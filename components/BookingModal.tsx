@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useMoovsFAB } from '@/hooks/useMoovsFAB'
 
 interface BookingModalProps {
   isOpen: boolean
@@ -10,19 +11,45 @@ interface BookingModalProps {
 export function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [mounted, setMounted] = useState(false)
 
+  // Hide Moovs FAB when modal is open
+  useMoovsFAB(isOpen)
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
   useEffect(() => {
     if (isOpen) {
+      // Lock body scroll
       document.body.style.overflow = 'hidden'
+      // Add body class for modal-open state
+      document.body.classList.add('modal-open')
+
+      // Hide Moovs FAB when modal is open
+      const moovsElements = document.querySelectorAll('[id*="moovs"], [class*="moovs"]')
+      moovsElements.forEach((el) => {
+        if (el instanceof HTMLElement) {
+          el.style.display = 'none'
+        }
+      })
     } else {
+      // Restore body scroll
       document.body.style.overflow = 'unset'
+      // Remove body class
+      document.body.classList.remove('modal-open')
+
+      // Show Moovs FAB when modal closes
+      const moovsElements = document.querySelectorAll('[id*="moovs"], [class*="moovs"]')
+      moovsElements.forEach((el) => {
+        if (el instanceof HTMLElement) {
+          el.style.display = ''
+        }
+      })
     }
 
     return () => {
       document.body.style.overflow = 'unset'
+      document.body.classList.remove('modal-open')
     }
   }, [isOpen])
 
@@ -42,15 +69,15 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="booking-modal fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-200"
       onClick={onClose}
     >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
 
-      {/* Modal */}
+      {/* Modal - Increased z-index to be above everything */}
       <div
-        className="relative w-full max-w-5xl max-h-[90vh] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-2xl overflow-hidden"
+        className="relative w-full max-w-5xl max-h-[90vh] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Lake Ride Pros Branded Header */}
@@ -65,7 +92,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-primary-dark rounded-lg transition-colors"
+            className="p-2 hover:bg-primary-dark rounded-lg transition-colors z-10"
             aria-label="Close booking modal"
           >
             <svg
@@ -83,7 +110,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
         </div>
 
         {/* Moovs Iframe Container */}
-        <div className="relative w-full h-[calc(90vh-100px)]">
+        <div className="relative w-full h-[calc(90vh-100px)] overflow-y-auto">
           <iframe
             src="https://customer.moovs.app/lake-ride-pros/iframe"
             title="Lake Ride Pros Booking"

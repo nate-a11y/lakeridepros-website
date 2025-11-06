@@ -25,7 +25,7 @@ export default function ThemeToggle() {
     >
       {theme === 'dark' ? (
         <svg
-          className="h-5 w-5 text-primary dark:text-primary-light"
+          className="h-5 w-5 text-primary-light dark:text-primary-light"
           fill="none"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -37,7 +37,7 @@ export default function ThemeToggle() {
         </svg>
       ) : (
         <svg
-          className="h-5 w-5 text-lrp-black"
+          className="h-5 w-5 text-primary dark:text-primary-light"
           fill="none"
           strokeLinecap="round"
           strokeLinejoin="round"

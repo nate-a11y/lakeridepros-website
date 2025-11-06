@@ -109,13 +109,52 @@ body[data-page="booking"] [class*="moovs-fab"] {
   display: none !important;
 }
 
-/* Style Moovs FAB to match Lake Ride Pros green brand */
+/* Force Moovs FAB to match Lake Ride Pros green branding */
+/* Target all possible Moovs FAB selectors */
 #moovs-fab-button,
-[id*="moovs-fab"] {
+[id*="moovs-fab"],
+[class*="moovs-fab"],
+div[style*="position: fixed"][style*="bottom"][style*="right"] > div,
+div[style*="position: fixed"][style*="z-index"] > button {
   background-color: #4cbb17 !important;
+  background: #4cbb17 !important;
 }
 
 #moovs-fab-button:hover,
-[id*="moovs-fab"]:hover {
+[id*="moovs-fab"]:hover,
+[class*="moovs-fab"]:hover {
   background-color: #60e421 !important;
+  background: #60e421 !important;
+  box-shadow: 0 0 20px rgba(76, 187, 23, 0.4) !important;
+}
+
+/* Override any inline styles Moovs might use */
+#moovs-fab-button[style],
+[id*="moovs"][style] {
+  background-color: #4cbb17 !important;
+}
+
+/* If Moovs FAB has SVG or text, ensure it's visible on green */
+#moovs-fab-button svg,
+#moovs-fab-button span,
+[id*="moovs-fab"] svg,
+[id*="moovs-fab"] span {
+  color: white !important;
+  fill: white !important;
+}
+
+/* Ensure Moovs FAB has proper z-index but below our modal */
+#moovs-fab-button,
+[id*="moovs-fab"] {
+  z-index: 1000 !important;
+}
+
+/* Our modal should be above everything */
+.booking-modal-overlay {
+  z-index: 9999 !important;
+}
+
+/* Nuclear option: hide ALL fixed position elements in bottom-right when modal is open */
+body.modal-open [style*="position: fixed"][style*="bottom"][style*="right"]:not(.booking-modal):not(.booking-modal *) {
+  display: none !important;
 }

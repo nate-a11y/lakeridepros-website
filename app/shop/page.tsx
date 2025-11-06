@@ -19,14 +19,14 @@ export default async function ShopPage() {
       <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">Shop</h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+          <p className="text-xl text-blue-100 dark:text-neutral-200 max-w-2xl mx-auto">
             Browse our collection of premium merchandise and accessories
           </p>
         </div>
       </section>
 
       {/* Products Grid */}
-      <section className="py-16">
+      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {products.length > 0 ? (
             <>
@@ -45,7 +45,7 @@ export default async function ShopPage() {
             </>
           ) : (
             <div className="text-center py-12">
-              <p className="text-neutral-600">
+              <p className="text-neutral-600 dark:text-neutral-400">
                 Products will be available soon. Check back later!
               </p>
             </div>

@@ -31,15 +31,15 @@ export default function BookingWidget({ className = '' }: BookingWidgetProps) {
   // Fallback UI when Moovs URL is not configured
   if (!moovsEmbedUrl) {
     return (
-      <div className={`bg-neutral-100 rounded-lg p-8 text-center ${className}`}>
-        <h3 className="text-2xl font-bold text-neutral-900 mb-4">
+      <div className={`bg-neutral-100 dark:bg-dark-bg-tertiary rounded-lg p-8 text-center transition-colors ${className}`}>
+        <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
           Book Your Luxury Ride
         </h3>
-        <p className="text-neutral-600 mb-6">
+        <p className="text-neutral-600 dark:text-neutral-300 mb-6">
           Experience premium transportation at Lake of the Ozarks
         </p>
         <div className="max-w-md mx-auto">
-          <p className="text-sm text-neutral-500 mb-4">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
             To complete your booking, please contact us directly:
           </p>
           <div className="space-y-3">
@@ -51,7 +51,7 @@ export default function BookingWidget({ className = '' }: BookingWidgetProps) {
             </a>
             <a
               href="mailto:bookings@lakeridepros.com"
-              className="block w-full bg-secondary hover:bg-secondary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+              className="block w-full bg-secondary dark:bg-primary hover:bg-secondary-dark dark:hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors"
             >
               ✉️ Email: bookings@lakeridepros.com
             </a>

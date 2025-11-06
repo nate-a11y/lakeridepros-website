@@ -71,22 +71,27 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
     <div
       className="booking-modal fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-200"
       onClick={onClose}
+      role="presentation"
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
+      <div className="absolute inset-0 bg-black/50 dark:bg-black/70" aria-hidden="true" />
 
       {/* Modal - Increased z-index to be above everything */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="booking-modal-title"
+        aria-describedby="booking-modal-description"
         className="relative w-full max-w-5xl max-h-[90vh] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Lake Ride Pros Branded Header */}
         <div className="flex items-center justify-between p-6 bg-primary">
           <div>
-            <h2 className="text-2xl font-bold text-white">
+            <h2 id="booking-modal-title" className="text-2xl font-bold text-white">
               Book Your Ride
             </h2>
-            <p className="text-white/90 text-sm mt-1">
+            <p id="booking-modal-description" className="text-white/90 text-sm mt-1">
               Lake Ride Pros - Premium Transportation
             </p>
           </div>

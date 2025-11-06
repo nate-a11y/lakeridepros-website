@@ -55,8 +55,11 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           <CartProvider>
+            <a href="#main-content" className="skip-link">
+              Skip to main content
+            </a>
             <Header />
-            <main className="min-h-screen">{children}</main>
+            <main id="main-content" className="min-h-screen">{children}</main>
             <Footer />
             <CartDrawer />
           </CartProvider>

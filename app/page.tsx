@@ -30,27 +30,30 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary to-primary-dark text-white py-24 lg:py-32">
-        <div className="absolute inset-0 bg-black opacity-10"></div>
+      <section className="relative bg-white py-24 lg:py-32 overflow-hidden">
+        {/* Green accent shapes */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary opacity-10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-light opacity-10 rounded-full blur-3xl"></div>
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-              Premium Luxury Transportation at{' '}
-              <span className="text-secondary">Lake of the Ozarks</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 text-lrp-black">
+              Premium Transportation at{' '}
+              <span className="text-primary">Lake of the Ozarks</span>
             </h1>
-            <p className="text-xl sm:text-2xl mb-8 text-blue-100">
-              Experience comfort, reliability, and professionalism with every ride
+            <p className="text-xl sm:text-2xl mb-8 text-neutral-600 font-medium">
+              Safe rides, good times. Perfect for weddings, wine tours, and wild nights out!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="#booking"
-                className="bg-secondary hover:bg-secondary-dark text-white font-semibold px-8 py-4 rounded-lg text-lg transition-colors"
+                className="bg-primary hover:bg-primary-dark text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg hover:shadow-xl"
               >
                 Book Your Ride
               </a>
               <Link
                 href="/fleet"
-                className="bg-white hover:bg-neutral-100 text-primary font-semibold px-8 py-4 rounded-lg text-lg transition-colors"
+                className="bg-white hover:bg-primary-light border-2 border-primary text-primary hover:text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-md"
               >
                 View Our Fleet
               </Link>

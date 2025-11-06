@@ -6,6 +6,7 @@ export default function Footer() {
 
   const footerLinks = {
     services: [
+      { name: 'Book a Ride', href: '/book' },
       { name: 'Airport Transfers', href: '/services' },
       { name: 'Corporate Transportation', href: '/services' },
       { name: 'Special Events', href: '/services' },

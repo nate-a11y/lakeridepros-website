@@ -87,6 +87,18 @@
 .dark {
   --background: #0a0a0a;
   --foreground: #ffffff;
+
+  /* Update neutral colors for dark mode */
+  --neutral-50: #2a2a2a;
+  --neutral-100: #333333;
+  --neutral-200: #3d3d3d;
+  --neutral-300: #4b5563;
+  --neutral-400: #6b7280;
+  --neutral-500: #9ca3af;
+  --neutral-600: #d1d5db;
+  --neutral-700: #e5e7eb;
+  --neutral-800: #f3f4f6;
+  --neutral-900: #f9fafb;
 }
 
 body {

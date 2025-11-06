@@ -1,11 +1,11 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+@import "tailwindcss";
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #060606;
 
-  /* Lake Ride Pros Brand Colors - Energetic Green */
+  /* Lake Ride Pros Brand Colors - Energetic Green (same in both modes) */
   --primary: #4cbb17;
   --primary-dark: #3a8e11;
   --primary-light: #60e421;
@@ -23,6 +23,12 @@
   --neutral-700: #374151;
   --neutral-800: #1f2937;
   --neutral-900: #111827;
+
+  /* Dark Mode specific colors */
+  --dark-bg-primary: #0a0a0a;
+  --dark-bg-secondary: #1a1a1a;
+  --dark-bg-tertiary: #2a2a2a;
+  --dark-border: #333333;
 }
 
 @theme inline {
@@ -45,6 +51,10 @@
   --color-neutral-700: var(--neutral-700);
   --color-neutral-800: var(--neutral-800);
   --color-neutral-900: var(--neutral-900);
+  --color-dark-bg-primary: var(--dark-bg-primary);
+  --color-dark-bg-secondary: var(--dark-bg-secondary);
+  --color-dark-bg-tertiary: var(--dark-bg-tertiary);
+  --color-dark-border: var(--dark-border);
   --font-sans: 'Montserrat', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
@@ -73,18 +83,17 @@
   }
 }
 
-/* Disable dark mode - always use bright, energetic light theme */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #060606;
-  }
+/* Dark mode support - green pops even more on dark! */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 @layer utilities {

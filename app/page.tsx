@@ -30,18 +30,18 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-white py-24 lg:py-32 overflow-hidden">
+      <section className="relative bg-white dark:bg-dark-bg-primary py-24 lg:py-32 overflow-hidden transition-colors">
         {/* Green accent shapes */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary opacity-10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-light opacity-10 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary opacity-10 dark:opacity-20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-72 h-72 bg-primary-light opacity-10 dark:opacity-20 rounded-full blur-3xl"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 text-lrp-black">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 text-lrp-black dark:text-white">
               Premium Transportation at{' '}
-              <span className="text-primary">Lake of the Ozarks</span>
+              <span className="text-primary dark:text-primary-light">Lake of the Ozarks</span>
             </h1>
-            <p className="text-xl sm:text-2xl mb-8 text-neutral-600 font-medium">
+            <p className="text-xl sm:text-2xl mb-8 text-neutral-600 dark:text-neutral-300 font-medium">
               Safe rides, good times. Perfect for weddings, wine tours, and wild nights out!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -53,7 +53,7 @@ export default async function HomePage() {
               </a>
               <Link
                 href="/fleet"
-                className="bg-white hover:bg-primary-light border-2 border-primary text-primary hover:text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-md"
+                className="bg-white dark:bg-dark-bg-secondary hover:bg-primary-light dark:hover:bg-primary border-2 border-primary text-primary dark:text-primary-light hover:text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-md"
               >
                 View Our Fleet
               </Link>
@@ -63,7 +63,7 @@ export default async function HomePage() {
       </section>
 
       {/* Booking Widget Section */}
-      <section id="booking" className="py-16 bg-neutral-50">
+      <section id="booking" className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <BookingWidget />
         </div>
@@ -71,13 +71,13 @@ export default async function HomePage() {
 
       {/* Services Overview Section */}
       {services.length > 0 && (
-        <section className="py-16">
+        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 Our Services
               </h2>
-              <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+              <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
                 From airport transfers to special events, we provide premium transportation
                 for every occasion
               </p>
@@ -101,13 +101,13 @@ export default async function HomePage() {
 
       {/* Featured Vehicles Section */}
       {vehicles.length > 0 && (
-        <section className="py-16 bg-neutral-50">
+        <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 Featured Vehicles
               </h2>
-              <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+              <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
                 Our fleet of luxury vehicles ensures a comfortable and stylish experience
               </p>
             </div>
@@ -130,13 +130,13 @@ export default async function HomePage() {
 
       {/* Latest Blog Posts Section */}
       {blogPosts.length > 0 && (
-        <section className="py-16">
+        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 Latest News & Updates
               </h2>
-              <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+              <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
                 Stay informed with our latest articles and company news
               </p>
             </div>
@@ -159,13 +159,13 @@ export default async function HomePage() {
 
       {/* Testimonials Section */}
       {testimonials.length > 0 && (
-        <section className="py-16 bg-neutral-50">
+        <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 What Our Clients Say
               </h2>
-              <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+              <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
                 Hear from those who have experienced our premium service
               </p>
             </div>
@@ -173,16 +173,16 @@ export default async function HomePage() {
               {testimonials.slice(0, 3).map((testimonial) => (
                 <div
                   key={testimonial.id}
-                  className="bg-white p-6 rounded-lg shadow-md"
+                  className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-md transition-colors"
                 >
                   <div className="flex items-center mb-4">
                     {testimonial.rating && (
-                      <div className="flex text-secondary">
+                      <div className="flex text-secondary dark:text-primary">
                         {Array.from({ length: 5 }).map((_, i) => (
                           <svg
                             key={i}
                             className={`h-5 w-5 ${
-                              i < testimonial.rating! ? 'fill-current' : 'fill-neutral-300'
+                              i < testimonial.rating! ? 'fill-current' : 'fill-neutral-300 dark:fill-neutral-600'
                             }`}
                             viewBox="0 0 20 20"
                           >
@@ -192,7 +192,7 @@ export default async function HomePage() {
                       </div>
                     )}
                   </div>
-                  <p className="text-neutral-700 mb-4 italic">
+                  <p className="text-neutral-700 dark:text-neutral-300 mb-4 italic">
                     &ldquo;{testimonial.content}&rdquo;
                   </p>
                   <div className="flex items-center">
@@ -204,11 +204,11 @@ export default async function HomePage() {
                       />
                     )}
                     <div>
-                      <p className="font-semibold text-neutral-900">
+                      <p className="font-semibold text-neutral-900 dark:text-white">
                         {testimonial.name}
                       </p>
                       {testimonial.title && (
-                        <p className="text-sm text-neutral-600">{testimonial.title}</p>
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400">{testimonial.title}</p>
                       )}
                     </div>
                   </div>
@@ -221,9 +221,9 @@ export default async function HomePage() {
 
       {/* Partner Logos Section */}
       {partners.length > 0 && (
-        <section className="py-16">
+        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-center text-neutral-900 mb-8">
+            <h2 className="text-2xl font-bold text-center text-neutral-900 dark:text-white mb-8">
               Trusted by Leading Organizations
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">

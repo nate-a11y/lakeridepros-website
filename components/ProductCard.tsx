@@ -20,9 +20,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/shop/${product.slug}`}
-      className="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+      className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
     >
-      <div className="relative h-64 overflow-hidden bg-neutral-100">
+      <div className="relative h-64 overflow-hidden bg-neutral-100 dark:bg-dark-bg-secondary">
         <Image
           src={imageUrl}
           alt={product.featuredImage?.alt || product.name}
@@ -36,34 +36,34 @@ export default function ProductCard({ product }: ProductCardProps) {
         )}
         {!product.inStock && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <span className="bg-white text-neutral-900 px-4 py-2 rounded-lg font-semibold">
+            <span className="bg-white dark:bg-dark-bg-tertiary text-neutral-900 dark:text-white px-4 py-2 rounded-lg font-semibold">
               Out of Stock
             </span>
           </div>
         )}
       </div>
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-neutral-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+        <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-primary-light transition-colors line-clamp-2">
           {product.name}
         </h3>
         {product.shortDescription && (
-          <p className="text-neutral-600 text-sm line-clamp-2 mb-3">
+          <p className="text-neutral-600 dark:text-neutral-300 text-sm line-clamp-2 mb-3">
             {product.shortDescription}
           </p>
         )}
         <div className="flex items-baseline justify-between">
           <div>
-            <span className="text-lg font-bold text-primary">
+            <span className="text-lg font-bold text-primary dark:text-primary-light">
               {formatPrice(product.price)}
             </span>
             {hasDiscount && (
-              <span className="ml-2 text-sm text-neutral-500 line-through">
+              <span className="ml-2 text-sm text-neutral-500 dark:text-neutral-400 line-through">
                 {formatPrice(product.compareAtPrice!)}
               </span>
             )}
           </div>
           {product.inStock && (
-            <button className="text-sm text-secondary hover:text-secondary-dark font-medium transition-colors">
+            <button className="text-sm text-secondary dark:text-primary hover:text-secondary-dark dark:hover:text-primary-light font-medium transition-colors">
               View Details
             </button>
           )}

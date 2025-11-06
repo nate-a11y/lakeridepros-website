@@ -17,7 +17,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   return (
     <Link
       href={`/fleet/${vehicle.slug}`}
-      className="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+      className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
     >
       <div className="relative h-64 overflow-hidden">
         <Image
@@ -27,21 +27,21 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />
         {vehicle.featured && (
-          <div className="absolute top-4 right-4 bg-secondary text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <div className="absolute top-4 right-4 bg-secondary dark:bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
             Featured
           </div>
         )}
       </div>
       <div className="p-6">
         <div className="flex items-start justify-between mb-2">
-          <h3 className="text-xl font-semibold text-neutral-900 group-hover:text-primary transition-colors">
+          <h3 className="text-xl font-semibold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
             {vehicle.name}
           </h3>
-          <span className="text-sm text-neutral-500 capitalize">{vehicle.type}</span>
+          <span className="text-sm text-neutral-500 dark:text-neutral-400 capitalize">{vehicle.type}</span>
         </div>
-        <p className="text-neutral-600 text-sm line-clamp-2 mb-4">{vehicle.description}</p>
+        <p className="text-neutral-600 dark:text-neutral-300 text-sm line-clamp-2 mb-4">{vehicle.description}</p>
         <div className="flex items-center justify-between">
-          <div className="flex items-center text-sm text-neutral-500">
+          <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400">
             <svg
               className="h-5 w-5 mr-1"
               fill="none"
@@ -56,7 +56,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             <span>Capacity: {vehicle.capacity}</span>
           </div>
           {vehicle.pricing?.hourlyRate && (
-            <span className="text-secondary font-semibold">
+            <span className="text-secondary dark:text-primary font-semibold">
               ${vehicle.pricing.hourlyRate}/hr
             </span>
           )}

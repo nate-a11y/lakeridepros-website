@@ -13,7 +13,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
   return (
     <Link
       href={`/services#${service.slug}`}
-      className="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+      className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
     >
       <div className="relative h-48 overflow-hidden">
         <Image
@@ -24,14 +24,14 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         />
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-neutral-900 mb-2 group-hover:text-primary transition-colors">
+        <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
           {service.title}
         </h3>
-        <p className="text-neutral-600 text-sm line-clamp-3">
+        <p className="text-neutral-600 dark:text-neutral-300 text-sm line-clamp-3">
           {service.shortDescription || service.description}
         </p>
         {service.pricing && service.pricing.basePrice && (
-          <p className="mt-4 text-secondary font-semibold">
+          <p className="mt-4 text-secondary dark:text-primary font-semibold">
             Starting at ${service.pricing.basePrice}
           </p>
         )}

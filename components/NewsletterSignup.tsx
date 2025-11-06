@@ -36,13 +36,13 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <div className="bg-primary py-12">
+    <div className="bg-primary dark:bg-dark-bg-tertiary py-12 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-white mb-2">
             Stay Updated
           </h2>
-          <p className="text-blue-100">
+          <p className="text-blue-100 dark:text-neutral-300">
             Subscribe to our newsletter for exclusive offers and updates
           </p>
         </div>
@@ -56,12 +56,12 @@ export default function NewsletterSignup() {
               placeholder="Enter your email"
               required
               disabled={status === 'loading'}
-              className="flex-1 px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-secondary focus:outline-none disabled:opacity-50"
+              className="flex-1 px-4 py-3 rounded-lg border-0 bg-white dark:bg-dark-bg-secondary dark:text-white dark:placeholder-neutral-400 focus:ring-2 focus:ring-secondary dark:focus:ring-primary focus:outline-none disabled:opacity-50 transition-colors"
             />
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="bg-secondary hover:bg-secondary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-secondary dark:bg-primary hover:bg-secondary-dark dark:hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
             </button>
@@ -70,7 +70,7 @@ export default function NewsletterSignup() {
           {message && (
             <p
               className={`mt-3 text-center text-sm ${
-                status === 'success' ? 'text-green-200' : 'text-red-200'
+                status === 'success' ? 'text-green-200 dark:text-primary-light' : 'text-red-200 dark:text-red-300'
               }`}
             >
               {message}

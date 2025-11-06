@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <header className="bg-white dark:bg-dark-bg-secondary border-b border-neutral-200 dark:border-dark-border sticky top-0 z-50 transition-colors">
-      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <nav aria-label="Main navigation" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
@@ -70,7 +70,7 @@ export default function Header() {
             <button
               onClick={openCart}
               className="relative p-2 text-primary hover:text-primary-dark transition-colors"
-              aria-label="Shopping cart"
+              aria-label={`Shopping cart${itemCount > 0 ? ` with ${itemCount} item${itemCount !== 1 ? 's' : ''}` : ', empty'}`}
             >
               <svg
                 className="h-6 w-6"
@@ -95,7 +95,9 @@ export default function Header() {
               type="button"
               className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-primary-dark hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               <svg
                 className="h-6 w-6"
@@ -118,8 +120,8 @@ export default function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden pb-4">
-            <div className="flex flex-col space-y-3">
+          <div id="mobile-menu" className="md:hidden pb-4">
+            <nav aria-label="Mobile navigation" className="flex flex-col space-y-3">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
@@ -141,7 +143,7 @@ export default function Header() {
               >
                 Book Now
               </button>
-            </div>
+            </nav>
           </div>
         )}
       </nav>

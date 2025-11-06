@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 
@@ -25,9 +26,14 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <span className="text-2xl font-bold text-primary">
-                Lake Ride <span className="text-secondary">Pros</span>
-              </span>
+              <Image
+                src="/Color logo - no background.png"
+                alt="Lake Ride Pros Logo"
+                width={150}
+                height={50}
+                className="w-32 sm:w-36 md:w-40 h-auto"
+                priority
+              />
             </Link>
           </div>
 
@@ -37,7 +43,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-neutral-700 hover:text-primary transition-colors duration-200 text-sm font-medium"
+                className="text-lrp-black hover:text-primary transition-colors duration-200 text-sm font-semibold relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
               >
                 {item.name}
               </Link>
@@ -49,7 +55,7 @@ export default function Header() {
             {/* Cart Button */}
             <button
               onClick={openCart}
-              className="relative p-2 text-neutral-700 hover:text-primary transition-colors"
+              className="relative p-2 text-primary hover:text-primary-dark transition-colors"
               aria-label="Shopping cart"
             >
               <svg
@@ -73,7 +79,7 @@ export default function Header() {
             {/* Mobile menu button */}
             <button
               type="button"
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-neutral-700 hover:text-primary hover:bg-neutral-100 transition-colors"
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-primary-dark hover:bg-green-50 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -104,7 +110,7 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-neutral-700 hover:text-primary transition-colors duration-200 px-3 py-2 text-base font-medium"
+                  className="text-lrp-black hover:text-primary hover:bg-green-50 transition-colors duration-200 px-3 py-2 text-base font-semibold rounded-lg"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}

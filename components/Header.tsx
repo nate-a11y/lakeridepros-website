@@ -5,9 +5,11 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
 import ThemeToggle from './ThemeToggle';
+import { BookingModal } from './BookingModal';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const { itemCount, openCart } = useCart();
 
   const navigation = [
@@ -49,6 +51,14 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+
+            {/* Book Now Button */}
+            <button
+              onClick={() => setIsBookingOpen(true)}
+              className="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-lg font-semibold transition-all hover:shadow-lg"
+            >
+              Book Now
+            </button>
           </div>
 
           {/* Right side buttons */}
@@ -120,10 +130,27 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
+
+              {/* Mobile Book Now Button */}
+              <button
+                onClick={() => {
+                  setIsBookingOpen(true)
+                  setMobileMenuOpen(false)
+                }}
+                className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-semibold text-center transition-all"
+              >
+                Book Now
+              </button>
             </div>
           </div>
         )}
       </nav>
+
+      {/* Booking Modal */}
+      <BookingModal
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+      />
     </header>
   );
 }

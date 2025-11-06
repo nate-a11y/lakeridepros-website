@@ -101,3 +101,21 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Hide Moovs FAB on the dedicated booking page */
+body[data-page="booking"] #moovs-fab-button,
+body[data-page="booking"] [id*="moovs"],
+body[data-page="booking"] [class*="moovs-fab"] {
+  display: none !important;
+}
+
+/* Style Moovs FAB to match Lake Ride Pros green brand */
+#moovs-fab-button,
+[id*="moovs-fab"] {
+  background-color: #4cbb17 !important;
+}
+
+#moovs-fab-button:hover,
+[id*="moovs-fab"]:hover {
+  background-color: #60e421 !important;
+}

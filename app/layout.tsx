@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { CartProvider } from "@/contexts/CartContext";
@@ -31,6 +32,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Moovs Booking FAB */}
+        <Script id="moovs-fab" strategy="afterInteractive">
+          {`
+            window["moovsAPI"] = moovsAPI = window["moovsAPI"] || [];
+            moovsAPI.push(["operator", "49dfb7de-bbdf-11ee-a55e-57f07b7dc566"]);
+            (function(m, oo, v, s) {
+                s = m.createElement(oo);
+                s.src = v;
+                s.async = 1;
+                m.head.appendChild(s);
+            })(document, "script", "https://static.moovs.app");
+          `}
+        </Script>
+      </head>
       <body className="antialiased">
         <ThemeProvider
           attribute="class"

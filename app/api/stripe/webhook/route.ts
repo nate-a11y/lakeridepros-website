@@ -63,6 +63,13 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
   try {
     console.log('Processing completed checkout:', session.id)
 
+    // Check if this is a gift card purchase
+    if (session.metadata?.type === 'gift-card') {
+      await handleGiftCardPurchase(session)
+      return
+    }
+
+    // Otherwise handle regular product order
     // Retrieve full session with line items
     const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
       expand: ['line_items', 'line_items.data.price.product', 'customer_details', 'shipping_details'],
@@ -195,5 +202,98 @@ async function sendOrderConfirmationEmail(order: any, customerEmail: string, cus
     )
   } catch (error) {
     console.error('Error sending confirmation email:', error)
+  }
+}
+
+async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
+  try {
+    console.log('Processing gift card purchase:', session.id)
+
+    const amount = parseFloat(session.metadata?.amount || '0')
+    const purchaserName = session.metadata?.purchaserName || ''
+    const purchaserEmail = session.metadata?.purchaserEmail || ''
+    const recipientName = session.metadata?.recipientName || null
+    const recipientEmail = session.metadata?.recipientEmail || null
+    const message = session.metadata?.message || null
+
+    // Create gift card in Payload CMS
+    const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
+
+    const giftCardData = {
+      initialAmount: amount,
+      currentBalance: amount,
+      purchaserName,
+      purchaserEmail,
+      recipientName,
+      recipientEmail,
+      message,
+      status: 'active',
+      stripePaymentIntentId: session.payment_intent as string,
+      stripeCheckoutSessionId: session.id,
+    }
+
+    const response = await fetch(`${payloadUrl}/api/gift-cards`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(giftCardData),
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to create gift card in Payload CMS')
+    }
+
+    const giftCard = await response.json()
+    console.log('Gift card created:', giftCard.doc.code)
+
+    // Send gift card email
+    await sendGiftCardEmail(
+      giftCard.doc,
+      purchaserName,
+      purchaserEmail,
+      recipientName,
+      recipientEmail,
+      message
+    )
+
+  } catch (error) {
+    console.error('Error handling gift card purchase:', error)
+  }
+}
+
+async function sendGiftCardEmail(
+  giftCard: any,
+  purchaserName: string,
+  purchaserEmail: string,
+  recipientName: string | null,
+  recipientEmail: string | null,
+  message: string | null
+) {
+  try {
+    console.log('Sending gift card email')
+
+    // If recipient email provided, send to recipient
+    // Otherwise send to purchaser
+    const sendToEmail = recipientEmail || purchaserEmail
+    const sendToName = recipientName || purchaserName
+
+    // Call email API (create this next)
+    await fetch('/api/email/send-gift-card', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        giftCard,
+        recipientName: sendToName,
+        recipientEmail: sendToEmail,
+        purchaserName,
+        message,
+      }),
+    })
+
+  } catch (error) {
+    console.error('Error sending gift card email:', error)
   }
 }

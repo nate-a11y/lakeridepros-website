@@ -27,14 +27,14 @@ export default function Header() {
       <nav aria-label="Main navigation" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center">
+          <div className="flex items-center h-full py-2">
+            <Link href="/" className="flex items-center h-full">
               <Image
                 src="/Color logo - no background.png"
                 alt="Lake Ride Pros Logo"
                 width={150}
                 height={50}
-                className="w-32 sm:w-36 md:w-40 h-auto"
+                className="w-auto h-full max-w-[128px] sm:max-w-[144px] md:max-w-[160px] object-contain"
                 priority
               />
             </Link>

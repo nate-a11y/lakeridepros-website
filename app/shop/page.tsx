@@ -5,6 +5,9 @@ import { getProducts } from '@/lib/api/payload';
 export const metadata: Metadata = {
   title: 'Shop | Lake Ride Pros',
   description: 'Browse Lake Ride Pros merchandise and accessories. Shop branded apparel, accessories, and more.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/shop',
+  },
 };
 
 export const dynamic = 'force-dynamic';
@@ -45,7 +48,7 @@ export default async function ShopPage() {
             </>
           ) : (
             <div className="text-center py-12">
-              <p className="text-neutral-600 dark:text-neutral-400">
+              <p className="text-neutral-600 dark:text-lrp-text-muted">
                 Products will be available soon. Check back later!
               </p>
             </div>

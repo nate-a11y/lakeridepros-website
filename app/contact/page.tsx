@@ -86,7 +86,7 @@ export default function ContactPage() {
                     </svg>
                     <div>
                       <p className="font-semibold text-neutral-900">Address</p>
-                      <p className="text-neutral-600">
+                      <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                         123 Lake Road
                         <br />
                         Lake Ozark, MO 65049
@@ -154,7 +154,7 @@ export default function ContactPage() {
                     </svg>
                     <div>
                       <p className="font-semibold text-neutral-900">Hours</p>
-                      <p className="text-neutral-600">
+                      <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                         24/7 Service Available
                         <br />
                         Office: Mon-Fri, 8AM-6PM

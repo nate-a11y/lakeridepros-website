@@ -114,7 +114,7 @@ export default async function HomePage() {
               <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 Our Services
               </h2>
-              <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
+              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
                 From airport transfers to special events, we provide premium transportation
                 for every occasion
               </p>
@@ -144,7 +144,7 @@ export default async function HomePage() {
               <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 Featured Vehicles
               </h2>
-              <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
+              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
                 Our fleet of luxury vehicles ensures a comfortable and stylish experience
               </p>
             </div>
@@ -173,7 +173,7 @@ export default async function HomePage() {
               <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 Latest News & Updates
               </h2>
-              <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
+              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
                 Stay informed with our latest articles and company news
               </p>
             </div>
@@ -202,7 +202,7 @@ export default async function HomePage() {
               <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 What Our Clients Say
               </h2>
-              <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
+              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
                 Hear from those who have experienced our premium service
               </p>
             </div>
@@ -245,7 +245,7 @@ export default async function HomePage() {
                         {testimonial.name}
                       </p>
                       {testimonial.title && (
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400">{testimonial.title}</p>
+                        <p className="text-sm text-lrp-text-secondary dark:text-dark-text-muted">{testimonial.title}</p>
                       )}
                     </div>
                   </div>
@@ -285,7 +285,7 @@ export default async function HomePage() {
             <h2 id="service-areas" className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
               Serving Lake of the Ozarks and All of Missouri
             </h2>
-            <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
+            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
               Based at <strong>Lake of the Ozarks</strong>, we provide luxury transportation throughout{' '}
               <strong>Missouri</strong>, specializing in premium service for the area's top destinations.
             </p>
@@ -296,7 +296,7 @@ export default async function HomePage() {
               <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
                 Osage Beach
               </h3>
-              <p className="text-neutral-600 dark:text-neutral-300">
+              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                 Tan-Tar-A Resort, Margaritaville, Bagnell Dam Strip, lakefront venues
               </p>
             </div>
@@ -305,7 +305,7 @@ export default async function HomePage() {
               <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
                 Camdenton
               </h3>
-              <p className="text-neutral-600 dark:text-neutral-300">
+              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                 Old Kinderhook, local wineries, wedding venues, special events
               </p>
             </div>
@@ -314,7 +314,7 @@ export default async function HomePage() {
               <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
                 Lake Ozark
               </h3>
-              <p className="text-neutral-600 dark:text-neutral-300">
+              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                 Lodge of Four Seasons, lakefront properties, event venues
               </p>
             </div>
@@ -323,7 +323,7 @@ export default async function HomePage() {
               <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
                 Statewide Service
               </h3>
-              <p className="text-neutral-600 dark:text-neutral-300">
+              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                 Columbia, Jefferson City, Kansas City, St. Louis, and beyond
               </p>
             </div>
@@ -338,7 +338,7 @@ export default async function HomePage() {
             <h2 id="faq-heading" className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-lg text-neutral-600 dark:text-neutral-300">
+            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">
               Everything you need to know about our luxury transportation services
             </p>
           </div>
@@ -348,7 +348,7 @@ export default async function HomePage() {
               <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
                 What areas does Lake Ride Pros serve?
               </summary>
-              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
                 Lake Ride Pros provides luxury transportation throughout Missouri with a focus on Lake of the Ozarks,
                 including Osage Beach, Camdenton, Lake Ozark, and surrounding areas. We also service Columbia,
                 Jefferson City, Kansas City, St. Louis, and other Missouri destinations.
@@ -359,7 +359,7 @@ export default async function HomePage() {
               <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
                 How far in advance should I book?
               </summary>
-              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
                 For weddings and major events, we recommend booking 2-4 weeks in advance to ensure vehicle availability.
                 However, we often accommodate last-minute bookings based on our fleet availability. Contact us for
                 same-day or next-day service.
@@ -370,7 +370,7 @@ export default async function HomePage() {
               <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
                 What types of vehicles are available?
               </summary>
-              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
                 We offer luxury limo buses (14 passengers), sprinter vans (up to 11 passengers), shuttle buses
                 (37 passengers), specialty vehicles, and standard vehicles like Suburbans. All vehicles feature
                 premium amenities including sound systems, LED lighting, and comfortable seating.
@@ -381,7 +381,7 @@ export default async function HomePage() {
               <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
                 Do you provide transportation for weddings?
               </summary>
-              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
                 Yes! Wedding transportation is one of our specialties. We provide shuttle services for guests between
                 venues, hotels, and ceremony/reception locations. We serve all major Lake of the Ozarks wedding venues
                 including Tan-Tar-A Resort, Old Kinderhook, Lodge of Four Seasons, and more.
@@ -392,7 +392,7 @@ export default async function HomePage() {
               <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
                 What is your cancellation policy?
               </summary>
-              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
                 Cancellations made 48+ hours in advance receive a full refund (minus processing fee). Cancellations
                 made 24-48 hours in advance receive a 50% refund. Cancellations less than 24 hours before service
                 are non-refundable. Weather exceptions apply. See our{' '}
@@ -407,7 +407,7 @@ export default async function HomePage() {
               <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
                 Are your drivers licensed and insured?
               </summary>
-              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
                 Absolutely. All Lake Ride Pros drivers are professionally trained, fully licensed, and background-checked.
                 We maintain full commercial liability insurance and all required permits and licenses for transportation
                 services in Missouri. Your safety is our top priority.
@@ -416,7 +416,7 @@ export default async function HomePage() {
           </div>
 
           <div className="text-center mt-12">
-            <p className="text-neutral-600 dark:text-neutral-300 mb-4">
+            <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
               Have more questions?
             </p>
             <Link

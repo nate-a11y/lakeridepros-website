@@ -38,7 +38,7 @@ export default function ProductPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-neutral-600">Loading product...</p>
+          <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">Loading product...</p>
         </div>
       </div>
     );
@@ -124,7 +124,7 @@ export default function ProductPage() {
                   {formatPrice(product.price)}
                 </span>
                 {hasDiscount && (
-                  <span className="ml-3 text-xl text-neutral-500 line-through">
+                  <span className="ml-3 text-xl text-lrp-text-secondary line-through">
                     {formatPrice(product.compareAtPrice!)}
                   </span>
                 )}
@@ -171,7 +171,7 @@ export default function ProductPage() {
               )}
 
               {product.sku && (
-                <p className="mt-6 text-sm text-neutral-500">SKU: {product.sku}</p>
+                <p className="mt-6 text-sm text-lrp-text-secondary">SKU: {product.sku}</p>
               )}
             </div>
           </div>

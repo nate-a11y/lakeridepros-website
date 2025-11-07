@@ -155,7 +155,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                     </p>
                   )}
                   {vehicle.pricing.notes && (
-                    <p className="text-sm text-neutral-600 mt-3">
+                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-3">
                       {vehicle.pricing.notes}
                     </p>
                   )}
@@ -173,7 +173,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
             <h2 className="text-3xl font-bold text-neutral-900 mb-4">
               Book This Vehicle
             </h2>
-            <p className="text-lg text-neutral-600">
+            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">
               Reserve {vehicle.name} for your next trip
             </p>
           </div>

@@ -4,6 +4,9 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Accessibility Statement | Lake Ride Pros',
   description: 'Lake Ride Pros is committed to ensuring digital accessibility for people with disabilities. Learn about our accessibility standards and how to provide feedback.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/accessibility',
+  },
 }
 
 export default function AccessibilityPage() {

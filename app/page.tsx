@@ -13,6 +13,7 @@ import {
   getPartners,
 } from '@/lib/api/payload';
 import { getMediaUrl } from '@/lib/api/payload';
+import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,6 +31,20 @@ export default async function HomePage() {
 
   return (
     <>
+      {/* SEO Structured Data (JSON-LD) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       {/* Hero Section with Booking Modal */}
       <HeroSection />
 

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import HeroSection from '@/components/HeroSection';
 import BookingWidget from '@/components/BookingWidget';
@@ -14,6 +15,56 @@ import {
 } from '@/lib/api/payload';
 import { getMediaUrl } from '@/lib/api/payload';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://www.lakeridepros.com'),
+  title: 'Lake Ride Pros | Premier Luxury Transportation at Lake of the Ozarks',
+  description: 'Missouri\'s premier luxury transportation at Lake of the Ozarks. Limo buses, sprinter vans, shuttle buses for weddings, wine tours, bachelor parties. Professional drivers, 24/7 availability. Book now!',
+  keywords: [
+    'Lake of the Ozarks transportation',
+    'luxury transportation Missouri',
+    'party bus Lake Ozarks',
+    'wedding transportation',
+    'wine tour shuttle',
+    'Osage Beach limo service',
+    'bachelor party bus'
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://www.lakeridepros.com',
+    siteName: 'Lake Ride Pros',
+    title: 'Lake Ride Pros - Premier Transportation at Lake of the Ozarks',
+    description: 'Luxury limo buses, sprinter vans, and shuttle services for weddings, events, and nights out.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Lake Ride Pros luxury transportation vehicles'
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Lake Ride Pros - Premium Transportation',
+    description: 'Luxury transportation at Lake of the Ozarks',
+    images: ['/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://www.lakeridepros.com',
+  },
+};
 
 export const dynamic = 'force-dynamic';
 

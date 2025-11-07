@@ -42,7 +42,7 @@ export default function NewsletterSignup() {
           <h2 className="text-3xl font-bold text-white mb-2">
             Stay Updated
           </h2>
-          <p className="text-blue-100 dark:text-neutral-300">
+          <p className="text-white/90 dark:text-neutral-300">
             Subscribe to our newsletter for exclusive offers and updates
           </p>
         </div>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { sendOrderConfirmation } from '@/lib/email'
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -185,12 +186,13 @@ async function sendToPrintify(order: any, cartItems: any[], shippingAddress: any
 
 async function sendOrderConfirmationEmail(order: any, customerEmail: string, customerName: string) {
   try {
-    console.log('Sending confirmation email to:', customerEmail)
-
-    // Implement email sending (use Resend, SendGrid, or similar)
-    // For now, just log
-    console.log('Order confirmation email would be sent here')
-
+    await sendOrderConfirmation(
+      customerEmail,
+      customerName,
+      order.orderNumber,
+      order.total,
+      order.items
+    )
   } catch (error) {
     console.error('Error sending confirmation email:', error)
   }

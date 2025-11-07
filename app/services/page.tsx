@@ -6,6 +6,9 @@ import { getServices } from '@/lib/api/payload';
 export const metadata: Metadata = {
   title: 'Transportation Services | Lake Ride Pros',
   description: 'Explore our premium transportation services including airport transfers, corporate transportation, special events, and more at Lake of the Ozarks.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/services',
+  },
 };
 
 export const dynamic = 'force-dynamic';

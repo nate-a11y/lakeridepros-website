@@ -3,6 +3,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Book Your Ride | Lake Ride Pros',
   description: 'Book your luxury transportation at Lake of the Ozarks. Available 24/7 for weddings, events, wine tours, and nights out.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/book',
+  },
 }
 
 export default function BookPage() {

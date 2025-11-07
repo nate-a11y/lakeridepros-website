@@ -5,6 +5,9 @@ import { ExternalLink, FileText, Shield, Scale } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Terms of Service | Lake Ride Pros',
   description: 'Lake Ride Pros terms of service and booking conditions.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/terms-of-service',
+  },
 }
 
 export default function TermsOfServicePage() {

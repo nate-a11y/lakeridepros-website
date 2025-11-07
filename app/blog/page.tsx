@@ -5,6 +5,9 @@ import { getBlogPosts } from '@/lib/api/payload';
 export const metadata: Metadata = {
   title: 'Blog | Lake Ride Pros',
   description: 'Read the latest news, tips, and updates from Lake Ride Pros. Stay informed about luxury transportation at Lake of the Ozarks.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/blog',
+  },
 };
 
 export const dynamic = 'force-dynamic';

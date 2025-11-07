@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.lakeridepros.com'),
   title: "Lake Ride Pros - Premium Luxury Transportation at Lake of the Ozarks",
   description: "Experience premium luxury transportation services at Lake of the Ozarks, Missouri. Professional, reliable, and comfortable rides for all occasions.",
   keywords: ["luxury transportation", "Lake of the Ozarks", "Missouri", "limousine service", "airport transfer", "charter service"],
@@ -23,6 +24,11 @@ export const metadata: Metadata = {
     title: "Lake Ride Pros - Premium Luxury Transportation",
     description: "Experience premium luxury transportation services at Lake of the Ozarks, Missouri.",
   },
+  verification: {
+    // Add Google Search Console verification code here after setup
+    // google: 'your-google-site-verification-code',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -33,6 +39,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+        {/* Preconnect to external domains for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://static.moovs.app" />
+
         {/* Moovs Booking FAB */}
         <Script id="moovs-fab" strategy="afterInteractive">
           {`

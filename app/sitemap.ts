@@ -1,56 +1,44 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const baseUrl = 'https://www.lakeridepros.com';
+  const currentDate = new Date();
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/fleet`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/shop`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/gift-cards`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/gift-card-balance`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+  // Static pages with priority and change frequency
+  const staticRoutes = [
+    { url: '', priority: 1.0, changeFrequency: 'weekly' as const },
+    { url: '/book', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/services', priority: 0.9, changeFrequency: 'weekly' as const },
+    { url: '/fleet', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/about-us', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/contact', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/blog', priority: 0.8, changeFrequency: 'daily' as const },
+    { url: '/gift-cards', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/gift-card-balance', priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/shop', priority: 0.7, changeFrequency: 'weekly' as const },
+
+    // Fleet pages
+    { url: '/fleet/limo-bus', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/fleet/sprinter-van', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/fleet/shuttle-bus', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/fleet/rescue-squad', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/fleet/suburbans', priority: 0.9, changeFrequency: 'monthly' as const },
+
+    // Legal pages
+    { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },
+    { url: '/terms-of-service', priority: 0.5, changeFrequency: 'yearly' as const },
+    { url: '/accessibility', priority: 0.5, changeFrequency: 'yearly' as const },
   ];
+
+  const routes = staticRoutes.map((route) => ({
+    url: `${baseUrl}${route.url}`,
+    lastModified: currentDate,
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
+  }));
+
+  // TODO: Add dynamic blog post URLs from Payload CMS
+  // Fetch blog posts and add to sitemap when CMS is connected
+
+  return routes;
 }

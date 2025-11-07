@@ -3,6 +3,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Privacy Policy | Lake Ride Pros',
   description: 'Lake Ride Pros privacy policy and data protection practices.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/privacy-policy',
+  },
 }
 
 export default function PrivacyPolicyPage() {

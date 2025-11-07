@@ -5,6 +5,9 @@ import { getProducts } from '@/lib/api/payload';
 export const metadata: Metadata = {
   title: 'Shop | Lake Ride Pros',
   description: 'Browse Lake Ride Pros merchandise and accessories. Shop branded apparel, accessories, and more.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/shop',
+  },
 };
 
 export const dynamic = 'force-dynamic';

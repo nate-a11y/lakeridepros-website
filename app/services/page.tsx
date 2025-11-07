@@ -25,7 +25,7 @@ export default async function ServicesPage() {
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
             Our Transportation Services
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Professional, reliable, and luxurious transportation for every occasion
           </p>
         </div>

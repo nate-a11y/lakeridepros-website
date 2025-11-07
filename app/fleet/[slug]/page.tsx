@@ -45,7 +45,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/fleet"
-            className="inline-flex items-center text-blue-100 hover:text-white mb-4"
+            className="inline-flex items-center text-white/90 hover:text-white mb-4"
           >
             <svg className="h-5 w-5 mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
               <path d="M15 19l-7-7 7-7" />
@@ -53,7 +53,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
             Back to Fleet
           </Link>
           <h1 className="text-4xl font-bold">{vehicle.name}</h1>
-          <p className="text-xl text-blue-100 mt-2 capitalize">{vehicle.type}</p>
+          <p className="text-xl text-white/90 mt-2 capitalize">{vehicle.type}</p>
         </div>
       </section>
 

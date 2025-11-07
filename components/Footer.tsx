@@ -119,11 +119,14 @@ export default function Footer() {
               &copy; {currentYear} Lake Ride Pros. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacy" className="text-sm text-white dark:text-neutral-300 opacity-80 hover:opacity-100 hover:text-primary-light dark:hover:text-primary transition-all">
+              <Link href="/privacy-policy" className="text-sm text-white dark:text-neutral-300 opacity-80 hover:opacity-100 hover:text-primary-light dark:hover:text-primary transition-all">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-sm text-white dark:text-neutral-300 opacity-80 hover:opacity-100 hover:text-primary-light dark:hover:text-primary transition-all">
+              <Link href="/terms-of-service" className="text-sm text-white dark:text-neutral-300 opacity-80 hover:opacity-100 hover:text-primary-light dark:hover:text-primary transition-all">
                 Terms of Service
+              </Link>
+              <Link href="/accessibility" className="text-sm text-white dark:text-neutral-300 opacity-80 hover:opacity-100 hover:text-primary-light dark:hover:text-primary transition-all">
+                Accessibility
               </Link>
             </div>
           </div>

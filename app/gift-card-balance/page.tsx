@@ -67,7 +67,7 @@ export default function GiftCardBalancePage() {
                 <h2 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
                   How to Check Your Balance
                 </h2>
-                <p className="text-gray-700 dark:text-lrp-gray">
+                <p className="text-lrp-black dark:text-dark-text-secondary">
                   Enter your gift card code below to check your remaining balance. Your gift card code
                   can be found on your physical card or in your email confirmation.
                 </p>
@@ -97,9 +97,9 @@ export default function GiftCardBalancePage() {
                     minLength={8}
                     aria-describedby="code-help"
                   />
-                  <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />
+                  <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-lrp-text-muted dark:text-dark-text-muted" />
                 </div>
-                <p id="code-help" className="text-sm text-gray-600 dark:text-lrp-gray mt-2">
+                <p id="code-help" className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-2">
                   Gift card codes are not case-sensitive
                 </p>
               </div>
@@ -144,7 +144,7 @@ export default function GiftCardBalancePage() {
             {balance !== null && cardData && (
               <div className="mt-8 bg-white dark:bg-dark-bg-primary border-2 border-lrp-green rounded-lg p-6">
                 <div className="text-center mb-6">
-                  <p className="text-gray-600 dark:text-lrp-gray text-sm mb-2">
+                  <p className="text-lrp-text-secondary dark:text-dark-text-secondary text-sm mb-2">
                     Current Balance
                   </p>
                   <p className="text-5xl font-bold text-lrp-green">
@@ -156,7 +156,7 @@ export default function GiftCardBalancePage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <CreditCard className="w-5 h-5 text-lrp-green" />
-                      <span className="text-gray-700 dark:text-lrp-gray">Gift Card Code</span>
+                      <span className="text-lrp-black dark:text-dark-text-secondary">Gift Card Code</span>
                     </div>
                     <span className="font-semibold text-lrp-black dark:text-white">
                       {cardData.code}
@@ -167,7 +167,7 @@ export default function GiftCardBalancePage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <DollarSign className="w-5 h-5 text-lrp-green" />
-                        <span className="text-gray-700 dark:text-lrp-gray">Original Amount</span>
+                        <span className="text-lrp-black dark:text-dark-text-secondary">Original Amount</span>
                       </div>
                       <span className="font-semibold text-lrp-black dark:text-white">
                         ${cardData.originalAmount.toFixed(2)}
@@ -179,7 +179,7 @@ export default function GiftCardBalancePage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <Calendar className="w-5 h-5 text-lrp-green" />
-                        <span className="text-gray-700 dark:text-lrp-gray">Purchased</span>
+                        <span className="text-lrp-black dark:text-dark-text-secondary">Purchased</span>
                       </div>
                       <span className="font-semibold text-lrp-black dark:text-white">
                         {new Date(cardData.purchasedDate).toLocaleDateString()}
@@ -191,7 +191,7 @@ export default function GiftCardBalancePage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <Calendar className="w-5 h-5 text-lrp-green" />
-                        <span className="text-gray-700 dark:text-lrp-gray">Expires</span>
+                        <span className="text-lrp-black dark:text-dark-text-secondary">Expires</span>
                       </div>
                       <span className="font-semibold text-lrp-black dark:text-white">
                         {cardData.expirationDate === 'Never'
@@ -204,7 +204,7 @@ export default function GiftCardBalancePage() {
                 </div>
 
                 <div className="mt-6 bg-lrp-green/10 dark:bg-lrp-green/20 rounded-lg p-4">
-                  <p className="text-sm text-gray-700 dark:text-lrp-gray text-center">
+                  <p className="text-sm text-lrp-black dark:text-dark-text-secondary text-center">
                     Ready to use your gift card? Book your luxury ride today!
                   </p>
                   <button className="w-full mt-3 bg-lrp-green hover:bg-lrp-green-dark text-white py-3 rounded-lg font-semibold transition-all">
@@ -229,7 +229,7 @@ export default function GiftCardBalancePage() {
               <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
                 Do Lake Ride Pros gift cards expire?
               </summary>
-              <p className="text-gray-700 dark:text-lrp-gray mt-4">
+              <p className="text-lrp-black dark:text-dark-text-secondary mt-4">
                 No! Lake Ride Pros gift cards never expire. Use them whenever you're ready for luxury transportation.
               </p>
             </details>
@@ -238,7 +238,7 @@ export default function GiftCardBalancePage() {
               <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
                 Can I use my gift card for any service?
               </summary>
-              <p className="text-gray-700 dark:text-lrp-gray mt-4">
+              <p className="text-lrp-black dark:text-dark-text-secondary mt-4">
                 Yes! Gift cards can be applied to any Lake Ride Pros transportation service including limo buses,
                 sprinter vans, shuttle buses, and all specialty vehicles.
               </p>
@@ -248,7 +248,7 @@ export default function GiftCardBalancePage() {
               <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
                 Can I use multiple gift cards for one booking?
               </summary>
-              <p className="text-gray-700 dark:text-lrp-gray mt-4">
+              <p className="text-lrp-black dark:text-dark-text-secondary mt-4">
                 Yes, you can combine multiple gift cards toward a single booking. Contact us when making your
                 reservation to apply multiple gift card codes.
               </p>
@@ -258,7 +258,7 @@ export default function GiftCardBalancePage() {
               <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
                 What if my gift card balance doesn't cover the full amount?
               </summary>
-              <p className="text-gray-700 dark:text-lrp-gray mt-4">
+              <p className="text-lrp-black dark:text-dark-text-secondary mt-4">
                 No problem! You can pay the remaining balance with a credit card, debit card, or cash.
                 Your gift card balance will be applied first.
               </p>
@@ -268,7 +268,7 @@ export default function GiftCardBalancePage() {
               <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
                 Can gift cards be refunded or exchanged for cash?
               </summary>
-              <p className="text-gray-700 dark:text-lrp-gray mt-4">
+              <p className="text-lrp-black dark:text-dark-text-secondary mt-4">
                 Gift cards are non-refundable and cannot be exchanged for cash. They can only be used for
                 Lake Ride Pros transportation services.
               </p>
@@ -278,7 +278,7 @@ export default function GiftCardBalancePage() {
               <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
                 I lost my gift card code. Can you help?
               </summary>
-              <p className="text-gray-700 dark:text-lrp-gray mt-4">
+              <p className="text-lrp-black dark:text-dark-text-secondary mt-4">
                 Yes! Contact us at{' '}
                 <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:underline">
                   owners@lakeridepros.com

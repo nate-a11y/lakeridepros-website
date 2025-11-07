@@ -32,7 +32,7 @@ export default function TermsOfServicePage() {
               <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-4">
                 Booking Terms & Conditions
               </h2>
-              <p className="text-gray-700 dark:text-lrp-gray mb-6">
+              <p className="text-lrp-black dark:text-dark-text-secondary mb-6">
                 Our transportation booking terms and conditions are managed through our booking platform partner, Moovs.
                 By booking any transportation service with Lake Ride Pros, you agree to these terms.
               </p>
@@ -54,7 +54,7 @@ export default function TermsOfServicePage() {
           <h2 className="text-3xl font-bold text-lrp-black dark:text-white mb-6">
             Key Terms Summary
           </h2>
-          <p className="text-gray-700 dark:text-lrp-gray mb-6">
+          <p className="text-lrp-black dark:text-dark-text-secondary mb-6">
             While the complete terms are available through the link above, here are some key points:
           </p>
 
@@ -67,7 +67,7 @@ export default function TermsOfServicePage() {
                   Cancellation Policy
                 </h3>
               </div>
-              <ul className="space-y-2 text-gray-700 dark:text-lrp-gray">
+              <ul className="space-y-2 text-lrp-black dark:text-dark-text-secondary">
                 <li>• 48+ hours: Full refund (minus processing fee)</li>
                 <li>• 24-48 hours: 50% refund</li>
                 <li>• Less than 24 hours: No refund</li>
@@ -83,7 +83,7 @@ export default function TermsOfServicePage() {
                   Payment & Pricing
                 </h3>
               </div>
-              <ul className="space-y-2 text-gray-700 dark:text-lrp-gray">
+              <ul className="space-y-2 text-lrp-black dark:text-dark-text-secondary">
                 <li>• Payment required at booking</li>
                 <li>• Prices subject to availability</li>
                 <li>• Additional charges may apply</li>
@@ -105,10 +105,10 @@ export default function TermsOfServicePage() {
               <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
                 Passenger Conduct
               </h3>
-              <p className="text-gray-700 dark:text-lrp-gray mb-3">
+              <p className="text-lrp-black dark:text-dark-text-secondary mb-3">
                 All passengers must:
               </p>
-              <ul className="list-disc pl-6 text-gray-700 dark:text-lrp-gray space-y-1">
+              <ul className="list-disc pl-6 text-lrp-black dark:text-dark-text-secondary space-y-1">
                 <li>Treat drivers and vehicles with respect</li>
                 <li>Follow driver instructions for safety</li>
                 <li>Not smoke in vehicles</li>
@@ -122,7 +122,7 @@ export default function TermsOfServicePage() {
               <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
                 Age Requirements
               </h3>
-              <p className="text-gray-700 dark:text-lrp-gray">
+              <p className="text-lrp-black dark:text-dark-text-secondary">
                 Bookings must be made by someone 18 years or older. Minors must be accompanied by an adult.
                 The person making the booking accepts financial responsibility for the reservation.
               </p>
@@ -133,7 +133,7 @@ export default function TermsOfServicePage() {
               <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
                 Liability & Insurance
               </h3>
-              <p className="text-gray-700 dark:text-lrp-gray">
+              <p className="text-lrp-black dark:text-dark-text-secondary">
                 Lake Ride Pros maintains full commercial liability insurance and all required licenses.
                 We are not responsible for personal belongings left in vehicles. Passengers travel at their own risk.
               </p>
@@ -153,7 +153,7 @@ export default function TermsOfServicePage() {
               <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
                 Pickup & Drop-off
               </h3>
-              <ul className="list-disc pl-6 text-gray-700 dark:text-lrp-gray space-y-2">
+              <ul className="list-disc pl-6 text-lrp-black dark:text-dark-text-secondary space-y-2">
                 <li>Please be ready 5 minutes before scheduled pickup time</li>
                 <li>Driver will wait up to 10 minutes before charging a no-show fee</li>
                 <li>Provide accurate location details to ensure smooth service</li>
@@ -166,7 +166,7 @@ export default function TermsOfServicePage() {
               <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
                 Vehicle Capacity & Luggage
               </h3>
-              <ul className="list-disc pl-6 text-gray-700 dark:text-lrp-gray space-y-2">
+              <ul className="list-disc pl-6 text-lrp-black dark:text-dark-text-secondary space-y-2">
                 <li>Do not exceed the passenger capacity of your booked vehicle</li>
                 <li>Inform us in advance of excessive luggage or special items</li>
                 <li>Car seats must be requested at time of booking</li>
@@ -179,16 +179,16 @@ export default function TermsOfServicePage() {
               <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
                 Special Requests
               </h3>
-              <p className="text-gray-700 dark:text-lrp-gray mb-3">
+              <p className="text-lrp-black dark:text-dark-text-secondary mb-3">
                 We accommodate special requests when possible, including:
               </p>
-              <ul className="list-disc pl-6 text-gray-700 dark:text-lrp-gray space-y-2">
+              <ul className="list-disc pl-6 text-lrp-black dark:text-dark-text-secondary space-y-2">
                 <li>Wheelchair accessibility (must be requested in advance)</li>
                 <li>Car seats for children</li>
                 <li>Pet transportation (service animals always welcome)</li>
                 <li>Multiple stops (additional charges apply)</li>
               </ul>
-              <p className="text-gray-700 dark:text-lrp-gray mt-3">
+              <p className="text-lrp-black dark:text-dark-text-secondary mt-3">
                 Please contact us at least 24 hours in advance for special requests to ensure availability.
               </p>
             </div>
@@ -206,7 +206,7 @@ export default function TermsOfServicePage() {
               <h3 className="text-lg font-semibold text-lrp-black dark:text-white mb-2">
                 Gift Cards
               </h3>
-              <ul className="list-disc pl-6 text-gray-700 dark:text-lrp-gray space-y-2">
+              <ul className="list-disc pl-6 text-lrp-black dark:text-dark-text-secondary space-y-2">
                 <li>Gift cards are non-refundable and cannot be redeemed for cash</li>
                 <li>Gift cards do not expire</li>
                 <li>Can be used toward any Lake Ride Pros transportation service</li>
@@ -219,7 +219,7 @@ export default function TermsOfServicePage() {
               <h3 className="text-lg font-semibold text-lrp-black dark:text-white mb-2">
                 Merchandise Returns
               </h3>
-              <ul className="list-disc pl-6 text-gray-700 dark:text-lrp-gray space-y-2">
+              <ul className="list-disc pl-6 text-lrp-black dark:text-dark-text-secondary space-y-2">
                 <li>Returns must be requested within 14 days of delivery</li>
                 <li>Items must be unworn and in original condition with tags</li>
                 <li>A 20% restocking fee applies to all returns</li>
@@ -236,7 +236,7 @@ export default function TermsOfServicePage() {
             Dispute Resolution
           </h2>
           <div className="bg-white dark:bg-dark-bg-secondary border border-lrp-gray dark:border-dark-border p-6 rounded-lg">
-            <p className="text-gray-700 dark:text-lrp-gray mb-4">
+            <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
               If you have any concerns about our service, please contact us first at{' '}
               <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
                 owners@lakeridepros.com
@@ -247,7 +247,7 @@ export default function TermsOfServicePage() {
               </a>
               . We are committed to resolving any issues promptly and fairly.
             </p>
-            <p className="text-gray-700 dark:text-lrp-gray">
+            <p className="text-lrp-black dark:text-dark-text-secondary">
               Any disputes that cannot be resolved informally will be governed by the laws of the State
               of Missouri and subject to the exclusive jurisdiction of the courts in Camden County, Missouri.
             </p>
@@ -259,7 +259,7 @@ export default function TermsOfServicePage() {
           <h2 className="text-3xl font-bold text-lrp-black dark:text-white mb-6">
             Changes to Terms
           </h2>
-          <p className="text-gray-700 dark:text-lrp-gray">
+          <p className="text-lrp-black dark:text-dark-text-secondary">
             We reserve the right to modify these terms at any time. Changes will be posted on this page
             with an updated revision date. Your continued use of our services after changes are posted
             constitutes acceptance of the modified terms.
@@ -294,23 +294,23 @@ export default function TermsOfServicePage() {
           <h2 className="text-xl font-bold text-lrp-black dark:text-white mb-4">
             Questions About Our Terms?
           </h2>
-          <p className="text-gray-700 dark:text-lrp-gray mb-4">
+          <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
             If you have questions about our terms of service or booking conditions, please contact us:
           </p>
           <div className="space-y-2">
             <p className="text-gray-700 dark:text-white">
               <strong>Lake Ride Pros LLC</strong>
             </p>
-            <p className="text-gray-700 dark:text-lrp-gray">
+            <p className="text-lrp-black dark:text-dark-text-secondary">
               Lake of the Ozarks, Missouri
             </p>
-            <p className="text-gray-700 dark:text-lrp-gray">
+            <p className="text-lrp-black dark:text-dark-text-secondary">
               Email:{' '}
               <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
                 owners@lakeridepros.com
               </a>
             </p>
-            <p className="text-gray-700 dark:text-lrp-gray">
+            <p className="text-lrp-black dark:text-dark-text-secondary">
               Phone:{' '}
               <a href="tel:5732069499" className="text-lrp-green hover:text-lrp-green-light">
                 (573) 206-9499

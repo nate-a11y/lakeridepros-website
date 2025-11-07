@@ -278,6 +278,157 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* Service Areas Section */}
+      <section aria-labelledby="service-areas" className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 id="service-areas" className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+              Serving Lake of the Ozarks and All of Missouri
+            </h2>
+            <p className="text-lg text-neutral-600 dark:text-neutral-300 max-w-3xl mx-auto">
+              Based at <strong>Lake of the Ozarks</strong>, we provide luxury transportation throughout{' '}
+              <strong>Missouri</strong>, specializing in premium service for the area's top destinations.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-6 rounded-lg transition-colors">
+              <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
+                Osage Beach
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-300">
+                Tan-Tar-A Resort, Margaritaville, Bagnell Dam Strip, lakefront venues
+              </p>
+            </div>
+
+            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-6 rounded-lg transition-colors">
+              <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
+                Camdenton
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-300">
+                Old Kinderhook, local wineries, wedding venues, special events
+              </p>
+            </div>
+
+            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-6 rounded-lg transition-colors">
+              <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
+                Lake Ozark
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-300">
+                Lodge of Four Seasons, lakefront properties, event venues
+              </p>
+            </div>
+
+            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-6 rounded-lg transition-colors">
+              <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
+                Statewide Service
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-300">
+                Columbia, Jefferson City, Kansas City, St. Louis, and beyond
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section aria-labelledby="faq-heading" className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 id="faq-heading" className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-lg text-neutral-600 dark:text-neutral-300">
+              Everything you need to know about our luxury transportation services
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                What areas does Lake Ride Pros serve?
+              </summary>
+              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+                Lake Ride Pros provides luxury transportation throughout Missouri with a focus on Lake of the Ozarks,
+                including Osage Beach, Camdenton, Lake Ozark, and surrounding areas. We also service Columbia,
+                Jefferson City, Kansas City, St. Louis, and other Missouri destinations.
+              </p>
+            </details>
+
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                How far in advance should I book?
+              </summary>
+              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+                For weddings and major events, we recommend booking 2-4 weeks in advance to ensure vehicle availability.
+                However, we often accommodate last-minute bookings based on our fleet availability. Contact us for
+                same-day or next-day service.
+              </p>
+            </details>
+
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                What types of vehicles are available?
+              </summary>
+              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+                We offer luxury limo buses (14 passengers), sprinter vans (up to 11 passengers), shuttle buses
+                (37 passengers), specialty vehicles, and standard vehicles like Suburbans. All vehicles feature
+                premium amenities including sound systems, LED lighting, and comfortable seating.
+              </p>
+            </details>
+
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                Do you provide transportation for weddings?
+              </summary>
+              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+                Yes! Wedding transportation is one of our specialties. We provide shuttle services for guests between
+                venues, hotels, and ceremony/reception locations. We serve all major Lake of the Ozarks wedding venues
+                including Tan-Tar-A Resort, Old Kinderhook, Lodge of Four Seasons, and more.
+              </p>
+            </details>
+
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                What is your cancellation policy?
+              </summary>
+              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+                Cancellations made 48+ hours in advance receive a full refund (minus processing fee). Cancellations
+                made 24-48 hours in advance receive a 50% refund. Cancellations less than 24 hours before service
+                are non-refundable. Weather exceptions apply. See our{' '}
+                <Link href="/terms-of-service" className="text-primary dark:text-primary-light hover:underline">
+                  Terms of Service
+                </Link>
+                {' '}for complete details.
+              </p>
+            </details>
+
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                Are your drivers licensed and insured?
+              </summary>
+              <p className="mt-4 text-neutral-600 dark:text-neutral-300">
+                Absolutely. All Lake Ride Pros drivers are professionally trained, fully licensed, and background-checked.
+                We maintain full commercial liability insurance and all required permits and licenses for transportation
+                services in Missouri. Your safety is our top priority.
+              </p>
+            </details>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-neutral-600 dark:text-neutral-300 mb-4">
+              Have more questions?
+            </p>
+            <Link
+              href="/contact"
+              className="inline-block bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Newsletter Signup */}
       <NewsletterSignup />
     </>

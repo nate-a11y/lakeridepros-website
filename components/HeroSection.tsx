@@ -18,11 +18,10 @@ export default function HeroSection() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 text-lrp-black dark:text-white">
-              Premium Transportation at{' '}
-              <span className="text-primary dark:text-primary-light">Lake of the Ozarks</span>
+              Premium <span className="text-primary dark:text-primary-light">Luxury Transportation</span> at Lake of the Ozarks
             </h1>
             <p className="text-xl sm:text-2xl mb-8 text-neutral-600 dark:text-neutral-300 font-medium">
-              Safe rides, good times. Perfect for weddings, wine tours, and wild nights out!
+              Missouri's premier transportation service. Safe rides, good times. Perfect for <strong>weddings</strong>, <strong>wine tours</strong>, <strong>bachelor parties</strong>, and special events at Lake of the Ozarks.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button

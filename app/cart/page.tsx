@@ -1,17 +1,50 @@
 'use client'
 
-import { Trash2, ShoppingCart, ArrowLeft } from 'lucide-react'
+import { useState } from 'react'
+import { Trash2, ShoppingCart, ArrowLeft, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCart } from '@/lib/store/cart'
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getSubtotal, clearCart } = useCart()
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [checkoutError, setCheckoutError] = useState('')
 
   const subtotal = getSubtotal()
   const shipping = subtotal > 50 ? 0 : 5.99 // Free shipping over $50
-  const tax = subtotal * 0.085 // 8.5% tax (adjust for your state)
-  const total = subtotal + shipping + tax
+  const estimatedTax = subtotal * 0.085 // Estimated, Stripe calculates actual
+  const total = subtotal + shipping + estimatedTax
+
+  const handleCheckout = async () => {
+    setCheckoutLoading(true)
+    setCheckoutError('')
+
+    try {
+      const response = await fetch('/api/stripe/create-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session')
+      }
+
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url
+      }
+    } catch (error: any) {
+      console.error('Checkout error:', error)
+      setCheckoutError(error.message || 'Something went wrong. Please try again.')
+      setCheckoutLoading(false)
+    }
+  }
 
   if (items.length === 0) {
     return (
@@ -168,7 +201,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>Estimated Tax</span>
-                  <span className="font-semibold">${tax.toFixed(2)}</span>
+                  <span className="font-semibold">${estimatedTax.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -187,8 +220,27 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <button className="w-full bg-lrp-green hover:bg-lrp-green-dark text-white py-4 rounded-lg font-bold text-lg transition-all mb-4">
-                Proceed to Checkout
+              {checkoutError && (
+                <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-500 rounded-lg p-4 mb-6">
+                  <p className="text-red-700 dark:text-red-400 text-sm">
+                    {checkoutError}
+                  </p>
+                </div>
+              )}
+
+              <button
+                onClick={handleCheckout}
+                disabled={checkoutLoading || items.length === 0}
+                className="w-full bg-lrp-green hover:bg-lrp-green-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-bold text-lg transition-all mb-4 flex items-center justify-center gap-2"
+              >
+                {checkoutLoading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Proceed to Checkout'
+                )}
               </button>
 
               <p className="text-sm text-gray-600 dark:text-gray-400 text-center">

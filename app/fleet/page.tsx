@@ -74,7 +74,7 @@ export default function FleetPage() {
             <article key={vehicle.slug} className="bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden shadow-lg">
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="relative bg-neutral-200 dark:bg-neutral-700 aspect-video lg:aspect-auto lg:h-full flex items-center justify-center">
-                  <p className="text-neutral-500 dark:text-neutral-400">{vehicle.name} Image</p>
+                  <p className="text-lrp-text-secondary dark:text-lrp-text-muted">{vehicle.name} Image</p>
                 </div>
 
                 <div className="p-8">
@@ -95,7 +95,7 @@ export default function FleetPage() {
                     {vehicle.description}
                   </p>
 
-                  <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+                  <p className="text-neutral-600 dark:text-lrp-text-muted mb-6">
                     <strong>Best For:</strong> {vehicle.bestFor}
                   </p>
 

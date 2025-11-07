@@ -42,7 +42,7 @@ export default async function ServicesPage() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-neutral-600">
+              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                 Services information will be available soon.
               </p>
             </div>
@@ -57,7 +57,7 @@ export default async function ServicesPage() {
             <h2 className="text-3xl font-bold text-neutral-900 mb-4">
               Ready to Book?
             </h2>
-            <p className="text-lg text-neutral-600">
+            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">
               Reserve your luxury transportation today
             </p>
           </div>

@@ -48,7 +48,7 @@ export default async function ShopPage() {
             </>
           ) : (
             <div className="text-center py-12">
-              <p className="text-neutral-600 dark:text-neutral-400">
+              <p className="text-neutral-600 dark:text-lrp-text-muted">
                 Products will be available soon. Check back later!
               </p>
             </div>

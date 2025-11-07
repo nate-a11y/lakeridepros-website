@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           )}
 
-          <div className="flex items-center text-sm text-neutral-500 mb-4">
+          <div className="flex items-center text-sm text-lrp-text-secondary mb-4">
             {post.publishedDate && (
               <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
             )}
@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </h1>
 
           {post.excerpt && (
-            <p className="text-xl text-neutral-600 mb-8">{post.excerpt}</p>
+            <p className="text-xl text-lrp-text-secondary dark:text-dark-text-secondary mb-8">{post.excerpt}</p>
           )}
         </div>
       </section>

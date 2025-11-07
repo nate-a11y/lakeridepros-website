@@ -85,9 +85,9 @@ export default function SuburbansPage() {
         <nav aria-label="Breadcrumb" className="container mx-auto px-4 py-4">
           <ol className="flex gap-2 text-sm">
             <li><Link href="/" className="text-primary hover:underline">Home</Link></li>
-            <li className="text-neutral-500">/</li>
+            <li className="text-lrp-text-secondary">/</li>
             <li><Link href="/fleet" className="text-primary hover:underline">Fleet</Link></li>
-            <li className="text-neutral-500">/</li>
+            <li className="text-lrp-text-secondary">/</li>
             <li className="text-neutral-700 dark:text-neutral-300">Suburbans</li>
           </ol>
         </nav>
@@ -110,17 +110,17 @@ export default function SuburbansPage() {
             {/* Images */}
             <div>
               <div className="bg-neutral-200 dark:bg-neutral-700 rounded-lg aspect-video flex items-center justify-center">
-                <p className="text-neutral-500 dark:text-neutral-400">Suburban Main Image</p>
+                <p className="text-lrp-text-secondary dark:text-lrp-text-muted">Suburban Main Image</p>
               </div>
               <div className="grid grid-cols-3 gap-4 mt-4">
                 <div className="bg-neutral-200 dark:bg-neutral-700 rounded-lg aspect-video flex items-center justify-center">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Interior</p>
+                  <p className="text-xs text-lrp-text-secondary dark:text-lrp-text-muted">Interior</p>
                 </div>
                 <div className="bg-neutral-200 dark:bg-neutral-700 rounded-lg aspect-video flex items-center justify-center">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Seating</p>
+                  <p className="text-xs text-lrp-text-secondary dark:text-lrp-text-muted">Seating</p>
                 </div>
                 <div className="bg-neutral-200 dark:bg-neutral-700 rounded-lg aspect-video flex items-center justify-center">
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Exterior</p>
+                  <p className="text-xs text-lrp-text-secondary dark:text-lrp-text-muted">Exterior</p>
                 </div>
               </div>
             </div>

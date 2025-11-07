@@ -77,7 +77,7 @@ export default function GiftCardsPage() {
                       Custom Amount
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-lrp-text-secondary">
                         $
                       </span>
                       <input
@@ -197,7 +197,7 @@ export default function GiftCardsPage() {
                 <h3 className="text-xl font-bold text-neutral-900 mb-3">
                   Terms & Conditions
                 </h3>
-                <ul className="text-sm text-neutral-600 space-y-2">
+                <ul className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary space-y-2">
                   <li>• Gift cards are valid for 12 months from purchase date</li>
                   <li>• Can be used for any Lake Ride Pros service</li>
                   <li>• Non-refundable and cannot be redeemed for cash</li>

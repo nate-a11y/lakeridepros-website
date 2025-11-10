@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withPayload } from '@payloadcms/next/withPayload'
 
 const nextConfig: NextConfig = {
   images: {
@@ -6,8 +7,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'http',
         hostname: 'localhost',
-        port: '3001',
+        port: '3000',
         pathname: '/media/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
       },
       {
         protocol: 'https',
@@ -18,9 +23,9 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'localhost:3001'],
+      allowedOrigins: ['localhost:3000'],
     },
   },
 };
 
-export default nextConfig;
+export default withPayload(nextConfig);

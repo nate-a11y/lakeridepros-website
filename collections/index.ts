@@ -1,4 +1,4 @@
-export { Users } from './Users'
-export { Media } from './Media'
-export { Pages } from './Pages'
-export { BlogPosts } from './BlogPosts'
+export { Users } from './Users.js'
+export { Media } from './Media.js'
+export { Pages } from './Pages.js'
+export { BlogPosts } from './BlogPosts.js'

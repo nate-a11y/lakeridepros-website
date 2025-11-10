@@ -6,10 +6,10 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 // Import collections
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-import { Pages } from './collections/Pages'
-import { BlogPosts } from './collections/BlogPosts'
+import { Users } from './collections/Users.js'
+import { Media } from './collections/Media.js'
+import { Pages } from './collections/Pages.js'
+import { BlogPosts } from './collections/BlogPosts.js'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

@@ -44,16 +44,16 @@ export default function BookingWidget({ className = '' }: BookingWidgetProps) {
           </p>
           <div className="space-y-3">
             <a
-              href="tel:+15555551234"
+              href="tel:5732069499"
               className="block w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors"
             >
-              📞 Call: (555) 555-1234
+              📞 Call: (573) 206-9499
             </a>
             <a
-              href="mailto:bookings@lakeridepros.com"
+              href="mailto:contactus@lakeridepros.com"
               className="block w-full bg-secondary dark:bg-primary hover:bg-secondary-dark dark:hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors"
             >
-              ✉️ Email: bookings@lakeridepros.com
+              ✉️ Email: contactus@lakeridepros.com
             </a>
           </div>
         </div>

@@ -17,7 +17,7 @@ export async function sendOrderConfirmation(
   try {
     const resend = getResend()
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <orders@lakeridepros.com>',
+      from: 'Lake Ride Pros <contactus@lakeridepros.com>',
       to: customerEmail,
       subject: `Order Confirmation - ${orderNumber}`,
       html: `
@@ -74,7 +74,7 @@ export async function sendOrderConfirmation(
                 </a>
               </center>
 
-              <p>If you have any questions about your order, please contact us at <a href="mailto:owners@lakeridepros.com">owners@lakeridepros.com</a> or call (573) 206-9499.</p>
+              <p>If you have any questions about your order, please contact us at <a href="mailto:contactus@lakeridepros.com">contactus@lakeridepros.com</a> or call (573) 206-9499.</p>
             </div>
 
             <div class="footer">

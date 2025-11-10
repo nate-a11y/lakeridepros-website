@@ -89,11 +89,11 @@ export default function AccessibilityPage() {
               <li>
                 <strong className="text-lrp-black dark:text-white">Email:</strong>{' '}
                 <a
-                  href="mailto:owners@lakeridepros.com"
+                  href="mailto:contactus@lakeridepros.com"
                   className="text-primary hover:text-primary-dark underline"
-                  aria-label="Email Lake Ride Pros at owners@lakeridepros.com"
+                  aria-label="Email Lake Ride Pros at contactus@lakeridepros.com"
                 >
-                  owners@lakeridepros.com
+                  contactus@lakeridepros.com
                 </a>
               </li>
               <li>

@@ -152,10 +152,10 @@ function GiftCardSuccessContent() {
             Questions about your gift card?
           </p>
           <a
-            href="mailto:owners@lakeridepros.com"
+            href="mailto:contactus@lakeridepros.com"
             className="text-lrp-green hover:text-lrp-green-dark font-semibold"
           >
-            Contact Us: owners@lakeridepros.com
+            Contact Us: contactus@lakeridepros.com
           </a>
         </div>
       </div>

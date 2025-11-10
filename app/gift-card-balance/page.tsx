@@ -280,8 +280,8 @@ export default function GiftCardBalancePage() {
               </summary>
               <p className="text-lrp-black dark:text-dark-text-secondary mt-4">
                 Yes! Contact us at{' '}
-                <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:underline">
-                  owners@lakeridepros.com
+                <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:underline">
+                  contactus@lakeridepros.com
                 </a>{' '}
                 or call{' '}
                 <a href="tel:5732069499" className="text-lrp-green hover:underline">

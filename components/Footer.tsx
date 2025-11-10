@@ -93,11 +93,11 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:owners@lakeridepros.com"
+                  href="mailto:contactus@lakeridepros.com"
                   className="text-white/90 hover:text-lrp-green-light transition-colors"
                   aria-label="Email Lake Ride Pros"
                 >
-                  owners@lakeridepros.com
+                  contactus@lakeridepros.com
                 </a>
               </li>
               <li>

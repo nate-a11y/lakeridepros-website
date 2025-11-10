@@ -28,4 +28,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default await withPayload(nextConfig);
+export default withPayload(nextConfig);

@@ -228,8 +228,8 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               To exercise these rights, please contact us at{' '}
-              <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
-                owners@lakeridepros.com
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+                contactus@lakeridepros.com
               </a>
               {' '}or{' '}
               <a href="tel:5732069499" className="text-lrp-green hover:text-lrp-green-light">
@@ -300,8 +300,8 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               To exercise these rights, contact us at{' '}
-              <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
-                owners@lakeridepros.com
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+                contactus@lakeridepros.com
               </a>
               .
             </p>
@@ -357,8 +357,8 @@ export default function PrivacyPolicyPage() {
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               Email:{' '}
-              <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
-                owners@lakeridepros.com
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+                contactus@lakeridepros.com
               </a>
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">

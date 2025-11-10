@@ -55,9 +55,9 @@ export default function BookPage() {
               <span aria-hidden="true">📞</span> (573) 206-9499
             </a>
             <a
-              href="mailto:bookings@lakeridepros.com"
+              href="mailto:contactus@lakeridepros.com"
               className="bg-white dark:bg-dark-bg-tertiary border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
-              aria-label="Email Lake Ride Pros at bookings@lakeridepros.com"
+              aria-label="Email Lake Ride Pros at contactus@lakeridepros.com"
             >
               <span aria-hidden="true">✉️</span> Email Us
             </a>

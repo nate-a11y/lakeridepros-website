@@ -43,7 +43,7 @@ export default function AboutUsPage() {
       "@type": "ContactPoint",
       "telephone": "+1-573-206-9499",
       "contactType": "customer service",
-      "email": "owners@lakeridepros.com"
+      "email": "contactus@lakeridepros.com"
     }
   }
 

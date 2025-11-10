@@ -109,10 +109,10 @@ export default function ContactPage() {
                     <div>
                       <p className="font-semibold text-neutral-900">Phone</p>
                       <a
-                        href="tel:+15555551234"
+                        href="tel:5732069499"
                         className="text-primary hover:text-primary-dark"
                       >
-                        (555) 555-1234
+                        (573) 206-9499
                       </a>
                     </div>
                   </div>
@@ -132,10 +132,10 @@ export default function ContactPage() {
                     <div>
                       <p className="font-semibold text-neutral-900">Email</p>
                       <a
-                        href="mailto:info@lakeridepros.com"
+                        href="mailto:contactus@lakeridepros.com"
                         className="text-primary hover:text-primary-dark"
                       >
-                        info@lakeridepros.com
+                        contactus@lakeridepros.com
                       </a>
                     </div>
                   </div>

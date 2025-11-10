@@ -6,7 +6,7 @@ export const localBusinessSchema = {
   "@id": "https://www.lakeridepros.com",
   "url": "https://www.lakeridepros.com",
   "telephone": "+15732069499",
-  "email": "owners@lakeridepros.com",
+  "email": "contactus@lakeridepros.com",
   "priceRange": "$$-$$$",
   "address": {
     "@type": "PostalAddress",

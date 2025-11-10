@@ -241,8 +241,8 @@ export default function TermsOfServicePage() {
           <div className="bg-white dark:bg-dark-bg-secondary border border-lrp-gray dark:border-dark-border p-6 rounded-lg">
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
               If you have any concerns about our service, please contact us first at{' '}
-              <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
-                owners@lakeridepros.com
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+                contactus@lakeridepros.com
               </a>
               {' '}or{' '}
               <a href="tel:5732069499" className="text-lrp-green hover:text-lrp-green-light">
@@ -309,8 +309,8 @@ export default function TermsOfServicePage() {
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               Email:{' '}
-              <a href="mailto:owners@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
-                owners@lakeridepros.com
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+                contactus@lakeridepros.com
               </a>
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">

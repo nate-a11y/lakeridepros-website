@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     const resend = getResend()
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <gifts@lakeridepros.com>',
+      from: 'Lake Ride Pros <contactus@lakeridepros.com>',
       to: recipientEmail,
       subject: isGift
         ? `${purchaserName} sent you a Lake Ride Pros Gift Card!`
@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
 
               <p style="color: #666; font-size: 14px; margin-top: 30px;">
                 <strong>Questions?</strong> Contact us at
-                <a href="mailto:owners@lakeridepros.com" style="color: #4cbb17;">owners@lakeridepros.com</a>
+                <a href="mailto:contactus@lakeridepros.com" style="color: #4cbb17;">contactus@lakeridepros.com</a>
                 or call (573) 206-9499
               </p>
             </div>

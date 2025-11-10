@@ -22,7 +22,7 @@ export default function CheckoutCancelPage() {
           <p className="text-gray-700 dark:text-gray-300">
             If you experienced any issues during checkout, please{' '}
             <a
-              href="mailto:owners@lakeridepros.com"
+              href="mailto:contactus@lakeridepros.com"
               className="text-lrp-green hover:text-lrp-green-dark font-semibold underline"
             >
               contact us

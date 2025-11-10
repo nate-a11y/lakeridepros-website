@@ -9,7 +9,11 @@ export async function POST(request: NextRequest) {
     const { orderId, orderNumber, cartItems, shippingAddress, customerEmail } = await request.json()
 
     if (!PRINTIFY_TOKEN || !PRINTIFY_SHOP_ID) {
-      throw new Error('Printify credentials not configured')
+      console.log('Printify not configured - skipping order creation')
+      return NextResponse.json({
+        success: false,
+        message: 'Printify not configured'
+      })
     }
 
     // Map cart items to Printify line items
@@ -18,18 +22,23 @@ export async function POST(request: NextRequest) {
         // Fetch product from Payload to get Printify IDs
         const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
         const productResponse = await fetch(`${payloadUrl}/api/products/${item.productId}`)
+
+        if (!productResponse.ok) {
+          throw new Error(`Failed to fetch product ${item.productId}`)
+        }
+
         const productData = await productResponse.json()
 
         // Find the variant in the product
-        const variant = productData.variants?.find((v: any) => v.sku === item.variantId)
+        const variant = productData.doc.variants?.find((v: any) => v.sku === item.variantId)
 
         if (!variant || !variant.printifyVariantId) {
           throw new Error(`Printify variant ID not found for SKU: ${item.variantId}`)
         }
 
         return {
-          print_provider_id: parseInt(productData.printifyPrintProviderId),
-          blueprint_id: parseInt(productData.printifyBlueprintId),
+          print_provider_id: parseInt(productData.doc.printifyPrintProviderId),
+          blueprint_id: parseInt(productData.doc.printifyBlueprintId),
           variant_id: parseInt(variant.printifyVariantId),
           quantity: item.quantity,
         }

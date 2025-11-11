@@ -8,7 +8,11 @@ const PRINTIFY_SHOP_ID = process.env.PRINTIFY_SHOP_ID
 const SYNC_SECRET = process.env.PRINTIFY_SYNC_SECRET || 'change-me-in-production'
 
 async function downloadImage(url: string): Promise<Buffer> {
-  const response = await fetch(url)
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': 'LakeRidePros/1.0',
+    },
+  })
   if (!response.ok) {
     throw new Error(`Failed to download image: ${response.statusText}`)
   }
@@ -74,6 +78,7 @@ export async function POST(request: Request) {
         {
           headers: {
             Authorization: `Bearer ${PRINTIFY_TOKEN}`,
+            'User-Agent': 'LakeRidePros/1.0',
           },
         }
       )

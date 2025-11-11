@@ -41,7 +41,11 @@ interface PrintifyProduct {
 }
 
 async function downloadImage(url: string): Promise<Buffer> {
-  const response = await fetch(url)
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': 'LakeRidePros/1.0',
+    },
+  })
   if (!response.ok) {
     throw new Error(`Failed to download image: ${response.statusText}`)
   }
@@ -108,6 +112,7 @@ async function syncProducts() {
       {
         headers: {
           Authorization: `Bearer ${PRINTIFY_TOKEN}`,
+          'User-Agent': 'LakeRidePros/1.0',
         },
       }
     )

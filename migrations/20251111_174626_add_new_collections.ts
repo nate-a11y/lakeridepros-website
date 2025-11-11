@@ -205,7 +205,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   // Add foreign keys and indexes
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "products" ADD CONSTRAINT IF NOT EXISTS "products_featured_image_id_media_id_fk" FOREIGN KEY ("featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+      ALTER TABLE "products" ADD CONSTRAINT "products_featured_image_id_media_id_fk" FOREIGN KEY ("featured_image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;
@@ -213,7 +213,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "products_images" ADD CONSTRAINT IF NOT EXISTS "products_images_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+      ALTER TABLE "products_images" ADD CONSTRAINT "products_images_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;
@@ -221,7 +221,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "products_images" ADD CONSTRAINT IF NOT EXISTS "products_images_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "products_images" ADD CONSTRAINT "products_images_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;
@@ -229,7 +229,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "products_categories" ADD CONSTRAINT IF NOT EXISTS "products_categories_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "products_categories" ADD CONSTRAINT "products_categories_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;
@@ -237,7 +237,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "products_tags" ADD CONSTRAINT IF NOT EXISTS "products_tags_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "products_tags" ADD CONSTRAINT "products_tags_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;
@@ -245,7 +245,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "products_variants" ADD CONSTRAINT IF NOT EXISTS "products_variants_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "products_variants" ADD CONSTRAINT "products_variants_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;
@@ -253,7 +253,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "orders_items" ADD CONSTRAINT IF NOT EXISTS "orders_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "orders_items" ADD CONSTRAINT "orders_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;
@@ -261,7 +261,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
   await db.execute(sql`
     DO $$ BEGIN
-      ALTER TABLE "partners" ADD CONSTRAINT IF NOT EXISTS "partners_logo_id_media_id_fk" FOREIGN KEY ("logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+      ALTER TABLE "partners" ADD CONSTRAINT "partners_logo_id_media_id_fk" FOREIGN KEY ("logo_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
     EXCEPTION
       WHEN duplicate_object THEN null;
     END $$;

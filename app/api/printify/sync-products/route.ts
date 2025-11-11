@@ -39,12 +39,41 @@ async function uploadImageToPayload(payload: any, imageBuffer: Buffer, filename:
 }
 
 function slugify(text: string): string {
-  return text
+  const slug = text
     .toLowerCase()
     .replace(/[^\w\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .trim()
+
+  // Limit slug length to 100 characters to avoid database issues
+  return slug.substring(0, 100).replace(/-+$/, '')
+}
+
+async function ensureUniqueSlug(payload: any, baseSlug: string, existingProductId?: string | number): Promise<string> {
+  let slug = baseSlug
+  let counter = 1
+
+  while (true) {
+    const existing = await payload.find({
+      collection: 'products',
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+      limit: 1,
+    })
+
+    // If no conflict, or the conflict is with the same product we're updating, use this slug
+    if (existing.docs.length === 0 || (existingProductId && existing.docs[0].id === existingProductId)) {
+      return slug
+    }
+
+    // Generate new slug with counter
+    counter++
+    slug = `${baseSlug}-${counter}`.substring(0, 100).replace(/-+$/, '')
+  }
 }
 
 async function syncProducts(request: Request) {
@@ -144,7 +173,9 @@ async function syncProducts(request: Request) {
           },
         })
 
-        const slug = slugify(printifyProduct.title)
+        const baseSlug = slugify(printifyProduct.title)
+        const existingProductId = existing.docs.length > 0 ? existing.docs[0].id : undefined
+        const slug = await ensureUniqueSlug(payload, baseSlug, existingProductId)
 
         // Download and upload featured image
         let featuredImageId: number | null = null

@@ -48,7 +48,7 @@ export default function CartDrawer() {
           {cart.items.length === 0 ? (
             <div className="text-center py-12">
               <svg
-                className="mx-auto h-12 w-12 text-neutral-400 dark:text-neutral-600"
+                className="mx-auto h-12 w-12 text-neutral-400 dark:text-neutral-300"
                 fill="none"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -58,7 +58,7 @@ export default function CartDrawer() {
               >
                 <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-              <p className="mt-4 text-neutral-600 dark:text-neutral-400">Your cart is empty</p>
+              <p className="mt-4 text-neutral-600 dark:text-neutral-300">Your cart is empty</p>
               <Link
                 href="/shop"
                 onClick={closeCart}

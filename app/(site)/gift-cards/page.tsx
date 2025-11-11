@@ -14,6 +14,9 @@ const giftCardAmounts = [
 
 export default function GiftCardsPage() {
   const [cardType, setCardType] = useState<'digital' | 'physical'>('digital');
+  const [deliveryMethod, setDeliveryMethod] = useState<'immediate' | 'scheduled'>('immediate');
+  const [scheduledDate, setScheduledDate] = useState('');
+  const [scheduledTime, setScheduledTime] = useState('12:00');
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [customAmount, setCustomAmount] = useState('');
   const [purchaserName, setPurchaserName] = useState('');
@@ -53,6 +56,24 @@ export default function GiftCardsPage() {
         }
       }
 
+      // Validate scheduled delivery for digital cards
+      if (cardType === 'digital' && deliveryMethod === 'scheduled') {
+        if (!scheduledDate) {
+          throw new Error('Please select a delivery date');
+        }
+        const scheduledDateTime = new Date(`${scheduledDate}T${scheduledTime}`);
+        const now = new Date();
+        if (scheduledDateTime <= now) {
+          throw new Error('Scheduled delivery date must be in the future');
+        }
+      }
+
+      // Build scheduled delivery date/time
+      let scheduledDeliveryDate = null;
+      if (cardType === 'digital' && deliveryMethod === 'scheduled' && scheduledDate) {
+        scheduledDeliveryDate = new Date(`${scheduledDate}T${scheduledTime}`).toISOString();
+      }
+
       // Call Stripe checkout API
       const response = await fetch('/api/stripe/create-gift-card-checkout', {
         method: 'POST',
@@ -67,6 +88,8 @@ export default function GiftCardsPage() {
           recipientName: recipientName || null,
           recipientEmail: recipientEmail || null,
           message: message || null,
+          deliveryMethod: cardType === 'digital' ? deliveryMethod : null,
+          scheduledDeliveryDate,
           shippingAddress: cardType === 'physical' ? {
             name: shippingName,
             street1: shippingStreet1,
@@ -200,6 +223,83 @@ export default function GiftCardsPage() {
                       />
                     </div>
                     <p className="text-xs text-gray-500 mt-1">Min: $10, Max: $1,000</p>
+                  </div>
+                )}
+
+                {/* Delivery Timing - Only for Digital Cards */}
+                {cardType === 'digital' && (
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+                      Delivery Timing
+                    </h3>
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <button
+                        type="button"
+                        onClick={() => setDeliveryMethod('immediate')}
+                        className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors ${
+                          deliveryMethod === 'immediate'
+                            ? 'border-primary bg-primary text-white'
+                            : 'border-neutral-300 text-neutral-700 hover:border-primary'
+                        }`}
+                      >
+                        <div className="text-center">
+                          <div className="text-sm">⚡ Send Now</div>
+                          <div className="text-xs mt-1 opacity-80">Instant delivery</div>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDeliveryMethod('scheduled')}
+                        className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors ${
+                          deliveryMethod === 'scheduled'
+                            ? 'border-primary bg-primary text-white'
+                            : 'border-neutral-300 text-neutral-700 hover:border-primary'
+                        }`}
+                      >
+                        <div className="text-center">
+                          <div className="text-sm">📅 Schedule</div>
+                          <div className="text-xs mt-1 opacity-80">Future delivery</div>
+                        </div>
+                      </button>
+                    </div>
+
+                    {deliveryMethod === 'scheduled' && (
+                      <div className="space-y-4 bg-neutral-50 p-4 rounded-lg">
+                        <p className="text-sm text-gray-600">
+                          Perfect for birthdays, holidays, or special occasions!
+                        </p>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                              Delivery Date <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="date"
+                              value={scheduledDate}
+                              onChange={(e) => setScheduledDate(e.target.value)}
+                              min={new Date(Date.now() + 86400000).toISOString().split('T')[0]} // Tomorrow
+                              required={deliveryMethod === 'scheduled'}
+                              className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                              Time <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              type="time"
+                              value={scheduledTime}
+                              onChange={(e) => setScheduledTime(e.target.value)}
+                              required={deliveryMethod === 'scheduled'}
+                              className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            />
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          Times are in Central Time (CST/CDT). Email will be sent on the scheduled date and time.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
 

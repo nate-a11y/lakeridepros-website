@@ -21,6 +21,8 @@ export async function POST(request: NextRequest) {
       recipientName,
       recipientEmail,
       message,
+      deliveryMethod,
+      scheduledDeliveryDate,
       shippingAddress
     } = await request.json()
 
@@ -95,6 +97,8 @@ export async function POST(request: NextRequest) {
       recipientName: recipientName || '',
       recipientEmail: recipientEmail || '',
       message: message || '',
+      deliveryMethod: deliveryMethod || 'immediate',
+      scheduledDeliveryDate: scheduledDeliveryDate || '',
     }
 
     // Add shipping address to metadata for physical cards

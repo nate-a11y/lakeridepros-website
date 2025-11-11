@@ -216,6 +216,8 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     const recipientName = session.metadata?.recipientName || null
     const recipientEmail = session.metadata?.recipientEmail || null
     const message = session.metadata?.message || null
+    const deliveryMethod = session.metadata?.deliveryMethod || 'immediate'
+    const scheduledDeliveryDate = session.metadata?.scheduledDeliveryDate || null
 
     // Create gift card in Payload CMS
     const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
@@ -232,6 +234,15 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
       status: 'active',
       stripePaymentIntentId: session.payment_intent as string,
       stripeCheckoutSessionId: session.id,
+    }
+
+    // Add delivery info for digital cards
+    if (cardType === 'digital') {
+      giftCardData.deliveryMethod = deliveryMethod
+      giftCardData.deliveryStatus = deliveryMethod === 'scheduled' ? 'pending' : 'pending'
+      if (scheduledDeliveryDate) {
+        giftCardData.scheduledDeliveryDate = scheduledDeliveryDate
+      }
     }
 
     // Add shipping address for physical cards
@@ -263,17 +274,30 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     const giftCard = await response.json()
     console.log('Gift card created:', cardType === 'digital' ? giftCard.doc.code : 'pending fulfillment')
 
-    // Only send email immediately for digital gift cards
-    // Physical cards will be emailed when marked as shipped
+    // Send emails based on card type and delivery method
     if (cardType === 'digital') {
-      await sendGiftCardEmail(
-        giftCard.doc,
-        purchaserName,
-        purchaserEmail,
-        recipientName,
-        recipientEmail,
-        message
-      )
+      if (deliveryMethod === 'immediate') {
+        // Send gift card email immediately
+        await sendGiftCardEmail(
+          giftCard.doc,
+          purchaserName,
+          purchaserEmail,
+          recipientName,
+          recipientEmail,
+          message
+        )
+      } else {
+        // Send purchase confirmation for scheduled cards
+        await sendScheduledGiftCardConfirmation(
+          purchaserName,
+          purchaserEmail,
+          amount,
+          scheduledDeliveryDate,
+          recipientName,
+          recipientEmail,
+          message
+        )
+      }
     } else {
       // Send order confirmation for physical cards
       await sendPhysicalGiftCardConfirmation(
@@ -305,8 +329,10 @@ async function sendGiftCardEmail(
     const sendToEmail = recipientEmail || purchaserEmail
     const sendToName = recipientName || purchaserName
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
     // Call email API (create this next)
-    await fetch('/api/email/send-gift-card', {
+    await fetch(`${siteUrl}/api/email/send-gift-card`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -334,8 +360,10 @@ async function sendPhysicalGiftCardConfirmation(
   try {
     console.log('Sending physical gift card order confirmation')
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
     // Send order confirmation email (you can implement a separate email template)
-    const response = await fetch('/api/email/send-physical-gift-card-confirmation', {
+    const response = await fetch(`${siteUrl}/api/email/send-physical-gift-card-confirmation`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -354,5 +382,45 @@ async function sendPhysicalGiftCardConfirmation(
 
   } catch (error) {
     console.error('Error sending physical gift card confirmation:', error)
+  }
+}
+
+async function sendScheduledGiftCardConfirmation(
+  purchaserName: string,
+  purchaserEmail: string,
+  amount: number,
+  scheduledDate: string | null,
+  recipientName: string | null,
+  recipientEmail: string | null,
+  message: string | null
+) {
+  try {
+    console.log('Sending scheduled gift card purchase confirmation')
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
+    // Send purchase confirmation email for scheduled delivery
+    const response = await fetch(`${siteUrl}/api/email/send-scheduled-gift-card-confirmation`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        purchaserName,
+        purchaserEmail,
+        amount,
+        scheduledDate,
+        recipientName,
+        recipientEmail,
+        message,
+      }),
+    })
+
+    if (!response.ok) {
+      console.error('Failed to send scheduled gift card confirmation email')
+    }
+
+  } catch (error) {
+    console.error('Error sending scheduled gift card confirmation:', error)
   }
 }

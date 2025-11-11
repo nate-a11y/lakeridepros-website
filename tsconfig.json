@@ -21,7 +21,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@payload-config": ["./payload.config.mjs"]
+      "@payload-config": ["./payload.config.ts"]
     }
   },
   "include": [

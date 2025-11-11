@@ -23,9 +23,13 @@ const dirname = path.dirname(filename)
 
 // Helper to get the appropriate Postgres connection string with SSL disabled
 function getPostgresConnectionString() {
-  // Always use direct connection (non-pooling) for better control in serverless
-  // POSTGRES_URL_NON_POOLING is the direct connection to the database
-  let connStr = process.env.POSTGRES_URL_NON_POOLING || process.env.DATABASE_URI || process.env.POSTGRES_URL || ''
+  // For serverless: Use POSTGRES_URL (transaction pooler on port 6543) - handles thousands of connections
+  // For migrations: Use POSTGRES_URL_NON_POOLING (direct connection on port 5432) - needed for schema changes
+  const isMigration = process.argv.includes('migrate') || process.env.PAYLOAD_MIGRATING === 'true'
+
+  let connStr = isMigration
+    ? (process.env.POSTGRES_URL_NON_POOLING || process.env.DATABASE_URI || '')
+    : (process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
 
   // Supabase URLs come with sslmode=require - we need to override it to disable cert verification
   if (connStr.includes('sslmode=require')) {

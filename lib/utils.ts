@@ -32,3 +32,10 @@ export function slugify(text: string): string {
     .replace(/-+/g, '-')
     .trim();
 }
+
+export function getMediaUrl(url: string): string {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3001';
+  return `${PAYLOAD_API_URL}${url}`;
+}

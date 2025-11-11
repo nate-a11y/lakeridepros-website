@@ -40,13 +40,13 @@ const config = buildConfig({
   cors: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
     'https://lakeridepros-website.vercel.app',
-    'https://*.vercel.app',
+    /^https:\/\/.*\.vercel\.app$/,
     'http://localhost:3000',
   ].filter(Boolean),
   csrf: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
     'https://lakeridepros-website.vercel.app',
-    'https://*.vercel.app',
+    /^https:\/\/.*\.vercel\.app$/,
     'http://localhost:3000',
   ].filter(Boolean),
   email: resendAdapter({

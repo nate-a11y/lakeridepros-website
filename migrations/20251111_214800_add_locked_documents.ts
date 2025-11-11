@@ -29,6 +29,18 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
     );
   `)
 
+  // Add columns if they don't exist (for existing tables from dev mode)
+  await db.execute(sql`
+    DO $$ BEGIN
+      ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "products_id" integer;
+      ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "gift_cards_id" integer;
+      ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "orders_id" integer;
+      ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "partners_id" integer;
+      ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "pages_id" integer;
+      ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "blog_posts_id" integer;
+    END $$;
+  `)
+
   // Add foreign key constraints
   await db.execute(sql`
     DO $$ BEGIN

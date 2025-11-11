@@ -38,6 +38,7 @@ const config = buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
+    push: true, // Auto-sync schema without migrations
   }),
   sharp,
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || 'http://localhost:3000',

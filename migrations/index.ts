@@ -1,9 +1,15 @@
 import * as migration_20251111_174626_add_new_collections from './20251111_174626_add_new_collections';
+import * as migration_20251111_205751_add_printify_indexes from './20251111_205751_add_printify_indexes';
 
 export const migrations = [
   {
     up: migration_20251111_174626_add_new_collections.up,
     down: migration_20251111_174626_add_new_collections.down,
     name: '20251111_174626_add_new_collections'
+  },
+  {
+    up: migration_20251111_205751_add_printify_indexes.up,
+    down: migration_20251111_205751_add_printify_indexes.down,
+    name: '20251111_205751_add_printify_indexes'
   },
 ];

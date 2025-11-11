@@ -28,6 +28,7 @@ async function uploadImageToPayload(payload: any, imageBuffer: Buffer, filename:
       mimetype: 'image/png',
       size: imageBuffer.length,
     },
+    overrideAccess: true,
   })
 
   return media
@@ -61,21 +62,40 @@ export async function POST(request: Request) {
 
     const payload = await getPayload({ config })
 
-    // Fetch products from Printify
-    const response = await fetch(`${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json`, {
-      headers: {
-        Authorization: `Bearer ${PRINTIFY_TOKEN}`,
-      },
-    })
+    // Fetch all products from Printify with pagination
+    let allProducts: any[] = []
+    let currentPage = 1
+    let hasMorePages = true
+    const limit = 100 // Max allowed by Printify API
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: `Printify API error: ${response.statusText}` },
-        { status: response.status }
+    while (hasMorePages) {
+      const response = await fetch(
+        `${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json?page=${currentPage}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${PRINTIFY_TOKEN}`,
+          },
+        }
       )
+
+      if (!response.ok) {
+        return NextResponse.json(
+          { error: `Printify API error: ${response.statusText}` },
+          { status: response.status }
+        )
+      }
+
+      const responseData = await response.json()
+      const { data: products, current_page, last_page } = responseData
+
+      allProducts = allProducts.concat(products)
+
+      // Check if there are more pages to fetch
+      hasMorePages = current_page < last_page
+      currentPage++
     }
 
-    const { data: printifyProducts } = await response.json()
+    const printifyProducts = allProducts
 
     const results = {
       total: printifyProducts.length,
@@ -108,6 +128,21 @@ export async function POST(request: Request) {
           const imageBuffer = await downloadImage(defaultImage.src)
           const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-featured.png`)
           featuredImageId = media.id as number
+        }
+
+        // Upload additional images
+        const additionalImages: Array<{ image: number }> = []
+        for (const [index, image] of printifyProduct.images.slice(0, 5).entries()) {
+          if (image === defaultImage) continue
+
+          try {
+            const imageBuffer = await downloadImage(image.src)
+            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${index + 1}.png`)
+            additionalImages.push({ image: media.id as number })
+          } catch (error) {
+            // Continue if one image fails
+            console.error(`Failed to upload image ${index + 1} for ${printifyProduct.title}:`, error)
+          }
         }
 
         // Map variants
@@ -184,6 +219,7 @@ export async function POST(request: Request) {
           shortDescription:
             printifyProduct.description?.substring(0, 200) || printifyProduct.title,
           featuredImage: featuredImageId,
+          images: additionalImages,
           price: basePrice,
           categories,
           tags: printifyProduct.tags.map((tag: string) => ({ tag })),
@@ -203,12 +239,14 @@ export async function POST(request: Request) {
             collection: 'products',
             id: existing.docs[0].id,
             data: productData,
+            overrideAccess: true,
           })
           results.updated++
         } else {
           await payload.create({
             collection: 'products',
             data: productData,
+            overrideAccess: true,
           })
           results.created++
         }

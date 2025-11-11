@@ -4,16 +4,28 @@ export const GiftCards: CollectionConfig = {
   slug: 'gift-cards',
   admin: {
     useAsTitle: 'code',
-    defaultColumns: ['code', 'initialAmount', 'currentBalance', 'status', 'createdAt'],
+    defaultColumns: ['code', 'type', 'initialAmount', 'currentBalance', 'status', 'fulfillmentStatus', 'createdAt'],
   },
   fields: [
     {
+      name: 'type',
+      type: 'select',
+      required: true,
+      defaultValue: 'digital',
+      options: [
+        { label: 'Digital', value: 'digital' },
+        { label: 'Physical', value: 'physical' },
+      ],
+      admin: {
+        description: 'Gift card delivery type',
+      },
+    },
+    {
       name: 'code',
       type: 'text',
-      required: true,
       unique: true,
       admin: {
-        description: 'Unique gift card code',
+        description: 'Unique gift card code (auto-generated)',
         readOnly: true,
       },
     },
@@ -74,6 +86,94 @@ export const GiftCards: CollectionConfig = {
       },
     },
     {
+      name: 'shippingAddress',
+      type: 'group',
+      admin: {
+        description: 'Shipping address for physical gift cards',
+        condition: (data) => data.type === 'physical',
+      },
+      fields: [
+        {
+          name: 'name',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'street1',
+          type: 'text',
+          required: true,
+          admin: {
+            description: 'Street address line 1',
+          },
+        },
+        {
+          name: 'street2',
+          type: 'text',
+          admin: {
+            description: 'Apartment, suite, etc. (optional)',
+          },
+        },
+        {
+          name: 'city',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'state',
+          type: 'text',
+          required: true,
+          admin: {
+            description: 'State/Province',
+          },
+        },
+        {
+          name: 'zipCode',
+          type: 'text',
+          required: true,
+          admin: {
+            description: 'ZIP/Postal Code',
+          },
+        },
+        {
+          name: 'country',
+          type: 'text',
+          required: true,
+          defaultValue: 'United States',
+        },
+      ],
+    },
+    {
+      name: 'fulfillmentStatus',
+      type: 'select',
+      defaultValue: 'pending',
+      options: [
+        { label: 'Pending', value: 'pending' },
+        { label: 'Processing', value: 'processing' },
+        { label: 'Shipped', value: 'shipped' },
+        { label: 'Delivered', value: 'delivered' },
+      ],
+      admin: {
+        description: 'Fulfillment status for physical cards',
+        condition: (data) => data.type === 'physical',
+      },
+    },
+    {
+      name: 'trackingNumber',
+      type: 'text',
+      admin: {
+        description: 'USPS tracking number',
+        condition: (data) => data.type === 'physical' && (data.fulfillmentStatus === 'shipped' || data.fulfillmentStatus === 'delivered'),
+      },
+    },
+    {
+      name: 'shippedDate',
+      type: 'date',
+      admin: {
+        description: 'Date card was shipped',
+        condition: (data) => data.type === 'physical' && (data.fulfillmentStatus === 'shipped' || data.fulfillmentStatus === 'delivered'),
+      },
+    },
+    {
       name: 'stripePaymentIntentId',
       type: 'text',
       admin: {
@@ -92,15 +192,26 @@ export const GiftCards: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      async ({ data, operation }) => {
-        // Auto-generate gift card code on creation
-        if (operation === 'create' && !data.code) {
+      async ({ data, operation, originalDoc }) => {
+        // Auto-generate gift card code for digital cards on creation
+        if (operation === 'create' && !data.code && data.type === 'digital') {
           data.code = generateGiftCardCode()
         }
+
+        // For physical cards, generate code when marked as shipped
+        if (data.type === 'physical' && !data.code && data.fulfillmentStatus === 'shipped') {
+          data.code = generateGiftCardCode()
+          // Set shipped date if not already set
+          if (!data.shippedDate) {
+            data.shippedDate = new Date().toISOString()
+          }
+        }
+
         // If balance reaches 0, mark as redeemed
         if (data.currentBalance === 0 && data.status === 'active') {
           data.status = 'redeemed'
         }
+
         return data
       },
     ],

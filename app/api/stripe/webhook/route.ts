@@ -209,6 +209,7 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
   try {
     console.log('Processing gift card purchase:', session.id)
 
+    const cardType = session.metadata?.cardType || 'digital'
     const amount = parseFloat(session.metadata?.amount || '0')
     const purchaserName = session.metadata?.purchaserName || ''
     const purchaserEmail = session.metadata?.purchaserEmail || ''
@@ -219,7 +220,8 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     // Create gift card in Payload CMS
     const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
 
-    const giftCardData = {
+    const giftCardData: any = {
+      type: cardType,
       initialAmount: amount,
       currentBalance: amount,
       purchaserName,
@@ -230,6 +232,20 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
       status: 'active',
       stripePaymentIntentId: session.payment_intent as string,
       stripeCheckoutSessionId: session.id,
+    }
+
+    // Add shipping address for physical cards
+    if (cardType === 'physical') {
+      giftCardData.shippingAddress = {
+        name: session.metadata?.shippingName || '',
+        street1: session.metadata?.shippingStreet1 || '',
+        street2: session.metadata?.shippingStreet2 || '',
+        city: session.metadata?.shippingCity || '',
+        state: session.metadata?.shippingState || '',
+        zipCode: session.metadata?.shippingZipCode || '',
+        country: session.metadata?.shippingCountry || 'United States',
+      }
+      giftCardData.fulfillmentStatus = 'pending'
     }
 
     const response = await fetch(`${payloadUrl}/api/gift-cards`, {
@@ -245,17 +261,28 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     }
 
     const giftCard = await response.json()
-    console.log('Gift card created:', giftCard.doc.code)
+    console.log('Gift card created:', cardType === 'digital' ? giftCard.doc.code : 'pending fulfillment')
 
-    // Send gift card email
-    await sendGiftCardEmail(
-      giftCard.doc,
-      purchaserName,
-      purchaserEmail,
-      recipientName,
-      recipientEmail,
-      message
-    )
+    // Only send email immediately for digital gift cards
+    // Physical cards will be emailed when marked as shipped
+    if (cardType === 'digital') {
+      await sendGiftCardEmail(
+        giftCard.doc,
+        purchaserName,
+        purchaserEmail,
+        recipientName,
+        recipientEmail,
+        message
+      )
+    } else {
+      // Send order confirmation for physical cards
+      await sendPhysicalGiftCardConfirmation(
+        purchaserName,
+        purchaserEmail,
+        amount,
+        giftCardData.shippingAddress
+      )
+    }
 
   } catch (error) {
     console.error('Error handling gift card purchase:', error)
@@ -295,5 +322,37 @@ async function sendGiftCardEmail(
 
   } catch (error) {
     console.error('Error sending gift card email:', error)
+  }
+}
+
+async function sendPhysicalGiftCardConfirmation(
+  purchaserName: string,
+  purchaserEmail: string,
+  amount: number,
+  shippingAddress: any
+) {
+  try {
+    console.log('Sending physical gift card order confirmation')
+
+    // Send order confirmation email (you can implement a separate email template)
+    const response = await fetch('/api/email/send-physical-gift-card-confirmation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        purchaserName,
+        purchaserEmail,
+        amount,
+        shippingAddress,
+      }),
+    })
+
+    if (!response.ok) {
+      console.error('Failed to send physical gift card confirmation email')
+    }
+
+  } catch (error) {
+    console.error('Error sending physical gift card confirmation:', error)
   }
 }

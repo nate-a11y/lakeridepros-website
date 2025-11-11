@@ -21,12 +21,13 @@ import { supabaseAdapter } from '../lib/supabase-adapter'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Detect if we're running migrations
+const isMigration = process.argv.includes('migrate') || process.env.PAYLOAD_MIGRATING === 'true'
+
 // Helper to get the appropriate Postgres connection string with SSL disabled
 function getPostgresConnectionString() {
   // For serverless: Use POSTGRES_URL (transaction pooler on port 6543) - handles thousands of connections
   // For migrations: Use POSTGRES_URL_NON_POOLING (direct connection on port 5432) - needed for schema changes
-  const isMigration = process.argv.includes('migrate') || process.env.PAYLOAD_MIGRATING === 'true'
-
   let connStr = isMigration
     ? (process.env.POSTGRES_URL_NON_POOLING || process.env.DATABASE_URI || '')
     : (process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
@@ -43,6 +44,33 @@ function getPostgresConnectionString() {
   return connStr
 }
 
+// Get pool configuration based on whether we're migrating or running serverless
+function getPoolConfig() {
+  if (isMigration) {
+    // Migration pool config: more connections, longer timeouts
+    return {
+      connectionString: getPostgresConnectionString(),
+      ssl: { rejectUnauthorized: false },
+      max: 10, // Allow more connections for migrations
+      min: 0,
+      idleTimeoutMillis: 60000, // 60 seconds
+      connectionTimeoutMillis: 60000, // 60 seconds for slow cold starts
+      allowExitOnIdle: true,
+    }
+  } else {
+    // Serverless pool config: minimal connections, fast cleanup
+    return {
+      connectionString: getPostgresConnectionString(),
+      ssl: { rejectUnauthorized: false },
+      max: 1, // Max 1 connection per serverless function
+      min: 0,
+      idleTimeoutMillis: 30000, // 30 seconds
+      connectionTimeoutMillis: 10000, // 10 seconds
+      allowExitOnIdle: true,
+    }
+  }
+}
+
 const config = buildConfig({
   admin: {
     user: 'users',
@@ -57,18 +85,7 @@ const config = buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
-    pool: {
-      connectionString: getPostgresConnectionString(),
-      ssl: {
-        rejectUnauthorized: false,
-      },
-      // Serverless-friendly connection pool settings
-      max: 1, // Max connections per serverless function instance (keep low for serverless)
-      min: 0, // No minimum connections (serverless functions should scale to zero)
-      idleTimeoutMillis: 30000, // Close idle connections after 30s
-      connectionTimeoutMillis: 10000, // Timeout after 10s if can't connect
-      allowExitOnIdle: true, // Allow process to exit when all connections are idle
-    },
+    pool: getPoolConfig(),
     // Use migrations only, no auto-push
     push: false,
   }),

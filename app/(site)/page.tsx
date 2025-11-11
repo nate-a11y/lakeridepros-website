@@ -75,7 +75,7 @@ export default async function HomePage() {
     getFeaturedVehicles(3).catch(() => []),
     getLatestBlogPosts(3).catch(() => []),
     getTestimonials(true).catch(() => []),
-    getPartners(true).catch(() => []),
+    getPartners(undefined, true).catch(() => []),
   ]);
 
   const services = servicesData.docs || [];

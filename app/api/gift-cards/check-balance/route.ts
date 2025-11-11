@@ -50,10 +50,10 @@ export async function POST(request: NextRequest) {
     // Return gift card data
     return NextResponse.json({
       code: giftCard.code,
-      balance: giftCard.balance || 0,
-      originalAmount: giftCard.amount || giftCard.balance,
-      purchasedDate: giftCard.purchasedDate || giftCard.createdAt,
-      expirationDate: giftCard.expirationDate || 'Never',
+      balance: giftCard.currentBalance || 0,
+      originalAmount: giftCard.initialAmount || giftCard.currentBalance,
+      purchasedDate: giftCard.createdAt,
+      expirationDate: 'Never', // Gift cards never expire
       status: giftCard.status,
     })
 

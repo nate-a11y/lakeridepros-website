@@ -27,7 +27,6 @@ const serverFunction: ServerFunctionClient = async function (args) {
 }
 
 const Layout = ({ children }: Args) => (
-  // REMOVED html/body - will use parent layout's
   <RootLayout
     config={config}
     importMap={importMap}

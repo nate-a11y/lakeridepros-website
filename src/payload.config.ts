@@ -36,7 +36,19 @@ const config = buildConfig({
     },
   }),
   sharp,
-  serverURL: process.env.SERVER_URL || 'http://localhost:3000',
+  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || 'http://localhost:3000',
+  cors: [
+    process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
+    'https://lakeridepros-website.vercel.app',
+    /^https:\/\/.*\.vercel\.app$/,
+    'http://localhost:3000',
+  ].filter(Boolean),
+  csrf: [
+    process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
+    'https://lakeridepros-website.vercel.app',
+    /^https:\/\/.*\.vercel\.app$/,
+    'http://localhost:3000',
+  ].filter(Boolean),
   email: resendAdapter({
     defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lakeridepros.com',
     defaultFromName: process.env.EMAIL_FROM_NAME || 'Lake Ride Pros',

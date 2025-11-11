@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { formatPrice } from '@/lib/utils';
+import { Loader2 } from 'lucide-react';
 
 const giftCardAmounts = [
   { value: 25, label: '$25' },
@@ -14,16 +15,58 @@ const giftCardAmounts = [
 export default function GiftCardsPage() {
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [customAmount, setCustomAmount] = useState('');
+  const [purchaserName, setPurchaserName] = useState('');
+  const [purchaserEmail, setPurchaserEmail] = useState('');
   const [recipientEmail, setRecipientEmail] = useState('');
   const [recipientName, setRecipientName] = useState('');
   const [message, setMessage] = useState('');
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
 
   const finalAmount = selectedAmount === 0 ? parseFloat(customAmount) || 0 : selectedAmount;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // This would integrate with payment processing
-    alert('Gift card purchase would be processed here with payment integration.');
+    setCheckoutLoading(true);
+    setCheckoutError('');
+
+    try {
+      // Validate amount
+      if (finalAmount < 10 || finalAmount > 1000) {
+        throw new Error('Gift card amount must be between $10 and $1,000');
+      }
+
+      // Call Stripe checkout API
+      const response = await fetch('/api/stripe/create-gift-card-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: finalAmount,
+          purchaserName,
+          purchaserEmail,
+          recipientName: recipientName || null,
+          recipientEmail: recipientEmail || null,
+          message: message || null,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
+      }
+
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error: any) {
+      console.error('Gift card checkout error:', error);
+      setCheckoutError(error.message || 'Something went wrong. Please try again.');
+      setCheckoutLoading(false);
+    }
   };
 
   return (
@@ -86,41 +129,88 @@ export default function GiftCardsPage() {
                         onChange={(e) => setCustomAmount(e.target.value)}
                         placeholder="0.00"
                         min="10"
+                        max="1000"
                         step="0.01"
                         required
                         className="w-full pl-8 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
+                    <p className="text-xs text-gray-500 mt-1">Min: $10, Max: $1,000</p>
                   </div>
                 )}
 
-                {/* Recipient Details */}
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-2">
-                    Recipient Name
-                  </label>
-                  <input
-                    type="text"
-                    value={recipientName}
-                    onChange={(e) => setRecipientName(e.target.value)}
-                    placeholder="John Doe"
-                    required
-                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
+                {/* Purchaser Details */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">Your Information</h3>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                        Your Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={purchaserName}
+                        onChange={(e) => setPurchaserName(e.target.value)}
+                        placeholder="Jane Smith"
+                        required
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                        Your Email <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        value={purchaserEmail}
+                        onChange={(e) => setPurchaserEmail(e.target.value)}
+                        placeholder="jane@example.com"
+                        required
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Receipt and gift card will be sent here</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-2">
-                    Recipient Email
-                  </label>
-                  <input
-                    type="email"
-                    value={recipientEmail}
-                    onChange={(e) => setRecipientEmail(e.target.value)}
-                    placeholder="recipient@example.com"
-                    required
-                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
+                {/* Recipient Details */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+                    Recipient Information (Optional)
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Leave blank to send the gift card to yourself, or fill in to send directly to the recipient.
+                  </p>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                        Recipient Name
+                      </label>
+                      <input
+                        type="text"
+                        value={recipientName}
+                        onChange={(e) => setRecipientName(e.target.value)}
+                        placeholder="John Doe"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                        Recipient Email
+                      </label>
+                      <input
+                        type="email"
+                        value={recipientEmail}
+                        onChange={(e) => setRecipientEmail(e.target.value)}
+                        placeholder="recipient@example.com"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -144,13 +234,33 @@ export default function GiftCardsPage() {
                       {formatPrice(finalAmount)}
                     </span>
                   </div>
+
+                  {checkoutError && (
+                    <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 mb-4">
+                      <p className="text-red-700 text-sm">
+                        {checkoutError}
+                      </p>
+                    </div>
+                  )}
+
                   <button
                     type="submit"
-                    disabled={finalAmount < 10}
-                    className="w-full bg-secondary hover:bg-secondary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={checkoutLoading || finalAmount < 10 || finalAmount > 1000}
+                    className="w-full bg-secondary hover:bg-secondary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
-                    Purchase Gift Card
+                    {checkoutLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Purchase Gift Card'
+                    )}
                   </button>
+
+                  <p className="text-sm text-gray-600 text-center mt-3">
+                    Secure checkout powered by Stripe
+                  </p>
                 </div>
               </form>
             </div>

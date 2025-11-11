@@ -161,6 +161,16 @@ body {
     white-space: nowrap;
     border-width: 0;
   }
+
+  /* Hide scrollbar utility for horizontal scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
 }
 
 /* Hide Moovs FAB on the dedicated booking page */

@@ -292,7 +292,10 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
           purchaserName,
           purchaserEmail,
           amount,
-          scheduledDeliveryDate
+          scheduledDeliveryDate,
+          recipientName,
+          recipientEmail,
+          message
         )
       }
     } else {
@@ -326,8 +329,10 @@ async function sendGiftCardEmail(
     const sendToEmail = recipientEmail || purchaserEmail
     const sendToName = recipientName || purchaserName
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
     // Call email API (create this next)
-    await fetch('/api/email/send-gift-card', {
+    await fetch(`${siteUrl}/api/email/send-gift-card`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -355,8 +360,10 @@ async function sendPhysicalGiftCardConfirmation(
   try {
     console.log('Sending physical gift card order confirmation')
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
     // Send order confirmation email (you can implement a separate email template)
-    const response = await fetch('/api/email/send-physical-gift-card-confirmation', {
+    const response = await fetch(`${siteUrl}/api/email/send-physical-gift-card-confirmation`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -382,13 +389,18 @@ async function sendScheduledGiftCardConfirmation(
   purchaserName: string,
   purchaserEmail: string,
   amount: number,
-  scheduledDate: string | null
+  scheduledDate: string | null,
+  recipientName: string | null,
+  recipientEmail: string | null,
+  message: string | null
 ) {
   try {
     console.log('Sending scheduled gift card purchase confirmation')
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+
     // Send purchase confirmation email for scheduled delivery
-    const response = await fetch('/api/email/send-scheduled-gift-card-confirmation', {
+    const response = await fetch(`${siteUrl}/api/email/send-scheduled-gift-card-confirmation`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -398,6 +410,9 @@ async function sendScheduledGiftCardConfirmation(
         purchaserEmail,
         amount,
         scheduledDate,
+        recipientName,
+        recipientEmail,
+        message,
       }),
     })
 

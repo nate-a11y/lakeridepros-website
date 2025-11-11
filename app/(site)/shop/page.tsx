@@ -84,11 +84,11 @@ export default async function ShopPage() {
         <div className="container mx-auto px-4">
           {products.length === 0 ? (
             <div className="text-center py-20">
-              <ShoppingBag className="w-20 h-20 text-gray-400 mx-auto mb-6" />
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              <ShoppingBag className="w-20 h-20 text-neutral-400 dark:text-neutral-400 mx-auto mb-6" />
+              <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
                 Coming Soon!
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-8">
+              <p className="text-neutral-600 dark:text-neutral-400 mb-8">
                 We're working on bringing you awesome Lake Ride Pros merchandise. Check back soon!
               </p>
               <Link
@@ -130,7 +130,7 @@ function ProductCard({ product }: { product: any }) {
       className="group bg-white dark:bg-dark-bg-secondary rounded-lg border dark:border-dark-border overflow-hidden hover:shadow-xl transition-all"
     >
       {/* Image */}
-      <div className="relative aspect-square bg-gray-100 dark:bg-dark-bg-primary overflow-hidden">
+      <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-primary overflow-hidden">
         {image ? (
           <Image
             src={image.image.url}
@@ -140,7 +140,7 @@ function ProductCard({ product }: { product: any }) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <ShoppingBag className="w-20 h-20 text-gray-300" />
+            <ShoppingBag className="w-20 h-20 text-neutral-300 dark:text-neutral-300" />
           </div>
         )}
 
@@ -159,7 +159,7 @@ function ProductCard({ product }: { product: any }) {
 
       {/* Details */}
       <div className="p-4">
-        <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 group-hover:text-lrp-green transition-colors">
+        <h3 className="font-bold text-lg text-neutral-900 dark:text-white mb-2 group-hover:text-lrp-green transition-colors">
           {product.name}
         </h3>
 
@@ -169,7 +169,7 @@ function ProductCard({ product }: { product: any }) {
             ${product.price.toFixed(2)}
           </span>
           {hasDiscount && (
-            <span className="text-gray-500 line-through">
+            <span className="text-neutral-500 dark:text-neutral-400 line-through">
               ${product.compareAtPrice.toFixed(2)}
             </span>
           )}
@@ -177,7 +177,7 @@ function ProductCard({ product }: { product: any }) {
 
         {/* Category */}
         {product.categories && product.categories.length > 0 && (
-          <p className="text-sm text-gray-600 dark:text-gray-400 capitalize">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 capitalize">
             {product.categories[0].replace('-', ' ')}
           </p>
         )}
@@ -188,7 +188,7 @@ function ProductCard({ product }: { product: any }) {
             {Array.from(new Set<string>(product.variants.map((v: any) => v.size as string))).slice(0, 5).map((size: string) => (
               <span
                 key={size}
-                className="text-xs border border-gray-300 dark:border-dark-border px-2 py-1 rounded"
+                className="text-xs border border-neutral-300 dark:border-dark-border px-2 py-1 rounded"
               >
                 {size.toUpperCase()}
               </span>

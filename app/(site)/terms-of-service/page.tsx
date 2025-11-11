@@ -301,7 +301,7 @@ export default function TermsOfServicePage() {
             If you have questions about our terms of service or booking conditions, please contact us:
           </p>
           <div className="space-y-2">
-            <p className="text-gray-700 dark:text-white">
+            <p className="text-neutral-700 dark:text-white">
               <strong>Lake Ride Pros LLC</strong>
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">

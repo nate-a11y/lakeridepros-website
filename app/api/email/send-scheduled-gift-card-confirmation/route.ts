@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
                           <p style="margin: 0; color: #666666; font-size: 14px;">
                             Lake Ride Pros - Premium Water Sports Equipment & Services
                           </p>
-                          <p style="margin: 10px 0 0; color: #999999; font-size: 12px;">
+                          <p style="margin: 10px 0 0; color: #6b7280; font-size: 12px;">
                             <a href="https://www.lakeridepros.com" style="color: ${greenTheme}; text-decoration: none;">www.lakeridepros.com</a>
                           </p>
                         </div>

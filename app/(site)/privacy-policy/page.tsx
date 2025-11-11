@@ -349,7 +349,7 @@ export default function PrivacyPolicyPage() {
             If you have any questions or concerns about how we handle your data, please contact us:
           </p>
           <div className="space-y-2">
-            <p className="text-gray-700 dark:text-white">
+            <p className="text-neutral-700 dark:text-white">
               <strong>Lake Ride Pros LLC</strong>
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">

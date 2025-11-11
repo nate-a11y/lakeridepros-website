@@ -29,13 +29,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         <div className="flex items-center justify-between p-6 border-b dark:border-dark-border">
           <div className="flex items-center gap-3">
             <ShoppingCart className="w-6 h-6 text-lrp-green" />
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
               Cart ({items.length})
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-dark-bg-secondary rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary rounded-lg transition-colors"
             aria-label="Close cart"
           >
             <X className="w-6 h-6" />
@@ -46,8 +46,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         <div className="flex-1 overflow-y-auto p-6">
           {items.length === 0 ? (
             <div className="text-center py-12">
-              <ShoppingCart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
+              <ShoppingCart className="w-16 h-16 text-neutral-400 dark:text-neutral-400 mx-auto mb-4" />
+              <p className="text-neutral-600 dark:text-neutral-400 mb-4">
                 Your cart is empty
               </p>
               <button
@@ -75,10 +75,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                   {/* Details */}
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                    <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">
                       {item.productName}
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
                       {item.variantName}
                     </p>
 
@@ -87,7 +87,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                          className="w-8 h-8 rounded border border-gray-300 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-secondary"
+                          className="w-8 h-8 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
                           aria-label="Decrease quantity"
                         >
                           −
@@ -97,7 +97,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                          className="w-8 h-8 rounded border border-gray-300 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-secondary"
+                          className="w-8 h-8 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
                           aria-label="Increase quantity"
                         >
                           +
@@ -129,7 +129,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           <div className="border-t dark:border-dark-border p-6 space-y-4">
             {/* Subtotal */}
             <div className="flex justify-between text-lg">
-              <span className="font-semibold text-gray-900 dark:text-white">
+              <span className="font-semibold text-neutral-900 dark:text-white">
                 Subtotal:
               </span>
               <span className="font-bold text-lrp-green">
@@ -137,7 +137,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </span>
             </div>
 
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
               Shipping and taxes calculated at checkout
             </p>
 
@@ -152,7 +152,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </Link>
               <button
                 onClick={onClose}
-                className="block w-full border-2 border-gray-300 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-secondary text-gray-900 dark:text-white text-center py-3 rounded-lg font-semibold transition-all"
+                className="block w-full border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-white text-center py-3 rounded-lg font-semibold transition-all"
               >
                 Continue Shopping
               </button>

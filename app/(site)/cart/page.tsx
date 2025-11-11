@@ -50,11 +50,11 @@ export default function CartPage() {
     return (
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary py-20">
         <div className="container mx-auto px-4 text-center">
-          <ShoppingCart className="w-24 h-24 text-gray-400 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <ShoppingCart className="w-24 h-24 text-neutral-400 mx-auto mb-6" />
+          <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
             Your Cart is Empty
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
+          <p className="text-neutral-600 dark:text-neutral-400 mb-8">
             Add some Lake Ride Pros merchandise to get started!
           </p>
           <Link
@@ -81,7 +81,7 @@ export default function CartPage() {
             <ArrowLeft className="w-5 h-5" />
             Continue Shopping
           </Link>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-4xl font-bold text-neutral-900 dark:text-white">
             Shopping Cart
           </h1>
         </div>
@@ -110,24 +110,24 @@ export default function CartPage() {
                   <div className="flex-1">
                     <Link
                       href={`/shop/products/${item.productSlug}`}
-                      className="font-bold text-xl text-gray-900 dark:text-white hover:text-lrp-green mb-2 block"
+                      className="font-bold text-xl text-neutral-900 dark:text-white hover:text-lrp-green mb-2 block"
                     >
                       {item.productName}
                     </Link>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">
+                    <p className="text-neutral-600 dark:text-neutral-400 mb-4">
                       {item.variantName}
                     </p>
 
                     <div className="flex items-center justify-between">
                       {/* Quantity Controls */}
                       <div className="flex items-center gap-3">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                        <span className="text-sm text-neutral-600 dark:text-neutral-400">
                           Quantity:
                         </span>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                            className="w-10 h-10 rounded border border-gray-300 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-primary font-bold"
+                            className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-primary font-bold"
                             aria-label="Decrease quantity"
                           >
                             −
@@ -137,7 +137,7 @@ export default function CartPage() {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                            className="w-10 h-10 rounded border border-gray-300 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-primary font-bold"
+                            className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-primary font-bold"
                             aria-label="Increase quantity"
                           >
                             +
@@ -150,7 +150,7 @@ export default function CartPage() {
                         <p className="text-2xl font-bold text-lrp-green">
                           ${(item.price * item.quantity).toFixed(2)}
                         </p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
                           ${item.price.toFixed(2)} each
                         </p>
                       </div>
@@ -169,7 +169,7 @@ export default function CartPage() {
               ))}
 
               {/* Clear Cart */}
-              <div className="p-6 bg-gray-50 dark:bg-dark-bg-primary">
+              <div className="p-6 bg-neutral-50 dark:bg-dark-bg-primary">
                 <button
                   onClick={clearCart}
                   className="text-red-600 hover:text-red-700 font-semibold flex items-center gap-2"
@@ -184,22 +184,22 @@ export default function CartPage() {
           {/* Order Summary */}
           <div>
             <div className="bg-white dark:bg-dark-bg-secondary rounded-lg border dark:border-dark-border p-6 sticky top-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
                 Order Summary
               </h2>
 
               <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                <div className="flex justify-between text-neutral-600 dark:text-neutral-400">
                   <span>Subtotal ({items.length} items)</span>
                   <span className="font-semibold">${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                <div className="flex justify-between text-neutral-600 dark:text-neutral-400">
                   <span>Shipping</span>
                   <span className="font-semibold">
                     {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
                   </span>
                 </div>
-                <div className="flex justify-between text-gray-600 dark:text-gray-400">
+                <div className="flex justify-between text-neutral-600 dark:text-neutral-400">
                   <span>Estimated Tax</span>
                   <span className="font-semibold">${estimatedTax.toFixed(2)}</span>
                 </div>
@@ -207,7 +207,7 @@ export default function CartPage() {
 
               {subtotal < 50 && (
                 <div className="bg-lrp-green/10 border border-lrp-green rounded-lg p-4 mb-6">
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
                     Add <strong>${(50 - subtotal).toFixed(2)}</strong> more for free shipping!
                   </p>
                 </div>
@@ -215,7 +215,7 @@ export default function CartPage() {
 
               <div className="border-t dark:border-dark-border pt-4 mb-6">
                 <div className="flex justify-between text-xl font-bold">
-                  <span className="text-gray-900 dark:text-white">Total</span>
+                  <span className="text-neutral-900 dark:text-white">Total</span>
                   <span className="text-lrp-green">${total.toFixed(2)}</span>
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default function CartPage() {
               <button
                 onClick={handleCheckout}
                 disabled={checkoutLoading || items.length === 0}
-                className="w-full bg-lrp-green hover:bg-lrp-green-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-bold text-lg transition-all mb-4 flex items-center justify-center gap-2"
+                className="w-full bg-lrp-green hover:bg-lrp-green-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-bold text-lg transition-all mb-4 flex items-center justify-center gap-2"
               >
                 {checkoutLoading ? (
                   <>
@@ -243,7 +243,7 @@ export default function CartPage() {
                 )}
               </button>
 
-              <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+              <p className="text-sm text-neutral-600 dark:text-neutral-400 text-center">
                 Secure checkout powered by Stripe
               </p>
             </div>

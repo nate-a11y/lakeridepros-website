@@ -222,7 +222,7 @@ export default function GiftCardsPage() {
                         className="w-full pl-8 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
-                    <p className="text-xs text-gray-500 mt-1">Min: $10, Max: $1,000</p>
+                    <p className="text-xs text-neutral-500 mt-1">Min: $10, Max: $1,000</p>
                   </div>
                 )}
 
@@ -265,7 +265,7 @@ export default function GiftCardsPage() {
 
                     {deliveryMethod === 'scheduled' && (
                       <div className="space-y-4 bg-neutral-50 p-4 rounded-lg">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-neutral-600">
                           Perfect for birthdays, holidays, or special occasions!
                         </p>
                         <div className="grid grid-cols-2 gap-4">
@@ -295,7 +295,7 @@ export default function GiftCardsPage() {
                             />
                           </div>
                         </div>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-neutral-500">
                           Times are in Central Time (CST/CDT). Email will be sent on the scheduled date and time.
                         </p>
                       </div>
@@ -334,7 +334,7 @@ export default function GiftCardsPage() {
                         required
                         className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Receipt and gift card will be sent here</p>
+                      <p className="text-xs text-neutral-500 mt-1">Receipt and gift card will be sent here</p>
                     </div>
                   </div>
                 </div>
@@ -344,7 +344,7 @@ export default function GiftCardsPage() {
                   <h3 className="text-lg font-semibold text-neutral-900 mb-4">
                     Recipient Information (Optional)
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-neutral-600 mb-4">
                     Leave blank to send the gift card to yourself, or fill in to send directly to the recipient.
                   </p>
 
@@ -383,7 +383,7 @@ export default function GiftCardsPage() {
                     <h3 className="text-lg font-semibold text-neutral-900 mb-4">
                       Shipping Address <span className="text-red-500">*</span>
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4">
+                    <p className="text-sm text-neutral-600 mb-4">
                       Physical gift card will be mailed to this address via USPS.
                     </p>
 
@@ -538,7 +538,7 @@ export default function GiftCardsPage() {
                   <button
                     type="submit"
                     disabled={checkoutLoading || finalAmount < 10 || finalAmount > 1000}
-                    className="w-full bg-secondary hover:bg-secondary-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-secondary hover:bg-secondary-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
                     {checkoutLoading ? (
                       <>
@@ -550,7 +550,7 @@ export default function GiftCardsPage() {
                     )}
                   </button>
 
-                  <p className="text-sm text-gray-600 text-center mt-3">
+                  <p className="text-sm text-neutral-600 text-center mt-3">
                     Secure checkout powered by Stripe
                   </p>
                 </div>

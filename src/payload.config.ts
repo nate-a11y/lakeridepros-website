@@ -21,15 +21,11 @@ import { supabaseAdapter } from '../lib/supabase-adapter'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// Helper to ensure SSL is configured for Postgres connection
+// Helper to get the appropriate Postgres connection string
 function getPostgresConnectionString() {
-  const connStr = process.env.POSTGRES_URL || process.env.DATABASE_URI || ''
-  // Supabase connections need sslmode=no-verify to accept self-signed certs
-  if (connStr && !connStr.includes('sslmode=')) {
-    const separator = connStr.includes('?') ? '&' : '?'
-    return `${connStr}${separator}sslmode=no-verify`
-  }
-  return connStr
+  // For build-time migrations, use non-pooling connection with SSL disabled
+  // POSTGRES_URL_NON_POOLING is provided by Vercel Supabase integration
+  return process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URI || ''
 }
 
 const config = buildConfig({
@@ -48,6 +44,9 @@ const config = buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: getPostgresConnectionString(),
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     // Use migrations only, no auto-push
     push: false,

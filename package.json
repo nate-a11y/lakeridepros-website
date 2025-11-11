@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "payload generate:importmap && next build",
+    "build": "echo 'y' | payload migrate && payload generate:importmap && next build",
     "start": "next start",
     "lint": "eslint",
     "payload": "payload",

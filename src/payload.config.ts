@@ -38,8 +38,8 @@ const config = buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
-    // Auto-push schema changes (tables created automatically at runtime)
-    push: true,
+    // Use migrations only, no auto-push
+    push: false,
   }),
   sharp,
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || 'http://localhost:3000',

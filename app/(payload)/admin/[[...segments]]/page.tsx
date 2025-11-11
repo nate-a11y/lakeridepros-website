@@ -1,7 +1,7 @@
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 import type { Metadata } from 'next'
 
-import config from '@payload-config'
+import config from '../../../../src/payload.config'
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
 import { importMap } from '../importMap.js'
 

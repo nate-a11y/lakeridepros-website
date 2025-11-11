@@ -1,9 +1,18 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
+import { resendAdapter } from '@payloadcms/email-resend'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
+
+// Import collections and adapters
+import { Users } from '../collections/Users'
+import { Media } from '../collections/Media'
+import { Pages } from '../collections/Pages'
+import { BlogPosts } from '../collections/BlogPosts'
+import { supabaseAdapter } from '../lib/supabase-adapter'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -15,118 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname, '..'),
     },
   },
-  collections: [
-    {
-      slug: 'users',
-      auth: true,
-      admin: {
-        useAsTitle: 'email',
-      },
-      fields: [
-        {
-          name: 'name',
-          type: 'text',
-        },
-        {
-          name: 'role',
-          type: 'select',
-          options: [
-            { label: 'Admin', value: 'admin' },
-            { label: 'Editor', value: 'editor' },
-            { label: 'User', value: 'user' },
-          ],
-          defaultValue: 'user',
-          required: true,
-        },
-      ],
-    },
-    {
-      slug: 'media',
-      upload: true,
-      fields: [
-        {
-          name: 'alt',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'caption',
-          type: 'text',
-        },
-      ],
-      access: {
-        read: () => true,
-      },
-    },
-    {
-      slug: 'pages',
-      admin: {
-        useAsTitle: 'title',
-      },
-      fields: [
-        {
-          name: 'title',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'slug',
-          type: 'text',
-          required: true,
-          unique: true,
-        },
-        {
-          name: 'content',
-          type: 'richText',
-          required: true,
-        },
-        {
-          name: 'published',
-          type: 'checkbox',
-          defaultValue: false,
-        },
-      ],
-    },
-    {
-      slug: 'blog-posts',
-      admin: {
-        useAsTitle: 'title',
-      },
-      fields: [
-        {
-          name: 'title',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'slug',
-          type: 'text',
-          required: true,
-          unique: true,
-        },
-        {
-          name: 'excerpt',
-          type: 'textarea',
-          required: true,
-        },
-        {
-          name: 'content',
-          type: 'richText',
-          required: true,
-        },
-        {
-          name: 'publishedDate',
-          type: 'date',
-          required: true,
-        },
-        {
-          name: 'published',
-          type: 'checkbox',
-          defaultValue: false,
-        },
-      ],
-    },
-  ],
+  collections: [Users, Media, Pages, BlogPosts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -139,4 +37,19 @@ export default buildConfig({
   }),
   sharp,
   serverURL: process.env.SERVER_URL || 'http://localhost:3000',
+  email: resendAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lakeridepros.com',
+    defaultFromName: process.env.EMAIL_FROM_NAME || 'Lake Ride Pros',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
+  plugins: [
+    cloudStoragePlugin({
+      collections: {
+        media: {
+          adapter: supabaseAdapter,
+          disableLocalStorage: true,
+        },
+      },
+    }),
+  ],
 })

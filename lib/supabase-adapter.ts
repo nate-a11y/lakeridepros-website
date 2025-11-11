@@ -9,7 +9,7 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
     handleUpload: async ({ data, file }) => {
       const supabase = createClient(
         process.env.SUPABASE_URL || '',
-        process.env.SUPABASE_SERVICE_KEY || ''
+        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
       )
 
       const { data: uploadData, error } = await supabase.storage
@@ -35,7 +35,7 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
     handleDelete: async ({ filename }) => {
       const supabase = createClient(
         process.env.SUPABASE_URL || '',
-        process.env.SUPABASE_SERVICE_KEY || ''
+        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
       )
 
       const { error } = await supabase.storage.from(bucket).remove([filename])
@@ -47,7 +47,7 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
     generateURL: ({ filename }) => {
       const supabase = createClient(
         process.env.SUPABASE_URL || '',
-        process.env.SUPABASE_SERVICE_KEY || ''
+        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
       )
 
       const { data } = supabase.storage.from(bucket).getPublicUrl(filename)
@@ -56,7 +56,7 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
     staticHandler: async (req, { params }) => {
       const supabase = createClient(
         process.env.SUPABASE_URL || '',
-        process.env.SUPABASE_SERVICE_KEY || ''
+        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
       )
 
       const { data, error } = await supabase.storage

@@ -33,5 +33,5 @@ const nextConfig = {
 export default withPayload(nextConfig, {
   devBundleServerPackages: false,
   configPath: './src/payload.config.ts',
-  generateLayouts: false  // Add this line - prevents Payload from generating html/body
+  generateLayouts: false
 })

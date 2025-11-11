@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { usePathname } from "next/navigation";
 import "./globals.css";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { CartProvider } from "@/contexts/CartContext";
-import { MoovsWidget } from "@/components/MoovsWidget";
-import CartDrawer from "@/components/CartDrawer";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
@@ -42,18 +38,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem={true}
-          disableTransitionOnChange={false}
-        >
-          <CartProvider>
-            {children}
-            <CartDrawer />
-            <MoovsWidget />
-          </CartProvider>
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );

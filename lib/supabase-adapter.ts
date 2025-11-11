@@ -8,11 +8,20 @@ let supabaseClient: ReturnType<typeof createClient> | null = null
 
 const getSupabaseClient = () => {
   if (!supabaseClient) {
-    const url = process.env.SUPABASE_URL
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+    const url = process.env.SUPABASE_URL?.trim()
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
 
     if (!url || !key) {
-      throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables')
+      throw new Error(
+        `Missing Supabase credentials. SUPABASE_URL: ${url ? 'set' : 'MISSING'}, SUPABASE_SERVICE_ROLE_KEY: ${key ? 'set' : 'MISSING'}`
+      )
+    }
+
+    // Validate URL format
+    if (!url.startsWith('https://') && !url.startsWith('http://')) {
+      throw new Error(
+        `Invalid SUPABASE_URL format. Got: "${url}". Expected format: https://xxxxx.supabase.co`
+      )
     }
 
     supabaseClient = createClient(url, key)

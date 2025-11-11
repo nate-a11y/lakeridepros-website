@@ -1,5 +1,6 @@
 import * as migration_20251111_174626_add_new_collections from './20251111_174626_add_new_collections';
 import * as migration_20251111_205751_add_printify_indexes from './20251111_205751_add_printify_indexes';
+import * as migration_20251111_214800_add_locked_documents from './20251111_214800_add_locked_documents';
 
 export const migrations = [
   {
@@ -11,5 +12,10 @@ export const migrations = [
     up: migration_20251111_205751_add_printify_indexes.up,
     down: migration_20251111_205751_add_printify_indexes.down,
     name: '20251111_205751_add_printify_indexes'
+  },
+  {
+    up: migration_20251111_214800_add_locked_documents.up,
+    down: migration_20251111_214800_add_locked_documents.down,
+    name: '20251111_214800_add_locked_documents'
   },
 ];

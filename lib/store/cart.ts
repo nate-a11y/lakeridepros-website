@@ -87,6 +87,7 @@ export const useCart = create<CartState>()(
     }),
     {
       name: 'lrp-cart-storage', // localStorage key
+      skipHydration: true, // Prevent automatic hydration on SSR
     }
   )
 )

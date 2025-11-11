@@ -33,40 +33,77 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
   return {
     name: 'supabase',
     handleUpload: async ({ data, file }) => {
-      const supabase = getSupabaseClient()
+      try {
+        const supabase = getSupabaseClient()
 
-      // Build the file path with prefix if provided
-      const filePath = prefix ? `${prefix}/${file.filename}` : file.filename
+        // Build the file path with prefix if provided
+        const filePath = prefix ? `${prefix}/${file.filename}` : file.filename
 
-      // Upload the buffer to Supabase
-      const { data: uploadData, error } = await supabase.storage
-        .from(bucket)
-        .upload(filePath, data, {
-          contentType: file.mimeType,
-          upsert: true,
-        })
+        // Convert data to proper buffer format
+        let fileBuffer: Buffer | ArrayBuffer
 
-      if (error) {
-        throw new Error(`Supabase upload failed: ${error.message}`)
+        if (data instanceof Buffer) {
+          // Already a Buffer
+          fileBuffer = data
+        } else if (data instanceof ArrayBuffer) {
+          // Already an ArrayBuffer
+          fileBuffer = data
+        } else if (typeof data === 'object' && 'arrayBuffer' in data && typeof data.arrayBuffer === 'function') {
+          // It's a Blob/File object, read the arrayBuffer
+          fileBuffer = await data.arrayBuffer()
+        } else if (typeof data === 'object' && 'buffer' in data) {
+          // Check if data has a buffer property
+          fileBuffer = data.buffer
+        } else {
+          throw new Error(`Unsupported file data type: ${typeof data}. Expected Buffer, ArrayBuffer, or Blob.`)
+        }
+
+        console.log(`[Supabase Adapter] Uploading ${file.filename}, size: ${fileBuffer.byteLength || (fileBuffer as Buffer).length} bytes`)
+
+        // Upload the buffer to Supabase
+        const { data: uploadData, error } = await supabase.storage
+          .from(bucket)
+          .upload(filePath, fileBuffer, {
+            contentType: file.mimeType,
+            upsert: true,
+          })
+
+        if (error) {
+          throw new Error(`Supabase upload failed: ${error.message}`)
+        }
+
+        console.log(`[Supabase Adapter] Successfully uploaded ${file.filename}`)
+
+        // Get the public URL
+        const { data: urlData } = supabase.storage
+          .from(bucket)
+          .getPublicUrl(filePath)
+
+        return urlData.publicUrl
+      } catch (error) {
+        console.error(`[Supabase Adapter] Error uploading ${file.filename}:`, error)
+        throw error
       }
-
-      // Get the public URL
-      const { data: urlData } = supabase.storage
-        .from(bucket)
-        .getPublicUrl(filePath)
-
-      return urlData.publicUrl
     },
     handleDelete: async ({ filename }) => {
-      const supabase = getSupabaseClient()
+      try {
+        const supabase = getSupabaseClient()
 
-      // Build the file path with prefix if provided
-      const filePath = prefix ? `${prefix}/${filename}` : filename
+        // Build the file path with prefix if provided
+        const filePath = prefix ? `${prefix}/${filename}` : filename
 
-      const { error } = await supabase.storage.from(bucket).remove([filePath])
+        console.log(`[Supabase Adapter] Deleting ${filePath}`)
 
-      if (error) {
-        throw new Error(`Supabase delete failed: ${error.message}`)
+        const { error } = await supabase.storage.from(bucket).remove([filePath])
+
+        if (error) {
+          throw new Error(`Supabase delete failed: ${error.message}`)
+        }
+
+        console.log(`[Supabase Adapter] Successfully deleted ${filePath}`)
+      } catch (error) {
+        console.error(`[Supabase Adapter] Error deleting ${filename}:`, error)
+        throw error
       }
     },
     generateURL: ({ filename }) => {
@@ -79,26 +116,31 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
       return data.publicUrl
     },
     staticHandler: async (req, { params }) => {
-      const supabase = getSupabaseClient()
+      try {
+        const supabase = getSupabaseClient()
 
-      // Build the file path with prefix if provided
-      const filePath = prefix ? `${prefix}/${params.filename}` : params.filename
+        // Build the file path with prefix if provided
+        const filePath = prefix ? `${prefix}/${params.filename}` : params.filename
 
-      const { data, error } = await supabase.storage
-        .from(bucket)
-        .download(filePath)
+        const { data, error } = await supabase.storage
+          .from(bucket)
+          .download(filePath)
 
-      if (error || !data) {
-        return new Response('File not found', { status: 404 })
+        if (error || !data) {
+          return new Response('File not found', { status: 404 })
+        }
+
+        const buffer = await data.arrayBuffer()
+        return new Response(buffer, {
+          headers: {
+            'Content-Type': data.type || 'application/octet-stream',
+            'Cache-Control': 'public, max-age=31536000, immutable',
+          },
+        })
+      } catch (error) {
+        console.error(`[Supabase Adapter] Error in staticHandler for ${params.filename}:`, error)
+        return new Response('Internal Server Error', { status: 500 })
       }
-
-      const buffer = await data.arrayBuffer()
-      return new Response(buffer, {
-        headers: {
-          'Content-Type': data.type || 'application/octet-stream',
-          'Cache-Control': 'public, max-age=31536000, immutable',
-        },
-      })
     },
   }
 }

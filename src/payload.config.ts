@@ -37,6 +37,9 @@ const config = buildConfig({
   db: postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URI || '',
+      ssl: process.env.NODE_ENV === 'production' ? {
+        rejectUnauthorized: false
+      } : undefined,
     },
     // Use migrations only, no auto-push
     push: false,

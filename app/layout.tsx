@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { usePathname } from "next/navigation";
 import "./globals.css";
 
 export const metadata: Metadata = {

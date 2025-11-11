@@ -3,65 +3,81 @@ import type { Adapter } from '@payloadcms/plugin-cloud-storage/types'
 
 const bucket = 'media'
 
+// Create singleton Supabase client
+let supabaseClient: ReturnType<typeof createClient> | null = null
+
+const getSupabaseClient = () => {
+  if (!supabaseClient) {
+    const url = process.env.SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!url || !key) {
+      throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables')
+    }
+
+    supabaseClient = createClient(url, key)
+  }
+  return supabaseClient
+}
+
 export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
   return {
     name: 'supabase',
     handleUpload: async ({ data, file }) => {
-      const supabase = createClient(
-        process.env.SUPABASE_URL || '',
-        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-      )
+      const supabase = getSupabaseClient()
 
+      // Build the file path with prefix if provided
+      const filePath = prefix ? `${prefix}/${file.filename}` : file.filename
+
+      // Upload the buffer to Supabase
       const { data: uploadData, error } = await supabase.storage
         .from(bucket)
-        .upload(file.filename, data.file, {
+        .upload(filePath, data, {
           contentType: file.mimeType,
           upsert: true,
         })
 
       if (error) {
-        throw new Error(`Upload failed: ${error.message}`)
+        throw new Error(`Supabase upload failed: ${error.message}`)
       }
 
+      // Get the public URL
       const { data: urlData } = supabase.storage
         .from(bucket)
-        .getPublicUrl(file.filename)
+        .getPublicUrl(filePath)
 
-      return {
-        ...data,
-        url: urlData.publicUrl,
-      }
+      return urlData.publicUrl
     },
     handleDelete: async ({ filename }) => {
-      const supabase = createClient(
-        process.env.SUPABASE_URL || '',
-        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-      )
+      const supabase = getSupabaseClient()
 
-      const { error } = await supabase.storage.from(bucket).remove([filename])
+      // Build the file path with prefix if provided
+      const filePath = prefix ? `${prefix}/${filename}` : filename
+
+      const { error } = await supabase.storage.from(bucket).remove([filePath])
 
       if (error) {
-        throw new Error(`Delete failed: ${error.message}`)
+        throw new Error(`Supabase delete failed: ${error.message}`)
       }
     },
     generateURL: ({ filename }) => {
-      const supabase = createClient(
-        process.env.SUPABASE_URL || '',
-        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-      )
+      const supabase = getSupabaseClient()
 
-      const { data } = supabase.storage.from(bucket).getPublicUrl(filename)
+      // Build the file path with prefix if provided
+      const filePath = prefix ? `${prefix}/${filename}` : filename
+
+      const { data } = supabase.storage.from(bucket).getPublicUrl(filePath)
       return data.publicUrl
     },
     staticHandler: async (req, { params }) => {
-      const supabase = createClient(
-        process.env.SUPABASE_URL || '',
-        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-      )
+      const supabase = getSupabaseClient()
+
+      // Build the file path with prefix if provided
+      const filePath = prefix ? `${prefix}/${params.filename}` : params.filename
 
       const { data, error } = await supabase.storage
         .from(bucket)
-        .download(params.filename)
+        .download(filePath)
 
       if (error || !data) {
         return new Response('File not found', { status: 404 })

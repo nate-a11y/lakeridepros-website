@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "payload generate:importmap && next build",
+    "build": "payload migrate && payload generate:importmap && next build",
     "start": "next start",
     "lint": "eslint",
     "payload": "payload",
     "generate:types": "payload generate:types",
-    "generate:importmap": "payload generate:importmap"
+    "generate:importmap": "payload generate:importmap",
+    "migrate": "payload migrate"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.63.0",

@@ -60,11 +60,11 @@ function getPoolConfig() {
       options: '-c statement_timeout=120000',
     }
   } else {
-    // Serverless pool config: minimal connections, generous timeouts for cold starts
+    // Serverless pool config: allow concurrent operations while avoiding pool exhaustion
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 1, // Max 1 connection per serverless function
+      max: 3, // Allow up to 3 concurrent connections per serverless function
       min: 0,
       idleTimeoutMillis: 120000, // 2 minutes - allow time for image uploads and heavy operations
       connectionTimeoutMillis: 120000, // 2 minutes - handle cold starts and connection pooler delays

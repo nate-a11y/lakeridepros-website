@@ -8,5 +8,15 @@
     "env": {
       "PAYLOAD_CONFIG_PATH": "./src/payload.config.ts"
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/printify/sync-products?secret=9k2mP8xQ4nL6vR1wT7yE3fH5jN0bC9sA2dF4gK8mZ1qW6rY",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/printify/sync-products?secret=9k2mP8xQ4nL6vR1wT7yE3fH5jN0bC9sA2dF4gK8mZ1qW6rY",
+      "schedule": "0 18 * * *"
+    }
+  ]
 }

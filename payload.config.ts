@@ -47,7 +47,7 @@ export default buildConfig({
     cloudStoragePlugin({
       collections: {
         media: {
-          adapter: supabaseAdapter(),
+          adapter: supabaseAdapter,
           disableLocalStorage: true,
         },
       },

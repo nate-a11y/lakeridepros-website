@@ -9,8 +9,40 @@ export const metadata = {
   description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
 }
 
+// Subcategory labels mapping
+const subcategoryLabels: Record<string, string> = {
+  'advertising-marketing-technology': 'Advertising / Marketing / Technology',
+  'auto-marine-services': 'Auto & Marine Services',
+  'bars-restaurants': 'Bars & Restaurants',
+  'boat-captains-charters': 'Boat Captains & Charters',
+  'lodging-rentals': 'Condos / Hotels / Short Term / Long Term Rentals / Airbnb-VRBO',
+  'construction-developers': 'Construction / Developers',
+  'home-services': 'Home Services',
+  'campgrounds-rv-parks': 'Campgrounds / RV Parks / Camps',
+  'entertainers-venues': 'Entertainers / Venues',
+  'event-planners-concierge': 'Event Planners & Concierge Services',
+  'family-fun': 'Family Fun',
+  'nutrition-personal-care': 'Nutrition Services / Personal Care',
+  'golf': 'Golf Courses / Golf Simulators / Golf Equipment / Golf Carts',
+  'real-estate-financial': 'Real Estate / Financial Services',
+  'shopping': 'Shopping',
+}
+
 export default async function TrustedReferralPartnersPage() {
   const partners = await getPartners('trusted-referral')
+
+  // Group partners by subcategory
+  const partnersBySubcategory = partners.reduce((acc, partner) => {
+    const subcategory = partner.subcategory || 'other'
+    if (!acc[subcategory]) {
+      acc[subcategory] = []
+    }
+    acc[subcategory].push(partner)
+    return acc
+  }, {} as Record<string, typeof partners>)
+
+  // Sort subcategories alphabetically
+  const sortedSubcategories = Object.keys(partnersBySubcategory).sort()
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -24,7 +56,7 @@ export default async function TrustedReferralPartnersPage() {
         </div>
       </section>
 
-      {/* Partners Grid */}
+      {/* Partners by Subcategory */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {partners.length === 0 ? (
@@ -34,8 +66,17 @@ export default async function TrustedReferralPartnersPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {partners.map((partner) => (
+            <div className="space-y-16">
+              {sortedSubcategories.map((subcategory) => (
+                <div key={subcategory}>
+                  {/* Subcategory Header */}
+                  <h2 className="text-3xl font-bold text-lrp-black dark:text-white mb-8 pb-4 border-b-4 border-lrp-green">
+                    {subcategoryLabels[subcategory] || subcategory}
+                  </h2>
+
+                  {/* Partners Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {partnersBySubcategory[subcategory].map((partner) => (
                 <div
                   key={partner.id}
                   className="bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg p-6 hover:shadow-xl transition-all"
@@ -102,6 +143,9 @@ export default async function TrustedReferralPartnersPage() {
                         <span className="text-sm">{partner.address}</span>
                       </div>
                     )}
+                  </div>
+                    </div>
+                    ))}
                   </div>
                 </div>
               ))}

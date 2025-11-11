@@ -92,7 +92,7 @@ export default function GiftCardBalancePage() {
                     value={giftCardCode}
                     onChange={(e) => setGiftCardCode(e.target.value)}
                     placeholder="Enter your gift card code (e.g., LRP-XXXX-XXXX)"
-                    className="w-full px-4 py-4 pr-12 rounded-lg border-2 border-gray-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white focus:border-lrp-green focus:ring-2 focus:ring-lrp-green/20 outline-none transition-all text-lg"
+                    className="w-full px-4 py-4 pr-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white focus:border-lrp-green focus:ring-2 focus:ring-lrp-green/20 outline-none transition-all text-lg"
                     required
                     minLength={8}
                     aria-describedby="code-help"
@@ -107,7 +107,7 @@ export default function GiftCardBalancePage() {
               <button
                 type="submit"
                 disabled={loading || !giftCardCode.trim()}
-                className="w-full bg-lrp-green hover:bg-lrp-green-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-2"
+                className="w-full bg-lrp-green hover:bg-lrp-green-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -152,7 +152,7 @@ export default function GiftCardBalancePage() {
                   </p>
                 </div>
 
-                <div className="border-t border-gray-200 dark:border-dark-border pt-6 space-y-4">
+                <div className="border-t border-neutral-200 dark:border-dark-border pt-6 space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <CreditCard className="w-5 h-5 text-lrp-green" />

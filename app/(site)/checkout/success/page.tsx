@@ -54,17 +54,17 @@ function CheckoutSuccessContent() {
           <div className="w-24 h-24 bg-lrp-green rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-16 h-16 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
             Order Confirmed!
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-lg text-neutral-600 dark:text-neutral-400">
             Thank you for your purchase from Lake Ride Pros!
           </p>
         </div>
 
         {/* Order Details Card */}
         <div className="bg-white dark:bg-dark-bg-secondary rounded-lg border dark:border-dark-border p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
             What's Next?
           </h2>
 
@@ -76,10 +76,10 @@ function CheckoutSuccessContent() {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-bold text-neutral-900 dark:text-white mb-2">
                   Check Your Email
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-neutral-600 dark:text-neutral-400">
                   We've sent a confirmation email with your order details to{' '}
                   {orderData?.customerEmail || 'your email address'}.
                 </p>
@@ -93,10 +93,10 @@ function CheckoutSuccessContent() {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-bold text-neutral-900 dark:text-white mb-2">
                   Order Processing
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-neutral-600 dark:text-neutral-400">
                   Your order is being prepared for shipment. You'll receive a tracking number
                   via email within 1-2 business days.
                 </p>
@@ -110,10 +110,10 @@ function CheckoutSuccessContent() {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 dark:text-white mb-2">
+                <h3 className="font-bold text-neutral-900 dark:text-white mb-2">
                   Estimated Delivery
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-neutral-600 dark:text-neutral-400">
                   7-14 business days from order date
                 </p>
               </div>
@@ -123,8 +123,8 @@ function CheckoutSuccessContent() {
 
         {/* Session ID (for testing) */}
         {sessionId && (
-          <div className="bg-gray-100 dark:bg-dark-bg-primary rounded-lg p-4 mb-8">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="bg-neutral-100 dark:bg-dark-bg-primary rounded-lg p-4 mb-8">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
               <strong>Order Reference:</strong> {sessionId.slice(0, 20)}...
             </p>
           </div>
@@ -140,7 +140,7 @@ function CheckoutSuccessContent() {
           </Link>
           <Link
             href="/"
-            className="flex-1 border-2 border-gray-300 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-secondary text-gray-900 dark:text-white text-center py-4 rounded-lg font-bold transition-all"
+            className="flex-1 border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-white text-center py-4 rounded-lg font-bold transition-all"
           >
             Back to Home
           </Link>
@@ -148,7 +148,7 @@ function CheckoutSuccessContent() {
 
         {/* Support Info */}
         <div className="mt-12 text-center">
-          <p className="text-gray-600 dark:text-gray-400 mb-2">
+          <p className="text-neutral-600 dark:text-neutral-400 mb-2">
             Questions about your order?
           </p>
           <a

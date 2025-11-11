@@ -110,7 +110,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               </Link>
             </li>
             <li>/</li>
-            <li className="text-gray-600 dark:text-gray-400">{product.name}</li>
+            <li className="text-neutral-600 dark:text-neutral-400">{product.name}</li>
           </ol>
         </nav>
 
@@ -118,7 +118,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           {/* Images */}
           <div>
             {/* Main Image */}
-            <div className="aspect-square bg-gray-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden mb-4">
+            <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden mb-4">
               {product.images && product.images[selectedImage] ? (
                 <Image
                   src={product.images[selectedImage].image.url}
@@ -130,7 +130,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <ShoppingCart className="w-32 h-32 text-gray-300" />
+                  <ShoppingCart className="w-32 h-32 text-neutral-300" />
                 </div>
               )}
             </div>
@@ -145,7 +145,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                     className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                       selectedImage === index
                         ? 'border-lrp-green'
-                        : 'border-gray-300 dark:border-dark-border hover:border-lrp-green'
+                        : 'border-neutral-300 dark:border-dark-border hover:border-lrp-green'
                     }`}
                   >
                     <Image
@@ -163,7 +163,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
           {/* Product Info */}
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
               {product.name}
             </h1>
 
@@ -174,7 +174,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               </span>
               {product.compareAtPrice && product.compareAtPrice > product.price && (
                 <>
-                  <span className="text-2xl text-gray-500 line-through">
+                  <span className="text-2xl text-neutral-500 line-through">
                     ${product.compareAtPrice.toFixed(2)}
                   </span>
                   <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
@@ -185,14 +185,14 @@ export default function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* Description */}
-            <p className="text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
+            <p className="text-neutral-700 dark:text-neutral-300 mb-8 leading-relaxed">
               {product.description}
             </p>
 
             {/* Size Selection */}
             {sizes.length > 0 && (
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
                   Select Size:
                 </label>
                 <div className="grid grid-cols-4 gap-3">
@@ -210,8 +210,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                           isSelected
                             ? 'border-lrp-green bg-lrp-green text-white'
                             : inStock
-                            ? 'border-gray-300 dark:border-dark-border hover:border-lrp-green'
-                            : 'border-gray-200 dark:border-dark-border opacity-50 cursor-not-allowed'
+                            ? 'border-neutral-300 dark:border-dark-border hover:border-lrp-green'
+                            : 'border-neutral-200 dark:border-dark-border opacity-50 cursor-not-allowed'
                         }`}
                       >
                         {size.toUpperCase()}
@@ -226,7 +226,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             {/* Color Selection */}
             {colors.length > 1 && (
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
                   Select Color:
                 </label>
                 <div className="flex gap-3">
@@ -241,7 +241,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                         className={`py-2 px-6 rounded-lg border-2 font-semibold transition-all ${
                           isSelected
                             ? 'border-lrp-green bg-lrp-green text-white'
-                            : 'border-gray-300 dark:border-dark-border hover:border-lrp-green'
+                            : 'border-neutral-300 dark:border-dark-border hover:border-lrp-green'
                         }`}
                       >
                         {color}
@@ -254,13 +254,13 @@ export default function ProductPage({ params }: ProductPageProps) {
 
             {/* Quantity */}
             <div className="mb-8">
-              <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-3">
+              <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
                 Quantity:
               </label>
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-12 h-12 rounded-lg border-2 border-gray-300 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-secondary font-bold text-xl"
+                  className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl"
                 >
                   −
                 </button>
@@ -269,7 +269,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 </span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-12 h-12 rounded-lg border-2 border-gray-300 dark:border-dark-border hover:bg-gray-100 dark:hover:bg-dark-bg-secondary font-bold text-xl"
+                  className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl"
                 >
                   +
                 </button>
@@ -280,7 +280,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             <button
               onClick={handleAddToCart}
               disabled={!selectedVariant || !selectedVariant.inStock || addedToCart}
-              className="w-full bg-lrp-green hover:bg-lrp-green-dark disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-3 mb-4"
+              className="w-full bg-lrp-green hover:bg-lrp-green-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-3 mb-4"
             >
               {addedToCart ? (
                 <>
@@ -297,10 +297,10 @@ export default function ProductPage({ params }: ProductPageProps) {
 
             {/* Product Details */}
             <div className="border-t dark:border-dark-border pt-6 space-y-4">
-              <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+              <h3 className="font-bold text-lg text-neutral-900 dark:text-white">
                 Product Details:
               </h3>
-              <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+              <ul className="space-y-2 text-neutral-700 dark:text-neutral-300">
                 <li>• High-quality materials</li>
                 <li>• Comfortable fit</li>
                 <li>• Official Lake Ride Pros merchandise</li>

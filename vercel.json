@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "app/(payload)/admin/[[...segments]]/page.tsx": {
+      "maxDuration": 30
+    }
+  },
+  "build": {
+    "env": {
+      "PAYLOAD_CONFIG_PATH": "./src/payload.config.ts"
+    }
+  }
+}

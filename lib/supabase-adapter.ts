@@ -74,12 +74,7 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
 
         console.log(`[Supabase Adapter] Successfully uploaded ${file.filename}`)
 
-        // Get the public URL
-        const { data: urlData } = supabase.storage
-          .from(bucket)
-          .getPublicUrl(filePath)
-
-        return urlData.publicUrl
+        // handleUpload should return void - URL generation is done by generateURL
       } catch (error) {
         console.error(`[Supabase Adapter] Error uploading ${file.filename}:`, error)
         throw error

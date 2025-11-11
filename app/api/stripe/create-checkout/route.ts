@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({

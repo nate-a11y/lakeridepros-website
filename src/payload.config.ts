@@ -60,14 +60,14 @@ function getPoolConfig() {
       options: '-c statement_timeout=120000',
     }
   } else {
-    // Serverless pool config: minimal connections, reasonable timeouts for I/O operations
+    // Serverless pool config: minimal connections, generous timeouts for cold starts
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
       max: 1, // Max 1 connection per serverless function
       min: 0,
-      idleTimeoutMillis: 60000, // 60 seconds - allow time for image uploads and heavy operations
-      connectionTimeoutMillis: 60000, // 60 seconds - needed for Printify sync and other I/O-heavy operations
+      idleTimeoutMillis: 120000, // 2 minutes - allow time for image uploads and heavy operations
+      connectionTimeoutMillis: 120000, // 2 minutes - handle cold starts and connection pooler delays
       allowExitOnIdle: true,
       // Set statement timeout to prevent queries from hanging indefinitely (60 seconds)
       options: '-c statement_timeout=60000',

@@ -64,7 +64,12 @@ async function syncProducts(request: Request) {
       )
     }
 
+    // Optional: limit number of products to process per invocation
+    const batchSize = searchParams.get('batch') ? parseInt(searchParams.get('batch')!) : undefined
+
     const payload = await getPayload({ config })
+
+    console.log('[Printify Sync] Starting product sync from Printify...')
 
     // Fetch all products from Printify with pagination
     let allProducts: any[] = []
@@ -73,6 +78,7 @@ async function syncProducts(request: Request) {
     const limit = 50 // Max allowed by Printify API
 
     while (hasMorePages) {
+      console.log(`[Printify Sync] Fetching page ${currentPage}...`)
       const response = await fetch(
         `${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json?page=${currentPage}&limit=${limit}`,
         {
@@ -107,7 +113,14 @@ async function syncProducts(request: Request) {
       currentPage++
     }
 
-    const printifyProducts = allProducts
+    // Apply batch limit if specified
+    let printifyProducts = allProducts
+    if (batchSize && batchSize > 0) {
+      console.log(`[Printify Sync] Processing batch of ${batchSize} products (out of ${allProducts.length} total)`)
+      printifyProducts = allProducts.slice(0, batchSize)
+    } else {
+      console.log(`[Printify Sync] Processing all ${allProducts.length} products`)
+    }
 
     const results = {
       total: printifyProducts.length,
@@ -117,8 +130,10 @@ async function syncProducts(request: Request) {
       errors: [] as string[],
     }
 
-    for (const printifyProduct of printifyProducts) {
+    const startTime = Date.now()
+    for (const [index, printifyProduct] of printifyProducts.entries()) {
       try {
+        console.log(`[Printify Sync] Processing product ${index + 1}/${printifyProducts.length}: ${printifyProduct.title}`)
         // Check if product already exists
         const existing = await payload.find({
           collection: 'products',
@@ -142,20 +157,23 @@ async function syncProducts(request: Request) {
           featuredImageId = media.id as number
         }
 
-        // Upload additional images
+        // Upload additional images in parallel (limit to 5 images)
         const additionalImages: Array<{ image: number }> = []
-        for (const [index, image] of printifyProduct.images.slice(0, 5).entries()) {
-          if (image === defaultImage) continue
+        const imagesToProcess = printifyProduct.images.slice(0, 5).filter((img: any) => img !== defaultImage)
 
+        const imageUploadPromises = imagesToProcess.map(async (image: any, index: number) => {
           try {
             const imageBuffer = await downloadImage(image.src)
             const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${index + 1}.png`)
-            additionalImages.push({ image: media.id as number })
+            return { image: media.id as number }
           } catch (error) {
-            // Continue if one image fails
             console.error(`Failed to upload image ${index + 1} for ${printifyProduct.title}:`, error)
+            return null
           }
-        }
+        })
+
+        const uploadedImages = await Promise.all(imageUploadPromises)
+        additionalImages.push(...uploadedImages.filter((img): img is { image: number } => img !== null))
 
         // Map variants
         const variants = printifyProduct.variants
@@ -268,10 +286,16 @@ async function syncProducts(request: Request) {
       }
     }
 
+    const duration = ((Date.now() - startTime) / 1000).toFixed(2)
+    console.log(`[Printify Sync] Completed in ${duration}s - ${results.created} created, ${results.updated} updated, ${results.failed} failed`)
+
     return NextResponse.json({
       success: true,
-      message: `Synced ${results.total} products (${results.created} created, ${results.updated} updated, ${results.failed} failed)`,
-      results,
+      message: `Synced ${results.total} products (${results.created} created, ${results.updated} updated, ${results.failed} failed) in ${duration}s`,
+      results: {
+        ...results,
+        durationSeconds: parseFloat(duration),
+      },
     })
   } catch (error) {
     console.error('Printify sync error:', error)

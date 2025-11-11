@@ -3,10 +3,10 @@ import type { Adapter } from '@payloadcms/plugin-cloud-storage/types'
 
 const bucket = 'media'
 
-export const supabaseAdapter = (): Adapter => {
+export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
   return {
     name: 'supabase',
-    async handleUpload({ data, file }) {
+    handleUpload: async ({ data, file }) => {
       const supabase = createClient(
         process.env.SUPABASE_URL || '',
         process.env.SUPABASE_SERVICE_KEY || ''
@@ -32,7 +32,7 @@ export const supabaseAdapter = (): Adapter => {
         url: urlData.publicUrl,
       }
     },
-    async handleDelete({ filename }) {
+    handleDelete: async ({ filename }) => {
       const supabase = createClient(
         process.env.SUPABASE_URL || '',
         process.env.SUPABASE_SERVICE_KEY || ''
@@ -44,7 +44,7 @@ export const supabaseAdapter = (): Adapter => {
         throw new Error(`Delete failed: ${error.message}`)
       }
     },
-    async generateURL({ filename }) {
+    generateURL: ({ filename }) => {
       const supabase = createClient(
         process.env.SUPABASE_URL || '',
         process.env.SUPABASE_SERVICE_KEY || ''
@@ -52,6 +52,28 @@ export const supabaseAdapter = (): Adapter => {
 
       const { data } = supabase.storage.from(bucket).getPublicUrl(filename)
       return data.publicUrl
+    },
+    staticHandler: async (req, { params }) => {
+      const supabase = createClient(
+        process.env.SUPABASE_URL || '',
+        process.env.SUPABASE_SERVICE_KEY || ''
+      )
+
+      const { data, error } = await supabase.storage
+        .from(bucket)
+        .download(params.filename)
+
+      if (error || !data) {
+        return new Response('File not found', { status: 404 })
+      }
+
+      const buffer = await data.arrayBuffer()
+      return new Response(buffer, {
+        headers: {
+          'Content-Type': data.type || 'application/octet-stream',
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      })
     },
   }
 }

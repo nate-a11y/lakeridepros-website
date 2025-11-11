@@ -23,13 +23,9 @@ const dirname = path.dirname(filename)
 
 // Helper to get the appropriate Postgres connection string with SSL disabled
 function getPostgresConnectionString() {
-  // Use non-pooling for migrations, pooled for runtime
-  // POSTGRES_URL uses Supabase's transaction pooler (better for serverless)
-  // POSTGRES_URL_NON_POOLING is direct connection (for migrations only)
-  const isBuildTime = process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV
-  let connStr = isBuildTime
-    ? (process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
-    : (process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
+  // Always use direct connection (non-pooling) for better control in serverless
+  // POSTGRES_URL_NON_POOLING is the direct connection to the database
+  let connStr = process.env.POSTGRES_URL_NON_POOLING || process.env.DATABASE_URI || process.env.POSTGRES_URL || ''
 
   // Supabase URLs come with sslmode=require - we need to override it to disable cert verification
   if (connStr.includes('sslmode=require')) {
@@ -38,12 +34,6 @@ function getPostgresConnectionString() {
     // If no sslmode param exists, add it
     const separator = connStr.includes('?') ? '&' : '?'
     connStr = `${connStr}${separator}sslmode=no-verify`
-  }
-
-  // For Supabase pooler, add pgbouncer parameter for transaction pooling mode
-  if (connStr.includes('supabase.co') && !connStr.includes('pgbouncer=true')) {
-    const separator = connStr.includes('?') ? '&' : '?'
-    connStr = `${connStr}${separator}pgbouncer=true`
   }
 
   return connStr

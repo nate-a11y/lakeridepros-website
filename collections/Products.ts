@@ -2,6 +2,14 @@ import type { CollectionConfig } from 'payload'
 
 export const Products: CollectionConfig = {
   slug: 'products',
+  access: {
+    // Allow public read access for frontend
+    read: () => true,
+    // Require authentication for write operations
+    create: ({ req: { user } }) => !!user,
+    update: ({ req: { user } }) => !!user,
+    delete: ({ req: { user } }) => !!user,
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'price', 'inStock', 'status', 'updatedAt'],

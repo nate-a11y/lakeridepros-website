@@ -1,17 +1,18 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import { resendAdapter } from '@payloadcms/email-resend'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-// Import collections
+// Import collections and adapters
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { BlogPosts } from './collections/BlogPosts'
+import { supabaseAdapter } from './lib/supabase-adapter'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -43,12 +44,13 @@ export default buildConfig({
     apiKey: process.env.RESEND_API_KEY || '',
   }),
   plugins: [
-    vercelBlobStorage({
-      enabled: true,
+    cloudStoragePlugin({
       collections: {
-        media: true,
+        media: {
+          adapter: supabaseAdapter(),
+          disableLocalStorage: true,
+        },
       },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
     }),
   ],
 })

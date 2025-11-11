@@ -69,6 +69,7 @@ async function uploadImageToPayload(
       mimetype: 'image/png',
       size: imageBuffer.length,
     },
+    overrideAccess: true,
   })
 
   return media
@@ -94,20 +95,40 @@ async function syncProducts() {
   // Initialize Payload
   const payload = await getPayload({ config })
 
-  // Fetch products from Printify
+  // Fetch all products from Printify with pagination
   console.log('📦 Fetching products from Printify...')
-  const response = await fetch(`${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json`, {
-    headers: {
-      Authorization: `Bearer ${PRINTIFY_TOKEN}`,
-    },
-  })
+  let allProducts: PrintifyProduct[] = []
+  let currentPage = 1
+  let hasMorePages = true
+  const limit = 100 // Max allowed by Printify API
 
-  if (!response.ok) {
-    throw new Error(`Printify API error: ${response.statusText}`)
+  while (hasMorePages) {
+    const response = await fetch(
+      `${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json?page=${currentPage}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${PRINTIFY_TOKEN}`,
+        },
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error(`Printify API error: ${response.statusText}`)
+    }
+
+    const responseData = await response.json() as { data: PrintifyProduct[]; current_page: number; last_page: number }
+    const { data: products, current_page, last_page } = responseData
+
+    allProducts = allProducts.concat(products)
+    console.log(`  📄 Fetched page ${current_page} of ${last_page} (${products.length} products)`)
+
+    // Check if there are more pages to fetch
+    hasMorePages = current_page < last_page
+    currentPage++
   }
 
-  const { data: printifyProducts } = await response.json() as { data: PrintifyProduct[] }
-  console.log(`✅ Found ${printifyProducts.length} products in Printify`)
+  const printifyProducts = allProducts
+  console.log(`✅ Found ${printifyProducts.length} total products in Printify`)
 
   for (const printifyProduct of printifyProducts) {
     try {
@@ -257,6 +278,7 @@ async function syncProducts() {
           collection: 'products',
           id: existing.docs[0].id,
           data: productData,
+          overrideAccess: true,
         })
         console.log(`  ✅ Updated: ${printifyProduct.title}`)
       } else {
@@ -265,6 +287,7 @@ async function syncProducts() {
         await payload.create({
           collection: 'products',
           data: productData,
+          overrideAccess: true,
         })
         console.log(`  ✅ Created: ${printifyProduct.title}`)
       }

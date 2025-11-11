@@ -28,6 +28,7 @@ async function uploadImageToPayload(payload: any, imageBuffer: Buffer, filename:
       mimetype: 'image/png',
       size: imageBuffer.length,
     },
+    overrideAccess: true,
   })
 
   return media
@@ -129,6 +130,21 @@ export async function POST(request: Request) {
           featuredImageId = media.id as number
         }
 
+        // Upload additional images
+        const additionalImages: Array<{ image: number }> = []
+        for (const [index, image] of printifyProduct.images.slice(0, 5).entries()) {
+          if (image === defaultImage) continue
+
+          try {
+            const imageBuffer = await downloadImage(image.src)
+            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${index + 1}.png`)
+            additionalImages.push({ image: media.id as number })
+          } catch (error) {
+            // Continue if one image fails
+            console.error(`Failed to upload image ${index + 1} for ${printifyProduct.title}:`, error)
+          }
+        }
+
         // Map variants
         const variants = printifyProduct.variants
           .filter((v: any) => v.is_enabled && v.is_available)
@@ -203,6 +219,7 @@ export async function POST(request: Request) {
           shortDescription:
             printifyProduct.description?.substring(0, 200) || printifyProduct.title,
           featuredImage: featuredImageId,
+          images: additionalImages,
           price: basePrice,
           categories,
           tags: printifyProduct.tags.map((tag: string) => ({ tag })),
@@ -222,12 +239,14 @@ export async function POST(request: Request) {
             collection: 'products',
             id: existing.docs[0].id,
             data: productData,
+            overrideAccess: true,
           })
           results.updated++
         } else {
           await payload.create({
             collection: 'products',
             data: productData,
+            overrideAccess: true,
           })
           results.created++
         }

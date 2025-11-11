@@ -2,6 +2,9 @@
   "functions": {
     "app/(payload)/admin/[[...segments]]/page.tsx": {
       "maxDuration": 30
+    },
+    "app/api/printify/sync-products/route.ts": {
+      "maxDuration": 300
     }
   },
   "build": {

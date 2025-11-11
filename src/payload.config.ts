@@ -41,12 +41,6 @@ function getPostgresConnectionString() {
     connStr = `${connStr}${separator}sslmode=no-verify`
   }
 
-  // Add statement_timeout to prevent queries from hanging indefinitely
-  // 120 seconds for migrations, 60 seconds for serverless operations
-  const statementTimeout = isMigration ? 120000 : 60000
-  const separator = connStr.includes('?') ? '&' : '?'
-  connStr = `${connStr}${separator}options=-c statement_timeout=${statementTimeout}`
-
   return connStr
 }
 
@@ -62,6 +56,8 @@ function getPoolConfig() {
       idleTimeoutMillis: 180000, // 3 minutes - allow time for slow migrations
       connectionTimeoutMillis: 180000, // 3 minutes - handle network latency and cold starts
       allowExitOnIdle: true,
+      // Set statement timeout to prevent queries from hanging indefinitely (120 seconds)
+      options: '-c statement_timeout=120000',
     }
   } else {
     // Serverless pool config: minimal connections, reasonable timeouts for I/O operations
@@ -73,6 +69,8 @@ function getPoolConfig() {
       idleTimeoutMillis: 60000, // 60 seconds - allow time for image uploads and heavy operations
       connectionTimeoutMillis: 60000, // 60 seconds - needed for Printify sync and other I/O-heavy operations
       allowExitOnIdle: true,
+      // Set statement timeout to prevent queries from hanging indefinitely (60 seconds)
+      options: '-c statement_timeout=60000',
     }
   }
 }

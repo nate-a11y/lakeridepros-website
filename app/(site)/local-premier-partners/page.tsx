@@ -9,6 +9,9 @@ export const metadata = {
   description: 'Our premier local business partners at Lake of the Ozarks. Supporting local excellence.',
 }
 
+// Force dynamic rendering so Payload CMS is available at request time
+export const dynamic = 'force-dynamic'
+
 export default async function LocalPremierPartnersPage() {
   const partners = await getPartners('local-premier')
 

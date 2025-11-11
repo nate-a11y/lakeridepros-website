@@ -10,7 +10,10 @@ import type {
   FilterParams,
 } from '@/lib/types';
 
-const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001';
+// Use production URL if available, otherwise use localhost for development
+const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
+                        process.env.NEXT_PUBLIC_SERVER_URL ||
+                        (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
 const API_KEY = process.env.PAYLOAD_API_KEY;
 
 interface FetchOptions extends RequestInit {

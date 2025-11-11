@@ -9,6 +9,9 @@ export const metadata = {
   description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
 }
 
+// Force dynamic rendering so Payload CMS is available at request time
+export const dynamic = 'force-dynamic'
+
 // Subcategory labels mapping
 const subcategoryLabels: Record<string, string> = {
   'advertising-marketing-technology': 'Advertising / Marketing / Technology',

@@ -17,7 +17,7 @@ import { supabaseAdapter } from '../lib/supabase-adapter'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-export default buildConfig({
+const config = buildConfig({
   admin: {
     user: 'users',
     importMap: {
@@ -53,3 +53,6 @@ export default buildConfig({
     }),
   ],
 })
+
+export default config
+export { config }

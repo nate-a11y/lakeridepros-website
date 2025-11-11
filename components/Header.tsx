@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { BookingModal } from './BookingModal';
 import CartIcon from '@/components/cart/CartIcon';
@@ -10,11 +11,23 @@ import CartIcon from '@/components/cart/CartIcon';
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Services', href: '/services' },
+    {
+      name: 'Services',
+      href: '/services',
+      hasDropdown: true,
+      dropdownItems: [
+        { name: 'All Services', href: '/services' },
+        { name: 'Wedding Transportation', href: '/wedding-transportation' },
+        { name: 'Bachelor Party Transportation', href: '/bachelor-party-transportation' },
+        { name: 'Wine Tour Shuttle', href: '/wine-tour-shuttle' },
+      ]
+    },
     { name: 'Fleet', href: '/fleet' },
+    { name: 'Partners', href: '/wedding-partners' },
     { name: 'Blog', href: '/blog' },
     { name: 'Shop', href: '/shop' },
     { name: 'Gift Cards', href: '/gift-cards' },
@@ -40,15 +53,45 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-8">
+          <div className="hidden md:flex md:items-center md:space-x-6">
             {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
-              >
-                {item.name}
-              </Link>
+              item.hasDropdown ? (
+                <div
+                  key={item.name}
+                  className="relative"
+                  onMouseEnter={() => setServicesDropdownOpen(true)}
+                  onMouseLeave={() => setServicesDropdownOpen(false)}
+                >
+                  <button
+                    className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1"
+                  >
+                    {item.name}
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+
+                  {servicesDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                      {item.dropdownItems?.map((dropdownItem) => (
+                        <Link
+                          key={dropdownItem.name}
+                          href={dropdownItem.href}
+                          className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
+                        >
+                          {dropdownItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
 
             {/* Book Now Button */}
@@ -99,16 +142,41 @@ export default function Header() {
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <div id="mobile-menu" className="md:hidden pb-4">
-            <nav aria-label="Mobile navigation" className="flex flex-col space-y-3">
+            <nav aria-label="Mobile navigation" className="flex flex-col space-y-2">
               {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors duration-200 px-3 py-2 text-base font-semibold rounded-lg"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
+                <div key={item.name}>
+                  {item.hasDropdown ? (
+                    <>
+                      <Link
+                        href={item.href}
+                        className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors duration-200 px-3 py-2 text-base font-semibold rounded-lg block"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                      <div className="pl-4 space-y-1">
+                        {item.dropdownItems?.map((dropdownItem) => (
+                          <Link
+                            key={dropdownItem.name}
+                            href={dropdownItem.href}
+                            className="text-neutral-600 dark:text-neutral-300 hover:text-primary dark:hover:text-primary hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors duration-200 px-3 py-1.5 text-sm rounded-lg block"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            {dropdownItem.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors duration-200 px-3 py-2 text-base font-semibold rounded-lg block"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </div>
               ))}
 
               {/* Mobile Book Now Button */}

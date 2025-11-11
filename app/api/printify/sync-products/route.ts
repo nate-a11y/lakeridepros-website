@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     let allProducts: any[] = []
     let currentPage = 1
     let hasMorePages = true
-    const limit = 100 // Max allowed by Printify API
+    const limit = 50 // Max allowed by Printify API
 
     while (hasMorePages) {
       const response = await fetch(

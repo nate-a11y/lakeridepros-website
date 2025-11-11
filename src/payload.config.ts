@@ -36,7 +36,7 @@ const config = buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URI || '',
     },
     // Use migrations only, no auto-push
     push: false,

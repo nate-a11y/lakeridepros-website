@@ -1,5 +1,5 @@
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
-/* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
+import type { Metadata } from 'next'
 import type { ServerFunctionClient } from 'payload'
 import config from '../../src/payload.config'
 import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
@@ -12,6 +12,11 @@ type Args = {
   children: React.ReactNode
 }
 
+export const metadata: Metadata = {
+  title: 'Lake Ride Pros Admin',
+  description: 'Admin panel for Lake Ride Pros',
+}
+
 const serverFunction: ServerFunctionClient = async function (args) {
   'use server'
   return handleServerFunctions({
@@ -22,13 +27,17 @@ const serverFunction: ServerFunctionClient = async function (args) {
 }
 
 const Layout = ({ children }: Args) => (
-  <RootLayout
-    config={config}
-    importMap={importMap}
-    serverFunction={serverFunction}
-  >
-    {children}
-  </RootLayout>
+  <html lang="en" suppressHydrationWarning>
+    <body>
+      <RootLayout
+        config={config}
+        importMap={importMap}
+        serverFunction={serverFunction}
+      >
+        {children}
+      </RootLayout>
+    </body>
+  </html>
 )
 
 export default Layout

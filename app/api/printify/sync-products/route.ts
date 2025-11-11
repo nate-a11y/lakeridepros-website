@@ -190,7 +190,18 @@ async function syncProducts(request: Request) {
 
         // Upload additional images in parallel (limit to 5 images)
         const additionalImages: Array<{ image: number }> = []
-        const imagesToProcess = printifyProduct.images.slice(0, 5).filter((img: any) => img !== defaultImage)
+
+        // Deduplicate images by URL to avoid filename conflicts
+        const seenUrls = new Set([defaultImage?.src])
+        const imagesToProcess = printifyProduct.images
+          .filter((img: any) => {
+            if (seenUrls.has(img.src)) {
+              return false
+            }
+            seenUrls.add(img.src)
+            return true
+          })
+          .slice(0, 5)
 
         const imageUploadPromises = imagesToProcess.map(async (image: any, index: number) => {
           try {

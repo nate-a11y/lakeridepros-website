@@ -23,9 +23,13 @@ const dirname = path.dirname(filename)
 
 // Helper to get the appropriate Postgres connection string with SSL disabled
 function getPostgresConnectionString() {
-  // For build-time migrations, use non-pooling connection
-  // POSTGRES_URL_NON_POOLING is provided by Vercel Supabase integration
-  let connStr = process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URI || ''
+  // Use non-pooling for migrations, pooled for runtime
+  // POSTGRES_URL uses Supabase's transaction pooler (better for serverless)
+  // POSTGRES_URL_NON_POOLING is direct connection (for migrations only)
+  const isBuildTime = process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV
+  let connStr = isBuildTime
+    ? (process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
+    : (process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
 
   // Supabase URLs come with sslmode=require - we need to override it to disable cert verification
   if (connStr.includes('sslmode=require')) {
@@ -34,6 +38,12 @@ function getPostgresConnectionString() {
     // If no sslmode param exists, add it
     const separator = connStr.includes('?') ? '&' : '?'
     connStr = `${connStr}${separator}sslmode=no-verify`
+  }
+
+  // For Supabase pooler, add pgbouncer parameter for transaction pooling mode
+  if (connStr.includes('supabase.co') && !connStr.includes('pgbouncer=true')) {
+    const separator = connStr.includes('?') ? '&' : '?'
+    connStr = `${connStr}${separator}pgbouncer=true`
   }
 
   return connStr
@@ -58,6 +68,12 @@ const config = buildConfig({
       ssl: {
         rejectUnauthorized: false,
       },
+      // Serverless-friendly connection pool settings
+      max: 1, // Max connections per serverless function instance (keep low for serverless)
+      min: 0, // No minimum connections (serverless functions should scale to zero)
+      idleTimeoutMillis: 30000, // Close idle connections after 30s
+      connectionTimeoutMillis: 10000, // Timeout after 10s if can't connect
+      allowExitOnIdle: true, // Allow process to exit when all connections are idle
     },
     // Use migrations only, no auto-push
     push: false,

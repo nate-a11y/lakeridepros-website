@@ -121,7 +121,13 @@ async function syncProducts(request: Request) {
     }
 
     // Optional: limit number of products to process per invocation
-    const batchSize = searchParams.get('batch') ? parseInt(searchParams.get('batch')!) : undefined
+    // Default to 30 products to avoid Vercel's 5-minute timeout (300 seconds)
+    const batchSize = searchParams.get('batch')
+      ? parseInt(searchParams.get('batch')!)
+      : 30 // Process 30 products at a time by default
+
+    // Optional: offset for pagination (e.g., ?offset=30 for second batch)
+    const offset = searchParams.get('offset') ? parseInt(searchParams.get('offset')!) : 0
 
     const payload = await getPayload({ config })
 
@@ -169,20 +175,21 @@ async function syncProducts(request: Request) {
       currentPage++
     }
 
-    // Apply batch limit if specified
+    // Apply batch limit and offset for pagination
     let printifyProducts = allProducts
-    if (batchSize && batchSize > 0) {
-      console.log(`[Printify Sync] Processing batch of ${batchSize} products (out of ${allProducts.length} total)`)
-      printifyProducts = allProducts.slice(0, batchSize)
-    } else {
-      console.log(`[Printify Sync] Processing all ${allProducts.length} products`)
-    }
+    const endIndex = offset + batchSize
+    const hasMore = endIndex < allProducts.length
+
+    console.log(`[Printify Sync] Processing products ${offset + 1}-${Math.min(endIndex, allProducts.length)} of ${allProducts.length} total`)
+    printifyProducts = allProducts.slice(offset, endIndex)
 
     const results = {
       total: printifyProducts.length,
       created: 0,
       updated: 0,
       failed: 0,
+      imagesReused: 0,
+      imagesUploaded: 0,
       errors: [] as string[],
     }
 
@@ -202,49 +209,74 @@ async function syncProducts(request: Request) {
 
         const baseSlug = slugify(printifyProduct.title)
         const existingProductId = existing.docs.length > 0 ? existing.docs[0].id : undefined
+        const existingProduct = existing.docs.length > 0 ? existing.docs[0] : null
         const slug = await ensureUniqueSlug(payload, baseSlug, existingProductId)
 
-        // Download and upload featured image
+        // Determine if we need to re-upload images
+        const totalPrintifyImages = printifyProduct.images.length
+        const hasExistingImages = existingProduct?.featuredImage && existingProduct?.images?.length > 0
+        const shouldReuseImages = hasExistingImages && (
+          // Reuse if total image count matches (1 featured + n additional)
+          (existingProduct.images.length + 1) === totalPrintifyImages
+        )
+
         let featuredImageId: number | null = null
-        const defaultImage =
-          printifyProduct.images.find((img: any) => img.is_default) || printifyProduct.images[0]
+        let additionalImages: Array<{ image: number }> = []
 
-        if (defaultImage) {
-          const imageBuffer = await downloadImage(defaultImage.src)
-          const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-featured.png`)
-          featuredImageId = media.id as number
-        }
+        if (shouldReuseImages) {
+          // Reuse existing images to avoid re-uploading
+          console.log(`[Printify Sync] Reusing existing images for ${printifyProduct.title}`)
+          featuredImageId = typeof existingProduct.featuredImage === 'object'
+            ? existingProduct.featuredImage.id
+            : existingProduct.featuredImage
+          additionalImages = existingProduct.images.map((img: any) => ({
+            image: typeof img.image === 'object' ? img.image.id : img.image
+          }))
+          results.imagesReused += (1 + additionalImages.length)
+        } else {
+          // Upload new images
+          console.log(`[Printify Sync] Uploading ${existingProduct ? 'updated' : 'new'} images for ${printifyProduct.title}`)
 
-        // Upload additional images sequentially to avoid overwhelming the system (limit to 5 images)
-        const additionalImages: Array<{ image: number }> = []
+          // Download and upload featured image
+          const defaultImage =
+            printifyProduct.images.find((img: any) => img.is_default) || printifyProduct.images[0]
 
-        // Deduplicate images by URL to avoid filename conflicts
-        const seenUrls = new Set([defaultImage?.src])
-        const imagesToProcess = printifyProduct.images
-          .filter((img: any) => {
-            if (seenUrls.has(img.src)) {
-              return false
+          if (defaultImage) {
+            const imageBuffer = await downloadImage(defaultImage.src)
+            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-featured.png`)
+            featuredImageId = media.id as number
+            results.imagesUploaded++
+          }
+
+          // Deduplicate images by URL to avoid filename conflicts
+          const seenUrls = new Set([defaultImage?.src])
+          const imagesToProcess = printifyProduct.images
+            .filter((img: any) => {
+              if (seenUrls.has(img.src)) {
+                return false
+              }
+              seenUrls.add(img.src)
+              return true
+            })
+            .slice(0, 5)
+
+          // Upload images sequentially with error handling
+          for (let i = 0; i < imagesToProcess.length; i++) {
+            const image = imagesToProcess[i]
+            try {
+              const imageBuffer = await downloadImage(image.src)
+              const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${i + 1}.png`)
+              additionalImages.push({ image: media.id as number })
+              results.imagesUploaded++
+
+              // Small delay to avoid overwhelming the database
+              if (i < imagesToProcess.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 100))
+              }
+            } catch (error) {
+              console.error(`[Printify Sync] Failed to upload image ${i + 1} for ${printifyProduct.title}:`, error)
+              // Continue with remaining images even if one fails
             }
-            seenUrls.add(img.src)
-            return true
-          })
-          .slice(0, 5)
-
-        // Upload images sequentially with error handling
-        for (let i = 0; i < imagesToProcess.length; i++) {
-          const image = imagesToProcess[i]
-          try {
-            const imageBuffer = await downloadImage(image.src)
-            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${i + 1}.png`)
-            additionalImages.push({ image: media.id as number })
-
-            // Small delay to avoid overwhelming the database
-            if (i < imagesToProcess.length - 1) {
-              await new Promise(resolve => setTimeout(resolve, 100))
-            }
-          } catch (error) {
-            console.error(`[Printify Sync] Failed to upload image ${i + 1} for ${printifyProduct.title}:`, error)
-            // Continue with remaining images even if one fails
           }
         }
 
@@ -365,7 +397,7 @@ async function syncProducts(request: Request) {
     }
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2)
-    console.log(`[Printify Sync] Completed in ${duration}s - ${results.created} created, ${results.updated} updated, ${results.failed} failed`)
+    console.log(`[Printify Sync] Completed in ${duration}s - ${results.created} created, ${results.updated} updated, ${results.failed} failed, ${results.imagesUploaded} images uploaded, ${results.imagesReused} images reused`)
 
     // Log all errors for debugging
     if (results.errors.length > 0) {
@@ -375,10 +407,20 @@ async function syncProducts(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: `Synced ${results.total} products (${results.created} created, ${results.updated} updated, ${results.failed} failed) in ${duration}s`,
+      message: `Synced ${results.total} products (${results.created} created, ${results.updated} updated, ${results.failed} failed, ${results.imagesUploaded} images uploaded, ${results.imagesReused} images reused) in ${duration}s${hasMore ? ` - ${allProducts.length - endIndex} products remaining` : ''}`,
       results: {
         ...results,
         durationSeconds: parseFloat(duration),
+      },
+      pagination: {
+        totalProducts: allProducts.length,
+        processedStart: offset + 1,
+        processedEnd: Math.min(endIndex, allProducts.length),
+        hasMore,
+        nextOffset: hasMore ? endIndex : null,
+        nextUrl: hasMore
+          ? `${process.env.PAYLOAD_PUBLIC_SERVER_URL || ''}/api/printify/sync-products?secret=${SYNC_SECRET}&offset=${endIndex}&batch=${batchSize}`
+          : null,
       },
     })
   } catch (error) {

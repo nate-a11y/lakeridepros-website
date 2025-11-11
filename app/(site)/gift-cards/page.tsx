@@ -13,6 +13,7 @@ const giftCardAmounts = [
 ];
 
 export default function GiftCardsPage() {
+  const [cardType, setCardType] = useState<'digital' | 'physical'>('digital');
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [customAmount, setCustomAmount] = useState('');
   const [purchaserName, setPurchaserName] = useState('');
@@ -20,10 +21,19 @@ export default function GiftCardsPage() {
   const [recipientEmail, setRecipientEmail] = useState('');
   const [recipientName, setRecipientName] = useState('');
   const [message, setMessage] = useState('');
+  const [shippingName, setShippingName] = useState('');
+  const [shippingStreet1, setShippingStreet1] = useState('');
+  const [shippingStreet2, setShippingStreet2] = useState('');
+  const [shippingCity, setShippingCity] = useState('');
+  const [shippingState, setShippingState] = useState('');
+  const [shippingZipCode, setShippingZipCode] = useState('');
+  const [shippingCountry, setShippingCountry] = useState('United States');
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
 
   const finalAmount = selectedAmount === 0 ? parseFloat(customAmount) || 0 : selectedAmount;
+  const PHYSICAL_CARD_SHIPPING_FEE = 5;
+  const totalAmount = cardType === 'physical' ? finalAmount + PHYSICAL_CARD_SHIPPING_FEE : finalAmount;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +46,13 @@ export default function GiftCardsPage() {
         throw new Error('Gift card amount must be between $10 and $1,000');
       }
 
+      // Validate shipping address for physical cards
+      if (cardType === 'physical') {
+        if (!shippingName || !shippingStreet1 || !shippingCity || !shippingState || !shippingZipCode) {
+          throw new Error('Please complete all required shipping address fields');
+        }
+      }
+
       // Call Stripe checkout API
       const response = await fetch('/api/stripe/create-gift-card-checkout', {
         method: 'POST',
@@ -43,12 +60,22 @@ export default function GiftCardsPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          type: cardType,
           amount: finalAmount,
           purchaserName,
           purchaserEmail,
           recipientName: recipientName || null,
           recipientEmail: recipientEmail || null,
           message: message || null,
+          shippingAddress: cardType === 'physical' ? {
+            name: shippingName,
+            street1: shippingStreet1,
+            street2: shippingStreet2 || null,
+            city: shippingCity,
+            state: shippingState,
+            zipCode: shippingZipCode,
+            country: shippingCountry,
+          } : null,
         }),
       });
 
@@ -91,6 +118,43 @@ export default function GiftCardsPage() {
                 Purchase a Gift Card
               </h2>
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Card Type Selection */}
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
+                    Card Type
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setCardType('digital')}
+                      className={`py-4 px-4 rounded-lg border-2 font-semibold transition-colors ${
+                        cardType === 'digital'
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-neutral-300 text-neutral-700 hover:border-primary'
+                      }`}
+                    >
+                      <div className="text-center">
+                        <div className="text-lg">📧 Digital</div>
+                        <div className="text-xs mt-1 opacity-80">Instant email delivery</div>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCardType('physical')}
+                      className={`py-4 px-4 rounded-lg border-2 font-semibold transition-colors ${
+                        cardType === 'physical'
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-neutral-300 text-neutral-700 hover:border-primary'
+                      }`}
+                    >
+                      <div className="text-center">
+                        <div className="text-lg">💳 Physical</div>
+                        <div className="text-xs mt-1 opacity-80">Shipped via USPS (+$5)</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
                 {/* Amount Selection */}
                 <div>
                   <label className="block text-sm font-semibold text-neutral-900 mb-3">
@@ -213,6 +277,121 @@ export default function GiftCardsPage() {
                   </div>
                 </div>
 
+                {/* Shipping Address - Only for Physical Cards */}
+                {cardType === 'physical' && (
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+                      Shipping Address <span className="text-red-500">*</span>
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Physical gift card will be mailed to this address via USPS.
+                    </p>
+
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                          Full Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={shippingName}
+                          onChange={(e) => setShippingName(e.target.value)}
+                          placeholder="John Doe"
+                          required={cardType === 'physical'}
+                          className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                          Street Address <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={shippingStreet1}
+                          onChange={(e) => setShippingStreet1(e.target.value)}
+                          placeholder="123 Main St"
+                          required={cardType === 'physical'}
+                          className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                          Apartment, Suite, etc. (Optional)
+                        </label>
+                        <input
+                          type="text"
+                          value={shippingStreet2}
+                          onChange={(e) => setShippingStreet2(e.target.value)}
+                          placeholder="Apt 4B"
+                          className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                            City <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={shippingCity}
+                            onChange={(e) => setShippingCity(e.target.value)}
+                            placeholder="Osage Beach"
+                            required={cardType === 'physical'}
+                            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                            State <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={shippingState}
+                            onChange={(e) => setShippingState(e.target.value)}
+                            placeholder="MO"
+                            required={cardType === 'physical'}
+                            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                            ZIP Code <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={shippingZipCode}
+                            onChange={(e) => setShippingZipCode(e.target.value)}
+                            placeholder="65065"
+                            required={cardType === 'physical'}
+                            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                            Country <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={shippingCountry}
+                            onChange={(e) => setShippingCountry(e.target.value)}
+                            placeholder="United States"
+                            required={cardType === 'physical'}
+                            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm font-semibold text-neutral-900 mb-2">
                     Personal Message (Optional)
@@ -228,10 +407,23 @@ export default function GiftCardsPage() {
 
                 {/* Total */}
                 <div className="bg-neutral-50 p-6 rounded-lg">
+                  {cardType === 'physical' && (
+                    <>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm text-neutral-700">Gift Card Amount:</span>
+                        <span className="text-sm text-neutral-900">{formatPrice(finalAmount)}</span>
+                      </div>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm text-neutral-700">Shipping (USPS):</span>
+                        <span className="text-sm text-neutral-900">{formatPrice(PHYSICAL_CARD_SHIPPING_FEE)}</span>
+                      </div>
+                      <div className="border-t border-neutral-300 my-3"></div>
+                    </>
+                  )}
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-lg font-semibold text-neutral-900">Total:</span>
                     <span className="text-2xl font-bold text-primary">
-                      {formatPrice(finalAmount)}
+                      {formatPrice(totalAmount)}
                     </span>
                   </div>
 

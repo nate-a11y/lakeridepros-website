@@ -1,23 +1,20 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-// import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
-import { resendAdapter } from '@payloadcms/email-resend'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-// Import collections and adapters
+// Import collections
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { BlogPosts } from './collections/BlogPosts'
-// import { supabaseAdapter } from './lib/supabase-adapter'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const config = buildConfig({
+export default buildConfig({
   admin: {
     user: 'users',
     importMap: {
@@ -26,7 +23,7 @@ const config = buildConfig({
   },
   collections: [Users, Media, Pages, BlogPosts],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET || 'your-secret-here',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -36,26 +33,5 @@ const config = buildConfig({
     },
   }),
   sharp,
-  cors: process.env.CORS_ORIGINS?.split(',') || [],
   serverURL: process.env.SERVER_URL || 'http://localhost:3000',
-  ...(process.env.RESEND_API_KEY ? {
-    email: resendAdapter({
-      defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lakeridepros.com',
-      defaultFromName: process.env.EMAIL_FROM_NAME || 'Lake Ride Pros',
-      apiKey: process.env.RESEND_API_KEY,
-    }),
-  } : {}),
-  // Temporarily disable cloud storage to debug config issue
-  // plugins: [
-  //   cloudStoragePlugin({
-  //     collections: {
-  //       media: {
-  //         adapter: supabaseAdapter,
-  //         disableLocalStorage: true,
-  //       },
-  //     },
-  //   }),
-  // ],
 })
-
-export default config

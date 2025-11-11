@@ -79,8 +79,15 @@ export async function POST(request: Request) {
       )
 
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Printify API error:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText,
+          url: `${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json?page=${currentPage}&limit=${limit}`,
+        })
         return NextResponse.json(
-          { error: `Printify API error: ${response.statusText}` },
+          { error: `Printify API error: ${response.statusText}`, details: errorText },
           { status: response.status }
         )
       }

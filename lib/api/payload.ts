@@ -184,6 +184,19 @@ export async function getPartners(featured = false): Promise<Partner[]> {
   return response.docs || [];
 }
 
+// Pages API
+export async function getPageBySlug(slug: string): Promise<any | null> {
+  const response = await fetchFromPayload<ApiResponse<any>>('/pages', {
+    params: {
+      where: JSON.stringify({
+        slug: { equals: slug },
+        published: { equals: true }
+      })
+    },
+  });
+  return response.docs?.[0] || null;
+}
+
 // Helper function to get media URL
 export function getMediaUrl(url: string): string {
   if (!url) return '';

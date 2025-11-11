@@ -9,6 +9,9 @@ export const metadata = {
   description: 'Our trusted wedding vendor partners at Lake of the Ozarks. Luxury transportation for your special day.',
 }
 
+// Force dynamic rendering so Payload CMS is available at request time
+export const dynamic = 'force-dynamic'
+
 export default async function WeddingPartnersPage() {
   const partners = await getPartners('wedding')
 

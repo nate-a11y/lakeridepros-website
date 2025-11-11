@@ -58,14 +58,14 @@ function getPoolConfig() {
       allowExitOnIdle: true,
     }
   } else {
-    // Serverless pool config: minimal connections, fast cleanup
+    // Serverless pool config: minimal connections, reasonable timeouts for I/O operations
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
       max: 1, // Max 1 connection per serverless function
       min: 0,
-      idleTimeoutMillis: 30000, // 30 seconds
-      connectionTimeoutMillis: 10000, // 10 seconds
+      idleTimeoutMillis: 60000, // 60 seconds - allow time for image uploads and heavy operations
+      connectionTimeoutMillis: 60000, // 60 seconds - needed for Printify sync and other I/O-heavy operations
       allowExitOnIdle: true,
     }
   }

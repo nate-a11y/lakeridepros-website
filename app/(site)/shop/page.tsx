@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   },
 }
 
+// Force dynamic rendering so Payload CMS is available at request time
+export const dynamic = 'force-dynamic'
+
 async function getProducts() {
   try {
     const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'

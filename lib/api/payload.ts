@@ -174,14 +174,29 @@ export async function getTestimonials(featured = false): Promise<Testimonial[]> 
 }
 
 // Partners API
-export async function getPartners(featured = false): Promise<Partner[]> {
-  const params: Record<string, any> = { sort: 'order' };
-  if (featured) {
-    params.where = JSON.stringify({ featured: { equals: true } });
-  }
+export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
+  try {
+    const params: Record<string, any> = { sort: 'order' };
+    const whereConditions: Record<string, any> = {};
 
-  const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
-  return response.docs || [];
+    if (category) {
+      whereConditions.category = { equals: category };
+    }
+    if (featured) {
+      whereConditions.featured = { equals: true };
+    }
+
+    if (Object.keys(whereConditions).length > 0) {
+      params.where = JSON.stringify(whereConditions);
+    }
+
+    const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
+    return response.docs || [];
+  } catch (error) {
+    // Return empty array if Partners collection doesn't exist yet (during initial deployment)
+    console.warn('Partners collection not found, returning empty array');
+    return [];
+  }
 }
 
 // Pages API

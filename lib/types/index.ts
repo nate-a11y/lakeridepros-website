@@ -200,8 +200,13 @@ export interface Testimonial {
 export interface Partner {
   id: string;
   name: string;
+  category: 'wedding' | 'local-premier' | 'trusted-referral';
+  subcategory?: string;
   logo: Media;
   website?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
   description?: string;
   featured: boolean;
   order?: number;

@@ -47,14 +47,14 @@ function getPostgresConnectionString() {
 // Get pool configuration based on whether we're migrating or running serverless
 function getPoolConfig() {
   if (isMigration) {
-    // Migration pool config: more connections, longer timeouts
+    // Migration pool config: more connections, longer timeouts for slow build environments
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 10, // Allow more connections for migrations
+      max: 5, // Reduced from 10 to avoid overwhelming the database
       min: 0,
-      idleTimeoutMillis: 60000, // 60 seconds
-      connectionTimeoutMillis: 60000, // 60 seconds for slow cold starts
+      idleTimeoutMillis: 180000, // 3 minutes - allow time for slow migrations
+      connectionTimeoutMillis: 180000, // 3 minutes - handle network latency and cold starts
       allowExitOnIdle: true,
     }
   } else {

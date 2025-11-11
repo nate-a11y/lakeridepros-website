@@ -38,11 +38,13 @@ const config = buildConfig({
   sharp,
   cors: process.env.CORS_ORIGINS?.split(',') || [],
   serverURL: process.env.SERVER_URL || 'http://localhost:3000',
-  email: resendAdapter({
-    defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lakeridepros.com',
-    defaultFromName: process.env.EMAIL_FROM_NAME || 'Lake Ride Pros',
-    apiKey: process.env.RESEND_API_KEY || '',
-  }),
+  ...(process.env.RESEND_API_KEY ? {
+    email: resendAdapter({
+      defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lakeridepros.com',
+      defaultFromName: process.env.EMAIL_FROM_NAME || 'Lake Ride Pros',
+      apiKey: process.env.RESEND_API_KEY,
+    }),
+  } : {}),
   // Temporarily disable cloud storage to debug config issue
   // plugins: [
   //   cloudStoragePlugin({

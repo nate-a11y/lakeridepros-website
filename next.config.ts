@@ -44,4 +44,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPayload(nextConfig);
+export default withPayload(nextConfig, {
+  configPath: path.resolve(process.cwd(), 'payload.config.ts'),
+});

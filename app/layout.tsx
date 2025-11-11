@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { CartProvider } from "@/contexts/CartContext";
+import { MoovsWidget } from "@/components/MoovsWidget";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
@@ -47,25 +47,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://static.moovs.app" />
-
-        {/* Moovs Booking FAB */}
-        <Script
-          id="moovs-fab"
-          strategy="lazyOnload"
-        >
-          {`
-            window["moovsAPI"] = moovsAPI = window["moovsAPI"] || [];
-            moovsAPI.push(["operator", "49dfb7de-bbdf-11ee-a55e-57f07b7dc566"]);
-            (function(m, oo, v, s) {
-                s = m.createElement(oo);
-                s.src = v;
-                s.async = 1;
-                m.head.appendChild(s);
-            })(document, "script", "https://static.moovs.app");
-          `}
-        </Script>
       </head>
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -80,6 +63,7 @@ export default function RootLayout({
             <main id="main-content" className="min-h-screen">{children}</main>
             <Footer />
             <CartDrawer />
+            <MoovsWidget />
           </CartProvider>
         </ThemeProvider>
       </body>

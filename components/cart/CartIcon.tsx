@@ -2,10 +2,16 @@
 
 import { ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { useCart } from '@/lib/store/cart'
 
 export default function CartIcon() {
+  const [mounted, setMounted] = useState(false)
   const itemCount = useCart((state) => state.getItemCount())
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <Link
@@ -15,7 +21,7 @@ export default function CartIcon() {
     >
       <ShoppingCart className="w-6 h-6 text-lrp-green" />
 
-      {itemCount > 0 && (
+      {mounted && itemCount > 0 && (
         <span className="absolute -top-1 -right-1 bg-lrp-green text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
           {itemCount > 9 ? '9+' : itemCount}
         </span>

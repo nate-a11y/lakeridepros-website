@@ -98,7 +98,7 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
 // Blog API
 export async function getBlogPosts(params?: PaginationParams & FilterParams): Promise<ApiResponse<BlogPost>> {
   const baseParams = {
-    where: JSON.stringify({ status: { equals: 'published' } }),
+    where: JSON.stringify({ published: { equals: true } }),
     sort: '-publishedDate',
     ...params,
   };
@@ -108,7 +108,7 @@ export async function getBlogPosts(params?: PaginationParams & FilterParams): Pr
 export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
   const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', {
     params: {
-      where: JSON.stringify({ status: { equals: 'published' } }),
+      where: JSON.stringify({ published: { equals: true } }),
       sort: '-publishedDate',
       limit,
     },
@@ -121,7 +121,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
     params: {
       where: JSON.stringify({
         slug: { equals: slug },
-        status: { equals: 'published' }
+        published: { equals: true }
       })
     },
   });
@@ -182,6 +182,19 @@ export async function getPartners(featured = false): Promise<Partner[]> {
 
   const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
   return response.docs || [];
+}
+
+// Pages API
+export async function getPageBySlug(slug: string): Promise<any | null> {
+  const response = await fetchFromPayload<ApiResponse<any>>('/pages', {
+    params: {
+      where: JSON.stringify({
+        slug: { equals: slug },
+        published: { equals: true }
+      })
+    },
+  });
+  return response.docs?.[0] || null;
 }
 
 // Helper function to get media URL

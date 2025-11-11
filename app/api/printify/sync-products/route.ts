@@ -61,21 +61,40 @@ export async function POST(request: Request) {
 
     const payload = await getPayload({ config })
 
-    // Fetch products from Printify
-    const response = await fetch(`${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json`, {
-      headers: {
-        Authorization: `Bearer ${PRINTIFY_TOKEN}`,
-      },
-    })
+    // Fetch all products from Printify with pagination
+    let allProducts: any[] = []
+    let currentPage = 1
+    let hasMorePages = true
+    const limit = 100 // Max allowed by Printify API
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: `Printify API error: ${response.statusText}` },
-        { status: response.status }
+    while (hasMorePages) {
+      const response = await fetch(
+        `${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json?page=${currentPage}&limit=${limit}`,
+        {
+          headers: {
+            Authorization: `Bearer ${PRINTIFY_TOKEN}`,
+          },
+        }
       )
+
+      if (!response.ok) {
+        return NextResponse.json(
+          { error: `Printify API error: ${response.statusText}` },
+          { status: response.status }
+        )
+      }
+
+      const responseData = await response.json()
+      const { data: products, current_page, last_page } = responseData
+
+      allProducts = allProducts.concat(products)
+
+      // Check if there are more pages to fetch
+      hasMorePages = current_page < last_page
+      currentPage++
     }
 
-    const { data: printifyProducts } = await response.json()
+    const printifyProducts = allProducts
 
     const results = {
       total: printifyProducts.length,

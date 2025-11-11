@@ -168,7 +168,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
           </div>
 
           {/* Results Count */}
-          <div className="mt-3 text-sm text-neutral-600 dark:text-neutral-400">
+          <div className="mt-3 text-sm text-neutral-600 dark:text-neutral-400" suppressHydrationWarning>
             {filteredAndSortedProducts.length} {filteredAndSortedProducts.length === 1 ? 'product' : 'products'}
             {searchQuery && ` matching "${searchQuery}"`}
           </div>
@@ -290,8 +290,8 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist }: P
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center">
-              <ShoppingBag className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mb-2" />
-              <span className="text-sm text-neutral-400 dark:text-neutral-500">No Image</span>
+              <ShoppingBag className="w-16 h-16 text-neutral-400 dark:text-neutral-300 mb-2" />
+              <span className="text-sm text-neutral-500 dark:text-neutral-300">No Image</span>
             </div>
           )}
 

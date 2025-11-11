@@ -86,6 +86,53 @@ export const GiftCards: CollectionConfig = {
       },
     },
     {
+      name: 'deliveryMethod',
+      type: 'select',
+      defaultValue: 'immediate',
+      options: [
+        { label: 'Send Immediately', value: 'immediate' },
+        { label: 'Schedule for Later', value: 'scheduled' },
+      ],
+      admin: {
+        description: 'When to deliver the digital gift card',
+        condition: (data) => data.type === 'digital',
+      },
+    },
+    {
+      name: 'scheduledDeliveryDate',
+      type: 'date',
+      admin: {
+        description: 'Date and time to send the gift card email',
+        condition: (data) => data.type === 'digital' && data.deliveryMethod === 'scheduled',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+    },
+    {
+      name: 'deliveryStatus',
+      type: 'select',
+      defaultValue: 'pending',
+      options: [
+        { label: 'Pending', value: 'pending' },
+        { label: 'Sent', value: 'sent' },
+      ],
+      admin: {
+        description: 'Email delivery status for digital cards',
+        condition: (data) => data.type === 'digital',
+        readOnly: true,
+      },
+    },
+    {
+      name: 'sentDate',
+      type: 'date',
+      admin: {
+        description: 'When the gift card email was sent',
+        condition: (data) => data.type === 'digital' && data.deliveryStatus === 'sent',
+        readOnly: true,
+      },
+    },
+    {
       name: 'shippingAddress',
       type: 'group',
       admin: {

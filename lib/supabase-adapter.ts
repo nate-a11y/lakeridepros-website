@@ -90,13 +90,29 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
       }
     },
     generateURL: ({ filename }) => {
-      const supabase = getSupabaseClient()
+      try {
+        const supabase = getSupabaseClient()
 
-      // Build the file path with prefix if provided
-      const filePath = prefix ? `${prefix}/${filename}` : filename
+        // Build the file path with prefix if provided
+        const filePath = prefix ? `${prefix}/${filename}` : filename
 
-      const { data } = supabase.storage.from(bucket).getPublicUrl(filePath)
-      return data.publicUrl
+        const { data } = supabase.storage.from(bucket).getPublicUrl(filePath)
+
+        if (!data.publicUrl) {
+          console.error(`[Supabase Adapter] generateURL failed to get public URL for ${filename}`)
+          // Return a fallback URL that won't have double slashes
+          const serverUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || ''
+          return serverUrl ? `${serverUrl.replace(/\/$/, '')}/api/media/file/${filename}` : `/api/media/file/${filename}`
+        }
+
+        console.log(`[Supabase Adapter] Generated URL for ${filename}: ${data.publicUrl}`)
+        return data.publicUrl
+      } catch (error) {
+        console.error(`[Supabase Adapter] Error in generateURL for ${filename}:`, error)
+        // Return a fallback URL that won't have double slashes
+        const serverUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || ''
+        return serverUrl ? `${serverUrl.replace(/\/$/, '')}/api/media/file/${filename}` : `/api/media/file/${filename}`
+      }
     },
     staticHandler: async (req, { params }) => {
       try {

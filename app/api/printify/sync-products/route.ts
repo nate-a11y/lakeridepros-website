@@ -20,22 +20,49 @@ async function downloadImage(url: string): Promise<Buffer> {
   return Buffer.from(arrayBuffer)
 }
 
-async function uploadImageToPayload(payload: any, imageBuffer: Buffer, filename: string) {
-  const media = await payload.create({
-    collection: 'media',
-    data: {
-      alt: filename.replace(/\.[^/.]+$/, '').replace(/_/g, ' '),
-    },
-    file: {
-      data: imageBuffer,
-      name: filename,
-      mimetype: 'image/png',
-      size: imageBuffer.length,
-    },
-    overrideAccess: true,
-  })
+function sanitizeFilename(filename: string): string {
+  // Remove extension first
+  const nameWithoutExt = filename.replace(/\.[^/.]+$/, '')
 
-  return media
+  // Remove all non-alphanumeric characters except hyphens and underscores
+  const sanitized = nameWithoutExt
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+  // Limit to 50 characters to leave room for timestamps and extension
+  const truncated = sanitized.substring(0, 50).replace(/-+$/, '')
+
+  // Add timestamp to ensure uniqueness
+  const timestamp = Date.now()
+
+  return `${truncated}-${timestamp}.png`
+}
+
+async function uploadImageToPayload(payload: any, imageBuffer: Buffer, filename: string) {
+  const sanitizedFilename = sanitizeFilename(filename)
+
+  try {
+    const media = await payload.create({
+      collection: 'media',
+      data: {
+        alt: filename.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
+      },
+      file: {
+        data: imageBuffer,
+        name: sanitizedFilename,
+        mimetype: 'image/png',
+        size: imageBuffer.length,
+      },
+      overrideAccess: true,
+    })
+
+    return media
+  } catch (error) {
+    console.error(`[Upload Error] Failed to upload ${sanitizedFilename}:`, error)
+    throw error
+  }
 }
 
 function slugify(text: string): string {
@@ -188,7 +215,7 @@ async function syncProducts(request: Request) {
           featuredImageId = media.id as number
         }
 
-        // Upload additional images in parallel (limit to 5 images)
+        // Upload additional images sequentially to avoid overwhelming the system (limit to 5 images)
         const additionalImages: Array<{ image: number }> = []
 
         // Deduplicate images by URL to avoid filename conflicts
@@ -203,19 +230,23 @@ async function syncProducts(request: Request) {
           })
           .slice(0, 5)
 
-        const imageUploadPromises = imagesToProcess.map(async (image: any, index: number) => {
+        // Upload images sequentially with error handling
+        for (let i = 0; i < imagesToProcess.length; i++) {
+          const image = imagesToProcess[i]
           try {
             const imageBuffer = await downloadImage(image.src)
-            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${index + 1}.png`)
-            return { image: media.id as number }
-          } catch (error) {
-            console.error(`Failed to upload image ${index + 1} for ${printifyProduct.title}:`, error)
-            return null
-          }
-        })
+            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${i + 1}.png`)
+            additionalImages.push({ image: media.id as number })
 
-        const uploadedImages = await Promise.all(imageUploadPromises)
-        additionalImages.push(...uploadedImages.filter((img): img is { image: number } => img !== null))
+            // Small delay to avoid overwhelming the database
+            if (i < imagesToProcess.length - 1) {
+              await new Promise(resolve => setTimeout(resolve, 100))
+            }
+          } catch (error) {
+            console.error(`[Printify Sync] Failed to upload image ${i + 1} for ${printifyProduct.title}:`, error)
+            // Continue with remaining images even if one fails
+          }
+        }
 
         // Map variants
         const variants = printifyProduct.variants

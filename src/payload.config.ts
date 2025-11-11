@@ -41,6 +41,12 @@ function getPostgresConnectionString() {
     connStr = `${connStr}${separator}sslmode=no-verify`
   }
 
+  // Add statement_timeout to prevent queries from hanging indefinitely
+  // 120 seconds for migrations, 60 seconds for serverless operations
+  const statementTimeout = isMigration ? 120000 : 60000
+  const separator = connStr.includes('?') ? '&' : '?'
+  connStr = `${connStr}${separator}options=-c statement_timeout=${statementTimeout}`
+
   return connStr
 }
 

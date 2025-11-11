@@ -10,6 +10,8 @@ export default function CartIcon() {
   const itemCount = useCart((state) => state.getItemCount())
 
   useEffect(() => {
+    // Rehydrate the cart store from localStorage after mount
+    useCart.persist.rehydrate()
     setMounted(true)
   }, [])
 

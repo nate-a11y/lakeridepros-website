@@ -21,6 +21,17 @@ import { supabaseAdapter } from '../lib/supabase-adapter'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Helper to ensure SSL is configured for Postgres connection
+function getPostgresConnectionString() {
+  const connStr = process.env.POSTGRES_URL || process.env.DATABASE_URI || ''
+  // Supabase connections need sslmode=no-verify to accept self-signed certs
+  if (connStr && !connStr.includes('sslmode=')) {
+    const separator = connStr.includes('?') ? '&' : '?'
+    return `${connStr}${separator}sslmode=no-verify`
+  }
+  return connStr
+}
+
 const config = buildConfig({
   admin: {
     user: 'users',
@@ -36,10 +47,7 @@ const config = buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URI || '',
-      ssl: {
-        rejectUnauthorized: false
-      },
+      connectionString: getPostgresConnectionString(),
     },
     // Use migrations only, no auto-push
     push: false,

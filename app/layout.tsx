@@ -49,7 +49,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://static.moovs.app" />
 
         {/* Moovs Booking FAB */}
-        <Script id="moovs-fab" strategy="afterInteractive">
+        <Script
+          id="moovs-fab"
+          strategy="lazyOnload"
+        >
           {`
             window["moovsAPI"] = moovsAPI = window["moovsAPI"] || [];
             moovsAPI.push(["operator", "49dfb7de-bbdf-11ee-a55e-57f07b7dc566"]);

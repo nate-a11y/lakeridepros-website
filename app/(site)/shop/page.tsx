@@ -39,10 +39,10 @@ export default async function ShopPage() {
 
   const categories = [
     { name: 'All Products', value: 'all' },
-    { name: 'T-Shirts', value: 'tshirts' },
-    { name: 'Hats', value: 'hats' },
-    { name: 'Hoodies', value: 'hoodies' },
+    { name: 'Apparel', value: 'apparel' },
     { name: 'Accessories', value: 'accessories' },
+    { name: 'Drinkware', value: 'drinkware' },
+    { name: 'Home & Living', value: 'home' },
   ]
 
   return (
@@ -176,9 +176,11 @@ function ProductCard({ product }: { product: any }) {
         </div>
 
         {/* Category */}
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          {product.category}
-        </p>
+        {product.categories && product.categories.length > 0 && (
+          <p className="text-sm text-gray-600 dark:text-gray-400 capitalize">
+            {product.categories[0].replace('-', ' ')}
+          </p>
+        )}
 
         {/* Available Sizes */}
         {product.variants && product.variants.length > 0 && (

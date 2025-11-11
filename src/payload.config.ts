@@ -15,6 +15,7 @@ import { BlogPosts } from '../collections/BlogPosts'
 import { Products } from '../collections/Products'
 import { GiftCards } from '../collections/GiftCards'
 import { Orders } from '../collections/Orders'
+import { Partners } from '../collections/Partners'
 import { supabaseAdapter } from '../lib/supabase-adapter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -27,7 +28,7 @@ const config = buildConfig({
       baseDir: path.resolve(dirname, '..'),
     },
   },
-  collections: [Users, Media, Pages, BlogPosts, Products, GiftCards, Orders],
+  collections: [Users, Media, Pages, BlogPosts, Products, GiftCards, Orders, Partners],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

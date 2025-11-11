@@ -174,10 +174,19 @@ export async function getTestimonials(featured = false): Promise<Testimonial[]> 
 }
 
 // Partners API
-export async function getPartners(featured = false): Promise<Partner[]> {
+export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   const params: Record<string, any> = { sort: 'order' };
+  const whereConditions: Record<string, any> = {};
+
+  if (category) {
+    whereConditions.category = { equals: category };
+  }
   if (featured) {
-    params.where = JSON.stringify({ featured: { equals: true } });
+    whereConditions.featured = { equals: true };
+  }
+
+  if (Object.keys(whereConditions).length > 0) {
+    params.where = JSON.stringify(whereConditions);
   }
 
   const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });

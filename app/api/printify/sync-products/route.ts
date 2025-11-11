@@ -282,12 +282,23 @@ async function syncProducts(request: Request) {
         }
       } catch (error) {
         results.failed++
-        results.errors.push(`${printifyProduct.title}: ${error instanceof Error ? error.message : 'Unknown error'}`)
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+        results.errors.push(`${printifyProduct.title}: ${errorMessage}`)
+        console.error(`[Printify Sync] Failed to sync product "${printifyProduct.title}":`, errorMessage)
+        if (error instanceof Error && error.stack) {
+          console.error(`[Printify Sync] Stack trace:`, error.stack)
+        }
       }
     }
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2)
     console.log(`[Printify Sync] Completed in ${duration}s - ${results.created} created, ${results.updated} updated, ${results.failed} failed`)
+
+    // Log all errors for debugging
+    if (results.errors.length > 0) {
+      console.error(`[Printify Sync] Errors encountered:`)
+      results.errors.forEach((err, idx) => console.error(`  ${idx + 1}. ${err}`))
+    }
 
     return NextResponse.json({
       success: true,

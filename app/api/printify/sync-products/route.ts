@@ -47,7 +47,7 @@ function slugify(text: string): string {
     .trim()
 }
 
-export async function POST(request: Request) {
+async function syncProducts(request: Request) {
   try {
     // Verify secret for security
     const { searchParams } = new URL(request.url)
@@ -280,4 +280,13 @@ export async function POST(request: Request) {
       { status: 500 }
     )
   }
+}
+
+// Export both GET and POST handlers for convenience
+export async function GET(request: Request) {
+  return syncProducts(request)
+}
+
+export async function POST(request: Request) {
+  return syncProducts(request)
 }

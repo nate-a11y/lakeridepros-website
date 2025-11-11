@@ -2,6 +2,14 @@ import type { CollectionConfig } from 'payload'
 
 export const Partners: CollectionConfig = {
   slug: 'partners',
+  access: {
+    // Allow public read access for frontend
+    read: () => true,
+    // Require authentication for write operations
+    create: ({ req: { user } }) => !!user,
+    update: ({ req: { user } }) => !!user,
+    delete: ({ req: { user } }) => !!user,
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'category', 'featured', 'order'],

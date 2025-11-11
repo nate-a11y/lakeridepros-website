@@ -21,11 +21,22 @@ import { supabaseAdapter } from '../lib/supabase-adapter'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// Helper to get the appropriate Postgres connection string
+// Helper to get the appropriate Postgres connection string with SSL disabled
 function getPostgresConnectionString() {
-  // For build-time migrations, use non-pooling connection with SSL disabled
+  // For build-time migrations, use non-pooling connection
   // POSTGRES_URL_NON_POOLING is provided by Vercel Supabase integration
-  return process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URI || ''
+  let connStr = process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URI || ''
+
+  // Supabase URLs come with sslmode=require - we need to override it to disable cert verification
+  if (connStr.includes('sslmode=require')) {
+    connStr = connStr.replace('sslmode=require', 'sslmode=no-verify')
+  } else if (!connStr.includes('sslmode=')) {
+    // If no sslmode param exists, add it
+    const separator = connStr.includes('?') ? '&' : '?'
+    connStr = `${connStr}${separator}sslmode=no-verify`
+  }
+
+  return connStr
 }
 
 const config = buildConfig({

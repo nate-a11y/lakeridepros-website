@@ -39,26 +39,14 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
         // Build the file path with prefix if provided
         const filePath = prefix ? `${prefix}/${file.filename}` : file.filename
 
-        // Convert data to proper buffer format
-        let fileBuffer: Buffer | ArrayBuffer
+        // Use the buffer from the file parameter
+        const fileBuffer = file.buffer
 
-        if (data instanceof Buffer) {
-          // Already a Buffer
-          fileBuffer = data
-        } else if (data instanceof ArrayBuffer) {
-          // Already an ArrayBuffer
-          fileBuffer = data
-        } else if (typeof data === 'object' && 'arrayBuffer' in data && typeof data.arrayBuffer === 'function') {
-          // It's a Blob/File object, read the arrayBuffer
-          fileBuffer = await data.arrayBuffer()
-        } else if (typeof data === 'object' && 'buffer' in data) {
-          // Check if data has a buffer property
-          fileBuffer = data.buffer
-        } else {
-          throw new Error(`Unsupported file data type: ${typeof data}. Expected Buffer, ArrayBuffer, or Blob.`)
+        if (!fileBuffer) {
+          throw new Error(`No file buffer found for ${file.filename}`)
         }
 
-        console.log(`[Supabase Adapter] Uploading ${file.filename}, size: ${fileBuffer.byteLength || (fileBuffer as Buffer).length} bytes`)
+        console.log(`[Supabase Adapter] Uploading ${file.filename}, size: ${fileBuffer.length} bytes, type: ${file.mimeType}`)
 
         // Upload the buffer to Supabase
         const { data: uploadData, error } = await supabase.storage

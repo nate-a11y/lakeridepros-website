@@ -119,6 +119,7 @@ export async function getBlogPosts(params?: PaginationParams & FilterParams): Pr
   const baseParams = {
     where: JSON.stringify({ published: { equals: true } }),
     sort: '-publishedDate',
+    depth: 2,
     ...params,
   };
   return fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', { params: baseParams as any });
@@ -130,6 +131,7 @@ export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
       where: JSON.stringify({ published: { equals: true } }),
       sort: '-publishedDate',
       limit,
+      depth: 2,
     },
   });
   return response.docs || [];
@@ -141,7 +143,8 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
       where: JSON.stringify({
         slug: { equals: slug },
         published: { equals: true }
-      })
+      }),
+      depth: 2,
     },
   });
   return response.docs?.[0] || null;

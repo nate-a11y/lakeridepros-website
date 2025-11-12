@@ -9,6 +9,17 @@ interface BlogPostCardProps {
   post: BlogPost;
 }
 
+// Helper function to get category display name
+const getCategoryLabel = (categoryValue: string): string => {
+  const categoryMap: Record<string, string> = {
+    'news': 'Company News',
+    'guides': 'Tips & Guides',
+    'events': 'Events',
+    'fleet': 'Fleet Updates',
+  };
+  return categoryMap[categoryValue] || categoryValue;
+};
+
 export default function BlogPostCard({ post }: BlogPostCardProps) {
   const imageUrl = post.featuredImage
     ? getMediaUrl(post.featuredImage.url)
@@ -41,7 +52,11 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
           {post.categories && post.categories.length > 0 && (
             <>
               <span className="mx-2">•</span>
-              <span className="text-primary dark:text-primary-light">{post.categories[0].name}</span>
+              <span className="text-primary dark:text-primary-light">
+                {typeof post.categories[0] === 'string'
+                  ? getCategoryLabel(post.categories[0])
+                  : post.categories[0]?.name || ''}
+              </span>
             </>
           )}
         </div>

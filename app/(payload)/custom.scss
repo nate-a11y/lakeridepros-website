@@ -1,2 +1,990 @@
-// Add any custom Payload admin styles here
-// The base Payload styles are automatically included
+// ============================================
+// LAKE RIDE PROS - PAYLOAD CMS ADMIN STYLING
+// ============================================
+// Custom admin panel branding for Lake Ride Pros
+// Bold green on deep black with premium typography
+
+// ============================================
+// FONT LOADING
+// ============================================
+
+// Boardson font for headers (bold, impactful brand font)
+@font-face {
+  font-family: 'Boardson';
+  src: url('/Boardson.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Import Montserrat from Google Fonts as fallback and for body text
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+
+// ============================================
+// BRAND COLOR PALETTE
+// ============================================
+
+$lrp-primary-green: #4cbb17;    // Primary Green (rgb 76, 187, 23)
+$lrp-bright-green: #60e421;     // Bright Green (rgb 96, 228, 33) - highlights
+$lrp-dark-green: #3a8e11;       // Dark Green (rgb 58, 142, 17) - hover states
+$lrp-pure-black: #060606;       // Pure Black (rgb 6, 6, 6) - backgrounds
+$lrp-pure-white: #ffffff;       // Pure White - text on dark
+$lrp-light-gray: #e6e6e6;       // Light Gray (rgb 230, 230, 230) - secondary
+$lrp-border-gray: #2a2a2a;      // Border color for dark theme
+
+// Typography stack
+$font-header: 'Boardson', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+$font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+// ============================================
+// GLOBAL ADMIN OVERRIDES
+// ============================================
+
+// Override Payload's default root styles
+:root {
+  // Color overrides
+  --theme-bg: #{$lrp-pure-black} !important;
+  --theme-elevation-0: #{$lrp-pure-black} !important;
+  --theme-elevation-50: #0d0d0d !important;
+  --theme-elevation-100: #1a1a1a !important;
+  --theme-elevation-150: #1f1f1f !important;
+  --theme-elevation-200: #{$lrp-border-gray} !important;
+  --theme-elevation-250: #333333 !important;
+  --theme-elevation-300: #3d3d3d !important;
+  --theme-elevation-400: #4d4d4d !important;
+  --theme-elevation-500: #5d5d5d !important;
+  --theme-elevation-600: #6d6d6d !important;
+  --theme-elevation-700: #7d7d7d !important;
+  --theme-elevation-800: #8d8d8d !important;
+  --theme-elevation-900: #9d9d9d !important;
+  --theme-elevation-1000: #b0b0b0 !important;
+
+  // Text colors
+  --theme-text: #{$lrp-pure-white} !important;
+  --theme-text-secondary: #{$lrp-light-gray} !important;
+
+  // Primary brand color
+  --theme-success-500: #{$lrp-primary-green} !important;
+  --theme-success-600: #{$lrp-dark-green} !important;
+  --theme-success-400: #{$lrp-bright-green} !important;
+
+  // Input and form colors
+  --theme-input-bg: #1a1a1a !important;
+  --theme-input-border: #{$lrp-border-gray} !important;
+
+  // Font families
+  --font-body: #{$font-body} !important;
+  --font-mono: 'Monaco', 'Courier New', monospace !important;
+}
+
+// ============================================
+// BASE ADMIN LAYOUT
+// ============================================
+
+// Main admin wrapper
+body {
+  background: $lrp-pure-black !important;
+  color: $lrp-pure-white !important;
+  font-family: $font-body !important;
+
+  // Ensure smooth transitions
+  * {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+}
+
+// ============================================
+// HEADER / TOP NAVIGATION
+// ============================================
+
+// Main header bar
+.payload__template-default {
+  background: $lrp-pure-black !important;
+  border-bottom: 2px solid $lrp-primary-green !important;
+}
+
+// Header container
+header.template-default__header,
+.nav__wrap,
+[class*="template-default__header"] {
+  background: $lrp-pure-black !important;
+  border-bottom: 2px solid $lrp-primary-green !important;
+
+  // Logo styling
+  .nav__logo {
+    img {
+      filter: brightness(0) invert(1); // Make logo white if it's dark
+    }
+  }
+
+  // Navigation links in header
+  a, button {
+    color: $lrp-pure-white !important;
+    font-weight: 600;
+
+    &:hover {
+      color: $lrp-bright-green !important;
+    }
+  }
+}
+
+// ============================================
+// SIDEBAR NAVIGATION
+// ============================================
+
+// Sidebar container
+.nav,
+[class*="nav__wrap"],
+.template-default__nav {
+  background: $lrp-pure-black !important;
+  border-right: 1px solid $lrp-border-gray !important;
+
+  // Navigation groups
+  .nav__group {
+    border-bottom: 1px solid $lrp-border-gray;
+
+    &-label {
+      color: $lrp-light-gray !important;
+      font-family: $font-header !important;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      padding: 1rem 1.5rem 0.5rem;
+    }
+  }
+
+  // Navigation links
+  .nav-item,
+  [class*="nav-item"] {
+    a, button {
+      color: $lrp-pure-white !important;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-left: 3px solid transparent;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba($lrp-primary-green, 0.1) !important;
+        color: $lrp-bright-green !important;
+        border-left-color: $lrp-bright-green !important;
+      }
+
+      // Active state
+      &.active,
+      &[aria-current="page"] {
+        background: rgba($lrp-primary-green, 0.15) !important;
+        color: $lrp-bright-green !important;
+        border-left-color: $lrp-primary-green !important;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// ============================================
+// MAIN CONTENT AREA
+// ============================================
+
+// Main content wrapper
+main,
+.template-default__main,
+[class*="template-default__main"] {
+  background: $lrp-pure-black !important;
+
+  // Page headers
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font-header !important;
+    color: $lrp-pure-white !important;
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: $lrp-pure-white !important;
+
+    // Add green accent to main headings
+    &::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: $lrp-primary-green;
+      margin-top: 0.75rem;
+      border-radius: 2px;
+    }
+  }
+}
+
+// ============================================
+// FORM ELEMENTS
+// ============================================
+
+// Labels
+label,
+.field-label,
+[class*="field-label"] {
+  color: $lrp-pure-white !important;
+  font-weight: 700;
+  font-family: $font-body !important;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+// Input fields
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input[type="tel"],
+input[type="search"],
+textarea,
+select,
+.input,
+[class*="input"] {
+  background: #1a1a1a !important;
+  border: 2px solid $lrp-border-gray !important;
+  color: $lrp-pure-white !important;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-family: $font-body;
+  transition: all 0.2s ease;
+
+  &:focus,
+  &:focus-visible {
+    outline: none !important;
+    border-color: $lrp-primary-green !important;
+    box-shadow: 0 0 0 3px rgba($lrp-primary-green, 0.2) !important;
+    background: #0d0d0d !important;
+  }
+
+  &:hover:not(:focus) {
+    border-color: lighten($lrp-border-gray, 10%) !important;
+  }
+
+  &::placeholder {
+    color: #888888 !important;
+  }
+}
+
+// Textareas
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+// ============================================
+// BUTTONS
+// ============================================
+
+// Primary buttons
+button,
+.btn,
+[class*="btn--style-primary"],
+[class*="button--style-primary"] {
+  background: $lrp-primary-green !important;
+  color: $lrp-pure-white !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-family: $font-body;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: $lrp-bright-green !important;
+    box-shadow: 0 0 20px rgba($lrp-primary-green, 0.4) !important;
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    background: $lrp-dark-green !important;
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Secondary buttons
+[class*="btn--style-secondary"],
+[class*="button--style-secondary"] {
+  background: transparent !important;
+  color: $lrp-primary-green !important;
+  border: 2px solid $lrp-primary-green !important;
+
+  &:hover:not(:disabled) {
+    background: rgba($lrp-primary-green, 0.1) !important;
+    border-color: $lrp-bright-green !important;
+    color: $lrp-bright-green !important;
+  }
+}
+
+// Icon buttons
+.btn--icon,
+[class*="button--icon"] {
+  color: $lrp-pure-white !important;
+
+  &:hover {
+    color: $lrp-bright-green !important;
+  }
+}
+
+// ============================================
+// TABLES & LISTS
+// ============================================
+
+// Table styling
+table,
+.table,
+[class*="table"] {
+  background: $lrp-pure-black !important;
+
+  thead {
+    background: #1a1a1a !important;
+    border-bottom: 2px solid $lrp-primary-green !important;
+
+    th {
+      color: $lrp-pure-white !important;
+      font-family: $font-header !important;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      padding: 1rem;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $lrp-border-gray !important;
+
+      &:hover {
+        background: rgba($lrp-primary-green, 0.05) !important;
+      }
+
+      &:nth-child(even) {
+        background: rgba(255, 255, 255, 0.02) !important;
+
+        &:hover {
+          background: rgba($lrp-primary-green, 0.05) !important;
+        }
+      }
+
+      td {
+        color: $lrp-pure-white !important;
+        padding: 1rem;
+
+        a {
+          color: $lrp-bright-green !important;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Collection list view
+.collection-list,
+[class*="collection-list"] {
+  background: $lrp-pure-black !important;
+}
+
+// ============================================
+// CARDS & PANELS
+// ============================================
+
+.card,
+.panel,
+[class*="card"],
+[class*="panel"],
+[class*="render-fields"] {
+  background: #1a1a1a !important;
+  border: 1px solid $lrp-border-gray !important;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  // Card headers
+  .card__header,
+  [class*="card__header"] {
+    border-bottom: 2px solid $lrp-primary-green;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+
+    h2, h3, h4 {
+      color: $lrp-pure-white !important;
+      font-family: $font-header !important;
+      margin: 0;
+    }
+  }
+}
+
+// ============================================
+// MODALS & DRAWERS
+// ============================================
+
+.modal,
+.drawer,
+[class*="modal"],
+[class*="drawer"] {
+  .modal__content,
+  .drawer__content,
+  [class*="modal__content"],
+  [class*="drawer__content"] {
+    background: $lrp-pure-black !important;
+    border: 2px solid $lrp-primary-green !important;
+
+    .modal__header,
+    .drawer__header,
+    [class*="modal__header"],
+    [class*="drawer__header"] {
+      background: #1a1a1a !important;
+      border-bottom: 2px solid $lrp-primary-green !important;
+
+      h2, h3 {
+        color: $lrp-pure-white !important;
+        font-family: $font-header !important;
+      }
+    }
+  }
+}
+
+// Modal overlay
+.modal__overlay,
+[class*="modal__overlay"] {
+  background: rgba($lrp-pure-black, 0.85) !important;
+  backdrop-filter: blur(4px);
+}
+
+// ============================================
+// RICH TEXT EDITOR (LEXICAL)
+// ============================================
+
+.rich-text-editor,
+[class*="lexical"],
+[class*="editor"] {
+  background: #1a1a1a !important;
+  border: 2px solid $lrp-border-gray !important;
+  border-radius: 6px;
+
+  // Toolbar
+  .editor-toolbar,
+  [class*="toolbar"] {
+    background: #0d0d0d !important;
+    border-bottom: 1px solid $lrp-border-gray !important;
+
+    button {
+      color: $lrp-pure-white !important;
+
+      &:hover {
+        background: rgba($lrp-primary-green, 0.1) !important;
+        color: $lrp-bright-green !important;
+      }
+
+      &.active {
+        background: rgba($lrp-primary-green, 0.2) !important;
+        color: $lrp-primary-green !important;
+      }
+    }
+  }
+
+  // Editor content area
+  .editor-content,
+  [class*="ContentEditable"] {
+    color: $lrp-pure-white !important;
+    padding: 1rem;
+    min-height: 200px;
+
+    p, li, span {
+      color: $lrp-pure-white !important;
+    }
+  }
+}
+
+// ============================================
+// UPLOAD FIELDS & MEDIA
+// ============================================
+
+.upload,
+.file-upload,
+[class*="upload"],
+[class*="file-field"] {
+  .upload__wrap,
+  [class*="upload__wrap"] {
+    background: #1a1a1a !important;
+    border: 2px dashed $lrp-border-gray !important;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $lrp-primary-green !important;
+      background: rgba($lrp-primary-green, 0.05) !important;
+    }
+
+    .upload__label {
+      color: $lrp-pure-white !important;
+      font-weight: 600;
+    }
+
+    .upload__sublabel {
+      color: $lrp-light-gray !important;
+    }
+  }
+
+  // Uploaded file preview
+  .file-preview,
+  [class*="file-preview"],
+  [class*="thumbnail"] {
+    border: 2px solid $lrp-border-gray !important;
+    border-radius: 6px;
+    overflow: hidden;
+
+    &:hover {
+      border-color: $lrp-primary-green !important;
+      box-shadow: 0 0 15px rgba($lrp-primary-green, 0.3);
+    }
+  }
+}
+
+// ============================================
+// RELATIONSHIP & SELECT FIELDS
+// ============================================
+
+.relationship,
+.select,
+[class*="relationship"],
+[class*="select-field"] {
+  // Dropdown menu
+  .select__menu,
+  [class*="menu"] {
+    background: #1a1a1a !important;
+    border: 2px solid $lrp-primary-green !important;
+    border-radius: 6px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+    .select__option,
+    [class*="option"] {
+      color: $lrp-pure-white !important;
+      padding: 0.75rem 1rem;
+
+      &:hover {
+        background: rgba($lrp-primary-green, 0.15) !important;
+        color: $lrp-bright-green !important;
+      }
+
+      &--is-selected {
+        background: rgba($lrp-primary-green, 0.25) !important;
+        color: $lrp-primary-green !important;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// ============================================
+// CHECKBOXES & RADIO BUTTONS
+// ============================================
+
+input[type="checkbox"],
+input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid $lrp-border-gray !important;
+  border-radius: 4px;
+  background: #1a1a1a !important;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+
+  &:checked {
+    background: $lrp-primary-green !important;
+    border-color: $lrp-primary-green !important;
+
+    &::after {
+      content: '✓';
+      position: absolute;
+      color: $lrp-pure-white;
+      font-size: 14px;
+      font-weight: 700;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &:hover:not(:disabled) {
+    border-color: $lrp-primary-green !important;
+    box-shadow: 0 0 0 2px rgba($lrp-primary-green, 0.1);
+  }
+
+  &:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba($lrp-primary-green, 0.3) !important;
+  }
+}
+
+input[type="radio"] {
+  border-radius: 50%;
+
+  &:checked::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: $lrp-pure-white;
+    border-radius: 50%;
+  }
+}
+
+// ============================================
+// TESTIMONIALS COLLECTION SPECIFIC
+// ============================================
+
+// Testimonials page
+[data-collection="testimonials"],
+[href*="testimonials"] {
+  .collection-header,
+  h1 {
+    font-family: $font-header !important;
+    color: $lrp-pure-white !important;
+  }
+
+  // Featured checkbox - make it stand out
+  .field[data-field="featured"],
+  [class*="field-type-checkbox"][data-name="featured"] {
+    .field-label {
+      color: $lrp-bright-green !important;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: '⭐';
+        font-size: 1.2rem;
+      }
+    }
+
+    input[type="checkbox"]:checked {
+      background: $lrp-bright-green !important;
+      border-color: $lrp-bright-green !important;
+      box-shadow: 0 0 15px rgba($lrp-bright-green, 0.4);
+    }
+  }
+
+  // Rating field - custom star styling
+  .field[data-field="rating"],
+  [data-name="rating"] {
+    .field-label {
+      &::after {
+        content: ' ⭐';
+      }
+    }
+
+    input[type="number"] {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $lrp-bright-green !important;
+      text-align: center;
+    }
+  }
+
+  // Image upload - more prominent
+  .field[data-field="image"],
+  [data-name="image"] {
+    .upload__wrap {
+      border-color: $lrp-primary-green !important;
+      background: rgba($lrp-primary-green, 0.05) !important;
+    }
+  }
+}
+
+// ============================================
+// NOTIFICATIONS & TOASTS
+// ============================================
+
+.toast,
+.notification,
+[class*="toast"],
+[class*="notification"] {
+  background: #1a1a1a !important;
+  border: 2px solid $lrp-primary-green !important;
+  border-radius: 8px;
+  color: $lrp-pure-white !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+  &.success,
+  &--success {
+    border-color: $lrp-primary-green !important;
+    background: rgba($lrp-primary-green, 0.1) !important;
+  }
+
+  &.error,
+  &--error {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+  }
+}
+
+// ============================================
+// PAGINATION
+// ============================================
+
+.pagination,
+[class*="pagination"] {
+  .pagination__button,
+  button {
+    background: transparent !important;
+    color: $lrp-pure-white !important;
+    border: 1px solid $lrp-border-gray !important;
+
+    &:hover:not(:disabled) {
+      background: rgba($lrp-primary-green, 0.1) !important;
+      border-color: $lrp-primary-green !important;
+      color: $lrp-bright-green !important;
+    }
+
+    &.active {
+      background: $lrp-primary-green !important;
+      border-color: $lrp-primary-green !important;
+      color: $lrp-pure-white !important;
+      font-weight: 700;
+    }
+  }
+}
+
+// ============================================
+// LOADING STATES
+// ============================================
+
+.loading,
+.spinner,
+[class*="loading"],
+[class*="spinner"] {
+  border-color: rgba($lrp-primary-green, 0.2) !important;
+  border-top-color: $lrp-primary-green !important;
+}
+
+// Loading overlay
+.loading-overlay,
+[class*="loading-overlay"] {
+  background: rgba($lrp-pure-black, 0.8) !important;
+  backdrop-filter: blur(4px);
+}
+
+// ============================================
+// SCROLLBARS
+// ============================================
+
+// Custom scrollbar styling for webkit browsers
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $lrp-border-gray;
+  border-radius: 6px;
+  border: 2px solid #1a1a1a;
+
+  &:hover {
+    background: lighten($lrp-border-gray, 15%);
+  }
+
+  &:active {
+    background: $lrp-primary-green;
+  }
+}
+
+// ============================================
+// SEARCH & FILTERS
+// ============================================
+
+.search,
+.filter,
+[class*="search"],
+[class*="filter"] {
+  input {
+    background: #1a1a1a !important;
+    border: 2px solid $lrp-border-gray !important;
+    color: $lrp-pure-white !important;
+
+    &:focus {
+      border-color: $lrp-primary-green !important;
+      box-shadow: 0 0 0 3px rgba($lrp-primary-green, 0.2) !important;
+    }
+  }
+
+  button {
+    background: $lrp-primary-green !important;
+
+    &:hover {
+      background: $lrp-bright-green !important;
+    }
+  }
+}
+
+// ============================================
+// BREADCRUMBS
+// ============================================
+
+.breadcrumbs,
+[class*="breadcrumb"] {
+  a {
+    color: $lrp-light-gray !important;
+
+    &:hover {
+      color: $lrp-bright-green !important;
+    }
+  }
+
+  .breadcrumb__current,
+  [class*="current"] {
+    color: $lrp-pure-white !important;
+    font-weight: 700;
+  }
+
+  .breadcrumb__separator {
+    color: $lrp-border-gray !important;
+  }
+}
+
+// ============================================
+// TABS
+// ============================================
+
+.tabs,
+[class*="tabs"] {
+  .tab,
+  [class*="tab__button"] {
+    color: $lrp-light-gray !important;
+    border-bottom: 3px solid transparent;
+    font-weight: 600;
+
+    &:hover {
+      color: $lrp-bright-green !important;
+      border-bottom-color: rgba($lrp-bright-green, 0.3);
+    }
+
+    &.active,
+    &--is-active {
+      color: $lrp-primary-green !important;
+      border-bottom-color: $lrp-primary-green !important;
+      font-weight: 700;
+    }
+  }
+}
+
+// ============================================
+// UTILITY CLASSES
+// ============================================
+
+// Glow effect for important elements
+.lrp-glow {
+  box-shadow: 0 0 20px rgba($lrp-primary-green, 0.4) !important;
+}
+
+// Premium badge
+.lrp-badge {
+  background: $lrp-primary-green !important;
+  color: $lrp-pure-white !important;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// ============================================
+// RESPONSIVE ADJUSTMENTS
+// ============================================
+
+@media (max-width: 768px) {
+  // Adjust font sizes for mobile
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  // Stack forms better
+  .field-type-group,
+  [class*="field-type-group"] {
+    flex-direction: column;
+  }
+
+  // Full width buttons on mobile
+  button,
+  .btn {
+    width: 100%;
+  }
+}
+
+// ============================================
+// PRINT STYLES
+// ============================================
+
+@media print {
+  // Ensure readable print output
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .nav,
+  .sidebar,
+  button:not(.print-button) {
+    display: none !important;
+  }
+}
+
+// ============================================
+// ACCESSIBILITY ENHANCEMENTS
+// ============================================
+
+// Focus visible for better keyboard navigation
+*:focus-visible {
+  outline: 3px solid $lrp-bright-green !important;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+// Ensure proper contrast for screen readers
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

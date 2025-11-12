@@ -84,6 +84,17 @@ const config = buildConfig({
     importMap: {
       baseDir: path.resolve(dirname, '..'),
     },
+    meta: {
+      titleSuffix: '- Lake Ride Pros',
+      favicon: '/Color logo - no background.png',
+      ogImage: '/Color logo - no background.png',
+    },
+    components: {
+      graphics: {
+        Icon: '@/components/admin/Icon#Icon',
+        Logo: '@/components/admin/Logo#Logo',
+      },
+    },
   },
   collections: [Users, Media, Pages, BlogPosts, Services, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],
   editor: lexicalEditor(),

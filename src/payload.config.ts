@@ -21,10 +21,6 @@ import { Orders } from '../collections/Orders'
 import { Partners } from '../collections/Partners'
 import { supabaseAdapter } from '../lib/supabase-adapter'
 
-// Import custom admin components
-import { Logo } from './components/admin/Logo'
-import { Icon } from './components/admin/Icon'
-
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -95,8 +91,8 @@ const config = buildConfig({
     },
     components: {
       graphics: {
-        Icon,
-        Logo,
+        Icon: '@/components/admin/Icon#Icon',
+        Logo: '@/components/admin/Logo#Logo',
       },
     },
   },

@@ -138,20 +138,21 @@
 }
 
 /* Ensure body and html take full height and use proper backgrounds */
-html,
-body {
+/* Exclude Payload admin routes to prevent style conflicts */
+html:not(:has([data-payload-admin])),
+body:not(:has([data-payload-admin])) {
   min-height: 100vh;
   background-color: var(--background);
   color: var(--foreground);
 }
 
 /* Prevent white gaps on dark mode */
-.dark html,
-.dark body {
+.dark html:not(:has([data-payload-admin])),
+.dark body:not(:has([data-payload-admin])) {
   background-color: #0a0a0a;
 }
 
-body {
+body:not(:has([data-payload-admin])) {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);

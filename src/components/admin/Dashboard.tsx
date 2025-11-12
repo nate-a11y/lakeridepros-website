@@ -12,10 +12,6 @@ interface CollectionStats {
   color: string
 }
 
-interface DashboardProps {
-  canAccessAdmin: boolean
-}
-
 const collections = [
   { name: 'Services', icon: '🚗', slug: 'services', color: '#4cbb17' },
   { name: 'Vehicles', icon: '🚙', slug: 'vehicles', color: '#60e421' },
@@ -30,7 +26,7 @@ const collections = [
   { name: 'Users', icon: '👥', slug: 'users', color: '#4cbb17' },
 ]
 
-export const Dashboard: React.FC<DashboardProps> = ({ canAccessAdmin }) => {
+export const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<CollectionStats[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -88,17 +84,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ canAccessAdmin }) => {
 
     fetchStats()
   }, [])
-
-  if (!canAccessAdmin) {
-    return (
-      <div className="dashboard-container">
-        <div className="dashboard-error">
-          <h2>Access Denied</h2>
-          <p>You do not have permission to view this dashboard.</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="dashboard-container">

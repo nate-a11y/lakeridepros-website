@@ -41,9 +41,14 @@ export interface Vehicle {
   type: 'sedan' | 'suv' | 'van' | 'limousine' | 'bus' | 'boat' | 'other';
   description: string;
   capacity: number;
-  images?: Media[];
+  images?: Array<{
+    image: Media;
+    alt?: string;
+  }>;
   featuredImage?: Media;
-  amenities?: string[];
+  amenities?: Array<{
+    amenity: string;
+  }>;
   specifications?: {
     make?: string;
     model?: string;
@@ -70,7 +75,7 @@ export interface BlogPost {
   excerpt?: string;
   content: any; // Rich text content
   author?: Author | string; // Can be Author object or email string
-  categories?: Category[];
+  categories?: Array<Category | string>; // Can be Category objects or ID strings
   tags?: string[];
   featuredImage?: Media;
   publishedDate?: string;

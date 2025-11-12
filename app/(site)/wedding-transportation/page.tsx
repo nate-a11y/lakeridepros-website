@@ -44,7 +44,7 @@ export default function WeddingTransportationPage() {
               Luxury shuttle service for your perfect day. Stress-free transportation for bridal parties, guests, and wedding events.
             </p>
             <a
-              href="/booking"
+              href="/book"
               className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
             >
               Get Custom Quote
@@ -320,7 +320,7 @@ export default function WeddingTransportationPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/booking"
+                href="/book"
                 className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
               >
                 Get Custom Quote

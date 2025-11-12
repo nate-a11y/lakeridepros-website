@@ -81,7 +81,7 @@ export default function Header() {
                   }}
                 >
                   <button
-                    className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1 pb-4"
+                    className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1"
                   >
                     {item.name}
                     <ChevronDown className="w-4 h-4" />

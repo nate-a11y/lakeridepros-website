@@ -101,7 +101,7 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
         if (!data.publicUrl) {
           console.error(`[Supabase Adapter] generateURL failed to get public URL for ${filename}`)
           // Return a fallback URL that won't have double slashes
-          const serverUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || ''
+          const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || ''
           return serverUrl ? `${serverUrl.replace(/\/$/, '')}/api/media/file/${filename}` : `/api/media/file/${filename}`
         }
 
@@ -110,7 +110,7 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
       } catch (error) {
         console.error(`[Supabase Adapter] Error in generateURL for ${filename}:`, error)
         // Return a fallback URL that won't have double slashes
-        const serverUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || ''
+        const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || ''
         return serverUrl ? `${serverUrl.replace(/\/$/, '')}/api/media/file/${filename}` : `/api/media/file/${filename}`
       }
     },

@@ -467,7 +467,7 @@ async function syncProducts(request: Request) {
 
     // Auto-chain to next batch if there are more products and autoChain is enabled
     if (hasMore && autoChain) {
-      const nextUrl = `${process.env.PAYLOAD_PUBLIC_SERVER_URL || request.url.split('/api/')[0]}/api/printify/sync-products?secret=${SYNC_SECRET}&offset=${endIndex}&batch=${batchSize}&autoChain=true`
+      const nextUrl = `${process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || request.url.split('/api/')[0]}/api/printify/sync-products?secret=${SYNC_SECRET}&offset=${endIndex}&batch=${batchSize}&autoChain=true`
 
       console.log(`[Printify Sync] Auto-chaining to next batch (${allProducts.length - endIndex} products remaining)...`)
 

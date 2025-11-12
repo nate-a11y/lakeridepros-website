@@ -171,7 +171,7 @@ export async function POST(request: NextRequest) {
               </div>
 
               <center>
-                <a href="https://www.lakeridepros.com/gift-cards/balance" class="button">
+                <a href="https://www.lakeridepros.com/gift-card-balance" class="button">
                   Check Balance
                 </a>
               </center>

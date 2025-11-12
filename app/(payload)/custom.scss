@@ -727,17 +727,31 @@ input[type="radio"] {
   color: $lrp-pure-white !important;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 
-  &.success,
-  &--success {
+  &.success {
     border-color: $lrp-primary-green !important;
     background: rgba($lrp-primary-green, 0.1) !important;
   }
 
-  &.error,
-  &--error {
+  &.error {
     border-color: #ef4444 !important;
     background: rgba(239, 68, 68, 0.1) !important;
   }
+}
+
+.toast--success,
+.notification--success,
+[class*="toast"][class*="success"],
+[class*="notification"][class*="success"] {
+  border-color: $lrp-primary-green !important;
+  background: rgba($lrp-primary-green, 0.1) !important;
+}
+
+.toast--error,
+.notification--error,
+[class*="toast"][class*="error"],
+[class*="notification"][class*="error"] {
+  border-color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
 }
 
 // ============================================
@@ -884,12 +898,18 @@ input[type="radio"] {
       border-bottom-color: rgba($lrp-bright-green, 0.3);
     }
 
-    &.active,
-    &--is-active {
+    &.active {
       color: $lrp-primary-green !important;
       border-bottom-color: $lrp-primary-green !important;
       font-weight: 700;
     }
+  }
+
+  .tab--is-active,
+  [class*="tab__button"][class*="active"] {
+    color: $lrp-primary-green !important;
+    border-bottom-color: $lrp-primary-green !important;
+    font-weight: 700;
   }
 }
 

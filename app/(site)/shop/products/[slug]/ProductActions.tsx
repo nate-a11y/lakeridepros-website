@@ -42,9 +42,9 @@ export default function ProductActions({ product }: ProductActionsProps) {
     setTimeout(() => setAddedToCart(false), 3000)
   }
 
-  // Group variants by size and color
-  const sizes = Array.from(new Set<string>(product.variants?.map((v: any) => v.size as string) || []))
-  const colors = Array.from(new Set<string>(product.variants?.map((v: any) => v.color as string) || []))
+  // Group variants by size and color (filter out empty values)
+  const sizes = Array.from(new Set<string>(product.variants?.map((v: any) => v.size as string).filter((s: string) => s) || []))
+  const colors = Array.from(new Set<string>(product.variants?.map((v: any) => v.color as string).filter((c: string) => c) || []))
 
   return (
     <div className="flex flex-col lg:flex-row gap-12">
@@ -118,13 +118,16 @@ export default function ProductActions({ product }: ProductActionsProps) {
         </div>
 
         {/* Description */}
-        <p className="text-neutral-700 dark:text-neutral-300 mb-8 leading-relaxed">
-          {typeof product.description === 'string'
-            ? product.description
-            : product.description?.root?.children?.[0]?.children?.[0]?.text
-              ? product.description.root.children[0].children[0].text
-              : product.shortDescription || 'High-quality Lake Ride Pros merchandise'}
-        </p>
+        <div
+          className="text-neutral-700 dark:text-neutral-300 mb-8 leading-relaxed prose prose-sm max-w-none"
+          dangerouslySetInnerHTML={{
+            __html: typeof product.description === 'string'
+              ? product.description
+              : product.description?.root?.children?.[0]?.children?.[0]?.text
+                ? product.description.root.children[0].children[0].text
+                : product.shortDescription || 'High-quality Lake Ride Pros merchandise'
+          }}
+        />
 
         {/* Size Selection */}
         {sizes.length > 0 && (

@@ -36,7 +36,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   }
 
   const images = vehicle.images || [];
-  const mainImage = vehicle.featuredImage || images[0];
+  const mainImage = vehicle.featuredImage || (images[0]?.image);
 
   return (
     <>
@@ -75,11 +75,11 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
               )}
               {images.length > 1 && (
                 <div className="grid grid-cols-3 gap-4">
-                  {images.slice(1, 4).map((image, index) => (
+                  {images.slice(1, 4).map((imageWrapper, index) => (
                     <div key={index} className="relative h-24 rounded-lg overflow-hidden">
                       <Image
-                        src={getMediaUrl(image.url)}
-                        alt={`${vehicle.name} ${index + 2}`}
+                        src={getMediaUrl(imageWrapper.image.url)}
+                        alt={imageWrapper.alt || `${vehicle.name} ${index + 2}`}
                         fill
                         className="object-cover"
                       />
@@ -127,12 +127,12 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                     Amenities
                   </h3>
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {vehicle.amenities.map((amenity, index) => (
+                    {vehicle.amenities.map((amenityObj, index) => (
                       <li key={index} className="flex items-center text-neutral-700">
                         <svg className="h-5 w-5 text-secondary mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                           <path d="M5 13l4 4L19 7" />
                         </svg>
-                        {amenity}
+                        {amenityObj.amenity}
                       </li>
                     ))}
                   </ul>

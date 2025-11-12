@@ -9,8 +9,9 @@ interface ProductPageProps {
 }
 
 async function getProduct(slug: string) {
+  const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
+
   try {
-    const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
     const res = await fetch(
       `${payloadUrl}/api/products?where[slug][equals]=${slug}`,
       {
@@ -18,20 +19,25 @@ async function getProduct(slug: string) {
       }
     )
 
+    // Server errors (500, 503, etc.) should NOT be cached as 404
+    // Throw to trigger error boundary instead
     if (!res.ok) {
-      return null
+      throw new Error(`Failed to fetch product: ${res.status} ${res.statusText}`)
     }
 
     const data = await res.json()
 
+    // Product truly doesn't exist - safe to return null for 404
     if (!data.docs || data.docs.length === 0) {
       return null
     }
 
     return data.docs[0]
   } catch (error) {
+    // Network errors, timeouts, JSON parse errors should NOT be cached as 404
+    // Re-throw to trigger error boundary
     console.error('Error fetching product:', error)
-    return null
+    throw error
   }
 }
 

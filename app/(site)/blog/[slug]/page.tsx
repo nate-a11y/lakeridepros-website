@@ -123,7 +123,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg max-w-none text-neutral-700 leading-relaxed">
             {post.content ? (
-              serializeLexical(post.content)
+              typeof post.content === 'string' ? (
+                // Legacy HTML content from older posts
+                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+              ) : (
+                // New Lexical rich text content
+                serializeLexical(post.content)
+              )
             ) : post.excerpt ? (
               <p>{post.excerpt}</p>
             ) : (

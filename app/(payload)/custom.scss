@@ -4,6 +4,9 @@
 // Custom admin panel branding for Lake Ride Pros
 // Bold green on deep black with premium typography
 
+// Import SASS color module for modern color functions
+@use "sass:color";
+
 // ============================================
 // FONT LOADING
 // ============================================
@@ -263,7 +266,7 @@ select,
   }
 
   &:hover:not(:focus) {
-    border-color: lighten($lrp-border-gray, 10%) !important;
+    border-color: color.adjust($lrp-border-gray, $lightness: 10%) !important;
   }
 
   &::placeholder {
@@ -820,7 +823,7 @@ input[type="radio"] {
   border: 2px solid #1a1a1a;
 
   &:hover {
-    background: lighten($lrp-border-gray, 15%);
+    background: color.adjust($lrp-border-gray, $lightness: 15%);
   }
 
   &:active {

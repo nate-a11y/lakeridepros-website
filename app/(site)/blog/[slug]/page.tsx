@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getBlogPostBySlug, getMediaUrl } from '@/lib/api/payload';
 import { formatDate } from '@/lib/utils';
+import { serializeLexical } from '@/lib/serializeLexical';
+import type { Author } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +18,19 @@ const getCategoryLabel = (categoryValue: string): string => {
     'fleet': 'Fleet Updates',
   };
   return categoryMap[categoryValue] || categoryValue;
+};
+
+// Helper function to get author name from either string or object
+const getAuthorName = (author: Author | string | undefined): string => {
+  if (!author) {
+    return 'Lake Ride Pros';
+  }
+  if (typeof author === 'string') {
+    // If it's just an email, return "Lake Ride Pros" as fallback
+    return 'Lake Ride Pros';
+  }
+  // If it's an Author object, return the name or fallback
+  return author.name || 'Lake Ride Pros';
 };
 
 interface BlogPostPageProps {
@@ -89,12 +104,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </span>
               </>
             )}
-            {post.author && typeof post.author === 'object' && (
-              <>
-                <span className="mx-2">•</span>
-                <span>By {post.author.name}</span>
-              </>
-            )}
+            <span className="mx-2">•</span>
+            <span>By {getAuthorName(post.author)}</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 mb-6">
@@ -110,15 +121,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {/* Content */}
       <article className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
-            {typeof post.content === 'string' ? (
-              <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          <div className="prose prose-lg max-w-none text-neutral-700 leading-relaxed">
+            {post.content ? (
+              serializeLexical(post.content)
+            ) : post.excerpt ? (
+              <p>{post.excerpt}</p>
             ) : (
-              <div>
-                <p className="text-neutral-700 leading-relaxed">
-                  {post.excerpt || 'Content will be rendered here from the CMS.'}
-                </p>
-              </div>
+              <p>No content available.</p>
             )}
           </div>
 

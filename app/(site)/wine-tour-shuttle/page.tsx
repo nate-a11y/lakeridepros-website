@@ -56,7 +56,7 @@ export default function WineTourShuttlePage() {
               <p className="text-white text-2xl font-bold">Starting at $100/hour</p>
             </div>
             <a
-              href="/booking"
+              href="/book"
               className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
             >
               Book Your Wine Tour
@@ -332,7 +332,7 @@ export default function WineTourShuttlePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/booking"
+                href="/book"
                 className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
               >
                 Book Your Wine Tour

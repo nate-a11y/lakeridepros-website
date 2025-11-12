@@ -9,8 +9,11 @@ export const GiftCards: CollectionConfig = {
   access: {
     // Only authenticated users can read gift cards (admin dashboard needs this)
     read: ({ req: { user } }) => !!user,
-    // Allow API to create gift cards (webhooks, checkout)
-    create: () => true,
+    // Only authenticated admins can create gift cards
+    // For webhook/API integration, validate signed secrets in API routes before creation
+    create: ({ req: { user } }) => {
+      return !!user && user.role === 'admin'
+    },
     // Only authenticated users can update gift cards
     update: ({ req: { user } }) => !!user,
     // Only admins can delete gift cards

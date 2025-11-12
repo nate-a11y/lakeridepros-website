@@ -15,6 +15,14 @@ export const Media: CollectionConfig = {
     },
   ],
   access: {
+    // Public read access for images on website
     read: () => true,
+    // Authenticated users can upload/manage media
+    create: ({ req: { user } }) => !!user,
+    update: ({ req: { user } }) => !!user,
+    delete: ({ req: { user } }) => {
+      // Only admins can delete media
+      return !!user && user.role === 'admin'
+    },
   },
 }

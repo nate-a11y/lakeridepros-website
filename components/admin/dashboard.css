@@ -369,15 +369,3 @@
     grid-template-columns: 1fr;
   }
 }
-
-/* Hide default Payload dashboard that appears below custom dashboard */
-.dashboard-container ~ * {
-  display: none !important;
-}
-
-/* Alternative: Hide Payload's default dashboard cards/widgets */
-.template-default .dashboard,
-.payload-dashboard,
-[class*="dashboard_"]:not(.dashboard-container):not([class*="dashboard-"]) {
-  display: none !important;
-}

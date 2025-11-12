@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { sendOrderConfirmation } from '@/lib/email'
 import { getPayload } from 'payload'
-import config from '@/payload.config'
+import config from '@payload-config'
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {

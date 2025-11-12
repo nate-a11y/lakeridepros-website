@@ -108,15 +108,17 @@ const config = buildConfig({
     push: false,
   }),
   sharp,
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || 'http://localhost:3000',
+  // CRITICAL: Use NEXT_PUBLIC_ prefix so the admin client can access this in the browser
+  // Falls back to server-side vars for backward compatibility and build-time usage
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || 'http://localhost:3000',
   cors: [
-    process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
+    process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
     'https://lakeridepros-website.vercel.app',
     /^https:\/\/.*\.vercel\.app$/,
     'http://localhost:3000',
   ].filter(Boolean),
   csrf: [
-    process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
+    process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
     'https://lakeridepros-website.vercel.app',
     /^https:\/\/.*\.vercel\.app$/,
     'http://localhost:3000',

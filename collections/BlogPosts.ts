@@ -5,6 +5,14 @@ export const BlogPosts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
   },
+  access: {
+    // Allow public read access to published blog posts
+    read: () => true,
+    // Require authentication for create, update, delete
+    create: ({ req: { user } }) => !!user,
+    update: ({ req: { user } }) => !!user,
+    delete: ({ req: { user } }) => !!user,
+  },
   fields: [
     {
       name: 'title',

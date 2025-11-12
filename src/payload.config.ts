@@ -12,6 +12,9 @@ import { Users } from '../collections/Users'
 import { Media } from '../collections/Media'
 import { Pages } from '../collections/Pages'
 import { BlogPosts } from '../collections/BlogPosts'
+import { Services } from '../collections/Services'
+import { Vehicles } from '../collections/Vehicles'
+import { Testimonials } from '../collections/Testimonials'
 import { Products } from '../collections/Products'
 import { GiftCards } from '../collections/GiftCards'
 import { Orders } from '../collections/Orders'
@@ -82,7 +85,7 @@ const config = buildConfig({
       baseDir: path.resolve(dirname, '..'),
     },
   },
-  collections: [Users, Media, Pages, BlogPosts, Products, GiftCards, Orders, Partners],
+  collections: [Users, Media, Pages, BlogPosts, Services, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

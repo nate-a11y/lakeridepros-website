@@ -94,11 +94,7 @@ const config = buildConfig({
         Icon: '@/components/admin/Icon#Icon',
         Logo: '@/components/admin/Logo#Logo',
       },
-      views: {
-        Dashboard: {
-          Component: '@/components/admin/Dashboard#Dashboard',
-        },
-      },
+      beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
   },
   collections: [Users, Media, Pages, BlogPosts, Services, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],

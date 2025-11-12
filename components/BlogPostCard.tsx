@@ -3,6 +3,7 @@ import Image from 'next/image';
 import type { BlogPost } from '@/lib/types';
 import { getMediaUrl } from '@/lib/api/payload';
 import { formatDate } from '@/lib/utils';
+import { FileText } from 'lucide-react';
 
 interface BlogPostCardProps {
   post: BlogPost;
@@ -11,7 +12,7 @@ interface BlogPostCardProps {
 export default function BlogPostCard({ post }: BlogPostCardProps) {
   const imageUrl = post.featuredImage
     ? getMediaUrl(post.featuredImage.url)
-    : '/placeholder-blog.jpg';
+    : null;
 
   return (
     <Link
@@ -19,12 +20,18 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
       className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
     >
       <div className="relative h-48 overflow-hidden">
-        <Image
-          src={imageUrl}
-          alt={post.featuredImage?.alt || post.title}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt={post.featuredImage?.alt || post.title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-dark-bg-secondary">
+            <FileText className="w-16 h-16 text-neutral-300 dark:text-neutral-500" />
+          </div>
+        )}
       </div>
       <div className="p-6">
         <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400 mb-3">

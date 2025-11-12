@@ -11,16 +11,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function FleetPage() {
   // Fetch vehicles from Payload CMS
-  let vehicles = [];
-  try {
-    const response = await getVehicles();
-    vehicles = response.docs || [];
-  } catch (error) {
-    console.error('Error fetching vehicles:', error);
-    // Fall back to empty array if API fails
-  }
+  const vehiclesData = await getVehicles().catch(() => ({ docs: [] }));
+  const vehicles = vehiclesData.docs || [];
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

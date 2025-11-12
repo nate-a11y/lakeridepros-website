@@ -65,27 +65,43 @@ async function fetchFromPayload<T>(
 
 // Services API
 export async function getServices(params?: PaginationParams & FilterParams): Promise<ApiResponse<Service>> {
-  return fetchFromPayload<ApiResponse<Service>>('/services', { params: params as any });
+  const baseParams = {
+    where: JSON.stringify({ active: { equals: true } }),
+    sort: 'order',
+    depth: 2,
+    ...params,
+  };
+  return fetchFromPayload<ApiResponse<Service>>('/services', { params: baseParams as any });
 }
 
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
   const response = await fetchFromPayload<ApiResponse<Service>>('/services', {
-    params: { where: JSON.stringify({ slug: { equals: slug } }) },
+    params: {
+      where: JSON.stringify({ slug: { equals: slug }, active: { equals: true } }),
+      depth: 2,
+    },
   });
   return response.docs?.[0] || null;
 }
 
 // Vehicles API
 export async function getVehicles(params?: PaginationParams & FilterParams): Promise<ApiResponse<Vehicle>> {
-  return fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', { params: params as any });
+  const baseParams = {
+    where: JSON.stringify({ available: { equals: true } }),
+    sort: 'order',
+    depth: 2,
+    ...params,
+  };
+  return fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', { params: baseParams as any });
 }
 
 export async function getFeaturedVehicles(limit = 6): Promise<Vehicle[]> {
   const response = await fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', {
     params: {
-      where: JSON.stringify({ featured: { equals: true } }),
+      where: JSON.stringify({ featured: { equals: true }, available: { equals: true } }),
       limit,
       sort: 'order',
+      depth: 2,
     },
   });
   return response.docs || [];
@@ -170,7 +186,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
 // Testimonials API
 export async function getTestimonials(featured = false): Promise<Testimonial[]> {
-  const params: Record<string, any> = { sort: 'order' };
+  const params: Record<string, any> = { sort: 'order', depth: 2 };
   if (featured) {
     params.where = JSON.stringify({ featured: { equals: true } });
   }

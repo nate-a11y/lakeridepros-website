@@ -585,12 +585,13 @@ table,
         background: rgba($lrp-primary-green, 0.15) !important;
         color: $lrp-bright-green !important;
       }
+    }
 
-      &--is-selected {
-        background: rgba($lrp-primary-green, 0.25) !important;
-        color: $lrp-primary-green !important;
-        font-weight: 700;
-      }
+    .select__option--is-selected,
+    [class*="option"][class*="selected"] {
+      background: rgba($lrp-primary-green, 0.25) !important;
+      color: $lrp-primary-green !important;
+      font-weight: 700;
     }
   }
 }

@@ -127,7 +127,7 @@ const config = buildConfig({
     'http://localhost:3000',
   ].filter(Boolean),
   email: resendAdapter({
-    defaultFromAddress: process.env.EMAIL_FROM || 'noreply@lakeridepros.com',
+    defaultFromAddress: process.env.EMAIL_FROM || 'hello@updates.lakeridepros.com',
     defaultFromName: process.env.EMAIL_FROM_NAME || 'Lake Ride Pros',
     apiKey: process.env.RESEND_API_KEY || '',
   }),

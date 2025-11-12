@@ -7,12 +7,61 @@ const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
 const PRINTIFY_SHOP_ID = process.env.PRINTIFY_SHOP_ID
 const SYNC_SECRET = process.env.PRINTIFY_SYNC_SECRET || 'change-me-in-production'
 
+// Retry helper function with exponential backoff
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  maxRetries = 3
+): Promise<Response> {
+  let lastError: Error | null = null
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options)
+
+      // If rate limited (429), wait and retry
+      if (response.status === 429 && attempt < maxRetries) {
+        const retryAfter = parseInt(response.headers.get('Retry-After') || '5')
+        console.log(`[Retry] Rate limited, waiting ${retryAfter}s before retry ${attempt + 1}/${maxRetries}`)
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000))
+        continue
+      }
+
+      // If successful or client error (not worth retrying), return response
+      if (response.ok || (response.status >= 400 && response.status < 500 && response.status !== 429)) {
+        return response
+      }
+
+      // Server error (5xx) - retry with backoff
+      if (response.status >= 500 && attempt < maxRetries) {
+        const backoffMs = Math.min(1000 * Math.pow(2, attempt), 10000) // Max 10s
+        console.log(`[Retry] Server error ${response.status}, retrying in ${backoffMs}ms (${attempt + 1}/${maxRetries})`)
+        await new Promise(resolve => setTimeout(resolve, backoffMs))
+        continue
+      }
+
+      return response
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error))
+
+      if (attempt < maxRetries) {
+        const backoffMs = Math.min(1000 * Math.pow(2, attempt), 10000)
+        console.log(`[Retry] Network error, retrying in ${backoffMs}ms (${attempt + 1}/${maxRetries}):`, lastError.message)
+        await new Promise(resolve => setTimeout(resolve, backoffMs))
+      }
+    }
+  }
+
+  throw lastError || new Error('Max retries exceeded')
+}
+
 async function downloadImage(url: string): Promise<Buffer> {
-  const response = await fetch(url, {
+  const response = await fetchWithRetry(url, {
     headers: {
       'User-Agent': 'LakeRidePros/1.0',
     },
-  })
+  }, 3)
+
   if (!response.ok) {
     throw new Error(`Failed to download image: ${response.statusText}`)
   }
@@ -121,13 +170,16 @@ async function syncProducts(request: Request) {
     }
 
     // Optional: limit number of products to process per invocation
-    // Default to 30 products to avoid Vercel's 5-minute timeout (300 seconds)
+    // Reduced to 15 for faster processing and better reliability
     const batchSize = searchParams.get('batch')
       ? parseInt(searchParams.get('batch')!)
-      : 30 // Process 30 products at a time by default
+      : 15 // Process 15 products at a time by default
 
-    // Optional: offset for pagination (e.g., ?offset=30 for second batch)
+    // Optional: offset for pagination (e.g., ?offset=15 for second batch)
     const offset = searchParams.get('offset') ? parseInt(searchParams.get('offset')!) : 0
+
+    // Auto-chain flag - if true, will automatically trigger next batch
+    const autoChain = searchParams.get('autoChain') !== 'false' // Default to true
 
     const payload = await getPayload({ config })
 
@@ -141,14 +193,15 @@ async function syncProducts(request: Request) {
 
     while (hasMorePages) {
       console.log(`[Printify Sync] Fetching page ${currentPage}...`)
-      const response = await fetch(
+      const response = await fetchWithRetry(
         `${PRINTIFY_API_URL}/shops/${PRINTIFY_SHOP_ID}/products.json?page=${currentPage}&limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${PRINTIFY_TOKEN}`,
             'User-Agent': 'LakeRidePros/1.0',
           },
-        }
+        },
+        3
       )
 
       if (!response.ok) {
@@ -197,6 +250,13 @@ async function syncProducts(request: Request) {
     for (const [index, printifyProduct] of printifyProducts.entries()) {
       try {
         console.log(`[Printify Sync] Processing product ${index + 1}/${printifyProducts.length}: ${printifyProduct.title}`)
+
+        // Add delay between products to avoid rate limiting (500ms)
+        // Skip delay for first product
+        if (index > 0) {
+          await new Promise(resolve => setTimeout(resolve, 500))
+        }
+
         // Check if product already exists
         const existing = await payload.find({
           collection: 'products',
@@ -405,9 +465,26 @@ async function syncProducts(request: Request) {
       results.errors.forEach((err, idx) => console.error(`  ${idx + 1}. ${err}`))
     }
 
+    // Auto-chain to next batch if there are more products and autoChain is enabled
+    if (hasMore && autoChain) {
+      const nextUrl = `${process.env.PAYLOAD_PUBLIC_SERVER_URL || request.url.split('/api/')[0]}/api/printify/sync-products?secret=${SYNC_SECRET}&offset=${endIndex}&batch=${batchSize}&autoChain=true`
+
+      console.log(`[Printify Sync] Auto-chaining to next batch (${allProducts.length - endIndex} products remaining)...`)
+
+      // Trigger next batch asynchronously (don't await to avoid timeout)
+      fetch(nextUrl, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'LakeRidePros-AutoChain/1.0',
+        },
+      }).catch((error) => {
+        console.error(`[Printify Sync] Failed to trigger next batch:`, error)
+      })
+    }
+
     return NextResponse.json({
       success: true,
-      message: `Synced ${results.total} products (${results.created} created, ${results.updated} updated, ${results.failed} failed, ${results.imagesUploaded} images uploaded, ${results.imagesReused} images reused) in ${duration}s${hasMore ? ` - ${allProducts.length - endIndex} products remaining` : ''}`,
+      message: `Synced ${results.total} products (${results.created} created, ${results.updated} updated, ${results.failed} failed, ${results.imagesUploaded} images uploaded, ${results.imagesReused} images reused) in ${duration}s${hasMore ? ` - Auto-chaining to process ${allProducts.length - endIndex} remaining products` : ' - All products processed!'}`,
       results: {
         ...results,
         durationSeconds: parseFloat(duration),
@@ -418,9 +495,7 @@ async function syncProducts(request: Request) {
         processedEnd: Math.min(endIndex, allProducts.length),
         hasMore,
         nextOffset: hasMore ? endIndex : null,
-        nextUrl: hasMore
-          ? `${process.env.PAYLOAD_PUBLIC_SERVER_URL || ''}/api/printify/sync-products?secret=${SYNC_SECRET}&offset=${endIndex}&batch=${batchSize}`
-          : null,
+        autoChaining: hasMore && autoChain,
       },
     })
   } catch (error) {

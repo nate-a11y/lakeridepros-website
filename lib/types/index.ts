@@ -69,12 +69,13 @@ export interface BlogPost {
   slug: string;
   excerpt?: string;
   content: any; // Rich text content
-  author?: Author;
+  author?: Author | string; // Can be Author object or email string
   categories?: Category[];
   tags?: string[];
   featuredImage?: Media;
   publishedDate?: string;
   status: 'draft' | 'published';
+  published?: boolean; // Checkbox for published state
   seo?: SEO;
   createdAt: string;
   updatedAt: string;

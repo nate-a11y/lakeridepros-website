@@ -201,7 +201,7 @@ export async function getTestimonials(featured = false): Promise<Testimonial[]> 
 // Partners API
 export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   try {
-    const params: Record<string, any> = { sort: 'order' };
+    const params: Record<string, any> = { sort: 'order', depth: 2 };
     const whereConditions: Record<string, any> = {};
 
     if (category) {
@@ -215,7 +215,15 @@ export async function getPartners(category?: string, featured = false): Promise<
       params.where = JSON.stringify(whereConditions);
     }
 
+    console.log('🔍 getPartners called with:', { category, featured, whereConditions, params });
+
     const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
+
+    console.log('📦 getPartners response:', {
+      count: response.docs?.length,
+      partners: response.docs?.map(p => ({ id: p.id, name: p.name, category: p.category }))
+    });
+
     return response.docs || [];
   } catch (error) {
     // Return empty array if Partners collection doesn't exist yet (during initial deployment)

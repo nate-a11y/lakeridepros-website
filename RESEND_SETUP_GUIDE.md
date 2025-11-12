@@ -9,8 +9,8 @@ Your Resend email integration is set up in the code but not properly configured.
 ### 1. Missing `.env` File
 You don't have a `.env` file with your Resend API key. The application can't send emails without this.
 
-### 2. Domain Not Verified
-Emails are configured to send from `contactus@lakeridepros.com`, but this domain must be verified in Resend.
+### 2. Domain Not Verified (FIXED)
+Emails are now configured to send from `hello@updates.lakeridepros.com` which matches your verified domain.
 
 ### 3. Where Emails Are Sent From
 
@@ -44,32 +44,20 @@ POSTGRES_URL=your-postgres-connection-string
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 
 # For email configuration
-EMAIL_FROM=contactus@lakeridepros.com
+EMAIL_FROM=hello@updates.lakeridepros.com
 EMAIL_FROM_NAME=Lake Ride Pros
 ```
 
-### Step 3: Verify Your Domain in Resend
+### Step 3: Domain Already Verified ✅
 
-**Option A: Production Setup (Recommended)**
-1. Go to https://resend.com/domains
-2. Click "Add Domain"
-3. Enter `lakeridepros.com`
-4. Add the DNS records Resend provides to your domain DNS settings
-5. Wait for verification (usually 1-5 minutes)
+Your domain `updates.lakeridepros.com` is already verified in Resend! All email FROM addresses have been updated to use `hello@updates.lakeridepros.com`.
 
-**Option B: Testing (Quick Start)**
-For testing only, change the `from` address to Resend's sandbox:
-
-```typescript
-from: 'onboarding@resend.dev'  // Instead of contactus@lakeridepros.com
-```
-
-**Files to update for testing:**
-- `lib/email.ts:20`
-- `app/api/email/send-gift-card/route.ts:19`
-- `app/api/email/send-physical-gift-card-confirmation/route.ts:19`
-- `app/api/email/send-scheduled-gift-card-confirmation/route.ts:19`
-- `src/payload.config.ts:132` (defaultFromAddress)
+**Updated files:**
+- ✅ `lib/email.ts:20` - Order confirmations
+- ✅ `app/api/email/send-gift-card/route.ts:19` - Gift card emails
+- ✅ `app/api/email/send-physical-gift-card-confirmation/route.ts:27` - Physical gift cards
+- ✅ `app/api/email/send-scheduled-gift-card-confirmation/route.ts:43` - Scheduled gift cards
+- ✅ `src/payload.config.ts:132` - Payload CMS emails
 
 ### Step 4: Test Your Configuration
 

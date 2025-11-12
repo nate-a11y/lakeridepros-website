@@ -37,13 +37,13 @@ try {
 
 // Check 3: Test Email Send
 console.log('\n3. Attempting to send test email...')
-console.log('   📧 From: Lake Ride Pros <contactus@lakeridepros.com>')
+console.log('   📧 From: Lake Ride Pros <hello@updates.lakeridepros.com>')
 console.log('   📧 To: (using your test email)')
 
 async function testSend() {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <contactus@lakeridepros.com>',
+      from: 'Lake Ride Pros <hello@updates.lakeridepros.com>',
       to: 'test@example.com', // Replace with your email
       subject: 'Resend Test Email',
       html: '<p>This is a test email from Lake Ride Pros Resend setup.</p>',

@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const isGift = recipientName && recipientEmail && recipientEmail !== purchaserEmail
 
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <contactus@lakeridepros.com>',
+      from: 'Lake Ride Pros <hello@updates.lakeridepros.com>',
       to: purchaserEmail,
       subject: isGift
         ? `Your Gift Card is Scheduled for Delivery to ${recipientName}`

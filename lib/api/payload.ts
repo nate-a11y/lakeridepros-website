@@ -201,7 +201,7 @@ export async function getTestimonials(featured = false): Promise<Testimonial[]> 
 // Partners API
 export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   try {
-    const params: Record<string, any> = { sort: 'order' };
+    const params: Record<string, any> = { sort: 'order', depth: 2 };
     const whereConditions: Record<string, any> = {};
 
     if (category) {
@@ -215,8 +215,34 @@ export async function getPartners(category?: string, featured = false): Promise<
       params.where = JSON.stringify(whereConditions);
     }
 
+    console.log('🔍 getPartners called with:', { category, featured, whereConditions, params });
+
     const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
-    return response.docs || [];
+
+    console.log('📦 getPartners API response (before filtering):', {
+      count: response.docs?.length,
+      partners: response.docs?.map(p => ({ id: p.id, name: p.name, category: p.category }))
+    });
+
+    let partners = response.docs || [];
+
+    // WORKAROUND: Payload API is not respecting the where clause for Partners collection
+    // Filter manually in application code until the API issue is resolved
+    if (category) {
+      partners = partners.filter(p => p.category === category);
+      console.log(`🔧 Manually filtered by category "${category}":`, {
+        count: partners.length,
+        partners: partners.map(p => ({ id: p.id, name: p.name, category: p.category }))
+      });
+    }
+    if (featured) {
+      partners = partners.filter(p => p.featured === true);
+      console.log(`🔧 Manually filtered by featured:`, {
+        count: partners.length,
+      });
+    }
+
+    return partners;
   } catch (error) {
     // Return empty array if Partners collection doesn't exist yet (during initial deployment)
     console.warn('Partners collection not found, returning empty array');

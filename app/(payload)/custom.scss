@@ -599,11 +599,54 @@ button[class*="remove"],
     }
   }
 
-  // Focused state for select controls
-  .select__control--is-focused,
-  [class*="control"][class*="focused"] {
-    border-color: $lrp-green !important;
-    box-shadow: 0 0 0 3px rgba($lrp-green, 0.2) !important;
+  // Uploaded file preview
+  .file-preview,
+  [class*="file-preview"],
+  [class*="thumbnail"] {
+    border: 2px solid $lrp-border-gray !important;
+    border-radius: 6px;
+    overflow: hidden;
+
+    &:hover {
+      border-color: $lrp-primary-green !important;
+      box-shadow: 0 0 15px rgba($lrp-primary-green, 0.3);
+    }
+  }
+}
+
+// ============================================
+// RELATIONSHIP & SELECT FIELDS
+// ============================================
+
+.relationship,
+.select,
+[class*="relationship"],
+[class*="select-field"] {
+  // Dropdown menu
+  .select__menu,
+  [class*="menu"] {
+    background: #1a1a1a !important;
+    border: 2px solid $lrp-primary-green !important;
+    border-radius: 6px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+    .select__option,
+    [class*="option"] {
+      color: $lrp-pure-white !important;
+      padding: 0.75rem 1rem;
+
+      &:hover {
+        background: rgba($lrp-primary-green, 0.15) !important;
+        color: $lrp-bright-green !important;
+      }
+    }
+
+    .select__option--is-selected,
+    .select__option[class*="selected"] {
+      background: rgba($lrp-primary-green, 0.25) !important;
+      color: $lrp-primary-green !important;
+      font-weight: 700;
+    }
   }
 }
 
@@ -728,16 +771,36 @@ input[type="radio"] {
 // UPLOAD FIELDS
 // ============================================
 
-.upload,
-.file-upload,
-[class*="upload"] {
-  .upload__wrap,
-  [class*="upload__wrap"] {
-    background: $lrp-black-lighter !important;
-    border: 2px dashed $lrp-border !important;
-    border-radius: 8px;
-    padding: 2rem;
-    text-align: center;
+.toast,
+.notification,
+[class*="toast"],
+[class*="notification"] {
+  background: #1a1a1a !important;
+  border: 2px solid $lrp-primary-green !important;
+  border-radius: 8px;
+  color: $lrp-pure-white !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.toast.success,
+.toast--success,
+.notification.success,
+.notification--success {
+  border-color: $lrp-primary-green !important;
+  background: rgba($lrp-primary-green, 0.1) !important;
+}
+
+.toast.error,
+.toast--error,
+.notification.error,
+.notification--error {
+  border-color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+// ============================================
+// PAGINATION
+// ============================================
 
     &:hover {
       border-color: $lrp-green !important;
@@ -890,12 +953,18 @@ input[type="radio"] {
       border-bottom-color: rgba($lrp-green-bright, 0.3);
     }
 
-    &.active,
-    &[aria-selected="true"] {
-      color: $lrp-green !important;
-      border-bottom-color: $lrp-green !important;
+    &.active {
+      color: $lrp-primary-green !important;
+      border-bottom-color: $lrp-primary-green !important;
       font-weight: 700;
     }
+  }
+
+  .tab--is-active,
+  .tab__button--is-active {
+    color: $lrp-primary-green !important;
+    border-bottom-color: $lrp-primary-green !important;
+    font-weight: 700;
   }
 }
 

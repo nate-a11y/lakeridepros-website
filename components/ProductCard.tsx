@@ -19,7 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link
-      href={`/shop/${product.slug}`}
+      href={`/shop/products/${product.slug}`}
       className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
     >
       <div className="relative h-64 overflow-hidden bg-neutral-100 dark:bg-dark-bg-secondary">
@@ -44,9 +44,9 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-primary-light transition-colors line-clamp-2">
-          {product.name}
+          {typeof product.name === 'string' ? product.name : 'Product'}
         </h3>
-        {product.shortDescription && (
+        {product.shortDescription && typeof product.shortDescription === 'string' && (
           <p className="text-neutral-600 dark:text-neutral-300 text-sm line-clamp-2 mb-3">
             {product.shortDescription}
           </p>
@@ -54,11 +54,11 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-baseline justify-between">
           <div>
             <span className="text-lg font-bold text-primary dark:text-primary-light">
-              {formatPrice(product.price)}
+              {typeof product.price === 'number' ? formatPrice(product.price) : '$0.00'}
             </span>
             {hasDiscount && (
               <span className="ml-2 text-sm text-neutral-500 dark:text-neutral-400 line-through">
-                {formatPrice(product.compareAtPrice!)}
+                {typeof product.compareAtPrice === 'number' ? formatPrice(product.compareAtPrice!) : '$0.00'}
               </span>
             )}
           </div>

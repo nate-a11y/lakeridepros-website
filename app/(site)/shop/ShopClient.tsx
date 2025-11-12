@@ -328,7 +328,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist }: P
         <div className="p-5 flex flex-col flex-grow">
           {/* Title - Truncated */}
           <h3 className="font-bold text-base text-neutral-900 dark:text-white mb-2 group-hover:text-lrp-green dark:group-hover:text-lrp-green-light transition-colors line-clamp-2 min-h-[3rem]">
-            {truncatedTitle}
+            {typeof truncatedTitle === 'string' ? truncatedTitle : 'Product'}
           </h3>
 
           {/* Category - Subtle */}
@@ -341,11 +341,11 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist }: P
           {/* Price - Make it pop! */}
           <div className="flex items-baseline gap-2 mb-4 mt-auto">
             <span className="text-2xl font-extrabold text-lrp-green dark:text-lrp-green-light">
-              ${product.price.toFixed(2)}
+              ${typeof product.price === 'number' ? product.price.toFixed(2) : '0.00'}
             </span>
             {hasDiscount && (
               <span className="text-sm text-neutral-500 dark:text-neutral-400 line-through">
-                ${product.compareAtPrice.toFixed(2)}
+                ${typeof product.compareAtPrice === 'number' ? product.compareAtPrice.toFixed(2) : '0.00'}
               </span>
             )}
           </div>

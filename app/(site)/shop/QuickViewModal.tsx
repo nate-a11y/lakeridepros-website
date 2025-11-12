@@ -43,8 +43,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       color: selectedVariant.color,
       price: finalPrice,
       quantity,
-      image: product.images[0]?.image?.url || '',
-      imageAlt: product.images[0]?.alt || product.name,
+      image: product.images?.[0]?.image?.url || '',
+      imageAlt: product.images?.[0]?.alt || product.name,
     })
 
     setAddedToCart(true)
@@ -81,7 +81,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
             {/* Image Gallery */}
             <div>
               <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-xl overflow-hidden mb-4">
-                {product.images && product.images[selectedImage] ? (
+                {product.images?.[selectedImage]?.image?.url ? (
                   <Image
                     src={product.images[selectedImage].image.url}
                     alt={product.images[selectedImage].alt || product.name}
@@ -91,7 +91,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <ShoppingCart className="w-24 h-24 text-neutral-300" />
+                    <ShoppingCart className="w-24 h-24 text-neutral-300 dark:text-neutral-500" />
+                    <span className="absolute bottom-4 text-neutral-500 dark:text-neutral-400 text-sm">No Image Available</span>
                   </div>
                 )}
 
@@ -114,23 +115,25 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               {product.images && product.images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">
                   {product.images.slice(0, 4).map((img: any, index: number) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImage(index)}
-                      className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                        selectedImage === index
-                          ? 'border-lrp-green'
-                          : 'border-neutral-200 dark:border-dark-border hover:border-lrp-green/50'
-                      }`}
-                    >
-                      <Image
-                        src={img.image.url}
-                        alt={img.alt}
-                        width={100}
-                        height={100}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
+                    img?.image?.url ? (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImage(index)}
+                        className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                          selectedImage === index
+                            ? 'border-lrp-green'
+                            : 'border-neutral-200 dark:border-dark-border hover:border-lrp-green/50'
+                        }`}
+                      >
+                        <Image
+                          src={img.image.url}
+                          alt={img.alt || 'Product image'}
+                          width={100}
+                          height={100}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ) : null
                   ))}
                 </div>
               )}
@@ -139,7 +142,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
             {/* Product Info */}
             <div className="flex flex-col">
               <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-3">
-                {product.name}
+                {typeof product.name === 'string' ? product.name : 'Product'}
               </h2>
 
               {/* Category */}

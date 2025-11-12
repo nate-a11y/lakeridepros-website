@@ -13,7 +13,7 @@ async function getProduct(slug: string) {
 
   try {
     const res = await fetch(
-      `${payloadUrl}/api/products?where[slug][equals]=${slug}`,
+      `${payloadUrl}/api/products?where[slug][equals]=${slug}&depth=2`,
       {
         // Use no-store to prevent caching failed responses
         // If we used revalidate, a 500 error would be cached and the retry button wouldn't work

@@ -121,9 +121,9 @@ export default function ProductActions({ product }: ProductActionsProps) {
         <p className="text-neutral-700 dark:text-neutral-300 mb-8 leading-relaxed">
           {typeof product.description === 'string'
             ? product.description
-            : product.description?.root
-              ? JSON.stringify(product.description)
-              : product.shortDescription || 'No description available'}
+            : product.description?.root?.children?.[0]?.children?.[0]?.text
+              ? product.description.root.children[0].children[0].text
+              : product.shortDescription || 'High-quality Lake Ride Pros merchandise'}
         </p>
 
         {/* Size Selection */}

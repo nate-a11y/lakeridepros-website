@@ -12,6 +12,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [partnersDropdownOpen, setPartnersDropdownOpen] = useState(false);
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -19,6 +20,7 @@ export default function Header() {
       name: 'Services',
       href: '/services',
       hasDropdown: true,
+      dropdownType: 'services',
       dropdownItems: [
         { name: 'All Services', href: '/services' },
         { name: 'Wedding Transportation', href: '/wedding-transportation' },
@@ -27,7 +29,17 @@ export default function Header() {
       ]
     },
     { name: 'Fleet', href: '/fleet' },
-    { name: 'Partners', href: '/wedding-partners' },
+    {
+      name: 'Partners',
+      href: '/wedding-partners',
+      hasDropdown: true,
+      dropdownType: 'partners',
+      dropdownItems: [
+        { name: 'Wedding Partners', href: '/wedding-partners' },
+        { name: 'Local Premier Partners', href: '/local-premier-partners' },
+        { name: 'Trusted Referral Partners', href: '/trusted-referral-partners' },
+      ]
+    },
     { name: 'Blog', href: '/blog' },
     { name: 'Shop', href: '/shop' },
     { name: 'Gift Cards', href: '/gift-cards' },
@@ -59,18 +71,25 @@ export default function Header() {
                 <div
                   key={item.name}
                   className="relative"
-                  onMouseEnter={() => setServicesDropdownOpen(true)}
-                  onMouseLeave={() => setServicesDropdownOpen(false)}
+                  onMouseEnter={() => {
+                    if (item.dropdownType === 'services') setServicesDropdownOpen(true);
+                    if (item.dropdownType === 'partners') setPartnersDropdownOpen(true);
+                  }}
+                  onMouseLeave={() => {
+                    if (item.dropdownType === 'services') setServicesDropdownOpen(false);
+                    if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
+                  }}
                 >
                   <button
-                    className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1"
+                    className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1 pb-4"
                   >
                     {item.name}
                     <ChevronDown className="w-4 h-4" />
                   </button>
 
-                  {servicesDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                  {((item.dropdownType === 'services' && servicesDropdownOpen) ||
+                    (item.dropdownType === 'partners' && partnersDropdownOpen)) && (
+                    <div className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}

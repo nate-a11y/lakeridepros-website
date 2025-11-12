@@ -603,13 +603,13 @@ button[class*="remove"],
   .file-preview,
   [class*="file-preview"],
   [class*="thumbnail"] {
-    border: 2px solid $lrp-border-gray !important;
+    border: 2px solid $lrp-border !important;
     border-radius: 6px;
     overflow: hidden;
 
     &:hover {
-      border-color: $lrp-primary-green !important;
-      box-shadow: 0 0 15px rgba($lrp-primary-green, 0.3);
+      border-color: $lrp-green !important;
+      box-shadow: 0 0 15px rgba($lrp-green, 0.3);
     }
   }
 }
@@ -626,25 +626,25 @@ button[class*="remove"],
   .select__menu,
   [class*="menu"] {
     background: #1a1a1a !important;
-    border: 2px solid $lrp-primary-green !important;
+    border: 2px solid $lrp-green !important;
     border-radius: 6px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 
     .select__option,
     [class*="option"] {
-      color: $lrp-pure-white !important;
+      color: $lrp-white !important;
       padding: 0.75rem 1rem;
 
       &:hover {
-        background: rgba($lrp-primary-green, 0.15) !important;
-        color: $lrp-bright-green !important;
+        background: rgba($lrp-green, 0.15) !important;
+        color: $lrp-green-bright !important;
       }
     }
 
     .select__option--is-selected,
     .select__option[class*="selected"] {
-      background: rgba($lrp-primary-green, 0.25) !important;
-      color: $lrp-primary-green !important;
+      background: rgba($lrp-green, 0.25) !important;
+      color: $lrp-green !important;
       font-weight: 700;
     }
   }
@@ -771,36 +771,17 @@ input[type="radio"] {
 // UPLOAD FIELDS
 // ============================================
 
-.toast,
-.notification,
-[class*="toast"],
-[class*="notification"] {
-  background: #1a1a1a !important;
-  border: 2px solid $lrp-primary-green !important;
-  border-radius: 8px;
-  color: $lrp-pure-white !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
-
-.toast.success,
-.toast--success,
-.notification.success,
-.notification--success {
-  border-color: $lrp-primary-green !important;
-  background: rgba($lrp-primary-green, 0.1) !important;
-}
-
-.toast.error,
-.toast--error,
-.notification.error,
-.notification--error {
-  border-color: #ef4444 !important;
-  background: rgba(239, 68, 68, 0.1) !important;
-}
-
-// ============================================
-// PAGINATION
-// ============================================
+.upload,
+[class*="upload"],
+.file-field {
+  .upload__dropzone,
+  [class*="dropzone"] {
+    background: $lrp-black-lighter !important;
+    border: 2px dashed $lrp-border !important;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
 
     &:hover {
       border-color: $lrp-green !important;
@@ -954,16 +935,16 @@ input[type="radio"] {
     }
 
     &.active {
-      color: $lrp-primary-green !important;
-      border-bottom-color: $lrp-primary-green !important;
+      color: $lrp-green !important;
+      border-bottom-color: $lrp-green !important;
       font-weight: 700;
     }
   }
 
   .tab--is-active,
   .tab__button--is-active {
-    color: $lrp-primary-green !important;
-    border-bottom-color: $lrp-primary-green !important;
+    color: $lrp-green !important;
+    border-bottom-color: $lrp-green !important;
     font-weight: 700;
   }
 }

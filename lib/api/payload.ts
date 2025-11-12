@@ -219,12 +219,30 @@ export async function getPartners(category?: string, featured = false): Promise<
 
     const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
 
-    console.log('📦 getPartners response:', {
+    console.log('📦 getPartners API response (before filtering):', {
       count: response.docs?.length,
       partners: response.docs?.map(p => ({ id: p.id, name: p.name, category: p.category }))
     });
 
-    return response.docs || [];
+    let partners = response.docs || [];
+
+    // WORKAROUND: Payload API is not respecting the where clause for Partners collection
+    // Filter manually in application code until the API issue is resolved
+    if (category) {
+      partners = partners.filter(p => p.category === category);
+      console.log(`🔧 Manually filtered by category "${category}":`, {
+        count: partners.length,
+        partners: partners.map(p => ({ id: p.id, name: p.name, category: p.category }))
+      });
+    }
+    if (featured) {
+      partners = partners.filter(p => p.featured === true);
+      console.log(`🔧 Manually filtered by featured:`, {
+        count: partners.length,
+      });
+    }
+
+    return partners;
   } catch (error) {
     // Return empty array if Partners collection doesn't exist yet (during initial deployment)
     console.warn('Partners collection not found, returning empty array');

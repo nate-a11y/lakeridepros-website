@@ -6,6 +6,18 @@ export const Orders: CollectionConfig = {
     useAsTitle: 'orderNumber',
     defaultColumns: ['orderNumber', 'customerEmail', 'total', 'status', 'createdAt'],
   },
+  access: {
+    // Only authenticated users can read orders (admin dashboard needs this)
+    read: ({ req: { user } }) => !!user,
+    // Allow API to create orders (webhooks, checkout)
+    create: () => true,
+    // Only authenticated users can update orders
+    update: ({ req: { user } }) => !!user,
+    // Only admins can delete orders
+    delete: ({ req: { user } }) => {
+      return !!user && user.role === 'admin'
+    },
+  },
   fields: [
     {
       name: 'orderNumber',

@@ -68,7 +68,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </Link>
             </li>
             <li>/</li>
-            <li className="text-neutral-600 dark:text-neutral-300">{product.name}</li>
+            <li className="text-neutral-600 dark:text-neutral-300">
+              {typeof product.name === 'string' ? product.name : 'Product'}
+            </li>
           </ol>
         </nav>
 

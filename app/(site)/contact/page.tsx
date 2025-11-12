@@ -176,7 +176,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-semibold text-neutral-900 mb-2"
+                        className="block text-sm font-semibold text-neutral-900 dark:text-neutral-900 mb-2"
                       >
                         Name *
                       </label>
@@ -187,13 +187,13 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-semibold text-neutral-900 mb-2"
+                        className="block text-sm font-semibold text-neutral-900 dark:text-neutral-900 mb-2"
                       >
                         Email *
                       </label>
@@ -204,7 +204,7 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900"
                       />
                     </div>
                   </div>
@@ -213,7 +213,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="phone"
-                        className="block text-sm font-semibold text-neutral-900 mb-2"
+                        className="block text-sm font-semibold text-neutral-900 dark:text-neutral-900 mb-2"
                       >
                         Phone
                       </label>
@@ -223,13 +223,13 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="subject"
-                        className="block text-sm font-semibold text-neutral-900 mb-2"
+                        className="block text-sm font-semibold text-neutral-900 dark:text-neutral-900 mb-2"
                       >
                         Subject
                       </label>
@@ -239,7 +239,7 @@ export default function ContactPage() {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900"
                       />
                     </div>
                   </div>
@@ -247,7 +247,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="message"
-                      className="block text-sm font-semibold text-neutral-900 mb-2"
+                      className="block text-sm font-semibold text-neutral-900 dark:text-neutral-900 mb-2"
                     >
                       Message *
                     </label>
@@ -258,7 +258,7 @@ export default function ContactPage() {
                       onChange={handleChange}
                       required
                       rows={6}
-                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900"
                     />
                   </div>
 

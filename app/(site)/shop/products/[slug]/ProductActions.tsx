@@ -97,7 +97,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
       {/* Product Info */}
       <div className="lg:w-1/2">
         <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-          {product.name}
+          {typeof product.name === 'string' ? product.name : 'Product'}
         </h1>
 
         {/* Price */}
@@ -119,7 +119,11 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
         {/* Description */}
         <p className="text-neutral-700 dark:text-neutral-300 mb-8 leading-relaxed">
-          {product.description}
+          {typeof product.description === 'string'
+            ? product.description
+            : product.description?.root
+              ? JSON.stringify(product.description)
+              : product.shortDescription || 'No description available'}
         </p>
 
         {/* Size Selection */}

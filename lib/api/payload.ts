@@ -135,6 +135,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 export async function getProducts(params?: PaginationParams & FilterParams): Promise<ApiResponse<Product>> {
   const baseParams = {
     where: JSON.stringify({ status: { equals: 'active' } }),
+    depth: 2,
     ...params,
   };
   return fetchFromPayload<ApiResponse<Product>>('/products', { params: baseParams as any });
@@ -148,6 +149,7 @@ export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
         status: { equals: 'active' }
       }),
       limit,
+      depth: 2,
     },
   });
   return response.docs || [];
@@ -159,7 +161,8 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
       where: JSON.stringify({
         slug: { equals: slug },
         status: { equals: 'active' }
-      })
+      }),
+      depth: 2,
     },
   });
   return response.docs?.[0] || null;

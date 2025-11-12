@@ -1,0 +1,371 @@
+/* Lake Ride Pros Custom Dashboard Styles */
+
+.dashboard-container {
+  min-height: 100vh;
+  background: #000000;
+  color: #ffffff;
+  padding: 2rem;
+}
+
+/* Dashboard Header */
+.dashboard-header {
+  background: linear-gradient(135deg, #060606 0%, #0a0a0a 100%);
+  border: 1px solid rgba(76, 187, 23, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.dashboard-header-content {
+  flex: 1;
+}
+
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.dashboard-subtitle {
+  font-size: 1rem;
+  color: #999999;
+  margin: 0;
+}
+
+.dashboard-header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Buttons */
+.dashboard-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.dashboard-btn-outline {
+  background: transparent;
+  border: 2px solid #4cbb17;
+  color: #4cbb17;
+}
+
+.dashboard-btn-outline:hover {
+  background: #4cbb17;
+  color: #000000;
+  transform: translateY(-2px);
+}
+
+.dashboard-btn-primary {
+  background: #4cbb17;
+  color: #000000;
+  border: 2px solid #4cbb17;
+}
+
+.dashboard-btn-primary:hover {
+  background: #60e421;
+  border-color: #60e421;
+  transform: translateY(-2px);
+}
+
+/* Quick Stats Overview */
+.dashboard-stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #0f0f0f;
+  border: 1px solid rgba(76, 187, 23, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  border-color: #4cbb17;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(76, 187, 23, 0.2);
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #4cbb17;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Dashboard Section */
+.dashboard-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Collections Grid */
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.collection-card {
+  background: #0f0f0f;
+  border: 1px solid rgba(76, 187, 23, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.collection-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--card-color, #4cbb17);
+  box-shadow: 0 8px 24px rgba(76, 187, 23, 0.3);
+}
+
+.collection-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.collection-icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.collection-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.collection-stats {
+  padding: 1rem 0;
+  border-top: 1px solid rgba(76, 187, 23, 0.1);
+  border-bottom: 1px solid rgba(76, 187, 23, 0.1);
+  text-align: center;
+}
+
+.collection-count {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--card-color, #4cbb17);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.collection-count-label {
+  font-size: 0.875rem;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.collection-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.collection-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.collection-btn-view {
+  background: transparent;
+  border: 2px solid var(--card-color, #4cbb17);
+  color: var(--card-color, #4cbb17);
+}
+
+.collection-btn-view:hover {
+  background: var(--card-color, #4cbb17);
+  color: #000000;
+}
+
+.collection-btn-create {
+  background: var(--card-color, #4cbb17);
+  color: #000000;
+  border: 2px solid var(--card-color, #4cbb17);
+}
+
+.collection-btn-create:hover {
+  background: #60e421;
+  border-color: #60e421;
+  transform: scale(1.05);
+}
+
+/* Loading State */
+.dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(76, 187, 23, 0.2);
+  border-top-color: #4cbb17;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dashboard-loading p {
+  color: #999999;
+  font-size: 1rem;
+}
+
+/* Error State */
+.dashboard-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+  text-align: center;
+}
+
+.dashboard-error h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.dashboard-error p {
+  color: #999999;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .collections-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+  }
+
+  .dashboard-title {
+    font-size: 1.75rem;
+  }
+
+  .dashboard-stats-overview {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .collections-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .collection-icon {
+    font-size: 2.5rem;
+  }
+
+  .collection-name {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-stats-overview {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+  }
+
+  .collection-count {
+    font-size: 2rem;
+  }
+
+  .collection-actions {
+    grid-template-columns: 1fr;
+  }
+}

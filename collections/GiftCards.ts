@@ -6,6 +6,18 @@ export const GiftCards: CollectionConfig = {
     useAsTitle: 'code',
     defaultColumns: ['code', 'type', 'initialAmount', 'currentBalance', 'status', 'fulfillmentStatus', 'createdAt'],
   },
+  access: {
+    // Only authenticated users can read gift cards (admin dashboard needs this)
+    read: ({ req: { user } }) => !!user,
+    // Allow API to create gift cards (webhooks, checkout)
+    create: () => true,
+    // Only authenticated users can update gift cards
+    update: ({ req: { user } }) => !!user,
+    // Only admins can delete gift cards
+    delete: ({ req: { user } }) => {
+      return !!user && user.role === 'admin'
+    },
+  },
   fields: [
     {
       name: 'type',

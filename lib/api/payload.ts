@@ -109,7 +109,7 @@ export async function getFeaturedVehicles(limit = 6): Promise<Vehicle[]> {
 
 export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
   const response = await fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', {
-    params: { where: JSON.stringify({ slug: { equals: slug } }) },
+    params: { where: JSON.stringify({ slug: { equals: slug } }), depth: 2 },
   });
   return response.docs?.[0] || null;
 }

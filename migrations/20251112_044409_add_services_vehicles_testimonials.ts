@@ -14,13 +14,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   // Create Services table
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "services" (
-      "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+      "id" serial PRIMARY KEY NOT NULL,
       "title" varchar NOT NULL,
       "slug" varchar NOT NULL,
       "description" varchar NOT NULL,
       "short_description" varchar,
       "icon" varchar,
-      "image_id" uuid,
+      "image_id" integer,
       "pricing_base_price" numeric,
       "pricing_pricing_type" "enum_services_pricing_pricing_type" DEFAULT 'custom',
       "pricing_notes" varchar,
@@ -36,7 +36,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "services_features" (
       "_order" integer NOT NULL,
-      "_parent_id" uuid NOT NULL,
+      "_parent_id" integer NOT NULL,
       "id" varchar PRIMARY KEY NOT NULL,
       "feature" varchar
     );
@@ -45,13 +45,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   // Create Vehicles table
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "vehicles" (
-      "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+      "id" serial PRIMARY KEY NOT NULL,
       "name" varchar NOT NULL,
       "slug" varchar NOT NULL,
       "type" "enum_vehicles_type" NOT NULL,
       "description" varchar NOT NULL,
       "capacity" numeric NOT NULL,
-      "featured_image_id" uuid,
+      "featured_image_id" integer,
       "specifications_make" varchar,
       "specifications_model" varchar,
       "specifications_year" numeric,
@@ -72,9 +72,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "vehicles_images" (
       "_order" integer NOT NULL,
-      "_parent_id" uuid NOT NULL,
+      "_parent_id" integer NOT NULL,
       "id" varchar PRIMARY KEY NOT NULL,
-      "image_id" uuid,
+      "image_id" integer,
       "alt" varchar
     );
   `)
@@ -83,7 +83,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "vehicles_amenities" (
       "_order" integer NOT NULL,
-      "_parent_id" uuid NOT NULL,
+      "_parent_id" integer NOT NULL,
       "id" varchar PRIMARY KEY NOT NULL,
       "amenity" varchar
     );
@@ -92,13 +92,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   // Create Testimonials table
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "testimonials" (
-      "id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+      "id" serial PRIMARY KEY NOT NULL,
       "name" varchar NOT NULL,
       "title" varchar,
       "company" varchar,
       "content" varchar NOT NULL,
       "rating" numeric,
-      "image_id" uuid,
+      "image_id" integer,
       "featured" boolean DEFAULT false,
       "order" numeric,
       "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,

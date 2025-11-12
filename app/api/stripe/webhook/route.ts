@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { sendOrderConfirmation } from '@/lib/email'
+import { sendOrderConfirmation, sendOwnerOrderNotification, sendOwnerGiftCardNotification } from '@/lib/email'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
@@ -137,8 +137,18 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
     // Send order to Printify (next step)
     await sendToPrintify(order, cartItems, shippingAddress, customerEmail)
 
-    // Send confirmation email (implement this next)
+    // Send confirmation email to customer
     await sendOrderConfirmationEmail(order, customerEmail, customerName)
+
+    // Send notification email to owners
+    await sendOwnerOrderNotification(
+      order.orderNumber,
+      customerName,
+      customerEmail,
+      order.total,
+      cartItems,
+      orderData.shippingAddress
+    )
 
   } catch (error) {
     console.error('Error handling checkout session:', error)
@@ -296,6 +306,19 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
         giftCardData.shippingAddress
       )
     }
+
+    // Send notification email to owners
+    await sendOwnerGiftCardNotification(
+      giftCard.code || 'Pending',
+      cardType,
+      amount,
+      purchaserName,
+      purchaserEmail,
+      recipientName,
+      recipientEmail,
+      deliveryMethod,
+      scheduledDeliveryDate
+    )
 
   } catch (error) {
     console.error('Error handling gift card purchase:', error)

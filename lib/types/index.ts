@@ -75,7 +75,7 @@ export interface BlogPost {
   excerpt?: string;
   content: any; // Rich text content
   author?: Author | string; // Can be Author object or email string
-  categories?: Category[];
+  categories?: Array<Category | string>; // Can be Category objects or ID strings
   tags?: string[];
   featuredImage?: Media;
   publishedDate?: string;

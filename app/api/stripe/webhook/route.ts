@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { sendOrderConfirmation } from '@/lib/email'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -99,8 +101,8 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
     const amountShipping = (fullSession.total_details?.amount_shipping || 0)
     const amountTax = (fullSession.total_details?.amount_tax || 0)
 
-    // Create order in Payload CMS
-    const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
+    // Create order in Payload CMS using Local API
+    const payload = await getPayload({ config })
 
     const orderData = {
       stripePaymentIntentId: fullSession.payment_intent as string,
@@ -123,26 +125,20 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
       status: 'processing',
     }
 
-    const orderResponse = await fetch(`${payloadUrl}/api/orders`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orderData),
+    // Use Local API with overrideAccess to bypass admin-only restriction
+    const order = await payload.create({
+      collection: 'orders',
+      data: orderData,
+      overrideAccess: true, // Bypass access control - safe because Stripe signature verified
     })
 
-    if (!orderResponse.ok) {
-      throw new Error('Failed to create order in Payload CMS')
-    }
-
-    const order = await orderResponse.json()
-    console.log('Order created:', order.doc.orderNumber)
+    console.log('Order created:', order.orderNumber)
 
     // Send order to Printify (next step)
-    await sendToPrintify(order.doc, cartItems, shippingAddress, customerEmail)
+    await sendToPrintify(order, cartItems, shippingAddress, customerEmail)
 
     // Send confirmation email (implement this next)
-    await sendOrderConfirmationEmail(order.doc, customerEmail, customerName)
+    await sendOrderConfirmationEmail(order, customerEmail, customerName)
 
   } catch (error) {
     console.error('Error handling checkout session:', error)
@@ -173,16 +169,15 @@ async function sendToPrintify(order: any, cartItems: any[], shippingAddress: any
       const printifyOrder = await response.json()
       console.log('Printify order created:', printifyOrder.id)
 
-      // Update order with Printify order ID
-      const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
-      await fetch(`${payloadUrl}/api/orders/${order.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Update order with Printify order ID using Local API
+      const payload = await getPayload({ config })
+      await payload.update({
+        collection: 'orders',
+        id: order.id,
+        data: {
           printifyOrderId: printifyOrder.id,
-        }),
+        },
+        overrideAccess: true, // Bypass access control
       })
     }
 
@@ -219,8 +214,8 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     const deliveryMethod = session.metadata?.deliveryMethod || 'immediate'
     const scheduledDeliveryDate = session.metadata?.scheduledDeliveryDate || null
 
-    // Create gift card in Payload CMS
-    const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
+    // Create gift card in Payload CMS using Local API
+    const payload = await getPayload({ config })
 
     const giftCardData: any = {
       type: cardType,
@@ -259,27 +254,21 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
       giftCardData.fulfillmentStatus = 'pending'
     }
 
-    const response = await fetch(`${payloadUrl}/api/gift-cards`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(giftCardData),
+    // Use Local API with overrideAccess to bypass admin-only restriction
+    const giftCard = await payload.create({
+      collection: 'gift-cards',
+      data: giftCardData,
+      overrideAccess: true, // Bypass access control - safe because Stripe signature verified
     })
 
-    if (!response.ok) {
-      throw new Error('Failed to create gift card in Payload CMS')
-    }
-
-    const giftCard = await response.json()
-    console.log('Gift card created:', cardType === 'digital' ? giftCard.doc.code : 'pending fulfillment')
+    console.log('Gift card created:', cardType === 'digital' ? giftCard.code : 'pending fulfillment')
 
     // Send emails based on card type and delivery method
     if (cardType === 'digital') {
       if (deliveryMethod === 'immediate') {
         // Send gift card email immediately
         await sendGiftCardEmail(
-          giftCard.doc,
+          giftCard,
           purchaserName,
           purchaserEmail,
           recipientName,

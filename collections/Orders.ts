@@ -9,8 +9,11 @@ export const Orders: CollectionConfig = {
   access: {
     // Only authenticated users can read orders (admin dashboard needs this)
     read: ({ req: { user } }) => !!user,
-    // Allow API to create orders (webhooks, checkout)
-    create: () => true,
+    // Only authenticated admins can create orders
+    // For webhook/API integration, validate signed secrets in API routes before creation
+    create: ({ req: { user } }) => {
+      return !!user && user.role === 'admin'
+    },
     // Only authenticated users can update orders
     update: ({ req: { user } }) => !!user,
     // Only admins can delete orders

@@ -133,7 +133,7 @@ function GiftCardSuccessContent() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
-            href="/gift-cards/balance"
+            href="/gift-card-balance"
             className="flex-1 bg-lrp-green hover:bg-lrp-green-dark text-white text-center py-4 rounded-lg font-bold transition-all"
           >
             Check Balance

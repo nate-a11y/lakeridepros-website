@@ -27,17 +27,13 @@ const serverFunction: ServerFunctionClient = async function (args) {
 }
 
 const Layout = ({ children }: Args) => (
-  <html data-payload-admin suppressHydrationWarning>
-    <body data-payload-admin>
-      <RootLayout
-        config={config}
-        importMap={importMap}
-        serverFunction={serverFunction}
-      >
-        {children}
-      </RootLayout>
-    </body>
-  </html>
+  <RootLayout
+    config={config}
+    importMap={importMap}
+    serverFunction={serverFunction}
+  >
+    {children}
+  </RootLayout>
 )
 
 export default Layout

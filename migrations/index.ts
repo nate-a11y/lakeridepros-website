@@ -1,7 +1,7 @@
 import * as migration_20251111_174626_add_new_collections from './20251111_174626_add_new_collections';
 import * as migration_20251111_205751_add_printify_indexes from './20251111_205751_add_printify_indexes';
 import * as migration_20251111_214800_add_locked_documents from './20251111_214800_add_locked_documents';
-import * as migration_20251112_044409_add_services_vehicles_testimonials from './20251112_044409_add_services_vehicles_testimonials';
+import * as migration_20251112_remove_old_collections from './20251112_remove_old_collections';
 
 export const migrations = [
   {
@@ -20,8 +20,8 @@ export const migrations = [
     name: '20251111_214800_add_locked_documents'
   },
   {
-    up: migration_20251112_044409_add_services_vehicles_testimonials.up,
-    down: migration_20251112_044409_add_services_vehicles_testimonials.down,
-    name: '20251112_044409_add_services_vehicles_testimonials'
+    up: migration_20251112_remove_old_collections.up,
+    down: migration_20251112_remove_old_collections.down,
+    name: '20251112_remove_old_collections'
   },
 ];

@@ -21,6 +21,10 @@ import { Orders } from '../collections/Orders'
 import { Partners } from '../collections/Partners'
 import { supabaseAdapter } from '../lib/supabase-adapter'
 
+// Import custom admin components
+import { Logo } from './components/admin/Logo'
+import { Icon } from './components/admin/Icon'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -83,6 +87,17 @@ const config = buildConfig({
     user: 'users',
     importMap: {
       baseDir: path.resolve(dirname, '..'),
+    },
+    meta: {
+      titleSuffix: '- Lake Ride Pros',
+      favicon: '/Color logo - no background.png',
+      ogImage: '/Color logo - no background.png',
+    },
+    components: {
+      graphics: {
+        Icon,
+        Logo,
+      },
     },
   },
   collections: [Users, Media, Pages, BlogPosts, Services, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],

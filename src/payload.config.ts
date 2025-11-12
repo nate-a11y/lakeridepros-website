@@ -95,9 +95,7 @@ const config = buildConfig({
         Logo: '@/components/admin/Logo#Logo',
       },
       views: {
-        Dashboard: {
-          Component: '@/components/admin/Dashboard#Dashboard',
-        },
+        Dashboard: '@/components/admin/Dashboard#Dashboard',
       },
     },
   },

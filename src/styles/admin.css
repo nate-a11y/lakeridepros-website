@@ -1,0 +1,397 @@
+/* ============================================
+   LAKE RIDE PROS - PAYLOAD CMS ADMIN BRANDING
+   ============================================ */
+
+/* Base Admin Container */
+.payload-admin,
+.app-wrapper,
+[class*="template-default"],
+[class*="dashboard"] {
+  background: #060606 !important;
+  color: #ffffff !important;
+}
+
+/* All Text Elements - Force White on Black */
+.payload-admin *,
+.payload-admin p,
+.payload-admin span,
+.payload-admin div,
+.payload-admin label,
+.payload-admin a {
+  color: #ffffff;
+}
+
+/* Headers and Titles */
+h1, h2, h3, h4, h5, h6,
+.heading,
+[class*="title"] {
+  color: #ffffff !important;
+}
+
+/* Page Titles */
+.collection-list__title,
+.page-title,
+.route-title {
+  color: #ffffff !important;
+}
+
+/* ============================================
+   SETTINGS PAGE SPECIFIC
+   ============================================ */
+
+.route-settings,
+.route-account {
+  background: #060606 !important;
+}
+
+.route-settings h1,
+.route-settings h2,
+.route-settings label,
+.route-settings .field-label {
+  color: #ffffff !important;
+}
+
+/* Theme Selector Labels */
+.route-settings .radio-input label,
+.route-settings .radio-group label,
+.route-settings [class*="radio"] label {
+  color: #ffffff !important;
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+/* All Input Fields */
+input,
+textarea,
+select,
+.input,
+[class*="input"] {
+  background: #0f0f0f !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+}
+
+/* Input Focus States */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #4cbb17 !important;
+  box-shadow: 0 0 0 3px rgba(76, 187, 23, 0.2) !important;
+  outline: none !important;
+}
+
+/* Placeholder Text */
+input::placeholder,
+textarea::placeholder {
+  color: #666666 !important;
+}
+
+/* Field Labels */
+.field-label,
+.label,
+label {
+  color: #e6e6e6 !important;
+  font-weight: 500;
+}
+
+/* Field Descriptions */
+.field-description,
+[class*="description"] {
+  color: #999999 !important;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+/* Primary Buttons */
+button[type="submit"],
+.btn--style-primary,
+.form-submit button,
+[class*="button--primary"] {
+  background: #4cbb17 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+button[type="submit"]:hover,
+.btn--style-primary:hover {
+  background: #3a8e11 !important;
+}
+
+/* Secondary Buttons */
+.btn--style-secondary,
+[class*="button--secondary"] {
+  background: transparent !important;
+  color: #4cbb17 !important;
+  border: 1px solid #4cbb17 !important;
+}
+
+.btn--style-secondary:hover {
+  background: #4cbb17 !important;
+  color: #ffffff !important;
+}
+
+/* ============================================
+   TABLES AND LISTS
+   ============================================ */
+
+/* Table Headers */
+.list-controls,
+.table-header,
+thead th,
+[class*="header-cell"] {
+  background: #060606 !important;
+  color: #ffffff !important;
+  border-bottom: 2px solid #4cbb17 !important;
+}
+
+/* Table Rows */
+tbody tr,
+.list-row,
+[class*="table-row"] {
+  background: #060606 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+tbody tr:hover,
+.list-row:hover {
+  background: rgba(76, 187, 23, 0.05) !important;
+}
+
+/* Table Cells */
+td,
+.cell,
+[class*="table-cell"] {
+  color: #ffffff !important;
+}
+
+/* ============================================
+   NAVIGATION AND SIDEBAR
+   ============================================ */
+
+/* Sidebar/Nav Container */
+.nav,
+.sidebar,
+[class*="nav-"] {
+  background: #060606 !important;
+}
+
+/* Nav Items */
+.nav-item,
+.nav-link,
+[class*="nav-item"] {
+  color: #ffffff !important;
+}
+
+.nav-item:hover,
+.nav-link:hover {
+  color: #60e421 !important;
+  background: rgba(76, 187, 23, 0.1) !important;
+}
+
+/* Active Nav Item */
+.nav-item--active,
+.nav-link--active,
+[class*="active"] {
+  color: #4cbb17 !important;
+  border-left: 3px solid #4cbb17 !important;
+}
+
+/* ============================================
+   MODALS AND OVERLAYS
+   ============================================ */
+
+.modal,
+.popup,
+.drawer,
+[class*="modal"],
+[class*="popup"] {
+  background: #060606 !important;
+  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+}
+
+.modal-header,
+.popup-header {
+  border-bottom: 1px solid rgba(76, 187, 23, 0.3) !important;
+}
+
+/* ============================================
+   DROPDOWN MENUS
+   ============================================ */
+
+.dropdown,
+.select-options,
+[class*="dropdown"],
+[class*="menu"] {
+  background: #0f0f0f !important;
+  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+}
+
+.dropdown-item,
+.select-option {
+  color: #ffffff !important;
+}
+
+.dropdown-item:hover,
+.select-option:hover {
+  background: rgba(76, 187, 23, 0.2) !important;
+}
+
+/* ============================================
+   CARDS AND PANELS
+   ============================================ */
+
+.card,
+.panel,
+[class*="card"],
+[class*="panel"] {
+  background: #0f0f0f !important;
+  border: 1px solid rgba(76, 187, 23, 0.2) !important;
+}
+
+/* ============================================
+   SEARCH AND FILTERS
+   ============================================ */
+
+.search-input,
+.filter-bar,
+[class*="search"] input {
+  background: #0f0f0f !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+}
+
+/* ============================================
+   BADGES AND TAGS
+   ============================================ */
+
+.badge,
+.tag,
+[class*="badge"],
+[class*="tag"] {
+  background: rgba(76, 187, 23, 0.2) !important;
+  color: #4cbb17 !important;
+  border: 1px solid #4cbb17 !important;
+}
+
+/* ============================================
+   RADIO BUTTONS AND CHECKBOXES
+   ============================================ */
+
+/* Radio button container */
+.radio-input,
+.checkbox-input {
+  color: #ffffff !important;
+}
+
+/* Radio/checkbox labels */
+.radio-input label,
+.checkbox-input label {
+  color: #ffffff !important;
+}
+
+/* Custom radio/checkbox styling */
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: #4cbb17 !important;
+}
+
+/* ============================================
+   BREADCRUMBS
+   ============================================ */
+
+.breadcrumbs,
+[class*="breadcrumb"] {
+  color: #e6e6e6 !important;
+}
+
+.breadcrumbs a {
+  color: #4cbb17 !important;
+}
+
+.breadcrumbs a:hover {
+  color: #60e421 !important;
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.loader,
+.spinner,
+[class*="loading"] {
+  border-color: rgba(76, 187, 23, 0.2) !important;
+  border-top-color: #4cbb17 !important;
+}
+
+/* ============================================
+   ALERTS AND NOTIFICATIONS
+   ============================================ */
+
+.alert-success,
+.notification-success {
+  background: rgba(76, 187, 23, 0.2) !important;
+  border-color: #4cbb17 !important;
+  color: #ffffff !important;
+}
+
+.alert-error,
+.notification-error {
+  background: rgba(220, 38, 38, 0.2) !important;
+  border-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+
+.pagination,
+[class*="pagination"] {
+  color: #ffffff !important;
+}
+
+.pagination button {
+  background: #0f0f0f !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+}
+
+.pagination button:hover {
+  background: rgba(76, 187, 23, 0.2) !important;
+  border-color: #4cbb17 !important;
+}
+
+/* ============================================
+   RICH TEXT EDITOR
+   ============================================ */
+
+.rich-text-editor,
+[class*="editor"] {
+  background: #0f0f0f !important;
+  color: #ffffff !important;
+}
+
+.rich-text-toolbar,
+[class*="toolbar"] {
+  background: #060606 !important;
+  border-bottom: 1px solid rgba(76, 187, 23, 0.3) !important;
+}
+
+/* ============================================
+   COLLECTION CARDS (if any remain)
+   ============================================ */
+
+.collection-card {
+  background: #0f0f0f !important;
+  border: 1px solid rgba(76, 187, 23, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.collection-card:hover {
+  border-color: #4cbb17 !important;
+  box-shadow: 0 8px 24px rgba(76, 187, 23, 0.3) !important;
+}

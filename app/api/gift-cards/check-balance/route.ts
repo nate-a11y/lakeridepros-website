@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getPayload } from 'payload'
+import config from '@/payload.config'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,30 +16,29 @@ export async function POST(request: NextRequest) {
     // Normalize the code (uppercase, trim)
     const normalizedCode = code.trim().toUpperCase()
 
-    // Call Payload CMS API to get gift card data
-    const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
+    // Use Payload Local API to query gift cards
+    const payload = await getPayload({ config })
 
-    const response = await fetch(`${payloadUrl}/api/gift-cards?where[code][equals]=${normalizedCode}`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const result = await payload.find({
+      collection: 'gift-cards',
+      where: {
+        code: {
+          equals: normalizedCode,
+        },
       },
+      overrideAccess: true, // Allow public balance checks
+      limit: 1,
     })
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch gift card data')
-    }
-
-    const data = await response.json()
-
     // Check if gift card exists
-    if (!data.docs || data.docs.length === 0) {
+    if (!result.docs || result.docs.length === 0) {
       return NextResponse.json(
         { error: 'Gift card not found. Please check your code and try again.' },
         { status: 404 }
       )
     }
 
-    const giftCard = data.docs[0]
+    const giftCard = result.docs[0]
 
     // Check if gift card is active
     if (giftCard.status !== 'active') {

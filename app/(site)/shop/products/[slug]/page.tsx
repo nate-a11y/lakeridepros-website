@@ -15,7 +15,9 @@ async function getProduct(slug: string) {
     const res = await fetch(
       `${payloadUrl}/api/products?where[slug][equals]=${slug}`,
       {
-        next: { revalidate: 3600 }, // Revalidate every hour
+        // Use no-store to prevent caching failed responses
+        // If we used revalidate, a 500 error would be cached and the retry button wouldn't work
+        cache: 'no-store',
       }
     )
 

@@ -593,11 +593,17 @@ button[class*="remove"],
       border-color: color.adjust($lrp-border, $lightness: 10%) !important;
     }
 
-    &:focus,
-    &--is-focused {
+    &:focus {
       border-color: $lrp-green !important;
       box-shadow: 0 0 0 3px rgba($lrp-green, 0.2) !important;
     }
+  }
+
+  // Focused state for select controls
+  .select__control--is-focused,
+  [class*="control"][class*="focused"] {
+    border-color: $lrp-green !important;
+    box-shadow: 0 0 0 3px rgba($lrp-green, 0.2) !important;
   }
 }
 

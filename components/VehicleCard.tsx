@@ -10,8 +10,8 @@ interface VehicleCardProps {
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const imageUrl = vehicle.featuredImage
     ? getMediaUrl(vehicle.featuredImage.url)
-    : vehicle.images?.[0]
-    ? getMediaUrl(vehicle.images[0].url)
+    : vehicle.images?.[0]?.image
+    ? getMediaUrl(vehicle.images[0].image.url)
     : '/placeholder-vehicle.jpg';
 
   return (

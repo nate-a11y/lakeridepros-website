@@ -1099,4 +1099,200 @@ input[type="radio"] {
   [class*="field-type-group"] {
     flex-direction: column;
   }
+
+  // ============================================
+  // CRITICAL MOBILE FIXES - COLLECTION CARDS
+  // ============================================
+
+  // Dashboard and collection cards MUST show content on mobile
+  .dashboard,
+  .dashboard-card,
+  .collection-card,
+  .card,
+  [class*="card"],
+  [class*="dashboard"],
+  [class*="collection"] {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: auto !important;
+    padding: 1rem !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: none !important;
+    transform: none !important;
+
+    // Ensure all child elements are visible
+    > * {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      position: relative !important;
+      color: $lrp-white !important;
+    }
+
+    // Force text content to be visible
+    span,
+    p,
+    div,
+    a,
+    button,
+    label,
+    h1, h2, h3, h4, h5, h6 {
+      color: $lrp-white !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+      position: relative !important;
+      font-size: inherit !important;
+      line-height: 1.5 !important;
+    }
+
+    // Links and buttons must be visible and clickable
+    a, button {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      min-height: 44px !important;
+      pointer-events: auto !important;
+    }
+  }
+
+  // Force dashboard grid to work on mobile
+  .dashboard__grid,
+  [class*="dashboard-grid"],
+  [class*="grid"] {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    width: 100% !important;
+  }
+
+  // Collection list cards - ensure they're visible
+  .collection-list,
+  [class*="collection-list"] {
+    .card,
+    [class*="card"] {
+      margin-bottom: 1rem !important;
+      padding: 1rem !important;
+      background: $lrp-black-lighter !important;
+      border: 1px solid $lrp-border !important;
+
+      * {
+        color: $lrp-white !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+    }
+  }
+
+  // Ensure icons are visible
+  svg,
+  [class*="icon"],
+  .icon {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    fill: currentColor !important;
+    color: $lrp-white !important;
+  }
+
+  // Plus buttons and action buttons must be visible
+  [class*="add"],
+  [class*="create"],
+  [class*="new"],
+  button[class*="action"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: $lrp-green !important;
+    color: $lrp-white !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 6px !important;
+    min-height: 44px !important;
+
+    svg,
+    span,
+    * {
+      color: $lrp-white !important;
+      fill: $lrp-white !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  }
+
+  // Reset any problematic absolute positioning on mobile
+  .template-default,
+  [class*="template-"] {
+    position: static !important;
+
+    * {
+      position: relative !important;
+    }
+
+    // Except for modals and dropdowns which need absolute positioning
+    .modal,
+    .dropdown,
+    [class*="modal"],
+    [class*="dropdown"],
+    [class*="menu"],
+    [class*="popup"] {
+      position: fixed !important;
+
+      * {
+        position: relative !important;
+      }
+    }
+  }
+
+  // Make sure fonts load properly on mobile
+  body,
+  * {
+    font-family: $font-body !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $font-heading !important;
+  }
+
+  label,
+  .field-label,
+  [class*="field-label"] {
+    font-family: $font-label !important;
+  }
+
+  // Ensure proper text sizing on mobile
+  body {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100% !important;
+  }
+
+  // Make sure collection names are visible
+  .collection-name,
+  .card-title,
+  [class*="title"],
+  [class*="name"] {
+    color: $lrp-white !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5rem !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+
+  // Ensure count/meta information is visible
+  .collection-count,
+  .card-meta,
+  [class*="meta"],
+  [class*="count"] {
+    color: $lrp-gray-light !important;
+    font-size: 0.875rem !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
 }

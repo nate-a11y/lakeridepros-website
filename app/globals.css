@@ -137,6 +137,20 @@
   --neutral-900: #ffffff;  /* Pure white */
 }
 
+/* Ensure body and html take full height and use proper backgrounds */
+html,
+body {
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Prevent white gaps on dark mode */
+.dark html,
+.dark body {
+  background-color: #0a0a0a;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -181,12 +195,18 @@ body[data-page="booking"] [class*="moovs-fab"] {
 }
 
 /* Force Moovs FAB to match Lake Ride Pros green branding */
-/* Target all possible Moovs FAB selectors */
+/* Target specific Moovs FAB selectors only */
 #moovs-fab-button,
 [id*="moovs-fab"],
-[class*="moovs-fab"],
-div[style*="position: fixed"][style*="bottom"][style*="right"] > div,
-div[style*="position: fixed"][style*="z-index"] > button {
+[class*="moovs-fab"] {
+  background-color: #4cbb17 !important;
+  background: #4cbb17 !important;
+}
+
+/* Only target buttons within the Moovs FAB container, not all fixed positioned divs */
+#moovs-fab-button > *,
+[id*="moovs-fab"] > button,
+[class*="moovs-fab"] > button {
   background-color: #4cbb17 !important;
   background: #4cbb17 !important;
 }

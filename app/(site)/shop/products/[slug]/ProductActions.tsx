@@ -19,6 +19,14 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
   const { addItem } = useCart()
 
+  // Debug: Log variants data to console
+  if (typeof window !== 'undefined' && product.variants) {
+    console.log('Product:', product.name)
+    console.log('Total variants:', product.variants.length)
+    console.log('Variants data:', product.variants)
+    console.log('First variant:', product.variants[0])
+  }
+
   const handleAddToCart = () => {
     if (!selectedVariant) return
 
@@ -43,8 +51,14 @@ export default function ProductActions({ product }: ProductActionsProps) {
   }
 
   // Group variants by size and color (filter out empty values)
-  const sizes = Array.from(new Set<string>(product.variants?.map((v: any) => v.size as string).filter((s: string) => s) || []))
-  const colors = Array.from(new Set<string>(product.variants?.map((v: any) => v.color as string).filter((c: string) => c) || []))
+  const sizes = Array.from(new Set<string>((product.variants || []).map((v: any) => v.size as string).filter((s: string) => s)))
+  const colors = Array.from(new Set<string>((product.variants || []).map((v: any) => v.color as string).filter((c: string) => c)))
+
+  // Debug: Log processed sizes/colors
+  if (typeof window !== 'undefined') {
+    console.log('Sizes found:', sizes)
+    console.log('Colors found:', colors)
+  }
 
   return (
     <div className="flex flex-col lg:flex-row gap-12">
@@ -129,8 +143,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
           }}
         />
 
-        {/* Size Selection */}
-        {sizes.length > 0 && (
+        {/* Variant Selection - Show size selector OR general variant selector */}
+        {sizes.length > 0 ? (
           <div className="mb-6">
             <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
               Select Size:
@@ -161,7 +175,42 @@ export default function ProductActions({ product }: ProductActionsProps) {
               })}
             </div>
           </div>
-        )}
+        ) : product.variants && product.variants.length > 1 ? (
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+              Select Option:
+            </label>
+            <div className="flex flex-col gap-2">
+              {product.variants.map((variant: any, index: number) => {
+                const isSelected = selectedVariant?.sku === variant.sku
+                const inStock = variant.inStock
+
+                return (
+                  <button
+                    key={variant.sku || index}
+                    onClick={() => inStock && setSelectedVariant(variant)}
+                    disabled={!inStock}
+                    className={`py-3 px-4 rounded-lg border-2 font-semibold transition-all text-left ${
+                      isSelected
+                        ? 'border-lrp-green bg-lrp-green text-white'
+                        : inStock
+                        ? 'border-neutral-300 dark:border-dark-border hover:border-lrp-green dark:text-white'
+                        : 'border-neutral-200 dark:border-dark-border opacity-50 cursor-not-allowed'
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span>{variant.name}</span>
+                      {variant.price && variant.price !== product.price && (
+                        <span className="text-sm">${variant.price.toFixed(2)}</span>
+                      )}
+                    </div>
+                    {!inStock && <span className="block text-xs mt-1">Out of Stock</span>}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ) : null}
 
         {/* Color Selection */}
         {colors.length > 1 && (

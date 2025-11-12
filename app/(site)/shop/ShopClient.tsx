@@ -265,7 +265,11 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, index }: ProductCardProps) {
-  const image = product.images?.[0]
+  // Use featuredImage first, then fall back to first image in gallery
+  const featuredImage = product.featuredImage
+  const galleryImage = product.images?.[0]?.image
+  const image = featuredImage || galleryImage
+
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
 
   // Truncate title at 60 characters
@@ -299,9 +303,9 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
       <Link href={`/shop/products/${product.slug}`} className="flex-1 flex flex-col">
         {/* Premium Image / Branded Placeholder */}
         <div className="relative aspect-square bg-[#1a1a1a] overflow-hidden">
-          {image?.image?.url ? (
+          {image?.url ? (
             <Image
-              src={image.image.url}
+              src={image.url}
               alt={image.alt || product.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

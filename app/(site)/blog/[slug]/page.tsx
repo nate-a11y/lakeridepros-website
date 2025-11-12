@@ -7,6 +7,17 @@ import { formatDate } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
+// Helper function to get category display name
+const getCategoryLabel = (categoryValue: string): string => {
+  const categoryMap: Record<string, string> = {
+    'news': 'Company News',
+    'guides': 'Tips & Guides',
+    'events': 'Events',
+    'fleet': 'Fleet Updates',
+  };
+  return categoryMap[categoryValue] || categoryValue;
+};
+
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -71,10 +82,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {post.categories && post.categories.length > 0 && (
               <>
                 <span className="mx-2">•</span>
-                <span className="text-primary">{post.categories[0].name}</span>
+                <span className="text-primary">
+                  {typeof post.categories[0] === 'string'
+                    ? getCategoryLabel(post.categories[0])
+                    : post.categories[0]?.name || ''}
+                </span>
               </>
             )}
-            {post.author && (
+            {post.author && typeof post.author === 'object' && (
               <>
                 <span className="mx-2">•</span>
                 <span>By {post.author.name}</span>

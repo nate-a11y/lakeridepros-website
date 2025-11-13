@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { Plane, Clock, Shield, Users, CheckCircle, Star, Phone } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Airport Shuttle Lake Ozarks | KC, STL, Springfield Transfer',
-  description: 'Reliable airport transfers from Kansas City, St. Louis & Springfield to Lake of the Ozarks. Professional drivers, flight tracking, on-time service. Book your shuttle!',
+  title: 'Lake Ozarks Airport Shuttle | MCI, STL, SGF | On-Time',
+  description: 'Luxury airport transfers from Kansas City, St. Louis, Springfield to Lake of the Ozarks. Flight tracking, meet & greet, always on time. Book your ride today.',
   keywords: ['Lake Ozarks airport shuttle', 'Kansas City airport transfer', 'STL airport shuttle', 'Springfield airport Lake Ozarks', 'MCI to Lake Ozarks', 'airport transportation Missouri'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/airport-shuttle',

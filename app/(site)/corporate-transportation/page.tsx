@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { Briefcase, Clock, Shield, Award, CheckCircle, Star, Phone } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Corporate Transportation Lake Ozarks | Executive Car Service',
-  description: 'Professional corporate transportation at Lake of the Ozarks. Executive cars, shuttles for meetings, conferences, retreats. Impress clients with premium service.',
+  title: 'Executive Car Service Lake of the Ozarks | Corporate',
+  description: 'Impress clients with luxury executive transportation. Airport transfers, conference shuttles, client entertainment. Professional drivers, immaculate vehicles.',
   keywords: ['corporate transportation Lake Ozarks', 'executive car service', 'business travel Lake Ozarks', 'corporate shuttle Missouri', 'executive transportation', 'Tan-Tar-A corporate events'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/corporate-transportation',
@@ -103,7 +103,7 @@ export default function CorporateTransportationPage() {
                   Executive Vehicles
                 </h3>
                 <p className="text-gray-700 dark:text-lrp-gray">
-                  Luxury sedans and SUVs with WiFi, charging ports, and privacy for confidential calls and work.
+                  Luxury sedans and SUVs with charging ports, privacy screens, and quiet cabins perfect for confidential calls and work.
                 </p>
               </div>
             </div>
@@ -240,7 +240,7 @@ export default function CorporateTransportationPage() {
                   What types of vehicles do you have for executive service?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Our executive fleet includes luxury sedans (Lincoln Town Cars, Cadillac), premium SUVs (Suburban, Escalade), and executive vans for small groups. All vehicles are impeccably maintained and equipped with WiFi and charging ports.
+                  Our executive fleet includes luxury sedans (Lincoln Town Cars, Cadillac), premium SUVs (Suburban, Escalade), and executive vans for small groups. All vehicles are impeccably maintained and equipped with charging ports, climate control, and privacy features.
                 </p>
               </details>
 
@@ -276,7 +276,7 @@ export default function CorporateTransportationPage() {
                   Can I work during the ride?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Yes! Our executive vehicles offer a quiet, professional environment perfect for working, taking calls, or preparing for meetings. WiFi available in all vehicles.
+                  Yes! Our executive vehicles offer a quiet, professional environment perfect for working, taking calls, or preparing for meetings. Charging ports available for all devices.
                 </p>
               </details>
             </div>
@@ -313,7 +313,7 @@ export default function CorporateTransportationPage() {
                   ))}
                 </div>
                 <p className="text-gray-700 dark:text-lrp-gray mb-4 italic">
-                  "As an executive who travels to Lake Ozarks frequently for business, Lake Ride Pros is my go-to service. WiFi lets me work en route, drivers are professional and discreet, and billing is seamless. Highly recommend for corporate travel."
+                  "As an executive who travels to Lake Ozarks frequently for business, Lake Ride Pros is my go-to service. The quiet cabin lets me work en route, drivers are professional and discreet, and billing is seamless. Highly recommend for corporate travel."
                 </p>
                 <p className="font-bold text-lrp-black dark:text-white">
                   Sarah M.

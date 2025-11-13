@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { Heart, Shield, Users, Calendar, CheckCircle, Star, Phone } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Lake Ozarks Wedding Transportation | Bridal Shuttle Service',
-  description: 'Stress-free wedding shuttles at Lake of the Ozarks. Bridal party transport, guest shuttles, luxury limos. Serving Tan-Tar-A, Old Kinderhook + all venues.',
+  title: 'Lake of the Ozarks Wedding Transportation | Stress-Free',
+  description: 'Your wedding day, flawless. Guest shuttles, bridal party limos, rehearsal transport. Serving Tan-Tar-A, Old Kinderhook, all Lake venues. Book your peace of mind.',
   keywords: ['Lake Ozarks wedding transportation', 'wedding shuttle service', 'bridal party limo', 'Lake Ozarks wedding venues', 'Tan-Tar-A transportation', 'Old Kinderhook shuttle'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/wedding-transportation',

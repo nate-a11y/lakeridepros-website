@@ -12,7 +12,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
   return (
     <Link
-      href={`/services#${service.slug}`}
+      href={`/services/${service.slug}`}
       className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
     >
       <div className="relative h-48 overflow-hidden">

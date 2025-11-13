@@ -33,12 +33,63 @@ const structuredData = {
   },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How many wineries can we visit in one tour?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most groups comfortably visit 3-4 wineries in a 4-6 hour tour. We recommend spending about 45-60 minutes at each location to fully enjoy the tasting experience. We can customize based on your preferences.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What\'s included in the hourly rate?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our hourly rate includes professional driver, luxury vehicle, fuel, insurance, and complimentary water. Tasting fees at wineries are paid separately by guests. Minimum booking is typically 4 hours.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can you recommend wineries for our group?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely! Our drivers are local experts who can recommend wineries based on your wine preferences, group size, and interests. We know which venues have the best tastings, food options, and atmosphere.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What size groups do you accommodate?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We have vehicles for groups of all sizes! Sprinter vans fit up to 14 guests (perfect for intimate wine tours), and larger buses accommodate groups of 20-56 for bigger celebrations.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can we bring wine purchases on the shuttle?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! We have secure storage space for wine purchases. Many guests buy cases throughout the day, and we safely transport them back with you.'
+      }
+    }
+  ]
+}
+
 export default function WineTourShuttlePage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

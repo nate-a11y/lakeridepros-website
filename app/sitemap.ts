@@ -90,6 +90,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/transportation-camdenton', priority: 0.9, changeFrequency: 'monthly' as const },
     { url: '/transportation-lake-ozark', priority: 0.9, changeFrequency: 'monthly' as const },
 
+    // City-to-Lake landing pages (capturing nearby city searches)
+    { url: '/columbia-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/jefferson-city-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/springfield-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
+
     // Legal pages
     { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },
     { url: '/terms-of-service', priority: 0.5, changeFrequency: 'yearly' as const },

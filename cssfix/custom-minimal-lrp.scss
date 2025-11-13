@@ -1,0 +1,89 @@
+// ============================================================================
+// LAKE RIDE PROS - PAYLOAD CMS MINIMAL BRANDING
+// ============================================================================
+// Strategy: Let Payload's default theme do its job, only brand what matters
+// This is a MINIMAL override that respects Payload's design system
+// ============================================================================
+
+@import '~@payloadcms/ui/scss';
+
+@layer payload {
+  // ==========================================================================
+  // ONLY OVERRIDE PAYLOAD'S PRIMARY BRAND COLOR
+  // ==========================================================================
+  
+  :root {
+    // Lake Ride Pros brand green becomes Payload's "primary" color
+    --theme-success-500: #4cbb17;
+    --theme-success-600: #3a8e11;
+    --theme-success-400: #60e421;
+    
+    // That's it. Let Payload handle everything else.
+    // Error colors stay red (Payload default)
+    // Warning colors stay amber (Payload default)
+    // Focus states use Payload's system
+  }
+  
+  // ==========================================================================
+  // FIX ONLY THE BROKEN CHECKBOX ISSUE
+  // ==========================================================================
+  
+  // If you have a custom checkbox component, disable it
+  // Let Payload's default checkboxes work
+  
+  // Target only the duplicate checkbox overlay issue from your screenshot
+  input[type="checkbox"] {
+    // Remove any custom styling that creates the rounded square
+    &::before,
+    &::after {
+      // Only if you see the double-checkbox issue
+      // Uncomment these if needed:
+      // content: none !important;
+      // display: none !important;
+    }
+  }
+  
+  // ==========================================================================
+  // FIX MODAL BUTTON HIERARCHY (Image 3 issue)
+  // ==========================================================================
+  
+  // "Leave anyway" should be the destructive action, not green
+  .popup,
+  .modal {
+    // Find the "Leave anyway" or destructive button
+    // It should NOT use success color
+    
+    button:last-child {
+      // If this is the destructive action, make it red
+      &[type="button"] {
+        --btn-color: var(--theme-error-500);
+        --btn-hover-color: var(--theme-error-600);
+      }
+    }
+    
+    // "Stay on page" or primary action stays green (Payload default)
+  }
+  
+  // ==========================================================================
+  // OPTIONAL: ADD LRP LOGO TO ADMIN HEADER
+  // ==========================================================================
+  
+  // .template-default__nav-header {
+  //   &::before {
+  //     content: '';
+  //     display: inline-block;
+  //     width: 120px;
+  //     height: 40px;
+  //     background: url('/path/to/lrp-logo.svg') no-repeat center;
+  //     background-size: contain;
+  //     margin-right: 1rem;
+  //   }
+  // }
+}
+
+// ============================================================================
+// THAT'S IT. NOTHING ELSE.
+// ============================================================================
+// Let Payload's professional design system do its job.
+// Your LRP green is now the primary brand color throughout.
+// Everything else (errors, warnings, focus, etc.) uses Payload's defaults.

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingBag, Star, Search, X, Heart, ShoppingCart as CartIcon, ChevronDown } from 'lucide-react'
 import QuickViewModal from './QuickViewModal'
+import { getMediaUrl } from '@/lib/utils'
 
 interface ShopClientProps {
   initialProducts: any[]
@@ -305,7 +306,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
         <div className="relative aspect-square bg-[#1a1a1a] overflow-hidden">
           {image?.url ? (
             <Image
-              src={image.url}
+              src={getMediaUrl(image.url)}
               alt={image.alt || product.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

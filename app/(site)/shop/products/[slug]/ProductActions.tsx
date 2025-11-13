@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { ShoppingCart, Check } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
+import { getMediaUrl } from '@/lib/utils'
 
 interface ProductActionsProps {
   product: any
@@ -68,7 +69,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
         <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden mb-4">
           {product.images && product.images[selectedImage] ? (
             <Image
-              src={product.images[selectedImage].image.url}
+              src={getMediaUrl(product.images[selectedImage].image.url)}
               alt={product.images[selectedImage].alt || product.name}
               width={600}
               height={600}
@@ -96,7 +97,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 }`}
               >
                 <Image
-                  src={img.image.url}
+                  src={getMediaUrl(img.image.url)}
                   alt={img.alt || product.name}
                   width={150}
                   height={150}

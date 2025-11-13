@@ -141,3 +141,4 @@ vite.config.ts.timestamp-*
 # Payload CMS
 payload-types.ts
 media/
+*.backup_*

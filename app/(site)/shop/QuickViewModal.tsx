@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { X, ShoppingCart, Check, ExternalLink } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
+import { getMediaUrl } from '@/lib/utils'
 
 interface QuickViewModalProps {
   product: any
@@ -43,7 +44,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       color: selectedVariant.color,
       price: finalPrice,
       quantity,
-      image: product.images?.[0]?.image?.url || '',
+      image: product.images?.[0]?.image?.url ? getMediaUrl(product.images[0].image.url) : '',
       imageAlt: product.images?.[0]?.alt || product.name,
     })
 
@@ -83,7 +84,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-xl overflow-hidden mb-4">
                 {product.images?.[selectedImage]?.image?.url ? (
                   <Image
-                    src={product.images[selectedImage].image.url}
+                    src={getMediaUrl(product.images[selectedImage].image.url)}
                     alt={product.images[selectedImage].alt || product.name}
                     fill
                     className="object-cover"
@@ -126,7 +127,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         }`}
                       >
                         <Image
-                          src={img.image.url}
+                          src={getMediaUrl(img.image.url)}
                           alt={img.alt || 'Product image'}
                           width={100}
                           height={100}

@@ -1,8 +1,6 @@
 import { getPartners } from '@/lib/api/payload'
-import { getMediaUrl } from '@/lib/utils'
-import Image from 'next/image'
 import Link from 'next/link'
-import { ExternalLink, Phone, Mail, MapPin } from 'lucide-react'
+import TrustedReferralPartnersClient from '@/components/TrustedReferralPartnersClient'
 
 export const metadata = {
   title: 'Trusted Referral Partners | Lake Ride Pros',
@@ -32,20 +30,9 @@ const subcategoryLabels: Record<string, string> = {
 }
 
 export default async function TrustedReferralPartnersPage() {
-  const partners = await getPartners('trusted-referral')
-
-  // Group partners by subcategory
-  const partnersBySubcategory = partners.reduce((acc, partner) => {
-    const subcategory = partner.subcategory || 'other'
-    if (!acc[subcategory]) {
-      acc[subcategory] = []
-    }
-    acc[subcategory].push(partner)
-    return acc
-  }, {} as Record<string, typeof partners>)
-
-  // Sort subcategories alphabetically
-  const sortedSubcategories = Object.keys(partnersBySubcategory).sort()
+  // Fetch both trusted referral partners and wedding partners
+  const trustedPartners = await getPartners('trusted-referral')
+  const weddingPartners = await getPartners('wedding')
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -59,103 +46,12 @@ export default async function TrustedReferralPartnersPage() {
         </div>
       </section>
 
-      {/* Partners by Subcategory */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {partners.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-xl text-lrp-text-secondary dark:text-dark-text-secondary">
-                No referral partners to display at this time.
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-16">
-              {sortedSubcategories.map((subcategory) => (
-                <div key={subcategory}>
-                  {/* Subcategory Header */}
-                  <h2 className="text-3xl font-bold text-lrp-black dark:text-white mb-8 pb-4 border-b-4 border-lrp-green">
-                    {subcategoryLabels[subcategory] || subcategory}
-                  </h2>
-
-                  {/* Partners Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {partnersBySubcategory[subcategory].map((partner) => (
-                <div
-                  key={partner.id}
-                  className="bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg p-6 hover:shadow-xl transition-all"
-                >
-                  {/* Logo */}
-                  {partner.logo && (
-                    <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
-                      <Image
-                        src={getMediaUrl(partner.logo.url)}
-                        alt={partner.logo.alt || partner.name}
-                        width={200}
-                        height={100}
-                        className="object-contain max-h-full"
-                      />
-                    </div>
-                  )}
-
-                  {/* Name */}
-                  <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
-                    {partner.name}
-                  </h3>
-
-                  {/* Description */}
-                  {partner.description && (
-                    <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
-                      {partner.description}
-                    </p>
-                  )}
-
-                  {/* Contact Info */}
-                  <div className="space-y-2 text-sm">
-                    {partner.website && (
-                      <a
-                        href={partner.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Visit Website
-                      </a>
-                    )}
-                    {partner.phone && (
-                      <a
-                        href={`tel:${partner.phone}`}
-                        className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
-                      >
-                        <Phone className="w-4 h-4" />
-                        {partner.phone}
-                      </a>
-                    )}
-                    {partner.email && (
-                      <a
-                        href={`mailto:${partner.email}`}
-                        className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
-                      >
-                        <Mail className="w-4 h-4" />
-                        {partner.email}
-                      </a>
-                    )}
-                    {partner.address && (
-                      <div className="flex items-start gap-2 text-lrp-text-secondary dark:text-dark-text-secondary">
-                        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm">{partner.address}</span>
-                      </div>
-                    )}
-                  </div>
-                    </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      {/* Client Component with Filters and Partner Display */}
+      <TrustedReferralPartnersClient
+        trustedPartners={trustedPartners}
+        weddingPartners={weddingPartners}
+        subcategoryLabels={subcategoryLabels}
+      />
 
       {/* CTA Section */}
       <section className="bg-lrp-green py-16">

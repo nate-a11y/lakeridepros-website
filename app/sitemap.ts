@@ -48,6 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/airport-shuttle', priority: 1.0, changeFrequency: 'monthly' as const },
     { url: '/corporate-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
     { url: '/nightlife-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
+    { url: '/private-aviation-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
 
     // Secondary static service pages
     { url: '/bachelor-party-transportation', priority: 0.9, changeFrequency: 'monthly' as const },

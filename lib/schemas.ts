@@ -59,15 +59,15 @@ export const faqSchema = {
       "name": "What areas does Lake Ride Pros serve?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Lake Ride Pros provides luxury transportation throughout Missouri with a focus on Lake of the Ozarks, including Osage Beach, Camdenton, Lake Ozark, and surrounding areas."
+        "text": "Lake Ride Pros provides luxury transportation throughout Missouri with a focus on Lake of the Ozarks, including Osage Beach, Camdenton, Lake Ozark, and surrounding areas. We also service Columbia, Jefferson City, Kansas City, St. Louis, and provide airport shuttles to MCI, STL, and SGF airports."
       }
     },
     {
       "@type": "Question",
-      "name": "How far in advance should I book?",
+      "name": "How far in advance should I book transportation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "For weddings and major events, we recommend booking 2-4 weeks in advance. However, we often accommodate last-minute bookings based on availability."
+        "text": "For weddings and major events, we recommend booking 2-4 weeks in advance to ensure vehicle availability. For airport shuttles and regular transportation, 24-48 hours notice is typically sufficient. We also accommodate last-minute bookings based on fleet availability."
       }
     },
     {
@@ -75,7 +75,63 @@ export const faqSchema = {
       "name": "What types of vehicles are available?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "We offer luxury limo buses (14 passengers), sprinter vans, shuttle buses (37 passengers), specialty vehicles, and standard vehicles like Suburbans."
+        "text": "Our fleet includes luxury limo buses (14 passengers), Mercedes Sprinter vans (6-14 passengers), shuttle buses (37 passengers), SUVs, and specialty vehicles. All vehicles feature premium amenities, professional sound systems, comfortable seating, and are meticulously maintained."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you provide transportation for weddings?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Wedding transportation is one of our specialties. We provide guest shuttles between venues, hotels, ceremony and reception locations. We serve all major Lake of the Ozarks wedding venues including Tan-Tar-A Resort, Old Kinderhook, Lodge of Four Seasons, and Margaritaville Lake Resort."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does transportation cost at Lake of the Ozarks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Rates vary based on vehicle type, distance, and duration. Airport shuttles start around $180 one-way. Hourly rentals start at $120/hour for Sprinter vans. Wedding packages start at $600. Contact us at (573) 206-9499 for a custom quote tailored to your needs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are your drivers licensed and insured?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. All Lake Ride Pros drivers are professionally trained, fully licensed, DOT compliant, and background-checked. We maintain full commercial liability insurance and all required permits and licenses for transportation services in Missouri. Your safety is our top priority."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What airports do you service?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We provide airport shuttle service to/from Kansas City International Airport (MCI), St. Louis Lambert Airport (STL), Springfield-Branson Airport (SGF), and Columbia Regional Airport (COU). We track flights in real-time and adjust pickup times for delays."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you accommodate large groups?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! We specialize in large group transportation. Our fleet can accommodate groups from 2 to 200+ passengers by coordinating multiple vehicles. Perfect for weddings, corporate events, conferences, and special occasions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer nightlife and bar hopping transportation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely! We're the go-to choice for Bagnell Dam Strip bar hopping and Lake of the Ozarks nightlife. Our party buses keep your group together and ensure everyone gets home safely. Perfect for bachelor/bachelorette parties, birthdays, and nights out."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is your cancellation policy?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cancellations made 48+ hours in advance receive a full refund (minus processing fee). Cancellations made 24-48 hours in advance receive a 50% refund. Cancellations less than 24 hours before service are non-refundable. Weather-related cancellations are evaluated case-by-case."
       }
     }
   ]

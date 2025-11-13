@@ -40,16 +40,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? getMediaUrl(service.image.url)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
+  // Enhanced title with location
+  const title = `${service.title} at Lake Ozarks | Lake Ride Pros`;
+
+  // Enhanced description with location + CTA
+  const metaDescription = description
+    ? `${description.slice(0, 140)} at Lake of the Ozarks. Book now!`
+    : `Professional ${service.title.toLowerCase()} at Lake of the Ozarks, Missouri. Professional drivers, luxury vehicles, 24/7 service. Book your ride today.`;
+
   return {
-    title: `${service.title} | Lake Ride Pros`,
-    description: description.slice(0, 160),
-    keywords: `${service.title}, Lake of the Ozarks transportation, luxury transportation, professional drivers, ${service.slug}`,
+    title,
+    description: metaDescription.slice(0, 160),
+    keywords: `${service.title}, Lake of the Ozarks transportation, luxury transportation Missouri, ${service.slug.replace(/-/g, ' ')}, professional drivers, Lake Ozarks, Osage Beach`,
     alternates: {
       canonical: `https://www.lakeridepros.com/services/${slug}`,
     },
     openGraph: {
-      title: `${service.title} | Lake Ride Pros`,
-      description: description.slice(0, 160),
+      title,
+      description: metaDescription.slice(0, 160),
       url: `https://www.lakeridepros.com/services/${slug}`,
       siteName: 'Lake Ride Pros',
       images: [
@@ -65,8 +73,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${service.title} | Lake Ride Pros`,
-      description: description.slice(0, 160),
+      title,
+      description: metaDescription.slice(0, 160),
       images: [imageUrl],
     },
     robots: {

@@ -18,8 +18,8 @@ import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schema
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
-  title: '#1 Lake of the Ozarks Transportation | Lake Ride Pros',
-  description: 'The Lake\'s most trusted luxury transportation. Weddings, nightlife, airports, corporate. Professional drivers, immaculate fleet, 24/7 service. Book your ride.',
+  title: 'Lake of the Ozarks Transportation | Weddings, Airport, Nightlife | Lake Ride Pros',
+  description: 'Premier luxury transportation at Lake of the Ozarks. Wedding shuttles, airport transfers (MCI, STL, SGF), nightlife party buses. Professional drivers, 24/7 service.',
   keywords: [
     'Lake of the Ozarks transportation',
     'luxury transportation Missouri',
@@ -27,7 +27,9 @@ export const metadata: Metadata = {
     'wedding transportation',
     'wine tour shuttle',
     'Osage Beach limo service',
-    'bachelor party bus'
+    'bachelor party bus',
+    'transportation near me Lake Ozarks',
+    'shuttle service Osage Beach'
   ],
   openGraph: {
     type: 'website',
@@ -285,25 +287,25 @@ export default async function HomePage() {
             Most Requested Services
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link href="/wedding-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+            <Link href="/services/wedding-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
               <h3 className="font-bold text-lg mb-2 group-hover:text-white">Wedding Transportation</h3>
               <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
                 Stress-free shuttles for your big day
               </p>
             </Link>
-            <Link href="/airport-shuttle" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+            <Link href="/services/airport-shuttle" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
               <h3 className="font-bold text-lg mb-2 group-hover:text-white">Airport Shuttle</h3>
               <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
                 MCI, STL, SGF airport transfers
               </p>
             </Link>
-            <Link href="/bachelor-party-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+            <Link href="/services/bachelor-party-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
               <h3 className="font-bold text-lg mb-2 group-hover:text-white">Party Bus Rental</h3>
               <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
                 Safe nightlife transportation
               </p>
             </Link>
-            <Link href="/corporate-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+            <Link href="/services/corporate-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
               <h3 className="font-bold text-lg mb-2 group-hover:text-white">Corporate Travel</h3>
               <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
                 Executive car service

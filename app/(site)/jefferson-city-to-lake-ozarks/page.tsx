@@ -232,7 +232,7 @@ export default function JeffersonCityToLakeOzarksPage() {
               Popular Lake Trips from Jefferson City
             </h2>
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-              <Link href="/corporate-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-white transition-all">
+              <Link href="/services/corporate-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-white transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Corporate & Government Retreats</h3>
@@ -241,7 +241,7 @@ export default function JeffersonCityToLakeOzarksPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/wedding-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-white transition-all">
+              <Link href="/services/wedding-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-white transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Lake Weddings</h3>
@@ -250,7 +250,7 @@ export default function JeffersonCityToLakeOzarksPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/group-event-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-white transition-all">
+              <Link href="/services/group-event-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-white transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Family Reunions</h3>

@@ -144,19 +144,32 @@ function serializeNode(node: SerializedNode, index: number): React.ReactNode {
 
 export function serializeLexical(content: unknown): React.ReactNode {
   if (!content || typeof content !== 'object') {
+    console.warn('serializeLexical: Invalid content type:', typeof content);
     return null;
   }
 
   const lexicalContent = content as LexicalContent;
 
   if (!lexicalContent.root || !lexicalContent.root.children) {
+    console.warn('serializeLexical: Missing root or children');
     return null;
   }
 
   try {
-    return lexicalContent.root.children.map((node, index) => serializeNode(node, index));
+    const children = lexicalContent.root.children;
+    console.log('serializeLexical: Processing', children.length, 'nodes');
+    const result = children.map((node, index) => {
+      try {
+        return serializeNode(node, index);
+      } catch (nodeError) {
+        console.error('serializeLexical: Error processing node', index, nodeError);
+        return null; // Continue processing other nodes
+      }
+    });
+    console.log('serializeLexical: Successfully serialized content');
+    return result;
   } catch (error) {
-    console.error('Error serializing Lexical content:', error);
+    console.error('serializeLexical: Fatal error:', error);
     return null;
   }
 }

@@ -1,7 +1,21 @@
 import Link from 'next/link';
+import { getServices } from '@/lib/api/payload';
 
-export default function Footer() {
+export default async function Footer() {
   const currentYear = new Date().getFullYear();
+
+  // Fetch services dynamically from CMS
+  let dynamicServices: Array<{ name: string; href: string }> = [];
+  try {
+    const servicesResponse = await getServices({ limit: 100 });
+    dynamicServices = servicesResponse.docs.map((service) => ({
+      name: service.name,
+      href: `/services/${service.slug}`,
+    }));
+  } catch (error) {
+    console.error('Error fetching services for footer:', error);
+    // Fall back to empty array if fetch fails
+  }
 
   const footerLinks = {
     quickLinks: [
@@ -12,22 +26,7 @@ export default function Footer() {
       { name: 'Check Gift Card Balance', href: '/gift-card-balance' },
       { name: 'Shop', href: '/shop' },
     ],
-    services: [
-      { name: 'Taxi Service', href: '/taxi-service' },
-      { name: 'Airport Shuttle', href: '/airport-shuttle' },
-      { name: 'Corporate Transportation', href: '/corporate-transportation' },
-      { name: 'Wedding Transportation', href: '/wedding-transportation' },
-      { name: 'Bachelor Party Transport', href: '/bachelor-party-transportation' },
-      { name: 'Prom Transportation', href: '/prom-transportation' },
-      { name: 'Wine Tour Shuttle', href: '/wine-tour-shuttle' },
-      { name: 'Brewery Tours', href: '/brewery-tour-transportation' },
-      { name: 'Concert Transportation', href: '/concert-transportation' },
-      { name: 'Golf Transportation', href: '/golf-outing-transportation' },
-      { name: 'Charter Bus Service', href: '/charter-bus-service' },
-      { name: 'Group Events', href: '/group-event-transportation' },
-      { name: 'Lake Tours', href: '/lake-ozarks-tours' },
-      { name: "NYE Transportation", href: '/new-years-eve-transportation' },
-    ],
+    services: dynamicServices,
     partners: [
       { name: 'Wedding Partners', href: '/wedding-partners' },
       { name: 'Local Premier Partners', href: '/local-premier-partners' },

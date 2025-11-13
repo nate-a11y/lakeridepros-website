@@ -27,6 +27,21 @@ export default async function Footer() {
       { name: 'Shop', href: '/shop' },
     ],
     services: dynamicServices,
+    serviceAreas: [
+      { name: 'Osage Beach Transportation', href: '/transportation-osage-beach' },
+      { name: 'Camdenton Transportation', href: '/transportation-camdenton' },
+      { name: 'Lake Ozark Transportation', href: '/transportation-lake-ozark' },
+      { name: 'Columbia to Lake Ozarks', href: '/columbia-to-lake-ozarks' },
+      { name: 'Jefferson City to Lake', href: '/jefferson-city-to-lake-ozarks' },
+      { name: 'Springfield to Lake', href: '/springfield-to-lake-ozarks' },
+    ],
+    venues: [
+      { name: 'Tan-Tar-A Transportation', href: '/tan-tar-a-transportation' },
+      { name: 'Margaritaville Transportation', href: '/margaritaville-transportation' },
+      { name: 'Old Kinderhook Transportation', href: '/old-kinderhook-transportation' },
+      { name: 'Shootout Transportation', href: '/lake-ozarks-shootout-transportation' },
+      { name: 'Bikefest Transportation', href: '/bikefest-transportation' },
+    ],
     partners: [
       { name: 'Wedding Partners', href: '/wedding-partners' },
       { name: 'Local Premier Partners', href: '/local-premier-partners' },
@@ -47,7 +62,7 @@ export default async function Footer() {
   return (
     <footer className="bg-primary-dark dark:bg-dark-bg-primary text-white transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-8">
           {/* Column 1 - Quick Links */}
           <div>
             <h3 className="text-white font-bold mb-4 text-lg">Quick Links</h3>
@@ -82,7 +97,41 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 3 - Partners */}
+          {/* Column 3 - Service Areas */}
+          <div>
+            <h3 className="text-white font-bold mb-4 text-lg">Service Areas</h3>
+            <ul className="space-y-2">
+              {footerLinks.serviceAreas.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4 - Venues & Events */}
+          <div>
+            <h3 className="text-white font-bold mb-4 text-lg">Venues & Events</h3>
+            <ul className="space-y-2">
+              {footerLinks.venues.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 5 - Partners */}
           <div>
             <h3 className="text-white font-bold mb-4 text-lg">Partners</h3>
             <ul className="space-y-2">
@@ -99,7 +148,7 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 4 - Company */}
+          {/* Column 6 - Company */}
           <div>
             <h3 className="text-white font-bold mb-4 text-lg">Company</h3>
             <ul className="space-y-2">

@@ -68,6 +68,31 @@ const faqSchema = {
   ]
 }
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://www.lakeridepros.com'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Venues',
+      item: 'https://www.lakeridepros.com/services'
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Margaritaville Transportation',
+      item: 'https://www.lakeridepros.com/margaritaville-transportation'
+    }
+  ]
+}
+
 export default function MargaritavilleTransportationPage() {
   return (
     <>
@@ -78,6 +103,10 @@ export default function MargaritavilleTransportationPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

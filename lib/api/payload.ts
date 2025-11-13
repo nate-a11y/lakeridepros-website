@@ -259,6 +259,28 @@ export async function getTestimonials(featured = false): Promise<Testimonial[]> 
   return response.docs || [];
 }
 
+/**
+ * Get random testimonials for variety across pages
+ * @param count - Number of testimonials to return
+ * @param featured - Only return featured testimonials
+ */
+export async function getRandomTestimonials(count = 3, featured = false): Promise<Testimonial[]> {
+  const allTestimonials = await getTestimonials(featured);
+
+  if (allTestimonials.length <= count) {
+    return allTestimonials;
+  }
+
+  // Fisher-Yates shuffle algorithm for randomization
+  const shuffled = [...allTestimonials];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled.slice(0, count);
+}
+
 // Partners API
 export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   try {

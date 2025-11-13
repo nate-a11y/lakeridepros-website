@@ -9,7 +9,7 @@ export default async function Footer() {
   try {
     const servicesResponse = await getServices({ limit: 100 });
     dynamicServices = servicesResponse.docs.map((service) => ({
-      name: service.name,
+      name: service.title,
       href: `/services/${service.slug}`,
     }));
   } catch (error) {

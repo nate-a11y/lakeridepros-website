@@ -7,7 +7,7 @@ export default async function Header() {
   try {
     const servicesResponse = await getServices({ limit: 100 });
     services = servicesResponse.docs.map((service) => ({
-      name: service.name,
+      name: service.title,
       slug: service.slug,
     }));
   } catch (error) {

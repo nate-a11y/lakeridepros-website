@@ -71,6 +71,14 @@ const faqSchema = {
         '@type': 'Answer',
         text: 'Call us at (573) 206-9499 or use our online booking form. Provide your pickup/dropoff locations, date, time, passenger count, and service type. We\'ll provide an instant quote with no obligation to book.'
       }
+    },
+    {
+      '@type': 'Question',
+      name: 'What is "Stop the Clock" and how does it work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '"Stop the Clock" is our exclusive feature for hourly reservations that lets you pause the meter when you don\'t need the vehicle. After 2 hours into your reservation, you can pause for up to 4 hours ($200 flat fee, then $50/hour for additional time). Perfect for dinners, events, or downtime where you don\'t want to pay for idle vehicle time. Must be pre-planned at booking.'
+      }
     }
   ]
 }
@@ -127,14 +135,94 @@ export default function PricingPage() {
           </div>
         </section>
 
+        {/* Stop the Clock Feature */}
+        <section className="py-16 bg-gradient-to-br from-lrp-green to-lrp-green/80">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <Clock className="w-16 h-16 text-white mx-auto mb-6" />
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Introducing "Stop the Clock" ⏱️
+              </h2>
+              <p className="text-white/90 text-xl mb-8">
+                Our exclusive feature for hourly reservations — enjoy your event without paying for idle time
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-2 border-white/20">
+                  <h3 className="text-xl font-bold text-white mb-3">How It Works</h3>
+                  <ul className="space-y-3 text-left text-white/90">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
+                      <span>Available after 2 hours into your reservation</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
+                      <span>Pause the clock for up to 4 hours</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
+                      <span>Must be pre-planned at booking time</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
+                      <span>Service resumes when you're ready</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-2 border-white/20">
+                  <h3 className="text-xl font-bold text-white mb-3">Pricing</h3>
+                  <div className="space-y-4 text-left">
+                    <div>
+                      <div className="text-3xl font-bold text-white mb-1">$200</div>
+                      <p className="text-white/90 text-sm">First up to 4 hours paused</p>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-white mb-1">$50<span className="text-lg">/hour</span></div>
+                      <p className="text-white/90 text-sm">Each additional hour beyond 4</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-2 border-white/20">
+                <h3 className="text-xl font-bold text-white mb-4">Perfect For</h3>
+                <div className="grid md:grid-cols-3 gap-4 text-white/90">
+                  <div>
+                    <p className="font-semibold text-white mb-1">Private Dinners</p>
+                    <p className="text-sm">Enjoy dinner without paying for idle vehicle time</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white mb-1">Wedding Events</p>
+                    <p className="text-sm">Pause during ceremony or cocktail hour</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white mb-1">Corporate Functions</p>
+                    <p className="text-sm">Attend meetings while saving on hourly rates</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <p className="text-white/90 text-sm">
+                  <strong className="text-white">Example:</strong> Book a 6-hour reservation. Use the vehicle for 3 hours, "Stop the Clock" during a 2-hour private dinner ($200), then resume service for your return trip. You only pay for 4 hours of active service + $200 pause fee, instead of the full 6 hours.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Hourly Rental Rates */}
         <section className="py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
               Hourly Rental Rates
             </h2>
-            <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
+            <p className="text-center text-gray-600 dark:text-lrp-gray mb-8 max-w-2xl mx-auto">
               Perfect for bar hopping, nightlife, local events, and flexible transportation needs
+            </p>
+            <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
+              <strong>Add "Stop the Clock"</strong> to any hourly reservation and pause your meter when you don't need the vehicle
             </p>
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
@@ -506,6 +594,16 @@ export default function PricingPage() {
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
                   Call us at (573) 206-9499 or use our online booking form. Provide your pickup/dropoff locations, date, time, passenger count, and service type. We'll provide an instant quote with no obligation to book.
+                </p>
+              </details>
+
+              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-lrp-green" />
+                  What is "Stop the Clock" and how does it work?
+                </summary>
+                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                  "Stop the Clock" is our exclusive feature for hourly reservations that lets you pause the meter when you don't need the vehicle. After 2 hours into your reservation, you can pause for up to 4 hours for a flat fee of $200 (then $50/hour for additional time beyond 4 hours). This is perfect for private dinners, wedding ceremonies, corporate meetings, or any event where you don't want to pay for idle vehicle time. The pause must be pre-planned at booking time so we can staff and schedule accordingly. For example: Book a 6-hour reservation, use the vehicle for 3 hours, pause during a 2-hour dinner ($200), then resume service for your return trip — you only pay for 4 hours of active service + the $200 pause fee instead of the full 6 hours.
                 </p>
               </details>
 

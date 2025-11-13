@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function ServicesPage() {
-  const servicesData = await getServices().catch(() => ({ docs: [] }));
+  const servicesData = await getServices({ limit: 100 }).catch(() => ({ docs: [] }));
   const services = servicesData.docs || [];
 
   // Structured data for SEO

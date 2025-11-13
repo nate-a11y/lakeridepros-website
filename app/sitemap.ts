@@ -43,21 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/gift-card-balance', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/shop', priority: 0.7, changeFrequency: 'weekly' as const },
 
-    // Hardcoded service pages
-    { url: '/airport-shuttle', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/wedding-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/corporate-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/taxi-service', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/bachelor-party-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/prom-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/wine-tour-shuttle', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/brewery-tour-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/concert-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/golf-outing-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/charter-bus-service', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/group-event-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/lake-ozarks-tours', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/new-years-eve-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+    // Service pages are now dynamically generated from CMS below
 
     // Fleet pages
     { url: '/fleet/limo-bus', priority: 0.9, changeFrequency: 'monthly' as const },
@@ -70,6 +56,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/wedding-partners', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/local-premier-partners', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/trusted-referral-partners', priority: 0.7, changeFrequency: 'monthly' as const },
+
+    // Local landing pages
+    { url: '/transportation-osage-beach', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/transportation-camdenton', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/transportation-lake-ozark', priority: 0.9, changeFrequency: 'monthly' as const },
 
     // Legal pages
     { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },

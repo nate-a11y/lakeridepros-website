@@ -36,6 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/book', priority: 0.9, changeFrequency: 'monthly' as const },
     { url: '/services', priority: 0.9, changeFrequency: 'weekly' as const },
     { url: '/fleet', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/pricing', priority: 0.9, changeFrequency: 'monthly' as const },
     { url: '/about-us', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/contact', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/blog', priority: 0.8, changeFrequency: 'daily' as const },
@@ -43,35 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/gift-card-balance', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/shop', priority: 0.7, changeFrequency: 'weekly' as const },
 
-    // Core static service pages (priority 1.0 for main revenue drivers)
-    { url: '/wedding-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
-    { url: '/airport-shuttle', priority: 1.0, changeFrequency: 'monthly' as const },
-    { url: '/corporate-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
-    { url: '/nightlife-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
-    { url: '/private-aviation-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
-
-    // Venue-specific landing pages (high-intent keywords)
-    { url: '/tan-tar-a-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/margaritaville-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/old-kinderhook-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
-
-    // Event-specific landing pages (seasonal high-intent keywords)
-    { url: '/lake-ozarks-shootout-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/bikefest-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
-
-    // Secondary static service pages
-    { url: '/bachelor-party-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/wine-tour-shuttle', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/brewery-tour-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/group-event-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/charter-bus-service', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/concert-transportation', priority: 0.7, changeFrequency: 'monthly' as const },
-    { url: '/golf-outing-transportation', priority: 0.7, changeFrequency: 'monthly' as const },
-    { url: '/new-years-eve-transportation', priority: 0.7, changeFrequency: 'monthly' as const },
-    { url: '/prom-transportation', priority: 0.7, changeFrequency: 'monthly' as const },
-    { url: '/taxi-service', priority: 0.7, changeFrequency: 'monthly' as const },
-
-    // Service pages from CMS are also included below (serviceSitemapEntries)
+    // All service pages are now CMS-driven and included via serviceSitemapEntries below
 
     // Fleet pages
     { url: '/fleet/limo-bus', priority: 0.9, changeFrequency: 'monthly' as const },
@@ -94,6 +67,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/columbia-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/jefferson-city-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/springfield-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/st-louis-to-lake-ozarks', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/kansas-city-to-lake-ozarks', priority: 0.9, changeFrequency: 'monthly' as const },
+
+    // Specialty landing pages
+    { url: '/bagnell-dam-strip-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/lake-ozarks-airport-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
 
     // Legal pages
     { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { MapPin, Phone, CheckCircle, Star, ArrowRight, Home } from 'lucide-react'
 import Link from 'next/link'
+import RelatedServices from '@/components/RelatedServices'
 
 export const metadata: Metadata = {
   title: 'Transportation in Lake Ozark MO | Lake Ride Pros',
@@ -333,6 +334,35 @@ export default function LakeOzarkTransportationPage() {
             </div>
           </div>
         </section>
+
+        {/* Testimonial */}
+        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
+              <div className="flex gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
+                ))}
+              </div>
+              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
+                "Our company held a corporate retreat at Lodge of Four Seasons and Lake Ride Pros handled all our transportation needs. They navigated the waterfront property perfectly and shuttled our executives between the Lodge and off-site dinners. Professional and reliable service!"
+              </p>
+              <p className="font-bold text-lrp-black dark:text-white">
+                Michael P.
+              </p>
+              <p className="text-sm text-gray-600 dark:text-lrp-gray">
+                Corporate Event Coordinator, Lake Ozark
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Related Services */}
+        <RelatedServices services={[
+          { title: "Corporate Transportation", href: "/corporate-transportation", description: "Executive transportation for Lodge of Four Seasons events" },
+          { title: "Wedding Transportation", href: "/wedding-transportation", description: "Luxury wedding shuttles for waterfront venues" },
+          { title: "Airport Shuttle", href: "/airport-shuttle", description: "Direct transfers from MCI, STL, and SGF airports" }
+        ]} />
 
         {/* CTA Section */}
         <section className="py-16 bg-lrp-green">

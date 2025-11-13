@@ -2,9 +2,10 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { getServiceBySlug, getServices, getMediaUrl } from '@/lib/api/payload';
 import BookingWidget from '@/components/BookingWidget';
+import { DynamicIcon } from '@/lib/iconMapper';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -193,6 +194,11 @@ export default async function ServiceDetailPage({ params }: Props) {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {service.icon && (
+            <div className="mb-6 w-16 h-16 flex items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
+              <DynamicIcon name={service.icon} size={32} className="text-white" />
+            </div>
+          )}
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
             {service.title}
           </h1>

@@ -26,10 +26,19 @@ const collections = [
   { name: 'Users', icon: '👥', slug: 'users', color: '#4cbb17' },
 ]
 
+interface SyncStatus {
+  configured: boolean
+  lastSync?: string
+  totalGoogleReviews?: number
+}
+
 export const Dashboard: React.FC = () => {
   const [stats, setStats] = useState<CollectionStats[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null)
+  const [syncing, setSyncing] = useState(false)
+  const [syncMessage, setSyncMessage] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -84,6 +93,60 @@ export const Dashboard: React.FC = () => {
 
     fetchStats()
   }, [])
+
+  useEffect(() => {
+    const fetchSyncStatus = async () => {
+      try {
+        const response = await fetch('/api/sync-google-reviews', {
+          credentials: 'include',
+        })
+        if (response.ok) {
+          const data = await response.json()
+          setSyncStatus(data)
+        }
+      } catch (err) {
+        console.warn('Failed to fetch sync status:', err)
+      }
+    }
+
+    fetchSyncStatus()
+  }, [])
+
+  const handleSyncGoogleReviews = async () => {
+    setSyncing(true)
+    setSyncMessage(null)
+
+    try {
+      const apiKey = prompt('Enter sync API key (from SYNC_API_KEY env var):')
+      if (!apiKey) {
+        setSyncing(false)
+        return
+      }
+
+      const response = await fetch('/api/sync-google-reviews', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setSyncMessage(`✅ ${data.message} (Created: ${data.stats.created}, Updated: ${data.stats.updated}, Skipped: ${data.stats.skipped})`)
+        // Refresh stats
+        window.location.reload()
+      } else {
+        setSyncMessage(`❌ ${data.error || 'Sync failed'}`)
+      }
+    } catch (err) {
+      setSyncMessage(`❌ Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    } finally {
+      setSyncing(false)
+    }
+  }
 
   return (
     <div className="dashboard-container">
@@ -142,6 +205,73 @@ export const Dashboard: React.FC = () => {
                 {stats.find(s => s.slug === 'products')?.count || 0}
               </div>
               <div className="stat-label">Products Listed</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Google Reviews Sync Section */}
+      {syncStatus && (
+        <div className="dashboard-section">
+          <h2 className="section-title">Google Business Profile Integration</h2>
+          <div className="sync-card">
+            <div className="sync-header">
+              <div className="sync-icon">⭐</div>
+              <div>
+                <h3 className="sync-title">Google Reviews Sync</h3>
+                <p className="sync-description">
+                  Automatically import reviews from your Google Business Profile
+                </p>
+              </div>
+            </div>
+
+            <div className="sync-status">
+              {syncStatus.configured ? (
+                <>
+                  <div className="sync-stat">
+                    <span className="sync-stat-label">Status:</span>
+                    <span className="sync-stat-value status-active">✅ Configured</span>
+                  </div>
+                  <div className="sync-stat">
+                    <span className="sync-stat-label">Google Reviews:</span>
+                    <span className="sync-stat-value">{syncStatus.totalGoogleReviews || 0}</span>
+                  </div>
+                  {syncStatus.lastSync && (
+                    <div className="sync-stat">
+                      <span className="sync-stat-label">Last Sync:</span>
+                      <span className="sync-stat-value">
+                        {new Date(syncStatus.lastSync).toLocaleString()}
+                      </span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="sync-stat">
+                  <span className="sync-stat-label">Status:</span>
+                  <span className="sync-stat-value status-inactive">⚠️ Not Configured</span>
+                </div>
+              )}
+            </div>
+
+            {syncMessage && (
+              <div className={`sync-message ${syncMessage.includes('✅') ? 'success' : 'error'}`}>
+                {syncMessage}
+              </div>
+            )}
+
+            <div className="sync-actions">
+              <button
+                onClick={handleSyncGoogleReviews}
+                disabled={!syncStatus.configured || syncing}
+                className="dashboard-btn dashboard-btn-primary"
+              >
+                {syncing ? '⏳ Syncing...' : '🔄 Sync Reviews Now'}
+              </button>
+              {!syncStatus.configured && (
+                <p className="sync-help-text">
+                  Configure Google API credentials in environment variables to enable sync.
+                </p>
+              )}
             </div>
           </div>
         </div>

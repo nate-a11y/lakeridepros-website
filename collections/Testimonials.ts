@@ -4,7 +4,7 @@ export const Testimonials: CollectionConfig = {
   slug: 'testimonials',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'rating', 'featured', 'order'],
+    defaultColumns: ['name', 'rating', 'source', 'featured', 'order'],
   },
   access: {
     // Allow public read access to testimonials
@@ -75,6 +75,48 @@ export const Testimonials: CollectionConfig = {
       type: 'number',
       admin: {
         description: 'Display order (lower numbers appear first)',
+      },
+    },
+    {
+      name: 'source',
+      type: 'select',
+      required: true,
+      defaultValue: 'manual',
+      options: [
+        { label: 'Manual Entry', value: 'manual' },
+        { label: 'Google Business Profile', value: 'google' },
+        { label: 'Facebook', value: 'facebook' },
+        { label: 'Yelp', value: 'yelp' },
+        { label: 'Other', value: 'other' },
+      ],
+      admin: {
+        description: 'Source of this testimonial',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'externalId',
+      type: 'text',
+      admin: {
+        description: 'External review ID (e.g., Google Review ID) for deduplication',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'externalUrl',
+      type: 'text',
+      admin: {
+        description: 'Link to original review (if from external source)',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'syncedAt',
+      type: 'date',
+      admin: {
+        description: 'Last time this review was synced from external source',
+        position: 'sidebar',
+        readOnly: true,
       },
     },
   ],

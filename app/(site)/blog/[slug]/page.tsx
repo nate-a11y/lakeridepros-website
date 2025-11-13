@@ -47,12 +47,55 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
+  const description = post.excerpt
+    ? post.excerpt.substring(0, 155)
+    : post.title.substring(0, 155);
+  const imageUrl = post.featuredImage
+    ? getMediaUrl(post.featuredImage.url)
+    : 'https://www.lakeridepros.com/og-image.jpg';
+
   return {
-    title: `${post.title} | Lake Ride Pros Blog`,
-    description: post.excerpt || post.title,
-    openGraph: post.featuredImage ? {
-      images: [getMediaUrl(post.featuredImage.url)],
-    } : undefined,
+    title: `${post.title} | Lake Ozarks Transportation Blog`,
+    description: `${description}. Expert tips from Lake Ride Pros.`,
+    keywords: post.tags ? `${post.tags.join(', ')}, Lake of the Ozarks, transportation tips` : 'Lake of the Ozarks, transportation, travel tips',
+    alternates: {
+      canonical: `https://www.lakeridepros.com/blog/${slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description: description,
+      url: `https://www.lakeridepros.com/blog/${slug}`,
+      siteName: 'Lake Ride Pros',
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      locale: 'en_US',
+      type: 'article',
+      publishedTime: post.publishedDate,
+      modifiedTime: post.updatedAt,
+      authors: [getAuthorName(post.author)],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: description,
+      images: [imageUrl],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
   };
 }
 
@@ -64,8 +107,73 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  // Article Schema for SEO
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt || post.title,
+    image: post.featuredImage
+      ? getMediaUrl(post.featuredImage.url)
+      : 'https://www.lakeridepros.com/og-image.jpg',
+    author: {
+      '@type': typeof post.author === 'string' || !post.author ? 'Organization' : 'Person',
+      name: getAuthorName(post.author),
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Lake Ride Pros',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.lakeridepros.com/Color%20logo%20-%20no%20background.png',
+      },
+    },
+    datePublished: post.publishedDate || post.createdAt,
+    dateModified: post.updatedAt || post.publishedDate || post.createdAt,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://www.lakeridepros.com/blog/${slug}`,
+    },
+  };
+
+  // Breadcrumb Schema
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.lakeridepros.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: 'https://www.lakeridepros.com/blog',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: `https://www.lakeridepros.com/blog/${slug}`,
+      },
+    ],
+  };
+
   return (
     <>
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       {/* Hero Section */}
       <section className="py-12 bg-neutral-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { Briefcase, Clock, Shield, Award, CheckCircle, Star, Phone } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Corporate Transportation Lake of the Ozarks | Executive Business Travel',
-  description: 'Professional corporate and executive transportation services at Lake of the Ozarks. Business meetings, conferences, and client entertainment. Starting at $150/hour.',
-  keywords: ['corporate transportation Lake Ozarks', 'executive car service Missouri', 'business travel Lake Ozarks', 'corporate shuttle service', 'executive transportation'],
+  title: 'Corporate Transportation Lake Ozarks | Executive Car Service',
+  description: 'Professional corporate transportation at Lake of the Ozarks. Executive cars, shuttles for meetings, conferences, retreats. Impress clients with premium service.',
+  keywords: ['corporate transportation Lake Ozarks', 'executive car service', 'business travel Lake Ozarks', 'corporate shuttle Missouri', 'executive transportation', 'Tan-Tar-A corporate events'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/corporate-transportation',
   },
@@ -17,11 +17,19 @@ const structuredData = {
   provider: {
     '@type': 'Organization',
     name: 'Lake Ride Pros',
-    telephone: '(573) 206-9499',
+    telephone: '+1-573-206-9499',
+    url: 'https://www.lakeridepros.com',
   },
   serviceType: 'Corporate Transportation',
-  areaServed: 'Lake of the Ozarks, Missouri',
-  description: 'Professional corporate and executive transportation services for business meetings, conferences, and client entertainment',
+  areaServed: {
+    '@type': 'City',
+    name: 'Lake of the Ozarks',
+    containedIn: {
+      '@type': 'State',
+      name: 'Missouri'
+    }
+  },
+  description: 'Professional corporate and executive transportation services for business meetings, conferences, and client entertainment at Lake of the Ozarks',
   offers: {
     '@type': 'Offer',
     priceSpecification: {

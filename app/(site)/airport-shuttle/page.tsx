@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { Plane, Clock, Shield, Users, CheckCircle, Star, Phone } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Airport Shuttle Service Lake of the Ozarks | KC, STL, Springfield',
-  description: 'Professional airport shuttle service to/from Kansas City, St. Louis, and Springfield airports. Reliable transportation to Lake of the Ozarks. Starting at $120/hour.',
-  keywords: ['airport shuttle Lake Ozarks', 'Kansas City airport transportation', 'STL airport shuttle', 'Springfield airport transfer', 'Lake Ozarks airport service'],
+  title: 'Airport Shuttle Lake Ozarks | KC, STL, Springfield Transfer',
+  description: 'Reliable airport transfers from Kansas City, St. Louis & Springfield to Lake of the Ozarks. Professional drivers, flight tracking, on-time service. Book your shuttle!',
+  keywords: ['Lake Ozarks airport shuttle', 'Kansas City airport transfer', 'STL airport shuttle', 'Springfield airport Lake Ozarks', 'MCI to Lake Ozarks', 'airport transportation Missouri'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/airport-shuttle',
   },
@@ -17,11 +17,19 @@ const structuredData = {
   provider: {
     '@type': 'Organization',
     name: 'Lake Ride Pros',
-    telephone: '(573) 206-9499',
+    telephone: '+1-573-206-9499',
+    url: 'https://www.lakeridepros.com',
   },
   serviceType: 'Airport Transportation',
-  areaServed: 'Lake of the Ozarks, Missouri',
-  description: 'Professional airport shuttle service connecting Lake of the Ozarks to Kansas City, St. Louis, and Springfield airports',
+  areaServed: {
+    '@type': 'City',
+    name: 'Lake of the Ozarks',
+    containedIn: {
+      '@type': 'State',
+      name: 'Missouri'
+    }
+  },
+  description: 'Professional airport shuttle service connecting Lake of the Ozarks to Kansas City (MCI), St. Louis (STL), and Springfield (SGF) airports',
   offers: {
     '@type': 'Offer',
     priceSpecification: {

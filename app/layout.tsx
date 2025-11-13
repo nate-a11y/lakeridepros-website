@@ -4,8 +4,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
-  title: "Lake Ride Pros - Premium Luxury Transportation at Lake of the Ozarks",
-  description: "Experience premium luxury transportation services at Lake of the Ozarks, Missouri. Professional, reliable, and comfortable rides for all occasions.",
+  title: "Lake Ride Pros | Luxury Transportation at Lake of the Ozarks",
+  description: "Premium luxury transportation at Lake of the Ozarks, Missouri. Professional drivers, 24/7 service, luxury vehicles for all occasions. Book your ride today!",
   keywords: ["luxury transportation", "Lake of the Ozarks", "Missouri", "limousine service", "airport transfer", "charter service"],
   openGraph: {
     title: "Lake Ride Pros - Premium Luxury Transportation",

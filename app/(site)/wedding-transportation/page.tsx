@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import { Heart, Shield, Users, Calendar, CheckCircle, Star, Phone } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Wedding Transportation Lake of the Ozarks | Luxury Shuttle Service',
-  description: 'Professional wedding transportation at Lake of the Ozarks. Reliable shuttle service for bridal parties, guests, and wedding events. Custom packages for any group size.',
-  keywords: ['wedding transportation Lake Ozarks', 'wedding shuttle service', 'bridal party transportation', 'Lake of the Ozarks wedding transport', 'luxury wedding shuttle'],
+  title: 'Lake Ozarks Wedding Transportation | Bridal Shuttle Service',
+  description: 'Stress-free wedding shuttles at Lake of the Ozarks. Bridal party transport, guest shuttles, luxury limos. Serving Tan-Tar-A, Old Kinderhook + all venues.',
+  keywords: ['Lake Ozarks wedding transportation', 'wedding shuttle service', 'bridal party limo', 'Lake Ozarks wedding venues', 'Tan-Tar-A transportation', 'Old Kinderhook shuttle'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/wedding-transportation',
   },
@@ -17,11 +17,19 @@ const structuredData = {
   provider: {
     '@type': 'Organization',
     name: 'Lake Ride Pros',
-    telephone: '(573) 206-9499',
+    telephone: '+1-573-206-9499',
+    url: 'https://www.lakeridepros.com',
   },
   serviceType: 'Wedding Transportation',
-  areaServed: 'Lake of the Ozarks, Missouri',
-  description: 'Professional luxury wedding transportation and shuttle service for bridal parties and wedding guests',
+  areaServed: {
+    '@type': 'City',
+    name: 'Lake of the Ozarks',
+    containedIn: {
+      '@type': 'State',
+      name: 'Missouri'
+    }
+  },
+  description: 'Professional luxury wedding transportation and shuttle service for bridal parties and wedding guests at Lake of the Ozarks',
 }
 
 export default function WeddingTransportationPage() {

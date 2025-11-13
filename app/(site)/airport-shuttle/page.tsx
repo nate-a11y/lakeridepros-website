@@ -42,12 +42,35 @@ const structuredData = {
   },
 }
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://www.lakeridepros.com'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Airport Shuttle',
+      item: 'https://www.lakeridepros.com/airport-shuttle'
+    }
+  ]
+}
+
 export default function AirportShuttlePage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

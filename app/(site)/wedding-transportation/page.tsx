@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Heart, Shield, Users, Calendar, CheckCircle, Star, Phone } from 'lucide-react'
+import RelatedServices from '@/components/RelatedServices'
 
 export const metadata: Metadata = {
   title: 'Lake of the Ozarks Wedding Transportation | Stress-Free',
@@ -313,6 +314,13 @@ export default function WeddingTransportationPage() {
             </div>
           </div>
         </section>
+
+        {/* Related Services */}
+        <RelatedServices services={[
+          { title: "Airport Shuttle", href: "/airport-shuttle", description: "Guest airport pickups from MCI, STL, and SGF airports" },
+          { title: "Bachelor Party Transportation", href: "/bachelor-party-transportation", description: "Pre-wedding celebrations with party bus rentals" },
+          { title: "Corporate Transportation", href: "/corporate-transportation", description: "Executive service for rehearsal dinners and business guests" }
+        ]} />
 
         {/* CTA Section */}
         <section className="py-16 bg-lrp-green">

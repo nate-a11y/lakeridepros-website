@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { PartyPopper, Shield, Users, Clock, CheckCircle, Star, Phone } from 'lucide-react'
+import RelatedServices from '@/components/RelatedServices'
 
 export const metadata: Metadata = {
   title: 'Lake Ozarks Party Bus & Nightlife Transportation | Safe Rides',
@@ -313,6 +314,13 @@ export default function NightlifeTransportationPage() {
             </div>
           </div>
         </section>
+
+        {/* Related Services */}
+        <RelatedServices services={[
+          { title: "Bachelor Party Transportation", href: "/bachelor-party-transportation", description: "Epic bachelor/bachelorette party experiences" },
+          { title: "Wine Tour Shuttle", href: "/wine-tour-shuttle", description: "Safe transportation for Lake Ozarks winery tours" },
+          { title: "Concert Transportation", href: "/concert-transportation", description: "Group shuttles to concerts and live music events" }
+        ]} />
 
         {/* CTA Section */}
         <section className="py-16 bg-lrp-green">

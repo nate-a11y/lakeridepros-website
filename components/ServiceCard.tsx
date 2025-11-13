@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Service } from '@/lib/types';
 import { getMediaUrl } from '@/lib/api/payload';
+import { DynamicIcon } from '@/lib/iconMapper';
 
 interface ServiceCardProps {
   service: Service;
@@ -24,9 +25,16 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         />
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
-          {service.title}
-        </h3>
+        <div className="flex items-start gap-3 mb-2">
+          {service.icon && (
+            <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-primary-light/10 text-primary dark:text-primary-light">
+              <DynamicIcon name={service.icon} size={20} />
+            </div>
+          )}
+          <h3 className="text-xl font-semibold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
+            {service.title}
+          </h3>
+        </div>
         <p className="text-neutral-600 dark:text-neutral-300 text-sm line-clamp-3">
           {service.shortDescription || service.description}
         </p>

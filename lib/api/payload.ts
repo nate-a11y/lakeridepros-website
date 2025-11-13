@@ -171,6 +171,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
         published: { equals: true }
       }),
       depth: 2,
+      limit: 100, // Ensure we get the response even if there are many posts
     },
   });
 
@@ -183,7 +184,15 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   console.log('📦 getBlogPostBySlug API response:', {
     totalDocs: posts.length,
     posts: posts.map(p => ({ id: p.id, title: p.title, slug: p.slug })),
-    matchingPost: matchingPost ? { id: matchingPost.id, title: matchingPost.title, slug: matchingPost.slug } : null
+    matchingPost: matchingPost ? {
+      id: matchingPost.id,
+      title: matchingPost.title,
+      slug: matchingPost.slug,
+      contentType: typeof matchingPost.content,
+      contentChildrenCount: matchingPost.content?.root?.children?.length,
+      hasContent: !!matchingPost.content,
+      contentSize: JSON.stringify(matchingPost.content || {}).length
+    } : null
   });
 
   return matchingPost || null;

@@ -83,7 +83,7 @@ export default async function ServicesPage() {
     url: 'https://www.lakeridepros.com',
     logo: 'https://www.lakeridepros.com/logo.png',
     description: 'Premium transportation services at Lake of the Ozarks',
-    telephone: '+1-573-346-4300',
+    telephone: '+1-573-206-9499',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Lake of the Ozarks',

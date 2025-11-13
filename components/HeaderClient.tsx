@@ -32,6 +32,23 @@ export default function HeaderClient({ services }: HeaderClientProps) {
     })),
   ];
 
+  // Featured/priority services for quick access
+  const featuredServiceSlugs = [
+    'wedding-transportation',
+    'airport-shuttle',
+    'nightlife-transportation',
+    'corporate-transportation',
+    'private-aviation-transportation',
+  ];
+
+  const featuredServices = services
+    .filter(s => featuredServiceSlugs.includes(s.slug))
+    .map(s => ({ name: s.name, href: `/services/${s.slug}` }));
+
+  const otherServices = services
+    .filter(s => !featuredServiceSlugs.includes(s.slug))
+    .map(s => ({ name: s.name, href: `/services/${s.slug}` }));
+
   const navigation = [
     { name: 'Home', href: '/' },
     {
@@ -100,8 +117,51 @@ export default function HeaderClient({ services }: HeaderClientProps) {
                     <ChevronDown className="w-4 h-4" />
                   </button>
 
-                  {((item.dropdownType === 'services' && servicesDropdownOpen) ||
-                    (item.dropdownType === 'partners' && partnersDropdownOpen)) && (
+                  {item.dropdownType === 'services' && servicesDropdownOpen && (
+                    <div className="absolute top-full left-0 pt-0 w-[600px] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border p-6 z-50">
+                      <div className="grid grid-cols-2 gap-6">
+                        {/* Featured Services Column */}
+                        <div>
+                          <div className="text-xs font-bold text-primary uppercase mb-3">Most Popular</div>
+                          <div className="space-y-1">
+                            {featuredServices.map((service) => (
+                              <Link
+                                key={service.name}
+                                href={service.href}
+                                className="block px-3 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors rounded-md"
+                              >
+                                {service.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Other Services Column - Scrollable */}
+                        <div>
+                          <div className="text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase mb-3">All Services</div>
+                          <div className="space-y-1 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+                            <Link
+                              href="/services"
+                              className="block px-3 py-2 text-sm font-semibold text-primary hover:bg-lrp-green/10 transition-colors rounded-md"
+                            >
+                              View All Services →
+                            </Link>
+                            {otherServices.map((service) => (
+                              <Link
+                                key={service.name}
+                                href={service.href}
+                                className="block px-3 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors rounded-md"
+                              >
+                                {service.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {item.dropdownType === 'partners' && partnersDropdownOpen && (
                     <div className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
@@ -186,7 +246,7 @@ export default function HeaderClient({ services }: HeaderClientProps) {
                       >
                         {item.name}
                       </Link>
-                      <div className="pl-4 space-y-1">
+                      <div className="pl-4 space-y-1 max-h-[280px] overflow-y-auto pr-2">
                         {item.dropdownItems?.map((dropdownItem) => (
                           <Link
                             key={dropdownItem.name}

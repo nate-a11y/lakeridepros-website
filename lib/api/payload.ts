@@ -81,7 +81,20 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
       depth: 2,
     },
   });
-  return response.docs?.[0] || null;
+
+  // WORKAROUND: Payload API is not respecting the where clause for Services collection
+  // Filter manually in application code until the API issue is resolved
+  const services = response.docs || [];
+  const matchingService = services.find(service => service.slug === slug && service.active);
+
+  console.log('🔍 getServiceBySlug called with:', { slug });
+  console.log('📦 getServiceBySlug API response:', {
+    totalDocs: services.length,
+    services: services.map(s => ({ id: s.id, title: s.title, slug: s.slug })),
+    matchingService: matchingService ? { id: matchingService.id, title: matchingService.title, slug: matchingService.slug } : null
+  });
+
+  return matchingService || null;
 }
 
 // Vehicles API
@@ -111,7 +124,20 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
   const response = await fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', {
     params: { where: JSON.stringify({ slug: { equals: slug } }), depth: 2 },
   });
-  return response.docs?.[0] || null;
+
+  // WORKAROUND: Payload API is not respecting the where clause for Vehicles collection
+  // Filter manually in application code until the API issue is resolved
+  const vehicles = response.docs || [];
+  const matchingVehicle = vehicles.find(vehicle => vehicle.slug === slug);
+
+  console.log('🔍 getVehicleBySlug called with:', { slug });
+  console.log('📦 getVehicleBySlug API response:', {
+    totalDocs: vehicles.length,
+    vehicles: vehicles.map(v => ({ id: v.id, title: v.title, slug: v.slug })),
+    matchingVehicle: matchingVehicle ? { id: matchingVehicle.id, title: matchingVehicle.title, slug: matchingVehicle.slug } : null
+  });
+
+  return matchingVehicle || null;
 }
 
 // Blog API
@@ -147,7 +173,20 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
       depth: 2,
     },
   });
-  return response.docs?.[0] || null;
+
+  // WORKAROUND: Payload API is not respecting the where clause for BlogPosts collection
+  // Filter manually in application code until the API issue is resolved
+  const posts = response.docs || [];
+  const matchingPost = posts.find(post => post.slug === slug && post.published);
+
+  console.log('🔍 getBlogPostBySlug called with:', { slug });
+  console.log('📦 getBlogPostBySlug API response:', {
+    totalDocs: posts.length,
+    posts: posts.map(p => ({ id: p.id, title: p.title, slug: p.slug })),
+    matchingPost: matchingPost ? { id: matchingPost.id, title: matchingPost.title, slug: matchingPost.slug } : null
+  });
+
+  return matchingPost || null;
 }
 
 // Products API
@@ -184,7 +223,20 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
       depth: 2,
     },
   });
-  return response.docs?.[0] || null;
+
+  // WORKAROUND: Payload API is not respecting the where clause for Products collection
+  // Filter manually in application code until the API issue is resolved
+  const products = response.docs || [];
+  const matchingProduct = products.find(product => product.slug === slug && product.status === 'active');
+
+  console.log('🔍 getProductBySlug called with:', { slug });
+  console.log('📦 getProductBySlug API response:', {
+    totalDocs: products.length,
+    products: products.map(p => ({ id: p.id, name: p.name, slug: p.slug })),
+    matchingProduct: matchingProduct ? { id: matchingProduct.id, name: matchingProduct.name, slug: matchingProduct.slug } : null
+  });
+
+  return matchingProduct || null;
 }
 
 // Testimonials API
@@ -260,7 +312,20 @@ export async function getPageBySlug(slug: string): Promise<any | null> {
       })
     },
   });
-  return response.docs?.[0] || null;
+
+  // WORKAROUND: Payload API is not respecting the where clause for Pages collection
+  // Filter manually in application code until the API issue is resolved
+  const pages = response.docs || [];
+  const matchingPage = pages.find(page => page.slug === slug && page.published);
+
+  console.log('🔍 getPageBySlug called with:', { slug });
+  console.log('📦 getPageBySlug API response:', {
+    totalDocs: pages.length,
+    pages: pages.map(p => ({ id: p.id, title: p.title, slug: p.slug })),
+    matchingPage: matchingPage ? { id: matchingPage.id, title: matchingPage.title, slug: matchingPage.slug } : null
+  });
+
+  return matchingPage || null;
 }
 
 // Helper function to get media URL

@@ -50,6 +50,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/airport-transfers',
+        destination: '/services/airport-shuttle',
+        permanent: true,
+      },
+      {
+        source: '/services/airport-transfers',
+        destination: '/services/airport-shuttle',
+        permanent: true,
+      },
+      {
         source: '/corporate-transportation',
         destination: '/services/corporate-transportation',
         permanent: true,

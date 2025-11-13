@@ -198,6 +198,10 @@ export interface Testimonial {
   image?: Media;
   featured: boolean;
   order?: number;
+  source: 'manual' | 'google' | 'facebook' | 'yelp' | 'other';
+  externalId?: string;
+  externalUrl?: string;
+  syncedAt?: string;
   createdAt: string;
   updatedAt: string;
 }

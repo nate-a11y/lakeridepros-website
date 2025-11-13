@@ -66,6 +66,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/columbia-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/jefferson-city-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/springfield-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/st-louis-to-lake-ozarks', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/kansas-city-to-lake-ozarks', priority: 0.9, changeFrequency: 'monthly' as const },
+
+    // Specialty landing pages
+    { url: '/bagnell-dam-strip-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/lake-ozarks-airport-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
 
     // Legal pages
     { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },

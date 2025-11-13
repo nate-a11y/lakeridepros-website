@@ -31,9 +31,13 @@ export default async function Footer() {
       { name: 'Osage Beach Transportation', href: '/transportation-osage-beach' },
       { name: 'Camdenton Transportation', href: '/transportation-camdenton' },
       { name: 'Lake Ozark Transportation', href: '/transportation-lake-ozark' },
+      { name: 'Kansas City to Lake Ozarks', href: '/kansas-city-to-lake-ozarks' },
+      { name: 'St. Louis to Lake Ozarks', href: '/st-louis-to-lake-ozarks' },
       { name: 'Columbia to Lake Ozarks', href: '/columbia-to-lake-ozarks' },
       { name: 'Jefferson City to Lake', href: '/jefferson-city-to-lake-ozarks' },
       { name: 'Springfield to Lake', href: '/springfield-to-lake-ozarks' },
+      { name: 'Bagnell Dam Strip', href: '/bagnell-dam-strip-transportation' },
+      { name: 'Airport Transportation', href: '/lake-ozarks-airport-transportation' },
     ],
     venues: [
       { name: 'Tan-Tar-A Transportation', href: '/tan-tar-a-transportation' },

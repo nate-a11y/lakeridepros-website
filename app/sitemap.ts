@@ -43,7 +43,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/gift-card-balance', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/shop', priority: 0.7, changeFrequency: 'weekly' as const },
 
-    // Service pages are now dynamically generated from CMS below
+    // Core static service pages (priority 1.0 for main revenue drivers)
+    { url: '/wedding-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
+    { url: '/airport-shuttle', priority: 1.0, changeFrequency: 'monthly' as const },
+    { url: '/corporate-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
+    { url: '/nightlife-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
+
+    // Secondary static service pages
+    { url: '/bachelor-party-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/wine-tour-shuttle', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/brewery-tour-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/group-event-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/charter-bus-service', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/concert-transportation', priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/golf-outing-transportation', priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/new-years-eve-transportation', priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/prom-transportation', priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/taxi-service', priority: 0.7, changeFrequency: 'monthly' as const },
+
+    // Service pages from CMS are also included below (serviceSitemapEntries)
 
     // Fleet pages
     { url: '/fleet/limo-bus', priority: 0.9, changeFrequency: 'monthly' as const },

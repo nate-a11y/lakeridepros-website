@@ -37,7 +37,7 @@ const faqSchema = {
       name: 'How much does Lake of the Ozarks transportation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates at Lake of the Ozarks vary by service type. Airport shuttles from MCI start at $220, STL at $250. Hourly rentals for Sprinter vans start at $120/hour, limo buses at $150/hour. Wedding packages start at $600. Contact us at (573) 206-9499 for a custom quote.'
+        text: 'Transportation rates at Lake of the Ozarks vary by service type. Hourly rentals: Executive Sprinter $175/hr (tiered), Party Bus $130/hr (tiered), Mini Coach $275/hr flat. Airport shuttles and wedding packages are custom quoted based on distance, vehicle type, and guest count. All prices subject to 3% credit card processing fee. Contact us at (573) 206-9499 for exact quote.'
       }
     },
     {
@@ -227,22 +227,22 @@ export default function PricingPage() {
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Sprinter Van</h3>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">6-14 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green mb-2">$120<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum</p>
+                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Executive Sprinter</h3>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">Up to 13 passengers</p>
+                <div className="text-3xl font-bold text-lrp-green mb-2">$175<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum (4 hours weekends)</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Premium seating</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">First 3-4 hrs: $175/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Climate control</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">After: $155/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Bluetooth audio</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">Premium executive seating</span>
                   </li>
                 </ul>
               </div>
@@ -252,48 +252,51 @@ export default function PricingPage() {
                   MOST POPULAR
                 </div>
                 <Users className="w-10 h-10 text-white mb-4" />
-                <h3 className="text-xl font-bold mb-2">Limo Bus</h3>
+                <h3 className="text-xl font-bold mb-2">Party Bus</h3>
                 <p className="text-white/90 text-sm mb-4">Up to 14 passengers</p>
-                <div className="text-3xl font-bold mb-2">$150<span className="text-lg text-white/80">/hour</span></div>
-                <p className="text-sm text-white/80 mb-4">3-hour minimum</p>
+                <div className="text-3xl font-bold mb-2">$130<span className="text-lg text-white/80">/hour</span></div>
+                <p className="text-sm text-white/80 mb-4">3-hour minimum (4 hours weekends)</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">Party bus amenities</span>
+                    <span className="text-white/90">First 3-4 hrs: $130/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">LED lighting</span>
+                    <span className="text-white/90">After: $110/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">Premium sound system</span>
+                    <span className="text-white/90">LED lights & premium sound</span>
                   </li>
                 </ul>
               </div>
 
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Shuttle Bus</h3>
+                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Mini Coach</h3>
                 <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">Up to 37 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green mb-2">$180<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum</p>
+                <div className="text-3xl font-bold text-lrp-green mb-2">$275<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">2-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Large groups</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">Flat rate all hours</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Luggage capacity</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">Large group capacity</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Comfortable seating</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">Luggage space included</span>
                   </li>
                 </ul>
               </div>
             </div>
+            <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
+              <strong>Note:</strong> Weekend rates (Fri-Sun) have 4-hour minimums for Sprinter & Party Bus. Weekday minimums are 3 hours. All prices subject to 3% credit card processing fee.
+            </p>
           </div>
         </section>
 
@@ -304,21 +307,21 @@ export default function PricingPage() {
               Airport Shuttle Pricing
             </h2>
             <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
-              One-way rates from major airports to Lake of the Ozarks (Sprinter van, up to 6 passengers)
+              Call for exact quotes — pricing varies by vehicle type, distance, and final destination
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Springfield (SGF)</h3>
-                <div className="text-2xl font-bold text-lrp-green mb-1">$180+</div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1.5-2 hours</p>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">Round-trip discount available</p>
+                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Grand Glaize (KOZS)</h3>
+                <div className="text-2xl font-bold text-lrp-green mb-1">Call for Quote</div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">At Lake of the Ozarks</p>
+                <p className="text-xs text-gray-600 dark:text-lrp-gray">Private aviation & FBO service</p>
               </div>
 
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Kansas City (MCI)</h3>
-                <div className="text-2xl font-bold text-lrp-green mb-1">$220+</div>
+                <div className="text-2xl font-bold text-lrp-green mb-1">Call for Quote</div>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2-2.5 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Flight tracking included</p>
               </div>
@@ -326,21 +329,21 @@ export default function PricingPage() {
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">St. Louis (STL)</h3>
-                <div className="text-2xl font-bold text-lrp-green mb-1">$250+</div>
+                <div className="text-2xl font-bold text-lrp-green mb-1">Call for Quote</div>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2.5-3 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Delay adjustment included</p>
               </div>
 
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Grand Glaize (KOZS)</h3>
-                <div className="text-2xl font-bold text-lrp-green mb-1">$50+</div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">Local transfers</p>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">Private aviation ready</p>
+                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Springfield (SGF)</h3>
+                <div className="text-2xl font-bold text-lrp-green mb-1">Call for Quote</div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1.5-2 hours</p>
+                <p className="text-xs text-gray-600 dark:text-lrp-gray">Round-trip discounts available</p>
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
-              Larger vehicles and group rates available. Call for exact pricing based on your destination.
+              Airport shuttle pricing based on distance, vehicle type, and passenger count. Rates vary by destination address. Call (573) 206-9499 for instant quote.
             </p>
           </div>
         </section>
@@ -349,31 +352,31 @@ export default function PricingPage() {
         <section className="py-16">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
-              Wedding Transportation Packages
+              Wedding Transportation
             </h2>
             <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
-              All-inclusive packages for your Lake of the Ozarks wedding day
+              Custom packages based on hourly rates, guest count, and venue logistics
             </p>
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Essentials Package</h3>
-                <div className="text-3xl font-bold text-lrp-green mb-4">$600+</div>
+                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Intimate Weddings</h3>
+                <div className="text-3xl font-bold text-lrp-green mb-4">Custom Quote</div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">4-hour rental</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Up to 14 guests</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">1 vehicle (Sprinter van)</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Sprinter or Party Bus</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Up to 14 passengers</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">4-hour minimum (weekends)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Ceremony + reception transfer</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Hotel-to-venue shuttles</span>
                   </li>
                 </ul>
                 <Link href="/book" className="block w-full text-center bg-lrp-green hover:bg-lrp-green/90 text-white px-6 py-3 rounded-lg font-semibold transition-all">
@@ -383,22 +386,18 @@ export default function PricingPage() {
 
               <div className="bg-lrp-green p-8 rounded-lg text-white relative border-4 border-lrp-green-light">
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-lrp-green-light text-lrp-green text-xs font-bold px-4 py-2 rounded-full whitespace-nowrap">
-                  BEST VALUE
+                  MOST COMMON
                 </div>
-                <h3 className="text-xl font-bold mb-4">Premium Package</h3>
-                <div className="text-3xl font-bold mb-4">$1,200+</div>
+                <h3 className="text-xl font-bold mb-4">Standard Weddings</h3>
+                <div className="text-3xl font-bold mb-4">Custom Quote</div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">6-hour rental</span>
+                    <span className="text-white/90 text-sm">15-40 guests</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">2 vehicles available</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">Up to 28 passengers</span>
+                    <span className="text-white/90 text-sm">2-3 vehicles coordinated</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
@@ -406,7 +405,11 @@ export default function PricingPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">Dedicated coordinator</span>
+                    <span className="text-white/90 text-sm">Airport transfers available</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
+                    <span className="text-white/90 text-sm">"Stop the Clock" option</span>
                   </li>
                 </ul>
                 <Link href="/book" className="block w-full text-center bg-white text-lrp-green hover:bg-lrp-gray px-6 py-3 rounded-lg font-semibold transition-all">
@@ -415,28 +418,28 @@ export default function PricingPage() {
               </div>
 
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Elite Package</h3>
-                <div className="text-3xl font-bold text-lrp-green mb-4">Custom</div>
+                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Large Weddings</h3>
+                <div className="text-3xl font-bold text-lrp-green mb-4">Custom Quote</div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">8+ hour rental</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">50+ guests</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">3+ vehicles</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Multi-vehicle fleet</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">50+ passengers</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Continuous shuttle loops</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Airport pickups included</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Dedicated day-of coordinator</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Full weekend coverage</span>
+                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Full weekend packages</span>
                   </li>
                 </ul>
                 <a href="tel:5732069499" className="block w-full text-center bg-lrp-green hover:bg-lrp-green/90 text-white px-6 py-3 rounded-lg font-semibold transition-all">
@@ -445,7 +448,7 @@ export default function PricingPage() {
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
-              All wedding packages include: professional driver, fuel, insurance, route planning, and day-of coordination.
+              Wedding pricing based on hourly rates, vehicle type, guest count, and timeline. All packages include professional driver, fuel, insurance, and coordination. Call (573) 206-9499 for custom quote.
             </p>
           </div>
         </section>

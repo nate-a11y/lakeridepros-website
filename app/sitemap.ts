@@ -50,6 +50,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/nightlife-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
     { url: '/private-aviation-transportation', priority: 1.0, changeFrequency: 'monthly' as const },
 
+    // Venue-specific landing pages (high-intent keywords)
+    { url: '/tan-tar-a-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/margaritaville-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/old-kinderhook-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
+
+    // Event-specific landing pages (seasonal high-intent keywords)
+    { url: '/lake-ozarks-shootout-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/bikefest-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
+
     // Secondary static service pages
     { url: '/bachelor-party-transportation', priority: 0.9, changeFrequency: 'monthly' as const },
     { url: '/wine-tour-shuttle', priority: 0.8, changeFrequency: 'monthly' as const },

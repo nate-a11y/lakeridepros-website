@@ -59,6 +59,7 @@ export default function HeaderClient({ services }: HeaderClientProps) {
       dropdownItems: serviceDropdownItems,
     },
     { name: 'Fleet', href: '/fleet' },
+    { name: 'Pricing', href: '/pricing' },
     {
       name: 'Partners',
       href: '/wedding-partners',

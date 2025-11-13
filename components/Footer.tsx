@@ -22,6 +22,7 @@ export default async function Footer() {
       { name: 'Book a Ride', href: '/book' },
       { name: 'Services', href: '/services' },
       { name: 'Fleet', href: '/fleet' },
+      { name: 'Pricing', href: '/pricing' },
       { name: 'Gift Cards', href: '/gift-cards' },
       { name: 'Check Gift Card Balance', href: '/gift-card-balance' },
       { name: 'Shop', href: '/shop' },

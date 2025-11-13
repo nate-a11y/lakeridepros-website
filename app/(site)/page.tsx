@@ -18,8 +18,8 @@ import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schema
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
-  title: 'Lake of the Ozarks Luxury Transportation | Lake Ride Pros',
-  description: 'Premium transportation in Lake Ozarks. Party buses, shuttles, limo service for weddings, events, airport transfers. Professional drivers, 24/7 service. Book today!',
+  title: '#1 Lake of the Ozarks Transportation | Lake Ride Pros',
+  description: 'The Lake\'s most trusted luxury transportation. Weddings, nightlife, airports, corporate. Professional drivers, immaculate fleet, 24/7 service. Book your ride.',
   keywords: [
     'Lake of the Ozarks transportation',
     'luxury transportation Missouri',
@@ -278,8 +278,43 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* Popular Services Section */}
+      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white text-center mb-12">
+            Most Requested Services
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Link href="/wedding-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+              <h3 className="font-bold text-lg mb-2 group-hover:text-white">Wedding Transportation</h3>
+              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
+                Stress-free shuttles for your big day
+              </p>
+            </Link>
+            <Link href="/airport-shuttle" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+              <h3 className="font-bold text-lg mb-2 group-hover:text-white">Airport Shuttle</h3>
+              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
+                MCI, STL, SGF airport transfers
+              </p>
+            </Link>
+            <Link href="/bachelor-party-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+              <h3 className="font-bold text-lg mb-2 group-hover:text-white">Party Bus Rental</h3>
+              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
+                Safe nightlife transportation
+              </p>
+            </Link>
+            <Link href="/corporate-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
+              <h3 className="font-bold text-lg mb-2 group-hover:text-white">Corporate Travel</h3>
+              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
+                Executive car service
+              </p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Service Areas Section */}
-      <section aria-labelledby="service-areas" className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
+      <section aria-labelledby="service-areas" className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 id="service-areas" className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
@@ -411,6 +446,33 @@ export default async function HomePage() {
                 Absolutely. All Lake Ride Pros drivers are professionally trained, fully licensed, and background-checked.
                 We maintain full commercial liability insurance and all required permits and licenses for transportation
                 services in Missouri. Your safety is our top priority.
+              </p>
+            </details>
+
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                Who is the best transportation company at Lake of the Ozarks?
+              </summary>
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
+                Lake Ride Pros is the Lake's most trusted transportation provider, serving over 10,000 passengers annually. We're locally owned, professionally licensed, and specialize in weddings, corporate events, airport transfers, and nightlife transportation.
+              </p>
+            </details>
+
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                How do I get from STL airport to Lake of the Ozarks?
+              </summary>
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
+                Lake Ride Pros offers direct airport shuttle service from St. Louis Lambert International Airport (STL) to Lake of the Ozarks. We track your flight, meet you at baggage claim, and provide door-to-door service. Book online or call (573) 206-9499.
+              </p>
+            </details>
+
+            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
+              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
+                What's the safest way to bar hop on Bagnell Dam Strip?
+              </summary>
+              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
+                Book a Lake Ride Pros party bus or shuttle for Bagnell Dam Strip bar hopping. Our professional drivers know every venue, keep your group together, and ensure everyone gets home safely. Perfect for bachelor/bachelorette parties and group nights out.
               </p>
             </details>
           </div>

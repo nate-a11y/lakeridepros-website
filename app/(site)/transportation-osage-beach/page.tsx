@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { MapPin, Phone, CheckCircle, Star, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import RelatedServices from '@/components/RelatedServices'
 
 export const metadata: Metadata = {
   title: 'Transportation in Osage Beach MO | Lake Ride Pros',
@@ -372,6 +373,13 @@ export default function OsageBeachTransportationPage() {
             </div>
           </div>
         </section>
+
+        {/* Related Services */}
+        <RelatedServices services={[
+          { title: "Tan-Tar-A Transportation", href: "/tan-tar-a-transportation", description: "Dedicated shuttle service for Tan-Tar-A Resort events" },
+          { title: "Margaritaville Transportation", href: "/margaritaville-transportation", description: "Resort guest and event transportation for Margaritaville" },
+          { title: "Nightlife Transportation", href: "/nightlife-transportation", description: "Bagnell Dam Strip bar hopping and party bus rentals" }
+        ]} />
 
         {/* CTA Section */}
         <section className="py-16 bg-lrp-green">

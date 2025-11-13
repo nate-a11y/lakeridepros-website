@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { Heart, Shield, Users, Calendar, CheckCircle, Star, Phone } from 'lucide-react'
+import RelatedServices from '@/components/RelatedServices'
 
 export const metadata: Metadata = {
-  title: 'Lake Ozarks Wedding Transportation | Bridal Shuttle Service',
-  description: 'Stress-free wedding shuttles at Lake of the Ozarks. Bridal party transport, guest shuttles, luxury limos. Serving Tan-Tar-A, Old Kinderhook + all venues.',
+  title: 'Lake of the Ozarks Wedding Transportation | Stress-Free',
+  description: 'Your wedding day, flawless. Guest shuttles, bridal party limos, rehearsal transport. Serving Tan-Tar-A, Old Kinderhook, all Lake venues. Book your peace of mind.',
   keywords: ['Lake Ozarks wedding transportation', 'wedding shuttle service', 'bridal party limo', 'Lake Ozarks wedding venues', 'Tan-Tar-A transportation', 'Old Kinderhook shuttle'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/wedding-transportation',
@@ -32,12 +33,35 @@ const structuredData = {
   description: 'Professional luxury wedding transportation and shuttle service for bridal parties and wedding guests at Lake of the Ozarks',
 }
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://www.lakeridepros.com'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Wedding Transportation',
+      item: 'https://www.lakeridepros.com/wedding-transportation'
+    }
+  ]
+}
+
 export default function WeddingTransportationPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -313,6 +337,13 @@ export default function WeddingTransportationPage() {
             </div>
           </div>
         </section>
+
+        {/* Related Services */}
+        <RelatedServices services={[
+          { title: "Airport Shuttle", href: "/airport-shuttle", description: "Guest airport pickups from MCI, STL, and SGF airports" },
+          { title: "Bachelor Party Transportation", href: "/bachelor-party-transportation", description: "Pre-wedding celebrations with party bus rentals" },
+          { title: "Corporate Transportation", href: "/corporate-transportation", description: "Executive service for rehearsal dinners and business guests" }
+        ]} />
 
         {/* CTA Section */}
         <section className="py-16 bg-lrp-green">

@@ -33,12 +33,63 @@ const structuredData = {
   },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What\'s the minimum rental time for party buses?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our minimum rental is typically 4 hours for bachelor/bachelorette parties. Most groups book 5-8 hours to fully enjoy the Lake Ozarks nightlife without feeling rushed.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can we bring our own drinks on the party bus?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! Passengers 21+ can bring alcoholic beverages on board (no glass bottles). Our buses have coolers and cup holders. We provide complimentary water and ice.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What entertainment features do your party buses have?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our party buses feature premium sound systems, LED color-changing lighting, comfortable leather seating, climate control, and Bluetooth connectivity for your playlist. Some buses also have dance poles and bar areas.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How many people can fit on your party buses?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We have party buses ranging from 20-30 passengers, perfect for most bachelor/bachelorette groups. For larger parties, we can coordinate multiple vehicles to keep everyone together.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you help plan the bar crawl route?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely! Our drivers know the Lake Ozarks nightlife scene inside and out. We can recommend the best bars, clubs, and entertainment venues based on your group\'s preferences and party vibe.'
+      }
+    }
+  ]
+}
+
 export default function BachelorPartyTransportationPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

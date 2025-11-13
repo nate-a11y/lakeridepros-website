@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { Plane, Clock, Shield, Users, CheckCircle, Star, Phone } from 'lucide-react'
+import RelatedServices from '@/components/RelatedServices'
 
 export const metadata: Metadata = {
-  title: 'Airport Shuttle Lake Ozarks | KC, STL, Springfield Transfer',
-  description: 'Reliable airport transfers from Kansas City, St. Louis & Springfield to Lake of the Ozarks. Professional drivers, flight tracking, on-time service. Book your shuttle!',
+  title: 'Lake Ozarks Airport Shuttle | MCI, STL, SGF | On-Time',
+  description: 'Luxury airport transfers from Kansas City, St. Louis, Springfield to Lake of the Ozarks. Flight tracking, meet & greet, always on time. Book your ride today.',
   keywords: ['Lake Ozarks airport shuttle', 'Kansas City airport transfer', 'STL airport shuttle', 'Springfield airport Lake Ozarks', 'MCI to Lake Ozarks', 'airport transportation Missouri'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/airport-shuttle',
@@ -41,12 +42,35 @@ const structuredData = {
   },
 }
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://www.lakeridepros.com'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Airport Shuttle',
+      item: 'https://www.lakeridepros.com/airport-shuttle'
+    }
+  ]
+}
+
 export default function AirportShuttlePage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -325,6 +349,13 @@ export default function AirportShuttlePage() {
             </div>
           </div>
         </section>
+
+        {/* Related Services */}
+        <RelatedServices services={[
+          { title: "Corporate Transportation", href: "/corporate-transportation", description: "Executive car service for business travelers" },
+          { title: "Wedding Transportation", href: "/wedding-transportation", description: "Guest shuttles for weddings and special events" },
+          { title: "Private Aviation", href: "/private-aviation-transportation", description: "FBO ground transportation for private jet travelers" }
+        ]} />
 
         {/* CTA Section */}
         <section className="py-16 bg-lrp-green">

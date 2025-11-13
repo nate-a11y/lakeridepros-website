@@ -33,12 +33,63 @@ const structuredData = {
   },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How many breweries or wineries can we visit in one tour?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most brewery tours visit 3-4 stops over 4-6 hours. This allows time for tastings, tours, and enjoying the atmosphere without rushing. We can customize based on your pace and preferences.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you help plan the brewery tour route?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! Our drivers know the Lake Ozarks craft beverage scene. We can recommend breweries based on your beer style preferences, suggest optimal routes, and advise on timing and reservations if needed.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can we bring our own food or snacks on the tour?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely! We encourage bringing snacks and water for between stops. Many breweries also have food trucks or allow outside food. We provide coolers and can make restaurant stops if desired.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What\'s the ideal group size for a brewery tour?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Brewery tours work great for groups of 4-20. Smaller groups can use our SUVs or vans, while larger groups enjoy our party buses which add to the fun with music and mood lighting.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can we purchase bottles or growlers to take home?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! Most breweries and wineries sell bottles, cans, and growlers. Our vehicles have secure storage for your purchases. We\'ll make sure everything gets home safely with you.'
+      }
+    }
+  ]
+}
+
 export default function BreweryTourTransportationPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

@@ -33,12 +33,63 @@ const structuredData = {
   },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How many passengers can your charter buses accommodate?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our charter vehicles accommodate groups from 7 to 37 passengers. We have multiple vehicle sizes to fit your group perfectly. For groups larger than 37, we can coordinate multiple vehicles to keep everyone together.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What amenities are included in your charter buses?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our buses feature comfortable reclining seats, climate control, WiFi, power outlets, restrooms (on larger coaches), PA systems, and ample luggage storage. Specific amenities vary by bus size and type.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How far in advance should we book a charter bus?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For peak season (summer weekends, wedding season), book 4-8 weeks in advance. For corporate events and off-season travel, 2-4 weeks notice is usually sufficient. Last-minute bookings may be available - call us at (573) 206-9499.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you charge by the hour or by the mile?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Charter bus pricing depends on several factors including duration, distance, bus size, and season. We offer both hourly rates and flat-rate packages. Contact us with your event details for an accurate custom quote.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can we make multiple stops during our charter?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! Charter buses are perfect for multi-stop itineraries. We can accommodate brewery tours, winery visits, restaurant stops, attraction visits, and any custom route you need. Just share your itinerary when booking.'
+      }
+    }
+  ]
+}
+
 export default function CharterBusServicePage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -77,7 +128,7 @@ export default function CharterBusServicePage() {
                   Any Group Size
                 </h3>
                 <p className="text-gray-700 dark:text-lrp-gray">
-                  Accommodate groups from 20 to 100+ passengers. Luxury coaches with comfortable seating, climate control, and amenities.
+                  Accommodate groups from 7 to 37 passengers in a single vehicle. For larger groups, we coordinate multiple vehicles. Comfortable seating, climate control, and amenities.
                 </p>
               </div>
               <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
@@ -223,7 +274,7 @@ export default function CharterBusServicePage() {
                   How many passengers can your charter buses accommodate?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Our charter bus fleet ranges from minibuses (20-30 passengers) to full-size motor coaches (40-56 passengers). For groups larger than 56, we can coordinate multiple buses to keep your group together.
+                  Our charter vehicles accommodate groups from 7 to 37 passengers. We have multiple vehicle sizes to fit your group perfectly. For groups larger than 37, we can coordinate multiple vehicles to keep everyone together.
                 </p>
               </details>
 

@@ -33,12 +33,63 @@ const structuredData = {
   },
 }
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How far in advance should we book for a wedding or large event?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'For weddings and major events during peak season (May-October), book 2-3 months in advance. For smaller groups or off-season events, 3-4 weeks notice is usually sufficient. We can often accommodate last-minute bookings - just call us!'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can you handle multiple pickup locations?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely! We specialize in coordinating multiple pickup points. For weddings, we commonly shuttle guests from 2-3 hotels to the venue. We\'ll create an efficient route and communicate timing to all locations.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'What happens if our event runs longer than planned?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No problem! We build some buffer time into event schedules. If the party runs longer, just communicate with the driver. Extended time is billed at the hourly rate. We want you to enjoy your event without watching the clock.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you offer continuous shuttle service during events?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! For weddings and large events, we can provide continuous shuttle loops throughout the event. Guests can come and go on their own schedule while the shuttle runs back and forth between locations.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Can you accommodate elderly guests or those with mobility issues?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! We have vehicles with low steps and assist handles. Our drivers are trained to help passengers who need extra assistance. Let us know your needs when booking so we can select the appropriate vehicle.'
+      }
+    }
+  ]
+}
+
 export default function GroupEventTransportationPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

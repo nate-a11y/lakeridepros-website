@@ -66,6 +66,31 @@ const faqSchema = {
   ]
 }
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://www.lakeridepros.com'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Events',
+      item: 'https://www.lakeridepros.com/services'
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Bikefest Transportation',
+      item: 'https://www.lakeridepros.com/bikefest-transportation'
+    }
+  ]
+}
+
 export default function BikefestTransportationPage() {
   return (
     <>
@@ -76,6 +101,10 @@ export default function BikefestTransportationPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

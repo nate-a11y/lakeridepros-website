@@ -71,6 +71,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/local-premier-partners', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/trusted-referral-partners', priority: 0.7, changeFrequency: 'monthly' as const },
 
+    // Local landing pages
+    { url: '/transportation-osage-beach', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/transportation-camdenton', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/transportation-lake-ozark', priority: 0.9, changeFrequency: 'monthly' as const },
+
     // Legal pages
     { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },
     { url: '/terms-of-service', priority: 0.5, changeFrequency: 'yearly' as const },

@@ -5,7 +5,7 @@ export const localBusinessSchema = {
   "image": "https://www.lakeridepros.com/og-image.jpg",
   "@id": "https://www.lakeridepros.com",
   "url": "https://www.lakeridepros.com",
-  "telephone": "+15732069499",
+  "telephone": "+1-573-206-9499",
   "email": "contactus@lakeridepros.com",
   "priceRange": "$$-$$$",
   "address": {
@@ -30,12 +30,9 @@ export const localBusinessSchema = {
     { "@type": "City", "name": "Camdenton" },
     { "@type": "City", "name": "Lake Ozark" },
     { "@type": "State", "name": "Missouri" }
-  ],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "5.0",
-    "reviewCount": "50"
-  }
+  ]
+  // Note: aggregateRating removed until real reviews are collected
+  // Add back when you have actual customer reviews
 }
 
 export const organizationSchema = {

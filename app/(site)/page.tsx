@@ -18,8 +18,8 @@ import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schema
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
-  title: 'Lake Ride Pros | Premier Luxury Transportation at Lake of the Ozarks',
-  description: 'Missouri\'s premier luxury transportation at Lake of the Ozarks. Limo buses, sprinter vans, shuttle buses for weddings, wine tours, bachelor parties. Professional drivers, 24/7 availability. Book now!',
+  title: 'Lake of the Ozarks Luxury Transportation | Lake Ride Pros',
+  description: 'Premium transportation in Lake Ozarks. Party buses, shuttles, limo service for weddings, events, airport transfers. Professional drivers, 24/7 service. Book today!',
   keywords: [
     'Lake of the Ozarks transportation',
     'luxury transportation Missouri',

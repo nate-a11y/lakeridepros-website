@@ -103,8 +103,8 @@ export default async function ServiceDetailPage({ params }: Props) {
       '@type': 'LocalBusiness',
       name: 'Lake Ride Pros',
       url: 'https://www.lakeridepros.com',
-      logo: 'https://www.lakeridepros.com/logo.png',
-      telephone: '+1-573-346-4300',
+      logo: 'https://www.lakeridepros.com/Color%20logo%20-%20no%20background.png',
+      telephone: '+1-573-206-9499',
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Lake of the Ozarks',

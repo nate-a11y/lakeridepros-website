@@ -11,7 +11,8 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export const dynamic = 'force-dynamic';
+// Use ISR (Incremental Static Regeneration) with short revalidation
+export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function generateStaticParams() {
   const servicesData = await getServices().catch(() => ({ docs: [] }));

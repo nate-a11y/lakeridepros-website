@@ -64,12 +64,25 @@ export function normalizeIconName(iconName: string | undefined): string | null {
   if (!iconName) return null;
 
   // Remove common prefixes and clean up
-  const normalized = iconName
+  const cleaned = iconName
     .replace(/^(lucide-|icon-)/i, '')
     .trim();
 
-  // Capitalize first letter of each word
-  return normalized
+  // If already in PascalCase and exists in iconMap, return as-is
+  if (iconMap[cleaned]) {
+    return cleaned;
+  }
+
+  // Check case-insensitive match in iconMap (for typos)
+  const exactMatch = Object.keys(iconMap).find(
+    key => key.toLowerCase() === cleaned.toLowerCase()
+  );
+  if (exactMatch) {
+    return exactMatch;
+  }
+
+  // Convert kebab-case, snake_case, or space-separated to PascalCase
+  return cleaned
     .split(/[-_\s]+/)
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('');

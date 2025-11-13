@@ -45,7 +45,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
+// Use ISR (Incremental Static Regeneration) with short revalidation
+export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function ServicesPage() {
   const servicesData = await getServices().catch(() => ({ docs: [] }));

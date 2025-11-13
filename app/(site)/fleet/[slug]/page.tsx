@@ -38,8 +38,39 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   const images = vehicle.images || [];
   const mainImage = vehicle.featuredImage || (images[0]?.image);
 
+  // Breadcrumb Schema for SEO
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.lakeridepros.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Fleet',
+        item: 'https://www.lakeridepros.com/fleet',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: vehicle.name,
+        item: `https://www.lakeridepros.com/fleet/${slug}`,
+      },
+    ],
+  };
+
   return (
     <>
+      {/* Breadcrumb Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

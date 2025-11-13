@@ -6,6 +6,8 @@ import { Check } from 'lucide-react';
 import { getServiceBySlug, getServices, getMediaUrl } from '@/lib/api/payload';
 import BookingWidget from '@/components/BookingWidget';
 import { DynamicIcon } from '@/lib/iconMapper';
+import { getFAQsForService, generateFAQSchema } from '@/lib/serviceFAQs';
+import ServiceFAQ from '@/components/ServiceFAQ';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -152,6 +154,10 @@ export default async function ServiceDetailPage({ params }: Props) {
     ],
   };
 
+  // FAQ Structured Data for SEO
+  const faqStructuredData = generateFAQSchema(slug, service.title);
+  const faqs = getFAQsForService(slug);
+
   return (
     <>
       {/* Structured Data */}
@@ -162,6 +168,10 @@ export default async function ServiceDetailPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbStructuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
       {/* Breadcrumb Navigation */}
       <nav className="bg-neutral-50 dark:bg-dark-bg-secondary py-4" aria-label="Breadcrumb">
@@ -284,6 +294,21 @@ export default async function ServiceDetailPage({ params }: Props) {
               )}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">
+              Common questions about {service.title.toLowerCase()}
+            </p>
+          </div>
+          <ServiceFAQ faqs={faqs} />
         </div>
       </section>
 

@@ -46,17 +46,7 @@ const nextConfig = {
       },
       {
         source: '/airport-shuttle',
-        destination: '/services/airport-shuttle',
-        permanent: true,
-      },
-      {
-        source: '/airport-transfers',
-        destination: '/services/airport-shuttle',
-        permanent: true,
-      },
-      {
-        source: '/services/airport-transfers',
-        destination: '/services/airport-shuttle',
+        destination: '/services/airport-transfers',
         permanent: true,
       },
       {

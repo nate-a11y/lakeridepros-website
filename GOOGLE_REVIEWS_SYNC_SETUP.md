@@ -119,25 +119,17 @@ GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
 GOOGLE_REFRESH_TOKEN=your_google_refresh_token
 GOOGLE_BUSINESS_LOCATION_ID=accounts/123456789/locations/987654321
 GOOGLE_REDIRECT_URI=https://yourdomain.com/api/google-auth/callback
-
-# Sync API Key (generate a random secure string)
-SYNC_API_KEY=your_secure_random_string_for_sync_endpoint
-```
-
-**Generate a secure `SYNC_API_KEY`:**
-```bash
-openssl rand -base64 32
 ```
 
 ### 6. Deploy and Test
 
 1. Deploy your application with the new environment variables
 2. Go to your Payload admin dashboard (`/admin`)
-3. You should see a "Google Business Profile Integration" section
-4. Status should show "✅ Configured"
-5. Click "🔄 Sync Reviews Now"
-6. Enter your `SYNC_API_KEY` when prompted
-7. Reviews will be imported into Testimonials collection
+3. Log in with your admin credentials
+4. You should see a "Google Business Profile Integration" section
+5. Status should show "✅ Configured"
+6. Click "🔄 Sync Reviews Now"
+7. Reviews will be imported into Testimonials collection (no API key needed - uses your admin session)
 
 ## How It Works
 
@@ -178,12 +170,15 @@ This enables **star ratings in Google search results** (rich snippets).
 
 ## Manual Sync via API
 
-You can also trigger sync programmatically:
+You can trigger sync from the admin dashboard by clicking the "🔄 Sync Reviews Now" button. The endpoint uses your admin session for authentication, so you must be logged in.
+
+If you need to trigger sync programmatically (e.g., via cron job), you can use the API endpoint with a valid Payload admin session cookie:
 
 ```bash
+# Note: Requires valid Payload admin session cookie
 curl -X POST https://yourdomain.com/api/sync-google-reviews \
-  -H "Authorization: Bearer YOUR_SYNC_API_KEY" \
-  -H "Content-Type: application/json"
+  -H "Content-Type: application/json" \
+  -H "Cookie: payload-token=YOUR_SESSION_TOKEN"
 ```
 
 Response:
@@ -202,9 +197,14 @@ Response:
 
 ## Automated Syncing (Optional)
 
-To automatically sync reviews daily, you can use:
+**Note:** Automated syncing requires additional setup since the sync endpoint uses admin session authentication. For automated syncs, you have two options:
 
-**Vercel Cron Jobs** (add to `vercel.json`):
+1. **Create a separate API endpoint** with API key authentication specifically for cron jobs
+2. **Use Payload's API to authenticate programmatically** in your cron job
+
+### Option 1: Vercel Cron Jobs with API Key (requires separate endpoint)
+
+Add to `vercel.json`:
 ```json
 {
   "crons": [{
@@ -214,7 +214,7 @@ To automatically sync reviews daily, you can use:
 }
 ```
 
-**GitHub Actions** (`.github/workflows/sync-reviews.yml`):
+### Option 2: GitHub Actions with Payload Auth (`.github/workflows/sync-reviews.yml`):
 ```yaml
 name: Sync Google Reviews
 on:
@@ -241,8 +241,9 @@ jobs:
 
 ### "Unauthorized" Error
 
-- Verify your `SYNC_API_KEY` matches the environment variable
-- Ensure the key doesn't have extra spaces or line breaks
+- Ensure you are logged into the admin panel (`/admin`)
+- Your admin session may have expired - try logging out and back in
+- The endpoint uses Payload session authentication
 
 ### No Reviews Found
 
@@ -267,11 +268,12 @@ jobs:
 
 ## Security Notes
 
-- ✅ `SYNC_API_KEY` required for all sync operations
-- ✅ Sync endpoint requires authentication
+- ✅ Sync endpoint uses Payload admin session authentication
+- ✅ Only authenticated admin users can trigger sync
 - ✅ OAuth tokens stored securely in environment variables
 - ✅ Never commit `.env` to version control
 - ✅ Refresh tokens have limited scope (only read reviews)
+- ✅ Session-based auth prevents unauthorized API access
 
 ## Support
 

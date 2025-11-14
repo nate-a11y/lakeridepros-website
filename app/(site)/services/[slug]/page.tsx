@@ -16,6 +16,9 @@ type Props = {
 // Use ISR (Incremental Static Regeneration) with short revalidation
 export const revalidate = 60; // Revalidate every 60 seconds
 
+// Enable dynamic params for on-demand page generation
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const servicesData = await getServices().catch(() => ({ docs: [] }));
   const services = servicesData.docs || [];

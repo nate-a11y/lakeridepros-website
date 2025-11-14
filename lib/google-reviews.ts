@@ -83,20 +83,34 @@ export async function fetchGoogleReviews(
 
     const auth = getOAuth2Client();
 
-    // Use the googleapis client library instead of raw fetch
-    const mybusinessaccountmanagement = google.mybusinessaccountmanagement({
-      version: 'v1',
-      auth,
-    });
+    // Get access token
+    const { token } = await auth.getAccessToken();
 
-    // List reviews for the location
-    // Note: location should be in format "accounts/{accountId}/locations/{locationId}"
-    const response = await mybusinessaccountmanagement.accounts.locations.reviews.list({
-      parent: location,
-      pageSize: pageSize,
-    });
+    if (!token) {
+      throw new Error('Failed to get access token from Google');
+    }
 
-    return response.data.reviews || [];
+    // Use the Google My Business API v4 for reviews
+    // Note: Reviews are still on v4, even though most of the API is deprecated
+    // Location format: "accounts/{accountId}/locations/{locationId}"
+    const response = await fetch(
+      `https://mybusiness.googleapis.com/v4/${location}/reviews?pageSize=${pageSize}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Google API error response:', errorText);
+      throw new Error(`Google API error: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    return data.reviews || [];
   } catch (error) {
     console.error('Error fetching Google reviews:', error);
     throw error;
@@ -110,10 +124,9 @@ export async function fetchGoogleReviews(
 export function getAuthorizationUrl(): string {
   const oauth2Client = getOAuth2Client();
 
-  // Updated scopes for Google Business Profile API
+  // OAuth scope for Google My Business API (reviews use v4)
   const scopes = [
     'https://www.googleapis.com/auth/business.manage',
-    'https://www.googleapis.com/auth/plus.business.manage', // For My Business Account Management
   ];
 
   return oauth2Client.generateAuthUrl({

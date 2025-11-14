@@ -12,27 +12,25 @@ import { fetchGoogleReviews, transformGoogleReviewToTestimonial } from '@/lib/go
  */
 export async function POST(req: NextRequest) {
   try {
-    // Check authentication
     const payload = await getPayload({ config });
 
-    // Verify admin access (you can check session/auth header here)
-    // For now, we'll require an API key
-    const authHeader = req.headers.get('authorization');
-    const apiKey = process.env.SYNC_API_KEY;
+    // Verify admin authentication using Payload session
+    const { user } = await payload.auth({ headers: req.headers });
 
-    if (!apiKey) {
+    if (!user) {
       return NextResponse.json(
-        { error: 'Sync functionality not configured (missing SYNC_API_KEY)' },
-        { status: 500 }
-      );
-    }
-
-    if (authHeader !== `Bearer ${apiKey}`) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Invalid API key' },
+        { error: 'Unauthorized - Please log in to the admin panel' },
         { status: 401 }
       );
     }
+
+    // Optional: Check if user has admin role (if your Users collection has roles)
+    // if (!user.roles?.includes('admin')) {
+    //   return NextResponse.json(
+    //     { error: 'Forbidden - Admin access required' },
+    //     { status: 403 }
+    //   );
+    // }
 
     // Fetch reviews from Google
     console.log('🔄 Starting Google reviews sync...');

@@ -117,17 +117,10 @@ export const Dashboard: React.FC = () => {
     setSyncMessage(null)
 
     try {
-      const apiKey = prompt('Enter sync API key (from SYNC_API_KEY env var):')
-      if (!apiKey) {
-        setSyncing(false)
-        return
-      }
-
       const response = await fetch('/api/sync-google-reviews', {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
       })

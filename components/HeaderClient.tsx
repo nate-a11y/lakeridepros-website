@@ -96,7 +96,7 @@ export default function HeaderClient({ services }: HeaderClientProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-6">
+          <div className="hidden lg:flex lg:items-center lg:space-x-6">
             {navigation.map((item) => (
               item.hasDropdown ? (
                 <div
@@ -207,7 +207,7 @@ export default function HeaderClient({ services }: HeaderClientProps) {
             {/* Mobile menu button */}
             <button
               type="button"
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-primary-dark hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors"
+              className="lg:!hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-primary-dark hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileMenuOpen}
@@ -234,7 +234,7 @@ export default function HeaderClient({ services }: HeaderClientProps) {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div id="mobile-menu" className="md:hidden pb-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
+          <div id="mobile-menu" className="lg:hidden pb-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
             <nav aria-label="Mobile navigation" className="flex flex-col space-y-2">
               {navigation.map((item) => (
                 <div key={item.name}>

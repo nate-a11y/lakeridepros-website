@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
-import { getServiceBySlug, getServices, getMediaUrl } from '@/lib/api/payload';
+import { getServiceBySlugLocal, getServicesLocal, getMediaUrl } from '@/lib/api/payload-local';
 import BookingWidget from '@/components/BookingWidget';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { getFAQsForService, generateFAQSchema } from '@/lib/serviceFAQs';
@@ -20,17 +20,22 @@ export const revalidate = 60; // Revalidate every 60 seconds
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const servicesData = await getServices().catch(() => ({ docs: [] }));
-  const services = servicesData.docs || [];
+  try {
+    const services = await getServicesLocal();
+    console.log(`[generateStaticParams] Found ${services.length} services`);
 
-  return services.map((service) => ({
-    slug: service.slug,
-  }));
+    return services.map((service) => ({
+      slug: service.slug,
+    }));
+  } catch (error) {
+    console.error('[generateStaticParams] Error fetching services:', error);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const service = await getServiceBySlug(slug);
+  const service = await getServiceBySlugLocal(slug);
 
   if (!service) {
     return {
@@ -96,7 +101,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
-  const service = await getServiceBySlug(slug);
+  const service = await getServiceBySlugLocal(slug);
 
   if (!service) {
     notFound();

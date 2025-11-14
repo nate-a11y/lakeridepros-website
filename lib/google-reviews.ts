@@ -83,33 +83,20 @@ export async function fetchGoogleReviews(
 
     const auth = getOAuth2Client();
 
-    // Get access token
-    const { token } = await auth.getAccessToken();
+    // Use the googleapis client library instead of raw fetch
+    const mybusinessaccountmanagement = google.mybusinessaccountmanagement({
+      version: 'v1',
+      auth,
+    });
 
-    if (!token) {
-      throw new Error('Failed to get access token from Google');
-    }
+    // List reviews for the location
+    // Note: location should be in format "accounts/{accountId}/locations/{locationId}"
+    const response = await mybusinessaccountmanagement.accounts.locations.reviews.list({
+      parent: location,
+      pageSize: pageSize,
+    });
 
-    // Use the new Google Business Profile API endpoint
-    // https://developers.google.com/my-business/reference/rest/v4/accounts.locations.reviews/list
-    const response = await fetch(
-      `https://mybusiness.googleapis.com/v4/${location}/reviews?pageSize=${pageSize}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Google API error response:', errorText);
-      throw new Error(`Google API error: ${response.status} ${response.statusText} - ${errorText}`);
-    }
-
-    const data = await response.json();
-    return data.reviews || [];
+    return response.data.reviews || [];
   } catch (error) {
     console.error('Error fetching Google reviews:', error);
     throw error;
@@ -123,8 +110,10 @@ export async function fetchGoogleReviews(
 export function getAuthorizationUrl(): string {
   const oauth2Client = getOAuth2Client();
 
+  // Updated scopes for Google Business Profile API
   const scopes = [
     'https://www.googleapis.com/auth/business.manage',
+    'https://www.googleapis.com/auth/plus.business.manage', // For My Business Account Management
   ];
 
   return oauth2Client.generateAuthUrl({

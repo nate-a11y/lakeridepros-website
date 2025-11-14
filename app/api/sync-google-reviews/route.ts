@@ -138,20 +138,29 @@ export async function GET(req: NextRequest) {
   try {
     const payload = await getPayload({ config });
 
-    // Get testimonials from Google source
-    const googleTestimonials = await payload.find({
-      collection: 'testimonials',
-      where: {
-        source: {
-          equals: 'google',
-        },
-      },
-      sort: '-syncedAt',
-      limit: 1,
-    });
+    let lastSync;
+    let totalGoogleReviews = 0;
 
-    const lastSync = googleTestimonials.docs[0]?.syncedAt;
-    const totalGoogleReviews = googleTestimonials.totalDocs;
+    // Try to get testimonials from Google source
+    // This might fail if the schema hasn't been updated yet
+    try {
+      const googleTestimonials = await payload.find({
+        collection: 'testimonials',
+        where: {
+          source: {
+            equals: 'google',
+          },
+        },
+        sort: '-syncedAt',
+        limit: 1,
+      });
+
+      lastSync = googleTestimonials.docs[0]?.syncedAt;
+      totalGoogleReviews = googleTestimonials.totalDocs;
+    } catch (queryError) {
+      console.warn('Schema not yet updated - Google sync fields not available:', queryError);
+      // Continue with default values (lastSync undefined, totalGoogleReviews 0)
+    }
 
     return NextResponse.json({
       configured: !!(

@@ -234,7 +234,7 @@ export default function HeaderClient({ services }: HeaderClientProps) {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div id="mobile-menu" className="md:hidden pb-4">
+          <div id="mobile-menu" className="md:hidden pb-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
             <nav aria-label="Mobile navigation" className="flex flex-col space-y-2">
               {navigation.map((item) => (
                 <div key={item.name}>

@@ -82,21 +82,30 @@ export async function fetchGoogleReviews(
     }
 
     const auth = getOAuth2Client();
-    const mybusiness = google.mybusinessaccountmanagement({ version: 'v1', auth });
 
-    // Fetch reviews using Google My Business API
-    // Note: The actual API endpoint structure
+    // Get access token
+    const { token } = await auth.getAccessToken();
+
+    if (!token) {
+      throw new Error('Failed to get access token from Google');
+    }
+
+    // Use the new Google Business Profile API endpoint
+    // https://developers.google.com/my-business/reference/rest/v4/accounts.locations.reviews/list
     const response = await fetch(
       `https://mybusiness.googleapis.com/v4/${location}/reviews?pageSize=${pageSize}`,
       {
         headers: {
-          Authorization: `Bearer ${await auth.getAccessToken()}`,
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       }
     );
 
     if (!response.ok) {
-      throw new Error(`Google API error: ${response.statusText}`);
+      const errorText = await response.text();
+      console.error('Google API error response:', errorText);
+      throw new Error(`Google API error: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     const data = await response.json();

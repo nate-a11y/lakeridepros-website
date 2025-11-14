@@ -57,7 +57,11 @@ async function fetchFromPayload<T>(
   }
 
   const queryString = queryParams.toString();
-  const url = `${getPayloadApiUrl()}/api${endpoint}${queryString ? `?${queryString}` : ''}`;
+  const apiUrl = getPayloadApiUrl();
+  const url = `${apiUrl}/api${endpoint}${queryString ? `?${queryString}` : ''}`;
+
+  console.log(`[Payload API] Fetching from: ${url}`);
+  console.log(`[Payload API] Base URL: ${apiUrl}`);
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -73,12 +77,15 @@ async function fetchFromPayload<T>(
     });
 
     if (!response.ok) {
-      throw new Error(`API request failed: ${response.statusText}`);
+      console.error(`[Payload API] Request failed with status ${response.status}: ${response.statusText}`);
+      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log(`[Payload API] Success for ${endpoint}, returned ${data.docs?.length || 0} docs`);
+    return data;
   } catch (error) {
-    console.error(`Error fetching from Payload CMS (${endpoint}):`, error);
+    console.error(`[Payload API] Error fetching from ${url}:`, error);
     throw error;
   }
 }

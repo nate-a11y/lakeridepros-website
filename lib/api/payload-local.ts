@@ -67,9 +67,9 @@ export function getMediaUrl(url: string | undefined): string {
   if (!url) return ''
   if (url.startsWith('http')) return url
 
-  // Use environment variable or fall back to Vercel URL
-  const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL ||
-                  process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
+  // Media is served from Payload API - prioritize PAYLOAD_API_URL
+  const baseUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
+                  process.env.NEXT_PUBLIC_SERVER_URL ||
                   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
 
   return `${baseUrl}${url}`

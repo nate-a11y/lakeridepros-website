@@ -11,9 +11,29 @@ import type {
 } from '@/lib/types';
 
 // Use production URL if available, otherwise use localhost for development
-const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
-                        process.env.NEXT_PUBLIC_SERVER_URL ||
-                        (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+// In Vercel, VERCEL_URL is automatically available
+function getPayloadApiUrl(): string {
+  // Explicit configuration takes precedence
+  if (process.env.NEXT_PUBLIC_PAYLOAD_API_URL) {
+    return process.env.NEXT_PUBLIC_PAYLOAD_API_URL;
+  }
+  if (process.env.NEXT_PUBLIC_SERVER_URL) {
+    return process.env.NEXT_PUBLIC_SERVER_URL;
+  }
+
+  // Client-side: use current origin
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+
+  // Server-side: use Vercel URL if available, otherwise localhost
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  return 'http://localhost:3000';
+}
+
 const API_KEY = process.env.PAYLOAD_API_KEY;
 
 interface FetchOptions extends RequestInit {
@@ -37,7 +57,7 @@ async function fetchFromPayload<T>(
   }
 
   const queryString = queryParams.toString();
-  const url = `${PAYLOAD_API_URL}/api${endpoint}${queryString ? `?${queryString}` : ''}`;
+  const url = `${getPayloadApiUrl()}/api${endpoint}${queryString ? `?${queryString}` : ''}`;
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -363,5 +383,5 @@ export async function getPageBySlug(slug: string): Promise<any | null> {
 export function getMediaUrl(url: string): string {
   if (!url) return '';
   if (url.startsWith('http')) return url;
-  return `${PAYLOAD_API_URL}${url}`;
+  return `${getPayloadApiUrl()}${url}`;
 }

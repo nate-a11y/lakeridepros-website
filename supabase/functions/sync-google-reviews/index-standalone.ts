@@ -57,6 +57,31 @@ serve(async (req) => {
   }
 
   try {
+    // 🔒 SECURITY: Verify authentication
+    // Check for valid Supabase anon key or service role key
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Missing Authorization header' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Extract the token (format: "Bearer TOKEN")
+    const token = authHeader.replace('Bearer ', '')
+
+    // Verify it matches your Supabase anon key or service role key
+    const validAnonKey = Deno.env.get('SUPABASE_ANON_KEY')
+    const validServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+
+    if (token !== validAnonKey && token !== validServiceKey) {
+      console.error('Unauthorized access attempt - invalid token')
+      return new Response(
+        JSON.stringify({ success: false, error: 'Unauthorized - Invalid API key' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     // Get Outscraper API key from environment
     const outscraperApiKey = Deno.env.get('OUTSCRAPER_API_KEY')
     if (!outscraperApiKey) {

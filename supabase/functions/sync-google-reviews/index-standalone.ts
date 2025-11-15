@@ -137,10 +137,13 @@ serve(async (req) => {
 
     const data: OutscraperResponse = await response.json()
     console.log('Outscraper response status:', data.status)
+    console.log('Outscraper data array length:', data.data?.length || 0)
+    console.log('Full Outscraper response:', JSON.stringify(data, null, 2))
 
     // Extract reviews from response
     const placeData = data.data?.[0]
     if (!placeData) {
+      console.error('No place data in response!')
       return new Response(
         JSON.stringify({
           success: true,

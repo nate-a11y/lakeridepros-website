@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import config from '@payload-config';
-import { fetchGoogleReviews, transformGoogleReviewToTestimonial } from '@/lib/google-reviews';
+import { transformGoogleReviewToTestimonial, type GoogleReview } from '@/lib/google-reviews';
 
 /**
  * Sync Google Business Profile reviews to Testimonials CMS
+ * Uses Supabase Edge Function + Outscraper API (no Google API access required!)
  *
  * POST /api/sync-google-reviews
  *
@@ -32,9 +33,39 @@ export async function POST(req: NextRequest) {
     //   );
     // }
 
-    // Fetch reviews from Google
-    console.log('🔄 Starting Google reviews sync...');
-    const googleReviews = await fetchGoogleReviews();
+    // Fetch reviews from Supabase Edge Function (which calls Outscraper)
+    console.log('🔄 Starting Google reviews sync via Outscraper...');
+
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Supabase configuration missing. Set SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    }
+
+    const edgeFunctionUrl = `${supabaseUrl}/functions/v1/sync-google-reviews`;
+
+    const response = await fetch(edgeFunctionUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${supabaseAnonKey}`,
+      },
+      body: JSON.stringify({
+        placeId: process.env.GOOGLE_PLACE_ID || 'ChIJJ8GI2fuCGWIRW8RfPECoxN4',
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Edge function error (${response.status}): ${errorText}`);
+    }
+
+    const { success, reviews: googleReviews, metadata, error: edgeError } = await response.json();
+
+    if (!success || edgeError) {
+      throw new Error(edgeError || 'Edge function returned unsuccessful response');
+    }
 
     if (!googleReviews || googleReviews.length === 0) {
       return NextResponse.json({
@@ -46,10 +77,11 @@ export async function POST(req: NextRequest) {
           updated: 0,
           skipped: 0,
         },
+        metadata: metadata || null,
       });
     }
 
-    console.log(`📥 Fetched ${googleReviews.length} reviews from Google`);
+    console.log(`📥 Fetched ${googleReviews.length} reviews from ${metadata?.businessName || 'Google'}`);
 
     let created = 0;
     let updated = 0;
@@ -111,8 +143,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Synced ${created + updated} reviews from Google Business Profile`,
+      message: `Synced ${created + updated} reviews from ${metadata?.businessName || 'Google Business Profile'}`,
       stats,
+      metadata: metadata || null,
     });
 
   } catch (error) {
@@ -160,12 +193,13 @@ export async function GET(req: NextRequest) {
       // Continue with default values (lastSync undefined, totalGoogleReviews 0)
     }
 
+    // Check if Outscraper is configured
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const placeId = process.env.GOOGLE_PLACE_ID;
+
     return NextResponse.json({
-      configured: !!(
-        process.env.GOOGLE_CLIENT_ID &&
-        process.env.GOOGLE_CLIENT_SECRET &&
-        process.env.GOOGLE_BUSINESS_LOCATION_ID
-      ),
+      configured: !!(supabaseUrl && placeId),
+      provider: 'Outscraper (via Supabase Edge Function)',
       lastSync,
       totalGoogleReviews,
     });

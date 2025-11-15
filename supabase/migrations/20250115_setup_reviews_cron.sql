@@ -1,6 +1,8 @@
--- Enable pg_cron extension (if not already enabled)
--- This extension allows scheduling of PostgreSQL functions
+-- Enable required extensions
+-- pg_cron: Allows scheduling of PostgreSQL functions
+-- pg_net: Allows making HTTP requests from PostgreSQL
 CREATE EXTENSION IF NOT EXISTS pg_cron;
+CREATE EXTENSION IF NOT EXISTS pg_net;
 
 -- Create a function to invoke the Edge Function
 CREATE OR REPLACE FUNCTION invoke_sync_google_reviews()

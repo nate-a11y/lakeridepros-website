@@ -19,9 +19,9 @@ port = 54323
 [edge_functions]
 enabled = true
 
-# Environment variables for Edge Functions
-[functions.sync-google-reviews]
-verify_jwt = false
-
-# Note: Actual secrets should be set via Supabase CLI or Dashboard
-# Example: supabase secrets set OUTSCRAPER_API_KEY=your_key_here
+# Note: Edge Function uses manual authentication (checks for valid Supabase anon/service key)
+# Secrets should be set via Supabase CLI or Dashboard:
+# - OUTSCRAPER_API_KEY (your Outscraper API key)
+# - GOOGLE_PLACE_ID (ChIJJ8GI2fuCGWIRW8RfPECoxN4)
+# - SUPABASE_ANON_KEY (your Supabase anon key for auth validation)
+# - SUPABASE_SERVICE_ROLE_KEY (your Supabase service role key for auth validation)

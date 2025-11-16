@@ -43,6 +43,23 @@ export async function POST(req: NextRequest) {
       throw new Error('Supabase configuration missing. Set SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
     }
 
+    // Get the last sync timestamp to only fetch new/updated reviews
+    let lastSyncTimestamp: string | undefined
+    try {
+      const lastSynced = await payload.find({
+        collection: 'testimonials',
+        where: { source: { equals: 'google' } },
+        sort: '-syncedAt',
+        limit: 1,
+      })
+      if (lastSynced.docs[0]?.syncedAt) {
+        lastSyncTimestamp = lastSynced.docs[0].syncedAt
+        console.log(`📅 Last sync: ${new Date(lastSyncTimestamp).toLocaleString()} - fetching only new reviews`)
+      }
+    } catch (error) {
+      console.warn('Could not determine last sync time, fetching all reviews:', error)
+    }
+
     const edgeFunctionUrl = `${supabaseUrl}/functions/v1/sync-google-reviews`;
 
     const response = await fetch(edgeFunctionUrl, {
@@ -53,6 +70,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         placeId: process.env.GOOGLE_PLACE_ID || 'ChIJJ8GI2fuCGWIRW8RfPECoxN4',
+        lastSyncTimestamp, // Pass the last sync time to only fetch newer reviews
       }),
     });
 

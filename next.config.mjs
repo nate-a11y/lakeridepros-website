@@ -8,6 +8,9 @@ const nextConfig = {
   experimental: {
     reactCompiler: false,
   },
+  sassOptions: {
+    silenceDeprecations: ['import', 'legacy-js-api'],
+  },
   images: {
     remotePatterns: [
       {

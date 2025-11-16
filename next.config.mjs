@@ -22,6 +22,16 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.vercel.app',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3001',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+      },
     ],
   },
   webpack: (webpackConfig) => {

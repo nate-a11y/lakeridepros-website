@@ -309,6 +309,16 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
 
   console.log(`[Testimonials API] Filtered ${response.docs?.length || 0} -> ${validTestimonials.length} testimonials (removed placeholders)`);
 
+  // Debug: Show first valid testimonial
+  if (validTestimonials.length > 0) {
+    console.log('[Testimonials API] First valid testimonial:', {
+      id: validTestimonials[0].id,
+      name: validTestimonials[0].name,
+      rating: validTestimonials[0].rating,
+      contentPreview: validTestimonials[0].content?.substring(0, 100)
+    });
+  }
+
   return validTestimonials;
 }
 

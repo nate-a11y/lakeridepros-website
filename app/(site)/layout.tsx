@@ -4,6 +4,7 @@ import { MoovsWidget } from "@/components/MoovsWidget";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import UnderConstructionBanner from "@/components/UnderConstructionBanner";
 
 export default function SiteLayout({
   children,
@@ -23,6 +24,7 @@ export default function SiteLayout({
             Skip to main content
           </a>
           <Header />
+          <UnderConstructionBanner />
           <main id="main-content" className="min-h-screen">
             {children}
           </main>

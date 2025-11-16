@@ -277,7 +277,12 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
 // Testimonials API
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
-  const params: Record<string, any> = { sort: '-createdAt', depth: 2 }; // Sort by newest first
+  const params: Record<string, any> = {
+    sort: '-createdAt',
+    depth: 2, // Sort by newest first
+    // Explicitly select all fields to ensure content is included
+    select: 'id,name,title,company,content,rating,image,featured,order,source,externalId,externalUrl,syncedAt,createdAt,updatedAt'
+  };
 
   // Build where conditions
   const whereConditions: Record<string, any> = {};
@@ -291,29 +296,11 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
     whereConditions.rating = { greater_than_equal: minRating };
   }
 
-  // Exclude testimonials with placeholder or empty content
-  whereConditions.and = [
-    {
-      content: {
-        not_equals: 'No comment provided',
-      },
-    },
-    {
-      content: {
-        not_equals: 'No content provided',
-      },
-    },
-    {
-      content: {
-        not_equals: '',
-      },
-    },
-    {
-      content: {
-        exists: true,
-      },
-    },
-  ];
+  // Exclude testimonials with empty or placeholder content
+  // Using 'not_in' to filter out multiple placeholder values
+  whereConditions.content = {
+    not_in: ['No comment provided', 'No content provided', ''],
+  };
 
   if (Object.keys(whereConditions).length > 0) {
     params.where = JSON.stringify(whereConditions);

@@ -303,25 +303,19 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
   // Debug: Show what we got from API
   console.log('[Testimonials API] Raw response:', {
     totalDocs: response.docs?.length || 0,
-    samples: (response.docs || []).slice(0, 3).map(t => ({
-      id: t.id,
-      name: t.name,
-      rating: t.rating,
-      contentLength: t.content?.length || 0,
-      content: t.content?.substring(0, 50)
-    }))
+    firstDoc: response.docs?.[0] ? {
+      id: response.docs[0].id,
+      name: response.docs[0].name,
+      rating: response.docs[0].rating,
+      hasContent: !!response.docs[0].content,
+      contentType: typeof response.docs[0].content,
+      contentLength: response.docs[0].content?.length || 0,
+      contentPreview: response.docs[0].content?.substring(0, 100),
+      allKeys: Object.keys(response.docs[0])
+    } : null
   });
 
-  // Filter out testimonials with placeholder content on the client side
-  const placeholderTexts = ['No comment provided', 'No content provided', ''];
-  const validTestimonials = (response.docs || []).filter(testimonial => {
-    const content = testimonial.content?.trim() || '';
-    return content.length > 0 && !placeholderTexts.includes(content);
-  });
-
-  console.log(`[Testimonials API] Filtered ${response.docs?.length || 0} -> ${validTestimonials.length} testimonials (removed placeholders)`);
-
-  return validTestimonials;
+  return response.docs || [];
 }
 
 /**

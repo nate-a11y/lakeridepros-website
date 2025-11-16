@@ -106,8 +106,8 @@ const config = buildConfig({
   },
   db: postgresAdapter({
     pool: getPoolConfig(),
-    // Use migrations only, no auto-push
-    push: false,
+    // Auto-push schema changes to database
+    push: true,
   }),
   sharp,
   // CRITICAL: Use NEXT_PUBLIC_ prefix so the admin client can access this in the browser

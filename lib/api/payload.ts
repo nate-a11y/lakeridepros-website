@@ -277,7 +277,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
 // Testimonials API
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
-  const params: Record<string, any> = { sort: 'order', depth: 2 };
+  const params: Record<string, any> = { sort: '-createdAt', depth: 2 }; // Sort by newest first
 
   // Build where conditions
   const whereConditions: Record<string, any> = {};
@@ -290,6 +290,9 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
   if (minRating !== undefined) {
     whereConditions.rating = { greater_than_equal: minRating };
   }
+
+  // Exclude testimonials with "No comment provided" or similar placeholder content
+  whereConditions.content = { not_equals: 'No comment provided' };
 
   if (Object.keys(whereConditions).length > 0) {
     params.where = JSON.stringify(whereConditions);

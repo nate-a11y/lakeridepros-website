@@ -2,6 +2,7 @@ import * as migration_20251111_174626_add_new_collections from './20251111_17462
 import * as migration_20251111_205751_add_printify_indexes from './20251111_205751_add_printify_indexes';
 import * as migration_20251111_214800_add_locked_documents from './20251111_214800_add_locked_documents';
 import * as migration_20251112_remove_old_collections from './20251112_remove_old_collections';
+import * as migration_20250116_add_point_to_point_pricing from './20250116_add_point_to_point_pricing';
 
 export const migrations = [
   {
@@ -23,5 +24,10 @@ export const migrations = [
     up: migration_20251112_remove_old_collections.up,
     down: migration_20251112_remove_old_collections.down,
     name: '20251112_remove_old_collections'
+  },
+  {
+    up: migration_20250116_add_point_to_point_pricing.up,
+    down: migration_20250116_add_point_to_point_pricing.down,
+    name: '20250116_add_point_to_point_pricing'
   },
 ];

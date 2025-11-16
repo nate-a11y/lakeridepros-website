@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import BookingWidget from '@/components/BookingWidget';
-import { getVehicleBySlug, getMediaUrl } from '@/lib/api/payload';
+import TestimonialsSection from '@/components/TestimonialsSection';
+import { getVehicleBySlug, getMediaUrl, getVehicleRelatedTestimonials } from '@/lib/api/payload';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +35,9 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   if (!vehicle) {
     notFound();
   }
+
+  // Fetch vehicle-related testimonials (only 5-star reviews with vehicle keywords)
+  const testimonials = await getVehicleRelatedTestimonials(3, 5).catch(() => []);
 
   const images = vehicle.images || [];
   const mainImage = vehicle.featuredImage || (images[0]?.image);
@@ -197,11 +201,22 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      {testimonials.length > 0 && (
+        <TestimonialsSection
+          testimonials={testimonials}
+          title="What Our Clients Say"
+          subtitle={`Hear from customers who loved riding in our ${vehicle.name.toLowerCase()}`}
+          showCount={3}
+          includeSchema={false}
+        />
+      )}
+
       {/* Booking Section */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
               Book This Vehicle
             </h2>
             <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">

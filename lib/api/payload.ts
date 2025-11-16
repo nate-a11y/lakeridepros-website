@@ -322,6 +322,52 @@ export async function getRandomTestimonials(count = 3, featured = false, minRati
   return shuffled.slice(0, count);
 }
 
+/**
+ * Get vehicle-related testimonials filtered by keywords
+ * @param count - Number of testimonials to return
+ * @param minRating - Minimum rating to include (default: 5 for public display)
+ */
+export async function getVehicleRelatedTestimonials(count = 3, minRating = 5): Promise<Testimonial[]> {
+  const allTestimonials = await getTestimonials(false, minRating);
+
+  // Keywords that indicate a vehicle-related review
+  const vehicleKeywords = [
+    'vehicle', 'car', 'suv', 'suburban', 'van', 'bus', 'limo', 'sprinter', 'shuttle',
+    'ride', 'driver', 'driving', 'drove', 'driven',
+    'clean', 'comfortable', 'spacious', 'luxury', 'luxurious',
+    'seats', 'seating', 'capacity', 'room', 'roomy',
+    'air conditioning', 'ac', 'amenities', 'amenity',
+    'pickup', 'drop off', 'transport', 'transportation',
+    'professional driver', 'chauffeur',
+  ];
+
+  // Filter testimonials that mention vehicle-related keywords
+  const vehicleTestimonials = allTestimonials.filter(testimonial => {
+    const content = testimonial.content.toLowerCase();
+    const name = testimonial.name.toLowerCase();
+    const title = testimonial.title?.toLowerCase() || '';
+    const searchText = `${content} ${name} ${title}`;
+
+    return vehicleKeywords.some(keyword => searchText.includes(keyword));
+  });
+
+  // If we don't have enough vehicle-specific reviews, fall back to all testimonials
+  const testimonialsToUse = vehicleTestimonials.length >= count ? vehicleTestimonials : allTestimonials;
+
+  if (testimonialsToUse.length <= count) {
+    return testimonialsToUse;
+  }
+
+  // Fisher-Yates shuffle algorithm for randomization
+  const shuffled = [...testimonialsToUse];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled.slice(0, count);
+}
+
 // Partners API
 export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   try {

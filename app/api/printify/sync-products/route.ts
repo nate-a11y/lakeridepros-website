@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
+import type { Payload } from 'payload'
 import config from '@/src/payload.config'
 
 const PRINTIFY_API_URL = 'https://api.printify.com/v1'
@@ -45,11 +46,6 @@ interface PrintifyProduct {
   [key: string]: unknown
 }
 
-interface PayloadInstance {
-  find: (options: Record<string, unknown>) => Promise<{ docs: Record<string, unknown>[] }>
-  create: (options: Record<string, unknown>) => Promise<Record<string, unknown>>
-  update: (options: Record<string, unknown>) => Promise<Record<string, unknown>>
-}
 
 interface ProductImage {
   image: number | { id: number }
@@ -182,7 +178,7 @@ function slugify(text: string): string {
   return slug.substring(0, 100).replace(/-+$/, '')
 }
 
-async function ensureUniqueSlug(payload: PayloadInstance, baseSlug: string, existingProductId?: string | number): Promise<string> {
+async function ensureUniqueSlug(payload: Payload, baseSlug: string, existingProductId?: string | number): Promise<string> {
   let slug = baseSlug
   let counter = 1
 

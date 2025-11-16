@@ -102,7 +102,8 @@ serve(async (req) => {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         // Outscraper Google Maps Reviews API endpoint (correct base URL)
-        const outscraperUrl = `https://api.app.outscraper.com/maps/reviews-v2?query=place_id:${googlePlaceId}&reviewsLimit=250&language=en&async=false`
+        // Note: query parameter takes the Place ID directly, NOT with "place_id:" prefix
+        const outscraperUrl = `https://api.app.outscraper.com/maps/reviews-v2?query=${googlePlaceId}&reviewsLimit=250&language=en&async=false`
 
         response = await fetch(outscraperUrl, {
           method: 'GET',

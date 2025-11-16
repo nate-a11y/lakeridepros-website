@@ -4,7 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { getServiceBySlugLocal, getServicesLocal, getMediaUrl } from '@/lib/api/payload-local';
+import { getRandomTestimonials } from '@/lib/api/payload';
 import BookingWidget from '@/components/BookingWidget';
+import TestimonialsSection from '@/components/TestimonialsSection';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { getFAQsForService, generateFAQSchema } from '@/lib/serviceFAQs';
 import ServiceFAQ from '@/components/ServiceFAQ';
@@ -106,6 +108,9 @@ export default async function ServiceDetailPage({ params }: Props) {
   if (!service) {
     notFound();
   }
+
+  // Fetch testimonials (only 5-star reviews)
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
 
   const imageUrl = service.image
     ? getMediaUrl(service.image.url)
@@ -327,6 +332,17 @@ export default async function ServiceDetailPage({ params }: Props) {
           <ServiceFAQ faqs={faqs} />
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      {testimonials.length > 0 && (
+        <TestimonialsSection
+          testimonials={testimonials}
+          title="What Our Clients Say"
+          subtitle={`See why customers love our ${service.title.toLowerCase()}`}
+          showCount={3}
+          includeSchema={false}
+        />
+      )}
 
       {/* Booking Section */}
       <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary">

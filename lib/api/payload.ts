@@ -279,7 +279,8 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
   const params: Record<string, any> = {
     sort: '-createdAt', // Sort by newest first
-    depth: 2
+    depth: 2,
+    limit: 100 // Fetch enough to get past placeholder reviews
   };
 
   // Build where conditions
@@ -300,22 +301,16 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
 
-  // Debug: Show what we got from API
-  console.log('[Testimonials API] Raw response:', {
-    totalDocs: response.docs?.length || 0,
-    firstDoc: response.docs?.[0] ? {
-      id: response.docs[0].id,
-      name: response.docs[0].name,
-      rating: response.docs[0].rating,
-      hasContent: !!response.docs[0].content,
-      contentType: typeof response.docs[0].content,
-      contentLength: response.docs[0].content?.length || 0,
-      contentPreview: response.docs[0].content?.substring(0, 100),
-      allKeys: Object.keys(response.docs[0])
-    } : null
+  // Filter out testimonials with placeholder content (IDs 177-237 have "No comment provided")
+  const placeholderTexts = ['No comment provided', 'No content provided', ''];
+  const validTestimonials = (response.docs || []).filter(testimonial => {
+    const content = testimonial.content?.trim() || '';
+    return content.length > 0 && !placeholderTexts.includes(content);
   });
 
-  return response.docs || [];
+  console.log(`[Testimonials API] Fetched ${response.docs?.length || 0} → filtered to ${validTestimonials.length} valid testimonials`);
+
+  return validTestimonials;
 }
 
 /**

@@ -325,7 +325,7 @@ async function syncProducts(request: Request) {
 
         const baseSlug = slugify(printifyProduct.title)
         const existingProductId = existing.docs.length > 0 ? existing.docs[0].id : undefined
-        const existingProduct = existing.docs.length > 0 ? (existing.docs[0] as ExistingProduct) : null
+        const existingProduct = existing.docs.length > 0 ? (existing.docs[0] as unknown as ExistingProduct) : null
         const slug = await ensureUniqueSlug(payload, baseSlug, existingProductId)
 
         // Determine if we need to re-upload images

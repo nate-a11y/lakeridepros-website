@@ -278,10 +278,8 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 // Testimonials API
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
   const params: Record<string, any> = {
-    sort: '-createdAt',
-    depth: 2, // Sort by newest first
-    // Explicitly select all fields to ensure content is included
-    select: 'id,name,title,company,content,rating,image,featured,order,source,externalId,externalUrl,syncedAt,createdAt,updatedAt'
+    sort: '-createdAt', // Sort by newest first
+    depth: 2
   };
 
   // Build where conditions
@@ -296,23 +294,11 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
     whereConditions.rating = { greater_than_equal: minRating };
   }
 
-  // Exclude testimonials with empty or placeholder content
-  // Using 'not_in' to filter out multiple placeholder values
-  whereConditions.content = {
-    not_in: ['No comment provided', 'No content provided', ''],
-  };
-
   if (Object.keys(whereConditions).length > 0) {
     params.where = JSON.stringify(whereConditions);
   }
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
-
-  // Debug: Log first testimonial to see what fields are being returned
-  if (response.docs && response.docs.length > 0) {
-    console.log('[Testimonials API] First testimonial:', JSON.stringify(response.docs[0], null, 2));
-  }
-
   return response.docs || [];
 }
 

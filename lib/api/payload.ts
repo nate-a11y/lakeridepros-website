@@ -300,6 +300,18 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
 
+  // Debug: Show what we got from API
+  console.log('[Testimonials API] Raw response:', {
+    totalDocs: response.docs?.length || 0,
+    samples: (response.docs || []).slice(0, 3).map(t => ({
+      id: t.id,
+      name: t.name,
+      rating: t.rating,
+      contentLength: t.content?.length || 0,
+      content: t.content?.substring(0, 50)
+    }))
+  });
+
   // Filter out testimonials with placeholder content on the client side
   const placeholderTexts = ['No comment provided', 'No content provided', ''];
   const validTestimonials = (response.docs || []).filter(testimonial => {
@@ -308,16 +320,6 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
   });
 
   console.log(`[Testimonials API] Filtered ${response.docs?.length || 0} -> ${validTestimonials.length} testimonials (removed placeholders)`);
-
-  // Debug: Show first valid testimonial
-  if (validTestimonials.length > 0) {
-    console.log('[Testimonials API] First valid testimonial:', {
-      id: validTestimonials[0].id,
-      name: validTestimonials[0].name,
-      rating: validTestimonials[0].rating,
-      contentPreview: validTestimonials[0].content?.substring(0, 100)
-    });
-  }
 
   return validTestimonials;
 }

@@ -453,8 +453,9 @@ async function syncProducts(request: Request) {
                 {
                   type: 'paragraph',
                   children: [
-                    { type: 'text', text: printifyProduct.description || printifyProduct.title },
+                    { type: 'text', text: printifyProduct.description || printifyProduct.title, version: 1 },
                   ],
+                  version: 1,
                 },
               ],
               direction: 'ltr' as const,

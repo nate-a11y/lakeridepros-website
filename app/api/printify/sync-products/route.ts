@@ -475,7 +475,7 @@ async function syncProducts(request: Request) {
           printifyProductId: printifyProduct.id,
           printifyBlueprintId: printifyProduct.blueprint_id.toString(),
           printifyPrintProviderId: printifyProduct.print_provider_id.toString(),
-          status: 'active',
+          status: 'active' as const,
           metaTitle: printifyProduct.title,
           metaDescription:
             printifyProduct.description?.substring(0, 160) || printifyProduct.title,

@@ -163,8 +163,8 @@ serve(async (req) => {
       )
     }
 
-    const outscraperReviews = placeData.reviews || []
-    console.log(`Found ${outscraperReviews.length} reviews for ${placeData.name}`)
+    const outscraperReviews = placeData.reviews_data || []
+    console.log(`Found ${outscraperReviews.length} reviews for ${placeData.name} (${placeData.reviews} total)`)
 
     // Transform Outscraper reviews to Google My Business API format
     // This ensures compatibility with existing Payload CMS logic

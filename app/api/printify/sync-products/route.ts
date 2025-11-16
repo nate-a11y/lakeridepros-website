@@ -141,7 +141,7 @@ function sanitizeFilename(filename: string): string {
   return `${truncated}-${timestamp}.png`
 }
 
-async function uploadImageToPayload(payload: PayloadInstance, imageBuffer: Buffer, filename: string) {
+async function uploadImageToPayload(payload: Payload, imageBuffer: Buffer, filename: string) {
   const sanitizedFilename = sanitizeFilename(filename)
 
   try {

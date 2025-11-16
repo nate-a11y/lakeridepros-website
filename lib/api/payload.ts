@@ -60,9 +60,6 @@ async function fetchFromPayload<T>(
   const apiUrl = getPayloadApiUrl();
   const url = `${apiUrl}/api${endpoint}${queryString ? `?${queryString}` : ''}`;
 
-  console.log(`[Payload API] Fetching from: ${url}`);
-  console.log(`[Payload API] Base URL: ${apiUrl}`);
-
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(API_KEY && { Authorization: `API-Key ${API_KEY}` }),
@@ -82,7 +79,6 @@ async function fetchFromPayload<T>(
     }
 
     const data = await response.json();
-    console.log(`[Payload API] Success for ${endpoint}, returned ${data.docs?.length || 0} docs`);
     return data;
   } catch (error) {
     console.error(`[Payload API] Error fetching from ${url}:`, error);
@@ -113,13 +109,6 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
   // Filter manually in application code until the API issue is resolved
   const services = response.docs || [];
   const matchingService = services.find(service => service.slug === slug && service.active);
-
-  console.log('🔍 getServiceBySlug called with:', { slug });
-  console.log('📦 getServiceBySlug API response:', {
-    totalDocs: services.length,
-    services: services.map(s => ({ id: s.id, title: s.title, slug: s.slug })),
-    matchingService: matchingService ? { id: matchingService.id, title: matchingService.title, slug: matchingService.slug } : null
-  });
 
   return matchingService || null;
 }
@@ -156,13 +145,6 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
   // Filter manually in application code until the API issue is resolved
   const vehicles = response.docs || [];
   const matchingVehicle = vehicles.find(vehicle => vehicle.slug === slug);
-
-  console.log('🔍 getVehicleBySlug called with:', { slug });
-  console.log('📦 getVehicleBySlug API response:', {
-    totalDocs: vehicles.length,
-    vehicles: vehicles.map(v => ({ id: v.id, title: v.title, slug: v.slug })),
-    matchingVehicle: matchingVehicle ? { id: matchingVehicle.id, title: matchingVehicle.title, slug: matchingVehicle.slug } : null
-  });
 
   return matchingVehicle || null;
 }
@@ -207,21 +189,6 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   const posts = response.docs || [];
   const matchingPost = posts.find(post => post.slug === slug && post.published);
 
-  console.log('🔍 getBlogPostBySlug called with:', { slug });
-  console.log('📦 getBlogPostBySlug API response:', {
-    totalDocs: posts.length,
-    posts: posts.map(p => ({ id: p.id, title: p.title, slug: p.slug })),
-    matchingPost: matchingPost ? {
-      id: matchingPost.id,
-      title: matchingPost.title,
-      slug: matchingPost.slug,
-      contentType: typeof matchingPost.content,
-      contentChildrenCount: matchingPost.content?.root?.children?.length,
-      hasContent: !!matchingPost.content,
-      contentSize: JSON.stringify(matchingPost.content || {}).length
-    } : null
-  });
-
   return matchingPost || null;
 }
 
@@ -265,23 +232,15 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   const products = response.docs || [];
   const matchingProduct = products.find(product => product.slug === slug && product.status === 'active');
 
-  console.log('🔍 getProductBySlug called with:', { slug });
-  console.log('📦 getProductBySlug API response:', {
-    totalDocs: products.length,
-    products: products.map(p => ({ id: p.id, name: p.name, slug: p.slug })),
-    matchingProduct: matchingProduct ? { id: matchingProduct.id, name: matchingProduct.name, slug: matchingProduct.slug } : null
-  });
-
   return matchingProduct || null;
 }
 
 // Testimonials API
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
   const params: Record<string, any> = {
-    sort: '-createdAt',
-    depth: 2, // Sort by newest first
-    // Explicitly select all fields to ensure content is included
-    select: 'id,name,title,company,content,rating,image,featured,order,source,externalId,externalUrl,syncedAt,createdAt,updatedAt'
+    sort: 'order',
+    depth: 2,
+    limit: 100 // Fetch enough to get past placeholder reviews (IDs 177-237)
   };
 
   // Build where conditions
@@ -296,24 +255,20 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
     whereConditions.rating = { greater_than_equal: minRating };
   }
 
-  // Exclude testimonials with empty or placeholder content
-  // Using 'not_in' to filter out multiple placeholder values
-  whereConditions.content = {
-    not_in: ['No comment provided', 'No content provided', ''],
-  };
-
   if (Object.keys(whereConditions).length > 0) {
     params.where = JSON.stringify(whereConditions);
   }
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
 
-  // Debug: Log first testimonial to see what fields are being returned
-  if (response.docs && response.docs.length > 0) {
-    console.log('[Testimonials API] First testimonial:', JSON.stringify(response.docs[0], null, 2));
-  }
+  // Filter out testimonials with placeholder content
+  const placeholderTexts = ['No comment provided', 'No content provided', ''];
+  const validTestimonials = (response.docs || []).filter(testimonial => {
+    const content = testimonial.content?.trim() || '';
+    return content.length > 0 && !placeholderTexts.includes(content);
+  });
 
-  return response.docs || [];
+  return validTestimonials;
 }
 
 /**
@@ -402,14 +357,7 @@ export async function getPartners(category?: string, featured = false): Promise<
       params.where = JSON.stringify(whereConditions);
     }
 
-    console.log('🔍 getPartners called with:', { category, featured, whereConditions, params });
-
     const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
-
-    console.log('📦 getPartners API response (before filtering):', {
-      count: response.docs?.length,
-      partners: response.docs?.map(p => ({ id: p.id, name: p.name, category: p.category }))
-    });
 
     let partners = response.docs || [];
 
@@ -417,16 +365,9 @@ export async function getPartners(category?: string, featured = false): Promise<
     // Filter manually in application code until the API issue is resolved
     if (category) {
       partners = partners.filter(p => p.category === category);
-      console.log(`🔧 Manually filtered by category "${category}":`, {
-        count: partners.length,
-        partners: partners.map(p => ({ id: p.id, name: p.name, category: p.category }))
-      });
     }
     if (featured) {
       partners = partners.filter(p => p.featured === true);
-      console.log(`🔧 Manually filtered by featured:`, {
-        count: partners.length,
-      });
     }
 
     return partners;
@@ -452,13 +393,6 @@ export async function getPageBySlug(slug: string): Promise<any | null> {
   // Filter manually in application code until the API issue is resolved
   const pages = response.docs || [];
   const matchingPage = pages.find(page => page.slug === slug && page.published);
-
-  console.log('🔍 getPageBySlug called with:', { slug });
-  console.log('📦 getPageBySlug API response:', {
-    totalDocs: pages.length,
-    pages: pages.map(p => ({ id: p.id, title: p.title, slug: p.slug })),
-    matchingPage: matchingPage ? { id: matchingPage.id, title: matchingPage.title, slug: matchingPage.slug } : null
-  });
 
   return matchingPage || null;
 }

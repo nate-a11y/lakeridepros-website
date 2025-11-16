@@ -278,9 +278,9 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 // Testimonials API
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
   const params: Record<string, any> = {
-    sort: '-createdAt', // Sort by newest first
+    sort: 'order',
     depth: 2,
-    limit: 100 // Fetch enough to get past placeholder reviews
+    limit: 100 // Fetch enough to get past placeholder reviews (IDs 177-237)
   };
 
   // Build where conditions

@@ -92,11 +92,15 @@ export default async function FleetPage() {
                         <span className="bg-primary text-white px-4 py-2 rounded-lg font-semibold">
                           {vehicle.capacity} passenger{vehicle.capacity !== 1 ? 's' : ''}
                         </span>
-                        {vehicle.pricing?.hourlyRate && (
-                          <span className="text-primary font-semibold">
-                            Starting at ${vehicle.pricing.hourlyRate}/hr
+                        {vehicle.pricing?.pointToPointMinimum ? (
+                          <span className="text-primary dark:text-primary-light font-semibold text-lg">
+                            Starting at ${vehicle.pricing.pointToPointMinimum}
                           </span>
-                        )}
+                        ) : vehicle.pricing?.hourlyRate ? (
+                          <span className="text-primary dark:text-primary-light font-semibold">
+                            ${vehicle.pricing.hourlyRate}/hr
+                          </span>
+                        ) : null}
                       </div>
 
                       <p className="text-neutral-700 dark:text-neutral-300 text-lg mb-4">

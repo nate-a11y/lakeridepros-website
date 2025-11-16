@@ -276,10 +276,23 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 }
 
 // Testimonials API
-export async function getTestimonials(featured = false): Promise<Testimonial[]> {
+export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
   const params: Record<string, any> = { sort: 'order', depth: 2 };
+
+  // Build where conditions
+  const whereConditions: Record<string, any> = {};
+
   if (featured) {
-    params.where = JSON.stringify({ featured: { equals: true } });
+    whereConditions.featured = { equals: true };
+  }
+
+  // Only show 5-star reviews on the website (keeps all in CMS for admin viewing)
+  if (minRating !== undefined) {
+    whereConditions.rating = { greater_than_equal: minRating };
+  }
+
+  if (Object.keys(whereConditions).length > 0) {
+    params.where = JSON.stringify(whereConditions);
   }
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
@@ -290,9 +303,10 @@ export async function getTestimonials(featured = false): Promise<Testimonial[]> 
  * Get random testimonials for variety across pages
  * @param count - Number of testimonials to return
  * @param featured - Only return featured testimonials
+ * @param minRating - Minimum rating to include (default: 5 for public display)
  */
-export async function getRandomTestimonials(count = 3, featured = false): Promise<Testimonial[]> {
-  const allTestimonials = await getTestimonials(featured);
+export async function getRandomTestimonials(count = 3, featured = false, minRating = 5): Promise<Testimonial[]> {
+  const allTestimonials = await getTestimonials(featured, minRating);
 
   if (allTestimonials.length <= count) {
     return allTestimonials;
@@ -300,6 +314,52 @@ export async function getRandomTestimonials(count = 3, featured = false): Promis
 
   // Fisher-Yates shuffle algorithm for randomization
   const shuffled = [...allTestimonials];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  return shuffled.slice(0, count);
+}
+
+/**
+ * Get vehicle-related testimonials filtered by keywords
+ * @param count - Number of testimonials to return
+ * @param minRating - Minimum rating to include (default: 5 for public display)
+ */
+export async function getVehicleRelatedTestimonials(count = 3, minRating = 5): Promise<Testimonial[]> {
+  const allTestimonials = await getTestimonials(false, minRating);
+
+  // Keywords that indicate a vehicle-related review
+  const vehicleKeywords = [
+    'vehicle', 'car', 'suv', 'suburban', 'van', 'bus', 'limo', 'sprinter', 'shuttle',
+    'ride', 'driver', 'driving', 'drove', 'driven',
+    'clean', 'comfortable', 'spacious', 'luxury', 'luxurious',
+    'seats', 'seating', 'capacity', 'room', 'roomy',
+    'air conditioning', 'ac', 'amenities', 'amenity',
+    'pickup', 'drop off', 'transport', 'transportation',
+    'professional driver', 'chauffeur',
+  ];
+
+  // Filter testimonials that mention vehicle-related keywords
+  const vehicleTestimonials = allTestimonials.filter(testimonial => {
+    const content = testimonial.content.toLowerCase();
+    const name = testimonial.name.toLowerCase();
+    const title = testimonial.title?.toLowerCase() || '';
+    const searchText = `${content} ${name} ${title}`;
+
+    return vehicleKeywords.some(keyword => searchText.includes(keyword));
+  });
+
+  // If we don't have enough vehicle-specific reviews, fall back to all testimonials
+  const testimonialsToUse = vehicleTestimonials.length >= count ? vehicleTestimonials : allTestimonials;
+
+  if (testimonialsToUse.length <= count) {
+    return testimonialsToUse;
+  }
+
+  // Fisher-Yates shuffle algorithm for randomization
+  const shuffled = [...testimonialsToUse];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];

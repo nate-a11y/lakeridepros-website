@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import BookingWidget from '@/components/BookingWidget';
-import { getVehicleBySlug, getMediaUrl } from '@/lib/api/payload';
+import TestimonialsSection from '@/components/TestimonialsSection';
+import { getVehicleBySlug, getMediaUrl, getVehicleRelatedTestimonials } from '@/lib/api/payload';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +35,9 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   if (!vehicle) {
     notFound();
   }
+
+  // Fetch vehicle-related testimonials (only 5-star reviews with vehicle keywords)
+  const testimonials = await getVehicleRelatedTestimonials(3, 5).catch(() => []);
 
   const images = vehicle.images || [];
   const mainImage = vehicle.featuredImage || (images[0]?.image);
@@ -171,22 +175,59 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
               )}
 
               {vehicle.pricing && (
-                <div className="bg-neutral-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-semibold text-neutral-900 mb-3">
-                    Pricing
+                <div className="bg-neutral-50 dark:bg-dark-bg-tertiary p-6 rounded-lg">
+                  <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
+                    Pricing Options
                   </h3>
+
+                  {/* Point-to-Point Pricing */}
+                  {vehicle.pricing.pointToPointMinimum && (
+                    <div className="mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700">
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                          Point-to-Point
+                        </span>
+                        <span className="text-xs text-neutral-500 dark:text-neutral-500">
+                          (Taxi-style)
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                        Starting at ${vehicle.pricing.pointToPointMinimum}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Hourly Rate Pricing */}
                   {vehicle.pricing.hourlyRate && (
-                    <p className="text-2xl font-bold text-primary mb-2">
-                      ${vehicle.pricing.hourlyRate}/hour
-                    </p>
+                    <div className={`${vehicle.pricing.dailyRate ? 'mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700' : 'mb-4'}`}>
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                          Hourly Charter
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                        ${vehicle.pricing.hourlyRate}/hour
+                      </p>
+                    </div>
                   )}
+
+                  {/* Daily Rate Pricing */}
                   {vehicle.pricing.dailyRate && (
-                    <p className="text-lg text-neutral-700">
-                      Daily Rate: ${vehicle.pricing.dailyRate}
-                    </p>
+                    <div className="mb-4">
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                          Full Day Rate
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                        ${vehicle.pricing.dailyRate}
+                      </p>
+                    </div>
                   )}
+
+                  {/* Pricing Notes */}
                   {vehicle.pricing.notes && (
-                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-3">
+                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
                       {vehicle.pricing.notes}
                     </p>
                   )}
@@ -197,11 +238,22 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      {testimonials.length > 0 && (
+        <TestimonialsSection
+          testimonials={testimonials}
+          title="What Our Clients Say"
+          subtitle={`Hear from customers who loved riding in our ${vehicle.name.toLowerCase()}`}
+          showCount={3}
+          includeSchema={false}
+        />
+      )}
+
       {/* Booking Section */}
-      <section className="py-16 bg-neutral-50">
+      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-neutral-900 mb-4">
+            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
               Book This Vehicle
             </h2>
             <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">

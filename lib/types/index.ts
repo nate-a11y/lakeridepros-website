@@ -56,6 +56,7 @@ export interface Vehicle {
     color?: string;
   };
   pricing?: {
+    pointToPointMinimum?: number;
     hourlyRate?: number;
     dailyRate?: number;
     notes?: string;

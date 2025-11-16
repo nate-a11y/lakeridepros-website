@@ -106,13 +106,15 @@ serve(async (req) => {
       try {
         // Outscraper Google Maps Reviews API endpoint (correct base URL)
         // Note: query parameter takes the Place ID directly, NOT with "place_id:" prefix
-        // Using 'start' parameter to only fetch reviews since last sync (saves API quota)
+        // Using 'cutoff' parameter to only fetch reviews since last sync (saves API quota)
+        // cutoff = oldest timestamp allowed (so reviews SINCE that date)
         let outscraperUrl = `https://api.app.outscraper.com/maps/reviews-v2?query=${googlePlaceId}&reviewsLimit=250&language=en&async=false&sort=newest`
 
         // If we have a last sync timestamp, only fetch reviews since then
         if (lastSyncTimestamp) {
-          const startTimestamp = Math.floor(new Date(lastSyncTimestamp).getTime() / 1000)
-          outscraperUrl += `&start=${startTimestamp}`
+          const cutoffTimestamp = Math.floor(new Date(lastSyncTimestamp).getTime() / 1000)
+          outscraperUrl += `&cutoff=${cutoffTimestamp}`
+          console.log(`Using cutoff timestamp: ${cutoffTimestamp} (${new Date(lastSyncTimestamp).toISOString()})`)
         }
 
         response = await fetch(outscraperUrl, {

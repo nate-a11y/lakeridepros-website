@@ -4,9 +4,9 @@ import ProductActions from './ProductActions'
 import { Metadata } from 'next'
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 async function getProduct(slug: string) {
@@ -51,7 +51,8 @@ function getMediaUrl(url: string): string {
   return `${PAYLOAD_API_URL}${url}`;
 }
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata(props: ProductPageProps): Promise<Metadata> {
+  const params = await props.params
   const product = await getProduct(params.slug).catch(() => null);
 
   if (!product) {
@@ -108,7 +109,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   };
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage(props: ProductPageProps) {
+  const params = await props.params
   const product = await getProduct(params.slug)
 
   if (!product) {

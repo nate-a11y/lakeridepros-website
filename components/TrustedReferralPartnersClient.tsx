@@ -2,9 +2,8 @@
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { ExternalLink, Phone, Mail, MapPin } from 'lucide-react'
-import { Partner } from '@/lib/types'
+import { Partner } from '@/src/payload-types'
 import { getMediaUrl } from '@/lib/utils'
 import PartnerFilters from './PartnerFilters'
 
@@ -79,7 +78,7 @@ export default function TrustedReferralPartnersClient({
   const PartnerCard = ({ partner }: { partner: Partner }) => (
     <div className="bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg p-6 hover:shadow-xl transition-all">
       {/* Logo */}
-      {partner.logo && (
+      {partner.logo && typeof partner.logo === 'object' && (
         <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
           <Image
             src={getMediaUrl(partner.logo.url)}

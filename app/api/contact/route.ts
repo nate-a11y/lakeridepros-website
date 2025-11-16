@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { ContactFormData } from '@/lib/types';
+
+// ContactFormData type - not generated from Payload
+interface ContactFormData {
+  name: string;
+  email: string;
+  message: string;
+  phone?: string;
+  subject?: string;
+}
 
 export async function POST(request: NextRequest) {
   try {

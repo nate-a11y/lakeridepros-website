@@ -20,6 +20,6 @@ export function MoovsWidget() {
 
 declare global {
   interface Window {
-    moovsAPI: any[]
+    moovsAPI: unknown[]
   }
 }

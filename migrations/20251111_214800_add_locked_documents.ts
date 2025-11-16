@@ -1,6 +1,6 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
   // Create payload_locked_documents table if it doesn't exist
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "payload_locked_documents" (
@@ -115,7 +115,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   console.log('✓ Created payload_locked_documents tables and indexes')
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db, payload: _payload, req: _req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`DROP TABLE IF EXISTS "payload_locked_documents_rels" CASCADE;`)
   await db.execute(sql`DROP TABLE IF EXISTS "payload_locked_documents" CASCADE;`)
 }

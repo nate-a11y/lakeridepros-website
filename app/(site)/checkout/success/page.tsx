@@ -10,7 +10,7 @@ function CheckoutSuccessContent() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('session_id')
   const [loading, setLoading] = useState(true)
-  const [orderData, setOrderData] = useState<any>(null)
+  const [orderData, setOrderData] = useState<{ customerEmail?: string } | null>(null)
   const { clearCart } = useCart()
 
   useEffect(() => {

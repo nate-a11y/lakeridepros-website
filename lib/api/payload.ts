@@ -5,10 +5,32 @@ import type {
   Product,
   Testimonial,
   Partner,
-  ApiResponse,
-  PaginationParams,
-  FilterParams,
-} from '@/lib/types';
+} from '@/src/payload-types';
+
+// Generic API response type
+interface ApiResponse<T> {
+  docs: T[];
+  totalDocs: number;
+  limit: number;
+  totalPages: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: number | null;
+  nextPage: number | null;
+}
+
+interface PaginationParams {
+  limit?: number;
+  page?: number;
+}
+
+interface FilterParams {
+  where?: string;
+  sort?: string;
+  depth?: number;
+}
 
 // Use production URL if available, otherwise use localhost for development
 // In Vercel, VERCEL_URL is automatically available
@@ -37,7 +59,7 @@ function getPayloadApiUrl(): string {
 const API_KEY = process.env.PAYLOAD_API_KEY;
 
 interface FetchOptions extends RequestInit {
-  params?: Record<string, string | number | boolean | undefined>;
+  params?: Record<string, unknown>;
 }
 
 async function fetchFromPayload<T>(
@@ -94,7 +116,7 @@ export async function getServices(params?: PaginationParams & FilterParams): Pro
     depth: 2,
     ...params,
   };
-  return fetchFromPayload<ApiResponse<Service>>('/services', { params: baseParams as any });
+  return fetchFromPayload<ApiResponse<Service>>('/services', { params: baseParams });
 }
 
 export async function getServiceBySlug(slug: string): Promise<Service | null> {
@@ -121,7 +143,7 @@ export async function getVehicles(params?: PaginationParams & FilterParams): Pro
     depth: 2,
     ...params,
   };
-  return fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', { params: baseParams as any });
+  return fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', { params: baseParams as Record<string, unknown> });
 }
 
 export async function getFeaturedVehicles(limit = 6): Promise<Vehicle[]> {
@@ -157,7 +179,7 @@ export async function getBlogPosts(params?: PaginationParams & FilterParams): Pr
     depth: 2,
     ...params,
   };
-  return fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', { params: baseParams as any });
+  return fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', { params: baseParams as Record<string, unknown> });
 }
 
 export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
@@ -199,7 +221,7 @@ export async function getProducts(params?: PaginationParams & FilterParams): Pro
     depth: 2,
     ...params,
   };
-  return fetchFromPayload<ApiResponse<Product>>('/products', { params: baseParams as any });
+  return fetchFromPayload<ApiResponse<Product>>('/products', { params: baseParams as Record<string, unknown> });
 }
 
 export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
@@ -237,14 +259,14 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
 // Testimonials API
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
-  const params: Record<string, any> = {
+  const params: Record<string, unknown> = {
     sort: 'order',
     depth: 2,
     limit: 100 // Fetch enough to get past placeholder reviews (IDs 177-237)
   };
 
   // Build where conditions
-  const whereConditions: Record<string, any> = {};
+  const whereConditions: Record<string, unknown> = {};
 
   if (featured) {
     whereConditions.featured = { equals: true };
@@ -343,8 +365,8 @@ export async function getVehicleRelatedTestimonials(count = 3, minRating = 5): P
 // Partners API
 export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   try {
-    const params: Record<string, any> = { sort: 'order', depth: 2 };
-    const whereConditions: Record<string, any> = {};
+    const params: Record<string, unknown> = { sort: 'order', depth: 2 };
+    const whereConditions: Record<string, unknown> = {};
 
     if (category) {
       whereConditions.category = { equals: category };
@@ -371,7 +393,7 @@ export async function getPartners(category?: string, featured = false): Promise<
     }
 
     return partners;
-  } catch (error) {
+  } catch (_error) {
     // Return empty array if Partners collection doesn't exist yet (during initial deployment)
     console.warn('Partners collection not found, returning empty array');
     return [];
@@ -379,8 +401,8 @@ export async function getPartners(category?: string, featured = false): Promise<
 }
 
 // Pages API
-export async function getPageBySlug(slug: string): Promise<any | null> {
-  const response = await fetchFromPayload<ApiResponse<any>>('/pages', {
+export async function getPageBySlug(slug: string): Promise<Record<string, unknown> | null> {
+  const response = await fetchFromPayload<ApiResponse<Record<string, unknown>>>('/pages', {
     params: {
       where: JSON.stringify({
         slug: { equals: slug },

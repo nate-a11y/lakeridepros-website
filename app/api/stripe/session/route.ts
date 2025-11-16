@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       paymentStatus: session.payment_status,
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Session retrieval error:', error)
     return NextResponse.json(
       { error: 'Failed to retrieve session' },

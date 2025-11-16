@@ -4,10 +4,18 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Search, CreditCard, DollarSign, Calendar, AlertCircle } from 'lucide-react'
 
+interface GiftCardData {
+  code: string
+  balance: number
+  originalAmount?: number
+  purchasedDate?: string
+  expirationDate?: string
+}
+
 export default function GiftCardBalancePage() {
   const [giftCardCode, setGiftCardCode] = useState('')
   const [balance, setBalance] = useState<number | null>(null)
-  const [cardData, setCardData] = useState<any>(null)
+  const [cardData, setCardData] = useState<GiftCardData | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -36,8 +44,8 @@ export default function GiftCardBalancePage() {
 
       setBalance(data.balance)
       setCardData(data)
-    } catch (err: any) {
-      setError(err.message || 'An error occurred. Please try again.')
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred. Please try again.')
     } finally {
       setLoading(false)
     }

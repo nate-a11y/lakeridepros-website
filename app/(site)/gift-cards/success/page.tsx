@@ -3,13 +3,13 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { CheckCircle, Gift, Mail, Download, Loader2 } from 'lucide-react'
+import { CheckCircle, Gift, Mail, Loader2 } from 'lucide-react'
 
 function GiftCardSuccessContent() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('session_id')
   const [loading, setLoading] = useState(true)
-  const [giftCardData, setGiftCardData] = useState<any>(null)
+  const [giftCardData, setGiftCardData] = useState<{ customerEmail?: string } | null>(null)
 
   useEffect(() => {
     async function fetchGiftCardDetails() {

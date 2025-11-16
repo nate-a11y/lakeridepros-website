@@ -1,6 +1,6 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
   // Create enum for vehicle types
   await db.execute(sql`
     CREATE TYPE "public"."enum_vehicles_type" AS ENUM('sedan', 'suv', 'van', 'limousine', 'bus', 'boat', 'other');
@@ -246,7 +246,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   `)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db, payload: _payload, req: _req }: MigrateDownArgs): Promise<void> {
   // Drop tables in reverse order (child tables first)
   await db.execute(sql`
     DROP TABLE IF EXISTS "services_features" CASCADE;

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { BlogPost } from '@/lib/types';
+import type { BlogPost } from '@/src/payload-types';
 import { getMediaUrl } from '@/lib/api/payload';
 import { formatDate } from '@/lib/utils';
 import { FileText } from 'lucide-react';
@@ -21,7 +21,7 @@ const getCategoryLabel = (categoryValue: string): string => {
 };
 
 export default function BlogPostCard({ post }: BlogPostCardProps) {
-  const imageUrl = post.featuredImage
+  const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
     ? getMediaUrl(post.featuredImage.url)
     : null;
 
@@ -34,7 +34,7 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
         {imageUrl ? (
           <Image
             src={imageUrl}
-            alt={post.featuredImage?.alt || post.title}
+            alt={(post.featuredImage && typeof post.featuredImage === 'object' ? post.featuredImage.alt : null) || post.title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
@@ -53,9 +53,7 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
             <>
               <span className="mx-2">•</span>
               <span className="text-primary dark:text-primary-light">
-                {typeof post.categories[0] === 'string'
-                  ? getCategoryLabel(post.categories[0])
-                  : post.categories[0]?.name || ''}
+                {getCategoryLabel(post.categories[0])}
               </span>
             </>
           )}

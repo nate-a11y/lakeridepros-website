@@ -4,9 +4,15 @@ const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
 const PRINTIFY_SHOP_ID = process.env.PRINTIFY_SHOP_ID
 
+interface CartItem {
+  productId: string
+  variantId: string
+  quantity: number
+}
+
 export async function POST(request: NextRequest) {
   try {
-    const { orderId, orderNumber, cartItems, shippingAddress, customerEmail } = await request.json()
+    const { orderId: _orderId, orderNumber, cartItems, shippingAddress, customerEmail } = await request.json()
 
     if (!PRINTIFY_TOKEN || !PRINTIFY_SHOP_ID) {
       console.log('Printify not configured - skipping order creation')
@@ -18,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     // Map cart items to Printify line items
     const lineItems = await Promise.all(
-      cartItems.map(async (item: any) => {
+      cartItems.map(async (item: CartItem) => {
         // Fetch product from Payload to get Printify IDs
         const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
         const productResponse = await fetch(`${payloadUrl}/api/products/${item.productId}`)
@@ -30,7 +36,7 @@ export async function POST(request: NextRequest) {
         const productData = await productResponse.json()
 
         // Find the variant in the product
-        const variant = productData.doc.variants?.find((v: any) => v.sku === item.variantId)
+        const variant = productData.doc.variants?.find((v: { sku: string; printifyVariantId?: string }) => v.sku === item.variantId)
 
         if (!variant || !variant.printifyVariantId) {
           throw new Error(`Printify variant ID not found for SKU: ${item.variantId}`)
@@ -100,10 +106,10 @@ export async function POST(request: NextRequest) {
       status: printifyOrder.status,
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Printify order creation error:', error)
     return NextResponse.json(
-      { error: error.message || 'Failed to create Printify order' },
+      { error: error instanceof Error ? error.message : 'Failed to create Printify order' },
       { status: 500 }
     )
   }

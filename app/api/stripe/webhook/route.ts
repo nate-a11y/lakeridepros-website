@@ -3,6 +3,7 @@ import Stripe from 'stripe'
 import { sendOrderConfirmation, sendOwnerOrderNotification, sendOwnerGiftCardNotification } from '@/lib/email'
 import { getPayload } from 'payload'
 import config from '@payload-config'
+import type { Order, GiftCard } from '@/src/payload-types'
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -24,8 +25,9 @@ export async function POST(request: NextRequest) {
 
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-    } catch (err: any) {
-      console.error('Webhook signature verification failed:', err.message)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+      console.error('Webhook signature verification failed:', errorMessage)
       return NextResponse.json(
         { error: 'Invalid signature' },
         { status: 400 }
@@ -52,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Webhook error:', error)
     return NextResponse.json(
       { error: 'Webhook handler failed' },
@@ -77,10 +79,11 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
       expand: ['line_items', 'line_items.data.price.product', 'customer_details', 'shipping_details'],
     })
 
-    const lineItems = fullSession.line_items?.data || []
+    const _lineItems = fullSession.line_items?.data || []
     const customerEmail = fullSession.customer_details?.email
     const customerName = fullSession.customer_details?.name
-    const shippingAddress = (fullSession as any).shipping_details?.address
+    const shippingDetails = (fullSession as unknown as { shipping_details?: { address?: Stripe.Address } }).shipping_details
+    const shippingAddress = shippingDetails?.address
 
     if (!customerEmail || !customerName || !shippingAddress) {
       console.error('Missing customer or shipping information')
@@ -104,14 +107,20 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
     // Create order in Payload CMS using Local API
     const payload = await getPayload({ config })
 
+    // Generate order number
+    const timestamp = Date.now().toString(36).toUpperCase()
+    const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase()
+    const orderNumber = `ORD-${timestamp}-${randomPart}`
+
     const orderData = {
+      orderNumber,
       stripePaymentIntentId: fullSession.payment_intent as string,
       stripeCheckoutSessionId: session.id,
       customerEmail,
       customerName,
       shippingAddress: {
         line1: shippingAddress.line1 || '',
-        line2: shippingAddress.line2 || '',
+        line2: shippingAddress.line2 || null,
         city: shippingAddress.city || '',
         state: shippingAddress.state || '',
         postalCode: shippingAddress.postal_code || '',
@@ -122,23 +131,24 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
       shipping: amountShipping / 100,
       tax: amountTax / 100,
       total: amountTotal / 100,
-      status: 'processing',
+      status: 'processing' as const,
     }
 
     // Use Local API with overrideAccess to bypass admin-only restriction
     const order = await payload.create({
       collection: 'orders',
       data: orderData,
+      draft: false,
       overrideAccess: true, // Bypass access control - safe because Stripe signature verified
-    })
+    }) as Order
 
     console.log('Order created:', order.orderNumber)
 
     // Send order to Printify (next step)
-    await sendToPrintify(order, cartItems, shippingAddress, customerEmail)
+    await sendToPrintify(order as unknown as OrderData, cartItems, orderData.shippingAddress, customerEmail)
 
     // Send confirmation email to customer
-    await sendOrderConfirmationEmail(order, customerEmail, customerName)
+    await sendOrderConfirmationEmail(order as unknown as OrderData, customerEmail, customerName)
 
     // Send notification email to owners
     await sendOwnerOrderNotification(
@@ -155,7 +165,34 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
   }
 }
 
-async function sendToPrintify(order: any, cartItems: any[], shippingAddress: any, customerEmail: string) {
+interface OrderData {
+  id: string | number
+  orderNumber: string
+  total: number
+  items: CartItem[]
+}
+
+interface CartItem {
+  productId: string | number
+  productName: string
+  variantId: string
+  variantName: string
+  quantity: number
+  price: number
+  size?: string
+  color?: string
+}
+
+interface ShippingAddress {
+  line1: string
+  line2?: string | null
+  city: string
+  state: string
+  postalCode: string
+  country: string
+}
+
+async function sendToPrintify(order: OrderData, cartItems: CartItem[], shippingAddress: ShippingAddress, customerEmail: string) {
   try {
     // This will be implemented in the next prompt
     console.log('Sending order to Printify:', order.orderNumber)
@@ -196,7 +233,7 @@ async function sendToPrintify(order: any, cartItems: any[], shippingAddress: any
   }
 }
 
-async function sendOrderConfirmationEmail(order: any, customerEmail: string, customerName: string) {
+async function sendOrderConfirmationEmail(order: OrderData, customerEmail: string, customerName: string) {
   try {
     await sendOrderConfirmation(
       customerEmail,
@@ -227,15 +264,21 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     // Create gift card in Payload CMS using Local API
     const payload = await getPayload({ config })
 
-    const giftCardData: any = {
-      type: cardType,
+    // Generate gift card code
+    const timestamp = Date.now().toString(36).toUpperCase()
+    const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase()
+    const code = `GC-${timestamp}-${randomPart}`
+
+    const giftCardData: Partial<GiftCard> = {
+      code,
+      type: cardType as 'digital' | 'physical',
       initialAmount: amount,
       currentBalance: amount,
       purchaserName,
       purchaserEmail,
-      recipientName,
-      recipientEmail,
-      message,
+      recipientName: recipientName || undefined,
+      recipientEmail: recipientEmail || undefined,
+      message: message || undefined,
       status: 'active',
       stripePaymentIntentId: session.payment_intent as string,
       stripeCheckoutSessionId: session.id,
@@ -243,8 +286,8 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
 
     // Add delivery info for digital cards
     if (cardType === 'digital') {
-      giftCardData.deliveryMethod = deliveryMethod
-      giftCardData.deliveryStatus = deliveryMethod === 'scheduled' ? 'pending' : 'pending'
+      giftCardData.deliveryMethod = deliveryMethod as 'immediate' | 'scheduled'
+      giftCardData.deliveryStatus = deliveryMethod === 'scheduled' ? 'pending' : 'sent'
       if (scheduledDeliveryDate) {
         giftCardData.scheduledDeliveryDate = scheduledDeliveryDate
       }
@@ -267,9 +310,10 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     // Use Local API with overrideAccess to bypass admin-only restriction
     const giftCard = await payload.create({
       collection: 'gift-cards',
-      data: giftCardData,
+      data: giftCardData as unknown as Omit<GiftCard, 'id' | 'createdAt' | 'updatedAt'>,
+      draft: false,
       overrideAccess: true, // Bypass access control - safe because Stripe signature verified
-    })
+    }) as GiftCard
 
     console.log('Gift card created:', cardType === 'digital' ? giftCard.code : 'pending fulfillment')
 
@@ -278,7 +322,7 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
       if (deliveryMethod === 'immediate') {
         // Send gift card email immediately
         await sendGiftCardEmail(
-          giftCard,
+          giftCard as unknown as StripeGiftCardData,
           purchaserName,
           purchaserEmail,
           recipientName,
@@ -303,7 +347,7 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
         purchaserName,
         purchaserEmail,
         amount,
-        giftCardData.shippingAddress
+        giftCardData.shippingAddress as Record<string, unknown>
       )
     }
 
@@ -325,8 +369,16 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
   }
 }
 
+interface StripeGiftCardData {
+  code: string
+  initialAmount: number
+  currentBalance: number
+  type: string
+  [key: string]: unknown
+}
+
 async function sendGiftCardEmail(
-  giftCard: any,
+  giftCard: StripeGiftCardData,
   purchaserName: string,
   purchaserEmail: string,
   recipientName: string | null,
@@ -367,7 +419,7 @@ async function sendPhysicalGiftCardConfirmation(
   purchaserName: string,
   purchaserEmail: string,
   amount: number,
-  shippingAddress: any
+  shippingAddress: Record<string, unknown>
 ) {
   try {
     console.log('Sending physical gift card order confirmation')

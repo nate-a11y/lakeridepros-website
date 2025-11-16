@@ -1,5 +1,21 @@
 import { Resend } from 'resend'
 
+interface OrderItem {
+  productName: string
+  variantName: string
+  quantity: number
+  price: number
+}
+
+interface ShippingAddress {
+  line1: string
+  line2?: string
+  city: string
+  state: string
+  postalCode: string
+  country: string
+}
+
 function getResend() {
   if (!process.env.RESEND_API_KEY) {
     throw new Error('RESEND_API_KEY is not set')
@@ -12,7 +28,7 @@ export async function sendOrderConfirmation(
   customerName: string,
   orderNumber: string,
   orderTotal: number,
-  items: any[]
+  items: OrderItem[]
 ) {
   try {
     const resend = getResend()
@@ -108,8 +124,8 @@ export async function sendOwnerOrderNotification(
   customerName: string,
   customerEmail: string,
   orderTotal: number,
-  items: any[],
-  shippingAddress: any
+  items: OrderItem[],
+  shippingAddress: ShippingAddress
 ) {
   try {
     const resend = getResend()

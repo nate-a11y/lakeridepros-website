@@ -254,7 +254,7 @@ export const GiftCards: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      async ({ data, operation, originalDoc }) => {
+      async ({ data, operation, originalDoc: _originalDoc }) => {
         // Auto-generate gift card code for digital cards on creation
         if (operation === 'create' && !data.code && data.type === 'digital') {
           data.code = generateGiftCardCode()

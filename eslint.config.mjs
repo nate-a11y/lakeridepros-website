@@ -26,7 +26,14 @@ const eslintConfig = [
       // Disable strict rules that are too noisy for this codebase
       "react/no-unescaped-entities": "off",
       "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
       "@next/next/no-img-element": "warn",
     },
   },

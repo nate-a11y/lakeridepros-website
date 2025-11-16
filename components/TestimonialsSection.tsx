@@ -1,5 +1,6 @@
+import Image from 'next/image';
 import { getMediaUrl } from '@/lib/api/payload';
-import type { Testimonial } from '@/lib/types';
+import type { Testimonial } from '@/src/payload-types';
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[];
@@ -126,9 +127,11 @@ export default function TestimonialsSection({
                 {/* Author Info */}
                 <div className="flex items-center mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
                   {testimonial.image && typeof testimonial.image === 'object' && (
-                    <img
+                    <Image
                       src={getMediaUrl(testimonial.image.url)}
                       alt={testimonial.name}
+                      width={48}
+                      height={48}
                       className="h-12 w-12 rounded-full mr-4 object-cover"
                     />
                   )}

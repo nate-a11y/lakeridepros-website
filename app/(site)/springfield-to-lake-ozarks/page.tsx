@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { MapPin, Users, Clock, CheckCircle, Star, Phone, ArrowRight, Plane } from 'lucide-react'
+import { MapPin, Clock, Star, Phone, ArrowRight, Plane } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 

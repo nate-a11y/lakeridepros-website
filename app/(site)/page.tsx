@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import HeroSection from '@/components/HeroSection';
 import BookingWidget from '@/components/BookingWidget';
 import ServiceCard from '@/components/ServiceCard';
@@ -216,10 +217,12 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
               {partners.map((partner) => (
                 <div key={partner.id} className="flex items-center justify-center">
-                  <img
+                  <Image
                     src={getMediaUrl(partner.logo.url)}
                     alt={partner.name}
-                    className="h-16 object-contain filter grayscale hover:grayscale-0 transition-all"
+                    width={128}
+                    height={64}
+                    className="h-16 w-auto object-contain filter grayscale hover:grayscale-0 transition-all"
                   />
                 </div>
               ))}

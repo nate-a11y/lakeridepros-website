@@ -7,6 +7,62 @@ const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
 const PRINTIFY_SHOP_ID = process.env.PRINTIFY_SHOP_ID
 const SYNC_SECRET = process.env.PRINTIFY_SYNC_SECRET || 'change-me-in-production'
 
+interface PrintifyImage {
+  src: string
+  position: string
+  is_default: boolean
+  variant_ids: number[]
+}
+
+interface PrintifyVariantOption {
+  size?: string
+  color?: string
+  [key: string]: string | undefined
+}
+
+interface PrintifyVariant {
+  id: number
+  sku: string
+  cost: number
+  price: number
+  title: string
+  grams: number
+  is_enabled: boolean
+  is_default: boolean
+  is_available: boolean
+  options: PrintifyVariantOption[]
+}
+
+interface PrintifyProduct {
+  id: string
+  title: string
+  description: string
+  tags: string[]
+  images: PrintifyImage[]
+  variants: PrintifyVariant[]
+  blueprint_id: number
+  print_provider_id: number
+  [key: string]: unknown
+}
+
+interface PayloadInstance {
+  find: (options: Record<string, unknown>) => Promise<{ docs: Record<string, unknown>[] }>
+  create: (options: Record<string, unknown>) => Promise<Record<string, unknown>>
+  update: (options: Record<string, unknown>) => Promise<Record<string, unknown>>
+}
+
+interface ProductImage {
+  image: number | { id: number }
+  [key: string]: unknown
+}
+
+interface ExistingProduct {
+  id: string | number
+  featuredImage?: number | { id: number }
+  images?: ProductImage[]
+  [key: string]: unknown
+}
+
 // Retry helper function with exponential backoff
 async function fetchWithRetry(
   url: string,
@@ -89,7 +145,7 @@ function sanitizeFilename(filename: string): string {
   return `${truncated}-${timestamp}.png`
 }
 
-async function uploadImageToPayload(payload: any, imageBuffer: Buffer, filename: string) {
+async function uploadImageToPayload(payload: PayloadInstance, imageBuffer: Buffer, filename: string) {
   const sanitizedFilename = sanitizeFilename(filename)
 
   try {
@@ -126,7 +182,7 @@ function slugify(text: string): string {
   return slug.substring(0, 100).replace(/-+$/, '')
 }
 
-async function ensureUniqueSlug(payload: any, baseSlug: string, existingProductId?: string | number): Promise<string> {
+async function ensureUniqueSlug(payload: PayloadInstance, baseSlug: string, existingProductId?: string | number): Promise<string> {
   let slug = baseSlug
   let counter = 1
 
@@ -186,7 +242,7 @@ async function syncProducts(request: Request) {
     console.log('[Printify Sync] Starting product sync from Printify...')
 
     // Fetch all products from Printify with pagination
-    let allProducts: any[] = []
+    let allProducts: PrintifyProduct[] = []
     let currentPage = 1
     let hasMorePages = true
     const limit = 50 // Max allowed by Printify API
@@ -269,7 +325,7 @@ async function syncProducts(request: Request) {
 
         const baseSlug = slugify(printifyProduct.title)
         const existingProductId = existing.docs.length > 0 ? existing.docs[0].id : undefined
-        const existingProduct = existing.docs.length > 0 ? existing.docs[0] : null
+        const existingProduct = existing.docs.length > 0 ? (existing.docs[0] as ExistingProduct) : null
         const slug = await ensureUniqueSlug(payload, baseSlug, existingProductId)
 
         // Determine if we need to re-upload images
@@ -289,7 +345,7 @@ async function syncProducts(request: Request) {
           featuredImageId = typeof existingProduct.featuredImage === 'object'
             ? existingProduct.featuredImage.id
             : existingProduct.featuredImage
-          additionalImages = existingProduct.images.map((img: any) => ({
+          additionalImages = existingProduct.images.map((img: ProductImage) => ({
             image: typeof img.image === 'object' ? img.image.id : img.image
           }))
           results.imagesReused += (1 + additionalImages.length)
@@ -299,7 +355,7 @@ async function syncProducts(request: Request) {
 
           // Download and upload featured image
           const defaultImage =
-            printifyProduct.images.find((img: any) => img.is_default) || printifyProduct.images[0]
+            printifyProduct.images.find((img: PrintifyImage) => img.is_default) || printifyProduct.images[0]
 
           if (defaultImage) {
             const imageBuffer = await downloadImage(defaultImage.src)
@@ -311,7 +367,7 @@ async function syncProducts(request: Request) {
           // Deduplicate images by URL to avoid filename conflicts
           const seenUrls = new Set([defaultImage?.src])
           const imagesToProcess = printifyProduct.images
-            .filter((img: any) => {
+            .filter((img: PrintifyImage) => {
               if (seenUrls.has(img.src)) {
                 return false
               }
@@ -342,10 +398,10 @@ async function syncProducts(request: Request) {
 
         // Map variants
         const variants = printifyProduct.variants
-          .filter((v: any) => v.is_enabled && v.is_available)
-          .map((variant: any) => {
-            const size = variant.options.find((opt: any) => opt.size)?.size || ''
-            const color = variant.options.find((opt: any) => opt.color)?.color || ''
+          .filter((v: PrintifyVariant) => v.is_enabled && v.is_available)
+          .map((variant: PrintifyVariant) => {
+            const size = variant.options.find((opt: PrintifyVariantOption) => opt.size)?.size || ''
+            const color = variant.options.find((opt: PrintifyVariantOption) => opt.color)?.color || ''
 
             return {
               name: variant.title,
@@ -360,7 +416,7 @@ async function syncProducts(request: Request) {
 
         const basePrice =
           variants.length > 0
-            ? Math.min(...variants.map((v: any) => v.price))
+            ? Math.min(...variants.map((v: { price: number }) => v.price))
             : printifyProduct.variants[0]?.price / 100 || 0
 
         // Determine category
@@ -418,7 +474,7 @@ async function syncProducts(request: Request) {
           price: basePrice,
           categories,
           tags: printifyProduct.tags.map((tag: string) => ({ tag })),
-          inStock: variants.some((v: any) => v.inStock),
+          inStock: variants.some((v: { inStock: boolean }) => v.inStock),
           variants,
           printifyProductId: printifyProduct.id,
           printifyBlueprintId: printifyProduct.blueprint_id.toString(),

@@ -1,6 +1,6 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
   // Remove old collection columns that no longer exist in the config
   await db.execute(sql`
     DO $$ BEGIN
@@ -24,7 +24,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   console.log('✓ Removed old collection references (services, vehicles, testimonials) from payload_locked_documents_rels')
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db, payload: _payload, req: _req }: MigrateDownArgs): Promise<void> {
   // Re-add the columns if rolling back (though they would be empty)
   await db.execute(sql`
     DO $$ BEGIN

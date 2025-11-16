@@ -1,6 +1,6 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): Promise<void> {
   // Create enums for new collections
   await db.execute(sql`
     DO $$ BEGIN
@@ -283,7 +283,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`CREATE INDEX IF NOT EXISTS "partners_created_at_idx" ON "partners" USING btree ("created_at");`)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db, payload: _payload, req: _req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`DROP TABLE IF EXISTS "products_images" CASCADE;`)
   await db.execute(sql`DROP TABLE IF EXISTS "products_categories" CASCADE;`)
   await db.execute(sql`DROP TABLE IF EXISTS "products_tags" CASCADE;`)

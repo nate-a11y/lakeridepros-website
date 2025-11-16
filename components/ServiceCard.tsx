@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Service } from '@/lib/types';
+import type { Service } from '@/src/payload-types';
 import { getMediaUrl } from '@/lib/api/payload';
 import { DynamicIcon } from '@/lib/iconMapper';
 
@@ -9,7 +9,7 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
-  const imageUrl = service.image ? getMediaUrl(service.image.url) : '/placeholder-service.jpg';
+  const imageUrl = service.image && typeof service.image === 'object' ? getMediaUrl(service.image.url) : '/placeholder-service.jpg';
 
   return (
     <Link
@@ -19,7 +19,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
       <div className="relative h-48 overflow-hidden">
         <Image
           src={imageUrl}
-          alt={service.image?.alt || service.title}
+          alt={(service.image && typeof service.image === 'object' ? service.image.alt : null) || service.title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />

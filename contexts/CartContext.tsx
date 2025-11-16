@@ -1,13 +1,29 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { Cart, CartItem, Product, ProductVariant } from '@/lib/types';
+import type { Product } from '@/src/payload-types';
+
+// Extract ProductVariant type from Product's variants array
+type ProductVariant = NonNullable<Product['variants']>[number];
+
+// Cart types - not generated from Payload
+interface CartItem {
+  product: Product;
+  quantity: number;
+  variant?: ProductVariant;
+}
+
+interface Cart {
+  items: CartItem[];
+  subtotal: number;
+  total: number;
+}
 
 interface CartContextType {
   cart: Cart;
   addToCart: (product: Product, quantity?: number, variant?: ProductVariant) => void;
-  removeFromCart: (productId: string, variantId?: string) => void;
-  updateQuantity: (productId: string, quantity: number, variantId?: string) => void;
+  removeFromCart: (productId: string | number, variantId?: string) => void;
+  updateQuantity: (productId: string | number, quantity: number, variantId?: string) => void;
   clearCart: () => void;
   isOpen: boolean;
   openCart: () => void;
@@ -78,19 +94,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsOpen(true);
   };
 
-  const removeFromCart = (productId: string, variantId?: string) => {
+  const removeFromCart = (productId: string | number, variantId?: string) => {
     setItems((currentItems) =>
       currentItems.filter(
         (item) =>
           !(
-            item.product.id === productId &&
+            String(item.product.id) === String(productId) &&
             (variantId ? item.variant?.id === variantId : !item.variant)
           )
       )
     );
   };
 
-  const updateQuantity = (productId: string, quantity: number, variantId?: string) => {
+  const updateQuantity = (productId: string | number, quantity: number, variantId?: string) => {
     if (quantity <= 0) {
       removeFromCart(productId, variantId);
       return;
@@ -99,7 +115,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((currentItems) =>
       currentItems.map((item) => {
         if (
-          item.product.id === productId &&
+          String(item.product.id) === String(productId) &&
           (variantId ? item.variant?.id === variantId : !item.variant)
         ) {
           return { ...item, quantity };

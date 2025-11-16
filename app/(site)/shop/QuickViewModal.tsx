@@ -6,14 +6,21 @@ import Link from 'next/link'
 import { X, ShoppingCart, Check, ExternalLink } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl } from '@/lib/utils'
+import type { Product } from '@/src/payload-types'
+
+interface QuickViewProduct extends Omit<Product, 'id'> {
+  id: string | number
+}
 
 interface QuickViewModalProps {
-  product: any
+  product: QuickViewProduct
   onClose: () => void
 }
 
 export default function QuickViewModal({ product, onClose }: QuickViewModalProps) {
-  const [selectedVariant, setSelectedVariant] = useState<any>(
+  type ProductVariant = NonNullable<Product['variants']>[number];
+
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     product.variants?.[0] || null
   )
   const [quantity, setQuantity] = useState(1)
@@ -26,16 +33,16 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
   // Group variants by size
   const sizes = Array.from(
-    new Set<string>(product.variants?.map((v: any) => v.size as string) || [])
+    new Set<string>(product.variants?.map((v) => v.size || '').filter(s => s) || [])
   )
 
   const handleAddToCart = () => {
     if (!selectedVariant) return
 
-    const finalPrice = product.price + (selectedVariant.priceModifier || 0)
+    const finalPrice = selectedVariant.price || product.price
 
     addItem({
-      productId: product.id,
+      productId: String(product.id),
       productName: product.name,
       productSlug: product.slug,
       variantId: selectedVariant.sku,
@@ -44,8 +51,10 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       color: selectedVariant.color,
       price: finalPrice,
       quantity,
-      image: product.images?.[0]?.image?.url ? getMediaUrl(product.images[0].image.url) : '',
-      imageAlt: product.images?.[0]?.alt || product.name,
+      image: typeof product.featuredImage === 'object' && product.featuredImage.url
+        ? getMediaUrl(product.featuredImage.url)
+        : '',
+      imageAlt: typeof product.featuredImage === 'object' ? product.featuredImage.alt : product.name,
     })
 
     setAddedToCart(true)
@@ -82,20 +91,24 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
             {/* Image Gallery */}
             <div>
               <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-xl overflow-hidden mb-4">
-                {product.images?.[selectedImage]?.image?.url ? (
-                  <Image
-                    src={getMediaUrl(product.images[selectedImage].image.url)}
-                    alt={product.images[selectedImage].alt || product.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <ShoppingCart className="w-24 h-24 text-neutral-300 dark:text-neutral-500" />
-                    <span className="absolute bottom-4 text-neutral-500 dark:text-neutral-400 text-sm">No Image Available</span>
-                  </div>
-                )}
+                {(() => {
+                  const imageItem = product.images?.[selectedImage];
+                  const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null;
+                  return imageObj?.url ? (
+                    <Image
+                      src={getMediaUrl(imageObj.url)}
+                      alt={imageObj.alt || product.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <ShoppingCart className="w-24 h-24 text-neutral-300 dark:text-neutral-500" />
+                      <span className="absolute bottom-4 text-neutral-500 dark:text-neutral-400 text-sm">No Image Available</span>
+                    </div>
+                  );
+                })()}
 
                 {/* Badges */}
                 <div className="absolute top-4 left-4 flex flex-col gap-2">
@@ -115,8 +128,9 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               {/* Thumbnail Gallery */}
               {product.images && product.images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">
-                  {product.images.slice(0, 4).map((img: any, index: number) => (
-                    img?.image?.url ? (
+                  {product.images.slice(0, 4).map((img, index: number) => {
+                    const imgObj = typeof img.image === 'object' ? img.image : null;
+                    return imgObj?.url ? (
                       <button
                         key={index}
                         onClick={() => setSelectedImage(index)}
@@ -127,15 +141,15 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                         }`}
                       >
                         <Image
-                          src={getMediaUrl(img.image.url)}
-                          alt={img.alt || 'Product image'}
+                          src={getMediaUrl(imgObj.url)}
+                          alt={imgObj.alt || 'Product image'}
                           width={100}
                           height={100}
                           className="w-full h-full object-cover"
                         />
                       </button>
-                    ) : null
-                  ))}
+                    ) : null;
+                  })}
                 </div>
               )}
             </div>
@@ -156,7 +170,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               {/* Price */}
               <div className="flex items-baseline gap-3 mb-6">
                 <span className="text-4xl font-bold text-lrp-green dark:text-lrp-green-light">
-                  ${(product.price + (selectedVariant?.priceModifier || 0)).toFixed(2)}
+                  ${(selectedVariant?.price || product.price).toFixed(2)}
                 </span>
                 {hasDiscount && (
                   <>
@@ -172,8 +186,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
               {/* Description */}
               <p className="text-neutral-700 dark:text-neutral-300 mb-6 text-sm leading-relaxed line-clamp-3">
-                {product.description?.root?.children?.[0]?.children?.[0]?.text ||
-                  product.description ||
+                {typeof product.description === 'object' && product.description.root?.children?.[0]?.children?.[0]?.text ||
                   'High-quality Lake Ride Pros merchandise'}
               </p>
 
@@ -185,7 +198,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {sizes.map((size: string) => {
-                      const variant = product.variants.find((v: any) => v.size === size)
+                      const variant = product.variants?.find((v) => v.size === size)
                       const isSelected = selectedVariant?.size === size
                       const inStock = variant?.inStock !== false
 

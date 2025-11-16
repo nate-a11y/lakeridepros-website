@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { getBlogPostBySlug, getMediaUrl } from '@/lib/api/payload';
 import { formatDate } from '@/lib/utils';
 import { serializeLexical } from '@/lib/serializeLexical';
-import type { Author } from '@/lib/types';
+import type { User } from '@/src/payload-types';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +21,7 @@ const getCategoryLabel = (categoryValue: string): string => {
 };
 
 // Helper function to get author name from either string or object
-const getAuthorName = (author: Author | string | undefined): string => {
+const getAuthorName = (author: User | string | undefined): string => {
   if (!author) {
     return 'Lake Ride Pros';
   }
@@ -29,7 +29,7 @@ const getAuthorName = (author: Author | string | undefined): string => {
     // If it's just an email, return "Lake Ride Pros" as fallback
     return 'Lake Ride Pros';
   }
-  // If it's an Author object, return the name or fallback
+  // If it's a User object, return the name or fallback
   return author.name || 'Lake Ride Pros';
 };
 

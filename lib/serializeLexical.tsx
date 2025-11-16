@@ -19,6 +19,11 @@ type ElementNode = LexicalNode & {
   direction?: string;
 };
 
+type LinkNode = ElementNode & {
+  url?: string;
+  newTab?: boolean;
+};
+
 type SerializedNode = TextNode | ElementNode;
 
 type LexicalContent = {
@@ -88,8 +93,9 @@ function serializeNode(node: SerializedNode, index: number): React.ReactNode {
     case 'paragraph':
       return <p key={index} className="mb-4">{children}</p>;
 
-    case 'heading':
-      const HeadingTag = (node.tag || 'h2') as keyof JSX.IntrinsicElements;
+    case 'heading': {
+      const tag = node.tag || 'h2';
+      const HeadingTag = (tag === 'h1' || tag === 'h2' || tag === 'h3' || tag === 'h4' || tag === 'h5' || tag === 'h6' ? tag : 'h2') as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
       const headingClasses: Record<string, string> = {
         h1: 'text-4xl font-bold mb-6 mt-8',
         h2: 'text-3xl font-bold mb-5 mt-7',
@@ -103,6 +109,7 @@ function serializeNode(node: SerializedNode, index: number): React.ReactNode {
           {children}
         </HeadingTag>
       );
+    }
 
     case 'list':
       if (node.listType === 'bullet') {
@@ -121,14 +128,15 @@ function serializeNode(node: SerializedNode, index: number): React.ReactNode {
       );
 
     case 'link':
-      const url = (node as any).url || '#';
+      const linkNode = node as LinkNode;
+      const url = linkNode.url || '#';
       return (
         <a
           key={index}
           href={url}
           className="text-primary hover:text-primary-dark underline"
-          target={(node as any).newTab ? '_blank' : undefined}
-          rel={(node as any).newTab ? 'noopener noreferrer' : undefined}
+          target={linkNode.newTab ? '_blank' : undefined}
+          rel={linkNode.newTab ? 'noopener noreferrer' : undefined}
         >
           {children}
         </a>

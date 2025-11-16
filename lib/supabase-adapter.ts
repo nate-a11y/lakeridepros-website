@@ -29,10 +29,10 @@ const getSupabaseClient = () => {
   return supabaseClient
 }
 
-export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
+export const supabaseAdapter: Adapter = ({ collection: _collection, prefix }) => {
   return {
     name: 'supabase',
-    handleUpload: async ({ data, file }) => {
+    handleUpload: async ({ data: _data, file }) => {
       try {
         const supabase = getSupabaseClient()
 
@@ -49,7 +49,7 @@ export const supabaseAdapter: Adapter = ({ collection, prefix }) => {
         console.log(`[Supabase Adapter] Uploading ${file.filename}, size: ${fileBuffer.length} bytes, type: ${file.mimeType}`)
 
         // Upload the buffer to Supabase
-        const { data: uploadData, error } = await supabase.storage
+        const { data: _uploadData, error } = await supabase.storage
           .from(bucket)
           .upload(filePath, fileBuffer, {
             contentType: file.mimeType,

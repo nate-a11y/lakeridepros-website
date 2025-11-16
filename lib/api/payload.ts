@@ -279,9 +279,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
   const params: Record<string, any> = {
     sort: '-createdAt', // Sort by newest first
-    depth: 2,
-    // Explicitly select all fields to ensure content is included
-    select: 'id,name,title,company,content,rating,image,featured,order,source,externalId,externalUrl,syncedAt,createdAt,updatedAt'
+    depth: 2
   };
 
   // Build where conditions
@@ -301,6 +299,20 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
   }
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
+
+  // Debug: Log what we're getting back
+  console.log('[Testimonials API] Response:', {
+    count: response.docs?.length,
+    firstDoc: response.docs?.[0] ? {
+      id: response.docs[0].id,
+      name: response.docs[0].name,
+      rating: response.docs[0].rating,
+      hasContent: !!response.docs[0].content,
+      contentLength: response.docs[0].content?.length,
+      contentPreview: response.docs[0].content?.substring(0, 50)
+    } : null
+  });
+
   return response.docs || [];
 }
 

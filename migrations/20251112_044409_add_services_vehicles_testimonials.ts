@@ -89,6 +89,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
     );
   `)
 
+  // Create enum for testimonial source
+  await db.execute(sql`
+    CREATE TYPE IF NOT EXISTS "public"."enum_testimonials_source" AS ENUM('manual', 'google', 'facebook', 'yelp', 'other');
+  `)
+
   // Create Testimonials table
   await db.execute(sql`
     CREATE TABLE IF NOT EXISTS "testimonials" (
@@ -102,7 +107,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
       "featured" boolean DEFAULT false,
       "order" numeric,
       "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-      "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+      "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+      "source" "enum_testimonials_source" DEFAULT 'manual' NOT NULL,
+      "external_id" varchar,
+      "external_url" varchar,
+      "synced_at" timestamp(3) with time zone
     );
   `)
 
@@ -227,6 +236,14 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
     CREATE INDEX IF NOT EXISTS "testimonials_order_idx" ON "testimonials" USING btree ("order");
   `)
+
+  await db.execute(sql`
+    CREATE INDEX IF NOT EXISTS "testimonials_source_idx" ON "testimonials" USING btree ("source");
+  `)
+
+  await db.execute(sql`
+    CREATE INDEX IF NOT EXISTS "testimonials_external_id_idx" ON "testimonials" USING btree ("external_id");
+  `)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -262,5 +279,9 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
 
   await db.execute(sql`
     DROP TYPE IF EXISTS "public"."enum_services_pricing_pricing_type";
+  `)
+
+  await db.execute(sql`
+    DROP TYPE IF EXISTS "public"."enum_testimonials_source";
   `)
 }

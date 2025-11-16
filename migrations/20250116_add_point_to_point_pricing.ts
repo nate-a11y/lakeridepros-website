@@ -12,6 +12,6 @@ export async function down({ payload }: MigrateDownArgs): Promise<void> {
   await payload.db.drizzle.execute(`
     -- Remove pointToPointMinimum column from vehicles pricing
     ALTER TABLE "vehicles"
-    DROP COLUMN IF EXISTS "pricing_pointToPointMinimum";
+    DROP COLUMN IF EXISTS "pricing_point_to_point_minimum";
   `)
 }

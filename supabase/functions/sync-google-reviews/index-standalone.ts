@@ -88,11 +88,14 @@ serve(async (req) => {
       throw new Error('OUTSCRAPER_API_KEY not configured in Supabase secrets')
     }
 
-    // Get Place ID from request or environment
-    const { placeId } = await req.json().catch(() => ({}))
+    // Get Place ID and last sync timestamp from request or environment
+    const { placeId, lastSyncTimestamp } = await req.json().catch(() => ({}))
     const googlePlaceId = placeId || Deno.env.get('GOOGLE_PLACE_ID') || 'ChIJJ8GI2fuCGWIRW8RfPECoxN4'
 
     console.log('Fetching reviews for Place ID:', googlePlaceId)
+    if (lastSyncTimestamp) {
+      console.log('Only fetching reviews since:', new Date(lastSyncTimestamp).toISOString())
+    }
 
     // Call Outscraper API with retry logic
     let response: Response | null = null
@@ -101,8 +104,16 @@ serve(async (req) => {
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        // Outscraper Google Maps Reviews API endpoint
-        const outscraperUrl = `https://api.outscraper.com/maps/reviews-v3?query=place_id:${googlePlaceId}&reviewsLimit=250&language=en&async=false`
+        // Outscraper Google Maps Reviews API endpoint (correct base URL)
+        // Note: query parameter takes the Place ID directly, NOT with "place_id:" prefix
+        // Using 'start' parameter to only fetch reviews since last sync (saves API quota)
+        let outscraperUrl = `https://api.app.outscraper.com/maps/reviews-v2?query=${googlePlaceId}&reviewsLimit=250&language=en&async=false&sort=newest`
+
+        // If we have a last sync timestamp, only fetch reviews since then
+        if (lastSyncTimestamp) {
+          const startTimestamp = Math.floor(new Date(lastSyncTimestamp).getTime() / 1000)
+          outscraperUrl += `&start=${startTimestamp}`
+        }
 
         response = await fetch(outscraperUrl, {
           method: 'GET',
@@ -162,8 +173,8 @@ serve(async (req) => {
       )
     }
 
-    const outscraperReviews = placeData.reviews || []
-    console.log(`Found ${outscraperReviews.length} reviews for ${placeData.name}`)
+    const outscraperReviews = placeData.reviews_data || []
+    console.log(`Found ${outscraperReviews.length} reviews for ${placeData.name} (${placeData.reviews} total)`)
 
     // Transform Outscraper reviews to Google My Business API format
     // This ensures compatibility with existing Payload CMS logic

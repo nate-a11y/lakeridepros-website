@@ -1,6 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import type { Service } from '@/lib/types'
+import type { Service } from '@/src/payload-types'
 
 /**
  * Server-side only functions to query Payload directly without HTTP requests

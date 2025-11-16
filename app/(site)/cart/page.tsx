@@ -39,9 +39,9 @@ export default function CartPage() {
       if (data.url) {
         window.location.href = data.url
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Checkout error:', error)
-      setCheckoutError(error.message || 'Something went wrong. Please try again.')
+      setCheckoutError(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
       setCheckoutLoading(false)
     }
   }

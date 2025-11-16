@@ -36,8 +36,8 @@ interface PrintifyProduct {
   }>
   blueprint_id: number
   print_provider_id: number
-  print_areas: any[]
-  sales_channel_properties: any[]
+  print_areas: Record<string, unknown>[]
+  sales_channel_properties: Record<string, unknown>[]
 }
 
 async function downloadImage(url: string): Promise<Buffer> {
@@ -53,14 +53,20 @@ async function downloadImage(url: string): Promise<Buffer> {
   return Buffer.from(arrayBuffer)
 }
 
+interface PayloadInstance {
+  find: (options: Record<string, unknown>) => Promise<{ docs: Record<string, unknown>[] }>
+  create: (options: Record<string, unknown>) => Promise<Record<string, unknown>>
+  update: (options: Record<string, unknown>) => Promise<Record<string, unknown>>
+}
+
 async function uploadImageToPayload(
-  payload: any,
+  payload: PayloadInstance,
   imageBuffer: Buffer,
   filename: string
 ): Promise<Media> {
   // Create a File-like object for Payload
   const blob = new Blob([imageBuffer])
-  const file = new File([blob], filename, { type: 'image/png' })
+  const _file = new File([blob], filename, { type: 'image/png' })
 
   const media = await payload.create({
     collection: 'media',

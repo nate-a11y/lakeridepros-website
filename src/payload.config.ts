@@ -86,8 +86,6 @@ const config = buildConfig({
     },
     meta: {
       titleSuffix: '- Lake Ride Pros',
-      favicon: '/Color logo - no background.png',
-      ogImage: '/Color logo - no background.png',
     },
     components: {
       graphics: {
@@ -96,7 +94,6 @@ const config = buildConfig({
       },
       beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
-    css: path.resolve(dirname, 'styles/admin.css'),
   },
   collections: [Users, Media, Pages, BlogPosts, Services, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],
   editor: lexicalEditor(),
@@ -116,15 +113,13 @@ const config = buildConfig({
   cors: [
     process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
     'https://lakeridepros-website.vercel.app',
-    /^https:\/\/.*\.vercel\.app$/,
     'http://localhost:3000',
-  ].filter(Boolean),
+  ].filter(Boolean) as string[],
   csrf: [
     process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
     'https://lakeridepros-website.vercel.app',
-    /^https:\/\/.*\.vercel\.app$/,
     'http://localhost:3000',
-  ].filter(Boolean),
+  ].filter(Boolean) as string[],
   email: resendAdapter({
     defaultFromAddress: process.env.EMAIL_FROM || 'hello@updates.lakeridepros.com',
     defaultFromName: process.env.EMAIL_FROM_NAME || 'Lake Ride Pros',

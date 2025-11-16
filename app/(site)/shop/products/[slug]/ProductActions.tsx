@@ -5,13 +5,17 @@ import Image from 'next/image'
 import { ShoppingCart, Check } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl } from '@/lib/utils'
+import type { Product } from '@/src/payload-types'
 
 interface ProductActionsProps {
-  product: any
+  product: Product
 }
 
 export default function ProductActions({ product }: ProductActionsProps) {
-  const [selectedVariant, setSelectedVariant] = useState<any>(
+  type ProductVariant = NonNullable<Product['variants']>[number];
+  type ProductImage = NonNullable<Product['images']>[number];
+
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     product.variants && product.variants.length > 0 ? product.variants[0] : null
   )
   const [quantity, setQuantity] = useState(1)
@@ -31,10 +35,12 @@ export default function ProductActions({ product }: ProductActionsProps) {
   const handleAddToCart = () => {
     if (!selectedVariant) return
 
-    const finalPrice = product.price + (selectedVariant.priceModifier || 0)
+    const finalPrice = selectedVariant.price || product.price
+
+    const featuredImage = typeof product.featuredImage === 'object' ? product.featuredImage : null
 
     addItem({
-      productId: product.id,
+      productId: String(product.id),
       productName: product.name,
       productSlug: product.slug,
       variantId: selectedVariant.sku,
@@ -43,8 +49,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
       color: selectedVariant.color,
       price: finalPrice,
       quantity,
-      image: product.images[0]?.image?.url || '',
-      imageAlt: product.images[0]?.alt || product.name,
+      image: featuredImage?.url ? getMediaUrl(featuredImage.url) : '',
+      imageAlt: featuredImage?.alt || product.name,
     })
 
     setAddedToCart(true)
@@ -52,8 +58,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
   }
 
   // Group variants by size and color (filter out empty values)
-  const sizes = Array.from(new Set<string>((product.variants || []).map((v: any) => v.size as string).filter((s: string) => s)))
-  const colors = Array.from(new Set<string>((product.variants || []).map((v: any) => v.color as string).filter((c: string) => c)))
+  const sizes = Array.from(new Set((product.variants || []).map((v) => v.size || '').filter((s) => s)))
+  const colors = Array.from(new Set((product.variants || []).map((v) => v.color || '').filter((c) => c)))
 
   // Debug: Log processed sizes/colors
   if (typeof window !== 'undefined') {
@@ -67,44 +73,51 @@ export default function ProductActions({ product }: ProductActionsProps) {
       <div className="lg:w-1/2">
         {/* Main Image */}
         <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden mb-4">
-          {product.images && product.images[selectedImage] ? (
-            <Image
-              src={getMediaUrl(product.images[selectedImage].image.url)}
-              alt={product.images[selectedImage].alt || product.name}
-              width={600}
-              height={600}
-              className="w-full h-full object-cover"
-              priority
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <ShoppingCart className="w-32 h-32 text-neutral-300 dark:text-neutral-500" />
-            </div>
-          )}
+          {(() => {
+            const imageItem = product.images?.[selectedImage];
+            const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null;
+            return imageObj?.url ? (
+              <Image
+                src={getMediaUrl(imageObj.url)}
+                alt={imageObj.alt || product.name}
+                width={600}
+                height={600}
+                className="w-full h-full object-cover"
+                priority
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <ShoppingCart className="w-32 h-32 text-neutral-300 dark:text-neutral-500" />
+              </div>
+            );
+          })()}
         </div>
 
         {/* Thumbnail Gallery */}
         {product.images && product.images.length > 1 && (
           <div className="grid grid-cols-4 gap-4">
-            {product.images.map((img: any, index: number) => (
-              <button
-                key={index}
-                onClick={() => setSelectedImage(index)}
-                className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                  selectedImage === index
-                    ? 'border-lrp-green'
-                    : 'border-neutral-300 dark:border-dark-border hover:border-lrp-green'
-                }`}
-              >
-                <Image
-                  src={getMediaUrl(img.image.url)}
-                  alt={img.alt || product.name}
-                  width={150}
-                  height={150}
-                  className="w-full h-full object-cover"
-                />
-              </button>
-            ))}
+            {product.images.map((img: ProductImage, index: number) => {
+              const imageObj = typeof img.image === 'object' ? img.image : null;
+              return imageObj?.url ? (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                    selectedImage === index
+                      ? 'border-lrp-green'
+                      : 'border-neutral-300 dark:border-dark-border hover:border-lrp-green'
+                  }`}
+                >
+                  <Image
+                    src={getMediaUrl(imageObj.url)}
+                    alt={imageObj.alt || product.name}
+                    width={150}
+                    height={150}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ) : null;
+            })}
           </div>
         )}
       </div>
@@ -118,7 +131,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
         {/* Price */}
         <div className="flex items-baseline gap-3 mb-6">
           <span className="text-4xl font-bold text-lrp-green dark:text-lrp-green-light">
-            ${(product.price + (selectedVariant?.priceModifier || 0)).toFixed(2)}
+            ${(selectedVariant?.price || product.price).toFixed(2)}
           </span>
           {product.compareAtPrice && product.compareAtPrice > product.price && (
             <>
@@ -152,7 +165,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
             </label>
             <div className="grid grid-cols-4 gap-3">
               {sizes.map((size: string) => {
-                const variant = product.variants.find((v: any) => v.size === size)
+                const variant = product.variants?.find((v: ProductVariant) => v.size === size)
                 const isSelected = selectedVariant?.size === size
                 const inStock = variant?.inStock
 
@@ -182,7 +195,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
               Select Option:
             </label>
             <div className="flex flex-col gap-2">
-              {product.variants.map((variant: any, index: number) => {
+              {product.variants?.map((variant: ProductVariant, index: number) => {
                 const isSelected = selectedVariant?.sku === variant.sku
                 const inStock = variant.inStock
 
@@ -221,7 +234,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
             </label>
             <div className="flex gap-3">
               {colors.map((color: string) => {
-                const variant = product.variants.find((v: any) => v.color === color)
+                const variant = product.variants?.find((v: ProductVariant) => v.color === color)
                 const isSelected = selectedVariant?.color === color
 
                 return (

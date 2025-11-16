@@ -3,20 +3,21 @@
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingBag, Star, Search, X, Heart, ShoppingCart as CartIcon, ChevronDown } from 'lucide-react'
+import { ShoppingBag, Star, Search, X, Heart, ChevronDown } from 'lucide-react'
 import QuickViewModal from './QuickViewModal'
 import { getMediaUrl } from '@/lib/utils'
+import type { Product, Media } from '@/src/payload-types'
 
 interface ShopClientProps {
-  initialProducts: any[]
+  initialProducts: Product[]
 }
 
 export default function ShopClient({ initialProducts }: ShopClientProps) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('featured')
-  const [quickViewProduct, setQuickViewProduct] = useState<any>(null)
-  const [wishlist, setWishlist] = useState<Set<string>>(new Set())
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null)
+  const [wishlist, setWishlist] = useState<Set<string | number>>(new Set())
 
   const categories = [
     { name: 'All Products', value: 'all' },
@@ -39,18 +40,19 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
 
     // Category filter
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter((product: any) =>
-        product.categories?.includes(selectedCategory)
+      filtered = filtered.filter((product) =>
+        product.categories?.includes(selectedCategory as 'apparel' | 'accessories' | 'drinkware' | 'home')
       )
     }
 
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
-      filtered = filtered.filter((product: any) =>
+      filtered = filtered.filter((product) =>
         product.name.toLowerCase().includes(query) ||
-        product.description?.toLowerCase?.().includes(query) ||
-        product.categories?.some((cat: string) => cat.toLowerCase().includes(query))
+        (typeof product.description === 'object' && product.description?.root ?
+          JSON.stringify(product.description).toLowerCase().includes(query) : false) ||
+        product.categories?.some((cat) => cat.toLowerCase().includes(query))
       )
     }
 
@@ -79,7 +81,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     return sorted
   }, [initialProducts, selectedCategory, searchQuery, sortBy])
 
-  const toggleWishlist = (productId: string) => {
+  const toggleWishlist = (productId: string | number) => {
     setWishlist(prev => {
       const newSet = new Set(prev)
       if (newSet.has(productId)) {
@@ -217,7 +219,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredAndSortedProducts.map((product: any, index: number) => (
+              {filteredAndSortedProducts.map((product, index: number) => (
                 <ProductCard
                   key={product.id}
                   product={product}
@@ -258,7 +260,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
 }
 
 interface ProductCardProps {
-  product: any
+  product: Product
   onQuickView: () => void
   isWishlisted: boolean
   onToggleWishlist: () => void
@@ -267,9 +269,11 @@ interface ProductCardProps {
 
 function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, index }: ProductCardProps) {
   // Use featuredImage first, then fall back to first image in gallery
-  const featuredImage = product.featuredImage
-  const galleryImage = product.images?.[0]?.image
-  const image = featuredImage || galleryImage
+  const featuredImageObj = typeof product.featuredImage === 'object' ? product.featuredImage as Media : null
+  const galleryImageObj = product.images?.[0] && typeof product.images[0].image === 'object'
+    ? product.images[0].image as Media
+    : null
+  const image = featuredImageObj || galleryImageObj
 
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
 
@@ -391,7 +395,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
           {/* Available Sizes - Premium Style */}
           {product.variants && product.variants.length > 0 && (
             <div className="flex gap-2 mt-4 flex-wrap">
-              {Array.from(new Set<string>(product.variants.map((v: any) => v.size as string)))
+              {Array.from(new Set(product.variants.map((v) => v.size).filter((s): s is string => !!s)))
                 .slice(0, 4)
                 .map((size: string) => (
                   <span
@@ -401,9 +405,9 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
                     {size.toUpperCase()}
                   </span>
                 ))}
-              {Array.from(new Set<string>(product.variants.map((v: any) => v.size as string))).length > 4 && (
+              {Array.from(new Set(product.variants.map((v) => v.size).filter((s): s is string => !!s))).length > 4 && (
                 <span className="text-[10px] px-2.5 py-1 text-neutral-500 font-semibold">
-                  +{Array.from(new Set<string>(product.variants.map((v: any) => v.size as string))).length - 4}
+                  +{Array.from(new Set(product.variants.map((v) => v.size).filter((s): s is string => !!s))).length - 4}
                 </span>
               )}
             </div>

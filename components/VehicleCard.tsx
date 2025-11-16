@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Vehicle } from '@/lib/types';
+import type { Vehicle } from '@/src/payload-types';
 import { getMediaUrl } from '@/lib/api/payload';
 
 interface VehicleCardProps {
@@ -8,9 +8,9 @@ interface VehicleCardProps {
 }
 
 export default function VehicleCard({ vehicle }: VehicleCardProps) {
-  const imageUrl = vehicle.featuredImage
+  const imageUrl = vehicle.featuredImage && typeof vehicle.featuredImage === 'object'
     ? getMediaUrl(vehicle.featuredImage.url)
-    : vehicle.images?.[0]?.image
+    : vehicle.images?.[0]?.image && typeof vehicle.images[0].image === 'object'
     ? getMediaUrl(vehicle.images[0].image.url)
     : '/placeholder-vehicle.jpg';
 

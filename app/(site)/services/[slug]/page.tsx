@@ -46,8 +46,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const description = service.shortDescription || service.description || '';
-  const imageUrl = service.image
-    ? getMediaUrl(service.image.url)
+  const serviceImage = typeof service.image === 'object' ? service.image : null;
+  const imageUrl = serviceImage?.url
+    ? getMediaUrl(serviceImage.url)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   // Enhanced title with location
@@ -112,8 +113,9 @@ export default async function ServiceDetailPage({ params }: Props) {
   // Fetch testimonials (only 5-star reviews)
   const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
 
-  const imageUrl = service.image
-    ? getMediaUrl(service.image.url)
+  const serviceImageObj = typeof service.image === 'object' ? service.image : null;
+  const imageUrl = serviceImageObj?.url
+    ? getMediaUrl(serviceImageObj.url)
     : '/placeholder-service.jpg';
 
   // Structured data for SEO
@@ -135,8 +137,8 @@ export default async function ServiceDetailPage({ params }: Props) {
         addressCountry: 'US',
       },
     },
-    ...(service.image && {
-      image: getMediaUrl(service.image.url),
+    ...(serviceImageObj?.url && {
+      image: getMediaUrl(serviceImageObj.url),
     }),
     ...(service.pricing?.basePrice && {
       offers: {
@@ -250,7 +252,7 @@ export default async function ServiceDetailPage({ params }: Props) {
             <div className="relative h-[400px] rounded-lg overflow-hidden shadow-xl">
               <Image
                 src={imageUrl}
-                alt={service.image?.alt || service.title}
+                alt={serviceImageObj?.alt || service.title}
                 fill
                 className="object-cover"
               />

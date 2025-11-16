@@ -70,10 +70,10 @@ export default function CartDrawer() {
           ) : (
             <div className="space-y-4">
               {cart.items.map((item) => {
-                const imageUrl = item.product.featuredImage
+                const imageUrl = item.product.featuredImage && typeof item.product.featuredImage === 'object'
                   ? getMediaUrl(item.product.featuredImage.url)
-                  : item.product.images?.[0]
-                  ? getMediaUrl(item.product.images[0].url)
+                  : item.product.images?.[0] && typeof item.product.images[0].image === 'object'
+                  ? getMediaUrl(item.product.images[0].image.url)
                   : '/placeholder-product.jpg';
 
                 const price = item.variant?.price || item.product.price;

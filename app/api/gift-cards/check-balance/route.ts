@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       status: giftCard.status,
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Gift card balance check error:', error)
     return NextResponse.json(
       { error: 'An error occurred while checking the gift card balance. Please try again.' },

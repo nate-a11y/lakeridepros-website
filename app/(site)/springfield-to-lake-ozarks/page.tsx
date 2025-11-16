@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { MapPin, Users, Clock, CheckCircle, Star, Phone, ArrowRight, Plane } from 'lucide-react'
+import { MapPin, Clock, Star, Phone, ArrowRight, Plane } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 
@@ -146,12 +146,12 @@ export default function SpringfieldToLakeOzarksPage() {
             <p className="text-white/90 text-xl md:text-2xl max-w-3xl mx-auto mb-8">
               Direct shuttle service from Springfield, MO to the Lake. SGF airport transfers, group trips, weekend getaways. Just 2 hours to paradise.
             </p>
-            <a
+            <Link
               href="/book"
               className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
             >
               Book Your Springfield Shuttle
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -366,12 +366,12 @@ export default function SpringfieldToLakeOzarksPage() {
               SGF airport transfers and direct Springfield service—2 hours to the Lake
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
+              <Link
                 href="/book"
                 className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
               >
                 Book Your Shuttle
-              </a>
+              </Link>
               <a
                 href="tel:5732069499"
                 className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Product } from '@/lib/types';
+import type { Product } from '@/src/payload-types';
 import { getMediaUrl } from '@/lib/api/payload';
 import { formatPrice } from '@/lib/utils';
 
@@ -9,10 +9,10 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const imageUrl = product.featuredImage
+  const imageUrl = product.featuredImage && typeof product.featuredImage === 'object'
     ? getMediaUrl(product.featuredImage.url)
-    : product.images?.[0]
-    ? getMediaUrl(product.images[0].url)
+    : product.images?.[0] && typeof product.images[0].image === 'object'
+    ? getMediaUrl(product.images[0].image.url)
     : '/placeholder-product.jpg';
 
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
@@ -25,7 +25,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="relative h-64 overflow-hidden bg-neutral-100 dark:bg-dark-bg-secondary">
         <Image
           src={imageUrl}
-          alt={product.featuredImage?.alt || product.name}
+          alt={(product.featuredImage && typeof product.featuredImage === 'object' ? product.featuredImage.alt : null) || product.name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
         />

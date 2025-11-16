@@ -1,5 +1,11 @@
 import { MetadataRoute } from 'next';
 
+interface PayloadDoc {
+  slug: string;
+  updatedAt?: string;
+  publishedDate?: string;
+}
+
 async function getPayloadData() {
   const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001';
 
@@ -91,7 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { services, blogPosts, vehicles, products, pages } = await getPayloadData();
 
   // Dynamic service pages
-  const serviceSitemapEntries = services.map((service: any) => ({
+  const serviceSitemapEntries = services.map((service: PayloadDoc) => ({
     url: `${baseUrl}/services/${service.slug}`,
     lastModified: new Date(service.updatedAt || currentDate),
     changeFrequency: 'monthly' as const,
@@ -99,7 +105,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Blog posts
-  const blogSitemapEntries = blogPosts.map((post: any) => ({
+  const blogSitemapEntries = blogPosts.map((post: PayloadDoc) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.updatedAt || post.publishedDate || currentDate),
     changeFrequency: 'weekly' as const,
@@ -107,7 +113,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Vehicles
-  const vehicleSitemapEntries = vehicles.map((vehicle: any) => ({
+  const vehicleSitemapEntries = vehicles.map((vehicle: PayloadDoc) => ({
     url: `${baseUrl}/fleet/${vehicle.slug}`,
     lastModified: new Date(vehicle.updatedAt || currentDate),
     changeFrequency: 'monthly' as const,
@@ -115,7 +121,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Products
-  const productSitemapEntries = products.map((product: any) => ({
+  const productSitemapEntries = products.map((product: PayloadDoc) => ({
     url: `${baseUrl}/shop/products/${product.slug}`,
     lastModified: new Date(product.updatedAt || currentDate),
     changeFrequency: 'weekly' as const,
@@ -123,7 +129,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Custom pages
-  const pageSitemapEntries = pages.map((page: any) => ({
+  const pageSitemapEntries = pages.map((page: PayloadDoc) => ({
     url: `${baseUrl}/${page.slug}`,
     lastModified: new Date(page.updatedAt || currentDate),
     changeFrequency: 'monthly' as const,

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import config from '@payload-config';
-import { transformGoogleReviewToTestimonial, type GoogleReview } from '@/lib/google-reviews';
+import { transformGoogleReviewToTestimonial } from '@/lib/google-reviews';
 
 /**
  * Sync Google Business Profile reviews to Testimonials CMS
@@ -183,7 +183,7 @@ export async function POST(req: NextRequest) {
  *
  * GET /api/sync-google-reviews
  */
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
     const payload = await getPayload({ config });
 

@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
+interface CartItem {
+  productId: string | number
+  variantId: string
+  productName: string
+  variantName: string
+  image: string
+  price: number
+  quantity: number
+  size?: string
+  color?: string
+}
+
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
     throw new Error('STRIPE_SECRET_KEY is not set')
@@ -24,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Convert cart items to Stripe line items
-    const lineItems = items.map((item: any) => ({
+    const lineItems = items.map((item: CartItem) => ({
       price_data: {
         currency: 'usd',
         product_data: {
@@ -44,7 +56,7 @@ export async function POST(request: NextRequest) {
     }))
 
     // Calculate if free shipping applies (over $50)
-    const subtotal = items.reduce((sum: number, item: any) =>
+    const subtotal = items.reduce((sum: number, item: CartItem) =>
       sum + (item.price * item.quantity), 0
     )
 
@@ -87,7 +99,7 @@ export async function POST(request: NextRequest) {
         enabled: true, // Stripe calculates tax automatically
       },
       metadata: {
-        cartItems: JSON.stringify(items.map((item: any) => ({
+        cartItems: JSON.stringify(items.map((item: CartItem) => ({
           productId: item.productId,
           variantId: item.variantId,
           quantity: item.quantity,
@@ -99,10 +111,10 @@ export async function POST(request: NextRequest) {
       sessionId: session.id,
       url: session.url
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Stripe checkout error:', error)
     return NextResponse.json(
-      { error: error.message || 'Failed to create checkout session' },
+      { error: error instanceof Error ? error.message : 'Failed to create checkout session' },
       { status: 500 }
     )
   }

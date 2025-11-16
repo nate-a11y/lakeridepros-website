@@ -276,10 +276,23 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 }
 
 // Testimonials API
-export async function getTestimonials(featured = false): Promise<Testimonial[]> {
+export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
   const params: Record<string, any> = { sort: 'order', depth: 2 };
+
+  // Build where conditions
+  const whereConditions: Record<string, any> = {};
+
   if (featured) {
-    params.where = JSON.stringify({ featured: { equals: true } });
+    whereConditions.featured = { equals: true };
+  }
+
+  // Only show 5-star reviews on the website (keeps all in CMS for admin viewing)
+  if (minRating !== undefined) {
+    whereConditions.rating = { greater_than_equal: minRating };
+  }
+
+  if (Object.keys(whereConditions).length > 0) {
+    params.where = JSON.stringify(whereConditions);
   }
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
@@ -290,9 +303,10 @@ export async function getTestimonials(featured = false): Promise<Testimonial[]> 
  * Get random testimonials for variety across pages
  * @param count - Number of testimonials to return
  * @param featured - Only return featured testimonials
+ * @param minRating - Minimum rating to include (default: 5 for public display)
  */
-export async function getRandomTestimonials(count = 3, featured = false): Promise<Testimonial[]> {
-  const allTestimonials = await getTestimonials(featured);
+export async function getRandomTestimonials(count = 3, featured = false, minRating = 5): Promise<Testimonial[]> {
+  const allTestimonials = await getTestimonials(featured, minRating);
 
   if (allTestimonials.length <= count) {
     return allTestimonials;

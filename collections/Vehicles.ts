@@ -120,16 +120,32 @@ export const Vehicles: CollectionConfig = {
       type: 'group',
       fields: [
         {
+          name: 'pointToPointMinimum',
+          type: 'number',
+          admin: {
+            description: 'Minimum fare for point-to-point / taxi-style service (e.g., $15)',
+          },
+        },
+        {
           name: 'hourlyRate',
           type: 'number',
+          admin: {
+            description: 'Hourly rate for chartered service (e.g., $120/hour)',
+          },
         },
         {
           name: 'dailyRate',
           type: 'number',
+          admin: {
+            description: 'Full day rate (optional)',
+          },
         },
         {
           name: 'notes',
           type: 'textarea',
+          admin: {
+            description: 'Additional pricing details, terms, or conditions',
+          },
         },
       ],
     },

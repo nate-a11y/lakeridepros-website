@@ -175,22 +175,59 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
               )}
 
               {vehicle.pricing && (
-                <div className="bg-neutral-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-semibold text-neutral-900 mb-3">
-                    Pricing
+                <div className="bg-neutral-50 dark:bg-dark-bg-tertiary p-6 rounded-lg">
+                  <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
+                    Pricing Options
                   </h3>
+
+                  {/* Point-to-Point Pricing */}
+                  {vehicle.pricing.pointToPointMinimum && (
+                    <div className="mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700">
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                          Point-to-Point
+                        </span>
+                        <span className="text-xs text-neutral-500 dark:text-neutral-500">
+                          (Taxi-style)
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                        Starting at ${vehicle.pricing.pointToPointMinimum}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Hourly Rate Pricing */}
                   {vehicle.pricing.hourlyRate && (
-                    <p className="text-2xl font-bold text-primary mb-2">
-                      ${vehicle.pricing.hourlyRate}/hour
-                    </p>
+                    <div className={`${vehicle.pricing.dailyRate ? 'mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700' : 'mb-4'}`}>
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                          Hourly Charter
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                        ${vehicle.pricing.hourlyRate}/hour
+                      </p>
+                    </div>
                   )}
+
+                  {/* Daily Rate Pricing */}
                   {vehicle.pricing.dailyRate && (
-                    <p className="text-lg text-neutral-700">
-                      Daily Rate: ${vehicle.pricing.dailyRate}
-                    </p>
+                    <div className="mb-4">
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                          Full Day Rate
+                        </span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                        ${vehicle.pricing.dailyRate}
+                      </p>
+                    </div>
                   )}
+
+                  {/* Pricing Notes */}
                   {vehicle.pricing.notes && (
-                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-3">
+                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
                       {vehicle.pricing.notes}
                     </p>
                   )}

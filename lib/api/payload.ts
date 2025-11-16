@@ -301,14 +301,12 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
 
-  // Filter out testimonials with placeholder content (IDs 177-237 have "No comment provided")
+  // Filter out testimonials with placeholder content
   const placeholderTexts = ['No comment provided', 'No content provided', ''];
   const validTestimonials = (response.docs || []).filter(testimonial => {
     const content = testimonial.content?.trim() || '';
     return content.length > 0 && !placeholderTexts.includes(content);
   });
-
-  console.log(`[Testimonials API] Fetched ${response.docs?.length || 0} → filtered to ${validTestimonials.length} valid testimonials`);
 
   return validTestimonials;
 }

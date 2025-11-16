@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Search, CreditCard, DollarSign, Calendar, AlertCircle } from 'lucide-react'
 
 export default function GiftCardBalancePage() {
@@ -303,12 +304,12 @@ export default function GiftCardBalancePage() {
           <p className="text-white/90 text-lg mb-8">
             Give the gift of luxury transportation at Lake of the Ozarks!
           </p>
-          <a
+          <Link
             href="/gift-cards"
             className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
           >
             Buy Gift Cards
-          </a>
+          </Link>
         </div>
       </section>
     </div>

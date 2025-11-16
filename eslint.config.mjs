@@ -18,6 +18,7 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
       "node_modules/**",
+      "test-resend.js",
     ],
   },
   {

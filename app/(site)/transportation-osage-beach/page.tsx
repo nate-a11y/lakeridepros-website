@@ -126,12 +126,12 @@ export default function OsageBeachTransportationPage() {
             <p className="text-white/90 text-xl md:text-2xl max-w-3xl mx-auto mb-8">
               From Tan-Tar-A to the Bagnell Dam Strip, we know every venue, hotel, and hotspot in Osage Beach. Luxury transportation you can count on.
             </p>
-            <a
+            <Link
               href="/book"
               className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
             >
               Book Your Osage Beach Ride
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -391,12 +391,12 @@ export default function OsageBeachTransportationPage() {
               Professional, reliable service throughout Osage Beach
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
+              <Link
                 href="/book"
                 className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
               >
                 Book Now
-              </a>
+              </Link>
               <a
                 href="tel:5732069499"
                 className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"

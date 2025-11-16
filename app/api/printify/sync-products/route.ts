@@ -416,7 +416,7 @@ async function syncProducts(request: Request) {
             : printifyProduct.variants[0]?.price / 100 || 0
 
         // Determine category
-        const categories: string[] = []
+        const categories: ("apparel" | "accessories" | "drinkware" | "home")[] = []
         const titleLower = printifyProduct.title.toLowerCase()
         if (
           titleLower.includes('shirt') ||

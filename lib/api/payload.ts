@@ -291,14 +291,41 @@ export async function getTestimonials(featured = false, minRating?: number): Pro
     whereConditions.rating = { greater_than_equal: minRating };
   }
 
-  // Exclude testimonials with "No comment provided" or similar placeholder content
-  whereConditions.content = { not_equals: 'No comment provided' };
+  // Exclude testimonials with placeholder or empty content
+  whereConditions.and = [
+    {
+      content: {
+        not_equals: 'No comment provided',
+      },
+    },
+    {
+      content: {
+        not_equals: 'No content provided',
+      },
+    },
+    {
+      content: {
+        not_equals: '',
+      },
+    },
+    {
+      content: {
+        exists: true,
+      },
+    },
+  ];
 
   if (Object.keys(whereConditions).length > 0) {
     params.where = JSON.stringify(whereConditions);
   }
 
   const response = await fetchFromPayload<ApiResponse<Testimonial>>('/testimonials', { params });
+
+  // Debug: Log first testimonial to see what fields are being returned
+  if (response.docs && response.docs.length > 0) {
+    console.log('[Testimonials API] First testimonial:', JSON.stringify(response.docs[0], null, 2));
+  }
+
   return response.docs || [];
 }
 

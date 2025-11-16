@@ -77,7 +77,7 @@ export default async function HomePage() {
     getServices({ limit: 6 }).catch(() => ({ docs: [] })),
     getFeaturedVehicles(3).catch(() => []),
     getLatestBlogPosts(3).catch(() => []),
-    getRandomTestimonials(3, true).catch(() => []), // Random featured testimonials
+    getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),
   ]);
 

@@ -279,7 +279,9 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getTestimonials(featured = false, minRating?: number): Promise<Testimonial[]> {
   const params: Record<string, any> = {
     sort: '-createdAt', // Sort by newest first
-    depth: 2
+    depth: 2,
+    // Explicitly select all fields to ensure content is included
+    select: 'id,name,title,company,content,rating,image,featured,order,source,externalId,externalUrl,syncedAt,createdAt,updatedAt'
   };
 
   // Build where conditions

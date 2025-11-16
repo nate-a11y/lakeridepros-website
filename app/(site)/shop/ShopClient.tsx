@@ -269,11 +269,38 @@ interface ProductCardProps {
 
 function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, index }: ProductCardProps) {
   // Use featuredImage first, then fall back to first image in gallery
-  const featuredImageObj = typeof product.featuredImage === 'object' ? product.featuredImage as Media : null
-  const galleryImageObj = product.images?.[0] && typeof product.images[0].image === 'object'
-    ? product.images[0].image as Media
-    : null
-  const image = featuredImageObj || galleryImageObj
+  // Handle multiple possible data structures for maximum compatibility
+  let image: Media | null = null
+
+  // Try featuredImage (could be populated object or null)
+  if (product.featuredImage && typeof product.featuredImage === 'object') {
+    image = product.featuredImage as Media
+  }
+
+  // Fall back to gallery image if no featured image
+  if (!image?.url && product.images && product.images.length > 0) {
+    const firstImageItem = product.images[0]
+    // Handle nested structure: images[0].image
+    if (firstImageItem && typeof firstImageItem.image === 'object') {
+      image = firstImageItem.image as Media
+    }
+    // Handle flat structure: images[0] might be the Media object directly
+    else if (firstImageItem && typeof firstImageItem === 'object' && 'url' in firstImageItem) {
+      image = firstImageItem as unknown as Media
+    }
+  }
+
+  // Debug logging for image issues
+  if (typeof window !== 'undefined' && !image?.url) {
+    console.log('Product missing image:', {
+      productId: product.id,
+      productName: product.name,
+      featuredImage: product.featuredImage,
+      firstImage: product.images?.[0],
+      hasImages: !!product.images?.length,
+      imageUrl: image?.url,
+    })
+  }
 
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
 
@@ -316,6 +343,13 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl"
               priority={false}
+              onError={(e) => {
+                console.error('Image failed to load:', {
+                  productName: product.name,
+                  imageUrl: getMediaUrl(image.url),
+                  originalUrl: image.url,
+                })
+              }}
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">

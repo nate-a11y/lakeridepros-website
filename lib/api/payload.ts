@@ -365,7 +365,11 @@ export async function getVehicleRelatedTestimonials(count = 3, minRating = 5): P
 // Partners API
 export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   try {
-    const params: Record<string, unknown> = { sort: 'order', depth: 2 };
+    const params: Record<string, unknown> = {
+      sort: 'order',
+      depth: 2,
+      limit: 1000, // Set high limit to fetch all partners
+    };
     const whereConditions: Record<string, unknown> = {
       active: { equals: true }, // Always filter by active status
     };

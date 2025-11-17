@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       analytics = await payload.create({
         collection: 'service-analytics',
         data: {
-          service: service.id as string,
+          service: service.id,
           views: eventType === 'view' ? 1 : 0,
           bookings: eventType === 'booking' ? 1 : 0,
           viewsLast30Days: eventType === 'view' ? 1 : 0,

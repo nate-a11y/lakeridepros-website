@@ -117,29 +117,29 @@ export default async function PartnerDetailPage({ params }: Props) {
   const backLink = categoryLinks[partner.category] || '/';
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-lrp-white dark:bg-dark-bg-primary">
       {/* Breadcrumbs */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-dark-bg-secondary border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-3">
               <li className="inline-flex items-center">
-                <Link href="/" className="text-gray-700 hover:text-blue-600">
+                <Link href="/" className="text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green dark:hover:text-lrp-green">
                   Home
                 </Link>
               </li>
               <li>
                 <div className="flex items-center">
-                  <span className="mx-2 text-gray-400">/</span>
-                  <Link href={backLink} className="text-gray-700 hover:text-blue-600">
+                  <span className="mx-2 text-gray-400 dark:text-gray-600">/</span>
+                  <Link href={backLink} className="text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green dark:hover:text-lrp-green">
                     {categoryLabel}
                   </Link>
                 </div>
               </li>
               <li aria-current="page">
                 <div className="flex items-center">
-                  <span className="mx-2 text-gray-400">/</span>
-                  <span className="text-gray-500">{partner.name}</span>
+                  <span className="mx-2 text-gray-400 dark:text-gray-600">/</span>
+                  <span className="text-lrp-text-secondary dark:text-dark-text-secondary">{partner.name}</span>
                 </div>
               </li>
             </ol>
@@ -149,14 +149,14 @@ export default async function PartnerDetailPage({ params }: Props) {
 
       {/* Partner Detail */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
           {/* Header Section */}
-          <div className="p-8 border-b">
+          <div className="p-8 border-b border-gray-200 dark:border-gray-700">
             <div className="flex flex-col md:flex-row gap-8 items-start">
               {/* Logo */}
               {logoUrl && (
                 <div className="flex-shrink-0">
-                  <div className="w-48 h-48 bg-white border-2 border-gray-200 rounded-lg flex items-center justify-center p-4">
+                  <div className="w-48 h-48 bg-gray-50 dark:bg-dark-bg-primary border-2 border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center p-4">
                     <Image
                       src={logoUrl}
                       alt={partner.name}
@@ -170,16 +170,16 @@ export default async function PartnerDetailPage({ params }: Props) {
 
               {/* Partner Info */}
               <div className="flex-1">
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                <h1 className="text-4xl font-bold text-lrp-black dark:text-white mb-2">
                   {partner.name}
                 </h1>
-                <p className="text-sm text-blue-600 font-medium mb-4">
+                <p className="text-sm text-lrp-green font-medium mb-4">
                   {categoryLabel}
                 </p>
 
                 {/* Blurb */}
                 {partner.blurb && (
-                  <p className="text-lg text-gray-700 mb-6">
+                  <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
                     {partner.blurb}
                   </p>
                 )}
@@ -191,7 +191,7 @@ export default async function PartnerDetailPage({ params }: Props) {
                       href={partner.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
+                      className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark transition-colors"
                     >
                       <Globe className="w-5 h-5" />
                       <span>Visit Website</span>
@@ -201,7 +201,7 @@ export default async function PartnerDetailPage({ params }: Props) {
                   {partner.phone && (
                     <a
                       href={`tel:${partner.phone}`}
-                      className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors"
+                      className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
                     >
                       <Phone className="w-5 h-5" />
                       <span>{partner.phone}</span>
@@ -210,14 +210,14 @@ export default async function PartnerDetailPage({ params }: Props) {
                   {partner.email && (
                     <a
                       href={`mailto:${partner.email}`}
-                      className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors"
+                      className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
                     >
                       <Mail className="w-5 h-5" />
                       <span>{partner.email}</span>
                     </a>
                   )}
                   {partner.address && (
-                    <div className="flex items-start gap-2 text-gray-700">
+                    <div className="flex items-start gap-2 text-lrp-text-secondary dark:text-dark-text-secondary">
                       <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
                       <span>{partner.address}</span>
                     </div>
@@ -229,9 +229,9 @@ export default async function PartnerDetailPage({ params }: Props) {
 
           {/* Description Section */}
           {partner.description && (
-            <div className="p-8 border-b">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">About</h2>
-              <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+            <div className="p-8 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-4">About</h2>
+              <p className="text-lrp-text-secondary dark:text-dark-text-secondary whitespace-pre-wrap leading-relaxed">
                 {partner.description}
               </p>
             </div>
@@ -240,7 +240,7 @@ export default async function PartnerDetailPage({ params }: Props) {
           {/* Images Gallery */}
           {partner.images && Array.isArray(partner.images) && partner.images.length > 0 && (
             <div className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Gallery</h2>
+              <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-6">Gallery</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {partner.images.map((imageItem, index: number) => {
                   const imageObj = typeof imageItem.image === 'object' ? imageItem.image as Media : null;
@@ -249,7 +249,7 @@ export default async function PartnerDetailPage({ params }: Props) {
                   if (!imageUrl) return null;
 
                   return (
-                    <div key={imageItem.id || index} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
+                    <div key={imageItem.id || index} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                       <Image
                         src={imageUrl}
                         alt={`${partner.name} - Image ${index + 1}`}
@@ -268,7 +268,7 @@ export default async function PartnerDetailPage({ params }: Props) {
         <div className="mt-8">
           <Link
             href={backLink}
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium"
+            className="inline-flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark font-medium"
           >
             <span>←</span>
             <span>Back to {categoryLabel}</span>

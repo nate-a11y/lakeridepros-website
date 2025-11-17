@@ -9,6 +9,12 @@ vi.mock('payload', () => ({
     create: vi.fn(),
     update: vi.fn(),
   }),
+  buildConfig: vi.fn((config) => config),
+}))
+
+// Mock payload config
+vi.mock('@payload-config', () => ({
+  default: {},
 }))
 
 describe('Analytics Track API', () => {

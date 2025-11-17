@@ -8,6 +8,13 @@ export default defineConfig({
     environment: 'happy-dom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.next/**',
+      '**/e2e/**', // Exclude Playwright E2E tests
+      '**/playwright-report/**',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'json', 'lcov'],
@@ -20,6 +27,7 @@ export default defineConfig({
         '**/scripts/**',
         '**/supabase/**',
         '**/src/payload-types.ts',
+        '**/e2e/**',
       ],
       thresholds: {
         lines: 80,
@@ -32,6 +40,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
+      '@payload-config': path.resolve(__dirname, './src/payload.config.ts'),
     },
   },
 })

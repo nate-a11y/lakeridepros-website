@@ -40,6 +40,12 @@ vi.mock('payload', () => ({
     }),
     update: vi.fn().mockResolvedValue({}),
   }),
+  buildConfig: vi.fn((config) => config),
+}))
+
+// Mock payload config
+vi.mock('@payload-config', () => ({
+  default: {},
 }))
 
 // Mock fetch for internal API calls
@@ -407,17 +413,17 @@ describe('Stripe Webhook Handler', () => {
   })
 
   describe('Error Handling', () => {
-    it('returns 500 on unexpected errors', async () => {
+    it('returns 400 on signature verification errors', async () => {
       mockConstructEvent.mockImplementation(() => {
-        throw new Error('Unexpected error')
+        throw new Error('Signature verification failed')
       })
 
       const request = createMockRequest('{}')
       const response = await POST(request)
 
-      expect(response.status).toBe(500)
+      expect(response.status).toBe(400)
       const json = await response.json()
-      expect(json.error).toBe('Webhook handler failed')
+      expect(json.error).toBe('Invalid signature')
     })
 
     it('handles missing Stripe secret key', async () => {

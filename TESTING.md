@@ -6,9 +6,9 @@ This codebase now has comprehensive test coverage including unit tests, integrat
 
 ## Test Statistics
 
-- **Total Tests**: 77 test cases
-- **Current Pass Rate**: 58/77 (75%)
-- **Test Files**: 9 files
+- **Total Tests**: 90 test cases ⬆️
+- **Current Pass Rate**: 90/90 (100% ✅)
+- **Test Files**: 12 files
 - **Coverage Target**: 80%
 
 ## Testing Stack
@@ -53,7 +53,7 @@ npm run test:all
 ### ✅ Fully Tested (100% passing)
 
 #### 1. **Utility Functions** (`lib/__tests__/utils.test.ts`)
-- ✅ 27 tests passing
+- ✅ 28 tests passing
 - Tests: `formatPrice`, `formatDate`, `truncateText`, `slugify`, `getMediaUrl`, `cn`
 - Edge cases covered: empty strings, special characters, large numbers, null values
 
@@ -63,27 +63,41 @@ npm run test:all
 - Tests: add items, remove items, update quantity, calculate subtotal, item count
 - Edge cases: duplicate items, quantity updates, empty cart, large quantities
 
-#### 3. **Gift Card Balance API** (`app/api/gift-cards/check-balance/__tests__/route.test.ts`)
+#### 3. **Email Functions** (`lib/__tests__/email.test.ts`)
+- ✅ 12 tests passing
+- Order confirmations, owner notifications, gift card emails
+- Error handling, missing API keys, email formatting
+
+#### 4. **Stripe Webhook** (`app/api/stripe/webhook/__tests__/route.test.ts`)
+- ✅ 8 tests passing
+- Signature verification, order processing, gift card handling
+- Error handling, event types, missing customer info
+
+#### 5. **Gift Card Balance API** (`app/api/gift-cards/check-balance/__tests__/route.test.ts`)
 - ✅ 16 tests passing
 - Input validation, gift card lookup, error handling
 - Security: tests that sensitive data is not exposed
 
-#### 4. **Cart Icon Component** (`components/cart/__tests__/CartIcon.test.tsx`)
+#### 6. **Analytics Functions** (`lib/__tests__/analytics.test.ts`)
+- ✅ 6 tests passing
+- Track view and booking events
+- Browser vs server environment handling
+- Error handling, network failures
+
+#### 7. **Analytics Track API** (`app/api/analytics/track/__tests__/route.test.ts`)
+- ✅ 8 tests passing
+- Input validation, service lookup, analytics creation/update
+- Daily stats tracking, error handling
+
+#### 8. **Google Reviews Utilities** (`lib/__tests__/google-reviews.test.ts`)
+- ✅ 7 tests passing
+- Star rating conversion, edge cases
+- Invalid input handling
+
+#### 9. **Cart Icon Component** (`components/cart/__tests__/CartIcon.test.tsx`)
 - ✅ 8 tests passing
 - Rendering, badge display, item count updates
 - Accessibility: aria-labels tested
-
-### ⚠️ Partially Tested (mock issues to fix)
-
-#### 5. **Email Functions** (`lib/__tests__/email.test.ts`)
-- Mock setup needs adjustment for Resend
-- Tests written for: order confirmations, owner notifications, gift card emails
-- **Fix needed**: Update vi.mock for Resend constructor
-
-#### 6. **Stripe Webhook** (`app/api/stripe/webhook/__tests__/route.test.ts`)
-- Mock setup needs adjustment for Stripe
-- Tests written for: signature verification, order processing, gift card handling
-- **Fix needed**: Update vi.mock for Stripe constructor
 
 ### 📝 E2E Tests Created
 

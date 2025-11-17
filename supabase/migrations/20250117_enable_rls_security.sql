@@ -13,19 +13,23 @@
 
 -- User Management
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-ALTER TABLE users_roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users_sessions ENABLE ROW LEVEL SECURITY;
 
 -- Content Management
 ALTER TABLE pages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pages_rels ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE blog_posts_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE blog_posts_rels ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE services_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE services_rels ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE vehicles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vehicles_images ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vehicles_amenities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE vehicles_rels ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
@@ -57,6 +61,7 @@ ALTER TABLE payload_locked_documents_rels ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payload_preferences ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payload_preferences_rels ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payload_migrations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payload_kv ENABLE ROW LEVEL SECURITY;
 
 -- =============================================================================
 -- CREATE SECURITY POLICIES
@@ -76,7 +81,7 @@ CREATE POLICY "Admin full access to users" ON users
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "Admin full access to users_roles" ON users_roles
+CREATE POLICY "Admin full access to users_sessions" ON users_sessions
   FOR ALL
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
@@ -120,6 +125,11 @@ CREATE POLICY "Admin full access to payload_preferences_rels" ON payload_prefere
   WITH CHECK (auth.role() = 'service_role');
 
 CREATE POLICY "Admin full access to payload_migrations" ON payload_migrations
+  FOR ALL
+  USING (auth.role() = 'service_role')
+  WITH CHECK (auth.role() = 'service_role');
+
+CREATE POLICY "Admin full access to payload_kv" ON payload_kv
   FOR ALL
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
@@ -212,6 +222,15 @@ CREATE POLICY "Admin can manage blog posts" ON blog_posts
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
+CREATE POLICY "Public can view blog post categories" ON blog_posts_categories
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Admin can manage blog post categories" ON blog_posts_categories
+  FOR ALL
+  USING (auth.role() = 'service_role')
+  WITH CHECK (auth.role() = 'service_role');
+
 CREATE POLICY "Public can view blog post relationships" ON blog_posts_rels
   FOR SELECT
   USING (true);
@@ -231,6 +250,15 @@ CREATE POLICY "Admin can manage services" ON services
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
+CREATE POLICY "Public can view service features" ON services_features
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Admin can manage service features" ON services_features
+  FOR ALL
+  USING (auth.role() = 'service_role')
+  WITH CHECK (auth.role() = 'service_role');
+
 CREATE POLICY "Public can view service relationships" ON services_rels
   FOR SELECT
   USING (true);
@@ -246,6 +274,24 @@ CREATE POLICY "Public can view vehicles" ON vehicles
   USING (true);
 
 CREATE POLICY "Admin can manage vehicles" ON vehicles
+  FOR ALL
+  USING (auth.role() = 'service_role')
+  WITH CHECK (auth.role() = 'service_role');
+
+CREATE POLICY "Public can view vehicle images" ON vehicles_images
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Admin can manage vehicle images" ON vehicles_images
+  FOR ALL
+  USING (auth.role() = 'service_role')
+  WITH CHECK (auth.role() = 'service_role');
+
+CREATE POLICY "Public can view vehicle amenities" ON vehicles_amenities
+  FOR SELECT
+  USING (true);
+
+CREATE POLICY "Admin can manage vehicle amenities" ON vehicles_amenities
   FOR ALL
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');

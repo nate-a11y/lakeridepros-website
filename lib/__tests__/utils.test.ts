@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { formatPrice, formatDate, truncateText, slugify, getMediaUrl, cn } from '../utils'
 
 describe('utils', () => {

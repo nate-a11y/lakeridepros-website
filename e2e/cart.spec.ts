@@ -50,11 +50,6 @@ test.describe('Shopping Cart', () => {
   test('cart page has checkout button (when items exist)', async ({ page }) => {
     await page.goto('/cart')
 
-    // Look for checkout button (may not be visible if cart is empty)
-    const checkoutButton = page.getByRole('button', { name: /checkout/i }).or(
-      page.getByRole('link', { name: /checkout/i })
-    )
-
     // Just verify the page structure exists
     expect(page.url()).toContain('/cart')
   })

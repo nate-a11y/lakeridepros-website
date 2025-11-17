@@ -412,6 +412,523 @@ describe('Stripe Webhook Handler', () => {
     })
   })
 
+  describe('Printify Integration', () => {
+    it('handles failed Printify order creation gracefully', async () => {
+      const cartItems = [
+        {
+          productId: 'prod_123',
+          productName: 'Test Product',
+          variantId: 'var_123',
+          variantName: 'Medium / Blue',
+          quantity: 2,
+          price: 29.99,
+        },
+      ]
+
+      const mockSession = {
+        id: 'cs_test_123',
+        object: 'checkout.session',
+        payment_intent: 'pi_test_123',
+        customer_details: {
+          email: 'customer@example.com',
+          name: 'John Doe',
+          phone: null,
+          tax_exempt: 'none',
+          tax_ids: null,
+        },
+        amount_total: 10997,
+        amount_subtotal: 5998,
+        metadata: {
+          cartItems: JSON.stringify(cartItems),
+        },
+      }
+
+      const fullSession = {
+        ...mockSession,
+        line_items: { data: [] },
+        shipping_details: {
+          address: {
+            line1: '123 Main St',
+            line2: null,
+            city: 'Springfield',
+            state: 'MO',
+            postal_code: '65801',
+            country: 'US',
+          },
+        },
+        total_details: {
+          amount_shipping: 999,
+          amount_tax: 4000,
+        },
+      }
+
+      mockRetrieve.mockResolvedValue(fullSession)
+
+      // Mock fetch to fail for Printify API call
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+        ok: false,
+        status: 500,
+        json: () => Promise.resolve({ error: 'Printify error' }),
+      })
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      // Should still return 200 even if Printify fails
+      expect(response.status).toBe(200)
+    })
+
+    it('updates order with Printify ID on success', async () => {
+      const { getPayload } = await import('payload')
+      const mockPayload = await getPayload({ config: {} as never })
+      const updateMock = mockPayload.update as ReturnType<typeof vi.fn>
+
+      const cartItems = [
+        {
+          productId: 'prod_123',
+          productName: 'Test Product',
+          variantId: 'var_123',
+          variantName: 'Medium / Blue',
+          quantity: 2,
+          price: 29.99,
+        },
+      ]
+
+      const mockSession = {
+        id: 'cs_test_123',
+        object: 'checkout.session',
+        payment_intent: 'pi_test_123',
+        customer_details: {
+          email: 'customer@example.com',
+          name: 'John Doe',
+          phone: null,
+          tax_exempt: 'none',
+          tax_ids: null,
+        },
+        amount_total: 10997,
+        amount_subtotal: 5998,
+        metadata: {
+          cartItems: JSON.stringify(cartItems),
+        },
+      }
+
+      const fullSession = {
+        ...mockSession,
+        line_items: { data: [] },
+        shipping_details: {
+          address: {
+            line1: '123 Main St',
+            line2: null,
+            city: 'Springfield',
+            state: 'MO',
+            postal_code: '65801',
+            country: 'US',
+          },
+        },
+        total_details: {
+          amount_shipping: 999,
+          amount_tax: 4000,
+        },
+      }
+
+      mockRetrieve.mockResolvedValue(fullSession)
+
+      // Mock successful Printify response
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ id: 'printify-order-123' }),
+      })
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(updateMock).toHaveBeenCalled()
+    })
+  })
+
+  describe('Email Notifications', () => {
+    it('sends emails for regular orders', async () => {
+      const { sendOrderConfirmation, sendOwnerOrderNotification } = await import('@/lib/email')
+
+      const cartItems = [
+        {
+          productId: 'prod_123',
+          productName: 'Test Product',
+          variantId: 'var_123',
+          variantName: 'Medium / Blue',
+          quantity: 2,
+          price: 29.99,
+        },
+      ]
+
+      const mockSession = {
+        id: 'cs_test_123',
+        object: 'checkout.session',
+        payment_intent: 'pi_test_123',
+        customer_details: {
+          email: 'customer@example.com',
+          name: 'John Doe',
+          phone: null,
+          tax_exempt: 'none',
+          tax_ids: null,
+        },
+        amount_total: 10997,
+        amount_subtotal: 5998,
+        metadata: {
+          cartItems: JSON.stringify(cartItems),
+        },
+      }
+
+      const fullSession = {
+        ...mockSession,
+        line_items: { data: [] },
+        shipping_details: {
+          address: {
+            line1: '123 Main St',
+            line2: null,
+            city: 'Springfield',
+            state: 'MO',
+            postal_code: '65801',
+            country: 'US',
+          },
+        },
+        total_details: {
+          amount_shipping: 999,
+          amount_tax: 4000,
+        },
+      }
+
+      mockRetrieve.mockResolvedValue(fullSession)
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(sendOrderConfirmation).toHaveBeenCalled()
+      expect(sendOwnerOrderNotification).toHaveBeenCalled()
+    })
+
+    it('handles immediate gift card email delivery', async () => {
+      const mockSession = {
+        id: 'cs_test_gift',
+        payment_intent: 'pi_test_gift',
+        metadata: {
+          type: 'gift-card',
+          cardType: 'digital',
+          amount: '100.00',
+          purchaserName: 'John Doe',
+          purchaserEmail: 'john@example.com',
+          recipientName: 'Jane Doe',
+          recipientEmail: 'jane@example.com',
+          message: 'Happy Birthday!',
+          deliveryMethod: 'immediate',
+        },
+      }
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      // Mock fetch for gift card email API
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ success: true }),
+      })
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/api/email/send-gift-card'),
+        expect.any(Object)
+      )
+    })
+
+    it('handles gift card email failure gracefully', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const mockSession = {
+        id: 'cs_test_gift',
+        payment_intent: 'pi_test_gift',
+        metadata: {
+          type: 'gift-card',
+          cardType: 'digital',
+          amount: '100.00',
+          purchaserName: 'John Doe',
+          purchaserEmail: 'john@example.com',
+          recipientName: 'Jane Doe',
+          recipientEmail: 'jane@example.com',
+          deliveryMethod: 'immediate',
+        },
+      }
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      // Mock fetch to throw error
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('Email API error'))
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      // Should still return 200 even if email fails
+      expect(response.status).toBe(200)
+      consoleSpy.mockRestore()
+    })
+
+    it('handles scheduled gift card confirmation', async () => {
+      const mockSession = {
+        id: 'cs_test_scheduled',
+        payment_intent: 'pi_test_scheduled',
+        metadata: {
+          type: 'gift-card',
+          cardType: 'digital',
+          amount: '50.00',
+          purchaserName: 'John Doe',
+          purchaserEmail: 'john@example.com',
+          recipientName: 'Jane Doe',
+          recipientEmail: 'jane@example.com',
+          deliveryMethod: 'scheduled',
+          scheduledDeliveryDate: '2024-12-25',
+        },
+      }
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ success: true }),
+      })
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/api/email/send-scheduled-gift-card-confirmation'),
+        expect.any(Object)
+      )
+    })
+
+    it('handles physical gift card confirmation', async () => {
+      const mockSession = {
+        id: 'cs_test_physical',
+        payment_intent: 'pi_test_physical',
+        metadata: {
+          type: 'gift-card',
+          cardType: 'physical',
+          amount: '75.00',
+          purchaserName: 'John Doe',
+          purchaserEmail: 'john@example.com',
+          shippingName: 'Jane Doe',
+          shippingStreet1: '456 Oak Ave',
+          shippingCity: 'Springfield',
+          shippingState: 'MO',
+          shippingZipCode: '65801',
+          shippingCountry: 'United States',
+        },
+      }
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ success: true }),
+      })
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('/api/email/send-physical-gift-card-confirmation'),
+        expect.any(Object)
+      )
+    })
+
+    it('handles physical gift card email failure gracefully', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const mockSession = {
+        id: 'cs_test_physical',
+        payment_intent: 'pi_test_physical',
+        metadata: {
+          type: 'gift-card',
+          cardType: 'physical',
+          amount: '75.00',
+          purchaserName: 'John Doe',
+          purchaserEmail: 'john@example.com',
+          shippingName: 'Jane Doe',
+          shippingStreet1: '456 Oak Ave',
+          shippingCity: 'Springfield',
+          shippingState: 'MO',
+          shippingZipCode: '65801',
+        },
+      }
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      // Mock failed email API
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+        ok: false,
+        status: 500,
+      })
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      consoleSpy.mockRestore()
+    })
+
+    it('handles scheduled gift card email failure gracefully', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const mockSession = {
+        id: 'cs_test_scheduled',
+        payment_intent: 'pi_test_scheduled',
+        metadata: {
+          type: 'gift-card',
+          cardType: 'digital',
+          amount: '50.00',
+          purchaserName: 'John Doe',
+          purchaserEmail: 'john@example.com',
+          recipientName: 'Jane Doe',
+          recipientEmail: 'jane@example.com',
+          deliveryMethod: 'scheduled',
+          scheduledDeliveryDate: '2024-12-25',
+        },
+      }
+
+      const mockEvent = {
+        id: 'evt_test',
+        object: 'event',
+        type: 'checkout.session.completed',
+        data: { object: mockSession },
+        api_version: '2025-10-29.clover',
+        created: Date.now(),
+        livemode: false,
+        pending_webhooks: 0,
+        request: null,
+      }
+
+      mockConstructEvent.mockReturnValue(mockEvent)
+
+      // Mock failed email API
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+        ok: false,
+        status: 500,
+      })
+
+      const request = createMockRequest(JSON.stringify(mockEvent))
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      consoleSpy.mockRestore()
+    })
+  })
+
   describe('Error Handling', () => {
     it('returns 400 on signature verification errors', async () => {
       mockConstructEvent.mockImplementation(() => {

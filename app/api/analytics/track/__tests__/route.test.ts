@@ -222,6 +222,187 @@ describe('Analytics Track API', () => {
     })
   })
 
+  describe('Daily Stats Management', () => {
+    it('updates existing daily stats for today when tracking view', async () => {
+      const { getPayload } = await import('payload')
+      const mockPayload = await getPayload({ config: {} as never })
+      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
+      const updateMock = mockPayload.update as ReturnType<typeof vi.fn>
+
+      const today = new Date()
+      const todayString = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString()
+
+      findMock
+        .mockResolvedValueOnce({ docs: [{ id: 'service-1' }] })
+        .mockResolvedValueOnce({
+          docs: [{
+            id: 'analytics-1',
+            views: 10,
+            bookings: 2,
+            dailyStats: [
+              {
+                date: todayString,
+                views: 5,
+                bookings: 1,
+              },
+            ],
+          }],
+        })
+
+      updateMock.mockResolvedValue({
+        id: 'analytics-1',
+        views: 11,
+        bookings: 2,
+        popularityScore: 21,
+      })
+
+      const request = createMockRequest({
+        serviceSlug: 'boat-detailing',
+        eventType: 'view',
+      })
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(updateMock).toHaveBeenCalled()
+    })
+
+    it('updates existing daily stats for today when tracking booking', async () => {
+      const { getPayload } = await import('payload')
+      const mockPayload = await getPayload({ config: {} as never })
+      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
+      const updateMock = mockPayload.update as ReturnType<typeof vi.fn>
+
+      const today = new Date()
+      const todayString = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString()
+
+      findMock
+        .mockResolvedValueOnce({ docs: [{ id: 'service-1' }] })
+        .mockResolvedValueOnce({
+          docs: [{
+            id: 'analytics-1',
+            views: 10,
+            bookings: 2,
+            dailyStats: [
+              {
+                date: todayString,
+                views: 5,
+                bookings: 1,
+              },
+            ],
+          }],
+        })
+
+      updateMock.mockResolvedValue({
+        id: 'analytics-1',
+        views: 10,
+        bookings: 3,
+        popularityScore: 40,
+      })
+
+      const request = createMockRequest({
+        serviceSlug: 'boat-detailing',
+        eventType: 'booking',
+      })
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(updateMock).toHaveBeenCalled()
+    })
+
+    it('sorts daily stats by date descending', async () => {
+      const { getPayload } = await import('payload')
+      const mockPayload = await getPayload({ config: {} as never })
+      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
+      const updateMock = mockPayload.update as ReturnType<typeof vi.fn>
+
+      const today = new Date()
+      const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000)
+      const twoDaysAgo = new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000)
+
+      findMock
+        .mockResolvedValueOnce({ docs: [{ id: 'service-1' }] })
+        .mockResolvedValueOnce({
+          docs: [{
+            id: 'analytics-1',
+            views: 30,
+            bookings: 6,
+            dailyStats: [
+              {
+                date: twoDaysAgo.toISOString(),
+                views: 10,
+                bookings: 2,
+              },
+              {
+                date: yesterday.toISOString(),
+                views: 15,
+                bookings: 3,
+              },
+            ],
+          }],
+        })
+
+      updateMock.mockResolvedValue({
+        id: 'analytics-1',
+        views: 31,
+        bookings: 6,
+        popularityScore: 61,
+      })
+
+      const request = createMockRequest({
+        serviceSlug: 'boat-detailing',
+        eventType: 'view',
+      })
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+    })
+
+    it('limits daily stats to 30 entries', async () => {
+      const { getPayload } = await import('payload')
+      const mockPayload = await getPayload({ config: {} as never })
+      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
+      const updateMock = mockPayload.update as ReturnType<typeof vi.fn>
+
+      const today = new Date()
+      // Create 32 days of stats
+      const manyStats = Array.from({ length: 32 }, (_, i) => ({
+        date: new Date(today.getTime() - i * 24 * 60 * 60 * 1000).toISOString(),
+        views: 5,
+        bookings: 1,
+      }))
+
+      findMock
+        .mockResolvedValueOnce({ docs: [{ id: 'service-1' }] })
+        .mockResolvedValueOnce({
+          docs: [{
+            id: 'analytics-1',
+            views: 160,
+            bookings: 32,
+            dailyStats: manyStats,
+          }],
+        })
+
+      updateMock.mockResolvedValue({
+        id: 'analytics-1',
+        views: 161,
+        bookings: 32,
+        popularityScore: 321,
+      })
+
+      const request = createMockRequest({
+        serviceSlug: 'boat-detailing',
+        eventType: 'view',
+      })
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      // Verify that update was called with limited stats (max 30)
+      expect(updateMock).toHaveBeenCalled()
+      const updateCall = updateMock.mock.calls[0][0]
+      expect(updateCall.data.dailyStats.length).toBeLessThanOrEqual(30)
+    })
+  })
+
   describe('Error Handling', () => {
     it('returns 500 on database errors', async () => {
       const { getPayload } = await import('payload')

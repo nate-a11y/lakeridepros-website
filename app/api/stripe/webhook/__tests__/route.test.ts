@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { POST } from '../route'
 import { NextRequest } from 'next/server'
-import type Stripe from 'stripe'
 
 // Create shared mocks
 const mockConstructEvent = vi.fn()

@@ -237,7 +237,7 @@ export default async function PartnerDetailPage({ params }: Props) {
             <div className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Gallery</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {partner.images.map((imageItem: any, index: number) => {
+                {partner.images.map((imageItem: { image?: { url?: string } }, index: number) => {
                   const imageObj = typeof imageItem.image === 'object' ? imageItem.image : null;
                   const imageUrl = imageObj?.url ? getMediaUrl(imageObj.url) : null;
 

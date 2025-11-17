@@ -65,7 +65,7 @@ export async function getServiceBySlugLocal(slug: string): Promise<Service | nul
 export async function getPartnersLocal(category?: string): Promise<Partner[]> {
   try {
     const payload = await getPayloadClient()
-    const whereClause: any = {
+    const whereClause: Record<string, unknown> = {
       active: {
         equals: true,
       },

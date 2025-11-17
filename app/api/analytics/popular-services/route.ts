@@ -2,6 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import config from '@/src/payload.config'
 
+interface ServiceAnalytics {
+  service: {
+    title: string
+    slug: string
+  } | string
+  popularityScore: number
+  views: number
+  bookings: number
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -19,19 +29,20 @@ export async function GET(request: NextRequest) {
 
     // Map to service info
     const popularServices = analyticsResponse.docs
-      .map((analytics: any) => {
-        if (!analytics.service || typeof analytics.service === 'string') {
+      .map((analytics) => {
+        const typedAnalytics = analytics as unknown as ServiceAnalytics
+        if (!typedAnalytics.service || typeof typedAnalytics.service === 'string') {
           return null
         }
         return {
-          name: analytics.service.title,
-          slug: analytics.service.slug,
-          popularityScore: analytics.popularityScore,
-          views: analytics.views,
-          bookings: analytics.bookings,
+          name: typedAnalytics.service.title,
+          slug: typedAnalytics.service.slug,
+          popularityScore: typedAnalytics.popularityScore,
+          views: typedAnalytics.views,
+          bookings: typedAnalytics.bookings,
         }
       })
-      .filter((service: any) => service !== null)
+      .filter((service): service is NonNullable<typeof service> => service !== null)
 
     return NextResponse.json(
       {

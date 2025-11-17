@@ -343,7 +343,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl"
               priority={false}
-              onError={(e) => {
+              onError={(_e) => {
                 console.error('Image failed to load:', {
                   productName: product.name,
                   imageUrl: getMediaUrl(image.url),

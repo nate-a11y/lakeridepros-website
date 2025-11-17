@@ -6,6 +6,16 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
+interface ServiceAnalytics {
+  service: {
+    title: string
+    slug: string
+  } | string
+  popularityScore: number
+  views: number
+  bookings: number
+}
+
 /**
  * Fetch popular services directly from Payload (server-side only, for build time)
  * This avoids HTTP request issues during static site generation
@@ -34,16 +44,16 @@ export async function getPopularServicesLocal(limit: number = 5): Promise<Array<
     const popularServices = analyticsResponse.docs
       .map((analytics) => {
         // Type assertion needed because Payload types are complex
-        const service = analytics.service as any
-        if (!service || typeof service === 'string') {
+        const typedAnalytics = analytics as unknown as ServiceAnalytics
+        if (!typedAnalytics.service || typeof typedAnalytics.service === 'string') {
           return null
         }
         return {
-          name: service.title,
-          slug: service.slug,
-          popularityScore: analytics.popularityScore,
-          views: analytics.views,
-          bookings: analytics.bookings,
+          name: typedAnalytics.service.title,
+          slug: typedAnalytics.service.slug,
+          popularityScore: typedAnalytics.popularityScore,
+          views: typedAnalytics.views,
+          bookings: typedAnalytics.bookings,
         }
       })
       .filter((service): service is NonNullable<typeof service> => service !== null)

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import { getPartnerBySlugLocal, getPartnersLocal, getMediaUrl } from '@/lib/api/payload-local';
+import type { Media } from '@/src/payload-types';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -20,8 +21,12 @@ export async function generateStaticParams() {
     const partners = await getPartnersLocal();
     console.log(`[generateStaticParams] Found ${partners.length} partners`);
 
-    return partners.map((partner) => ({
-      slug: partner.slug,
+    // Filter out partners without slugs since slug is now optional
+    const partnersWithSlugs = partners.filter((partner) => partner.slug);
+    console.log(`[generateStaticParams] ${partnersWithSlugs.length} partners have slugs`);
+
+    return partnersWithSlugs.map((partner) => ({
+      slug: partner.slug as string,
     }));
   } catch (error) {
     console.error('[generateStaticParams] Error fetching partners:', error);
@@ -237,14 +242,14 @@ export default async function PartnerDetailPage({ params }: Props) {
             <div className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Gallery</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {partner.images.map((imageItem: any, index: number) => {
-                  const imageObj = typeof imageItem.image === 'object' ? imageItem.image : null;
+                {partner.images.map((imageItem, index: number) => {
+                  const imageObj = typeof imageItem.image === 'object' ? imageItem.image as Media : null;
                   const imageUrl = imageObj?.url ? getMediaUrl(imageObj.url) : null;
 
                   if (!imageUrl) return null;
 
                   return (
-                    <div key={index} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
+                    <div key={imageItem.id || index} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
                       <Image
                         src={imageUrl}
                         alt={`${partner.name} - Image ${index + 1}`}

@@ -26,10 +26,10 @@ export const Partners: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      required: true,
+      required: false,
       unique: true,
       admin: {
-        description: 'URL-friendly identifier (e.g., "example-venue")',
+        description: 'URL-friendly identifier (e.g., "example-venue") - Required for detail pages to work',
       },
     },
     {

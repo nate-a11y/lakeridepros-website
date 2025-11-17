@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ExternalLink, Phone, Mail, MapPin, ArrowRight } from 'lucide-react'
+import { ExternalLink, Phone, ArrowRight } from 'lucide-react'
 import { Partner } from '@/src/payload-types'
 import { getMediaUrl } from '@/lib/utils'
 import PartnerFilters from './PartnerFilters'
@@ -51,38 +51,67 @@ export default function WeddingPartnersClient({ partners }: WeddingPartnersClien
                   key={partner.id}
                   className="bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg hover:shadow-xl transition-all overflow-hidden"
                 >
-                  <Link href={`/partners/${partner.slug}`} className="block p-6">
-                    {/* Logo */}
-                    {partner.logo && typeof partner.logo === 'object' && (
-                      <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
-                        <Image
-                          src={getMediaUrl(partner.logo.url)}
-                          alt={partner.logo.alt || partner.name}
-                          width={200}
-                          height={100}
-                          className="object-contain max-h-full"
-                        />
+                  {partner.slug ? (
+                    <Link href={`/partners/${partner.slug}`} className="block p-6">
+                      {/* Logo */}
+                      {partner.logo && typeof partner.logo === 'object' && (
+                        <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
+                          <Image
+                            src={getMediaUrl(partner.logo.url)}
+                            alt={partner.logo.alt || partner.name}
+                            width={200}
+                            height={100}
+                            className="object-contain max-h-full"
+                          />
+                        </div>
+                      )}
+
+                      {/* Name */}
+                      <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
+                        {partner.name}
+                      </h3>
+
+                      {/* Blurb (short description) */}
+                      {partner.blurb && (
+                        <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
+                          {partner.blurb}
+                        </p>
+                      )}
+
+                      {/* Learn More Link */}
+                      <div className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark font-medium mt-4">
+                        <span>Learn More</span>
+                        <ArrowRight className="w-4 h-4" />
                       </div>
-                    )}
+                    </Link>
+                  ) : (
+                    <div className="block p-6">
+                      {/* Logo */}
+                      {partner.logo && typeof partner.logo === 'object' && (
+                        <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
+                          <Image
+                            src={getMediaUrl(partner.logo.url)}
+                            alt={partner.logo.alt || partner.name}
+                            width={200}
+                            height={100}
+                            className="object-contain max-h-full"
+                          />
+                        </div>
+                      )}
 
-                    {/* Name */}
-                    <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
-                      {partner.name}
-                    </h3>
+                      {/* Name */}
+                      <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
+                        {partner.name}
+                      </h3>
 
-                    {/* Blurb (short description) */}
-                    {partner.blurb && (
-                      <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
-                        {partner.blurb}
-                      </p>
-                    )}
-
-                    {/* Learn More Link */}
-                    <div className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark font-medium mt-4">
-                      <span>Learn More</span>
-                      <ArrowRight className="w-4 h-4" />
+                      {/* Blurb or Description */}
+                      {(partner.blurb || partner.description) && (
+                        <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
+                          {partner.blurb || partner.description}
+                        </p>
+                      )}
                     </div>
-                  </Link>
+                  )}
 
                   {/* Contact Info - Outside the link so they're still clickable */}
                   <div className="px-6 pb-6 space-y-2 text-sm border-t pt-4">

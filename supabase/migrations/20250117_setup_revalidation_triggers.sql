@@ -180,7 +180,7 @@ DROP TRIGGER IF EXISTS services_cache_revalidation ON services;
 DROP TRIGGER IF EXISTS products_cache_revalidation ON products;
 DROP TRIGGER IF EXISTS vehicles_cache_revalidation ON vehicles;
 DROP TRIGGER IF EXISTS partners_cache_revalidation ON partners;
-DROP TRIGGER IF EXISTS blog_posts_cache_revalidation ON "blog-posts";
+DROP TRIGGER IF EXISTS blog_posts_cache_revalidation ON blog_posts;
 DROP TRIGGER IF EXISTS testimonials_cache_revalidation ON testimonials;
 
 -- Services trigger
@@ -209,7 +209,7 @@ EXECUTE FUNCTION partners_revalidation_trigger();
 
 -- Blog Posts trigger
 CREATE TRIGGER blog_posts_cache_revalidation
-AFTER INSERT OR UPDATE ON "blog-posts"
+AFTER INSERT OR UPDATE ON blog_posts
 FOR EACH ROW
 EXECUTE FUNCTION blog_posts_revalidation_trigger();
 

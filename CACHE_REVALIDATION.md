@@ -1,15 +1,31 @@
 # Cache Revalidation Guide
 
+> **🚀 NEW: Advanced Dual-Layer Revalidation System**
+>
+> This project now has an advanced revalidation system with database triggers + Payload hooks.
+> For complete documentation, see [REVALIDATION_SETUP.md](./REVALIDATION_SETUP.md)
+
 ## Overview
 The services pages use ISR (Incremental Static Regeneration) with a 60-second revalidation period. This means:
 - Pages are fast (pre-built static HTML)
 - Content updates automatically every 60 seconds
-- You can manually trigger instant cache clearing
+- **NEW**: Instant cache clearing happens automatically via database triggers
+- You can also manually trigger cache clearing
 
 ## Automatic Revalidation
-Pages automatically revalidate every 60 seconds. If you update a service in Payload CMS, the changes will appear within 1 minute on the live site.
 
-## Manual/Instant Revalidation
+### Background Revalidation (60 seconds)
+Pages automatically revalidate every 60 seconds. If you update content, changes will appear within 1 minute.
+
+### Instant Revalidation (NEW! ⚡)
+The system now has **dual-layer automatic revalidation**:
+
+1. **Payload Hooks** - When you edit content in Payload CMS
+2. **Database Triggers** - When content changes from ANY source (direct DB edits, scripts, etc.)
+
+This means cache updates are **instant** regardless of how you modify the data!
+
+## Manual Revalidation
 
 ### Setup (One-time)
 1. Add this environment variable to Vercel:
@@ -18,7 +34,21 @@ Pages automatically revalidate every 60 seconds. If you update a service in Payl
    ```
    (Generate a secure random string, e.g., `openssl rand -hex 32`)
 
-### Clear Cache for Specific Service
+### Clear Cache with Smart Detection (NEW!)
+```bash
+# Using collection + slug (recommended)
+curl -X POST 'https://lakeridepros-website.vercel.app/api/revalidate?secret=YOUR_SECRET' \
+  -H "Content-Type: application/json" \
+  -d '{"collection":"services","slug":"wedding-transportation"}'
+
+# This automatically revalidates:
+# - /services/wedding-transportation
+# - /services
+# - /
+# - /sitemap.xml
+```
+
+### Clear Cache for Specific Path
 ```bash
 curl -X POST 'https://lakeridepros-website.vercel.app/api/revalidate?secret=YOUR_SECRET&path=/services/wedding-transportation'
 ```
@@ -33,17 +63,21 @@ curl -X POST 'https://lakeridepros-website.vercel.app/api/revalidate?secret=YOUR
 curl -X POST 'https://lakeridepros-website.vercel.app/api/revalidate?secret=YOUR_SECRET&path=/'
 ```
 
-## Integrate with Payload CMS Webhooks (Optional)
+## How It Works
 
-You can set up Payload CMS to automatically trigger revalidation when content changes:
+The advanced system uses **two layers** for maximum reliability:
 
-1. In Payload CMS admin, go to Settings → Webhooks
-2. Add a new webhook:
-   - **URL**: `https://lakeridepros-website.vercel.app/api/revalidate?secret=YOUR_SECRET&path=/services`
-   - **Events**: Select "afterChange" for the Services collection
-   - **Method**: POST
+1. **Database Triggers** (PostgreSQL/Supabase)
+   - Fires on ANY database change
+   - Works with direct SQL edits, scripts, external tools
+   - Calls revalidation API via HTTP
 
-Now whenever you update a service in Payload CMS, the cache will automatically clear!
+2. **Payload Hooks** (Application Layer)
+   - Fires when content saved in Payload CMS
+   - Provides application-level control
+   - Backup layer if database triggers fail
+
+See [REVALIDATION_SETUP.md](./REVALIDATION_SETUP.md) for full details.
 
 ## Troubleshooting
 

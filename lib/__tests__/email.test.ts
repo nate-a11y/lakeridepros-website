@@ -199,6 +199,36 @@ describe('Email Functions', () => {
 
       expect(result).toBe(true)
     })
+
+    it('returns false when Resend API throws an error', async () => {
+      mockSend.mockRejectedValueOnce(new Error('API error'))
+
+      const result = await sendOwnerOrderNotification(
+        'ORD-123456',
+        'John Doe',
+        'customer@example.com',
+        109.97,
+        mockOrderItems,
+        mockShippingAddress
+      )
+
+      expect(result).toBe(false)
+    })
+
+    it('returns false on email send error', async () => {
+      mockSend.mockResolvedValueOnce({ data: null, error: { message: 'Send failed' } })
+
+      const result = await sendOwnerOrderNotification(
+        'ORD-123456',
+        'John Doe',
+        'customer@example.com',
+        109.97,
+        mockOrderItems,
+        mockShippingAddress
+      )
+
+      expect(result).toBe(false)
+    })
   })
 
   describe('sendOwnerGiftCardNotification', () => {
@@ -326,6 +356,54 @@ describe('Email Functions', () => {
           subject: '🎁 New Gift Card Purchase - $75.50',
         })
       )
+    })
+
+    it('returns false when Resend API throws an error', async () => {
+      mockSend.mockRejectedValueOnce(new Error('API error'))
+
+      const result = await sendOwnerGiftCardNotification(
+        'GC-ABC123',
+        'digital',
+        100.00,
+        'John Doe',
+        'john@example.com',
+        'Jane Doe',
+        'jane@example.com'
+      )
+
+      expect(result).toBe(false)
+    })
+
+    it('returns false when RESEND_API_KEY is missing', async () => {
+      delete process.env.RESEND_API_KEY
+
+      const result = await sendOwnerGiftCardNotification(
+        'GC-ABC123',
+        'digital',
+        100.00,
+        'John Doe',
+        'john@example.com',
+        'Jane Doe',
+        'jane@example.com'
+      )
+
+      expect(result).toBe(false)
+    })
+
+    it('returns false on email send error', async () => {
+      mockSend.mockResolvedValueOnce({ data: null, error: { message: 'Send failed' } })
+
+      const result = await sendOwnerGiftCardNotification(
+        'GC-ABC123',
+        'digital',
+        100.00,
+        'John Doe',
+        'john@example.com',
+        'Jane Doe',
+        'jane@example.com'
+      )
+
+      expect(result).toBe(false)
     })
   })
 })

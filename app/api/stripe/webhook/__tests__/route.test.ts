@@ -1,10 +1,29 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { POST } from '../route'
 import { NextRequest } from 'next/server'
-import Stripe from 'stripe'
+import type Stripe from 'stripe'
+
+// Create shared mocks
+const mockConstructEvent = vi.fn()
+const mockRetrieve = vi.fn()
+
+// Mock Stripe
+vi.mock('stripe', () => {
+  return {
+    default: class MockStripe {
+      webhooks = {
+        constructEvent: mockConstructEvent,
+      }
+      checkout = {
+        sessions: {
+          retrieve: mockRetrieve,
+        },
+      }
+    }
+  }
+})
 
 // Mock dependencies
-vi.mock('stripe')
 vi.mock('@/lib/email', () => ({
   sendOrderConfirmation: vi.fn().mockResolvedValue(true),
   sendOwnerOrderNotification: vi.fn().mockResolvedValue(true),
@@ -27,41 +46,15 @@ vi.mock('payload', () => ({
 global.fetch = vi.fn().mockResolvedValue({
   ok: true,
   json: () => Promise.resolve({ id: 'printify-123' }),
-})
+}) as typeof fetch
 
 describe('Stripe Webhook Handler', () => {
-  let mockStripe: {
-    webhooks: {
-      constructEvent: ReturnType<typeof vi.fn>
-    }
-    checkout: {
-      sessions: {
-        retrieve: ReturnType<typeof vi.fn>
-      }
-    }
-  }
-
   beforeEach(() => {
     vi.clearAllMocks()
 
     process.env.STRIPE_SECRET_KEY = 'sk_test_123'
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_123'
     process.env.NEXT_PUBLIC_SITE_URL = 'http://localhost:3000'
-
-    // Setup Stripe mock
-    mockStripe = {
-      webhooks: {
-        constructEvent: vi.fn(),
-      },
-      checkout: {
-        sessions: {
-          retrieve: vi.fn(),
-        },
-      },
-    }
-
-    // Mock Stripe constructor
-    vi.mocked(Stripe).mockImplementation(() => mockStripe as unknown as Stripe)
   })
 
   const createMockRequest = (body: string, signature: string = 'test-signature') => {
@@ -78,7 +71,7 @@ describe('Stripe Webhook Handler', () => {
 
   describe('Signature Verification', () => {
     it('returns 400 for invalid signature', async () => {
-      mockStripe.webhooks.constructEvent.mockImplementation(() => {
+      mockConstructEvent.mockImplementation(() => {
         throw new Error('Invalid signature')
       })
 
@@ -91,7 +84,7 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('validates signature correctly', async () => {
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'checkout.session.completed',
@@ -99,7 +92,7 @@ describe('Stripe Webhook Handler', () => {
           object: {
             id: 'cs_test',
             metadata: {},
-          } as Stripe.Checkout.Session,
+          },
         },
         api_version: '2025-10-29.clover',
         created: Date.now(),
@@ -108,12 +101,12 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest('{}')
       const response = await POST(request)
 
-      expect(mockStripe.webhooks.constructEvent).toHaveBeenCalledWith(
+      expect(mockConstructEvent).toHaveBeenCalledWith(
         '{}',
         'test-signature',
         'whsec_test_123'
@@ -135,7 +128,7 @@ describe('Stripe Webhook Handler', () => {
         },
       ]
 
-      const mockSession: Stripe.Checkout.Session = {
+      const mockSession = {
         id: 'cs_test_123',
         object: 'checkout.session',
         payment_intent: 'pi_test_123',
@@ -151,7 +144,7 @@ describe('Stripe Webhook Handler', () => {
         metadata: {
           cartItems: JSON.stringify(cartItems),
         },
-      } as Stripe.Checkout.Session
+      }
 
       const fullSession = {
         ...mockSession,
@@ -172,9 +165,9 @@ describe('Stripe Webhook Handler', () => {
         },
       }
 
-      mockStripe.checkout.sessions.retrieve.mockResolvedValue(fullSession as Stripe.Checkout.Session)
+      mockRetrieve.mockResolvedValue(fullSession)
 
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'checkout.session.completed',
@@ -186,13 +179,13 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest(JSON.stringify(mockEvent))
       const response = await POST(request)
 
       expect(response.status).toBe(200)
-      expect(mockStripe.checkout.sessions.retrieve).toHaveBeenCalledWith(
+      expect(mockRetrieve).toHaveBeenCalledWith(
         'cs_test_123',
         expect.objectContaining({
           expand: expect.arrayContaining(['line_items', 'customer_details', 'shipping_details']),
@@ -205,11 +198,11 @@ describe('Stripe Webhook Handler', () => {
         id: 'cs_test_123',
         metadata: {},
         customer_details: null,
-      } as Stripe.Checkout.Session
+      }
 
-      mockStripe.checkout.sessions.retrieve.mockResolvedValue(mockSession)
+      mockRetrieve.mockResolvedValue(mockSession)
 
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'checkout.session.completed',
@@ -221,7 +214,7 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest(JSON.stringify(mockEvent))
       const response = await POST(request)
@@ -247,9 +240,9 @@ describe('Stripe Webhook Handler', () => {
           message: 'Happy Birthday!',
           deliveryMethod: 'immediate',
         },
-      } as Stripe.Checkout.Session
+      }
 
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'checkout.session.completed',
@@ -261,7 +254,7 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest(JSON.stringify(mockEvent))
       const response = await POST(request)
@@ -286,9 +279,9 @@ describe('Stripe Webhook Handler', () => {
           deliveryMethod: 'scheduled',
           scheduledDeliveryDate: '2024-12-25',
         },
-      } as Stripe.Checkout.Session
+      }
 
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'checkout.session.completed',
@@ -300,7 +293,7 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest(JSON.stringify(mockEvent))
       const response = await POST(request)
@@ -325,9 +318,9 @@ describe('Stripe Webhook Handler', () => {
           shippingZipCode: '65801',
           shippingCountry: 'United States',
         },
-      } as Stripe.Checkout.Session
+      }
 
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'checkout.session.completed',
@@ -339,7 +332,7 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest(JSON.stringify(mockEvent))
       const response = await POST(request)
@@ -350,11 +343,11 @@ describe('Stripe Webhook Handler', () => {
 
   describe('Other Event Types', () => {
     it('handles payment_intent.succeeded event', async () => {
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'payment_intent.succeeded',
-        data: { object: { id: 'pi_test' } as Stripe.PaymentIntent },
+        data: { object: { id: 'pi_test' } },
         api_version: '2025-10-29.clover',
         created: Date.now(),
         livemode: false,
@@ -362,7 +355,7 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest(JSON.stringify(mockEvent))
       const response = await POST(request)
@@ -371,11 +364,11 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('handles payment_intent.payment_failed event', async () => {
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'payment_intent.payment_failed',
-        data: { object: { id: 'pi_test_failed' } as Stripe.PaymentIntent },
+        data: { object: { id: 'pi_test_failed' } },
         api_version: '2025-10-29.clover',
         created: Date.now(),
         livemode: false,
@@ -383,7 +376,7 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest(JSON.stringify(mockEvent))
       const response = await POST(request)
@@ -392,11 +385,11 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('handles unknown event types gracefully', async () => {
-      const mockEvent: Stripe.Event = {
+      const mockEvent = {
         id: 'evt_test',
         object: 'event',
         type: 'unknown.event.type',
-        data: { object: {} as Stripe.Event.Data['object'] },
+        data: { object: {} },
         api_version: '2025-10-29.clover',
         created: Date.now(),
         livemode: false,
@@ -404,7 +397,7 @@ describe('Stripe Webhook Handler', () => {
         request: null,
       }
 
-      mockStripe.webhooks.constructEvent.mockReturnValue(mockEvent)
+      mockConstructEvent.mockReturnValue(mockEvent)
 
       const request = createMockRequest(JSON.stringify(mockEvent))
       const response = await POST(request)
@@ -415,7 +408,7 @@ describe('Stripe Webhook Handler', () => {
 
   describe('Error Handling', () => {
     it('returns 500 on unexpected errors', async () => {
-      mockStripe.webhooks.constructEvent.mockImplementation(() => {
+      mockConstructEvent.mockImplementation(() => {
         throw new Error('Unexpected error')
       })
 

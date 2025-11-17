@@ -1,6 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
+/**
+ * Server-only analytics functions
+ * This file contains functions that use Payload directly and should only be imported server-side
+ */
+
 import { getPayload } from 'payload'
-import config from '@/src/payload.config'
+import config from '@payload-config'
 
 interface ServiceAnalytics {
   service: {
@@ -12,24 +16,34 @@ interface ServiceAnalytics {
   bookings: number
 }
 
-export async function GET(request: NextRequest) {
+/**
+ * Fetch popular services directly from Payload (server-side only, for build time)
+ * This avoids HTTP request issues during static site generation
+ * @param limit - Maximum number of services to return (default: 5)
+ * @returns Promise that resolves to array of popular services
+ */
+export async function getPopularServicesLocal(limit: number = 5): Promise<Array<{
+  name: string
+  slug: string
+  popularityScore: number
+  views: number
+  bookings: number
+}>> {
   try {
-    const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '5', 10)
-
     const payload = await getPayload({ config })
 
     // Fetch analytics sorted by popularity score
     const analyticsResponse = await payload.find({
       collection: 'service-analytics',
-      sort: '-popularityScore', // Sort by popularity descending
+      sort: '-popularityScore',
       limit,
-      depth: 2, // Include related service data
+      depth: 2,
     })
 
     // Map to service info
     const popularServices = analyticsResponse.docs
       .map((analytics) => {
+        // Type assertion needed because Payload types are complex
         const typedAnalytics = analytics as unknown as ServiceAnalytics
         if (!typedAnalytics.service || typeof typedAnalytics.service === 'string') {
           return null
@@ -44,24 +58,9 @@ export async function GET(request: NextRequest) {
       })
       .filter((service): service is NonNullable<typeof service> => service !== null)
 
-    return NextResponse.json(
-      {
-        services: popularServices,
-        total: analyticsResponse.totalDocs,
-      },
-      {
-        status: 200,
-        headers: {
-          // Cache for 5 minutes
-          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
-        },
-      }
-    )
+    return popularServices
   } catch (error) {
-    console.error('Error fetching popular services:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch popular services' },
-      { status: 500 }
-    )
+    console.error('Error fetching popular services locally:', error)
+    return []
   }
 }

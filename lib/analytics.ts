@@ -48,7 +48,7 @@ export async function trackServiceEvent(
 }
 
 /**
- * Fetch popular services based on analytics
+ * Fetch popular services based on analytics (client-side or runtime)
  * @param limit - Maximum number of services to return (default: 5)
  * @returns Promise that resolves to array of popular services
  */
@@ -76,3 +76,4 @@ export async function getPopularServices(limit: number = 5): Promise<Array<{
     return []
   }
 }
+

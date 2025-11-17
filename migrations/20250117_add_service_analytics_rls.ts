@@ -74,40 +74,76 @@ export async function up({ payload }: MigrateUpArgs): Promise<void> {
     DROP POLICY IF EXISTS "Allow delete to daily stats" ON "service_analytics_daily_stats";
 
     -- RLS policies for service_analytics table
+    -- Public read access for analytics data
     CREATE POLICY "Public can view service analytics" ON "service_analytics"
       FOR SELECT
       USING (true);
 
-    CREATE POLICY "Allow write to service analytics" ON "service_analytics"
+    -- Write operations restricted to service role only
+    -- This prevents anonymous clients from tampering with analytics counters
+    CREATE POLICY "Service role can insert service analytics" ON "service_analytics"
       FOR INSERT
-      WITH CHECK (true);
+      TO authenticated
+      WITH CHECK (
+        -- Only allow inserts from service_role or authenticated backend connections
+        current_setting('request.jwt.claims', true)::json->>'role' = 'service_role'
+        OR current_setting('role', true) != 'anon'
+      );
 
-    CREATE POLICY "Allow update to service analytics" ON "service_analytics"
+    CREATE POLICY "Service role can update service analytics" ON "service_analytics"
       FOR UPDATE
-      USING (true)
-      WITH CHECK (true);
+      TO authenticated
+      USING (
+        current_setting('request.jwt.claims', true)::json->>'role' = 'service_role'
+        OR current_setting('role', true) != 'anon'
+      )
+      WITH CHECK (
+        current_setting('request.jwt.claims', true)::json->>'role' = 'service_role'
+        OR current_setting('role', true) != 'anon'
+      );
 
-    CREATE POLICY "Allow delete to service analytics" ON "service_analytics"
+    CREATE POLICY "Service role can delete service analytics" ON "service_analytics"
       FOR DELETE
-      USING (true);
+      TO authenticated
+      USING (
+        current_setting('request.jwt.claims', true)::json->>'role' = 'service_role'
+        OR current_setting('role', true) != 'anon'
+      );
 
     -- RLS policies for service_analytics_daily_stats table
+    -- Public read access for daily stats
     CREATE POLICY "Public can view daily stats" ON "service_analytics_daily_stats"
       FOR SELECT
       USING (true);
 
-    CREATE POLICY "Allow write to daily stats" ON "service_analytics_daily_stats"
+    -- Write operations restricted to service role only
+    CREATE POLICY "Service role can insert daily stats" ON "service_analytics_daily_stats"
       FOR INSERT
-      WITH CHECK (true);
+      TO authenticated
+      WITH CHECK (
+        current_setting('request.jwt.claims', true)::json->>'role' = 'service_role'
+        OR current_setting('role', true) != 'anon'
+      );
 
-    CREATE POLICY "Allow update to daily stats" ON "service_analytics_daily_stats"
+    CREATE POLICY "Service role can update daily stats" ON "service_analytics_daily_stats"
       FOR UPDATE
-      USING (true)
-      WITH CHECK (true);
+      TO authenticated
+      USING (
+        current_setting('request.jwt.claims', true)::json->>'role' = 'service_role'
+        OR current_setting('role', true) != 'anon'
+      )
+      WITH CHECK (
+        current_setting('request.jwt.claims', true)::json->>'role' = 'service_role'
+        OR current_setting('role', true) != 'anon'
+      );
 
-    CREATE POLICY "Allow delete to daily stats" ON "service_analytics_daily_stats"
+    CREATE POLICY "Service role can delete daily stats" ON "service_analytics_daily_stats"
       FOR DELETE
-      USING (true);
+      TO authenticated
+      USING (
+        current_setting('request.jwt.claims', true)::json->>'role' = 'service_role'
+        OR current_setting('role', true) != 'anon'
+      );
   `)
 }
 
@@ -115,10 +151,16 @@ export async function down({ payload }: MigrateDownArgs): Promise<void> {
   await payload.db.drizzle.execute(`
     -- Remove RLS policies from both tables
     DROP POLICY IF EXISTS "Public can view service analytics" ON "service_analytics";
+    DROP POLICY IF EXISTS "Service role can insert service analytics" ON "service_analytics";
+    DROP POLICY IF EXISTS "Service role can update service analytics" ON "service_analytics";
+    DROP POLICY IF EXISTS "Service role can delete service analytics" ON "service_analytics";
     DROP POLICY IF EXISTS "Allow write to service analytics" ON "service_analytics";
     DROP POLICY IF EXISTS "Allow update to service analytics" ON "service_analytics";
     DROP POLICY IF EXISTS "Allow delete to service analytics" ON "service_analytics";
     DROP POLICY IF EXISTS "Public can view daily stats" ON "service_analytics_daily_stats";
+    DROP POLICY IF EXISTS "Service role can insert daily stats" ON "service_analytics_daily_stats";
+    DROP POLICY IF EXISTS "Service role can update daily stats" ON "service_analytics_daily_stats";
+    DROP POLICY IF EXISTS "Service role can delete daily stats" ON "service_analytics_daily_stats";
     DROP POLICY IF EXISTS "Allow write to daily stats" ON "service_analytics_daily_stats";
     DROP POLICY IF EXISTS "Allow update to daily stats" ON "service_analytics_daily_stats";
     DROP POLICY IF EXISTS "Allow delete to daily stats" ON "service_analytics_daily_stats";

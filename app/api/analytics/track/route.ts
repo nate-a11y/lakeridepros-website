@@ -7,6 +7,12 @@ interface TrackEventRequest {
   eventType: 'view' | 'booking'
 }
 
+interface DailyStat {
+  date: string
+  views: number
+  bookings: number
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: TrackEventRequest = await request.json()
@@ -91,10 +97,11 @@ export async function POST(request: NextRequest) {
       const dailyStats = Array.isArray(analytics.dailyStats) ? [...analytics.dailyStats] : []
 
       // Find today's stats
-      const todayStats = dailyStats.find((stat: any) => {
-        const statDate = new Date(stat.date)
+      const todayStats = dailyStats.find((stat) => {
+        const typedStat = stat as DailyStat
+        const statDate = new Date(typedStat.date)
         return statDate.toDateString() === today.toDateString()
-      })
+      }) as DailyStat | undefined
 
       if (todayStats) {
         // Update today's stats
@@ -114,19 +121,28 @@ export async function POST(request: NextRequest) {
 
       // Keep only last 30 days
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
-      const recentStats = dailyStats.filter((stat: any) => {
-        return new Date(stat.date) >= thirtyDaysAgo
+      const recentStats = dailyStats.filter((stat) => {
+        const typedStat = stat as DailyStat
+        return new Date(typedStat.date) >= thirtyDaysAgo
       })
 
       // Sort by date descending and limit to 30 entries
-      recentStats.sort((a: any, b: any) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      recentStats.sort((a, b) => {
+        const typedA = a as DailyStat
+        const typedB = b as DailyStat
+        return new Date(typedB.date).getTime() - new Date(typedA.date).getTime()
       })
       const limitedStats = recentStats.slice(0, 30)
 
       // Calculate last 30 days totals
-      const viewsLast30Days = limitedStats.reduce((sum: number, stat: any) => sum + (stat.views || 0), 0)
-      const bookingsLast30Days = limitedStats.reduce((sum: number, stat: any) => sum + (stat.bookings || 0), 0)
+      const viewsLast30Days = limitedStats.reduce((sum: number, stat) => {
+        const typedStat = stat as DailyStat
+        return sum + (typedStat.views || 0)
+      }, 0)
+      const bookingsLast30Days = limitedStats.reduce((sum: number, stat) => {
+        const typedStat = stat as DailyStat
+        return sum + (typedStat.bookings || 0)
+      }, 0)
 
       // Update analytics
       analytics = await payload.update({

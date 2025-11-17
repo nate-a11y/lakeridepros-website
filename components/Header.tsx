@@ -1,5 +1,5 @@
 import { getServices } from '@/lib/api/payload';
-import { getPopularServices } from '@/lib/analytics';
+import { getPopularServicesLocal } from '@/lib/analytics-server';
 import HeaderClient from './HeaderClient';
 
 export default async function Header() {
@@ -16,10 +16,10 @@ export default async function Header() {
     // Fall back to empty array if fetch fails
   }
 
-  // Fetch popular services based on analytics
+  // Fetch popular services based on analytics - use local version for build-time
   let popularServiceSlugs: string[] = [];
   try {
-    const popularServices = await getPopularServices(5);
+    const popularServices = await getPopularServicesLocal(5);
     popularServiceSlugs = popularServices.map(s => s.slug);
   } catch (error) {
     console.error('Error fetching popular services:', error);

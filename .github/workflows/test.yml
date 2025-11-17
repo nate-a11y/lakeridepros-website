@@ -34,10 +34,30 @@ jobs:
 
       - name: Run unit tests
         run: npm test -- --run --reporter=verbose
+        env:
+          # Required secrets for tests
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          PAYLOAD_URL: ${{ secrets.PAYLOAD_URL }}
+          SERVER_URL: ${{ secrets.SERVER_URL }}
+          NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+          CORS_ORIGINS: ${{ secrets.CORS_ORIGINS }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
 
       - name: Generate coverage report
         run: npm run test:coverage
         continue-on-error: true
+        env:
+          # Required secrets for tests
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          PAYLOAD_URL: ${{ secrets.PAYLOAD_URL }}
+          SERVER_URL: ${{ secrets.SERVER_URL }}
+          NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+          CORS_ORIGINS: ${{ secrets.CORS_ORIGINS }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -104,6 +124,15 @@ jobs:
         run: npm run build
         continue-on-error: true
         env:
-          # Mock environment variables for build
+          # Required secrets for Payload CMS
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          PAYLOAD_URL: ${{ secrets.PAYLOAD_URL }}
+          SERVER_URL: ${{ secrets.SERVER_URL }}
+          NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+          CORS_ORIGINS: ${{ secrets.CORS_ORIGINS }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          # Public environment variables for build
           NEXT_PUBLIC_PAYLOAD_API_URL: http://localhost:3001
           NEXT_PUBLIC_SITE_URL: http://localhost:3000

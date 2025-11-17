@@ -12,7 +12,7 @@ export const Partners: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'category', 'featured', 'order'],
+    defaultColumns: ['name', 'category', 'active', 'publish_date', 'featured', 'order'],
   },
   fields: [
     {
@@ -31,6 +31,7 @@ export const Partners: CollectionConfig = {
         { label: 'Wedding Partners', value: 'wedding' },
         { label: 'Local Premier Partners', value: 'local-premier' },
         { label: 'Trusted Referral Partners', value: 'trusted-referral' },
+        { label: 'Promotions', value: 'promotions' },
       ],
       admin: {
         description: 'Partner category/type',
@@ -118,6 +119,53 @@ export const Partners: CollectionConfig = {
       defaultValue: 0,
       admin: {
         description: 'Display order (lower numbers appear first)',
+      },
+    },
+    {
+      name: 'blurb',
+      type: 'textarea',
+      admin: {
+        description: 'Short 1-2 sentence description for quick summaries',
+      },
+    },
+    {
+      name: 'sms_template',
+      type: 'textarea',
+      admin: {
+        description: 'Optional SMS message template (auto-generates if left blank when sending)',
+      },
+    },
+    {
+      name: 'images',
+      type: 'array',
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+      ],
+      admin: {
+        description: 'Additional images (max 5MB per image, MMS support)',
+      },
+    },
+    {
+      name: 'active',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description: 'Toggle to activate/deactivate this partner',
+      },
+    },
+    {
+      name: 'publish_date',
+      type: 'date',
+      admin: {
+        description: 'Optional publish date for scheduled publishing',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
       },
     },
   ],

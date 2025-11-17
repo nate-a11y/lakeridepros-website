@@ -366,7 +366,9 @@ export async function getVehicleRelatedTestimonials(count = 3, minRating = 5): P
 export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   try {
     const params: Record<string, unknown> = { sort: 'order', depth: 2 };
-    const whereConditions: Record<string, unknown> = {};
+    const whereConditions: Record<string, unknown> = {
+      active: { equals: true }, // Always filter by active status
+    };
 
     if (category) {
       whereConditions.category = { equals: category };
@@ -375,9 +377,7 @@ export async function getPartners(category?: string, featured = false): Promise<
       whereConditions.featured = { equals: true };
     }
 
-    if (Object.keys(whereConditions).length > 0) {
-      params.where = JSON.stringify(whereConditions);
-    }
+    params.where = JSON.stringify(whereConditions);
 
     const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
 
@@ -385,6 +385,7 @@ export async function getPartners(category?: string, featured = false): Promise<
 
     // WORKAROUND: Payload API is not respecting the where clause for Partners collection
     // Filter manually in application code until the API issue is resolved
+    partners = partners.filter(p => p.active === true); // Always filter by active
     if (category) {
       partners = partners.filter(p => p.category === category);
     }

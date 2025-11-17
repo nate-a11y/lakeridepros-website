@@ -17,20 +17,13 @@ ALTER TABLE users_sessions ENABLE ROW LEVEL SECURITY;
 
 -- Content Management
 ALTER TABLE pages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE pages_rels ENABLE ROW LEVEL SECURITY;
-
 ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE blog_posts_categories ENABLE ROW LEVEL SECURITY;
-ALTER TABLE blog_posts_rels ENABLE ROW LEVEL SECURITY;
-
 ALTER TABLE services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE services_features ENABLE ROW LEVEL SECURITY;
-ALTER TABLE services_rels ENABLE ROW LEVEL SECURITY;
-
 ALTER TABLE vehicles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE vehicles_images ENABLE ROW LEVEL SECURITY;
 ALTER TABLE vehicles_amenities ENABLE ROW LEVEL SECURITY;
-ALTER TABLE vehicles_rels ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
 
@@ -40,20 +33,15 @@ ALTER TABLE products_images ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products_tags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products_variants ENABLE ROW LEVEL SECURITY;
-ALTER TABLE products_rels ENABLE ROW LEVEL SECURITY;
-
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders_items ENABLE ROW LEVEL SECURITY;
-
 ALTER TABLE gift_cards ENABLE ROW LEVEL SECURITY;
 
 -- Partner/Affiliate Management
 ALTER TABLE partners ENABLE ROW LEVEL SECURITY;
-ALTER TABLE partners_rels ENABLE ROW LEVEL SECURITY;
 
 -- Media Storage
 ALTER TABLE media ENABLE ROW LEVEL SECURITY;
-ALTER TABLE media_rels ENABLE ROW LEVEL SECURITY;
 
 -- Payload CMS System Tables
 ALTER TABLE payload_locked_documents ENABLE ROW LEVEL SECURITY;
@@ -184,30 +172,12 @@ CREATE POLICY "Admin can manage product variants" ON products_variants
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "Public can view product relationships" ON products_rels
-  FOR SELECT
-  USING (true);
-
-CREATE POLICY "Admin can manage product relationships" ON products_rels
-  FOR ALL
-  USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-
 -- Pages: Public can read published pages
 CREATE POLICY "Public can view pages" ON pages
   FOR SELECT
   USING (true);
 
 CREATE POLICY "Admin can manage pages" ON pages
-  FOR ALL
-  USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-
-CREATE POLICY "Public can view page relationships" ON pages_rels
-  FOR SELECT
-  USING (true);
-
-CREATE POLICY "Admin can manage page relationships" ON pages_rels
   FOR ALL
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
@@ -231,15 +201,6 @@ CREATE POLICY "Admin can manage blog post categories" ON blog_posts_categories
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "Public can view blog post relationships" ON blog_posts_rels
-  FOR SELECT
-  USING (true);
-
-CREATE POLICY "Admin can manage blog post relationships" ON blog_posts_rels
-  FOR ALL
-  USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-
 -- Services: Public can read
 CREATE POLICY "Public can view services" ON services
   FOR SELECT
@@ -255,15 +216,6 @@ CREATE POLICY "Public can view service features" ON services_features
   USING (true);
 
 CREATE POLICY "Admin can manage service features" ON services_features
-  FOR ALL
-  USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-
-CREATE POLICY "Public can view service relationships" ON services_rels
-  FOR SELECT
-  USING (true);
-
-CREATE POLICY "Admin can manage service relationships" ON services_rels
   FOR ALL
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
@@ -296,15 +248,6 @@ CREATE POLICY "Admin can manage vehicle amenities" ON vehicles_amenities
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "Public can view vehicle relationships" ON vehicles_rels
-  FOR SELECT
-  USING (true);
-
-CREATE POLICY "Admin can manage vehicle relationships" ON vehicles_rels
-  FOR ALL
-  USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-
 -- Testimonials: Public can read
 CREATE POLICY "Public can view testimonials" ON testimonials
   FOR SELECT
@@ -325,30 +268,12 @@ CREATE POLICY "Admin can manage partners" ON partners
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
-CREATE POLICY "Public can view partner relationships" ON partners_rels
-  FOR SELECT
-  USING (true);
-
-CREATE POLICY "Admin can manage partner relationships" ON partners_rels
-  FOR ALL
-  USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-
 -- Media: Public can read (for images on website)
 CREATE POLICY "Public can view media" ON media
   FOR SELECT
   USING (true);
 
 CREATE POLICY "Admin can manage media" ON media
-  FOR ALL
-  USING (auth.role() = 'service_role')
-  WITH CHECK (auth.role() = 'service_role');
-
-CREATE POLICY "Public can view media relationships" ON media_rels
-  FOR SELECT
-  USING (true);
-
-CREATE POLICY "Admin can manage media relationships" ON media_rels
   FOR ALL
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');

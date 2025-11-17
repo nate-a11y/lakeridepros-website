@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { createRevalidationHook } from '../lib/revalidation'
 
 export const Partners: CollectionConfig = {
   slug: 'partners',
@@ -13,6 +14,9 @@ export const Partners: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'category', 'featured', 'order'],
+  },
+  hooks: {
+    afterChange: [createRevalidationHook('partners')],
   },
   fields: [
     {

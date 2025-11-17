@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { createRevalidationHook } from '../lib/revalidation'
 
 export const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
@@ -12,6 +13,9 @@ export const BlogPosts: CollectionConfig = {
     create: ({ req: { user } }) => !!user,
     update: ({ req: { user } }) => !!user,
     delete: ({ req: { user } }) => !!user,
+  },
+  hooks: {
+    afterChange: [createRevalidationHook('blog-posts')],
   },
   fields: [
     {

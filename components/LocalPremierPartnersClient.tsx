@@ -49,93 +49,68 @@ export default function LocalPremierPartnersClient({ partners }: LocalPremierPar
               {filteredPartners.map((partner) => (
                 <div
                   key={partner.id}
-                  className="bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg hover:shadow-xl transition-all overflow-hidden"
+                  className="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden border border-gray-200 dark:border-gray-700"
                 >
-                  {partner.slug ? (
-                    <Link href={`/partners/${partner.slug}`} className="block p-6">
-                    {/* Logo */}
-                    {partner.logo && typeof partner.logo === 'object' && (
-                      <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
-                        <Image
-                          src={getMediaUrl(partner.logo.url)}
-                          alt={partner.logo.alt || partner.name}
-                          width={200}
-                          height={100}
-                          className="object-contain max-h-full"
-                        />
-                      </div>
-                    )}
-
-                    {/* Name */}
-                    <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
-                      {partner.name}
-                    </h3>
-
-                    {/* Blurb (short description) */}
-                    {partner.blurb && (
-                      <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
-                        {partner.blurb}
-                      </p>
-                    )}
-
-                    {/* Learn More Link */}
-                    <div className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark font-medium mt-4">
-                      <span>Learn More</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </div>
-                  </Link>
-                  ) : (
-                    <div className="block p-6">
-                      {/* Logo */}
-                      {partner.logo && typeof partner.logo === 'object' && (
-                        <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
-                          <Image
-                            src={getMediaUrl(partner.logo.url)}
-                            alt={partner.logo.alt || partner.name}
-                            width={200}
-                            height={100}
-                            className="object-contain max-h-full"
-                          />
-                        </div>
-                      )}
-
-                      {/* Name */}
-                      <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
-                        {partner.name}
-                      </h3>
-
-                      {/* Blurb or Description */}
-                      {(partner.blurb || partner.description) && (
-                        <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
-                          {partner.blurb || partner.description}
-                        </p>
-                      )}
+                  {/* Logo */}
+                  {partner.logo && typeof partner.logo === 'object' && (
+                    <div className="relative h-40 bg-gray-50 dark:bg-dark-bg-primary p-6 flex items-center justify-center border-b border-gray-200 dark:border-gray-700">
+                      <Image
+                        src={getMediaUrl(partner.logo.url)}
+                        alt={partner.logo.alt || partner.name}
+                        width={200}
+                        height={120}
+                        className="object-contain max-h-full"
+                      />
                     </div>
                   )}
 
-                  {/* Contact Info - Outside the link so they're still clickable */}
-                  <div className="px-6 pb-6 space-y-2 text-sm border-t pt-4">
-                    {partner.website && (
-                      <a
-                        href={partner.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark transition-colors"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        Visit Website
-                      </a>
+                  {/* Content */}
+                  <div className="p-6">
+                    {/* Name */}
+                    <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
+                      {partner.name}
+                    </h3>
+
+                    {/* Blurb or Description */}
+                    {(partner.blurb || partner.description) && (
+                      <p className="text-lrp-text-secondary dark:text-dark-text-secondary text-sm mb-4 line-clamp-3">
+                        {partner.blurb || partner.description}
+                      </p>
                     )}
-                    {partner.phone && (
-                      <a
-                        href={`tel:${partner.phone}`}
-                        className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
-                        onClick={(e) => e.stopPropagation()}
+
+                    {/* Contact Info */}
+                    <div className="space-y-2 mb-4">
+                      {partner.website && (
+                        <a
+                          href={partner.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-sm text-lrp-green hover:text-lrp-green-dark transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                          <span className="truncate">Visit Website</span>
+                        </a>
+                      )}
+                      {partner.phone && (
+                        <a
+                          href={`tel:${partner.phone}`}
+                          className="flex items-center gap-2 text-sm text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
+                        >
+                          <Phone className="w-4 h-4 flex-shrink-0" />
+                          <span>{partner.phone}</span>
+                        </a>
+                      )}
+                    </div>
+
+                    {/* Learn More Button */}
+                    {partner.slug && (
+                      <Link
+                        href={`/partners/${partner.slug}`}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-lrp-green hover:bg-lrp-green-dark text-white rounded-md font-medium transition-colors text-sm"
                       >
-                        <Phone className="w-4 h-4" />
-                        {partner.phone}
-                      </a>
+                        <span>Learn More</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
                     )}
                   </div>
                 </div>

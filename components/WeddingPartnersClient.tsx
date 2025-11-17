@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
-import { ExternalLink, Phone, Mail, MapPin } from 'lucide-react'
+import Link from 'next/link'
+import { ExternalLink, Phone, Mail, MapPin, ArrowRight } from 'lucide-react'
 import { Partner } from '@/src/payload-types'
 import { getMediaUrl } from '@/lib/utils'
 import PartnerFilters from './PartnerFilters'
@@ -48,41 +49,50 @@ export default function WeddingPartnersClient({ partners }: WeddingPartnersClien
               {filteredPartners.map((partner) => (
                 <div
                   key={partner.id}
-                  className="bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg p-6 hover:shadow-xl transition-all"
+                  className="bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg hover:shadow-xl transition-all overflow-hidden"
                 >
-                  {/* Logo */}
-                  {partner.logo && typeof partner.logo === 'object' && (
-                    <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
-                      <Image
-                        src={getMediaUrl(partner.logo.url)}
-                        alt={partner.logo.alt || partner.name}
-                        width={200}
-                        height={100}
-                        className="object-contain max-h-full"
-                      />
+                  <Link href={`/partners/${partner.slug}`} className="block p-6">
+                    {/* Logo */}
+                    {partner.logo && typeof partner.logo === 'object' && (
+                      <div className="relative h-32 mb-4 bg-white dark:bg-dark-bg-primary rounded-lg p-4 flex items-center justify-center">
+                        <Image
+                          src={getMediaUrl(partner.logo.url)}
+                          alt={partner.logo.alt || partner.name}
+                          width={200}
+                          height={100}
+                          className="object-contain max-h-full"
+                        />
+                      </div>
+                    )}
+
+                    {/* Name */}
+                    <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
+                      {partner.name}
+                    </h3>
+
+                    {/* Blurb (short description) */}
+                    {partner.blurb && (
+                      <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
+                        {partner.blurb}
+                      </p>
+                    )}
+
+                    {/* Learn More Link */}
+                    <div className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark font-medium mt-4">
+                      <span>Learn More</span>
+                      <ArrowRight className="w-4 h-4" />
                     </div>
-                  )}
+                  </Link>
 
-                  {/* Name */}
-                  <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">
-                    {partner.name}
-                  </h3>
-
-                  {/* Description */}
-                  {partner.description && (
-                    <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
-                      {partner.description}
-                    </p>
-                  )}
-
-                  {/* Contact Info */}
-                  <div className="space-y-2 text-sm">
+                  {/* Contact Info - Outside the link so they're still clickable */}
+                  <div className="px-6 pb-6 space-y-2 text-sm border-t pt-4">
                     {partner.website && (
                       <a
                         href={partner.website}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark transition-colors"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <ExternalLink className="w-4 h-4" />
                         Visit Website
@@ -92,25 +102,11 @@ export default function WeddingPartnersClient({ partners }: WeddingPartnersClien
                       <a
                         href={`tel:${partner.phone}`}
                         className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Phone className="w-4 h-4" />
                         {partner.phone}
                       </a>
-                    )}
-                    {partner.email && (
-                      <a
-                        href={`mailto:${partner.email}`}
-                        className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
-                      >
-                        <Mail className="w-4 h-4" />
-                        {partner.email}
-                      </a>
-                    )}
-                    {partner.address && (
-                      <div className="flex items-start gap-2 text-lrp-text-secondary dark:text-dark-text-secondary">
-                        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm">{partner.address}</span>
-                      </div>
                     )}
                   </div>
                 </div>

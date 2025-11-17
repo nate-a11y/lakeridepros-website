@@ -1,14 +1,17 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { sendOrderConfirmation, sendOwnerOrderNotification, sendOwnerGiftCardNotification } from '../email'
 
+// Create mock send function that we can access in tests
+const mockSend = vi.fn().mockResolvedValue({ data: { id: 'test-email-id' }, error: null })
+
 // Mock Resend
 vi.mock('resend', () => {
   return {
-    Resend: vi.fn().mockImplementation(() => ({
-      emails: {
-        send: vi.fn().mockResolvedValue({ data: { id: 'test-email-id' }, error: null }),
-      },
-    })),
+    Resend: class MockResend {
+      emails = {
+        send: mockSend,
+      }
+    },
   }
 })
 
@@ -49,19 +52,19 @@ describe('Email Functions', () => {
     it('handles missing RESEND_API_KEY', async () => {
       delete process.env.RESEND_API_KEY
 
-      await expect(
-        sendOrderConfirmation(
-          'customer@example.com',
-          'John Doe',
-          'ORD-123456',
-          109.97,
-          mockOrderItems
-        )
-      ).rejects.toThrow('RESEND_API_KEY is not set')
+      const result = await sendOrderConfirmation(
+        'customer@example.com',
+        'John Doe',
+        'ORD-123456',
+        109.97,
+        mockOrderItems
+      )
+
+      // Function catches error and returns false
+      expect(result).toBe(false)
     })
 
     it('includes correct order information', async () => {
-      const { Resend } = await import('resend')
       await sendOrderConfirmation(
         'customer@example.com',
         'John Doe',
@@ -70,10 +73,7 @@ describe('Email Functions', () => {
         mockOrderItems
       )
 
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-
-      expect(sendMock).toHaveBeenCalledWith(
+      expect(mockSend).toHaveBeenCalledWith(
         expect.objectContaining({
           to: 'customer@example.com',
           subject: 'Order Confirmation - ORD-123456',
@@ -84,7 +84,6 @@ describe('Email Functions', () => {
     })
 
     it('formats order items correctly in email HTML', async () => {
-      const { Resend } = await import('resend')
       await sendOrderConfirmation(
         'customer@example.com',
         'John Doe',
@@ -93,9 +92,7 @@ describe('Email Functions', () => {
         mockOrderItems
       )
 
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-      const callArgs = sendMock.mock.calls[0][0]
+      const callArgs = mockSend.mock.calls[0][0]
       const html = callArgs.html as string
 
       expect(html).toContain('John Doe')
@@ -105,10 +102,7 @@ describe('Email Functions', () => {
     })
 
     it('returns false on email send error', async () => {
-      const { Resend } = await import('resend')
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-      sendMock.mockResolvedValueOnce({ data: null, error: { message: 'Send failed' } })
+      mockSend.mockResolvedValueOnce({ data: null, error: { message: 'Send failed' } })
 
       const result = await sendOrderConfirmation(
         'customer@example.com',
@@ -155,7 +149,6 @@ describe('Email Functions', () => {
     })
 
     it('sends to owners email address', async () => {
-      const { Resend } = await import('resend')
       await sendOwnerOrderNotification(
         'ORD-123456',
         'John Doe',
@@ -165,10 +158,7 @@ describe('Email Functions', () => {
         mockShippingAddress
       )
 
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-
-      expect(sendMock).toHaveBeenCalledWith(
+      expect(mockSend).toHaveBeenCalledWith(
         expect.objectContaining({
           to: 'owners@lakeridepros.com',
           subject: '🛍️ New Shop Order - ORD-123456',
@@ -177,7 +167,6 @@ describe('Email Functions', () => {
     })
 
     it('includes shipping address in email', async () => {
-      const { Resend } = await import('resend')
       await sendOwnerOrderNotification(
         'ORD-123456',
         'John Doe',
@@ -187,9 +176,7 @@ describe('Email Functions', () => {
         mockShippingAddress
       )
 
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-      const html = sendMock.mock.calls[0][0].html as string
+      const html = mockSend.mock.calls[0][0].html as string
 
       expect(html).toContain('123 Main St')
       expect(html).toContain('Apt 4B')
@@ -232,7 +219,6 @@ describe('Email Functions', () => {
     })
 
     it('formats digital gift card correctly', async () => {
-      const { Resend } = await import('resend')
       await sendOwnerGiftCardNotification(
         'GC-ABC123',
         'digital',
@@ -245,9 +231,7 @@ describe('Email Functions', () => {
         null
       )
 
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-      const html = sendMock.mock.calls[0][0].html as string
+      const html = mockSend.mock.calls[0][0].html as string
 
       expect(html).toContain('GC-ABC123')
       expect(html).toContain('Digital')
@@ -256,7 +240,6 @@ describe('Email Functions', () => {
     })
 
     it('formats scheduled gift card correctly', async () => {
-      const { Resend } = await import('resend')
       const scheduledDate = '2024-12-25'
 
       await sendOwnerGiftCardNotification(
@@ -271,15 +254,12 @@ describe('Email Functions', () => {
         scheduledDate
       )
 
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-      const html = sendMock.mock.calls[0][0].html as string
+      const html = mockSend.mock.calls[0][0].html as string
 
       expect(html).toContain('Scheduled')
     })
 
     it('formats physical gift card correctly', async () => {
-      const { Resend } = await import('resend')
       await sendOwnerGiftCardNotification(
         'Pending',
         'physical',
@@ -290,9 +270,7 @@ describe('Email Functions', () => {
         null
       )
 
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-      const html = sendMock.mock.calls[0][0].html as string
+      const html = mockSend.mock.calls[0][0].html as string
 
       expect(html).toContain('Physical')
       expect(html).toContain('$50.00')
@@ -300,8 +278,6 @@ describe('Email Functions', () => {
     })
 
     it('indicates gift vs personal use', async () => {
-      const { Resend } = await import('resend')
-
       // Gift for someone else
       await sendOwnerGiftCardNotification(
         'GC-ABC123',
@@ -313,9 +289,7 @@ describe('Email Functions', () => {
         'jane@example.com'
       )
 
-      let mockResend = new Resend()
-      let sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-      let html = sendMock.mock.calls[0][0].html as string
+      let html = mockSend.mock.calls[0][0].html as string
       expect(html).toContain('Jane Doe')
       expect(html).toContain('jane@example.com')
 
@@ -332,14 +306,11 @@ describe('Email Functions', () => {
         null
       )
 
-      mockResend = new Resend()
-      sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-      html = sendMock.mock.calls[0][0].html as string
+      html = mockSend.mock.calls[0][0].html as string
       expect(html).toContain('personal use')
     })
 
     it('includes correct subject line with amount', async () => {
-      const { Resend } = await import('resend')
       await sendOwnerGiftCardNotification(
         'GC-ABC123',
         'digital',
@@ -350,10 +321,7 @@ describe('Email Functions', () => {
         null
       )
 
-      const mockResend = new Resend()
-      const sendMock = mockResend.emails.send as ReturnType<typeof vi.fn>
-
-      expect(sendMock).toHaveBeenCalledWith(
+      expect(mockSend).toHaveBeenCalledWith(
         expect.objectContaining({
           subject: '🎁 New Gift Card Purchase - $75.50',
         })

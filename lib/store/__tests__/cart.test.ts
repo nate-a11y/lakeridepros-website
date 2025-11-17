@@ -191,11 +191,13 @@ describe('Cart Store', () => {
 
   describe('getItemCount', () => {
     it('returns 0 for empty cart', () => {
+      useCart.getState().clearCart()
       const { getItemCount } = getCartState()
       expect(getItemCount()).toBe(0)
     })
 
     it('returns total quantity of all items', () => {
+      useCart.getState().clearCart()
       const { addItem, getItemCount } = getCartState()
 
       addItem({ ...mockItem, quantity: 2 })
@@ -205,9 +207,10 @@ describe('Cart Store', () => {
     })
 
     it('updates after adding items', () => {
+      useCart.getState().clearCart()
       const { addItem, getItemCount } = getCartState()
 
-      addItem(mockItem)
+      addItem({ ...mockItem, quantity: 1 })
       expect(getItemCount()).toBe(1)
 
       addItem({ ...mockItem, quantity: 2 })

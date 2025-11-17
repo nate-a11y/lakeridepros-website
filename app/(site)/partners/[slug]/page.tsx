@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import { getPartnerBySlugLocal, getPartnersLocal, getMediaUrl } from '@/lib/api/payload-local';
+import type { Media } from '@/src/payload-types';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -237,14 +238,14 @@ export default async function PartnerDetailPage({ params }: Props) {
             <div className="p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Gallery</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {partner.images.map((imageItem: { image?: { url?: string } }, index: number) => {
-                  const imageObj = typeof imageItem.image === 'object' ? imageItem.image : null;
+                {partner.images.map((imageItem, index: number) => {
+                  const imageObj = typeof imageItem.image === 'object' ? imageItem.image as Media : null;
                   const imageUrl = imageObj?.url ? getMediaUrl(imageObj.url) : null;
 
                   if (!imageUrl) return null;
 
                   return (
-                    <div key={index} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
+                    <div key={imageItem.id || index} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
                       <Image
                         src={imageUrl}
                         alt={`${partner.name} - Image ${index + 1}`}

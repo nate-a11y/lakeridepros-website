@@ -1,4 +1,19 @@
 /**
+ * Get the base URL for API requests
+ * During build time (SSG), we need to use an absolute URL
+ */
+function getBaseUrl(): string {
+  // Browser should use relative URL
+  if (typeof window !== 'undefined') return ''
+
+  // For Vercel deployments (preview or production)
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+
+  // For local development
+  return 'http://localhost:3000'
+}
+
+/**
  * Track a service analytics event
  * @param serviceSlug - The slug of the service to track
  * @param eventType - Type of event: 'view' or 'booking'
@@ -9,7 +24,8 @@ export async function trackServiceEvent(
   eventType: 'view' | 'booking'
 ): Promise<void> {
   try {
-    const response = await fetch('/api/analytics/track', {
+    const baseUrl = getBaseUrl()
+    const response = await fetch(`${baseUrl}/api/analytics/track`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,7 +60,8 @@ export async function getPopularServices(limit: number = 5): Promise<Array<{
   bookings: number
 }>> {
   try {
-    const response = await fetch(`/api/analytics/popular-services?limit=${limit}`, {
+    const baseUrl = getBaseUrl()
+    const response = await fetch(`${baseUrl}/api/analytics/popular-services?limit=${limit}`, {
       next: { revalidate: 300 }, // Cache for 5 minutes
     })
 

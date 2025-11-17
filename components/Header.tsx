@@ -1,5 +1,5 @@
 import { getServices } from '@/lib/api/payload';
-import { getPopularServicesLocal } from '@/lib/analytics';
+import { getPopularServicesLocal } from '@/lib/analytics-server';
 import HeaderClient from './HeaderClient';
 
 export default async function Header() {

@@ -15,9 +15,10 @@ interface Service {
 
 interface HeaderClientProps {
   services: Service[];
+  popularServiceSlugs?: string[];
 }
 
-export default function HeaderClient({ services }: HeaderClientProps) {
+export default function HeaderClient({ services, popularServiceSlugs = [] }: HeaderClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
@@ -32,8 +33,8 @@ export default function HeaderClient({ services }: HeaderClientProps) {
     })),
   ];
 
-  // Featured/priority services for quick access
-  const featuredServiceSlugs = [
+  // Use analytics-based popular services, fallback to hardcoded list
+  const fallbackServiceSlugs = [
     'wedding-transportation',
     'airport-shuttle',
     'nightlife-transportation',
@@ -41,8 +42,17 @@ export default function HeaderClient({ services }: HeaderClientProps) {
     'private-aviation-transportation',
   ];
 
+  // Use analytics data if available, otherwise use fallback
+  const featuredServiceSlugs = popularServiceSlugs.length > 0
+    ? popularServiceSlugs
+    : fallbackServiceSlugs;
+
   const featuredServices = services
     .filter(s => featuredServiceSlugs.includes(s.slug))
+    // Maintain the order from analytics/fallback
+    .sort((a, b) => {
+      return featuredServiceSlugs.indexOf(a.slug) - featuredServiceSlugs.indexOf(b.slug);
+    })
     .map(s => ({ name: s.name, href: `/services/${s.slug}` }));
 
   const otherServices = services

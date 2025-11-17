@@ -1,8 +1,9 @@
 import { getServices } from '@/lib/api/payload';
+import { getPopularServices } from '@/lib/analytics';
 import HeaderClient from './HeaderClient';
 
 export default async function Header() {
-  // Fetch services dynamically from CMS
+  // Fetch all services dynamically from CMS
   let services: Array<{ name: string; slug: string }> = [];
   try {
     const servicesResponse = await getServices({ limit: 100 });
@@ -15,5 +16,15 @@ export default async function Header() {
     // Fall back to empty array if fetch fails
   }
 
-  return <HeaderClient services={services} />;
+  // Fetch popular services based on analytics
+  let popularServiceSlugs: string[] = [];
+  try {
+    const popularServices = await getPopularServices(5);
+    popularServiceSlugs = popularServices.map(s => s.slug);
+  } catch (error) {
+    console.error('Error fetching popular services:', error);
+    // Fall back to empty array - HeaderClient will use fallback logic
+  }
+
+  return <HeaderClient services={services} popularServiceSlugs={popularServiceSlugs} />;
 }

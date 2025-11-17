@@ -7,6 +7,12 @@ vi.mock('payload', () => ({
   getPayload: vi.fn().mockResolvedValue({
     find: vi.fn(),
   }),
+  buildConfig: vi.fn((config) => config),
+}))
+
+// Mock payload config
+vi.mock('@payload-config', () => ({
+  default: {},
 }))
 
 describe('Gift Card Balance Check API', () => {

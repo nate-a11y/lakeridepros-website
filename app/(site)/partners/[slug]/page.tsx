@@ -21,9 +21,11 @@ export async function generateStaticParams() {
     const partners = await getPartnersLocal();
     console.log(`[generateStaticParams] Found ${partners.length} partners`);
 
-    // Filter out partners without slugs since slug is now optional
-    const partnersWithSlugs = partners.filter((partner) => partner.slug);
-    console.log(`[generateStaticParams] ${partnersWithSlugs.length} partners have slugs`);
+    // Filter out partners without slugs and exclude promotions category
+    const partnersWithSlugs = partners.filter(
+      (partner) => partner.slug && partner.category !== 'promotions'
+    );
+    console.log(`[generateStaticParams] ${partnersWithSlugs.length} partners have slugs (excluding promotions)`);
 
     return partnersWithSlugs.map((partner) => ({
       slug: partner.slug as string,

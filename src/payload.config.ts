@@ -13,6 +13,7 @@ import { Media } from '../collections/Media'
 import { Pages } from '../collections/Pages'
 import { BlogPosts } from '../collections/BlogPosts'
 import { Services } from '../collections/Services'
+import { ServiceAnalytics } from '../collections/ServiceAnalytics'
 import { Vehicles } from '../collections/Vehicles'
 import { Testimonials } from '../collections/Testimonials'
 import { Products } from '../collections/Products'
@@ -95,7 +96,7 @@ const config = buildConfig({
       beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
   },
-  collections: [Users, Media, Pages, BlogPosts, Services, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],
+  collections: [Users, Media, Pages, BlogPosts, Services, ServiceAnalytics, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

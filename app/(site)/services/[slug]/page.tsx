@@ -10,6 +10,7 @@ import TestimonialsSection from '@/components/TestimonialsSection';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { getFAQsForService, generateFAQSchema } from '@/lib/serviceFAQs';
 import ServiceFAQ from '@/components/ServiceFAQ';
+import ServiceViewTracker from '@/components/ServiceViewTracker';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -183,6 +184,9 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <>
+      {/* Track page view for analytics */}
+      <ServiceViewTracker serviceSlug={slug} />
+
       {/* Structured Data */}
       <script
         type="application/ld+json"
@@ -357,7 +361,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               Reserve your {service.title.toLowerCase()} today
             </p>
           </div>
-          <BookingWidget />
+          <BookingWidget serviceSlug={slug} />
         </div>
       </section>
     </>

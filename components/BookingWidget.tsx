@@ -1,14 +1,25 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { trackServiceEvent } from '@/lib/analytics';
 
 interface BookingWidgetProps {
   className?: string;
+  serviceSlug?: string;
 }
 
-export default function BookingWidget({ className = '' }: BookingWidgetProps) {
+export default function BookingWidget({ className = '', serviceSlug }: BookingWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const moovsEmbedUrl = process.env.NEXT_PUBLIC_MOOVS_EMBED_URL;
+  const trackedRef = useRef(false);
+
+  useEffect(() => {
+    // Track booking intent when widget is displayed (only once)
+    if (serviceSlug && !trackedRef.current) {
+      trackServiceEvent(serviceSlug, 'booking');
+      trackedRef.current = true;
+    }
+  }, [serviceSlug]);
 
   useEffect(() => {
     // This will load the Moovs booking widget iframe when available

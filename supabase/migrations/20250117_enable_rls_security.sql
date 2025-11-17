@@ -173,19 +173,19 @@ CREATE POLICY "Admin can manage product variants" ON products_variants
   WITH CHECK (auth.role() = 'service_role');
 
 -- Pages: Public can read published pages
-CREATE POLICY "Public can view pages" ON pages
+CREATE POLICY "Public can view published pages" ON pages
   FOR SELECT
-  USING (true);
+  USING (published = true OR auth.role() = 'service_role');
 
 CREATE POLICY "Admin can manage pages" ON pages
   FOR ALL
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
--- Blog Posts: Public can read
-CREATE POLICY "Public can view blog posts" ON blog_posts
+-- Blog Posts: Public can read published posts
+CREATE POLICY "Public can view published blog posts" ON blog_posts
   FOR SELECT
-  USING (true);
+  USING (published = true OR auth.role() = 'service_role');
 
 CREATE POLICY "Admin can manage blog posts" ON blog_posts
   FOR ALL
@@ -201,10 +201,10 @@ CREATE POLICY "Admin can manage blog post categories" ON blog_posts_categories
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
--- Services: Public can read
-CREATE POLICY "Public can view services" ON services
+-- Services: Public can read active services
+CREATE POLICY "Public can view active services" ON services
   FOR SELECT
-  USING (true);
+  USING (active = true OR auth.role() = 'service_role');
 
 CREATE POLICY "Admin can manage services" ON services
   FOR ALL
@@ -220,10 +220,10 @@ CREATE POLICY "Admin can manage service features" ON services_features
   USING (auth.role() = 'service_role')
   WITH CHECK (auth.role() = 'service_role');
 
--- Vehicles: Public can read
-CREATE POLICY "Public can view vehicles" ON vehicles
+-- Vehicles: Public can read available vehicles
+CREATE POLICY "Public can view available vehicles" ON vehicles
   FOR SELECT
-  USING (true);
+  USING (available = true OR auth.role() = 'service_role');
 
 CREATE POLICY "Admin can manage vehicles" ON vehicles
   FOR ALL

@@ -1,6 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import type { Service } from '@/src/payload-types'
+import type { Service, Partner } from '@/src/payload-types'
 
 /**
  * Server-side only functions to query Payload directly without HTTP requests
@@ -58,6 +58,60 @@ export async function getServiceBySlugLocal(slug: string): Promise<Service | nul
     return result.docs[0] as unknown as Service || null
   } catch (error) {
     console.error(`[Payload Local] Error fetching service ${slug}:`, error)
+    return null
+  }
+}
+
+export async function getPartnersLocal(category?: string): Promise<Partner[]> {
+  try {
+    const payload = await getPayloadClient()
+    const whereClause: any = {
+      active: {
+        equals: true,
+      },
+    }
+
+    if (category) {
+      whereClause.category = {
+        equals: category,
+      }
+    }
+
+    const result = await payload.find({
+      collection: 'partners',
+      where: whereClause,
+      sort: 'order',
+      depth: 2,
+      limit: 1000,
+    })
+
+    return result.docs as unknown as Partner[]
+  } catch (error) {
+    console.error('[Payload Local] Error fetching partners:', error)
+    return []
+  }
+}
+
+export async function getPartnerBySlugLocal(slug: string): Promise<Partner | null> {
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'partners',
+      where: {
+        slug: {
+          equals: slug,
+        },
+        active: {
+          equals: true,
+        },
+      },
+      depth: 2,
+      limit: 1,
+    })
+
+    return result.docs[0] as unknown as Partner || null
+  } catch (error) {
+    console.error(`[Payload Local] Error fetching partner ${slug}:`, error)
     return null
   }
 }

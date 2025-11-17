@@ -24,6 +24,15 @@ export const Partners: CollectionConfig = {
       },
     },
     {
+      name: 'slug',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        description: 'URL-friendly identifier (e.g., "example-venue")',
+      },
+    },
+    {
       name: 'category',
       type: 'select',
       required: true,

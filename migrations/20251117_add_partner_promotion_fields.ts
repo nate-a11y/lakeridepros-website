@@ -13,10 +13,16 @@ export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): P
   // Add new columns to partners table
   await db.execute(sql`
     ALTER TABLE "partners"
+    ADD COLUMN IF NOT EXISTS "slug" varchar UNIQUE,
     ADD COLUMN IF NOT EXISTS "blurb" varchar,
     ADD COLUMN IF NOT EXISTS "sms_template" varchar,
     ADD COLUMN IF NOT EXISTS "active" boolean DEFAULT true,
     ADD COLUMN IF NOT EXISTS "publish_date" timestamp(3) with time zone;
+  `)
+
+  // Create index on slug for faster lookups
+  await db.execute(sql`
+    CREATE INDEX IF NOT EXISTS "partners_slug_idx" ON "partners" USING btree ("slug");
   `)
 
   // Create partners_images table for multiple image uploads
@@ -69,6 +75,7 @@ export async function down({ db, payload: _payload, req: _req }: MigrateDownArgs
   // Remove new columns from partners table
   await db.execute(sql`
     ALTER TABLE "partners"
+    DROP COLUMN IF EXISTS "slug",
     DROP COLUMN IF EXISTS "blurb",
     DROP COLUMN IF EXISTS "sms_template",
     DROP COLUMN IF EXISTS "active",

@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import type { Payload } from 'payload'
 import config from '@/src/payload.config'
 import { revalidatePaths } from '@/lib/revalidation'
+import { createHash } from 'crypto'
 
 const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
@@ -126,11 +127,15 @@ function sanitizeFilename(filename: string): string {
     .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '')
 
-  // Limit to 50 characters
-  const truncated = sanitized.substring(0, 50).replace(/-+$/, '')
+  // Generate a short hash of the original name to prevent collisions when truncating
+  // This ensures different products with similar names don't share filenames
+  const hash = createHash('md5').update(nameWithoutExt).digest('hex').substring(0, 8)
 
-  // No timestamp - use deterministic names for duplicate detection
-  return `${truncated}.webp`
+  // Limit base name to 40 characters to leave room for hash (8 chars) and separator
+  const truncated = sanitized.substring(0, 40).replace(/-+$/, '')
+
+  // Deterministic filename with hash suffix for uniqueness
+  return `${truncated}-${hash}.webp`
 }
 
 // Check if media with this filename already exists in Payload

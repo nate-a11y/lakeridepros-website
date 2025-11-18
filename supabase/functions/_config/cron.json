@@ -1,0 +1,7 @@
+{
+  "cron-abandoned-drafts": {
+    "schedule": "0 9 * * *",
+    "description": "Send email reminders for abandoned draft applications older than 24 hours",
+    "timezone": "America/Chicago"
+  }
+}

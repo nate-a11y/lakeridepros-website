@@ -5,12 +5,11 @@
  * Complies with 49 CFR 391.21(b)(1) - Application for employment
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
-import { encryptData } from '@/lib/crypto'
 
 // US States
 const US_STATES = [
@@ -52,6 +51,9 @@ interface Step1PersonalProps {
 
 export default function Step1Personal({ onNext }: Step1PersonalProps) {
   const { applicationData, updateApplicationData } = useApplication()
+  const [isEncrypting, setIsEncrypting] = useState(false)
+  const [ssnMasked, setSSNMasked] = useState(false)
+  const [fullSSN, setFullSSN] = useState('')
 
   const {
     register,
@@ -80,7 +82,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
   // Format SSN as user types
   const ssnValue = watch('ssn')
   useEffect(() => {
-    if (ssnValue) {
+    if (ssnValue && !ssnMasked) {
       const cleaned = ssnValue.replace(/\D/g, '')
       if (cleaned.length <= 9) {
         let formatted = cleaned
@@ -93,15 +95,67 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         if (formatted !== ssnValue) {
           setValue('ssn', formatted)
         }
+        // Store full SSN
+        setFullSSN(cleaned)
       }
     }
-  }, [ssnValue, setValue])
+  }, [ssnValue, setValue, ssnMasked])
+
+  // Mask SSN on blur (show last 4 digits only)
+  const handleSSNBlur = () => {
+    const ssn = watch('ssn')
+    if (ssn && ssn.replace(/\D/g, '').length === 9) {
+      const cleaned = ssn.replace(/\D/g, '')
+      setFullSSN(cleaned) // Store full SSN before masking
+      const masked = `XXX-XX-${cleaned.slice(5)}`
+      setValue('ssn', masked)
+      setSSNMasked(true)
+    }
+  }
+
+  // Unmask SSN on focus
+  const handleSSNFocus = () => {
+    const ssn = watch('ssn')
+    if (ssnMasked && ssn.startsWith('XXX-XX-')) {
+      setValue('ssn', '')
+      setSSNMasked(false)
+    }
+  }
 
   const onSubmit = async (data: PersonalInfoFormData) => {
+    setIsEncrypting(true)
     try {
-      // Encrypt SSN before storing
-      const encryptionKey = process.env.NEXT_PUBLIC_SSN_ENCRYPTION_KEY || 'default-key-change-in-production'
-      const encryptedSSN = await encryptData(data.ssn, encryptionKey)
+      // Use the stored full SSN or the current value
+      const ssnToEncrypt = ssnMasked && fullSSN ? fullSSN : data.ssn.replace(/\D/g, '')
+
+      // Validate SSN length
+      if (ssnToEncrypt.length !== 9) {
+        throw new Error('Please enter a valid 9-digit SSN')
+      }
+
+      // Encrypt SSN via Edge Function
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+      if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Supabase configuration is missing')
+      }
+
+      const encryptResponse = await fetch(`${supabaseUrl}/functions/v1/encrypt-ssn`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseAnonKey}`
+        },
+        body: JSON.stringify({ ssn: ssnToEncrypt })
+      })
+
+      if (!encryptResponse.ok) {
+        const errorData = await encryptResponse.json()
+        throw new Error(errorData.error || 'Failed to encrypt SSN')
+      }
+
+      const { encryptedSSN } = await encryptResponse.json()
 
       // Update application data
       updateApplicationData({
@@ -121,8 +175,14 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
 
       onNext()
     } catch (error) {
-      console.error('Error encrypting SSN:', error)
-      alert('An error occurred while processing your information. Please try again.')
+      console.error('Error processing application:', error)
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while processing your information. Please try again.'
+      )
+    } finally {
+      setIsEncrypting(false)
     }
   }
 
@@ -213,6 +273,8 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               id="ssn"
               placeholder="XXX-XX-XXXX"
               maxLength={11}
+              onBlur={handleSSNBlur}
+              onFocus={handleSSNFocus}
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                 errors.ssn ? 'border-red-500' : 'border-gray-300'
               }`}
@@ -221,7 +283,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               <p className="text-red-600 text-sm mt-1">{errors.ssn.message}</p>
             )}
             <p className="text-xs text-gray-500 mt-1">
-              Your SSN will be encrypted before storage and is required by federal regulation.
+              Your SSN will be encrypted server-side before storage and is required by federal regulation.
             </p>
           </div>
         </div>
@@ -364,9 +426,40 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         <div className="flex justify-end pt-6">
           <button
             type="submit"
-            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            disabled={isEncrypting}
+            className={`px-6 py-3 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+              isEncrypting
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
           >
-            Continue to Residence History
+            {isEncrypting ? (
+              <span className="flex items-center">
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Processing...
+              </span>
+            ) : (
+              'Continue to Residence History'
+            )}
           </button>
         </div>
       </form>

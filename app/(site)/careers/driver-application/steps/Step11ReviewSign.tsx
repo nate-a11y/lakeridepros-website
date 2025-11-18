@@ -18,8 +18,8 @@ import { useRouter } from 'next/navigation'
 
 const certificationSchema = z.object({
   certification_name_printed: z.string().min(1, 'Printed name is required'),
-  certify: z.literal(true, {
-    errorMap: () => ({ message: 'You must certify that all information is true and correct' })
+  certify: z.boolean().refine(val => val === true, {
+    message: 'You must certify that all information is true and correct'
   })
 })
 

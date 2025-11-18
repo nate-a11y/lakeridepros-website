@@ -144,6 +144,8 @@ export async function sendDraftReminder(
       },
       body: JSON.stringify({
         to: data.email,
+        from: 'noreply@updates.lakeridepros.com',
+        replyTo: 'contactus@lakeridepros.com',
         subject: 'Complete Your Driver Application - Lake Ride Pros',
         html: htmlContent
       })

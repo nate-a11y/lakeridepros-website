@@ -219,6 +219,8 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             to: draft.email,
+            from: 'noreply@updates.lakeridepros.com',
+            replyTo: 'contactus@lakeridepros.com',
             subject: 'Complete Your Driver Application - Lake Ride Pros',
             html: htmlContent
           })

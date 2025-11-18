@@ -172,6 +172,8 @@ export async function sendAdminNotification(
       },
       body: JSON.stringify({
         to: adminEmail,
+        from: 'noreply@updates.lakeridepros.com',
+        replyTo: 'contactus@lakeridepros.com',
         subject: `New Driver Application - ${applicantName}`,
         html: htmlContent
       })

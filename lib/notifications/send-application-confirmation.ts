@@ -102,6 +102,8 @@ export async function sendApplicationConfirmation(
       },
       body: JSON.stringify({
         to: data.email,
+        from: 'noreply@updates.lakeridepros.com',
+        replyTo: 'contactus@lakeridepros.com',
         subject: 'Application Received - Lake Ride Pros Driver Position',
         html: htmlContent
       })

@@ -228,7 +228,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               {...register('middle_name')}
               type="text"
               id="middle_name"
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary focus:ring-primary focus:border-primary focus:border-primary"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md focus:ring-2 focus:ring-primary focus:ring-primary focus:border-primary focus:border-primary"
             />
           </div>
 
@@ -417,7 +417,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               {...register('legal_right_to_work')}
               type="checkbox"
               id="legal_right_to_work"
-              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
+              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
             />
             <label htmlFor="legal_right_to_work" className="ml-3 text-sm text-neutral-900 dark:text-white">
               I certify that I have the legal right to work in the United States *

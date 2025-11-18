@@ -70,7 +70,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {fields.map((field, index) => (
-          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
+          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Residence {index + 1}</h3>
               {fields.length > 1 && (
@@ -93,7 +93,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                 <input
                   {...register(`residences.${index}.street`)}
                   type="text"
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary focus:ring-primary"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md focus:ring-2 focus:ring-primary focus:ring-primary"
                 />
                 {errors.residences?.[index]?.street && (
                   <p className="text-red-600 text-sm mt-1">{errors.residences[index]?.street?.message}</p>
@@ -106,7 +106,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                   <input
                     {...register(`residences.${index}.city`)}
                     type="text"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                   {errors.residences?.[index]?.city && (
                     <p className="text-red-600 text-sm mt-1">{errors.residences[index]?.city?.message}</p>
@@ -117,7 +117,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                   <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
                   <select
                     {...register(`residences.${index}.state`)}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   >
                     {US_STATES.map(state => (
                       <option key={state} value={state}>{state}</option>
@@ -130,7 +130,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                   <input
                     {...register(`residences.${index}.zip`)}
                     type="text"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                   {errors.residences?.[index]?.zip && (
                     <p className="text-red-600 text-sm mt-1">{errors.residences[index]?.zip?.message}</p>
@@ -144,7 +144,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                   <input
                     {...register(`residences.${index}.from_date`)}
                     type="date"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
@@ -156,7 +156,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                     {...register(`residences.${index}.to_date`)}
                     type="date"
                     disabled={watch(`residences.${index}.is_current`)}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md disabled:bg-neutral-100 dark:bg-dark-bg-secondary dark:bg-gray-700"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors rounded-md disabled:bg-neutral-100 dark:disabled:bg-dark-bg-tertiary"
                   />
                 </div>
               </div>
@@ -166,7 +166,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                   {...register(`residences.${index}.is_current`)}
                   type="checkbox"
                   id={`current-${index}`}
-                  className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
                 />
                 <label htmlFor={`current-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                   This is my current address
@@ -179,7 +179,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
         <button
           type="button"
           onClick={() => append({ street: '', city: '', state: 'MO' as const, zip: '', from_date: '', to_date: '', is_current: false })}
-          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-primary flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg text-lrp-text-secondary dark:text-dark-text-secondary hover:border-primary hover:text-primary flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Another Residence

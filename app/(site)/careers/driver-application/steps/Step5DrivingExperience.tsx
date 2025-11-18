@@ -61,7 +61,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {fields.map((field, index) => (
-          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
+          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Experience {index + 1}</h3>
               <button
@@ -82,7 +82,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
                   </label>
                   <select
                     {...register(`driving_experience.${index}.class_of_equipment`)}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   >
                     <option value="">Select class</option>
                     <option value="Tractor and Semi-Trailer">Tractor and Semi-Trailer</option>
@@ -110,7 +110,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
                     {...register(`driving_experience.${index}.type`)}
                     type="text"
                     placeholder="e.g., Van trailer, Flatbed, Tanker"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                   {errors.driving_experience?.[index]?.type && (
                     <p className="text-red-600 text-sm mt-1">
@@ -126,7 +126,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
                   <input
                     {...register(`driving_experience.${index}.date_from`)}
                     type="date"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
@@ -135,7 +135,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
                   <input
                     {...register(`driving_experience.${index}.date_to`)}
                     type="date"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
@@ -147,7 +147,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
                     {...register(`driving_experience.${index}.miles`, { valueAsNumber: true })}
                     type="number"
                     placeholder="0"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
               </div>
@@ -158,7 +158,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
         <button
           type="button"
           onClick={() => append({ class_of_equipment: '', type: '', date_from: '', date_to: '', miles: 0 })}
-          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-primary flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg text-lrp-text-secondary dark:text-dark-text-secondary hover:border-primary hover:text-primary flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Driving Experience

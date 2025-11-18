@@ -187,7 +187,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
             <div
               onDrop={(e) => handleDrop(e, 'front')}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
               onClick={() => frontInputRef.current?.click()}
             >
               {uploading.front || loadingExisting ? (
@@ -199,8 +199,8 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
                 </div>
               ) : (
                 <>
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 dark:text-gray-300 mb-2">
+                  <Upload className="w-12 h-12 text-neutral-400 dark:text-neutral-500 mx-auto mb-4" />
+                  <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-2">
                     Click to upload or drag and drop
                   </p>
                   <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
@@ -217,7 +217,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               />
             </div>
           ) : (
-            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
+            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {frontPreview.endsWith('.pdf') ? (
@@ -255,7 +255,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
             <div
               onDrop={(e) => handleDrop(e, 'back')}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
               onClick={() => backInputRef.current?.click()}
             >
               {uploading.back || loadingExisting ? (
@@ -267,8 +267,8 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
                 </div>
               ) : (
                 <>
-                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 dark:text-gray-300 mb-2">
+                  <Upload className="w-12 h-12 text-neutral-400 dark:text-neutral-500 mx-auto mb-4" />
+                  <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-2">
                     Click to upload or drag and drop
                   </p>
                   <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
@@ -285,7 +285,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               />
             </div>
           ) : (
-            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
+            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {backPreview.endsWith('.pdf') ? (

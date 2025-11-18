@@ -8,8 +8,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseServerClient } from '@/lib/supabase/client'
 
 export async function POST(request: NextRequest) {
-  const supabase = getSupabaseServerClient()
   try {
+    const supabase = getSupabaseServerClient()
     const { applicationId, email } = await request.json()
 
     if (!applicationId || !email) {

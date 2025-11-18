@@ -160,24 +160,24 @@ export default function EmploymentTimeline({ employments, requiredYears = 3 }: E
             <div key={index}>
               {/* Employment Bar */}
               <div className="flex items-center gap-3">
-                <div className="flex-1 bg-blue-100 border border-blue-300 rounded-lg p-3">
+                <div className="flex-1 bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/40 rounded-lg p-3 transition-colors">
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="font-semibold text-blue-900">{emp.name}</p>
-                      <p className="text-sm text-blue-700">{emp.position}</p>
+                      <p className="font-semibold text-neutral-900 dark:text-white">{emp.name}</p>
+                      <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">{emp.position}</p>
                       {emp.subject_to_fmcsr && (
-                        <span className="inline-block mt-1 px-2 py-0.5 bg-blue-600 text-white text-xs rounded">
+                        <span className="inline-block mt-1 px-2 py-0.5 bg-primary text-white text-xs rounded">
                           CMV Driver
                         </span>
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-blue-800">
+                      <p className="text-sm text-neutral-900 dark:text-white">
                         {start.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                         {' → '}
                         {emp.to_date ? end.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Present'}
                       </p>
-                      <p className="text-xs text-blue-600 mt-1">
+                      <p className="text-xs text-lrp-text-muted dark:text-dark-text-muted mt-1">
                         {years > 0 && `${years}y `}
                         {remainingMo}m
                       </p>

@@ -71,7 +71,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
               {...register('has_convictions')}
               type="checkbox"
               id="has_convictions"
-              className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
+              className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
             />
             <label htmlFor="has_convictions" className="ml-2 text-sm text-neutral-900 dark:text-white">
               I have traffic violations/convictions in the past 3 years (excluding parking)
@@ -82,7 +82,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
         {hasConvictions && (
           <>
             {fields.map((field, index) => (
-              <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
+              <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold">Conviction {index + 1}</h3>
                   <button
@@ -102,7 +102,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                       <input
                         {...register(`traffic_convictions.${index}.date`)}
                         type="date"
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       />
                     </div>
 
@@ -110,7 +110,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                       <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
                       <select
                         {...register(`traffic_convictions.${index}.state`)}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       >
                         <option value="">Select state</option>
                         {US_STATES.map(state => (
@@ -126,7 +126,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                       {...register(`traffic_convictions.${index}.violation`)}
                       type="text"
                       placeholder="e.g., Speeding, DUI, Reckless driving"
-                      className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                      className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                     />
                   </div>
 
@@ -136,7 +136,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                       {...register(`traffic_convictions.${index}.penalty`)}
                       type="text"
                       placeholder="e.g., Fine, License suspension, Probation"
-                      className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                      className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                     />
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
             <button
               type="button"
               onClick={() => append({ date: '', violation: '', state: 'MO' as const, penalty: '' })}
-              className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-primary flex items-center justify-center gap-2"
+              className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg text-lrp-text-secondary dark:text-dark-text-secondary hover:border-primary hover:text-primary flex items-center justify-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Add Another Conviction

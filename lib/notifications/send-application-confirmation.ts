@@ -101,11 +101,14 @@ export async function sendApplicationConfirmation(
         'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`
       },
       body: JSON.stringify({
-        to: data.email,
-        from: 'noreply@updates.lakeridepros.com',
-        replyTo: 'contactus@lakeridepros.com',
-        subject: 'Application Received - Lake Ride Pros Driver Position',
-        html: htmlContent
+        operation: 'sendNotificationEmail',
+        params: {
+          to: data.email,
+          subject: 'Application Received - Lake Ride Pros Driver Position',
+          message: `Your driver application has been received! Application ID: ${data.applicationId}`,
+          html: htmlContent,
+          replyTo: 'contactus@lakeridepros.com'
+        }
       })
     })
 
@@ -129,7 +132,7 @@ export async function sendApplicationConfirmation(
         lastName: data.lastName,
         submittedAt: data.submittedAt
       },
-      external_id: result.messageId || result.id
+      external_id: result.messageId
     })
 
     return { success: true }

@@ -70,7 +70,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
               {...register('has_accidents')}
               type="checkbox"
               id="has_accidents"
-              className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
+              className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
             />
             <label htmlFor="has_accidents" className="ml-2 text-sm text-neutral-900 dark:text-white">
               I have been involved in accidents in the past 3 years
@@ -81,7 +81,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
         {hasAccidents && (
           <>
             {fields.map((field, index) => (
-              <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
+              <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold">Accident {index + 1}</h3>
                   <button
@@ -101,7 +101,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
                       <input
                         {...register(`accidents.${index}.date`)}
                         type="date"
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       />
                     </div>
 
@@ -110,7 +110,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
                         {...register(`accidents.${index}.chemical_spills`)}
                         type="checkbox"
                         id={`spill-${index}`}
-                        className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
+                        className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
                       />
                       <label htmlFor={`spill-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                         Hazardous material spill
@@ -125,7 +125,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
                     <textarea
                       {...register(`accidents.${index}.nature`)}
                       rows={3}
-                      className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                      className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       placeholder="Describe what happened"
                     />
                   </div>
@@ -138,7 +138,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
                         type="number"
                         defaultValue={0}
                         min={0}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       />
                     </div>
 
@@ -149,7 +149,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
                         type="number"
                         defaultValue={0}
                         min={0}
-                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                        className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       />
                     </div>
                   </div>
@@ -160,7 +160,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
             <button
               type="button"
               onClick={() => append({ date: '', nature: '', fatalities: 0, injuries: 0, chemical_spills: false })}
-              className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-primary flex items-center justify-center gap-2"
+              className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg text-lrp-text-secondary dark:text-dark-text-secondary hover:border-primary hover:text-primary flex items-center justify-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Add Another Accident

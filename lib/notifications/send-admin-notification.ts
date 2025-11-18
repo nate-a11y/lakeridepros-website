@@ -47,11 +47,12 @@ export async function sendAdminNotification(
     // Link to LRP Driver Portal
     const portalUrl = 'https://lakeridepros.xyz/applications'
 
-    // Email HTML template
+    // Email HTML template with Lake Ride Pros branding
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px;">
-        <div style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 30px; border-radius: 8px 8px 0 0;">
-          <h1 style="margin: 0; font-size: 24px;">🚗 New Driver Application Received</h1>
+        <div style="background: linear-gradient(135deg, #060606 0%, #1a1a1a 100%); color: white; padding: 30px; border-radius: 8px 8px 0 0; text-align: center;">
+          <img src="https://dhwnlzborisjihhauchp.supabase.co/storage/v1/object/public/media/icon-512.png" alt="Lake Ride Pros" style="width: 60px; height: 60px; margin-bottom: 15px;" />
+          <h1 style="margin: 0; font-size: 24px; color: #4cbb17;">New Driver Application Received</h1>
           <p style="margin: 10px 0 0 0; opacity: 0.9;">Lake Ride Pros Driver Application System</p>
         </div>
 
@@ -66,14 +67,14 @@ export async function sendAdminNotification(
             <tr>
               <td style="padding: 12px; background-color: white; border: 1px solid #e5e7eb; font-weight: bold;">Email:</td>
               <td style="padding: 12px; background-color: white; border: 1px solid #e5e7eb;">
-                <a href="mailto:${data.email}" style="color: #2563eb;">${data.email}</a>
+                <a href="mailto:${data.email}" style="color: #4cbb17;">${data.email}</a>
               </td>
             </tr>
             ${data.phone ? `
             <tr>
               <td style="padding: 12px; background-color: white; border: 1px solid #e5e7eb; font-weight: bold;">Phone:</td>
               <td style="padding: 12px; background-color: white; border: 1px solid #e5e7eb;">
-                <a href="tel:${data.phone}" style="color: #2563eb;">${data.phone}</a>
+                <a href="tel:${data.phone}" style="color: #4cbb17;">${data.phone}</a>
               </td>
             </tr>
             ` : ''}
@@ -125,14 +126,14 @@ export async function sendAdminNotification(
           ` : ''}
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${portalUrl}" style="background: #2563eb; color: white; padding: 14px 32px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold; font-size: 16px;">
+            <a href="${portalUrl}" style="background: #4cbb17; color: white; padding: 14px 32px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold; font-size: 16px;">
               View in LRP Driver Portal
             </a>
           </div>
 
-          <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 16px; margin: 20px 0; border-radius: 4px;">
-            <p style="margin: 0; color: #1e40af; font-weight: bold;">📋 Next Steps:</p>
-            <ul style="margin: 10px 0 0 0; padding-left: 20px; color: #1e40af;">
+          <div style="background-color: rgba(76, 187, 23, 0.1); border-left: 4px solid #4cbb17; padding: 16px; margin: 20px 0; border-radius: 4px;">
+            <p style="margin: 0; color: #3a8e11; font-weight: bold;">Next Steps:</p>
+            <ul style="margin: 10px 0 0 0; padding-left: 20px; color: #3a8e11;">
               <li>Review the complete application details</li>
               <li>Verify license information and documentation</li>
               <li>Check employment history and references</li>

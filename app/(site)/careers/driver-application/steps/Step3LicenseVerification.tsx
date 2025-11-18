@@ -123,7 +123,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
             </label>
             <select
               {...register('current_license_state')}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
             >
               {US_STATES.map(state => (
                 <option key={state} value={state}>{state}</option>
@@ -175,7 +175,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
                 {...register('license_revoked_past_3_years')}
                 type="checkbox"
                 id="revoked"
-                className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
+                className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
               />
               <label htmlFor="revoked" className="ml-2 text-sm text-neutral-900 dark:text-white">
                 Has your license been revoked, suspended, or denied in the past 3 years?
@@ -189,7 +189,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
                 {...register('accidents_past_3_years')}
                 type="checkbox"
                 id="accidents"
-                className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
+                className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
               />
               <label htmlFor="accidents" className="ml-2 text-sm text-neutral-900 dark:text-white">
                 Have you been involved in any accidents in the past 3 years?
@@ -205,7 +205,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
               <textarea
                 {...register('accidents_explanation')}
                 rows={3}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                 placeholder="Provide details about the accident(s)"
               />
             </div>
@@ -227,7 +227,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
               {...register('authorize_license_record_check')}
               type="checkbox"
               id="authorize"
-              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
+              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
             />
             <label htmlFor="authorize" className="ml-3 text-sm text-neutral-900 dark:text-white">
               I authorize the investigation of my previous driving record *
@@ -242,7 +242,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
             <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
               Signature *
             </label>
-            <div className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md bg-white dark:bg-gray-800">
+            <div className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
               <SignatureCanvas
                 ref={signatureRef}
                 canvasProps={{
@@ -256,7 +256,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
               <button
                 type="button"
                 onClick={clearSignature}
-                className="text-sm text-primary hover:text-blue-700"
+                className="text-sm text-primary hover:text-primary-dark dark:text-primary-light dark:hover:text-primary"
               >
                 Clear Signature
               </button>

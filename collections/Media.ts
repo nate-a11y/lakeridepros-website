@@ -17,9 +17,16 @@ export const Media: CollectionConfig = {
         name: 'optimized',
         width: 1024,
         // Height undefined = maintain aspect ratio
+        // Apply WebP conversion to this size
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 80,
+          },
+        },
       },
     ],
-    // Configure format options for WebP conversion and optimization
+    // Configure format options for WebP conversion and optimization (applies to original)
     formatOptions: {
       format: 'webp',
       options: {

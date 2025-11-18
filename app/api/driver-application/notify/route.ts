@@ -91,8 +91,11 @@ export async function POST(request: NextRequest) {
             'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`
           },
           body: JSON.stringify({
-            to: applicantPhone,
-            message: `Lake Ride Pros: Your driver application has been received! Application ID: ${applicationId.slice(0, 8)}... We'll review your application within 3-5 business days. Questions? Call (573) 552-2628`
+            operation: 'sendSimpleSMS',
+            params: {
+              to: applicantPhone,
+              message: `Lake Ride Pros: Your driver application has been received! Application ID: ${applicationId.slice(0, 8)}... We'll review your application within 3-5 business days. Questions? Call (573) 552-2628`
+            }
           })
         })
 

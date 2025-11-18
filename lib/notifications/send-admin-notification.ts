@@ -171,11 +171,14 @@ export async function sendAdminNotification(
         'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`
       },
       body: JSON.stringify({
-        to: adminEmail,
-        from: 'noreply@updates.lakeridepros.com',
-        replyTo: 'contactus@lakeridepros.com',
-        subject: `New Driver Application - ${applicantName}`,
-        html: htmlContent
+        operation: 'sendNotificationEmail',
+        params: {
+          to: adminEmail,
+          subject: `New Driver Application - ${applicantName}`,
+          message: `New driver application received from ${applicantName}. Application ID: ${data.applicationId}`,
+          html: htmlContent,
+          replyTo: 'contactus@lakeridepros.com'
+        }
       })
     })
 
@@ -203,7 +206,7 @@ export async function sendAdminNotification(
         yearsExperience: data.yearsExperience,
         hasCDL: data.hasCDL
       },
-      external_id: result.messageId || result.id
+      external_id: result.messageId
     })
 
     return { success: true }

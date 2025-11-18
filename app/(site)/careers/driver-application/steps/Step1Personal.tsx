@@ -41,7 +41,7 @@ const personalInfoSchema = z.object({
   address_city: z.string().min(1, 'City is required'),
   address_state: z.enum(US_STATES, { message: 'Invalid state' }),
   address_zip: z.string().regex(/^\d{5}(-\d{4})?$/, 'ZIP code must be in format XXXXX or XXXXX-XXXX'),
-  legal_right_to_work: z.literal(true, { message: 'You must have legal right to work in the US' })
+  has_legal_right_to_work: z.literal(true, { message: 'You must have legal right to work in the US' })
 })
 
 type PersonalInfoFormData = z.infer<typeof personalInfoSchema>
@@ -76,7 +76,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
       address_city: applicationData.address_city || '',
       address_state: (applicationData.address_state as typeof US_STATES[number]) || undefined,
       address_zip: applicationData.address_zip || '',
-      legal_right_to_work: applicationData.legal_right_to_work === true ? true : undefined as unknown as true
+      has_legal_right_to_work: applicationData.has_legal_right_to_work === true ? true : undefined as unknown as true
     }
   })
 
@@ -171,7 +171,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         address_city: data.address_city,
         address_state: data.address_state,
         address_zip: data.address_zip,
-        legal_right_to_work: data.legal_right_to_work
+        has_legal_right_to_work: data.has_legal_right_to_work
       })
 
       onNext()
@@ -409,17 +409,17 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
           <div className="flex items-start">
             <input
-              {...register('legal_right_to_work')}
+              {...register('has_legal_right_to_work')}
               type="checkbox"
-              id="legal_right_to_work"
+              id="has_legal_right_to_work"
               className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
-            <label htmlFor="legal_right_to_work" className="ml-3 text-sm text-gray-700">
+            <label htmlFor="has_legal_right_to_work" className="ml-3 text-sm text-gray-700">
               I certify that I have the legal right to work in the United States *
             </label>
           </div>
-          {errors.legal_right_to_work && (
-            <p className="text-red-600 text-sm mt-2">{errors.legal_right_to_work.message}</p>
+          {errors.has_legal_right_to_work && (
+            <p className="text-red-600 text-sm mt-2">{errors.has_legal_right_to_work.message}</p>
           )}
         </div>
 

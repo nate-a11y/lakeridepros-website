@@ -199,6 +199,123 @@ body:has([data-main-app]) {
     text-wrap: balance;
   }
 
+  /* ===========================
+     THEME-AWARE UTILITY CLASSES
+     Use these instead of manual light/dark variants
+     =========================== */
+
+  /* Text colors - automatically switch for light/dark mode */
+  .text-body {
+    color: #374151; /* neutral-700 */
+  }
+  .dark .text-body {
+    color: #d1d5db; /* neutral-300 */
+  }
+
+  .text-body-secondary {
+    color: #4b5563; /* neutral-600 */
+  }
+  .dark .text-body-secondary {
+    color: #9ca3af; /* neutral-400 */
+  }
+
+  .text-heading {
+    color: #111827; /* neutral-900 */
+  }
+  .dark .text-heading {
+    color: #ffffff;
+  }
+
+  .text-heading-secondary {
+    color: #1f2937; /* neutral-800 */
+  }
+  .dark .text-heading-secondary {
+    color: #e5e7eb; /* neutral-200 */
+  }
+
+  .text-muted {
+    color: #6b7280; /* neutral-500 */
+  }
+  .dark .text-muted {
+    color: #9ca3af; /* neutral-400 */
+  }
+
+  /* Background colors - automatically switch for light/dark mode */
+  .bg-page {
+    background-color: #ffffff;
+  }
+  .dark .bg-page {
+    background-color: var(--dark-bg-primary);
+  }
+
+  .bg-section {
+    background-color: #f9fafb; /* neutral-50 */
+  }
+  .dark .bg-section {
+    background-color: var(--dark-bg-secondary);
+  }
+
+  .bg-section-alt {
+    background-color: #ffffff;
+  }
+  .dark .bg-section-alt {
+    background-color: var(--dark-bg-primary);
+  }
+
+  .bg-card {
+    background-color: #ffffff;
+  }
+  .dark .bg-card {
+    background-color: var(--dark-bg-secondary);
+  }
+
+  /* Border colors */
+  .border-themed {
+    border-color: #e5e7eb; /* neutral-200 */
+  }
+  .dark .border-themed {
+    border-color: var(--dark-border);
+  }
+
+  /* Prose/content styling for terms pages, blog posts, etc */
+  .prose-themed {
+    color: #374151;
+  }
+  .dark .prose-themed {
+    color: #d1d5db;
+  }
+
+  .prose-themed h1,
+  .prose-themed h2,
+  .prose-themed h3,
+  .prose-themed h4,
+  .prose-themed h5,
+  .prose-themed h6 {
+    color: #111827;
+  }
+  .dark .prose-themed h1,
+  .dark .prose-themed h2,
+  .dark .prose-themed h3,
+  .dark .prose-themed h4,
+  .dark .prose-themed h5,
+  .dark .prose-themed h6 {
+    color: #ffffff;
+  }
+
+  .prose-themed strong {
+    color: #1f2937;
+  }
+  .dark .prose-themed strong {
+    color: #f3f4f6;
+  }
+
+  .prose-themed a {
+    color: var(--primary);
+  }
+  .prose-themed a:hover {
+    color: var(--primary-dark);
+  }
+
   /* Screen reader only class */
   .sr-only {
     position: absolute;

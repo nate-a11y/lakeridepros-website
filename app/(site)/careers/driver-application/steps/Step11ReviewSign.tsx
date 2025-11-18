@@ -104,9 +104,10 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
           ...applicationData,
           certification_signature: signatureData,
           certification_name_printed: data.certification_name_printed,
+          // Anti-bot fields (will be stripped server-side)
           _honeypot: honeypot,
           _timestamp: formLoadTime.current
-        }
+        } as any
       )
 
       if (error) {

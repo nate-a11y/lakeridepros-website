@@ -77,7 +77,7 @@ export default function ApplicationStatusPage() {
     setApplication(null)
 
     try {
-      const response = await fetch('/api/driver-application/status', {
+      const response = await fetch('/api/driver-application/check-status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)

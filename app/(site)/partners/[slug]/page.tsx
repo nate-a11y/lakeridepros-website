@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
-import { getPartnerBySlugLocal, getPartnersLocal, getMediaUrl } from '@/lib/api/payload-local';
+import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/payload-local';
 import type { Media } from '@/src/payload-types';
 
 type Props = {

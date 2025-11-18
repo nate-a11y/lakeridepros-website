@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import type { Payload } from 'payload'
 import config from '@/src/payload.config'
 import { revalidatePaths } from '@/lib/revalidation'
+import { createHash } from 'crypto'
 
 const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
@@ -44,19 +45,6 @@ interface PrintifyProduct {
   variants: PrintifyVariant[]
   blueprint_id: number
   print_provider_id: number
-  [key: string]: unknown
-}
-
-
-interface ProductImage {
-  image: number | { id: number }
-  [key: string]: unknown
-}
-
-interface ExistingProduct {
-  id: string | number
-  featuredImage?: number | { id: number }
-  images?: ProductImage[]
   [key: string]: unknown
 }
 
@@ -139,11 +127,42 @@ function sanitizeFilename(filename: string): string {
     .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '')
 
-  // Limit to 50 characters
-  const truncated = sanitized.substring(0, 50).replace(/-+$/, '')
+  // Generate a short hash of the original name to prevent collisions when truncating
+  // This ensures different products with similar names don't share filenames
+  const hash = createHash('md5').update(nameWithoutExt).digest('hex').substring(0, 8)
 
-  // No timestamp - use deterministic names for duplicate detection
-  return `${truncated}.webp`
+  // Limit base name to 40 characters to leave room for hash (8 chars) and separator
+  const truncated = sanitized.substring(0, 40).replace(/-+$/, '')
+
+  // Deterministic filename with hash suffix for uniqueness
+  return `${truncated}-${hash}.webp`
+}
+
+// Check if media with this filename already exists in Payload
+async function findExistingMedia(payload: Payload, filename: string) {
+  const sanitizedFilename = sanitizeFilename(filename)
+
+  try {
+    const existing = await payload.find({
+      collection: 'media',
+      where: {
+        filename: {
+          equals: sanitizedFilename,
+        },
+      },
+      limit: 1,
+    })
+
+    if (existing.docs.length > 0) {
+      console.log(`[Media Cache] Found existing media: ${sanitizedFilename} (id: ${existing.docs[0].id})`)
+      return existing.docs[0]
+    }
+
+    return null
+  } catch (error) {
+    console.error(`[Media Cache] Error finding existing media ${sanitizedFilename}:`, error)
+    return null
+  }
 }
 
 async function uploadImageToPayload(payload: Payload, imageBuffer: Buffer, filename: string) {
@@ -164,11 +183,32 @@ async function uploadImageToPayload(payload: Payload, imageBuffer: Buffer, filen
       overrideAccess: true,
     })
 
+    console.log(`[Media Upload] Created new media: ${sanitizedFilename} (id: ${media.id})`)
     return media
   } catch (error) {
     console.error(`[Upload Error] Failed to upload ${sanitizedFilename}:`, error)
     throw error
   }
+}
+
+// Smart image upload: check if media exists first, skip download if it does
+async function getOrUploadImage(
+  payload: Payload,
+  imageUrl: string,
+  filename: string
+): Promise<{ media: Awaited<ReturnType<typeof uploadImageToPayload>>; reused: boolean }> {
+  const sanitizedFilename = sanitizeFilename(filename)
+
+  // First, check if this image already exists in Payload (skip download if it does)
+  const existingMedia = await findExistingMedia(payload, sanitizedFilename)
+  if (existingMedia) {
+    return { media: existingMedia, reused: true }
+  }
+
+  // Media doesn't exist, download and upload
+  const imageBuffer = await downloadImage(imageUrl)
+  const media = await uploadImageToPayload(payload, imageBuffer, filename)
+  return { media, reused: false }
 }
 
 function slugify(text: string): string {
@@ -326,87 +366,73 @@ async function syncProducts(request: Request) {
 
         const baseSlug = slugify(printifyProduct.title)
         const existingProductId = existing.docs.length > 0 ? existing.docs[0].id : undefined
-        const existingProduct = existing.docs.length > 0 ? (existing.docs[0] as unknown as ExistingProduct) : null
         const slug = await ensureUniqueSlug(payload, baseSlug, existingProductId)
 
-        // Determine if we need to re-upload images
-        const totalPrintifyImages = printifyProduct.images.length
-        const hasExistingImages = existingProduct?.featuredImage && existingProduct?.images?.length > 0
-        const shouldReuseImages = hasExistingImages && (
-          // Reuse if total image count matches (1 featured + n additional)
-          (existingProduct.images.length + 1) === totalPrintifyImages
-        )
-
+        // Smart image handling: check for existing media before downloading
+        // This prevents duplicate uploads and saves storage/bandwidth
         let featuredImageId: number | null = null
-        let additionalImages: Array<{ image: number }> = []
+        const additionalImages: Array<{ image: number }> = []
 
-        if (shouldReuseImages) {
-          // Reuse existing images to avoid re-uploading
-          console.log(`[Printify Sync] Reusing existing images for ${printifyProduct.title}`)
-          featuredImageId = typeof existingProduct.featuredImage === 'object'
-            ? existingProduct.featuredImage.id
-            : existingProduct.featuredImage
-          additionalImages = existingProduct.images.map((img: ProductImage) => ({
-            image: typeof img.image === 'object' ? img.image.id : img.image
-          }))
-          results.imagesReused += (1 + additionalImages.length)
-        } else {
-          // Upload new images
-          console.log(`[Printify Sync] Uploading ${existingProduct ? 'updated' : 'new'} images for ${printifyProduct.title}`)
+        console.log(`[Printify Sync] Processing images for ${printifyProduct.title}`)
 
-          // Download and upload featured image (only the default/first one)
-          const defaultImage =
-            printifyProduct.images.find((img: PrintifyImage) => img.is_default) || printifyProduct.images[0]
+        // Get or upload featured image (only the default/first one)
+        const defaultImage =
+          printifyProduct.images.find((img: PrintifyImage) => img.is_default) || printifyProduct.images[0]
 
-          if (defaultImage) {
-            const imageBuffer = await downloadImage(defaultImage.src)
-            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-featured.webp`)
-            featuredImageId = media.id as number
+        if (defaultImage) {
+          const { media, reused } = await getOrUploadImage(payload, defaultImage.src, `${slug}-featured.webp`)
+          featuredImageId = media.id as number
+          if (reused) {
+            results.imagesReused++
+          } else {
             results.imagesUploaded++
           }
+        }
 
-          // Deduplicate images:
-          // - Skip the default image (already uploaded as featured)
-          // - Skip any duplicate URLs
-          // - Normalize URLs by removing query parameters for comparison
-          const normalizeUrl = (url: string) => url.split('?')[0].toLowerCase()
-          const seenUrls = new Set(defaultImage ? [normalizeUrl(defaultImage.src)] : [])
+        // Deduplicate images:
+        // - Skip the default image (already processed as featured)
+        // - Skip any duplicate URLs
+        // - Normalize URLs by removing query parameters for comparison
+        const normalizeUrl = (url: string) => url.split('?')[0].toLowerCase()
+        const seenUrls = new Set(defaultImage ? [normalizeUrl(defaultImage.src)] : [])
 
-          const imagesToProcess = printifyProduct.images
-            .filter((img: PrintifyImage) => {
-              // Skip the default image (already used for featured)
-              if (img.is_default) {
-                return false
-              }
-
-              // Skip if we've seen this URL (normalized)
-              const normalizedUrl = normalizeUrl(img.src)
-              if (seenUrls.has(normalizedUrl)) {
-                return false
-              }
-
-              seenUrls.add(normalizedUrl)
-              return true
-            })
-            .slice(0, 5)
-
-          // Upload images sequentially with error handling
-          for (let i = 0; i < imagesToProcess.length; i++) {
-            const image = imagesToProcess[i]
-            try {
-              const imageBuffer = await downloadImage(image.src)
-              const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${i + 1}.webp`)
-              additionalImages.push({ image: media.id as number })
-              results.imagesUploaded++
-
-              // Small delay to avoid overwhelming the database
-              if (i < imagesToProcess.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 100))
-              }
-            } catch (error) {
-              console.error(`[Printify Sync] Failed to upload image ${i + 1} for ${printifyProduct.title}:`, error)
-              // Continue with remaining images even if one fails
+        const imagesToProcess = printifyProduct.images
+          .filter((img: PrintifyImage) => {
+            // Skip the default image (already used for featured)
+            if (img.is_default) {
+              return false
             }
+
+            // Skip if we've seen this URL (normalized)
+            const normalizedUrl = normalizeUrl(img.src)
+            if (seenUrls.has(normalizedUrl)) {
+              return false
+            }
+
+            seenUrls.add(normalizedUrl)
+            return true
+          })
+          .slice(0, 5)
+
+        // Process additional images sequentially with error handling
+        for (let i = 0; i < imagesToProcess.length; i++) {
+          const image = imagesToProcess[i]
+          try {
+            const { media, reused } = await getOrUploadImage(payload, image.src, `${slug}-${i + 1}.webp`)
+            additionalImages.push({ image: media.id as number })
+            if (reused) {
+              results.imagesReused++
+            } else {
+              results.imagesUploaded++
+            }
+
+            // Small delay to avoid overwhelming the database
+            if (i < imagesToProcess.length - 1) {
+              await new Promise(resolve => setTimeout(resolve, 100))
+            }
+          } catch (error) {
+            console.error(`[Printify Sync] Failed to upload image ${i + 1} for ${printifyProduct.title}:`, error)
+            // Continue with remaining images even if one fails
           }
         }
 

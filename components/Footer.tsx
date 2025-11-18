@@ -4,17 +4,22 @@ import { getServices } from '@/lib/api/payload';
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
 
+  // Skip data fetching during build time (no database available)
+  const isBuildTime = !process.env.POSTGRES_URL || process.env.NEXT_PHASE === 'phase-production-build';
+
   // Fetch services dynamically from CMS
   let dynamicServices: Array<{ name: string; href: string }> = [];
-  try {
-    const servicesResponse = await getServices({ limit: 100 });
-    dynamicServices = servicesResponse.docs.map((service) => ({
-      name: service.title,
-      href: `/services/${service.slug}`,
-    }));
-  } catch (error) {
-    console.error('Error fetching services for footer:', error);
-    // Fall back to empty array if fetch fails
+  if (!isBuildTime) {
+    try {
+      const servicesResponse = await getServices({ limit: 100 });
+      dynamicServices = servicesResponse.docs.map((service) => ({
+        name: service.title,
+        href: `/services/${service.slug}`,
+      }));
+    } catch (error) {
+      console.error('Error fetching services for footer:', error);
+      // Fall back to empty array if fetch fails
+    }
   }
 
   const footerLinks = {

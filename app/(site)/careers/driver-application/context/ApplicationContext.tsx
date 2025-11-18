@@ -7,6 +7,8 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
 import { saveDraft, getApplicationById, type DriverApplicationData } from '@/lib/supabase/driver-application'
+import { decodeResumeToken } from '@/lib/resume-link'
+import { useSearchParams } from 'next/navigation'
 
 interface ApplicationContextType {
   // Current step (1-11)
@@ -43,6 +45,7 @@ const STORAGE_KEY = 'driver-application-id'
 const AUTO_SAVE_INTERVAL = 30000 // 30 seconds
 
 export function ApplicationProvider({ children }: { children: React.ReactNode }) {
+  const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(1)
   const [applicationData, setApplicationData] = useState<Partial<DriverApplicationData>>({})
   const [applicationId, setApplicationId] = useState<string | null>(null)
@@ -55,10 +58,39 @@ export function ApplicationProvider({ children }: { children: React.ReactNode })
   const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null)
   const isInitializedRef = useRef(false)
 
-  // Load application ID from localStorage on mount
+  // Load application ID from localStorage or resume token on mount
   useEffect(() => {
     const loadApplication = async () => {
       try {
+        // Check for resume token in URL first
+        const resumeToken = searchParams.get('resume')
+
+        if (resumeToken) {
+          // Decode resume token
+          const decodedToken = decodeResumeToken(resumeToken)
+
+          if (decodedToken) {
+            console.log('Loading application from resume token')
+
+            // Try to load the draft from database
+            const { data, error } = await getApplicationById(decodedToken.applicationId)
+
+            if (data && data.status === 'draft' && data.email?.toLowerCase() === decodedToken.email.toLowerCase()) {
+              setApplicationId(decodedToken.applicationId)
+              setApplicationData(data)
+              console.log('Loaded draft application from resume link:', decodedToken.applicationId)
+              setIsLoading(false)
+              isInitializedRef.current = true
+              return
+            } else {
+              console.log('Resume link invalid or application not found')
+            }
+          } else {
+            console.log('Resume token expired or invalid')
+          }
+        }
+
+        // Fall back to localStorage
         const storedId = localStorage.getItem(STORAGE_KEY)
         if (storedId) {
           // Try to load the draft from database
@@ -84,7 +116,7 @@ export function ApplicationProvider({ children }: { children: React.ReactNode })
     }
 
     loadApplication()
-  }, [])
+  }, [searchParams])
 
   // Save to localStorage when applicationId changes
   useEffect(() => {

@@ -11,8 +11,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
 import { submitApplication, getClientInfo } from '@/lib/supabase/driver-application'
+import { downloadApplicationPDF } from '@/lib/pdf-generator'
 import SignatureCanvas from 'react-signature-canvas'
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, Download, FileText } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 const certificationSchema = z.object({
@@ -47,6 +48,11 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
   const clearSignature = () => {
     signatureRef.current?.clear()
     setSignatureError(null)
+  }
+
+  const handleDownloadPDF = () => {
+    const filename = `driver-application-${applicationData.last_name || 'preview'}-${new Date().toISOString().split('T')[0]}.pdf`
+    downloadApplicationPDF(applicationData, filename)
   }
 
   const onSubmit = async (data: CertificationFormData) => {
@@ -238,6 +244,32 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
           {submitError}
         </div>
       )}
+
+      {/* PDF Download Section */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-6">
+        <div className="flex items-start gap-4">
+          <div className="flex-shrink-0">
+            <FileText className="w-10 h-10 text-blue-600" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-blue-900 mb-2">
+              Download Application Preview
+            </h3>
+            <p className="text-sm text-blue-700 mb-4">
+              Download a PDF preview of your complete application before signing and submitting.
+              This allows you to review all information one final time.
+            </p>
+            <button
+              type="button"
+              onClick={handleDownloadPDF}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+            >
+              <Download className="w-5 h-5" />
+              Download PDF Preview
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Certification Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

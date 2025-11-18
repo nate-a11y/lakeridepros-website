@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
 
     const submissionData = {
       ...data,
+      email: data.email ? data.email.toLowerCase() : data.email,
       status: 'submitted',
       submission_ip: ip,
       submission_user_agent: userAgent,

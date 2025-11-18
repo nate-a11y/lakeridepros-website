@@ -22,9 +22,10 @@ export async function POST(request: NextRequest) {
     // Get singleton Supabase client
     const supabase = getSupabaseServerClient()
 
-    // Ensure status is draft
+    // Ensure status is draft and normalize email
     const draftData: Partial<DriverApplicationData> = {
       ...data,
+      email: data.email ? data.email.toLowerCase() : data.email,
       status: 'draft' as const,
       updated_at: new Date().toISOString()
     }

@@ -30,7 +30,6 @@ export async function logNotification(entry: NotificationLogEntry): Promise<void
     const supabase = getSupabase()
     const { error } = (await supabase
       .from('notification_log')
-      // @ts-expect-error - Supabase client lacks generated types, data validated by DB schema
       .insert({
         ...entry,
         sent_at: entry.status === 'sent' ? new Date().toISOString() : null
@@ -70,7 +69,6 @@ export async function updateNotificationStatus(
 
     const { error } = (await supabase
       .from('notification_log')
-      // @ts-expect-error - Supabase client lacks generated types, data validated by DB schema
       .update(updateData as any)
       .eq('external_id', externalId)) as { error: any }
 

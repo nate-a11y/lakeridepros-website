@@ -156,7 +156,12 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         throw new Error(errorData.error || 'Failed to encrypt SSN')
       }
 
-      const { encryptedSSN } = await encryptResponse.json()
+      const { encrypted } = await encryptResponse.json()
+
+      // Validate that encryption succeeded
+      if (!encrypted) {
+        throw new Error('SSN encryption failed. Please try again.')
+      }
 
       // Update application data
       updateApplicationData({
@@ -164,7 +169,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         middle_name: data.middle_name,
         last_name: data.last_name,
         date_of_birth: data.date_of_birth,
-        ssn_encrypted: encryptedSSN,
+        ssn_encrypted: encrypted,
         email: data.email,
         phone: data.phone,
         address_street: data.address_street,

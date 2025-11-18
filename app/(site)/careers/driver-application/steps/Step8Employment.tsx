@@ -91,8 +91,8 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-2">Employment History</h2>
-      <p className="text-gray-600 dark:text-gray-300 mb-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white mb-4">Employment History</h2>
+      <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
         List all employment for the past 3 years. If you held a CMV driver position, provide 10 years (49 CFR 391.21(b)(9)).
       </p>
 
@@ -103,7 +103,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {fields.map((field, index) => (
-          <div key={field.id} className="border border-gray-300 dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
+          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Employment {index + 1}</h3>
               {fields.length > 1 && (
@@ -121,105 +121,105 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Employer Name *
                   </label>
                   <input
                     {...register(`employment_history.${index}.name`)}
                     type="text"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Phone Number *
                   </label>
                   <input
                     {...register(`employment_history.${index}.phone`)}
                     type="tel"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                   Address *
                 </label>
                 <input
                   {...register(`employment_history.${index}.address`)}
                   type="text"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Position Held *
                   </label>
                   <input
                     {...register(`employment_history.${index}.position`)}
                     type="text"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Salary/Rate
                   </label>
                   <input
                     {...register(`employment_history.${index}.salary`)}
                     type="text"
                     placeholder="e.g., $50,000/year or $25/hour"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">From Date *</label>
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">From Date *</label>
                   <input
                     {...register(`employment_history.${index}.from_date`)}
                     type="date"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">To Date</label>
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">To Date</label>
                   <input
                     {...register(`employment_history.${index}.to_date`)}
                     type="date"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave blank if current position</p>
+                  <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-1">Leave blank if current position</p>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                   Reason for Leaving
                 </label>
                 <input
                   {...register(`employment_history.${index}.reason_leaving`)}
                   type="text"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                 />
               </div>
 
-              <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded p-4 space-y-3">
+              <div className="bg-neutral-50 dark:hover:bg-dark-bg-secondary border border-gray-200 dark:border-gray-700 rounded p-4 space-y-3">
                 <div className="flex items-center">
                   <input
                     {...register(`employment_history.${index}.subject_to_fmcsr`)}
                     type="checkbox"
                     id={`fmcsr-${index}`}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600 rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
                   />
-                  <label htmlFor={`fmcsr-${index}`} className="ml-2 text-sm text-gray-700 dark:text-gray-200">
+                  <label htmlFor={`fmcsr-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                     Position subject to Federal Motor Carrier Safety Regulations (FMCSR)
                   </label>
                 </div>
@@ -229,9 +229,9 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     {...register(`employment_history.${index}.subject_to_dot_testing`)}
                     type="checkbox"
                     id={`dot-${index}`}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600 rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
                   />
-                  <label htmlFor={`dot-${index}`} className="ml-2 text-sm text-gray-700 dark:text-gray-200">
+                  <label htmlFor={`dot-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                     Position subject to DOT drug and alcohol testing
                   </label>
                 </div>
@@ -257,7 +257,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
         <button
           type="button"
           onClick={() => append({ name: '', phone: '', address: '', position: '', from_date: '', to_date: '', reason_leaving: '', salary: '', subject_to_fmcsr: false, subject_to_dot_testing: false, gap_explanation: '' })}
-          className="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-primary flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Another Employment Record
@@ -267,13 +267,13 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md hover:bg-gray-50 dark:bg-gray-900"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700"
+            className="px-6 py-3 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark"
           >
             Continue
           </button>

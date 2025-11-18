@@ -59,20 +59,20 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-2">Education & Qualifications</h2>
-      <p className="text-gray-600 dark:text-gray-300 mb-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white mb-4">Education & Qualifications</h2>
+      <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
         Provide information about your education and any other qualifications (49 CFR 391.21(b)(10)).
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {fields.length === 0 && (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
+          <div className="text-center py-8 text-lrp-text-secondary dark:text-dark-text-secondary border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg">
             No education records yet. Click below to add your education history.
           </div>
         )}
 
         {fields.map((field, index) => (
-          <div key={field.id} className="border border-gray-300 dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
+          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Education {index + 1}</h3>
               <button
@@ -88,13 +88,13 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     School/Institution Name *
                   </label>
                   <input
                     {...register(`education.${index}.school_name`)}
                     type="text"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                     placeholder="e.g., Lincoln High School"
                   />
                   {errors.education?.[index]?.school_name && (
@@ -103,13 +103,13 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Location (City, State) *
                   </label>
                   <input
                     {...register(`education.${index}.location`)}
                     type="text"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                     placeholder="e.g., Springfield, MO"
                   />
                   {errors.education?.[index]?.location && (
@@ -120,19 +120,19 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Course of Study/Major
                   </label>
                   <input
                     {...register(`education.${index}.course_of_study`)}
                     type="text"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                     placeholder="e.g., Business Administration"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Years Completed
                   </label>
                   <input
@@ -140,7 +140,7 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                     type="number"
                     min={0}
                     max={20}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                     placeholder="e.g., 4"
                   />
                 </div>
@@ -152,22 +152,22 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                     {...register(`education.${index}.graduated`)}
                     type="checkbox"
                     id={`graduated-${index}`}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600 rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
                   />
-                  <label htmlFor={`graduated-${index}`} className="ml-2 text-sm text-gray-700 dark:text-gray-200">
+                  <label htmlFor={`graduated-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                     Graduated/Completed
                   </label>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                   Additional Details
                 </label>
                 <textarea
                   {...register(`education.${index}.details`)}
                   rows={2}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   placeholder="Certifications, honors, relevant coursework, etc."
                 />
               </div>
@@ -178,24 +178,24 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
         <button
           type="button"
           onClick={() => append({ school_name: '', location: '', course_of_study: '', years_completed: 0, graduated: false, details: '' })}
-          className="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-primary flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Education Record
         </button>
 
         {/* Other Qualifications */}
-        <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-6 bg-gray-50 dark:bg-gray-900">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
             Other Qualifications, Certifications, or Training
           </label>
           <textarea
             {...register('other_qualifications')}
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
             placeholder="List any other relevant qualifications such as CDL training, defensive driving courses, safety certifications, etc."
           />
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-1">
             Include any training or certifications relevant to commercial driving
           </p>
         </div>
@@ -204,13 +204,13 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md hover:bg-gray-50 dark:bg-gray-900"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700"
+            className="px-6 py-3 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark"
           >
             Continue
           </button>

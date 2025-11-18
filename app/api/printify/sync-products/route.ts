@@ -557,47 +557,45 @@ async function syncProducts(request: Request) {
       console.log(`[Printify Sync] Auto-chaining to next batch (${allProducts.length - endIndex} products remaining)...`)
       console.log(`[Printify Sync] Next batch URL: ${nextUrl.replace(SYNC_SECRET, '***')}`)
 
-      // Trigger next batch with retry logic (don't await to avoid timeout)
-      ;(async () => {
-        const maxRetries = 3
-        let lastError: Error | null = null
+      // Trigger next batch synchronously with retry logic
+      // This ensures the fetch completes before the serverless function terminates
+      let chainSuccess = false
+      const maxRetries = 3
 
-        for (let attempt = 0; attempt < maxRetries; attempt++) {
-          try {
-            // Add a small delay before triggering to avoid rate limiting
-            if (attempt > 0) {
-              const backoffMs = Math.min(2000 * Math.pow(2, attempt - 1), 10000)
-              console.log(`[Auto-Chain] Retry ${attempt}/${maxRetries} after ${backoffMs}ms delay...`)
-              await new Promise(resolve => setTimeout(resolve, backoffMs))
-            } else {
-              // Small delay even on first attempt to let current response complete
-              await new Promise(resolve => setTimeout(resolve, 1000))
-            }
-
-            const response = await fetch(nextUrl, {
-              method: 'GET',
-              headers: {
-                'User-Agent': 'LakeRidePros-AutoChain/1.0',
-              },
-              signal: AbortSignal.timeout(30000), // 30 second timeout
-            })
-
-            if (response.ok) {
-              console.log(`[Auto-Chain] Successfully triggered next batch (attempt ${attempt + 1}/${maxRetries})`)
-              return
-            } else {
-              lastError = new Error(`HTTP ${response.status}: ${response.statusText}`)
-              console.error(`[Auto-Chain] Failed with status ${response.status} (attempt ${attempt + 1}/${maxRetries})`)
-            }
-          } catch (error) {
-            lastError = error instanceof Error ? error : new Error(String(error))
-            console.error(`[Auto-Chain] Error on attempt ${attempt + 1}/${maxRetries}:`, lastError.message)
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        try {
+          // Add a small delay between retries
+          if (attempt > 0) {
+            const backoffMs = Math.min(1000 * Math.pow(2, attempt - 1), 5000)
+            console.log(`[Auto-Chain] Retry ${attempt}/${maxRetries} after ${backoffMs}ms delay...`)
+            await new Promise(resolve => setTimeout(resolve, backoffMs))
           }
-        }
 
-        console.error(`[Auto-Chain] Failed to trigger next batch after ${maxRetries} attempts:`, lastError?.message)
+          const response = await fetch(nextUrl, {
+            method: 'GET',
+            headers: {
+              'User-Agent': 'LakeRidePros-AutoChain/1.0',
+            },
+            signal: AbortSignal.timeout(10000), // 10 second timeout per attempt
+          })
+
+          if (response.ok) {
+            console.log(`[Auto-Chain] Successfully triggered next batch (attempt ${attempt + 1}/${maxRetries})`)
+            chainSuccess = true
+            break
+          } else {
+            console.error(`[Auto-Chain] Failed with status ${response.status} (attempt ${attempt + 1}/${maxRetries})`)
+          }
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error)
+          console.error(`[Auto-Chain] Error on attempt ${attempt + 1}/${maxRetries}:`, errorMessage)
+        }
+      }
+
+      if (!chainSuccess) {
+        console.error(`[Auto-Chain] Failed to trigger next batch after ${maxRetries} attempts`)
         console.error(`[Auto-Chain] Manual intervention needed: ${allProducts.length - endIndex} products remaining`)
-      })()
+      }
     }
 
     return NextResponse.json({

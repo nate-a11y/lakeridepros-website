@@ -5,12 +5,12 @@
  * Displayed after successful submission of driver application
  */
 
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { CheckCircle2, Mail, Phone } from 'lucide-react'
 import Link from 'next/link'
 
-export default function ApplicationReceivedPage() {
+function ApplicationReceivedContent() {
   const searchParams = useSearchParams()
   const applicationId = searchParams.get('id')
   const [copied, setCopied] = useState(false)
@@ -178,5 +178,20 @@ export default function ApplicationReceivedPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ApplicationReceivedPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <ApplicationReceivedContent />
+    </Suspense>
   )
 }

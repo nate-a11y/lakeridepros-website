@@ -138,7 +138,7 @@ function sanitizeFilename(filename: string): string {
   // Add timestamp to ensure uniqueness
   const timestamp = Date.now()
 
-  return `${truncated}-${timestamp}.png`
+  return `${truncated}-${timestamp}.webp`
 }
 
 async function uploadImageToPayload(payload: Payload, imageBuffer: Buffer, filename: string) {
@@ -153,7 +153,7 @@ async function uploadImageToPayload(payload: Payload, imageBuffer: Buffer, filen
       file: {
         data: imageBuffer,
         name: sanitizedFilename,
-        mimetype: 'image/png',
+        mimetype: 'image/png', // Printify provides PNG, Payload converts to WebP
         size: imageBuffer.length,
       },
       overrideAccess: true,
@@ -355,7 +355,7 @@ async function syncProducts(request: Request) {
 
           if (defaultImage) {
             const imageBuffer = await downloadImage(defaultImage.src)
-            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-featured.png`)
+            const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-featured.webp`)
             featuredImageId = media.id as number
             results.imagesUploaded++
           }
@@ -377,7 +377,7 @@ async function syncProducts(request: Request) {
             const image = imagesToProcess[i]
             try {
               const imageBuffer = await downloadImage(image.src)
-              const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${i + 1}.png`)
+              const media = await uploadImageToPayload(payload, imageBuffer, `${slug}-${i + 1}.webp`)
               additionalImages.push({ image: media.id as number })
               results.imagesUploaded++
 
@@ -520,19 +520,80 @@ async function syncProducts(request: Request) {
 
     // Auto-chain to next batch if there are more products and autoChain is enabled
     if (hasMore && autoChain) {
-      const nextUrl = `${process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || request.url.split('/api/')[0]}/api/printify/sync-products?secret=${SYNC_SECRET}&offset=${endIndex}&batch=${batchSize}&autoChain=true`
+      // Construct and validate URL
+      const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL ||
+                      process.env.PAYLOAD_PUBLIC_SERVER_URL ||
+                      request.url.split('/api/')[0]
+
+      // Ensure baseUrl is valid
+      if (!baseUrl || (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://'))) {
+        console.error(`[Printify Sync] Invalid base URL for auto-chain: ${baseUrl}`)
+        console.error('[Printify Sync] Set NEXT_PUBLIC_SERVER_URL or PAYLOAD_PUBLIC_SERVER_URL environment variable')
+        return NextResponse.json({
+          success: true,
+          warning: 'Batch completed but auto-chain failed - invalid server URL',
+          message: `Synced ${results.total} products. Manual intervention needed for remaining ${allProducts.length - endIndex} products.`,
+          results: {
+            ...results,
+            durationSeconds: parseFloat(duration),
+          },
+          pagination: {
+            totalProducts: allProducts.length,
+            processedStart: offset + 1,
+            processedEnd: Math.min(endIndex, allProducts.length),
+            hasMore,
+            nextOffset: endIndex,
+            autoChaining: false,
+          },
+        })
+      }
+
+      const nextUrl = `${baseUrl}/api/printify/sync-products?secret=${SYNC_SECRET}&offset=${endIndex}&batch=${batchSize}&autoChain=true`
 
       console.log(`[Printify Sync] Auto-chaining to next batch (${allProducts.length - endIndex} products remaining)...`)
+      console.log(`[Printify Sync] Next batch URL: ${nextUrl.replace(SYNC_SECRET, '***')}`)
 
-      // Trigger next batch asynchronously (don't await to avoid timeout)
-      fetch(nextUrl, {
-        method: 'GET',
-        headers: {
-          'User-Agent': 'LakeRidePros-AutoChain/1.0',
-        },
-      }).catch((error) => {
-        console.error(`[Printify Sync] Failed to trigger next batch:`, error)
-      })
+      // Trigger next batch with retry logic (don't await to avoid timeout)
+      ;(async () => {
+        const maxRetries = 3
+        let lastError: Error | null = null
+
+        for (let attempt = 0; attempt < maxRetries; attempt++) {
+          try {
+            // Add a small delay before triggering to avoid rate limiting
+            if (attempt > 0) {
+              const backoffMs = Math.min(2000 * Math.pow(2, attempt - 1), 10000)
+              console.log(`[Auto-Chain] Retry ${attempt}/${maxRetries} after ${backoffMs}ms delay...`)
+              await new Promise(resolve => setTimeout(resolve, backoffMs))
+            } else {
+              // Small delay even on first attempt to let current response complete
+              await new Promise(resolve => setTimeout(resolve, 1000))
+            }
+
+            const response = await fetch(nextUrl, {
+              method: 'GET',
+              headers: {
+                'User-Agent': 'LakeRidePros-AutoChain/1.0',
+              },
+              signal: AbortSignal.timeout(30000), // 30 second timeout
+            })
+
+            if (response.ok) {
+              console.log(`[Auto-Chain] Successfully triggered next batch (attempt ${attempt + 1}/${maxRetries})`)
+              return
+            } else {
+              lastError = new Error(`HTTP ${response.status}: ${response.statusText}`)
+              console.error(`[Auto-Chain] Failed with status ${response.status} (attempt ${attempt + 1}/${maxRetries})`)
+            }
+          } catch (error) {
+            lastError = error instanceof Error ? error : new Error(String(error))
+            console.error(`[Auto-Chain] Error on attempt ${attempt + 1}/${maxRetries}:`, lastError.message)
+          }
+        }
+
+        console.error(`[Auto-Chain] Failed to trigger next batch after ${maxRetries} attempts:`, lastError?.message)
+        console.error(`[Auto-Chain] Manual intervention needed: ${allProducts.length - endIndex} products remaining`)
+      })()
     }
 
     return NextResponse.json({

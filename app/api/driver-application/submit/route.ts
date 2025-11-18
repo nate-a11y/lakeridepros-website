@@ -19,6 +19,27 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Anti-bot validation: Check honeypot field
+    if (data._honeypot) {
+      console.log('Bot detected on driver application: honeypot field filled')
+      return NextResponse.json(
+        { error: 'Invalid submission' },
+        { status: 400 }
+      )
+    }
+
+    // Anti-bot validation: Check submission timing (must be at least 3 seconds)
+    if (data._timestamp) {
+      const timeSinceLoad = Date.now() - data._timestamp
+      if (timeSinceLoad < 3000) {
+        console.log('Bot detected on driver application: form submitted too quickly')
+        return NextResponse.json(
+          { error: 'Please take your time to review the application before submitting' },
+          { status: 400 }
+        )
+      }
+    }
+
     // Get client IP and user agent
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0] ||
                request.headers.get('x-real-ip') ||
@@ -28,9 +49,12 @@ export async function POST(request: NextRequest) {
     // Get singleton Supabase client
     const supabase = getSupabaseServerClient()
 
+    // Remove anti-bot fields before saving to database
+    const { _honeypot, _timestamp, ...cleanData } = data
+
     const submissionData = {
-      ...data,
-      email: data.email ? data.email.toLowerCase() : data.email,
+      ...cleanData,
+      email: cleanData.email ? cleanData.email.toLowerCase() : cleanData.email,
       status: 'submitted',
       submission_ip: ip,
       submission_user_agent: userAgent,

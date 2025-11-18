@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS driver_applications (
   address_city VARCHAR(100),
   address_state VARCHAR(2),
   address_zip VARCHAR(10),
-  has_legal_right_to_work BOOLEAN,
+  legal_right_to_work BOOLEAN,
 
   -- Residence History (Step 2)
   residence_history JSONB DEFAULT '[]'::jsonb,

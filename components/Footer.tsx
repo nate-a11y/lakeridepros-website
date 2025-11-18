@@ -1,20 +1,60 @@
 import Link from 'next/link';
 import { getServices } from '@/lib/api/payload';
+import { getPopularServicesLocal } from '@/lib/analytics-server';
 
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
 
-  // Fetch services dynamically from CMS
+  // Fallback popular services (same as header)
+  const fallbackServiceSlugs = [
+    'wedding-transportation',
+    'airport-shuttle',
+    'nightlife-transportation',
+    'corporate-transportation',
+    'private-aviation-transportation',
+    'group-shuttle-services',
+  ];
+
+  // Fetch popular services from analytics (same as header)
+  let popularServiceSlugs: string[] = [];
+  try {
+    const popularServices = await getPopularServicesLocal(6);
+    popularServiceSlugs = popularServices.map(s => s.slug);
+  } catch (error) {
+    console.error('Error fetching popular services for footer:', error);
+    // Use fallback if analytics fails
+    popularServiceSlugs = fallbackServiceSlugs;
+  }
+
+  // If no popular services from analytics, use fallback
+  if (popularServiceSlugs.length === 0) {
+    popularServiceSlugs = fallbackServiceSlugs;
+  }
+
+  // Fetch services dynamically from CMS, but only show popular ones
   let dynamicServices: Array<{ name: string; href: string }> = [];
   try {
     const servicesResponse = await getServices({ limit: 100 });
-    dynamicServices = servicesResponse.docs.map((service) => ({
-      name: service.title,
-      href: `/services/${service.slug}`,
-    }));
+    // Filter to only popular services and maintain order
+    dynamicServices = popularServiceSlugs
+      .map(slug => {
+        const service = servicesResponse.docs.find(s => s.slug === slug);
+        return service ? { name: service.title, href: `/services/${service.slug}` } : null;
+      })
+      .filter((s): s is { name: string; href: string } => s !== null);
+
+    // Add "View All Services" link at the end
+    dynamicServices.push({ name: 'View All Services →', href: '/services' });
   } catch (error) {
     console.error('Error fetching services for footer:', error);
-    // Fall back to empty array if fetch fails
+    // Fall back to static list if fetch fails
+    dynamicServices = [
+      { name: 'Wedding Transportation', href: '/services/wedding-transportation' },
+      { name: 'Airport Transfers', href: '/services/airport-shuttle' },
+      { name: 'Nightlife & Party', href: '/services/nightlife-transportation' },
+      { name: 'Corporate Travel', href: '/services/corporate-transportation' },
+      { name: 'View All Services →', href: '/services' },
+    ];
   }
 
   const footerLinks = {
@@ -40,17 +80,14 @@ export default async function Footer() {
       { name: 'Bagnell Dam Strip', href: '/bagnell-dam-strip-transportation' },
       { name: 'Airport Transportation', href: '/lake-ozarks-airport-transportation' },
     ],
-    venues: [
-      { name: 'Tan-Tar-A Transportation', href: '/tan-tar-a-transportation' },
-      { name: 'Margaritaville Transportation', href: '/margaritaville-transportation' },
-      { name: 'Old Kinderhook Transportation', href: '/old-kinderhook-transportation' },
-      { name: 'Shootout Transportation', href: '/lake-ozarks-shootout-transportation' },
-      { name: 'Bikefest Transportation', href: '/bikefest-transportation' },
-    ],
     partners: [
       { name: 'Wedding Partners', href: '/wedding-partners' },
       { name: 'Local Premier Partners', href: '/local-premier-partners' },
       { name: 'Trusted Referral Partners', href: '/trusted-referral-partners' },
+    ],
+    insiders: [
+      { name: 'Membership Benefits', href: '/insider-membership-benefits' },
+      { name: 'Terms & Conditions', href: '/insider-terms-and-conditions' },
     ],
     company: [
       { name: 'About Us', href: '/about-us' },
@@ -67,7 +104,7 @@ export default async function Footer() {
   return (
     <footer className="bg-primary-dark dark:bg-dark-bg-primary text-white transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-8 items-start">
           {/* Column 1 - Quick Links */}
           <div>
             <h3 className="text-white font-bold mb-4 text-lg">Quick Links</h3>
@@ -119,24 +156,7 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Column 4 - Venues & Events */}
-          <div>
-            <h3 className="text-white font-bold mb-4 text-lg">Venues & Events</h3>
-            <ul className="space-y-2">
-              {footerLinks.venues.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 5 - Partners */}
+          {/* Column 4 - Partners */}
           <div>
             <h3 className="text-white font-bold mb-4 text-lg">Partners</h3>
             <ul className="space-y-2">
@@ -151,9 +171,24 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
+
+            {/* Insiders */}
+            <h3 className="text-white font-bold mb-4 text-lg mt-6">Insiders</h3>
+            <ul className="space-y-2">
+              {footerLinks.insiders.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Column 6 - Company */}
+          {/* Column 5 - Company */}
           <div>
             <h3 className="text-white font-bold mb-4 text-lg">Company</h3>
             <ul className="space-y-2">
@@ -189,9 +224,11 @@ export default async function Footer() {
                 </Link>
               </li>
             </ul>
+          </div>
 
-            {/* Legal Links */}
-            <h3 className="text-white font-bold mb-4 text-lg mt-6">Legal</h3>
+          {/* Column 6 - Legal & Contact */}
+          <div>
+            <h3 className="text-white font-bold mb-4 text-lg">Legal</h3>
             <ul className="space-y-2">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
@@ -204,11 +241,9 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
 
-          {/* Column 5 - Contact */}
-          <div>
-            <h3 className="text-white font-bold mb-4 text-lg">Contact</h3>
+            {/* Contact */}
+            <h3 className="text-white font-bold mb-4 text-lg mt-6">Contact</h3>
             <ul className="space-y-2">
               <li>
                 <a

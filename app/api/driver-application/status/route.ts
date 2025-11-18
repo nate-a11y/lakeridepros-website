@@ -52,3 +52,8 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+// GET handler for health check
+export async function GET() {
+  return NextResponse.json({ status: 'ok', route: 'driver-application-status' })
+}

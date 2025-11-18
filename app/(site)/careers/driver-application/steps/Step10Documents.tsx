@@ -114,8 +114,8 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-2">Upload Driver's License</h2>
-      <p className="text-gray-600 mb-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white mb-4">Upload Driver's License</h2>
+      <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
         Upload clear images of the front and back of your current driver's license.
         Accepted formats: JPG, PNG, PDF (max 10MB each).
       </p>
@@ -129,7 +129,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* License Front */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
             License Front *
           </label>
 
@@ -137,21 +137,21 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
             <div
               onDrop={(e) => handleDrop(e, 'front')}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer"
               onClick={() => frontInputRef.current?.click()}
             >
               {uploading.front ? (
                 <div className="flex flex-col items-center gap-2">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                  <p className="text-sm text-gray-600">Uploading...</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Uploading...</p>
                 </div>
               ) : (
                 <>
                   <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 mb-2">
+                  <p className="text-gray-600 dark:text-gray-300 mb-2">
                     Click to upload or drag and drop
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
                     JPG, PNG or PDF (max 10MB)
                   </p>
                 </>
@@ -165,7 +165,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               />
             </div>
           ) : (
-            <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
+            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {frontPreview.endsWith('.pdf') ? (
@@ -175,7 +175,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
                   )}
                   <div>
                     <p className="font-medium">License Front</p>
-                    <p className="text-sm text-gray-500">Uploaded successfully</p>
+                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">Uploaded successfully</p>
                   </div>
                 </div>
                 <button
@@ -195,7 +195,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
 
         {/* License Back */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
             License Back *
           </label>
 
@@ -203,21 +203,21 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
             <div
               onDrop={(e) => handleDrop(e, 'back')}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer"
               onClick={() => backInputRef.current?.click()}
             >
               {uploading.back ? (
                 <div className="flex flex-col items-center gap-2">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                  <p className="text-sm text-gray-600">Uploading...</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Uploading...</p>
                 </div>
               ) : (
                 <>
                   <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 mb-2">
+                  <p className="text-gray-600 dark:text-gray-300 mb-2">
                     Click to upload or drag and drop
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
                     JPG, PNG or PDF (max 10MB)
                   </p>
                 </>
@@ -231,7 +231,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               />
             </div>
           ) : (
-            <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
+            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {backPreview.endsWith('.pdf') ? (
@@ -241,7 +241,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
                   )}
                   <div>
                     <p className="font-medium">License Back</p>
-                    <p className="text-sm text-gray-500">Uploaded successfully</p>
+                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">Uploaded successfully</p>
                   </div>
                 </div>
                 <button
@@ -259,7 +259,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
           )}
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/40 rounded-lg p-4">
           <p className="text-sm text-blue-900">
             <strong>Important:</strong> Ensure your license images are clear and all text is readable.
             Blurry or unreadable images may delay processing of your application.
@@ -270,14 +270,14 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
           >
             Previous
           </button>
           <button
             type="submit"
             disabled={uploading.front || uploading.back}
-            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Continue to Review
           </button>

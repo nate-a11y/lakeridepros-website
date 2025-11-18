@@ -39,15 +39,15 @@ export default function StepIndicator({ currentStep, onStepClick }: StepIndicato
       {/* Mobile view - current step only */}
       <div className="md:hidden">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-600">
+          <span className="text-sm font-medium text-lrp-text-secondary dark:text-dark-text-secondary">
             Step {currentStep} of {steps.length}
           </span>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
             {Math.round((currentStep / steps.length) * 100)}% Complete
           </span>
         </div>
-        <div className="text-lg font-semibold">{steps[currentStep - 1].title}</div>
-        <div className="text-sm text-gray-600">{steps[currentStep - 1].description}</div>
+        <div className="text-lg font-semibold text-neutral-900 dark:text-white">{steps[currentStep - 1].title}</div>
+        <div className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">{steps[currentStep - 1].description}</div>
       </div>
 
       {/* Desktop view - all steps */}
@@ -62,27 +62,27 @@ export default function StepIndicator({ currentStep, onStepClick }: StepIndicato
                   disabled={step.number > currentStep || !onStepClick}
                   className={`
                     w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm
-                    transition-all duration-200
+                    transition-all duration-200 focus:outline-none
                     ${
                       step.number < currentStep
-                        ? 'bg-green-600 text-white hover:bg-green-700 cursor-pointer'
+                        ? 'bg-primary text-white hover:bg-primary-dark cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2'
                         : step.number === currentStep
-                        ? 'bg-blue-600 text-white ring-4 ring-blue-200'
-                        : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        ? 'bg-primary text-white ring-4 ring-primary/30 dark:ring-primary/40'
+                        : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 cursor-not-allowed'
                     }
                   `}
                   aria-current={step.number === currentStep ? 'step' : undefined}
                   aria-label={`Step ${step.number}: ${step.title}`}
                 >
                   {step.number < currentStep ? (
-                    <Check className="w-5 h-5" />
+                    <Check className="w-5 h-5" aria-hidden="true" />
                   ) : (
                     step.number
                   )}
                 </button>
                 <div className="mt-2 text-center">
                   <div className={`text-xs font-medium ${
-                    step.number === currentStep ? 'text-blue-600' : 'text-gray-600'
+                    step.number === currentStep ? 'text-primary' : 'text-lrp-text-secondary dark:text-dark-text-secondary'
                   }`}>
                     {step.title}
                   </div>
@@ -93,7 +93,7 @@ export default function StepIndicator({ currentStep, onStepClick }: StepIndicato
               {index < steps.length - 1 && (
                 <div
                   className={`flex-1 h-1 mx-2 transition-all duration-200 ${
-                    step.number < currentStep ? 'bg-green-600' : 'bg-gray-200'
+                    step.number < currentStep ? 'bg-primary' : 'bg-neutral-200 dark:bg-neutral-700'
                   }`}
                   style={{ marginTop: '-24px' }}
                 />

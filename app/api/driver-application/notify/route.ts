@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
             operation: 'sendSimpleSMS',
             params: {
               to: applicantPhone,
-              message: `Lake Ride Pros: Your driver application has been received! Application ID: ${applicationId.slice(0, 8)}... We'll review your application within 3-5 business days. Questions? Call (573) 552-2628`
+              message: `Lake Ride Pros: Your driver application has been received! Application ID: ${applicationId.slice(0, 8)}... We'll review your application within 3-5 business days. Questions? Call (573) 206-9499`
             }
           })
         })

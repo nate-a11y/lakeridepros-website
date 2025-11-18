@@ -189,25 +189,25 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-2">Personal Information</h2>
-      <p className="text-gray-600 mb-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white mb-4">Personal Information</h2>
+      <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
         Please provide your personal information as it appears on your driver's license.
         All fields marked with * are required by federal regulation 49 CFR 391.21.
       </p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate aria-label="Personal information form">
         {/* Name Fields */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="first_name" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               First Name *
             </label>
             <input
               {...register('first_name')}
               type="text"
               id="first_name"
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.first_name ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.first_name ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.first_name && (
@@ -216,27 +216,27 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="middle_name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="middle_name" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               Middle Name
             </label>
             <input
               {...register('middle_name')}
               type="text"
               id="middle_name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary focus:ring-primary focus:border-primary focus:border-primary"
             />
           </div>
 
           <div>
-            <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="last_name" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               Last Name *
             </label>
             <input
               {...register('last_name')}
               type="text"
               id="last_name"
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.last_name ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.last_name ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.last_name && (
@@ -248,15 +248,15 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         {/* Date of Birth and SSN */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="date_of_birth" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               Date of Birth *
             </label>
             <input
               {...register('date_of_birth')}
               type="date"
               id="date_of_birth"
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.date_of_birth ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.date_of_birth ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.date_of_birth && (
@@ -265,7 +265,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="ssn" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="ssn" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               Social Security Number *
             </label>
             <input
@@ -276,14 +276,14 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               maxLength={11}
               onBlur={handleSSNBlur}
               onFocus={handleSSNFocus}
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.ssn ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.ssn ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.ssn && (
               <p className="text-red-600 text-sm mt-1">{errors.ssn.message}</p>
             )}
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-1">
               Your SSN will be encrypted server-side before storage and is required by federal regulation.
             </p>
           </div>
@@ -292,15 +292,15 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         {/* Email and Phone */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               Email Address *
             </label>
             <input
               {...register('email')}
               type="email"
               id="email"
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.email ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.email && (
@@ -309,7 +309,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="phone" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               Phone Number *
             </label>
             <input
@@ -317,8 +317,8 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               type="tel"
               id="phone"
               placeholder="(555) 123-4567"
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.phone ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.phone ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.phone && (
@@ -329,15 +329,15 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
 
         {/* Address */}
         <div>
-          <label htmlFor="address_street" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="address_street" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
             Street Address *
           </label>
           <input
             {...register('address_street')}
             type="text"
             id="address_street"
-            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-              errors.address_street ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+              errors.address_street ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
             }`}
           />
           {errors.address_street && (
@@ -347,15 +347,15 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="address_city" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="address_city" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               City *
             </label>
             <input
               {...register('address_city')}
               type="text"
               id="address_city"
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.address_city ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.address_city ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.address_city && (
@@ -364,14 +364,14 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="address_state" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="address_state" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               State *
             </label>
             <select
               {...register('address_state')}
               id="address_state"
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.address_state ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.address_state ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             >
               <option value="">Select State</option>
@@ -387,7 +387,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="address_zip" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="address_zip" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               ZIP Code *
             </label>
             <input
@@ -395,8 +395,8 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               type="text"
               id="address_zip"
               placeholder="12345"
-              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                errors.address_zip ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
+                errors.address_zip ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.address_zip && (
@@ -406,15 +406,15 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         </div>
 
         {/* Legal Right to Work */}
-        <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+        <div className="bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/40 rounded-md p-4">
           <div className="flex items-start">
             <input
               {...register('legal_right_to_work')}
               type="checkbox"
               id="legal_right_to_work"
-              className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
             />
-            <label htmlFor="legal_right_to_work" className="ml-3 text-sm text-gray-700">
+            <label htmlFor="legal_right_to_work" className="ml-3 text-sm text-neutral-900 dark:text-white">
               I certify that I have the legal right to work in the United States *
             </label>
           </div>
@@ -428,11 +428,12 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           <button
             type="submit"
             disabled={isEncrypting}
-            className={`px-6 py-3 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+            className={`px-6 py-3 font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
               isEncrypting
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
+                ? 'bg-neutral-400 dark:bg-neutral-600 cursor-not-allowed text-white'
+                : 'bg-primary text-white hover:bg-primary-dark'
             }`}
+            aria-label={isEncrypting ? 'Processing personal information' : 'Continue to residence history step'}
           >
             {isEncrypting ? (
               <span className="flex items-center">
@@ -441,6 +442,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <circle
                     className="opacity-25"

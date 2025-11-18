@@ -116,15 +116,15 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-2">Review & Certification</h2>
-      <p className="text-gray-600 mb-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white mb-4">Review & Certification</h2>
+      <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
         Please review your application carefully before signing and submitting.
       </p>
 
       {/* Application Summary */}
       <div className="space-y-4 mb-8">
         {/* Personal Information */}
-        <div className="border border-gray-300 rounded-lg p-6 bg-white">
+        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
           <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
@@ -146,7 +146,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
         </div>
 
         {/* License Information */}
-        <div className="border border-gray-300 rounded-lg p-6 bg-white">
+        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
           <h3 className="text-lg font-semibold mb-4">Current License</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
@@ -166,13 +166,13 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
         {/* Residence History */}
         {applicationData.residences && applicationData.residences.length > 0 && (
-          <div className="border border-gray-300 rounded-lg p-6 bg-white">
+          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
             <h3 className="text-lg font-semibold mb-4">Residence History</h3>
             <div className="space-y-2 text-sm">
               {applicationData.residences.map((res, idx) => (
                 <div key={idx}>
                   {res.street}, {res.city}, {res.state} {res.zip}
-                  {res.is_current && <span className="ml-2 text-blue-600">(Current)</span>}
+                  {res.is_current && <span className="ml-2 text-primary">(Current)</span>}
                 </div>
               ))}
             </div>
@@ -181,13 +181,13 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
         {/* Employment History */}
         {applicationData.employment_history && applicationData.employment_history.length > 0 && (
-          <div className="border border-gray-300 rounded-lg p-6 bg-white">
+          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
             <h3 className="text-lg font-semibold mb-4">Employment History</h3>
             <div className="space-y-3 text-sm">
               {applicationData.employment_history.map((emp, idx) => (
                 <div key={idx} className="border-l-2 border-blue-500 pl-3">
                   <div className="font-medium">{emp.name} - {emp.position}</div>
-                  <div className="text-gray-600">
+                  <div className="text-gray-600 dark:text-gray-300">
                     {emp.from_date} to {emp.to_date || 'Present'}
                   </div>
                 </div>
@@ -198,7 +198,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
         {/* Driving Experience */}
         {applicationData.driving_experience && applicationData.driving_experience.length > 0 && (
-          <div className="border border-gray-300 rounded-lg p-6 bg-white">
+          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
             <h3 className="text-lg font-semibold mb-4">Driving Experience</h3>
             <div className="space-y-2 text-sm">
               {applicationData.driving_experience.map((exp, idx) => (
@@ -211,7 +211,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
         )}
 
         {/* Safety History */}
-        <div className="border border-gray-300 rounded-lg p-6 bg-white">
+        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
           <h3 className="text-lg font-semibold mb-4">Safety History</h3>
           <div className="text-sm space-y-2">
             <div>
@@ -235,10 +235,10 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
       )}
 
       {/* PDF Download Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-6">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-primary/30 dark:border-primary/40 rounded-lg p-6 mb-6">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">
-            <FileText className="w-10 h-10 text-blue-600" />
+            <FileText className="w-10 h-10 text-primary" />
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-blue-900 mb-2">
@@ -251,7 +251,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
             <button
               type="button"
               onClick={handleDownloadPDF}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark transition-colors"
             >
               <Download className="w-5 h-5" />
               Download PDF Preview
@@ -262,9 +262,9 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
       {/* Certification Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div className="bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/40 rounded-lg p-6">
           <h3 className="font-semibold mb-3">Final Certification (49 CFR 391.21)</h3>
-          <p className="text-sm text-gray-700 mb-4">
+          <p className="text-sm text-neutral-900 dark:text-white mb-4">
             I certify that this application was completed by me, and that all entries on it and information
             in it are true and complete to the best of my knowledge. I understand that falsification of any
             information may result in the refusal to hire me or immediate discharge.
@@ -275,9 +275,9 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
               {...register('certify')}
               type="checkbox"
               id="certify"
-              className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
             />
-            <label htmlFor="certify" className="ml-3 text-sm text-gray-700">
+            <label htmlFor="certify" className="ml-3 text-sm text-neutral-900 dark:text-white">
               I certify that all information provided in this application is true and correct *
             </label>
           </div>
@@ -286,13 +286,13 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
           )}
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
               Print Full Name *
             </label>
             <input
               {...register('certification_name_printed')}
               type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
             />
             {errors.certification_name_printed && (
               <p className="text-red-600 text-sm mt-1">{errors.certification_name_printed.message}</p>
@@ -300,10 +300,10 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
               Signature *
             </label>
-            <div className="border-2 border-gray-300 rounded-md bg-white">
+            <div className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md bg-white dark:bg-gray-800">
               <SignatureCanvas
                 ref={signatureRef}
                 canvasProps={{
@@ -317,18 +317,18 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
               <button
                 type="button"
                 onClick={clearSignature}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm text-primary hover:text-blue-700"
               >
                 Clear Signature
               </button>
-              <p className="text-xs text-gray-500">Sign with your mouse or finger</p>
+              <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary">Sign with your mouse or finger</p>
             </div>
             {signatureError && (
               <p className="text-red-600 text-sm mt-1">{signatureError}</p>
             )}
           </div>
 
-          <p className="text-xs text-gray-500 mt-4">
+          <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-4">
             Date: {new Date().toLocaleDateString()}
           </p>
         </div>
@@ -338,14 +338,14 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
             type="button"
             onClick={onPrevious}
             disabled={isSubmitting}
-            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 disabled:opacity-50"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary disabled:opacity-50"
           >
             Previous
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-8 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+            className="px-8 py-3 bg-green-600 text-white font-semibold rounded-lg transition-colors hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
           >
             {isSubmitting ? (
               <>

@@ -67,23 +67,23 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-2">License History</h2>
-      <p className="text-gray-600 mb-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white mb-4">License History</h2>
+      <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
         List ALL driver's licenses held in the past 3 years (49 CFR 391.21(b)(4)).
         If you've only had one license, check the certification box below.
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {fields.length === 0 && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/40 rounded-lg p-4">
             <div className="flex items-start">
               <input
                 {...register('certify_one_license')}
                 type="checkbox"
                 id="certify_one"
-                className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
               />
-              <label htmlFor="certify_one" className="ml-3 text-sm text-gray-700">
+              <label htmlFor="certify_one" className="ml-3 text-sm text-neutral-900 dark:text-white">
                 I certify that I have only held ONE driver's license in the past 3 years
                 (the one entered in the previous step) *
               </label>
@@ -95,7 +95,7 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
         )}
 
         {fields.map((field, index) => (
-          <div key={field.id} className="border border-gray-300 rounded-lg p-6 bg-white">
+          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">License {index + 1}</h3>
               <button
@@ -111,10 +111,10 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">State *</label>
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
                   <select
                     {...register(`licenses.${index}.state`)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   >
                     {US_STATES.map(state => (
                       <option key={state} value={state}>{state}</option>
@@ -123,11 +123,11 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">License Number *</label>
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">License Number *</label>
                   <input
                     {...register(`licenses.${index}.number`)}
                     type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
                   {errors.licenses?.[index]?.number && (
                     <p className="text-red-600 text-sm mt-1">{errors.licenses[index]?.number?.message}</p>
@@ -137,12 +137,12 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Class/Type *</label>
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Class/Type *</label>
                   <input
                     {...register(`licenses.${index}.type_class`)}
                     type="text"
                     placeholder="e.g., Class A CDL"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
                   {errors.licenses?.[index]?.type_class && (
                     <p className="text-red-600 text-sm mt-1">{errors.licenses[index]?.type_class?.message}</p>
@@ -150,22 +150,22 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date *</label>
+                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Expiration Date *</label>
                   <input
                     {...register(`licenses.${index}.expiration_date`)}
                     type="date"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Endorsements</label>
+                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Endorsements</label>
                 <input
                   {...register(`licenses.${index}.endorsements`)}
                   type="text"
                   placeholder="e.g., H (Hazmat), N (Tank), P (Passenger)"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-md"
                 />
               </div>
 
@@ -174,9 +174,9 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
                   {...register(`licenses.${index}.is_current`)}
                   type="checkbox"
                   id={`current-${index}`}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded"
                 />
-                <label htmlFor={`current-${index}`} className="ml-2 text-sm text-gray-700">
+                <label htmlFor={`current-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                   This is my current license
                 </label>
               </div>
@@ -187,7 +187,7 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
         <button
           type="button"
           onClick={() => append({ state: 'MO' as const, number: '', type_class: '', endorsements: '', expiration_date: '', is_current: false })}
-          className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-primary flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Another License
@@ -197,13 +197,13 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700"
+            className="px-6 py-3 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark"
           >
             Continue
           </button>

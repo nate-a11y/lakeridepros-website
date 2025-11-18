@@ -44,9 +44,8 @@ export async function sendAdminNotification(
       hour12: true
     })
 
-    // Base URL for status page
-    const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'https://lakeridepros.com'
-    const statusUrl = `${baseUrl}/careers/application-status?id=${data.applicationId}`
+    // Link to LRP Driver Portal
+    const portalUrl = 'https://lakeridepros.xyz/applications'
 
     // Email HTML template
     const htmlContent = `
@@ -126,8 +125,8 @@ export async function sendAdminNotification(
           ` : ''}
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${statusUrl}" style="background: #2563eb; color: white; padding: 14px 32px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold; font-size: 16px;">
-              View Full Application
+            <a href="${portalUrl}" style="background: #2563eb; color: white; padding: 14px 32px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold; font-size: 16px;">
+              View in LRP Driver Portal
             </a>
           </div>
 

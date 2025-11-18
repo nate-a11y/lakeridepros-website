@@ -25,8 +25,8 @@ export async function sendApplicationConfirmation(
   const templateName = 'application-confirmation'
 
   try {
-    // Create tracking URL
-    const trackingUrl = `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://lakeridepros.com'}/careers/application-status`
+    // Create tracking URL with prefilled application ID
+    const trackingUrl = `${process.env.NEXT_PUBLIC_SERVER_URL || 'https://lakeridepros.com'}/careers/application-status?id=${data.applicationId}`
 
     // Format submitted date
     const submittedDate = new Date(data.submittedAt).toLocaleDateString('en-US', {
@@ -73,7 +73,7 @@ export async function sendApplicationConfirmation(
             <strong>Email:</strong> <a href="mailto:owners@lakeridepros.com" style="color: #2563eb;">owners@lakeridepros.com</a>
           </p>
           <p style="margin: 5px 0;">
-            <strong>Phone:</strong> <a href="tel:+15735522628" style="color: #2563eb;">(573) 552-2628</a>
+            <strong>Phone:</strong> <a href="tel:+15732069499" style="color: #2563eb;">(573) 206-9499</a>
           </p>
           <p style="margin: 15px 0 5px 0; color: #6b7280; font-size: 14px;">
             Our hiring team is available Monday-Friday, 9 AM - 5 PM CST

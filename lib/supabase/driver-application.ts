@@ -1,21 +1,7 @@
 /**
  * Supabase functions for driver application form
- * Works with existing driver_applications table schema
+ * Uses server-side API routes to bypass RLS policies
  */
-
-import { createClient } from '@supabase/supabase-js'
-
-// Create Supabase client for browser
-const getSupabaseClient = () => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Missing Supabase environment variables')
-  }
-
-  return createClient(supabaseUrl, supabaseKey)
-}
 
 export interface DriverApplicationData {
   id?: string
@@ -160,46 +146,26 @@ export async function saveDraft(
   applicationId?: string
 ): Promise<{ data: DriverApplicationData | null; error: Error | null }> {
   try {
-    const supabase = getSupabaseClient()
+    // Use server-side API route to bypass RLS
+    const response = await fetch('/api/driver-application/draft', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        applicationId,
+        data
+      })
+    })
 
-    // Ensure status is draft
-    const draftData = {
-      ...data,
-      status: 'draft' as const,
-      updated_at: new Date().toISOString()
+    const result = await response.json()
+
+    if (!response.ok) {
+      console.error('Error saving draft:', result.error)
+      return { data: null, error: new Error(result.error || 'Failed to save draft') }
     }
 
-    if (applicationId) {
-      // Update existing draft
-      const { data: updated, error } = await supabase
-        .from('driver_applications')
-        .update(draftData)
-        .eq('id', applicationId)
-        .eq('status', 'draft') // Only update if still in draft status
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Error updating draft:', error)
-        return { data: null, error: new Error(error.message) }
-      }
-
-      return { data: updated, error: null }
-    } else {
-      // Create new draft
-      const { data: created, error } = await supabase
-        .from('driver_applications')
-        .insert([draftData])
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Error creating draft:', error)
-        return { data: null, error: new Error(error.message) }
-      }
-
-      return { data: created, error: null }
-    }
+    return { data: result.data, error: null }
   } catch (error) {
     console.error('Unexpected error in saveDraft:', error)
     return {
@@ -218,20 +184,16 @@ export async function getApplicationById(
   applicationId: string
 ): Promise<{ data: DriverApplicationData | null; error: Error | null }> {
   try {
-    const supabase = getSupabaseClient()
+    // Use server-side API route to bypass RLS
+    const response = await fetch(`/api/driver-application/draft?id=${applicationId}`)
+    const result = await response.json()
 
-    const { data, error } = await supabase
-      .from('driver_applications')
-      .select('*')
-      .eq('id', applicationId)
-      .single()
-
-    if (error) {
-      console.error('Error fetching application:', error)
-      return { data: null, error: new Error(error.message) }
+    if (!response.ok) {
+      console.error('Error fetching application:', result.error)
+      return { data: null, error: new Error(result.error || 'Failed to fetch application') }
     }
 
-    return { data, error: null }
+    return { data: result.data, error: null }
   } catch (error) {
     console.error('Unexpected error in getApplicationById:', error)
     return {
@@ -245,41 +207,35 @@ export async function getApplicationById(
  * Submit an application (change status from draft to submitted)
  * @param applicationId - The application ID
  * @param data - Final application data
- * @param auditInfo - IP address and user agent
+ * @param auditInfo - IP address and user agent (optional, will be determined server-side)
  * @returns The submitted application
  */
 export async function submitApplication(
   applicationId: string,
   data: Partial<DriverApplicationData>,
-  auditInfo: { ip: string; userAgent: string }
+  auditInfo?: { ip: string; userAgent: string }
 ): Promise<{ data: DriverApplicationData | null; error: Error | null }> {
   try {
-    const supabase = getSupabaseClient()
+    // Use server-side API route to bypass RLS and capture IP/user agent
+    const response = await fetch('/api/driver-application/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        applicationId,
+        data
+      })
+    })
 
-    const submissionData = {
-      ...data,
-      status: 'submitted' as const,
-      submission_ip: auditInfo.ip,
-      submission_user_agent: auditInfo.userAgent,
-      certification_signature_date: new Date().toISOString(),
-      date_of_application: new Date().toISOString().split('T')[0],
-      updated_at: new Date().toISOString()
+    const result = await response.json()
+
+    if (!response.ok) {
+      console.error('Error submitting application:', result.error)
+      return { data: null, error: new Error(result.error || 'Failed to submit application') }
     }
 
-    const { data: submitted, error } = await supabase
-      .from('driver_applications')
-      .update(submissionData)
-      .eq('id', applicationId)
-      .eq('status', 'draft') // Only submit if still in draft status
-      .select()
-      .single()
-
-    if (error) {
-      console.error('Error submitting application:', error)
-      return { data: null, error: new Error(error.message) }
-    }
-
-    return { data: submitted, error: null }
+    return { data: result.data, error: null }
   } catch (error) {
     console.error('Unexpected error in submitApplication:', error)
     return {
@@ -302,50 +258,25 @@ export async function uploadLicenseImage(
   side: 'front' | 'back'
 ): Promise<{ url: string | null; error: Error | null }> {
   try {
-    const supabase = getSupabaseClient()
+    // Use server-side API route to bypass storage RLS
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('applicationId', applicationId)
+    formData.append('side', side)
 
-    // Validate file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
-    if (!validTypes.includes(file.type)) {
-      return {
-        url: null,
-        error: new Error('Invalid file type. Only JPG, PNG, and PDF are allowed.')
-      }
+    const response = await fetch('/api/driver-application/upload', {
+      method: 'POST',
+      body: formData
+    })
+
+    const result = await response.json()
+
+    if (!response.ok) {
+      console.error('Error uploading file:', result.error)
+      return { url: null, error: new Error(result.error || 'Failed to upload file') }
     }
 
-    // Validate file size (10MB limit)
-    const maxSize = 10 * 1024 * 1024 // 10MB
-    if (file.size > maxSize) {
-      return {
-        url: null,
-        error: new Error('File size exceeds 10MB limit.')
-      }
-    }
-
-    // Create unique filename
-    const timestamp = Date.now()
-    const extension = file.name.split('.').pop()
-    const filename = `${applicationId}/license_${side}_${timestamp}.${extension}`
-
-    // Upload to Supabase Storage
-    const { data, error } = await supabase.storage
-      .from('driver-applications')
-      .upload(filename, file, {
-        cacheControl: '3600',
-        upsert: false
-      })
-
-    if (error) {
-      console.error('Error uploading file:', error)
-      return { url: null, error: new Error(error.message) }
-    }
-
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('driver-applications')
-      .getPublicUrl(data.path)
-
-    return { url: urlData.publicUrl, error: null }
+    return { url: result.url, error: null }
   } catch (error) {
     console.error('Unexpected error in uploadLicenseImage:', error)
     return {
@@ -363,17 +294,16 @@ export async function deleteDraft(
   applicationId: string
 ): Promise<{ success: boolean; error: Error | null }> {
   try {
-    const supabase = getSupabaseClient()
+    // Use server-side API route to bypass RLS
+    const response = await fetch(`/api/driver-application/draft?id=${applicationId}`, {
+      method: 'DELETE'
+    })
 
-    const { error } = await supabase
-      .from('driver_applications')
-      .delete()
-      .eq('id', applicationId)
-      .eq('status', 'draft') // Only delete if in draft status
+    const result = await response.json()
 
-    if (error) {
-      console.error('Error deleting draft:', error)
-      return { success: false, error: new Error(error.message) }
+    if (!response.ok) {
+      console.error('Error deleting draft:', result.error)
+      return { success: false, error: new Error(result.error || 'Failed to delete draft') }
     }
 
     return { success: true, error: null }

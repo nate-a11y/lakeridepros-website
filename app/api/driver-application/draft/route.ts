@@ -1,0 +1,180 @@
+/**
+ * API Route: Save/Update Driver Application Draft
+ * Uses service role key to bypass RLS
+ */
+
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { applicationId, data } = body
+
+    if (!data) {
+      return NextResponse.json(
+        { error: 'Application data is required' },
+        { status: 400 }
+      )
+    }
+
+    // Create Supabase client with service role key
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+
+    // Ensure status is draft
+    const draftData = {
+      ...data,
+      status: 'draft',
+      updated_at: new Date().toISOString()
+    }
+
+    if (applicationId) {
+      // Update existing draft
+      const { data: updated, error } = await supabase
+        .from('driver_applications')
+        .update(draftData)
+        .eq('id', applicationId)
+        .eq('status', 'draft') // Only update if still in draft status
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Error updating draft:', error)
+        return NextResponse.json(
+          { error: error.message },
+          { status: 500 }
+        )
+      }
+
+      return NextResponse.json({ data: updated })
+    } else {
+      // Create new draft
+      const { data: created, error } = await supabase
+        .from('driver_applications')
+        .insert([draftData])
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Error creating draft:', error)
+        return NextResponse.json(
+          { error: error.message },
+          { status: 500 }
+        )
+      }
+
+      return NextResponse.json({ data: created })
+    }
+  } catch (error) {
+    console.error('Unexpected error in draft API:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const applicationId = searchParams.get('id')
+
+    if (!applicationId) {
+      return NextResponse.json(
+        { error: 'Application ID is required' },
+        { status: 400 }
+      )
+    }
+
+    // Create Supabase client with service role key
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+
+    const { data, error } = await supabase
+      .from('driver_applications')
+      .select('*')
+      .eq('id', applicationId)
+      .single()
+
+    if (error) {
+      console.error('Error fetching application:', error)
+      return NextResponse.json(
+        { error: error.message },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({ data })
+  } catch (error) {
+    console.error('Unexpected error in draft GET API:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const applicationId = searchParams.get('id')
+
+    if (!applicationId) {
+      return NextResponse.json(
+        { error: 'Application ID is required' },
+        { status: 400 }
+      )
+    }
+
+    // Create Supabase client with service role key
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+
+    const { error } = await supabase
+      .from('driver_applications')
+      .delete()
+      .eq('id', applicationId)
+      .eq('status', 'draft') // Only delete if in draft status
+
+    if (error) {
+      console.error('Error deleting draft:', error)
+      return NextResponse.json(
+        { error: error.message },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Unexpected error in draft DELETE API:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}

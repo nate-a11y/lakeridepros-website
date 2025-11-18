@@ -111,8 +111,268 @@ export default function InsiderMembershipBenefitsPage() {
         </div>
       </section>
 
-      {/* Pricing Widget Section */}
+      {/* Membership Tiers Comparison Table */}
       <section className="py-16 bg-section-alt">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-heading text-center mb-12">
+            Compare Membership Tiers
+          </h2>
+          <div className="overflow-x-auto -mx-4 px-4">
+            <table className="w-full min-w-[640px] border-collapse">
+              <thead>
+                <tr>
+                  <th className="bg-lrp-black text-white p-4 text-right font-bold sticky top-0"></th>
+                  <th className="bg-lrp-black text-white p-4 text-center font-bold sticky top-0">
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-lg">Bronze</span>
+                      <div className="w-20 h-20 bg-amber-700 rounded-full flex items-center justify-center">
+                        <span className="text-2xl font-bold">B</span>
+                      </div>
+                    </div>
+                  </th>
+                  <th className="bg-lrp-black text-white p-4 text-center font-bold sticky top-0">
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-lg">Silver</span>
+                      <div className="w-20 h-20 bg-gray-400 rounded-full flex items-center justify-center">
+                        <span className="text-2xl font-bold text-gray-800">S</span>
+                      </div>
+                    </div>
+                  </th>
+                  <th className="bg-lrp-black text-white p-4 text-center font-bold sticky top-0">
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-lg">Gold</span>
+                      <div className="w-20 h-20 bg-yellow-500 rounded-full flex items-center justify-center">
+                        <span className="text-2xl font-bold text-yellow-900">G</span>
+                      </div>
+                    </div>
+                  </th>
+                  <th className="bg-lrp-black text-white p-4 text-center font-bold sticky top-0">
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-lg">Diamond</span>
+                      <div className="w-20 h-20 bg-cyan-300 rounded-full flex items-center justify-center">
+                        <span className="text-2xl font-bold text-cyan-900">D</span>
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">Members-only offers</td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">No Deposits</td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">Waive Lost & Found Fees</td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">LRP Price Protection</td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">Earn LRP Reward Points</td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">Discount on Rides</td>
+                  <td className="bg-lrp-black text-white p-4 text-center font-semibold">0%</td>
+                  <td className="bg-lrp-black text-white p-4 text-center font-semibold text-primary">10%</td>
+                  <td className="bg-lrp-black text-white p-4 text-center font-semibold text-primary">15%</td>
+                  <td className="bg-lrp-black text-white p-4 text-center font-semibold text-primary">20%</td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">Relaxed Cancellation Fees</td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">Beverages Available</td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">VIP Premier Access</td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">One FREE Monthly Ride</td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr className="border-b border-themed">
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">LRP Limited Edition Merch</td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="bg-lrp-black text-white p-4 text-right font-bold">LRP Priority Pass</td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center"></td>
+                  <td className="bg-lrp-black text-white p-4 text-center">
+                    <svg className="w-6 h-6 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Widget Section */}
+      <section className="py-16 bg-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-heading text-center mb-8">
             Choose Your Membership
@@ -135,10 +395,10 @@ export default function InsiderMembershipBenefitsPage() {
               Insider Terms and Conditions
             </Link>
           </p>
-          <p className="text-muted mt-4">
-            Already a member?{' '}
-            <Link href="/insider-login" className="text-primary hover:text-primary-dark underline">
-              Log in to your account
+          <p className="text-body-secondary mt-4">
+            Already a member? To manage your existing Insider Membership -{' '}
+            <Link href="/insider-login" className="text-primary hover:text-primary-dark underline font-semibold">
+              click here
             </Link>
           </p>
         </div>

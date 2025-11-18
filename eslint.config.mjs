@@ -25,7 +25,7 @@ const eslintConfig = [
     rules: {
       // Disable strict rules that are too noisy for this codebase
       "react/no-unescaped-entities": "off",
-      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {

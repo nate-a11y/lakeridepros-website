@@ -366,7 +366,7 @@ async function syncProducts(request: Request) {
         // Smart image handling: check for existing media before downloading
         // This prevents duplicate uploads and saves storage/bandwidth
         let featuredImageId: number | null = null
-        let additionalImages: Array<{ image: number }> = []
+        const additionalImages: Array<{ image: number }> = []
 
         console.log(`[Printify Sync] Processing images for ${printifyProduct.title}`)
 

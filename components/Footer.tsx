@@ -92,6 +92,10 @@ export default async function Footer() {
       { name: 'Local Premier Partners', href: '/local-premier-partners' },
       { name: 'Trusted Referral Partners', href: '/trusted-referral-partners' },
     ],
+    insiders: [
+      { name: 'Membership Benefits', href: '/insider-membership-benefits' },
+      { name: 'Terms & Conditions', href: '/insider-terms-and-conditions' },
+    ],
     company: [
       { name: 'About Us', href: '/about-us' },
       { name: 'Blog', href: '/blog' },
@@ -181,6 +185,21 @@ export default async function Footer() {
             <h3 className="text-white font-bold mb-4 text-lg">Partners</h3>
             <ul className="space-y-2">
               {footerLinks.partners.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            {/* Insiders */}
+            <h3 className="text-white font-bold mb-4 text-lg mt-6">Insiders</h3>
+            <ul className="space-y-2">
+              {footerLinks.insiders.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}

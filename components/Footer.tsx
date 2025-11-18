@@ -4,17 +4,40 @@ import { getServices } from '@/lib/api/payload';
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
 
-  // Fetch services dynamically from CMS
+  // Featured services for footer - hardcoded popular services to keep footer clean
+  const popularServiceSlugs = [
+    'wedding-transportation',
+    'airport-shuttle',
+    'nightlife-transportation',
+    'corporate-transportation',
+    'private-aviation-transportation',
+    'group-shuttle-services',
+  ];
+
+  // Fetch services dynamically from CMS, but only show popular ones
   let dynamicServices: Array<{ name: string; href: string }> = [];
   try {
     const servicesResponse = await getServices({ limit: 100 });
-    dynamicServices = servicesResponse.docs.map((service) => ({
-      name: service.title,
-      href: `/services/${service.slug}`,
-    }));
+    // Filter to only popular services and maintain order
+    dynamicServices = popularServiceSlugs
+      .map(slug => {
+        const service = servicesResponse.docs.find(s => s.slug === slug);
+        return service ? { name: service.title, href: `/services/${service.slug}` } : null;
+      })
+      .filter((s): s is { name: string; href: string } => s !== null);
+
+    // Add "View All Services" link at the end
+    dynamicServices.push({ name: 'View All Services →', href: '/services' });
   } catch (error) {
     console.error('Error fetching services for footer:', error);
-    // Fall back to empty array if fetch fails
+    // Fall back to static list if fetch fails
+    dynamicServices = [
+      { name: 'Wedding Transportation', href: '/services/wedding-transportation' },
+      { name: 'Airport Transfers', href: '/services/airport-shuttle' },
+      { name: 'Nightlife & Party', href: '/services/nightlife-transportation' },
+      { name: 'Corporate Travel', href: '/services/corporate-transportation' },
+      { name: 'View All Services →', href: '/services' },
+    ];
   }
 
   const footerLinks = {

@@ -5,7 +5,7 @@
  * Complies with 49 CFR 391.21 - Document verification
  */
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -28,10 +28,11 @@ interface Step10DocumentsProps {
 
 export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsProps) {
   const { applicationData, updateApplicationData, applicationId } = useApplication()
-  const [frontPreview, setFrontPreview] = useState<string | null>(applicationData.license_front_url || null)
-  const [backPreview, setBackPreview] = useState<string | null>(applicationData.license_back_url || null)
+  const [frontPreview, setFrontPreview] = useState<string | null>(null)
+  const [backPreview, setBackPreview] = useState<string | null>(null)
   const [uploading, setUploading] = useState<{ front: boolean; back: boolean }>({ front: false, back: false })
   const [uploadError, setUploadError] = useState<string | null>(null)
+  const [loadingExisting, setLoadingExisting] = useState(false)
 
   const frontInputRef = useRef<HTMLInputElement>(null)
   const backInputRef = useRef<HTMLInputElement>(null)
@@ -43,6 +44,55 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
       license_back_url: applicationData.license_back_url || ''
     }
   })
+
+  // Load existing images with fresh signed URLs
+  useEffect(() => {
+    const loadExistingImages = async () => {
+      setLoadingExisting(true)
+
+      // Load front image
+      if (applicationData.license_front_url) {
+        try {
+          const response = await fetch('/api/driver-application/get-signed-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filePath: applicationData.license_front_url })
+          })
+
+          if (response.ok) {
+            const { url } = await response.json()
+            setFrontPreview(url)
+            setValue('license_front_url', url)
+          }
+        } catch (error) {
+          console.error('Error loading front image:', error)
+        }
+      }
+
+      // Load back image
+      if (applicationData.license_back_url) {
+        try {
+          const response = await fetch('/api/driver-application/get-signed-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filePath: applicationData.license_back_url })
+          })
+
+          if (response.ok) {
+            const { url } = await response.json()
+            setBackPreview(url)
+            setValue('license_back_url', url)
+          }
+        } catch (error) {
+          console.error('Error loading back image:', error)
+        }
+      }
+
+      setLoadingExisting(false)
+    }
+
+    loadExistingImages()
+  }, [applicationData.license_front_url, applicationData.license_back_url, setValue])
 
   const handleFileUpload = async (file: File, side: 'front' | 'back') => {
     if (!applicationId) {
@@ -137,13 +187,15 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
             <div
               onDrop={(e) => handleDrop(e, 'front')}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
               onClick={() => frontInputRef.current?.click()}
             >
-              {uploading.front ? (
+              {uploading.front || loadingExisting ? (
                 <div className="flex flex-col items-center gap-2">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Uploading...</p>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                  <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
+                    {uploading.front ? 'Uploading...' : 'Loading...'}
+                  </p>
                 </div>
               ) : (
                 <>
@@ -203,13 +255,15 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
             <div
               onDrop={(e) => handleDrop(e, 'back')}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors dark:border-gray-600 rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
               onClick={() => backInputRef.current?.click()}
             >
-              {uploading.back ? (
+              {uploading.back || loadingExisting ? (
                 <div className="flex flex-col items-center gap-2">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">Uploading...</p>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                  <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
+                    {uploading.back ? 'Uploading...' : 'Loading...'}
+                  </p>
                 </div>
               ) : (
                 <>
@@ -260,7 +314,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
         </div>
 
         <div className="bg-primary/10 dark:bg-primary/20 border border-primary/30 dark:border-primary/40 rounded-lg p-4">
-          <p className="text-sm text-blue-900">
+          <p className="text-sm text-neutral-900 dark:text-white">
             <strong>Important:</strong> Ensure your license images are clear and all text is readable.
             Blurry or unreadable images may delay processing of your application.
           </p>

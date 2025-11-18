@@ -67,12 +67,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get public URL
-    const { data: urlData } = supabase.storage
+    // Generate a signed URL for private bucket (expires in 1 year)
+    const { data: signedUrlData, error: urlError } = await supabase.storage
       .from('driver-applications')
-      .getPublicUrl(data.path)
+      .createSignedUrl(data.path, 31536000) // 1 year in seconds
 
-    return NextResponse.json({ url: urlData.publicUrl })
+    if (urlError || !signedUrlData) {
+      console.error('Error generating signed URL:', urlError)
+      return NextResponse.json(
+        { error: 'Failed to generate file URL' },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({ url: signedUrlData.signedUrl })
   } catch (error) {
     console.error('Unexpected error in upload API:', error)
     return NextResponse.json(

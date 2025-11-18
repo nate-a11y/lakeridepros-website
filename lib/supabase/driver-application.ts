@@ -207,13 +207,11 @@ export async function getApplicationById(
  * Submit an application (change status from draft to submitted)
  * @param applicationId - The application ID
  * @param data - Final application data
- * @param auditInfo - IP address and user agent (optional, will be determined server-side)
  * @returns The submitted application
  */
 export async function submitApplication(
   applicationId: string,
-  data: Partial<DriverApplicationData>,
-  auditInfo?: { ip: string; userAgent: string }
+  data: Partial<DriverApplicationData>
 ): Promise<{ data: DriverApplicationData | null; error: Error | null }> {
   try {
     // Use server-side API route to bypass RLS and capture IP/user agent

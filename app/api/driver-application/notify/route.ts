@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendApplicationConfirmation } from '@/lib/notifications/send-application-confirmation'
 import { sendAdminNotification } from '@/lib/notifications/send-admin-notification'
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseServerClient } from '@/lib/supabase/client'
 
 const SMS_FUNCTION_URL = 'https://dhwnlzborisjihhauchp.supabase.co/functions/v1/send-sms'
 
@@ -23,16 +23,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Get full application data from Supabase for notifications
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    )
+    const supabase = getSupabaseServerClient()
 
     const { data: application, error: fetchError } = await supabase
       .from('driver_applications')
       .select('*')
       .eq('id', applicationId)
-      .single()
+      .single() as { data: any; error: any }
 
     if (fetchError || !application) {
       console.error('Error fetching application:', fetchError)

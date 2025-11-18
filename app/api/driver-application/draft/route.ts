@@ -4,7 +4,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseServerClient } from '@/lib/supabase/client'
+import type { DriverApplicationData } from '@/lib/supabase/driver-application'
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,34 +19,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create Supabase client with service role key
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    // Get singleton Supabase client
+    const supabase = getSupabaseServerClient()
 
     // Ensure status is draft
-    const draftData = {
+    const draftData: Partial<DriverApplicationData> = {
       ...data,
-      status: 'draft',
+      status: 'draft' as const,
       updated_at: new Date().toISOString()
     }
 
     if (applicationId) {
       // Update existing draft
-      const { data: updated, error } = await supabase
+      const { data: updated, error } = (await supabase
         .from('driver_applications')
-        .update(draftData)
+        // @ts-ignore - Supabase types not generated
+        .update(draftData as any)
         .eq('id', applicationId)
         .eq('status', 'draft') // Only update if still in draft status
         .select()
-        .single()
+        .single()) as { data: any; error: any }
 
       if (error) {
         console.error('Error updating draft:', error)
@@ -58,11 +51,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ data: updated })
     } else {
       // Create new draft
-      const { data: created, error } = await supabase
+      const { data: created, error } = (await supabase
         .from('driver_applications')
-        .insert([draftData])
+        // @ts-ignore - Supabase types not generated
+        .insert([draftData as any])
         .select()
-        .single()
+        .single()) as { data: any; error: any }
 
       if (error) {
         console.error('Error creating draft:', error)
@@ -95,17 +89,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Create Supabase client with service role key
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    // Get singleton Supabase client
+    const supabase = getSupabaseServerClient()
 
     const { data, error } = await supabase
       .from('driver_applications')
@@ -143,17 +128,8 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    // Create Supabase client with service role key
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    // Get singleton Supabase client
+    const supabase = getSupabaseServerClient()
 
     const { error } = await supabase
       .from('driver_applications')

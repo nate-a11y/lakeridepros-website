@@ -3,12 +3,9 @@
  * Logs all email and SMS notifications to database for compliance and debugging
  */
 
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseServerClient } from '@/lib/supabase/client'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+const getSupabase = () => getSupabaseServerClient()
 
 export type NotificationType = 'email' | 'sms'
 export type NotificationStatus = 'sent' | 'failed' | 'pending' | 'bounced'
@@ -30,12 +27,14 @@ export interface NotificationLogEntry {
  */
 export async function logNotification(entry: NotificationLogEntry): Promise<void> {
   try {
-    const { error } = await supabase
+    const supabase = getSupabase()
+    const { error } = (await supabase
       .from('notification_log')
+      // @ts-ignore - Supabase types not generated
       .insert({
         ...entry,
         sent_at: entry.status === 'sent' ? new Date().toISOString() : null
-      })
+      } as any)) as { error: any }
 
     if (error) {
       console.error('Failed to log notification:', error)
@@ -54,6 +53,7 @@ export async function updateNotificationStatus(
   errorMessage?: string
 ): Promise<void> {
   try {
+    const supabase = getSupabase()
     const updateData: {
       status: NotificationStatus
       sent_at?: string
@@ -68,10 +68,11 @@ export async function updateNotificationStatus(
       updateData.error_message = errorMessage
     }
 
-    const { error } = await supabase
+    const { error } = (await supabase
       .from('notification_log')
-      .update(updateData)
-      .eq('external_id', externalId)
+      // @ts-ignore - Supabase types not generated
+      .update(updateData as any)
+      .eq('external_id', externalId)) as { error: any }
 
     if (error) {
       console.error('Failed to update notification status:', error)
@@ -88,6 +89,7 @@ export async function getNotificationHistory(
   applicationId: string
 ): Promise<NotificationLogEntry[]> {
   try {
+    const supabase = getSupabase()
     const { data, error } = await supabase
       .from('notification_log')
       .select('*')
@@ -115,6 +117,7 @@ export async function wasRecentlySent(
   hoursAgo: number = 24
 ): Promise<boolean> {
   try {
+    const supabase = getSupabase()
     const cutoff = new Date()
     cutoff.setHours(cutoff.getHours() - hoursAgo)
 

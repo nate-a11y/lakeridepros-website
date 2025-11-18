@@ -5,14 +5,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { getSupabaseServerClient } from '@/lib/supabase/client'
 
 export async function POST(request: NextRequest) {
+  const supabase = getSupabaseServerClient()
   try {
     const { applicationId, email } = await request.json()
 
@@ -29,7 +25,7 @@ export async function POST(request: NextRequest) {
       .select('id, status, created_at, submitted_at, first_name, last_name, email')
       .eq('id', applicationId)
       .eq('email', email.toLowerCase())
-      .single()
+      .single() as { data: any; error: any }
 
     if (error || !data) {
       return NextResponse.json(

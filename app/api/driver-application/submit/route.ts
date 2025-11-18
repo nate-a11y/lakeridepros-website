@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseServerClient } from '@/lib/supabase/client'
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,17 +25,8 @@ export async function POST(request: NextRequest) {
                'unknown'
     const userAgent = request.headers.get('user-agent') || 'unknown'
 
-    // Create Supabase client with service role key
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    // Get singleton Supabase client
+    const supabase = getSupabaseServerClient()
 
     const submissionData = {
       ...data,
@@ -47,13 +38,14 @@ export async function POST(request: NextRequest) {
       updated_at: new Date().toISOString()
     }
 
-    const { data: submitted, error } = await supabase
+    const { data: submitted, error } = (await supabase
       .from('driver_applications')
-      .update(submissionData)
+      // @ts-ignore - Supabase types not generated
+      .update(submissionData as any)
       .eq('id', applicationId)
       .eq('status', 'draft') // Only submit if still in draft status
       .select()
-      .single()
+      .single()) as { data: any; error: any }
 
     if (error) {
       console.error('Error submitting application:', error)

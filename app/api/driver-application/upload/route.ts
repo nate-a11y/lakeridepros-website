@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseServerClient } from '@/lib/supabase/client'
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,17 +38,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create Supabase client with service role key
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    // Get singleton Supabase client
+    const supabase = getSupabaseServerClient()
 
     // Create unique filename
     const timestamp = Date.now()

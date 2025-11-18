@@ -88,10 +88,6 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
           ...applicationData,
           certification_signature: signatureData,
           certification_name_printed: data.certification_name_printed
-        },
-        {
-          ip: ipData.ip || 'unknown',
-          userAgent: clientInfo.userAgent
         }
       )
 

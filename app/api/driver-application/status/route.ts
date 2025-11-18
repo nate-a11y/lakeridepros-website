@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       .select('id, status, created_at, submitted_at, first_name, last_name, email')
       .eq('id', applicationId)
       .eq('email', email.toLowerCase())
-      .single()
+      .single() as { data: any; error: any }
 
     if (error || !data) {
       return NextResponse.json(

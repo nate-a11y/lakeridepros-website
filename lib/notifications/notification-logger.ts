@@ -28,12 +28,13 @@ export interface NotificationLogEntry {
 export async function logNotification(entry: NotificationLogEntry): Promise<void> {
   try {
     const supabase = getSupabase()
-    const { error } = await supabase
+    const { error } = (await supabase
       .from('notification_log')
+      // @ts-ignore - Supabase client lacks generated types, data validated by DB schema
       .insert({
         ...entry,
         sent_at: entry.status === 'sent' ? new Date().toISOString() : null
-      })
+      } as any)) as { error: any }
 
     if (error) {
       console.error('Failed to log notification:', error)
@@ -67,10 +68,11 @@ export async function updateNotificationStatus(
       updateData.error_message = errorMessage
     }
 
-    const { error } = await supabase
+    const { error } = (await supabase
       .from('notification_log')
-      .update(updateData)
-      .eq('external_id', externalId)
+      // @ts-ignore - Supabase client lacks generated types, data validated by DB schema
+      .update(updateData as any)
+      .eq('external_id', externalId)) as { error: any }
 
     if (error) {
       console.error('Failed to update notification status:', error)

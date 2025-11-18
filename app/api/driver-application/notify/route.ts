@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       .from('driver_applications')
       .select('*')
       .eq('id', applicationId)
-      .single()
+      .single() as { data: any; error: any }
 
     if (fetchError || !application) {
       console.error('Error fetching application:', fetchError)

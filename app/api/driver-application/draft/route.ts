@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseServerClient } from '@/lib/supabase/client'
+import type { DriverApplicationData } from '@/lib/supabase/driver-application'
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,21 +23,22 @@ export async function POST(request: NextRequest) {
     const supabase = getSupabaseServerClient()
 
     // Ensure status is draft
-    const draftData = {
+    const draftData: Partial<DriverApplicationData> = {
       ...data,
-      status: 'draft',
+      status: 'draft' as const,
       updated_at: new Date().toISOString()
     }
 
     if (applicationId) {
       // Update existing draft
-      const { data: updated, error } = await supabase
+      const { data: updated, error } = (await supabase
         .from('driver_applications')
-        .update(draftData)
+        // @ts-ignore - Supabase client lacks generated types, data validated by DB schema
+        .update(draftData as any)
         .eq('id', applicationId)
         .eq('status', 'draft') // Only update if still in draft status
         .select()
-        .single()
+        .single()) as { data: any; error: any }
 
       if (error) {
         console.error('Error updating draft:', error)
@@ -49,11 +51,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ data: updated })
     } else {
       // Create new draft
-      const { data: created, error } = await supabase
+      const { data: created, error } = (await supabase
         .from('driver_applications')
-        .insert([draftData])
+        // @ts-ignore - Supabase client lacks generated types, data validated by DB schema
+        .insert([draftData as any])
         .select()
-        .single()
+        .single()) as { data: any; error: any }
 
       if (error) {
         console.error('Error creating draft:', error)

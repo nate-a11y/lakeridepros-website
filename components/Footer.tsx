@@ -104,7 +104,7 @@ export default async function Footer() {
   return (
     <footer className="bg-primary-dark dark:bg-dark-bg-primary text-white transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-8">
           {/* Column 1 - Quick Links */}
           <div>
             <h3 className="text-white font-bold mb-4 text-lg">Quick Links</h3>
@@ -224,9 +224,11 @@ export default async function Footer() {
                 </Link>
               </li>
             </ul>
+          </div>
 
-            {/* Legal Links */}
-            <h3 className="text-white font-bold mb-4 text-lg mt-6">Legal</h3>
+          {/* Column 6 - Legal & Contact */}
+          <div>
+            <h3 className="text-white font-bold mb-4 text-lg">Legal</h3>
             <ul className="space-y-2">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
@@ -239,11 +241,9 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
 
-          {/* Column 5 - Contact */}
-          <div>
-            <h3 className="text-white font-bold mb-4 text-lg">Contact</h3>
+            {/* Contact */}
+            <h3 className="text-white font-bold mb-4 text-lg mt-6">Contact</h3>
             <ul className="space-y-2">
               <li>
                 <a

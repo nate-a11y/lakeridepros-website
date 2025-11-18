@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
-import { getServiceBySlugLocal, getServicesLocal, getMediaUrl } from '@/lib/api/payload-local';
+import { getServiceBySlugLocal, getMediaUrl } from '@/lib/api/payload-local';
 import { getRandomTestimonials } from '@/lib/api/payload';
 import BookingWidget from '@/components/BookingWidget';
 import TestimonialsSection from '@/components/TestimonialsSection';

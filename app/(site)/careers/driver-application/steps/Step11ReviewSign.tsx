@@ -5,7 +5,7 @@
  * Final review of all application data and certification signature
  */
 
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -37,6 +37,15 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
+  // Anti-bot protection
+  const [honeypot, setHoneypot] = useState('')
+  const formLoadTime = useRef<number>(0)
+
+  // Track when the form was loaded
+  useEffect(() => {
+    formLoadTime.current = Date.now()
+  }, [])
+
   const { register, handleSubmit, formState: { errors } } = useForm<CertificationFormData>({
     resolver: zodResolver(certificationSchema),
     defaultValues: {
@@ -56,6 +65,19 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
   }
 
   const onSubmit = async (data: CertificationFormData) => {
+    // Anti-bot validation: Check if honeypot field is filled
+    if (honeypot) {
+      setSubmitError('Invalid submission detected.')
+      return
+    }
+
+    // Anti-bot validation: Check if form was submitted too quickly (less than 3 seconds)
+    const timeSinceLoad = Date.now() - formLoadTime.current
+    if (timeSinceLoad < 3000) {
+      setSubmitError('Please take your time to review the application before submitting.')
+      return
+    }
+
     // Validate signature
     if (signatureRef.current?.isEmpty()) {
       setSignatureError('Signature is required to submit application')
@@ -75,13 +97,17 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
       const signatureData = signatureRef.current?.toDataURL()
 
       // Submit application (IP and user agent captured server-side)
+      // Include anti-bot metadata
       const { error } = await submitApplication(
         applicationId,
         {
           ...applicationData,
           certification_signature: signatureData,
-          certification_name_printed: data.certification_name_printed
-        }
+          certification_name_printed: data.certification_name_printed,
+          // Anti-bot fields (will be stripped server-side)
+          _honeypot: honeypot,
+          _timestamp: formLoadTime.current
+        } as any
       )
 
       if (error) {
@@ -331,6 +357,20 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
           <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-4">
             Date: {new Date().toLocaleDateString()}
           </p>
+        </div>
+
+        {/* Honeypot field - hidden from real users but visible to bots */}
+        <div className="hidden" aria-hidden="true">
+          <label htmlFor="company_website">Company Website (leave blank)</label>
+          <input
+            type="text"
+            id="company_website"
+            name="company_website"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+          />
         </div>
 
         <div className="flex justify-between pt-6">

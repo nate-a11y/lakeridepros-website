@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect, useRef } from 'react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -10,19 +10,45 @@ export default function ContactPage() {
     subject: '',
     message: '',
   });
+  const [honeypot, setHoneypot] = useState('');
+  const formLoadTime = useRef<number>(0);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+
+  // Track when the form was loaded
+  useEffect(() => {
+    formLoadTime.current = Date.now();
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setStatus('loading');
     setMessage('');
 
+    // Anti-bot validation: Check if honeypot field is filled
+    if (honeypot) {
+      setStatus('error');
+      setMessage('Invalid submission detected.');
+      return;
+    }
+
+    // Anti-bot validation: Check if form was submitted too quickly (less than 2 seconds)
+    const timeSinceLoad = Date.now() - formLoadTime.current;
+    if (timeSinceLoad < 2000) {
+      setStatus('error');
+      setMessage('Please take your time to fill out the form.');
+      return;
+    }
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          _honeypot: honeypot,
+          _timestamp: formLoadTime.current,
+        }),
       });
 
       const data = await response.json();
@@ -266,6 +292,20 @@ export default function ContactPage() {
                       aria-required="true"
                       rows={6}
                       className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors resize-vertical"
+                    />
+                  </div>
+
+                  {/* Honeypot field - hidden from real users but visible to bots */}
+                  <div className="hidden" aria-hidden="true">
+                    <label htmlFor="website">Website (leave blank)</label>
+                    <input
+                      type="text"
+                      id="website"
+                      name="website"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
                     />
                   </div>
 

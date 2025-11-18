@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import type { Payload } from 'payload'
 import config from '@/src/payload.config'
+import { revalidatePaths } from '@/lib/revalidation'
 
 const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
@@ -505,6 +506,9 @@ async function syncProducts(request: Request) {
             id: existing.docs[0].id,
             data: productData,
             overrideAccess: true,
+            context: {
+              skipRevalidation: true, // Skip individual revalidations during bulk import
+            },
           })
           results.updated++
         } else {
@@ -512,6 +516,9 @@ async function syncProducts(request: Request) {
             collection: 'products',
             data: productData,
             overrideAccess: true,
+            context: {
+              skipRevalidation: true, // Skip individual revalidations during bulk import
+            },
           })
           results.created++
         }
@@ -533,6 +540,15 @@ async function syncProducts(request: Request) {
     if (results.errors.length > 0) {
       console.error(`[Printify Sync] Errors encountered:`)
       results.errors.forEach((err, idx) => console.error(`  ${idx + 1}. ${err}`))
+    }
+
+    // Trigger a single batch revalidation instead of individual revalidations
+    // This prevents the infinite loop from 15 concurrent revalidations
+    if (results.created > 0 || results.updated > 0) {
+      console.log('[Printify Sync] Triggering batch revalidation for /shop and /')
+      revalidatePaths(['/shop', '/']).catch((error) => {
+        console.error('[Printify Sync] Batch revalidation failed:', error)
+      })
     }
 
     // Auto-chain to next batch if there are more products and autoChain is enabled

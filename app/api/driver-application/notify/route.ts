@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     // Calculate years of experience
     let yearsExperience = 0
     if (application?.driving_experience && Array.isArray(application.driving_experience)) {
-      const totalMonths = application.driving_experience.reduce((sum: number, exp: any) => {
+      const totalMonths = application.driving_experience.reduce((sum: number, exp: { date_from: string; date_to?: string }) => {
         const start = new Date(exp.date_from)
         const end = exp.date_to ? new Date(exp.date_to) : new Date()
         const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth())

@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
 import EmploymentTimeline from '../components/EmploymentTimeline'
-import { Plus, Trash2, AlertCircle } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 
 const employmentHistorySchema = z.object({
   employment_history: z.array(z.object({
@@ -41,7 +41,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
   const { applicationData, updateApplicationData } = useApplication()
   const [gaps, setGaps] = useState<Array<{ index: number; months: number }>>([])
 
-  const { register, control, handleSubmit, formState: { errors }, watch } = useForm<EmploymentHistoryFormData>({
+  const { register, control, handleSubmit, watch } = useForm<EmploymentHistoryFormData>({
     resolver: zodResolver(employmentHistorySchema),
     defaultValues: {
       employment_history: applicationData.employment_history && applicationData.employment_history.length > 0

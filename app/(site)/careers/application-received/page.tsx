@@ -5,9 +5,9 @@
  * Displayed after successful submission of driver application
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { CheckCircle2, Download, Mail, Phone } from 'lucide-react'
+import { CheckCircle2, Mail, Phone } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ApplicationReceivedPage() {

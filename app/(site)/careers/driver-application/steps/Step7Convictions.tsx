@@ -37,7 +37,7 @@ interface Step7ConvictionsProps {
 export default function Step7Convictions({ onNext, onPrevious }: Step7ConvictionsProps) {
   const { applicationData, updateApplicationData } = useApplication()
 
-  const { register, control, handleSubmit, formState: { errors }, watch } = useForm<ConvictionsFormData>({
+  const { register, control, handleSubmit, watch } = useForm<ConvictionsFormData>({
     resolver: zodResolver(convictionsSchema),
     defaultValues: {
       has_convictions: (applicationData.traffic_convictions && applicationData.traffic_convictions.length > 0) || false,

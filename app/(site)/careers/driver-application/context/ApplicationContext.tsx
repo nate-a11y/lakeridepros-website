@@ -73,7 +73,7 @@ export function ApplicationProvider({ children }: { children: React.ReactNode })
             console.log('Loading application from resume token')
 
             // Try to load the draft from database
-            const { data, error } = await getApplicationById(decodedToken.applicationId)
+            const { data } = await getApplicationById(decodedToken.applicationId)
 
             if (data && data.status === 'draft' && data.email?.toLowerCase() === decodedToken.email.toLowerCase()) {
               setApplicationId(decodedToken.applicationId)
@@ -94,7 +94,7 @@ export function ApplicationProvider({ children }: { children: React.ReactNode })
         const storedId = localStorage.getItem(STORAGE_KEY)
         if (storedId) {
           // Try to load the draft from database
-          const { data, error } = await getApplicationById(storedId)
+          const { data } = await getApplicationById(storedId)
 
           if (data && data.status === 'draft') {
             setApplicationId(storedId)

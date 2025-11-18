@@ -9,9 +9,10 @@ import React, { useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import Image from 'next/image'
 import { useApplication } from '../context/ApplicationContext'
 import { uploadLicenseImage } from '@/lib/supabase/driver-application'
-import { Upload, X, FileText, Image as ImageIcon } from 'lucide-react'
+import { Upload, X, FileText } from 'lucide-react'
 
 const documentsSchema = z.object({
   license_front_url: z.string().min(1, 'License front image is required'),
@@ -170,7 +171,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
                   {frontPreview.endsWith('.pdf') ? (
                     <FileText className="w-12 h-12 text-red-600" />
                   ) : (
-                    <img src={frontPreview} alt="License front" className="w-24 h-16 object-cover rounded" />
+                    <Image src={frontPreview} alt="License front" width={96} height={64} className="object-cover rounded" unoptimized />
                   )}
                   <div>
                     <p className="font-medium">License Front</p>
@@ -236,7 +237,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
                   {backPreview.endsWith('.pdf') ? (
                     <FileText className="w-12 h-12 text-red-600" />
                   ) : (
-                    <img src={backPreview} alt="License back" className="w-24 h-16 object-cover rounded" />
+                    <Image src={backPreview} alt="License back" width={96} height={64} className="object-cover rounded" unoptimized />
                   )}
                   <div>
                     <p className="font-medium">License Back</p>

@@ -31,6 +31,10 @@ export interface DriverApplicationData {
   phone?: string
   date_of_birth?: string
   ssn_encrypted?: string
+  address_street?: string
+  address_city?: string
+  address_state?: string
+  address_zip?: string
   date_of_application?: string
   position_applied?: string
   date_available?: string

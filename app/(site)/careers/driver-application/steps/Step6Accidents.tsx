@@ -36,7 +36,7 @@ interface Step6AccidentsProps {
 export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsProps) {
   const { applicationData, updateApplicationData } = useApplication()
 
-  const { register, control, handleSubmit, formState: { errors }, watch } = useForm<AccidentsFormData>({
+  const { register, control, handleSubmit, watch } = useForm<AccidentsFormData>({
     resolver: zodResolver(accidentsSchema),
     defaultValues: {
       has_accidents: (applicationData.accidents && applicationData.accidents.length > 0) || false,

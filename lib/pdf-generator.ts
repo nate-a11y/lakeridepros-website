@@ -7,6 +7,13 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { DriverApplicationData } from '@/lib/supabase/driver-application'
 
+// Type for jsPDF with autoTable plugin
+interface jsPDFWithAutoTable extends jsPDF {
+  lastAutoTable: {
+    finalY: number
+  }
+}
+
 export function generateApplicationPDF(data: Partial<DriverApplicationData>): jsPDF {
   const doc = new jsPDF()
   let yPosition = 20
@@ -50,7 +57,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
     columnStyles: { 0: { fontStyle: 'bold', cellWidth: 50 } }
   })
 
-  yPosition = (doc as any).lastAutoTable.finalY + 10
+  yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
 
   // Residence History
   if (data.residences && data.residences.length > 0) {
@@ -79,7 +86,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
       styles: { fontSize: 8 }
     })
 
-    yPosition = (doc as any).lastAutoTable.finalY + 10
+    yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
   }
 
   // Current License
@@ -110,7 +117,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
     columnStyles: { 0: { fontStyle: 'bold', cellWidth: 60 } }
   })
 
-  yPosition = (doc as any).lastAutoTable.finalY + 10
+  yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
 
   // License History
   if (data.licenses && data.licenses.length > 0) {
@@ -141,7 +148,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
       styles: { fontSize: 8 }
     })
 
-    yPosition = (doc as any).lastAutoTable.finalY + 10
+    yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
   }
 
   // Driving Experience
@@ -172,7 +179,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
       styles: { fontSize: 8 }
     })
 
-    yPosition = (doc as any).lastAutoTable.finalY + 10
+    yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
   }
 
   // Accidents
@@ -187,7 +194,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
     doc.text('Accidents (Past 3 Years)', 14, yPosition)
     yPosition += 8
 
-    const accidentData = data.accidents.map((acc, idx) => [
+    const accidentData = data.accidents.map((acc) => [
       acc.date,
       acc.nature.substring(0, 80),
       acc.fatalities.toString(),
@@ -203,7 +210,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
       styles: { fontSize: 8 }
     })
 
-    yPosition = (doc as any).lastAutoTable.finalY + 10
+    yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
   }
 
   // Traffic Convictions
@@ -218,7 +225,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
     doc.text('Traffic Convictions (Past 3 Years)', 14, yPosition)
     yPosition += 8
 
-    const convictionData = data.traffic_convictions.map((conv, idx) => [
+    const convictionData = data.traffic_convictions.map((conv) => [
       conv.date,
       conv.state,
       conv.violation.substring(0, 60),
@@ -233,7 +240,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
       styles: { fontSize: 8 }
     })
 
-    yPosition = (doc as any).lastAutoTable.finalY + 10
+    yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
   }
 
   // Employment History
@@ -262,7 +269,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
       styles: { fontSize: 8 }
     })
 
-    yPosition = (doc as any).lastAutoTable.finalY + 10
+    yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
   }
 
   // Education
@@ -277,7 +284,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
     doc.text('Education', 14, yPosition)
     yPosition += 8
 
-    const eduData = data.education.map((edu, idx) => [
+    const eduData = data.education.map((edu) => [
       edu.school_name.substring(0, 50),
       edu.location,
       edu.course_of_study || 'N/A',
@@ -292,7 +299,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
       styles: { fontSize: 8 }
     })
 
-    yPosition = (doc as any).lastAutoTable.finalY + 10
+    yPosition = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10
   }
 
   // Certification

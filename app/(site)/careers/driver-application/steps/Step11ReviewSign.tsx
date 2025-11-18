@@ -82,7 +82,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
       const ipData = await ipResponse.json()
 
       // Submit application
-      const { data: submittedApp, error } = await submitApplication(
+      const { error } = await submitApplication(
         applicationId,
         {
           ...applicationData,

@@ -21,7 +21,7 @@ export interface NotificationLogEntry {
   subject?: string
   status: NotificationStatus
   error_message?: string
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
   external_id?: string
 }
 
@@ -54,7 +54,11 @@ export async function updateNotificationStatus(
   errorMessage?: string
 ): Promise<void> {
   try {
-    const updateData: any = { status }
+    const updateData: {
+      status: NotificationStatus
+      sent_at?: string
+      error_message?: string
+    } = { status }
 
     if (status === 'sent') {
       updateData.sent_at = new Date().toISOString()

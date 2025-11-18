@@ -23,17 +23,8 @@ export const revalidate = 60; // Revalidate every 60 seconds
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  try {
-    const services = await getServicesLocal();
-    console.log(`[generateStaticParams] Found ${services.length} services`);
-
-    return services.map((service) => ({
-      slug: service.slug,
-    }));
-  } catch (error) {
-    console.error('[generateStaticParams] Error fetching services:', error);
-    return [];
-  }
+  // Return empty array - pages will be generated on-demand with ISR
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

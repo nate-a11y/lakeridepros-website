@@ -38,17 +38,29 @@ WHERE m.mime_type = 'image/png'
   AND m.filename ~ '-[0-9]{10,}\.png$'
 LIMIT 20;
 
--- STEP 4: Temporarily allow NULL for featured_image_id
+-- STEP 4: Temporarily allow NULL for both image columns
 ALTER TABLE products
 ALTER COLUMN featured_image_id DROP NOT NULL;
 
--- STEP 5: Delete Printify PNG files
+ALTER TABLE products_images
+ALTER COLUMN image_id DROP NOT NULL;
+
+-- STEP 5: Delete product image associations that reference Printify PNGs
+-- (This prevents orphaned rows in products_images)
+DELETE FROM products_images
+WHERE image_id IN (
+  SELECT id FROM media
+  WHERE mime_type = 'image/png'
+    AND filename ~ '-[0-9]{10,}\.png$'
+);
+
+-- STEP 6: Delete Printify PNG files
 -- This will cascade and set featured_image_id to NULL for affected products
 DELETE FROM media
 WHERE mime_type = 'image/png'
   AND filename ~ '-[0-9]{10,}\.png$';
 
--- STEP 6: Verify products with NULL featured_image_id
+-- STEP 7: Verify products with NULL featured_image_id
 SELECT
   id,
   title,
@@ -57,10 +69,13 @@ SELECT
 FROM products
 WHERE featured_image_id IS NULL;
 
--- STEP 7: After Printify re-sync completes, restore the NOT NULL constraint
+-- STEP 8: After Printify re-sync completes, restore the NOT NULL constraints
 -- (Only run this AFTER the Printify sync has completed successfully)
 -- ALTER TABLE products
 -- ALTER COLUMN featured_image_id SET NOT NULL;
+--
+-- ALTER TABLE products_images
+-- ALTER COLUMN image_id SET NOT NULL;
 
 -- NOTE: After running STEP 5, immediately run the Printify sync to re-import
 -- all products with WebP images. Once that completes, you can run STEP 7

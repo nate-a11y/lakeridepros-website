@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { getServices } from '@/lib/api/payload';
+import { getPopularServicesLocal } from '@/lib/analytics-server';
 
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
 
-  // Featured services for footer - hardcoded popular services to keep footer clean
-  const popularServiceSlugs = [
+  // Fallback popular services (same as header)
+  const fallbackServiceSlugs = [
     'wedding-transportation',
     'airport-shuttle',
     'nightlife-transportation',
@@ -13,6 +14,22 @@ export default async function Footer() {
     'private-aviation-transportation',
     'group-shuttle-services',
   ];
+
+  // Fetch popular services from analytics (same as header)
+  let popularServiceSlugs: string[] = [];
+  try {
+    const popularServices = await getPopularServicesLocal(6);
+    popularServiceSlugs = popularServices.map(s => s.slug);
+  } catch (error) {
+    console.error('Error fetching popular services for footer:', error);
+    // Use fallback if analytics fails
+    popularServiceSlugs = fallbackServiceSlugs;
+  }
+
+  // If no popular services from analytics, use fallback
+  if (popularServiceSlugs.length === 0) {
+    popularServiceSlugs = fallbackServiceSlugs;
+  }
 
   // Fetch services dynamically from CMS, but only show popular ones
   let dynamicServices: Array<{ name: string; href: string }> = [];

@@ -16,16 +16,8 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-// Use ISR (Incremental Static Regeneration) with short revalidation
-export const revalidate = 60; // Revalidate every 60 seconds
-
-// Enable dynamic params for on-demand page generation
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  // Return empty array - pages will be generated on-demand with ISR
-  return [];
-}
+// Force dynamic rendering to avoid build-time database queries
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

@@ -169,6 +169,27 @@ export default async function Footer() {
               ))}
             </ul>
 
+            {/* Careers */}
+            <h3 className="text-white font-bold mb-4 text-lg mt-6">Careers</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/careers/driver-application"
+                  className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                >
+                  Driver Application
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/careers/application-status"
+                  className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                >
+                  Application Status
+                </Link>
+              </li>
+            </ul>
+
             {/* Legal Links */}
             <h3 className="text-white font-bold mb-4 text-lg mt-6">Legal</h3>
             <ul className="space-y-2">

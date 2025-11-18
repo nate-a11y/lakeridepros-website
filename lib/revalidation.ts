@@ -239,7 +239,10 @@ export async function revalidateTags(
  * ```
  */
 export function createRevalidationHook(collectionName: string) {
-  return async ({ doc, operation }: any) => {
+  return async ({ doc, operation }: {
+    doc: { slug?: string; id: string }
+    operation: 'create' | 'update' | 'delete'
+  }) => {
     // Only revalidate on create and update, not delete
     if (operation === 'create' || operation === 'update') {
       // Extract slug from the document

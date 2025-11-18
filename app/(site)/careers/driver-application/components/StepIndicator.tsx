@@ -39,15 +39,15 @@ export default function StepIndicator({ currentStep, onStepClick }: StepIndicato
       {/* Mobile view - current step only */}
       <div className="md:hidden">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-600">
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
             Step {currentStep} of {steps.length}
           </span>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
             {Math.round((currentStep / steps.length) * 100)}% Complete
           </span>
         </div>
         <div className="text-lg font-semibold">{steps[currentStep - 1].title}</div>
-        <div className="text-sm text-gray-600">{steps[currentStep - 1].description}</div>
+        <div className="text-sm text-gray-600 dark:text-gray-300">{steps[currentStep - 1].description}</div>
       </div>
 
       {/* Desktop view - all steps */}

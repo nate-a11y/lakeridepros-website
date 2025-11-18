@@ -54,14 +54,14 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
   return (
     <div className="max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-2">Driving Experience</h2>
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 dark:text-gray-300 mb-6">
         List your driving experience with different types of equipment (49 CFR 391.21(b)(7)).
         If you have no commercial driving experience, click Continue.
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {fields.map((field, index) => (
-          <div key={field.id} className="border border-gray-300 rounded-lg p-6 bg-white">
+          <div key={field.id} className="border border-gray-300 dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Experience {index + 1}</h3>
               <button
@@ -77,12 +77,12 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Class of Equipment *
                   </label>
                   <select
                     {...register(`driving_experience.${index}.class_of_equipment`)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                   >
                     <option value="">Select class</option>
                     <option value="Tractor and Semi-Trailer">Tractor and Semi-Trailer</option>
@@ -103,14 +103,14 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Type of Equipment *
                   </label>
                   <input
                     {...register(`driving_experience.${index}.type`)}
                     type="text"
                     placeholder="e.g., Van trailer, Flatbed, Tanker"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                   />
                   {errors.driving_experience?.[index]?.type && (
                     <p className="text-red-600 text-sm mt-1">
@@ -122,32 +122,32 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">From Date *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">From Date *</label>
                   <input
                     {...register(`driving_experience.${index}.date_from`)}
                     type="date"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">To Date</label>
                   <input
                     {...register(`driving_experience.${index}.date_to`)}
                     type="date"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
                     Approximate Miles
                   </label>
                   <input
                     {...register(`driving_experience.${index}.miles`, { valueAsNumber: true })}
                     type="number"
                     placeholder="0"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                   />
                 </div>
               </div>
@@ -158,7 +158,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
         <button
           type="button"
           onClick={() => append({ class_of_equipment: '', type: '', date_from: '', date_to: '', miles: 0 })}
-          className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Driving Experience
@@ -168,7 +168,7 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50"
+            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md hover:bg-gray-50 dark:bg-gray-900"
           >
             Previous
           </button>

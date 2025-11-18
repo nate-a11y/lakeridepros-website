@@ -81,8 +81,8 @@ export default function EmploymentTimeline({ employments, requiredYears = 3 }: E
   const actualRequiredYears = hasCMVExperience ? 10 : 3
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Employment Timeline</h3>
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-6">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Employment Timeline</h3>
 
       {/* Coverage Summary */}
       <div className={`rounded-lg p-4 mb-6 ${
@@ -99,10 +99,10 @@ export default function EmploymentTimeline({ employments, requiredYears = 3 }: E
             <AlertCircle className="w-8 h-8 text-yellow-600 flex-shrink-0" />
           )}
           <div className="flex-1">
-            <p className="font-semibold text-gray-900">
+            <p className="font-semibold text-gray-900 dark:text-white">
               Total Coverage: {totalYearsCovered} years, {remainingMonths} months
             </p>
-            <p className="text-sm text-gray-700 mt-1">
+            <p className="text-sm text-gray-700 dark:text-gray-200 mt-1">
               {hasCMVExperience
                 ? `You have CMV experience. Required: 10 years minimum.`
                 : `Required: 3 years minimum.`
@@ -207,12 +207,12 @@ export default function EmploymentTimeline({ employments, requiredYears = 3 }: E
       </div>
 
       {/* Date Range Summary */}
-      <div className="mt-6 pt-4 border-t border-gray-200">
-        <p className="text-sm text-gray-600">
+      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <p className="text-sm text-gray-600 dark:text-gray-300">
           <strong>Earliest Employment:</strong>{' '}
           {new Date(sortedEmployments[sortedEmployments.length - 1].from_date).toLocaleDateString()}
         </p>
-        <p className="text-sm text-gray-600 mt-1">
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
           <strong>Most Recent:</strong>{' '}
           {sortedEmployments[0].to_date
             ? new Date(sortedEmployments[0].to_date).toLocaleDateString()

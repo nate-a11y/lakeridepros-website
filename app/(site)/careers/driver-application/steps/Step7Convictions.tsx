@@ -60,7 +60,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
   return (
     <div className="max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-2">Traffic Convictions</h2>
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 dark:text-gray-300 mb-6">
         List all traffic law violations (excluding parking) in the past 3 years (49 CFR 391.21(b)(6)).
       </p>
 
@@ -71,9 +71,9 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
               {...register('has_convictions')}
               type="checkbox"
               id="has_convictions"
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600 rounded"
             />
-            <label htmlFor="has_convictions" className="ml-2 text-sm text-gray-700">
+            <label htmlFor="has_convictions" className="ml-2 text-sm text-gray-700 dark:text-gray-200">
               I have traffic violations/convictions in the past 3 years (excluding parking)
             </label>
           </div>
@@ -82,7 +82,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
         {hasConvictions && (
           <>
             {fields.map((field, index) => (
-              <div key={field.id} className="border border-gray-300 rounded-lg p-6 bg-white">
+              <div key={field.id} className="border border-gray-300 dark:border-gray-600 rounded-lg p-6 bg-white dark:bg-gray-800">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold">Conviction {index + 1}</h3>
                   <button
@@ -98,19 +98,19 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Date *</label>
                       <input
                         {...register(`traffic_convictions.${index}.date`)}
                         type="date"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">State *</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">State *</label>
                       <select
                         {...register(`traffic_convictions.${index}.state`)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                       >
                         <option value="">Select state</option>
                         {US_STATES.map(state => (
@@ -121,22 +121,22 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Violation *</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Violation *</label>
                     <input
                       {...register(`traffic_convictions.${index}.violation`)}
                       type="text"
                       placeholder="e.g., Speeding, DUI, Reckless driving"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Penalty *</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Penalty *</label>
                     <input
                       {...register(`traffic_convictions.${index}.penalty`)}
                       type="text"
                       placeholder="e.g., Fine, License suspension, Probation"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
                     />
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
             <button
               type="button"
               onClick={() => append({ date: '', violation: '', state: 'MO' as const, penalty: '' })}
-              className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
+              className="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-300 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Add Another Conviction
@@ -155,7 +155,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
         )}
 
         {!hasConvictions && (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             No traffic violations to report
           </div>
         )}
@@ -164,7 +164,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50"
+            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-md hover:bg-gray-50 dark:bg-gray-900"
           >
             Previous
           </button>

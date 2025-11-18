@@ -190,7 +190,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
   return (
     <div className="max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-2">Personal Information</h2>
-      <p className="text-gray-600 mb-6">
+      <p className="text-gray-600 dark:text-gray-300 mb-6">
         Please provide your personal information as it appears on your driver's license.
         All fields marked with * are required by federal regulation 49 CFR 391.21.
       </p>
@@ -199,7 +199,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         {/* Name Fields */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               First Name *
             </label>
             <input
@@ -216,19 +216,19 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="middle_name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="middle_name" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Middle Name
             </label>
             <input
               {...register('middle_name')}
               type="text"
               id="middle_name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400"
             />
           </div>
 
           <div>
-            <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Last Name *
             </label>
             <input
@@ -248,7 +248,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         {/* Date of Birth and SSN */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Date of Birth *
             </label>
             <input
@@ -265,7 +265,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="ssn" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="ssn" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Social Security Number *
             </label>
             <input
@@ -283,7 +283,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
             {errors.ssn && (
               <p className="text-red-600 text-sm mt-1">{errors.ssn.message}</p>
             )}
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Your SSN will be encrypted server-side before storage and is required by federal regulation.
             </p>
           </div>
@@ -292,7 +292,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
         {/* Email and Phone */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Email Address *
             </label>
             <input
@@ -309,7 +309,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Phone Number *
             </label>
             <input
@@ -329,7 +329,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
 
         {/* Address */}
         <div>
-          <label htmlFor="address_street" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="address_street" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
             Street Address *
           </label>
           <input
@@ -347,7 +347,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="address_city" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="address_city" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               City *
             </label>
             <input
@@ -364,7 +364,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="address_state" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="address_state" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               State *
             </label>
             <select
@@ -387,7 +387,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
           </div>
 
           <div>
-            <label htmlFor="address_zip" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="address_zip" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               ZIP Code *
             </label>
             <input
@@ -412,9 +412,9 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               {...register('legal_right_to_work')}
               type="checkbox"
               id="legal_right_to_work"
-              className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400 border-gray-300 dark:border-gray-600 rounded"
             />
-            <label htmlFor="legal_right_to_work" className="ml-3 text-sm text-gray-700">
+            <label htmlFor="legal_right_to_work" className="ml-3 text-sm text-gray-700 dark:text-gray-200">
               I certify that I have the legal right to work in the United States *
             </label>
           </div>

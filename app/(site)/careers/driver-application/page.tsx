@@ -40,7 +40,7 @@ function DriverApplicationForm() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading application...</p>
+          <p className="text-gray-600 dark:text-gray-300">Loading application...</p>
         </div>
       </div>
     )
@@ -76,14 +76,14 @@ function DriverApplicationForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Driver Employment Application
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             Complies with 49 CFR 391.21 Federal Regulations
           </p>
         </div>
@@ -94,25 +94,25 @@ function DriverApplicationForm() {
         </div>
 
         {/* Auto-save Status */}
-        <div className="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-6">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
               {isSaving ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-                  <span className="text-sm text-gray-600">Saving draft...</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Saving draft...</span>
                 </>
               ) : lastSaved ? (
                 <>
-                  <Clock className="w-5 h-5 text-green-600" />
-                  <span className="text-sm text-gray-600">
+                  <Clock className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
                     Last saved: {lastSaved.toLocaleTimeString()}
                   </span>
                 </>
               ) : (
                 <>
-                  <Clock className="w-5 h-5 text-gray-400" />
-                  <span className="text-sm text-gray-600">Auto-save enabled</span>
+                  <Clock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Auto-save enabled</span>
                 </>
               )}
             </div>
@@ -120,7 +120,7 @@ function DriverApplicationForm() {
             <button
               onClick={saveNow}
               disabled={isSaving}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-colors disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
               Save & Continue Later
@@ -128,7 +128,7 @@ function DriverApplicationForm() {
           </div>
 
           {saveError && (
-            <div className="mt-2 text-sm text-red-600">
+            <div className="mt-2 text-sm text-red-600 dark:text-red-400">
               Error saving: {saveError}
             </div>
           )}
@@ -138,19 +138,19 @@ function DriverApplicationForm() {
         <StepIndicator currentStep={currentStep} />
 
         {/* Step Content */}
-        <div className="bg-white border border-gray-200 rounded-lg p-6 sm:p-8 mt-8">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 sm:p-8 mt-8">
           {renderStep()}
         </div>
 
         {/* Footer Info */}
-        <div className="mt-8 text-center text-sm text-gray-500">
+        <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
           <p>
             Your application is automatically saved every 30 seconds.
             You can safely close this page and resume later.
           </p>
           <p className="mt-2">
             Questions? Contact us at{' '}
-            <a href="mailto:owners@lakeridepros.com" className="text-blue-600 hover:text-blue-700">
+            <a href="mailto:owners@lakeridepros.com" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
               owners@lakeridepros.com
             </a>
           </p>
@@ -166,7 +166,7 @@ export default function DriverApplicationPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading application...</p>
+          <p className="text-gray-600 dark:text-gray-300">Loading application...</p>
         </div>
       </div>
     }>

@@ -3,34 +3,27 @@ import { getPopularServicesLocal } from '@/lib/analytics-server';
 import HeaderClient from './HeaderClient';
 
 export default async function Header() {
-  // Skip data fetching during build time (no database available)
-  const isBuildTime = !process.env.POSTGRES_URL || process.env.NEXT_PHASE === 'phase-production-build';
-
   // Fetch all services dynamically from CMS
   let services: Array<{ name: string; slug: string }> = [];
-  if (!isBuildTime) {
-    try {
-      const servicesResponse = await getServices({ limit: 100 });
-      services = servicesResponse.docs.map((service) => ({
-        name: service.title,
-        slug: service.slug,
-      }));
-    } catch (error) {
-      console.error('Error fetching services for header:', error);
-      // Fall back to empty array if fetch fails
-    }
+  try {
+    const servicesResponse = await getServices({ limit: 100 });
+    services = servicesResponse.docs.map((service) => ({
+      name: service.title,
+      slug: service.slug,
+    }));
+  } catch (error) {
+    console.error('Error fetching services for header:', error);
+    // Fall back to empty array if fetch fails
   }
 
-  // Fetch popular services based on analytics - use local version for build-time
+  // Fetch popular services based on analytics
   let popularServiceSlugs: string[] = [];
-  if (!isBuildTime) {
-    try {
-      const popularServices = await getPopularServicesLocal(5);
-      popularServiceSlugs = popularServices.map(s => s.slug);
-    } catch (error) {
-      console.error('Error fetching popular services:', error);
-      // Fall back to empty array - HeaderClient will use fallback logic
-    }
+  try {
+    const popularServices = await getPopularServicesLocal(5);
+    popularServiceSlugs = popularServices.map(s => s.slug);
+  } catch (error) {
+    console.error('Error fetching popular services:', error);
+    // Fall back to empty array - HeaderClient will use fallback logic
   }
 
   return <HeaderClient services={services} popularServiceSlugs={popularServiceSlugs} />;

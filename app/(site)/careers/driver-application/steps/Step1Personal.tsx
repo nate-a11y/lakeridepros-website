@@ -31,7 +31,10 @@ const personalInfoSchema = z.object({
     eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
     return dob <= eighteenYearsAgo
   }, 'Must be at least 18 years old'),
-  ssn: z.string().regex(/^\d{3}-?\d{2}-?\d{4}$/, 'SSN must be in format XXX-XX-XXXX'),
+  ssn: z.string().refine((val) => {
+    // Accept either full SSN format (123-45-6789) or masked format (XXX-XX-1234)
+    return /^\d{3}-?\d{2}-?\d{4}$/.test(val) || /^XXX-XX-\d{4}$/.test(val)
+  }, 'SSN must be in format XXX-XX-XXXX'),
   email: z.string().email('Invalid email address'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   address_street: z.string().min(1, 'Street address is required'),

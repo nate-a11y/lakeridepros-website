@@ -51,23 +51,23 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
+      <header className="bg-gradient-to-r from-primary to-primary-dark text-white py-20" role="banner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">Contact Us</h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Get in touch with our team for bookings, inquiries, or support
           </p>
         </div>
-      </section>
+      </header>
 
       {/* Contact Content */}
-      <section className="py-16">
+      <main className="py-16 bg-neutral-50 dark:bg-dark-bg-primary transition-colors" role="main">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Contact Info */}
-            <div className="lg:col-span-1 space-y-8">
+            <aside className="lg:col-span-1 space-y-8" aria-label="Contact information">
               <div>
-                <h2 className="text-2xl font-bold text-neutral-900 mb-6">
+                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
                   Get In Touch
                 </h2>
                 <div className="space-y-4">
@@ -80,12 +80,13 @@ export default function ContactPage() {
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-neutral-900">Location</p>
+                      <p className="font-semibold text-neutral-900 dark:text-white">Location</p>
                       <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                         Lake of the Ozarks based but Operate Statewide
                       </p>
@@ -101,14 +102,16 @@ export default function ContactPage() {
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-neutral-900">Phone</p>
+                      <p className="font-semibold text-neutral-900 dark:text-white">Phone</p>
                       <a
                         href="tel:5732069499"
-                        className="text-primary hover:text-primary-dark"
+                        className="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                        aria-label="Call us at (573) 206-9499"
                       >
                         (573) 206-9499
                       </a>
@@ -124,14 +127,16 @@ export default function ContactPage() {
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-neutral-900">Email</p>
+                      <p className="font-semibold text-neutral-900 dark:text-white">Email</p>
                       <a
                         href="mailto:contactus@lakeridepros.com"
-                        className="text-primary hover:text-primary-dark"
+                        className="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                        aria-label="Email us at contactus@lakeridepros.com"
                       >
                         contactus@lakeridepros.com
                       </a>
@@ -147,11 +152,12 @@ export default function ContactPage() {
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
+                      aria-hidden="true"
                     >
                       <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-neutral-900">Hours</p>
+                      <p className="font-semibold text-neutral-900 dark:text-white">Hours</p>
                       <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
                         24/7 Service Available
                         <br />
@@ -161,20 +167,20 @@ export default function ContactPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </aside>
 
             {/* Contact Form */}
             <div className="lg:col-span-2">
-              <div className="bg-white shadow-lg rounded-lg p-8">
-                <h2 className="text-2xl font-bold text-neutral-900 mb-6">
+              <div className="bg-white dark:bg-dark-bg-secondary shadow-lg rounded-lg p-8 border border-neutral-200 dark:border-dark-border transition-colors">
+                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
                   Send Us a Message
                 </h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" aria-label="Contact form" noValidate>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-semibold text-neutral-900 mb-2"
+                        className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
                       >
                         Name *
                       </label>
@@ -185,13 +191,14 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 bg-white"
+                        aria-required="true"
+                        className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-semibold text-neutral-900 mb-2"
+                        className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
                       >
                         Email *
                       </label>
@@ -202,7 +209,8 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 bg-white"
+                        aria-required="true"
+                        className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                       />
                     </div>
                   </div>
@@ -211,7 +219,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="phone"
-                        className="block text-sm font-semibold text-neutral-900 mb-2"
+                        className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
                       >
                         Phone
                       </label>
@@ -221,13 +229,13 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 bg-white"
+                        className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="subject"
-                        className="block text-sm font-semibold text-neutral-900 mb-2"
+                        className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
                       >
                         Subject
                       </label>
@@ -237,7 +245,7 @@ export default function ContactPage() {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 bg-white"
+                        className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                       />
                     </div>
                   </div>
@@ -245,7 +253,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="message"
-                      className="block text-sm font-semibold text-neutral-900 mb-2"
+                      className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
                     >
                       Message *
                     </label>
@@ -255,17 +263,20 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={handleChange}
                       required
+                      aria-required="true"
                       rows={6}
-                      className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-neutral-900 bg-white"
+                      className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors resize-vertical"
                     />
                   </div>
 
                   {message && (
                     <div
+                      role="alert"
+                      aria-live="polite"
                       className={`p-4 rounded-lg ${
                         status === 'success'
-                          ? 'bg-green-50 text-green-800'
-                          : 'bg-red-50 text-red-800'
+                          ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800'
+                          : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
                       }`}
                     >
                       {message}
@@ -275,16 +286,44 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    aria-label={status === 'loading' ? 'Sending message' : 'Send message'}
                   >
-                    {status === 'loading' ? 'Sending...' : 'Send Message'}
+                    {status === 'loading' ? (
+                      <span className="flex items-center justify-center">
+                        <svg
+                          className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Sending...
+                      </span>
+                    ) : (
+                      'Send Message'
+                    )}
                   </button>
                 </form>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </main>
     </>
   );
 }

@@ -3,36 +3,22 @@ import type { CollectionConfig } from 'payload'
 export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
-    // Resize the original image to max 1920px (Full HD) for web optimization
-    // This applies to the "original" that gets stored
+    // Resize original to 1024px and convert to WebP
+    // This reduces storage by only keeping one optimized version
     resizeOptions: {
-      width: 1920,
-      height: 1920,
+      width: 1024,
+      height: 1024,
       fit: 'inside', // Maintains aspect ratio, fits within bounds
     },
-    // Configure image sizes for automatic resizing
-    // Just one optimized size for most website use cases
-    imageSizes: [
-      {
-        name: 'optimized',
-        width: 1024,
-        // Height undefined = maintain aspect ratio
-        // Apply WebP conversion to this size
-        formatOptions: {
-          format: 'webp',
-          options: {
-            quality: 80,
-          },
-        },
-      },
-    ],
-    // Configure format options for WebP conversion and optimization (applies to original)
+    // Convert to WebP format with quality optimization
     formatOptions: {
       format: 'webp',
       options: {
         quality: 80, // Good balance between quality and file size
       },
     },
+    // No additional image sizes - just the single optimized original
+    imageSizes: [],
   },
   fields: [
     {

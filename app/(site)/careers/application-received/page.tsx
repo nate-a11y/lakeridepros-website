@@ -61,7 +61,7 @@ export default function ApplicationReceivedPage() {
                 </button>
               </div>
               <p className="text-xs text-blue-700 mt-2">
-                Save this ID for your records. You'll receive a confirmation email shortly.
+                Save this ID for your records. You'll receive a confirmation email and SMS shortly.
               </p>
             </div>
           )}
@@ -77,9 +77,9 @@ export default function ApplicationReceivedPage() {
                   1
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">Email Confirmation</p>
+                  <p className="font-medium text-gray-900">Email & SMS Confirmation</p>
                   <p className="text-sm text-gray-600">
-                    You'll receive a confirmation email with your application details.
+                    You'll receive a confirmation email and text message with your application details.
                   </p>
                 </div>
               </li>
@@ -146,8 +146,14 @@ export default function ApplicationReceivedPage() {
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/"
+              href="/careers/application-status"
               className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Track Application Status
+            </Link>
+            <Link
+              href="/"
+              className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition-colors"
             >
               Return to Home
             </Link>

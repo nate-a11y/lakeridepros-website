@@ -11,6 +11,7 @@ import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
+import EmploymentTimeline from '../components/EmploymentTimeline'
 import { Plus, Trash2, AlertCircle } from 'lucide-react'
 
 const employmentHistorySchema = z.object({
@@ -95,17 +96,9 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
         List all employment for the past 3 years. If you held a CMV driver position, provide 10 years (49 CFR 391.21(b)(9)).
       </p>
 
-      {gaps.length > 0 && (
-        <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mb-6 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="font-semibold text-yellow-800">Employment Gaps Detected</p>
-            <p className="text-sm text-yellow-700 mt-1">
-              We detected {gaps.length} gap(s) greater than 1 month in your employment history.
-              Please provide explanations in the gap explanation fields.
-            </p>
-          </div>
-        </div>
+      {/* Visual Employment Timeline */}
+      {employmentData.length > 0 && employmentData.some(e => e.from_date) && (
+        <EmploymentTimeline employments={employmentData} requiredYears={3} />
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

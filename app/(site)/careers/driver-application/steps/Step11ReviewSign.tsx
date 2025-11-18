@@ -95,14 +95,15 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
         return
       }
 
-      // Send notification email
+      // Send notification email and SMS
       await fetch('/api/driver-application/notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           applicationId: applicationId,
           applicantName: `${applicationData.first_name} ${applicationData.last_name}`,
-          applicantEmail: applicationData.email
+          applicantEmail: applicationData.email,
+          applicantPhone: applicationData.phone
         })
       })
 

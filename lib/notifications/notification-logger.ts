@@ -30,6 +30,7 @@ export async function logNotification(entry: NotificationLogEntry): Promise<void
     const supabase = getSupabase()
     const { error } = (await supabase
       .from('notification_log')
+      // @ts-ignore - Supabase types not generated
       .insert({
         ...entry,
         sent_at: entry.status === 'sent' ? new Date().toISOString() : null
@@ -69,6 +70,7 @@ export async function updateNotificationStatus(
 
     const { error } = (await supabase
       .from('notification_log')
+      // @ts-ignore - Supabase types not generated
       .update(updateData as any)
       .eq('external_id', externalId)) as { error: any }
 

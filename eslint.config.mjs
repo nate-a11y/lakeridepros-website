@@ -35,6 +35,14 @@ const eslintConfig = [
         }
       ],
       "@next/next/no-img-element": "warn",
+      // Allow @ts-ignore with description for Supabase type issues
+      "@typescript-eslint/ban-ts-comment": [
+        "error",
+        {
+          "ts-ignore": "allow-with-description",
+          "minimumDescriptionLength": 10
+        }
+      ],
     },
   },
 ];

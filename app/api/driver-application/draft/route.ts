@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       // Update existing draft
       const { data: updated, error } = (await supabase
         .from('driver_applications')
-        // @ts-ignore - Supabase client lacks generated types, data validated by DB schema
+        // @ts-expect-error - Supabase client lacks generated types, data validated by DB schema
         .update(draftData as any)
         .eq('id', applicationId)
         .eq('status', 'draft') // Only update if still in draft status
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       // Create new draft
       const { data: created, error } = (await supabase
         .from('driver_applications')
-        // @ts-ignore - Supabase client lacks generated types, data validated by DB schema
+        // @ts-expect-error - Supabase client lacks generated types, data validated by DB schema
         .insert([draftData as any])
         .select()
         .single()) as { data: any; error: any }

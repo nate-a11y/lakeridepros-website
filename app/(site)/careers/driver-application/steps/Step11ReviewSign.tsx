@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
-import { submitApplication, getClientInfo } from '@/lib/supabase/driver-application'
+import { submitApplication } from '@/lib/supabase/driver-application'
 import { downloadApplicationPDF } from '@/lib/pdf-generator'
 import SignatureCanvas from 'react-signature-canvas'
 import { CheckCircle2, Download, FileText } from 'lucide-react'
@@ -74,14 +74,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
       // Get signature as base64
       const signatureData = signatureRef.current?.toDataURL()
 
-      // Get client info
-      const clientInfo = getClientInfo()
-
-      // Get IP from API route
-      const ipResponse = await fetch('/api/get-ip')
-      const ipData = await ipResponse.json()
-
-      // Submit application
+      // Submit application (IP and user agent captured server-side)
       const { error } = await submitApplication(
         applicationId,
         {

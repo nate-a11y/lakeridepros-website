@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     const { data: submitted, error } = (await supabase
       .from('driver_applications')
-      // @ts-ignore - Supabase client lacks generated types, data validated by DB schema
+      // @ts-expect-error - Supabase client lacks generated types, data validated by DB schema
       .update(submissionData as any)
       .eq('id', applicationId)
       .eq('status', 'draft') // Only submit if still in draft status

@@ -45,7 +45,7 @@ export function generateApplicationPDF(data: Partial<DriverApplicationData>): js
     ['Email', data.email || 'N/A'],
     ['Phone', data.phone || 'N/A'],
     ['Address', `${data.address_street || ''}, ${data.address_city || ''}, ${data.address_state || ''} ${data.address_zip || ''}`],
-    ['Legal Right to Work', data.legal_right_to_work ? 'Yes' : 'No']
+    ['Legal Right to Work', data.has_legal_right_to_work ? 'Yes' : 'No']
   ]
 
   autoTable(doc, {

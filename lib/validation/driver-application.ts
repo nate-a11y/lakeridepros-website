@@ -28,21 +28,21 @@ const usStates = [
 
 // Step 1: Personal Information
 export const personalInfoSchema = z.object({
-  firstName: z.string().min(1, 'First name is required').max(100),
-  middleName: z.string().max(100).optional(),
-  lastName: z.string().min(1, 'Last name is required').max(100),
-  dateOfBirth: z.string().refine((date) => {
+  first_name: z.string().min(1, 'First name is required').max(100),
+  middle_name: z.string().max(100).optional(),
+  last_name: z.string().min(1, 'Last name is required').max(100),
+  date_of_birth: z.string().refine((date) => {
     const dob = new Date(date)
     return dob <= maxAgeDate
   }, `Must be at least ${minAge} years old`),
   ssn: z.string().regex(ssnRegex, 'SSN must be in format XXX-XX-XXXX'),
   email: z.string().email('Invalid email address'),
   phone: z.string().regex(phoneRegex, 'Invalid phone number').min(10, 'Phone number must be at least 10 digits'),
-  addressStreet: z.string().min(1, 'Street address is required'),
-  addressCity: z.string().min(1, 'City is required'),
-  addressState: z.enum(usStates, { message: 'Invalid state' }),
-  addressZip: z.string().regex(/^\d{5}(-\d{4})?$/, 'ZIP code must be in format XXXXX or XXXXX-XXXX'),
-  hasLegalRightToWork: z.literal(true, { message: 'You must have legal right to work in the US' })
+  address_street: z.string().min(1, 'Street address is required'),
+  address_city: z.string().min(1, 'City is required'),
+  address_state: z.enum(usStates, { message: 'Invalid state' }),
+  address_zip: z.string().regex(/^\d{5}(-\d{4})?$/, 'ZIP code must be in format XXXXX or XXXXX-XXXX'),
+  has_legal_right_to_work: z.literal(true, { message: 'You must have legal right to work in the US' })
 })
 
 // Step 2: Residence History

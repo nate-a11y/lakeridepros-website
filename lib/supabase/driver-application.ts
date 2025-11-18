@@ -38,7 +38,7 @@ export interface DriverApplicationData {
   date_of_application?: string
   position_applied?: string
   date_available?: string
-  legal_right_to_work?: boolean
+  has_legal_right_to_work?: boolean
 
   // Residence History
   residences?: Array<{

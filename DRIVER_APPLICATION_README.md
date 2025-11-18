@@ -34,10 +34,39 @@ A comprehensive multi-step driver employment application form that complies with
 - E-signature capture using canvas
 - Input validation with Zod schemas
 
-✅ **Email Notifications**
+✅ **Email & SMS Notifications**
 - Notification to owners@lakeridepros.com
 - Confirmation email to applicant
+- SMS confirmation via Twilio/Supabase Edge Function
+- Resume from draft email reminders with secure links
 - Uses existing Resend integration
+
+✅ **Application Status Tracking**
+- Dedicated status page at /careers/application-status
+- Secure lookup with Application ID + Email
+- Visual timeline showing progress
+- Real-time status updates (Draft → Submitted → Under Review → Approved/Rejected)
+
+✅ **Visual Employment Timeline**
+- Color-coded employment history bars
+- Automatic gap detection (>1 month)
+- Total coverage calculation (3-10 years)
+- CMV driver indicators
+- Gap warnings with date ranges
+
+✅ **PDF Preview & Download**
+- Generate complete application PDF
+- Download before final submission
+- Professional formatting with tables
+- Multi-page support with auto-pagination
+- Includes all application sections
+
+✅ **Resume from Draft**
+- Secure email links to resume applications
+- 72-hour link expiration
+- Auto-load draft from URL parameter
+- Email validation for security
+- Reminder emails for incomplete applications
 
 ## Technology Stack
 
@@ -50,13 +79,15 @@ A comprehensive multi-step driver employment application form that complies with
 - **Storage**: Supabase Storage
 - **Signatures**: react-signature-canvas
 - **Email**: Resend
+- **SMS**: Twilio via Supabase Edge Function
+- **PDF Generation**: jsPDF + jspdf-autotable
 
 ## Installation
 
 Dependencies are already installed. If you need to reinstall:
 
 ```bash
-npm install react-hook-form zod @hookform/resolvers react-signature-canvas @types/react-signature-canvas
+npm install react-hook-form zod @hookform/resolvers react-signature-canvas @types/react-signature-canvas jspdf jspdf-autotable
 ```
 
 ## Supabase Setup

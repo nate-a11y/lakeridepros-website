@@ -27,7 +27,7 @@ export async function sendAdminNotification(
   data: AdminNotificationData
 ): Promise<{ success: boolean; error?: string }> {
   const templateName = 'admin-notification'
-  const adminEmail = 'nate@lakeridepros.com'
+  const adminEmail = 'owners@lakeridepros.com'
 
   try {
     const applicantName = data.firstName && data.lastName

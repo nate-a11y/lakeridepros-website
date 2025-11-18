@@ -353,7 +353,7 @@ async function syncProducts(request: Request) {
           // Upload new images
           console.log(`[Printify Sync] Uploading ${existingProduct ? 'updated' : 'new'} images for ${printifyProduct.title}`)
 
-          // Download and upload featured image
+          // Download and upload featured image (only the default/first one)
           const defaultImage =
             printifyProduct.images.find((img: PrintifyImage) => img.is_default) || printifyProduct.images[0]
 
@@ -364,14 +364,27 @@ async function syncProducts(request: Request) {
             results.imagesUploaded++
           }
 
-          // Deduplicate images by URL to avoid filename conflicts
-          const seenUrls = new Set([defaultImage?.src])
+          // Deduplicate images:
+          // - Skip the default image (already uploaded as featured)
+          // - Skip any duplicate URLs
+          // - Normalize URLs by removing query parameters for comparison
+          const normalizeUrl = (url: string) => url.split('?')[0].toLowerCase()
+          const seenUrls = new Set(defaultImage ? [normalizeUrl(defaultImage.src)] : [])
+
           const imagesToProcess = printifyProduct.images
             .filter((img: PrintifyImage) => {
-              if (seenUrls.has(img.src)) {
+              // Skip the default image (already used for featured)
+              if (img.is_default) {
                 return false
               }
-              seenUrls.add(img.src)
+
+              // Skip if we've seen this URL (normalized)
+              const normalizedUrl = normalizeUrl(img.src)
+              if (seenUrls.has(normalizedUrl)) {
+                return false
+              }
+
+              seenUrls.add(normalizedUrl)
               return true
             })
             .slice(0, 5)

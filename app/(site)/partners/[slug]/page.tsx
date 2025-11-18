@@ -17,23 +17,8 @@ export const revalidate = 60; // Revalidate every 60 seconds
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  try {
-    const partners = await getPartnersLocal();
-    console.log(`[generateStaticParams] Found ${partners.length} partners`);
-
-    // Filter out partners without slugs and exclude promotions category
-    const partnersWithSlugs = partners.filter(
-      (partner) => partner.slug && partner.category !== 'promotions'
-    );
-    console.log(`[generateStaticParams] ${partnersWithSlugs.length} partners have slugs (excluding promotions)`);
-
-    return partnersWithSlugs.map((partner) => ({
-      slug: partner.slug as string,
-    }));
-  } catch (error) {
-    console.error('[generateStaticParams] Error fetching partners:', error);
-    return [];
-  }
+  // Return empty array - pages will be generated on-demand with ISR
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

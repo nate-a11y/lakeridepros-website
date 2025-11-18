@@ -239,10 +239,19 @@ export async function revalidateTags(
  * ```
  */
 export function createRevalidationHook(collectionName: string) {
-  return async ({ doc, operation }: {
+  return async ({ doc, operation, context }: {
     doc: { slug?: string; id: string }
     operation: 'create' | 'update' | 'delete'
+    context?: { skipRevalidation?: boolean }
   }) => {
+    // Skip revalidation if explicitly disabled (e.g., during bulk imports)
+    if (context?.skipRevalidation) {
+      console.log(
+        `[Revalidation Hook] Skipped for ${collectionName} (bulk operation)`
+      );
+      return doc;
+    }
+
     // Only revalidate on create and update, not delete
     if (operation === 'create' || operation === 'update') {
       // Extract slug from the document

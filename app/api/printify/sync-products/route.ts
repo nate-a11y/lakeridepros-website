@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import type { Payload } from 'payload'
 import config from '@/src/payload.config'
+import { revalidatePaths } from '@/lib/revalidation'
 
 const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
@@ -353,7 +354,7 @@ async function syncProducts(request: Request) {
           // Upload new images
           console.log(`[Printify Sync] Uploading ${existingProduct ? 'updated' : 'new'} images for ${printifyProduct.title}`)
 
-          // Download and upload featured image
+          // Download and upload featured image (only the default/first one)
           const defaultImage =
             printifyProduct.images.find((img: PrintifyImage) => img.is_default) || printifyProduct.images[0]
 
@@ -364,14 +365,27 @@ async function syncProducts(request: Request) {
             results.imagesUploaded++
           }
 
-          // Deduplicate images by URL to avoid filename conflicts
-          const seenUrls = new Set([defaultImage?.src])
+          // Deduplicate images:
+          // - Skip the default image (already uploaded as featured)
+          // - Skip any duplicate URLs
+          // - Normalize URLs by removing query parameters for comparison
+          const normalizeUrl = (url: string) => url.split('?')[0].toLowerCase()
+          const seenUrls = new Set(defaultImage ? [normalizeUrl(defaultImage.src)] : [])
+
           const imagesToProcess = printifyProduct.images
             .filter((img: PrintifyImage) => {
-              if (seenUrls.has(img.src)) {
+              // Skip the default image (already used for featured)
+              if (img.is_default) {
                 return false
               }
-              seenUrls.add(img.src)
+
+              // Skip if we've seen this URL (normalized)
+              const normalizedUrl = normalizeUrl(img.src)
+              if (seenUrls.has(normalizedUrl)) {
+                return false
+              }
+
+              seenUrls.add(normalizedUrl)
               return true
             })
             .slice(0, 5)
@@ -492,6 +506,9 @@ async function syncProducts(request: Request) {
             id: existing.docs[0].id,
             data: productData,
             overrideAccess: true,
+            context: {
+              skipRevalidation: true, // Skip individual revalidations during bulk import
+            },
           })
           results.updated++
         } else {
@@ -499,6 +516,9 @@ async function syncProducts(request: Request) {
             collection: 'products',
             data: productData,
             overrideAccess: true,
+            context: {
+              skipRevalidation: true, // Skip individual revalidations during bulk import
+            },
           })
           results.created++
         }
@@ -520,6 +540,15 @@ async function syncProducts(request: Request) {
     if (results.errors.length > 0) {
       console.error(`[Printify Sync] Errors encountered:`)
       results.errors.forEach((err, idx) => console.error(`  ${idx + 1}. ${err}`))
+    }
+
+    // Trigger a single batch revalidation instead of individual revalidations
+    // This prevents the infinite loop from 15 concurrent revalidations
+    if (results.created > 0 || results.updated > 0) {
+      console.log('[Printify Sync] Triggering batch revalidation for /shop and /')
+      revalidatePaths(['/shop', '/']).catch((error) => {
+        console.error('[Printify Sync] Batch revalidation failed:', error)
+      })
     }
 
     // Auto-chain to next batch if there are more products and autoChain is enabled

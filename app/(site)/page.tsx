@@ -75,8 +75,9 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Fetch data with error handling
-  const [servicesData, vehicles, blogPosts, testimonials, partners, popularServicesData] = await Promise.all([
-    getServices({ limit: 6 }).catch(() => ({ docs: [] })),
+  const [servicesDataLimited, allServicesData, vehicles, blogPosts, testimonials, partners, popularServicesData] = await Promise.all([
+    getServices({ limit: 6 }).catch(() => ({ docs: [] })), // For "Our Services" section
+    getServices({ limit: 100 }).catch(() => ({ docs: [] })), // For filtering popular services (same as header)
     getFeaturedVehicles(3).catch(() => []),
     getLatestBlogPosts(3).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
@@ -84,7 +85,8 @@ export default async function HomePage() {
     getPopularServicesLocal(5).catch(() => []),
   ]);
 
-  const services = servicesData.docs || [];
+  const services = servicesDataLimited.docs || []; // For "Our Services" section display
+  const allServices = allServicesData.docs || []; // For filtering popular services
 
   // Use analytics-based popular services, fallback to hardcoded list (same as header)
   const fallbackServiceSlugs = [
@@ -100,7 +102,8 @@ export default async function HomePage() {
     : fallbackServiceSlugs;
 
   // Filter and sort services by popularity (same logic as header)
-  const popularServices = services
+  // Use allServices to ensure we have all services available for filtering
+  const popularServices = allServices
     .filter(s => popularServiceSlugs.includes(s.slug))
     .sort((a, b) => popularServiceSlugs.indexOf(a.slug) - popularServiceSlugs.indexOf(b.slug))
     .slice(0, 4); // Show top 4 on home page

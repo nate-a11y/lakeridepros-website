@@ -17,6 +17,7 @@ import {
 } from '@/lib/api/payload';
 import { getMediaUrl } from '@/lib/api/payload';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
+import { getPopularServicesLocal } from '@/lib/analytics-server';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
@@ -74,15 +75,35 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Fetch data with error handling
-  const [servicesData, vehicles, blogPosts, testimonials, partners] = await Promise.all([
+  const [servicesData, vehicles, blogPosts, testimonials, partners, popularServicesData] = await Promise.all([
     getServices({ limit: 6 }).catch(() => ({ docs: [] })),
     getFeaturedVehicles(3).catch(() => []),
     getLatestBlogPosts(3).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),
+    getPopularServicesLocal(5).catch(() => []),
   ]);
 
   const services = servicesData.docs || [];
+
+  // Use analytics-based popular services, fallback to hardcoded list (same as header)
+  const fallbackServiceSlugs = [
+    'wedding-transportation',
+    'airport-shuttle',
+    'nightlife-transportation',
+    'corporate-transportation',
+    'private-aviation-transportation',
+  ];
+
+  const popularServiceSlugs = popularServicesData.length > 0
+    ? popularServicesData.map(s => s.slug)
+    : fallbackServiceSlugs;
+
+  // Filter and sort services by popularity (same logic as header)
+  const popularServices = services
+    .filter(s => popularServiceSlugs.includes(s.slug))
+    .sort((a, b) => popularServiceSlugs.indexOf(a.slug) - popularServiceSlugs.indexOf(b.slug))
+    .slice(0, 4); // Show top 4 on home page
 
   return (
     <>
@@ -231,40 +252,34 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Popular Services Section */}
-      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white text-center mb-12">
-            Most Requested Services
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link href="/services/wedding-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
-              <h3 className="font-bold text-lg mb-2 group-hover:text-white">Wedding Transportation</h3>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
-                Stress-free shuttles for your big day
-              </p>
-            </Link>
-            <Link href="/services/airport-shuttle" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
-              <h3 className="font-bold text-lg mb-2 group-hover:text-white">Airport Shuttle</h3>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
-                MCI, STL, SGF airport transfers
-              </p>
-            </Link>
-            <Link href="/services/bachelor-party-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
-              <h3 className="font-bold text-lg mb-2 group-hover:text-white">Party Bus Rental</h3>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
-                Safe nightlife transportation
-              </p>
-            </Link>
-            <Link href="/services/corporate-transportation" className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300">
-              <h3 className="font-bold text-lg mb-2 group-hover:text-white">Corporate Travel</h3>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
-                Executive car service
-              </p>
-            </Link>
+      {/* Most Requested Services Section - Using same logic as header dropdown */}
+      {popularServices.length > 0 && (
+        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white text-center mb-12">
+              Most Requested Services
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {popularServices.map((service) => (
+                <Link
+                  key={service.id}
+                  href={`/services/${service.slug}`}
+                  className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300"
+                >
+                  <h3 className="font-bold text-lg mb-2 group-hover:text-white text-neutral-900 dark:text-white">
+                    {service.title}
+                  </h3>
+                  {service.excerpt && (
+                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
+                      {service.excerpt}
+                    </p>
+                  )}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* How It Works Section */}
       <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">

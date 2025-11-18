@@ -42,7 +42,7 @@ export const personalInfoSchema = z.object({
   address_city: z.string().min(1, 'City is required'),
   address_state: z.enum(usStates, { message: 'Invalid state' }),
   address_zip: z.string().regex(/^\d{5}(-\d{4})?$/, 'ZIP code must be in format XXXXX or XXXXX-XXXX'),
-  has_legal_right_to_work: z.literal(true, { message: 'You must have legal right to work in the US' })
+  legal_right_to_work: z.literal(true, { message: 'You must have legal right to work in the US' })
 })
 
 // Step 2: Residence History

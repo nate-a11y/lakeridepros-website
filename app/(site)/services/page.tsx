@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import ServiceCard from '@/components/ServiceCard';
 import BookingWidget from '@/components/BookingWidget';
-import { getServices } from '@/lib/api/payload';
+import { getServicesLocal } from '@/lib/api/payload-local';
 
 export const metadata: Metadata = {
   title: 'Transportation Services | Lake Ride Pros',
@@ -49,8 +49,7 @@ export const metadata: Metadata = {
 export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function ServicesPage() {
-  const servicesData = await getServices({ limit: 100 }).catch(() => ({ docs: [] }));
-  const services = servicesData.docs || [];
+  const services = await getServicesLocal().catch(() => []);
 
   // Structured data for SEO
   const structuredData = {

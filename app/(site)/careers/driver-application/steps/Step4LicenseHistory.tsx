@@ -46,9 +46,9 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
     resolver: zodResolver(licenseHistorySchema),
     defaultValues: {
       licenses: applicationData.licenses && applicationData.licenses.length > 0
-        ? applicationData.licenses
+        ? applicationData.licenses as LicenseHistoryFormData['licenses']
         : [],
-      certify_one_license: applicationData.certify_one_license ?? true
+      certify_one_license: applicationData.certify_one_license === true ? true : undefined as unknown as true
     }
   })
 
@@ -186,7 +186,7 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
 
         <button
           type="button"
-          onClick={() => append({ state: 'MO', number: '', type_class: '', endorsements: '', expiration_date: '', is_current: false })}
+          onClick={() => append({ state: 'MO' as const, number: '', type_class: '', endorsements: '', expiration_date: '', is_current: false })}
           className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />

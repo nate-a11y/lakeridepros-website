@@ -46,8 +46,8 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
     resolver: zodResolver(residenceSchema),
     defaultValues: {
       residences: applicationData.residences && applicationData.residences.length > 0
-        ? applicationData.residences
-        : [{ street: '', city: '', state: 'MO', zip: '', from_date: '', to_date: '', is_current: true }]
+        ? applicationData.residences as ResidenceFormData['residences']
+        : [{ street: '', city: '', state: 'MO' as const, zip: '', from_date: '', to_date: '', is_current: true }]
     }
   })
 
@@ -178,7 +178,7 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
 
         <button
           type="button"
-          onClick={() => append({ street: '', city: '', state: 'MO', zip: '', from_date: '', to_date: '', is_current: false })}
+          onClick={() => append({ street: '', city: '', state: 'MO' as const, zip: '', from_date: '', to_date: '', is_current: false })}
           className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />

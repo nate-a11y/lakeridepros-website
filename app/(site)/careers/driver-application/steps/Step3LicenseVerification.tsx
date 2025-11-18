@@ -31,9 +31,7 @@ const licenseVerificationSchema = z.object({
   license_revoked_past_3_years: z.boolean(),
   accidents_past_3_years: z.boolean(),
   accidents_explanation: z.string().optional(),
-  authorize_license_record_check: z.literal(true, {
-    errorMap: () => ({ message: 'You must authorize the license record check' })
-  })
+  authorize_license_record_check: z.literal(true, { message: 'You must authorize the license record check' })
 })
 
 type LicenseVerificationFormData = z.infer<typeof licenseVerificationSchema>
@@ -52,13 +50,13 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
     resolver: zodResolver(licenseVerificationSchema),
     defaultValues: {
       current_license_number: applicationData.current_license_number || '',
-      current_license_state: applicationData.current_license_state || 'MO',
+      current_license_state: (applicationData.current_license_state as typeof US_STATES[number]) || 'MO' as const,
       current_license_class: applicationData.current_license_class || '',
       current_license_expiration: applicationData.current_license_expiration || '',
       license_revoked_past_3_years: applicationData.license_revoked_past_3_years || false,
       accidents_past_3_years: applicationData.accidents_past_3_years || false,
       accidents_explanation: applicationData.accidents_explanation || '',
-      authorize_license_record_check: applicationData.authorize_license_record_check || undefined
+      authorize_license_record_check: applicationData.authorize_license_record_check === true ? true : undefined as unknown as true
     }
   })
 

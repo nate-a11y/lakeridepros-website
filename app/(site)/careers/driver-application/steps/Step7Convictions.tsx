@@ -41,7 +41,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
     resolver: zodResolver(convictionsSchema),
     defaultValues: {
       has_convictions: (applicationData.traffic_convictions && applicationData.traffic_convictions.length > 0) || false,
-      traffic_convictions: applicationData.traffic_convictions || []
+      traffic_convictions: (applicationData.traffic_convictions as ConvictionsFormData['traffic_convictions']) || []
     }
   })
 
@@ -145,7 +145,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
 
             <button
               type="button"
-              onClick={() => append({ date: '', violation: '', state: 'MO', penalty: '' })}
+              onClick={() => append({ date: '', violation: '', state: 'MO' as const, penalty: '' })}
               className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-blue-500 hover:text-blue-600 flex items-center justify-center gap-2"
             >
               <Plus className="w-5 h-5" />

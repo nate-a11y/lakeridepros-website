@@ -40,11 +40,9 @@ export const personalInfoSchema = z.object({
   phone: z.string().regex(phoneRegex, 'Invalid phone number').min(10, 'Phone number must be at least 10 digits'),
   addressStreet: z.string().min(1, 'Street address is required'),
   addressCity: z.string().min(1, 'City is required'),
-  addressState: z.enum(usStates, { errorMap: () => ({ message: 'Invalid state' }) }),
+  addressState: z.enum(usStates, { message: 'Invalid state' }),
   addressZip: z.string().regex(/^\d{5}(-\d{4})?$/, 'ZIP code must be in format XXXXX or XXXXX-XXXX'),
-  hasLegalRightToWork: z.literal(true, {
-    errorMap: () => ({ message: 'You must have legal right to work in the US' })
-  })
+  hasLegalRightToWork: z.literal(true, { message: 'You must have legal right to work in the US' })
 })
 
 // Step 2: Residence History
@@ -226,9 +224,7 @@ export const documentsSchema = z.object({
 // Step 11: Review & Sign
 export const certificationSchema = z.object({
   signature: z.string().min(1, 'Signature is required to submit application'),
-  certify: z.literal(true, {
-    errorMap: () => ({ message: 'You must certify that all information is true and correct' })
-  })
+  certify: z.literal(true, { message: 'You must certify that all information is true and correct' })
 })
 
 // Complete application schema

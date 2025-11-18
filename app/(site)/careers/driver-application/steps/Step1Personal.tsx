@@ -36,11 +36,9 @@ const personalInfoSchema = z.object({
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   address_street: z.string().min(1, 'Street address is required'),
   address_city: z.string().min(1, 'City is required'),
-  address_state: z.enum(US_STATES, { errorMap: () => ({ message: 'Invalid state' }) }),
+  address_state: z.enum(US_STATES, { message: 'Invalid state' }),
   address_zip: z.string().regex(/^\d{5}(-\d{4})?$/, 'ZIP code must be in format XXXXX or XXXXX-XXXX'),
-  legal_right_to_work: z.literal(true, {
-    errorMap: () => ({ message: 'You must have legal right to work in the US' })
-  })
+  legal_right_to_work: z.literal(true, { message: 'You must have legal right to work in the US' })
 })
 
 type PersonalInfoFormData = z.infer<typeof personalInfoSchema>
@@ -73,9 +71,9 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
       phone: applicationData.phone || '',
       address_street: applicationData.address_street || '',
       address_city: applicationData.address_city || '',
-      address_state: applicationData.address_state || undefined,
+      address_state: (applicationData.address_state as typeof US_STATES[number]) || undefined,
       address_zip: applicationData.address_zip || '',
-      legal_right_to_work: applicationData.legal_right_to_work || undefined
+      legal_right_to_work: applicationData.legal_right_to_work === true ? true : undefined as unknown as true
     }
   })
 

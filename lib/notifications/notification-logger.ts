@@ -3,12 +3,9 @@
  * Logs all email and SMS notifications to database for compliance and debugging
  */
 
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseServerClient } from '@/lib/supabase/client'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+const getSupabase = () => getSupabaseServerClient()
 
 export type NotificationType = 'email' | 'sms'
 export type NotificationStatus = 'sent' | 'failed' | 'pending' | 'bounced'
@@ -30,6 +27,7 @@ export interface NotificationLogEntry {
  */
 export async function logNotification(entry: NotificationLogEntry): Promise<void> {
   try {
+    const supabase = getSupabase()
     const { error } = await supabase
       .from('notification_log')
       .insert({
@@ -54,6 +52,7 @@ export async function updateNotificationStatus(
   errorMessage?: string
 ): Promise<void> {
   try {
+    const supabase = getSupabase()
     const updateData: {
       status: NotificationStatus
       sent_at?: string
@@ -88,6 +87,7 @@ export async function getNotificationHistory(
   applicationId: string
 ): Promise<NotificationLogEntry[]> {
   try {
+    const supabase = getSupabase()
     const { data, error } = await supabase
       .from('notification_log')
       .select('*')
@@ -115,6 +115,7 @@ export async function wasRecentlySent(
   hoursAgo: number = 24
 ): Promise<boolean> {
   try {
+    const supabase = getSupabase()
     const cutoff = new Date()
     cutoff.setHours(cutoff.getHours() - hoursAgo)
 

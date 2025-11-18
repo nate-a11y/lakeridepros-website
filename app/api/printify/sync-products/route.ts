@@ -557,44 +557,31 @@ async function syncProducts(request: Request) {
       console.log(`[Printify Sync] Auto-chaining to next batch (${allProducts.length - endIndex} products remaining)...`)
       console.log(`[Printify Sync] Next batch URL: ${nextUrl.replace(SYNC_SECRET, '***')}`)
 
-      // Trigger next batch synchronously with retry logic
-      // This ensures the fetch completes before the serverless function terminates
-      let chainSuccess = false
-      const maxRetries = 3
+      // Fire off the next batch with a minimal wait
+      // We only need to ensure the HTTP request is SENT, not that it completes
+      // This prevents cascading waits while ensuring the chain continues
+      try {
+        // Create the fetch promise but don't wait for full completion
+        const chainPromise = fetch(nextUrl, {
+          method: 'GET',
+          headers: {
+            'User-Agent': 'LakeRidePros-AutoChain/1.0',
+          },
+        })
 
-      for (let attempt = 0; attempt < maxRetries; attempt++) {
-        try {
-          // Add a small delay between retries
-          if (attempt > 0) {
-            const backoffMs = Math.min(1000 * Math.pow(2, attempt - 1), 5000)
-            console.log(`[Auto-Chain] Retry ${attempt}/${maxRetries} after ${backoffMs}ms delay...`)
-            await new Promise(resolve => setTimeout(resolve, backoffMs))
-          }
+        // Race between:
+        // 1. The fetch starting (we give it 2 seconds to initiate)
+        // 2. A timeout that lets us return early
+        await Promise.race([
+          chainPromise.then(() => console.log('[Auto-Chain] Next batch triggered successfully')),
+          new Promise(resolve => setTimeout(resolve, 2000)), // Wait max 2 seconds
+        ])
 
-          const response = await fetch(nextUrl, {
-            method: 'GET',
-            headers: {
-              'User-Agent': 'LakeRidePros-AutoChain/1.0',
-            },
-            signal: AbortSignal.timeout(10000), // 10 second timeout per attempt
-          })
-
-          if (response.ok) {
-            console.log(`[Auto-Chain] Successfully triggered next batch (attempt ${attempt + 1}/${maxRetries})`)
-            chainSuccess = true
-            break
-          } else {
-            console.error(`[Auto-Chain] Failed with status ${response.status} (attempt ${attempt + 1}/${maxRetries})`)
-          }
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : String(error)
-          console.error(`[Auto-Chain] Error on attempt ${attempt + 1}/${maxRetries}:`, errorMessage)
-        }
-      }
-
-      if (!chainSuccess) {
-        console.error(`[Auto-Chain] Failed to trigger next batch after ${maxRetries} attempts`)
-        console.error(`[Auto-Chain] Manual intervention needed: ${allProducts.length - endIndex} products remaining`)
+        console.log('[Auto-Chain] Request dispatched, returning to avoid timeout')
+      } catch (error) {
+        // If the request fails to start, log but don't block return
+        console.error('[Auto-Chain] Failed to trigger next batch:', error instanceof Error ? error.message : error)
+        console.error(`[Auto-Chain] Manual intervention may be needed for remaining ${allProducts.length - endIndex} products`)
       }
     }
 

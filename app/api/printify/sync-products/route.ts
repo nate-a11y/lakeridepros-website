@@ -122,6 +122,12 @@ async function downloadImage(url: string): Promise<Buffer> {
 }
 
 function sanitizeFilename(filename: string): string {
+  // If filename already ends with .webp, it's already been processed (slug-based)
+  // Just return it as-is to maintain deterministic naming for duplicate detection
+  if (filename.endsWith('.webp')) {
+    return filename
+  }
+
   // Remove extension first
   const nameWithoutExt = filename.replace(/\.[^/.]+$/, '')
 
@@ -132,13 +138,11 @@ function sanitizeFilename(filename: string): string {
     .replace(/-+/g, '-')
     .replace(/^-+|-+$/g, '')
 
-  // Limit to 50 characters to leave room for timestamps and extension
+  // Limit to 50 characters
   const truncated = sanitized.substring(0, 50).replace(/-+$/, '')
 
-  // Add timestamp to ensure uniqueness
-  const timestamp = Date.now()
-
-  return `${truncated}-${timestamp}.webp`
+  // No timestamp - use deterministic names for duplicate detection
+  return `${truncated}.webp`
 }
 
 async function uploadImageToPayload(payload: Payload, imageBuffer: Buffer, filename: string) {

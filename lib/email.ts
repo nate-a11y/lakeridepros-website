@@ -327,3 +327,167 @@ export async function sendOwnerGiftCardNotification(
     return false
   }
 }
+
+export async function sendContactNotification(
+  name: string,
+  email: string,
+  message: string,
+  phone?: string,
+  subject?: string
+) {
+  try {
+    const resend = getResend()
+    const { data, error } = await resend.emails.send({
+      from: 'Lake Ride Pros <hello@updates.lakeridepros.com>',
+      replyTo: email,
+      to: 'contactus@lakeridepros.com',
+      subject: `📧 New Contact Form Message${subject ? `: ${subject}` : ''}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #4cbb17; color: white; padding: 30px; text-align: center; }
+            .content { padding: 30px 20px; }
+            .section { background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .label { font-weight: bold; color: #4cbb17; }
+            .message-box { background-color: white; padding: 20px; border-left: 4px solid #4cbb17; margin: 20px 0; }
+            .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>📧 New Contact Form Message</h1>
+            </div>
+
+            <div class="content">
+              <div class="section">
+                <h3 class="label">Contact Information</h3>
+                <p>
+                  <strong>Name:</strong> ${name}<br>
+                  <strong>Email:</strong> <a href="mailto:${email}">${email}</a><br>
+                  ${phone ? `<strong>Phone:</strong> ${phone}<br>` : ''}
+                  ${subject ? `<strong>Subject:</strong> ${subject}` : ''}
+                </p>
+              </div>
+
+              <div class="section">
+                <h3 class="label">Message</h3>
+                <div class="message-box">
+                  ${message.replace(/\n/g, '<br>')}
+                </div>
+              </div>
+
+              <p style="color: #666; font-size: 14px; margin-top: 30px;">
+                To respond to this message, simply reply to this email. The reply-to address is set to ${email}.
+              </p>
+            </div>
+
+            <div class="footer">
+              <p>Lake Ride Pros LLC - Contact Form Notification</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+    })
+
+    if (error) {
+      console.error('Contact notification email error:', error)
+      return false
+    }
+
+    console.log('Contact notification email sent:', data)
+    return true
+
+  } catch (error) {
+    console.error('Contact notification error:', error)
+    return false
+  }
+}
+
+export async function sendContactConfirmation(
+  name: string,
+  email: string
+) {
+  try {
+    const resend = getResend()
+    const { data, error } = await resend.emails.send({
+      from: 'Lake Ride Pros <hello@updates.lakeridepros.com>',
+      replyTo: 'contactus@lakeridepros.com',
+      to: email,
+      subject: 'We received your message - Lake Ride Pros',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #4cbb17; color: white; padding: 30px; text-align: center; }
+            .content { padding: 30px 20px; }
+            .info-box { background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; }
+            .button { display: inline-block; background-color: #4cbb17; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Thank You for Contacting Us!</h1>
+            </div>
+
+            <div class="content">
+              <p>Hi ${name},</p>
+
+              <p>We've received your message and appreciate you reaching out to Lake Ride Pros. Our team will review your inquiry and get back to you as soon as possible, typically within 1-2 business days.</p>
+
+              <div class="info-box">
+                <h3>In the meantime:</h3>
+                <ul>
+                  <li>Check out our services at <a href="https://www.lakeridepros.com/services">lakeridepros.com/services</a></li>
+                  <li>Browse our shop for Lake of the Ozarks merchandise</li>
+                  <li>Learn more about becoming a partner driver</li>
+                </ul>
+              </div>
+
+              <p>If you need immediate assistance, you can also reach us at:</p>
+              <p>
+                <strong>Phone:</strong> (573) 206-9499<br>
+                <strong>Email:</strong> <a href="mailto:contactus@lakeridepros.com">contactus@lakeridepros.com</a>
+              </p>
+
+              <center>
+                <a href="https://www.lakeridepros.com" class="button">
+                  Visit Our Website
+                </a>
+              </center>
+            </div>
+
+            <div class="footer">
+              <p>Lake Ride Pros LLC<br>
+              Lake of the Ozarks, Missouri<br>
+              <a href="https://www.lakeridepros.com">www.lakeridepros.com</a></p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `,
+    })
+
+    if (error) {
+      console.error('Contact confirmation email error:', error)
+      return false
+    }
+
+    console.log('Contact confirmation email sent:', data)
+    return true
+
+  } catch (error) {
+    console.error('Contact confirmation error:', error)
+    return false
+  }
+}

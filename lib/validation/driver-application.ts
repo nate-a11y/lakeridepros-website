@@ -5,10 +5,8 @@
 
 import { z } from 'zod'
 
-// Helper to validate date is at least 18 years ago
+// Minimum age requirement
 const minAge = 18
-const maxAgeDate = new Date()
-maxAgeDate.setFullYear(maxAgeDate.getFullYear() - minAge)
 
 // Helper to validate phone numbers
 const phoneRegex = /^[\d\s\-\(\)]+$/
@@ -33,6 +31,9 @@ export const personalInfoSchema = z.object({
   last_name: z.string().min(1, 'Last name is required').max(100),
   date_of_birth: z.string().refine((date) => {
     const dob = new Date(date)
+    const today = new Date()
+    // Calculate age based on current date
+    const maxAgeDate = new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate())
     return dob <= maxAgeDate
   }, `Must be at least ${minAge} years old`),
   ssn: z.string().regex(ssnRegex, 'SSN must be in format XXX-XX-XXXX'),

@@ -87,13 +87,22 @@
   --link-hover: #3a8e11;
   --link-visited: #3a8e11;
 
+  /* Brand color alpha variants for borders, backgrounds, shadows */
+  --primary-alpha-5: rgba(76, 187, 23, 0.05);
+  --primary-alpha-8: rgba(76, 187, 23, 0.08);
+  --primary-alpha-10: rgba(76, 187, 23, 0.1);
+  --primary-alpha-12: rgba(76, 187, 23, 0.12);
+  --primary-alpha-20: rgba(76, 187, 23, 0.2);
+  --primary-alpha-30: rgba(76, 187, 23, 0.3);
+  --primary-alpha-40: rgba(76, 187, 23, 0.4);
+
   /* Shadow colors */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-brand: 0 4px 14px 0 rgba(76, 187, 23, 0.3);
+  --shadow-brand: 0 4px 14px 0 var(--primary-alpha-30);
 
   /* Transition defaults */
   --transition-fast: 150ms;
@@ -135,6 +144,10 @@
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
   --color-primary-light: var(--primary-light);
+  --color-primary-alpha-5: var(--primary-alpha-5);
+  --color-primary-alpha-10: var(--primary-alpha-10);
+  --color-primary-alpha-20: var(--primary-alpha-20);
+  --color-primary-alpha-30: var(--primary-alpha-30);
   --color-secondary: var(--secondary);
   --color-secondary-dark: var(--secondary-dark);
   --color-secondary-light: var(--secondary-light);
@@ -441,19 +454,41 @@ body:has([data-main-app]) {
 
   .shop-card-hover:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(76, 187, 23, 0.2);
-    border-color: rgba(76, 187, 23, 0.3);
+    box-shadow: 0 12px 24px var(--primary-alpha-20);
+    border-color: var(--primary-alpha-30);
   }
 
   .skeleton-shimmer {
     background: linear-gradient(
       90deg,
-      rgba(76, 187, 23, 0.05) 0%,
+      var(--primary-alpha-5) 0%,
       rgba(76, 187, 23, 0.15) 50%,
-      rgba(76, 187, 23, 0.05) 100%
+      var(--primary-alpha-5) 100%
     );
     background-size: 1000px 100%;
     animation: shimmer 2s infinite;
+  }
+
+  /* Diagonal stripe pattern for premium backgrounds */
+  .pattern-diagonal-stripes {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 35px,
+      rgba(255, 255, 255, 0.1) 35px,
+      rgba(255, 255, 255, 0.1) 70px
+    );
+  }
+
+  /* Green diagonal stripe pattern */
+  .pattern-diagonal-green {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      var(--primary-alpha-10) 10px,
+      var(--primary-alpha-10) 20px
+    );
   }
 
   .stagger-fade-in {

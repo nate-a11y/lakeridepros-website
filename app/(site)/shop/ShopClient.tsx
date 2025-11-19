@@ -104,9 +104,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
         </div>
 
         {/* Diagonal stripe pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px)'
-        }}></div>
+        <div className="absolute inset-0 opacity-5 pattern-diagonal-stripes"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -360,9 +358,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
                 <span className="text-sm text-neutral-500 font-medium tracking-wide">No Image</span>
               </div>
               {/* Subtle pattern overlay */}
-              <div className="absolute inset-0 opacity-5" style={{
-                backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(76,187,23,0.1) 10px, rgba(76,187,23,0.1) 20px)'
-              }}></div>
+              <div className="absolute inset-0 opacity-5 pattern-diagonal-green"></div>
             </div>
           )}
 
@@ -383,15 +379,24 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
 
           {/* Premium Quick View Overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center backdrop-blur-0 group-hover:backdrop-blur-sm">
-            <button
+            <span
+              role="button"
+              tabIndex={0}
               onClick={(e) => {
                 e.preventDefault()
                 onQuickView()
               }}
-              className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-lrp-green text-white px-6 py-3 rounded-xl font-bold shadow-xl hover:bg-lrp-green-dark hover:scale-105 transform"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onQuickView()
+                }
+              }}
+              aria-label={`Quick view ${product.name}`}
+              className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-lrp-green text-white px-6 py-3 rounded-xl font-bold shadow-xl hover:bg-lrp-green-dark hover:scale-105 transform cursor-pointer"
             >
               Quick View
-            </button>
+            </span>
           </div>
         </div>
 
@@ -422,9 +427,9 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
           </div>
 
           {/* Premium View Details Button */}
-          <button className="w-full bg-lrp-green hover:bg-lrp-green-dark text-white py-3 rounded-xl font-bold transition-all hover:scale-[1.02] hover:shadow-[0_4px_16px_rgba(76,187,23,0.4)] text-sm">
-            View Details
-          </button>
+          <span className="block w-full bg-lrp-green group-hover:bg-lrp-green-dark text-white py-3 rounded-xl font-bold transition-all group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(76,187,23,0.4)] text-sm text-center">
+            View Details →
+          </span>
 
           {/* Available Sizes - Premium Style */}
           {product.variants && product.variants.length > 0 && (

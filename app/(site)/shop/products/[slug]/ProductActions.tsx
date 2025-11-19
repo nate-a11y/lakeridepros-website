@@ -102,6 +102,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
+                  aria-label={`View image ${index + 1} of ${product.images?.length || 1}`}
+                  aria-pressed={selectedImage === index}
                   className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                     selectedImage === index
                       ? 'border-lrp-green'
@@ -174,6 +176,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
                     key={size}
                     onClick={() => inStock && setSelectedVariant(variant)}
                     disabled={!inStock}
+                    aria-label={`Select size ${size.toUpperCase()}${!inStock ? ', out of stock' : ''}`}
+                    aria-pressed={isSelected}
                     className={`py-3 px-4 rounded-lg border-2 font-semibold transition-all ${
                       isSelected
                         ? 'border-lrp-green bg-lrp-green text-white'
@@ -204,6 +208,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
                     key={variant.sku || index}
                     onClick={() => inStock && setSelectedVariant(variant)}
                     disabled={!inStock}
+                    aria-label={`Select option ${variant.name}${variant.price && variant.price !== product.price ? `, $${variant.price.toFixed(2)}` : ''}${!inStock ? ', out of stock' : ''}`}
+                    aria-pressed={isSelected}
                     className={`py-3 px-4 rounded-lg border-2 font-semibold transition-all text-left ${
                       isSelected
                         ? 'border-lrp-green bg-lrp-green text-white'
@@ -241,6 +247,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
                   <button
                     key={color}
                     onClick={() => setSelectedVariant(variant)}
+                    aria-label={`Select color ${color}`}
+                    aria-pressed={isSelected}
                     className={`py-2 px-6 rounded-lg border-2 font-semibold transition-all ${
                       isSelected
                         ? 'border-lrp-green bg-lrp-green text-white'
@@ -263,15 +271,18 @@ export default function ProductActions({ product }: ProductActionsProps) {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl dark:text-white"
+              aria-label="Decrease quantity"
+              disabled={quantity <= 1}
+              className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               −
             </button>
-            <span className="text-2xl font-bold w-16 text-center dark:text-white">
+            <span className="text-2xl font-bold w-16 text-center dark:text-white" aria-live="polite">
               {quantity}
             </span>
             <button
               onClick={() => setQuantity(quantity + 1)}
+              aria-label="Increase quantity"
               className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl dark:text-white"
             >
               +

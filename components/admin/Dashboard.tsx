@@ -4,6 +4,12 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import './dashboard.css'
 
+// Brand colors - using CSS variable values for consistency
+const BRAND_COLORS = {
+  primary: 'var(--primary)',      // #4cbb17
+  light: 'var(--primary-light)',  // #60e421
+} as const
+
 interface CollectionStats {
   slug: string
   name: string
@@ -13,17 +19,17 @@ interface CollectionStats {
 }
 
 const collections = [
-  { name: 'Services', icon: '🚗', slug: 'services', color: '#4cbb17' },
-  { name: 'Vehicles', icon: '🚙', slug: 'vehicles', color: '#60e421' },
-  { name: 'Partners', icon: '🤝', slug: 'partners', color: '#4cbb17' },
-  { name: 'Testimonials', icon: '⭐', slug: 'testimonials', color: '#60e421' },
-  { name: 'Products', icon: '🛍️', slug: 'products', color: '#4cbb17' },
-  { name: 'Gift Cards', icon: '🎁', slug: 'gift-cards', color: '#60e421' },
-  { name: 'Orders', icon: '📦', slug: 'orders', color: '#4cbb17' },
-  { name: 'Blog Posts', icon: '📝', slug: 'blog-posts', color: '#60e421' },
-  { name: 'Pages', icon: '📄', slug: 'pages', color: '#4cbb17' },
-  { name: 'Media', icon: '🖼️', slug: 'media', color: '#60e421' },
-  { name: 'Users', icon: '👥', slug: 'users', color: '#4cbb17' },
+  { name: 'Services', icon: '🚗', slug: 'services', color: BRAND_COLORS.primary },
+  { name: 'Vehicles', icon: '🚙', slug: 'vehicles', color: BRAND_COLORS.light },
+  { name: 'Partners', icon: '🤝', slug: 'partners', color: BRAND_COLORS.primary },
+  { name: 'Testimonials', icon: '⭐', slug: 'testimonials', color: BRAND_COLORS.light },
+  { name: 'Products', icon: '🛍️', slug: 'products', color: BRAND_COLORS.primary },
+  { name: 'Gift Cards', icon: '🎁', slug: 'gift-cards', color: BRAND_COLORS.light },
+  { name: 'Orders', icon: '📦', slug: 'orders', color: BRAND_COLORS.primary },
+  { name: 'Blog Posts', icon: '📝', slug: 'blog-posts', color: BRAND_COLORS.light },
+  { name: 'Pages', icon: '📄', slug: 'pages', color: BRAND_COLORS.primary },
+  { name: 'Media', icon: '🖼️', slug: 'media', color: BRAND_COLORS.light },
+  { name: 'Users', icon: '👥', slug: 'users', color: BRAND_COLORS.primary },
 ]
 
 interface SyncStatus {

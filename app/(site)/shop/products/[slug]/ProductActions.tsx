@@ -162,10 +162,10 @@ export default function ProductActions({ product }: ProductActionsProps) {
         {/* Variant Selection - Show size selector OR general variant selector */}
         {sizes.length > 0 ? (
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+            <label htmlFor="product-size-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
               Select Size:
             </label>
-            <div className="grid grid-cols-4 gap-3">
+            <div id="product-size-selection" className="grid grid-cols-4 gap-3" role="group" aria-label="Size options">
               {sizes.map((size: string) => {
                 const variant = product.variants?.find((v: ProductVariant) => v.size === size)
                 const isSelected = selectedVariant?.size === size
@@ -195,10 +195,10 @@ export default function ProductActions({ product }: ProductActionsProps) {
           </div>
         ) : product.variants && product.variants.length > 1 ? (
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+            <label htmlFor="product-option-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
               Select Option:
             </label>
-            <div className="flex flex-col gap-2">
+            <div id="product-option-selection" className="flex flex-col gap-2" role="group" aria-label="Product options">
               {product.variants?.map((variant: ProductVariant, index: number) => {
                 const isSelected = selectedVariant?.sku === variant.sku
                 const inStock = variant.inStock
@@ -235,10 +235,10 @@ export default function ProductActions({ product }: ProductActionsProps) {
         {/* Color Selection */}
         {colors.length > 1 && (
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+            <label htmlFor="product-color-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
               Select Color:
             </label>
-            <div className="flex gap-3">
+            <div id="product-color-selection" className="flex gap-3" role="group" aria-label="Color options">
               {colors.map((color: string) => {
                 const variant = product.variants?.find((v: ProductVariant) => v.color === color)
                 const isSelected = selectedVariant?.color === color
@@ -265,10 +265,10 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
         {/* Quantity */}
         <div className="mb-8">
-          <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+          <label htmlFor="product-quantity" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
             Quantity:
           </label>
-          <div className="flex items-center gap-4">
+          <div id="product-quantity" className="flex items-center gap-4" role="group" aria-label="Quantity selector">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               aria-label="Decrease quantity"

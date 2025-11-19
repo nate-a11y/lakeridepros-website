@@ -59,7 +59,6 @@ export function PhoneModal() {
         aria-labelledby="phone-modal-title"
         aria-describedby="phone-modal-description"
         className="relative w-full max-w-sm bg-white dark:bg-dark-bg-secondary rounded-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 bg-primary">

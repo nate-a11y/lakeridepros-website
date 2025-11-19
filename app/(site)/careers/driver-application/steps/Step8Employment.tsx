@@ -121,22 +121,24 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`employment-name-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Employer Name *
                   </label>
                   <input
                     {...register(`employment_history.${index}.name`)}
+                    id={`employment-name-${index}`}
                     type="text"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`employment-phone-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Phone Number *
                   </label>
                   <input
                     {...register(`employment_history.${index}.phone`)}
+                    id={`employment-phone-${index}`}
                     type="tel"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
@@ -144,11 +146,12 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                <label htmlFor={`employment-address-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                   Address *
                 </label>
                 <input
                   {...register(`employment_history.${index}.address`)}
+                  id={`employment-address-${index}`}
                   type="text"
                   className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                 />
@@ -156,22 +159,24 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`employment-position-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Position Held *
                   </label>
                   <input
                     {...register(`employment_history.${index}.position`)}
+                    id={`employment-position-${index}`}
                     type="text"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`employment-salary-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Salary/Rate
                   </label>
                   <input
                     {...register(`employment_history.${index}.salary`)}
+                    id={`employment-salary-${index}`}
                     type="text"
                     placeholder="e.g., $50,000/year or $25/hour"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
@@ -181,18 +186,20 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">From Date *</label>
+                  <label htmlFor={`employment-from-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">From Date *</label>
                   <input
                     {...register(`employment_history.${index}.from_date`)}
+                    id={`employment-from-date-${index}`}
                     type="date"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">To Date</label>
+                  <label htmlFor={`employment-to-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">To Date</label>
                   <input
                     {...register(`employment_history.${index}.to_date`)}
+                    id={`employment-to-date-${index}`}
                     type="date"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
@@ -201,11 +208,12 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                <label htmlFor={`employment-reason-leaving-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                   Reason for Leaving
                 </label>
                 <input
                   {...register(`employment_history.${index}.reason_leaving`)}
+                  id={`employment-reason-leaving-${index}`}
                   type="text"
                   className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                 />

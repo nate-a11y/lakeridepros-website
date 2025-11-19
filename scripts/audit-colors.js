@@ -58,7 +58,8 @@ const SKIP_PATHS = [
 ];
 
 // Allowed patterns (e.g., in comments or definitions)
-const ALLOWED_CONTEXTS = [
+// Note: These patterns are available for future use in more sophisticated context checking
+const _ALLOWED_CONTEXTS = [
   /--primary:\s*#4cbb17/,
   /--primary-light:\s*#60e421/,
   /--primary-dark:\s*#3a8e11/,

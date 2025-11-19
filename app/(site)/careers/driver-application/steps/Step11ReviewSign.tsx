@@ -312,11 +312,12 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
           )}
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
+            <label htmlFor="certification-name" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
               Print Full Name *
             </label>
             <input
               {...register('certification_name_printed')}
+              id="certification-name"
               type="text"
               className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
             />
@@ -326,10 +327,10 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
+            <label htmlFor="certification-signature" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
               Signature *
             </label>
-            <div className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
+            <div id="certification-signature" className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
               <SignatureCanvas
                 ref={signatureRef}
                 canvasProps={{

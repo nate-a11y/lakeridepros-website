@@ -87,11 +87,12 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                <label htmlFor={`residence-street-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                   Street Address *
                 </label>
                 <input
                   {...register(`residences.${index}.street`)}
+                  id={`residence-street-${index}`}
                   type="text"
                   className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md focus:ring-2 focus:ring-primary focus:ring-primary"
                 />
@@ -102,9 +103,10 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">City *</label>
+                  <label htmlFor={`residence-city-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">City *</label>
                   <input
                     {...register(`residences.${index}.city`)}
+                    id={`residence-city-${index}`}
                     type="text"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
@@ -114,9 +116,10 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
+                  <label htmlFor={`residence-state-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
                   <select
                     {...register(`residences.${index}.state`)}
+                    id={`residence-state-${index}`}
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   >
                     {US_STATES.map(state => (
@@ -126,9 +129,10 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">ZIP *</label>
+                  <label htmlFor={`residence-zip-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">ZIP *</label>
                   <input
                     {...register(`residences.${index}.zip`)}
+                    id={`residence-zip-${index}`}
                     type="text"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
@@ -140,20 +144,22 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">From Date *</label>
+                  <label htmlFor={`residence-from-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">From Date *</label>
                   <input
                     {...register(`residences.${index}.from_date`)}
+                    id={`residence-from-date-${index}`}
                     type="date"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`residence-to-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     To Date {watch(`residences.${index}.is_current`) ? '(Current)' : '*'}
                   </label>
                   <input
                     {...register(`residences.${index}.to_date`)}
+                    id={`residence-to-date-${index}`}
                     type="date"
                     disabled={watch(`residences.${index}.is_current`)}
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors rounded-md disabled:bg-neutral-100 dark:disabled:bg-dark-bg-tertiary"

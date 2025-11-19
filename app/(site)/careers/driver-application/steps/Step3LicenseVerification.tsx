@@ -102,11 +102,12 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+            <label htmlFor="license-number" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               License Number *
             </label>
             <input
               {...register('current_license_number')}
+              id="license-number"
               type="text"
               className={`w-full px-3 py-2 border rounded-md ${
                 errors.current_license_number ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
@@ -118,11 +119,12 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+            <label htmlFor="license-state" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               State *
             </label>
             <select
               {...register('current_license_state')}
+              id="license-state"
               className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
             >
               {US_STATES.map(state => (
@@ -134,11 +136,12 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+            <label htmlFor="license-class" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               License Class *
             </label>
             <input
               {...register('current_license_class')}
+              id="license-class"
               type="text"
               placeholder="e.g., Class A, Class B, CDL"
               className={`w-full px-3 py-2 border rounded-md ${
@@ -151,11 +154,12 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+            <label htmlFor="license-expiration" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
               Expiration Date *
             </label>
             <input
               {...register('current_license_expiration')}
+              id="license-expiration"
               type="date"
               className={`w-full px-3 py-2 border rounded-md ${
                 errors.current_license_expiration ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
@@ -199,11 +203,12 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
 
           {hasAccidents && (
             <div>
-              <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+              <label htmlFor="accidents-explanation" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                 Please explain:
               </label>
               <textarea
                 {...register('accidents_explanation')}
+                id="accidents-explanation"
                 rows={3}
                 className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                 placeholder="Provide details about the accident(s)"
@@ -239,10 +244,10 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
 
           {/* Signature Canvas */}
           <div>
-            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
+            <label htmlFor="license-verification-signature" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
               Signature *
             </label>
-            <div className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
+            <div id="license-verification-signature" className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
               <SignatureCanvas
                 ref={signatureRef}
                 canvasProps={{

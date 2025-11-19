@@ -70,13 +70,19 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] animate-in fade-in duration-200"
         onClick={onClose}
+        onKeyDown={(e) => e.key === 'Escape' && onClose()}
+        role="button"
+        tabIndex={0}
+        aria-label="Close modal"
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 pointer-events-none">
         <div
           className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto animate-in zoom-in-95 duration-200"
-          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="quickview-modal-title"
         >
           {/* Close Button */}
           <button
@@ -156,7 +162,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
             {/* Product Info */}
             <div className="flex flex-col">
-              <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-3">
+              <h2 id="quickview-modal-title" className="text-3xl font-bold text-neutral-900 dark:text-white mb-3">
                 {typeof product.name === 'string' ? product.name : 'Product'}
               </h2>
 
@@ -193,10 +199,10 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               {/* Size Selection */}
               {sizes.length > 0 && (
                 <div className="mb-6">
-                  <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+                  <label htmlFor="quickview-size-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
                     Select Size:
                   </label>
-                  <div className="flex flex-wrap gap-2">
+                  <div id="quickview-size-selection" className="flex flex-wrap gap-2" role="group" aria-label="Size options">
                     {sizes.map((size: string) => {
                       const variant = product.variants?.find((v) => v.size === size)
                       const isSelected = selectedVariant?.size === size
@@ -226,10 +232,10 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
               {/* Quantity */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+                <label htmlFor="quickview-quantity" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
                   Quantity:
                 </label>
-                <div className="flex items-center gap-3">
+                <div id="quickview-quantity" className="flex items-center gap-3" role="group" aria-label="Quantity selector">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     className="w-10 h-10 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:border-lrp-green flex items-center justify-center font-bold transition-colors"

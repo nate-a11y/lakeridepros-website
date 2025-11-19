@@ -111,9 +111,10 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
+                  <label htmlFor={`license-state-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
                   <select
                     {...register(`licenses.${index}.state`)}
+                    id={`license-state-${index}`}
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   >
                     {US_STATES.map(state => (
@@ -123,9 +124,10 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">License Number *</label>
+                  <label htmlFor={`license-number-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">License Number *</label>
                   <input
                     {...register(`licenses.${index}.number`)}
+                    id={`license-number-${index}`}
                     type="text"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
@@ -137,9 +139,10 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Class/Type *</label>
+                  <label htmlFor={`license-class-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Class/Type *</label>
                   <input
                     {...register(`licenses.${index}.type_class`)}
+                    id={`license-class-${index}`}
                     type="text"
                     placeholder="e.g., Class A CDL"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
@@ -150,9 +153,10 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Expiration Date *</label>
+                  <label htmlFor={`license-expiration-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Expiration Date *</label>
                   <input
                     {...register(`licenses.${index}.expiration_date`)}
+                    id={`license-expiration-${index}`}
                     type="date"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
@@ -160,9 +164,10 @@ export default function Step4LicenseHistory({ onNext, onPrevious }: Step4License
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Endorsements</label>
+                <label htmlFor={`license-endorsements-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Endorsements</label>
                 <input
                   {...register(`licenses.${index}.endorsements`)}
+                  id={`license-endorsements-${index}`}
                   type="text"
                   placeholder="e.g., H (Hazmat), N (Tank), P (Passenger)"
                   className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"

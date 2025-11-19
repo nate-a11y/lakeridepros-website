@@ -1,9 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import type { Service } from '@/src/payload-types';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { TrendingUp, ChevronRight } from 'lucide-react';
+import { BookingModal } from './BookingModal';
 
 interface PopularServicesRankingProps {
   services: Service[];
@@ -16,15 +18,18 @@ export default function PopularServicesRanking({
   title = 'Most Requested Services',
   subtitle = 'See what our customers book most often',
 }: PopularServicesRankingProps) {
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+
   if (services.length === 0) {
     return null;
   }
 
   return (
-    <section
-      aria-labelledby="popular-services-heading"
-      className="py-16 bg-white dark:bg-dark-bg-primary transition-colors"
-    >
+    <>
+      <section
+        aria-labelledby="popular-services-heading"
+        className="py-16 bg-white dark:bg-dark-bg-primary transition-colors"
+      >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light px-4 py-2 rounded-full text-sm font-medium mb-4">
@@ -85,9 +90,16 @@ export default function PopularServicesRanking({
                       From ${service.pricing.basePrice}
                     </span>
                   ) : (
-                    <span className="text-sm text-neutral-500 dark:text-neutral-400">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsBookingOpen(true);
+                      }}
+                      className="text-sm text-primary dark:text-primary-light font-semibold hover:underline focus:outline-none focus:underline"
+                    >
                       Get Quote
-                    </span>
+                    </button>
                   )}
                   <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-primary dark:group-hover:text-primary-light group-hover:translate-x-1 transition-all" />
                 </div>
@@ -105,6 +117,12 @@ export default function PopularServicesRanking({
           ))}
         </div>
       </div>
-    </section>
+      </section>
+
+      <BookingModal
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+      />
+    </>
   );
 }

@@ -113,69 +113,99 @@ async function compressImage(file: File): Promise<File> {
 /**
  * Provider component that adds automatic image compression to all file inputs
  * in the Payload admin panel.
+ *
+ * Uses input event interception to compress images before Payload processes them.
  */
 export function ImageCompressor() {
   useEffect(() => {
-    // Track which inputs we've already processed to prevent infinite loops
-    const processingInputs = new WeakSet<HTMLInputElement>()
+    // Store original files before compression
+    const pendingCompressions = new Map<HTMLInputElement, Promise<void>>()
 
-    // Override the native file input to compress images before upload
-    const handleChange = async (event: Event) => {
+    // Intercept file selection and compress before Payload sees it
+    const handleInputChange = async (event: Event) => {
       const input = event.target as HTMLInputElement
 
-      // Only handle file inputs with files
+      // Only handle file inputs with image files
       if (input.type !== 'file' || !input.files?.length) {
         return
       }
 
-      // Skip if we're already processing this input (prevents infinite loop)
-      if (processingInputs.has(input)) {
-        processingInputs.delete(input)
+      // Skip if already compressing this input
+      if (pendingCompressions.has(input)) {
         return
       }
 
-      // Check if this is an image upload
       const files = Array.from(input.files)
-      const hasLargeImages = files.some(f => f.type.startsWith('image/') && f.size > 2 * 1024 * 1024)
+      const hasLargeImages = files.some(
+        f => f.type.startsWith('image/') && f.size > 2 * 1024 * 1024
+      )
 
-      // Only process if there are large images to compress
+      // Only compress if there are large images
       if (!hasLargeImages) {
         return
       }
 
-      // Mark this input as being processed
-      processingInputs.add(input)
+      // Create compression promise
+      const compressionTask = (async () => {
+        try {
+          // Compress all image files
+          const compressedFiles = await Promise.all(
+            files.map(async (file) => {
+              if (file.type.startsWith('image/')) {
+                return compressImage(file)
+              }
+              return file
+            })
+          )
 
-      // Prevent the default change event from propagating
-      event.stopImmediatePropagation()
+          // Create new FileList with compressed files
+          const dataTransfer = new DataTransfer()
+          compressedFiles.forEach(file => dataTransfer.items.add(file))
 
-      // Compress all image files
-      const compressedFiles = await Promise.all(
-        files.map(async (file) => {
-          if (file.type.startsWith('image/')) {
-            return compressImage(file)
-          }
-          return file
-        })
-      )
+          // Replace input files with compressed versions
+          // This modifies the files that Payload will read when it processes the upload
+          Object.defineProperty(input, 'files', {
+            value: dataTransfer.files,
+            writable: true,
+            configurable: true,
+          })
+        } finally {
+          pendingCompressions.delete(input)
+        }
+      })()
 
-      // Create a new FileList-like object with compressed files
-      const dataTransfer = new DataTransfer()
-      compressedFiles.forEach(file => dataTransfer.items.add(file))
-
-      // Replace the input's files with compressed versions
-      input.files = dataTransfer.files
-
-      // Dispatch a new change event with the compressed files
-      const newEvent = new Event('change', { bubbles: true })
-      input.dispatchEvent(newEvent)
+      pendingCompressions.set(input, compressionTask)
     }
 
-    // Add listener to capture file input changes
-    document.addEventListener('change', handleChange, true)
+    // Intercept form submissions to ensure compression completes first
+    const handleSubmit = async (event: Event) => {
+      const form = event.target as HTMLFormElement
+      const fileInputs = form.querySelectorAll('input[type="file"]')
+
+      // Wait for any pending compressions on this form's inputs
+      const pendingTasks: Promise<void>[] = []
+      fileInputs.forEach(input => {
+        const task = pendingCompressions.get(input as HTMLInputElement)
+        if (task) {
+          pendingTasks.push(task)
+        }
+      })
+
+      if (pendingTasks.length > 0) {
+        event.preventDefault()
+        await Promise.all(pendingTasks)
+        // Re-submit after compression completes
+        form.requestSubmit()
+      }
+    }
+
+    // Listen for file input changes (capture phase to run before Payload)
+    document.addEventListener('change', handleInputChange, true)
+    document.addEventListener('submit', handleSubmit, true)
 
     return () => {
-      document.removeEventListener('change', handleChange, true)
+      document.removeEventListener('change', handleInputChange, true)
+      document.removeEventListener('submit', handleSubmit, true)
     }
   }, [])
 

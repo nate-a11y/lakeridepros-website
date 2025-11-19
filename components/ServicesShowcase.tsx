@@ -52,9 +52,10 @@ export default function ServicesShowcase({
             <div
               key={service.id}
               className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+              style={{ width: '100%' }}
             >
               {/* Image */}
-              <Link href={`/services/${service.slug}`} className="block">
+              <Link href={`/services/${service.slug}`} className="block" style={{ display: 'block', width: '100%' }}>
                 <div style={{ display: 'block', position: 'relative', height: '12rem', width: '100%', overflow: 'hidden' }}>
                   {service.image && typeof service.image === 'object' && (
                     <Image

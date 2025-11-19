@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Search, CreditCard, DollarSign, Calendar, AlertCircle } from 'lucide-react'
+import { PhoneLink } from '@/components/PhoneLink'
 
 interface GiftCardData {
   code: string
@@ -293,9 +294,9 @@ export default function GiftCardBalancePage() {
                   contactus@lakeridepros.com
                 </a>{' '}
                 or call{' '}
-                <a href="tel:5732069499" className="text-lrp-green hover:underline">
+                <PhoneLink className="text-lrp-green hover:underline">
                   (573) 206-9499
-                </a>{' '}
+                </PhoneLink>{' '}
                 with your purchase details and we'll help you retrieve your code.
               </p>
             </details>

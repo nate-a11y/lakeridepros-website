@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
   title: 'Book Your Ride | Lake Ride Pros',
@@ -47,13 +48,11 @@ export default function BookPage() {
             Our team is available 24/7 to assist with your transportation needs
           </p>
           <nav aria-label="Contact options" className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:5732069499"
+            <PhoneLink
               className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
-              aria-label="Call Lake Ride Pros at 573-206-9499"
             >
-              <span aria-hidden="true">📞</span> (573) 206-9499
-            </a>
+              (573) 206-9499
+            </PhoneLink>
             <a
               href="mailto:contactus@lakeridepros.com"
               className="bg-white dark:bg-dark-bg-tertiary border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"

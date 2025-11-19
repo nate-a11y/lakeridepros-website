@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { MapPin, Phone, CheckCircle, Star, ArrowRight, Plane, Clock, Shield } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
+import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
   title: 'Lake of the Ozarks Airport Transportation | Grand Glaize Airport Shuttle | Lake Ride Pros',
@@ -529,13 +530,10 @@ export default function LakeOzarksAirportTransportationPage() {
               >
                 Book Now
               </Link>
-              <a
-                href="tel:5732069499"
-                className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
-              >
+              <PhoneLink className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all">
                 <Phone className="w-5 h-5" />
                 (573) 206-9499
-              </a>
+              </PhoneLink>
             </div>
           </div>
         </section>

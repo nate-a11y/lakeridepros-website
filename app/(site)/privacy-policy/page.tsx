@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Lake Ride Pros',
@@ -232,9 +233,9 @@ export default function PrivacyPolicyPage() {
                 contactus@lakeridepros.com
               </a>
               {' '}or{' '}
-              <a href="tel:5732069499" className="text-lrp-green hover:text-lrp-green-light">
+              <PhoneLink className="text-lrp-green hover:text-lrp-green-light">
                 (573) 206-9499
-              </a>
+              </PhoneLink>
               .
             </p>
           </section>
@@ -363,9 +364,9 @@ export default function PrivacyPolicyPage() {
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               Phone:{' '}
-              <a href="tel:5732069499" className="text-lrp-green hover:text-lrp-green-light">
+              <PhoneLink className="text-lrp-green hover:text-lrp-green-light">
                 (573) 206-9499
-              </a>
+              </PhoneLink>
             </p>
           </div>
         </div>

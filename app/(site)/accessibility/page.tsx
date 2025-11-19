@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
   title: 'Accessibility Statement | Lake Ride Pros',
@@ -98,13 +99,11 @@ export default function AccessibilityPage() {
               </li>
               <li>
                 <strong className="text-lrp-black dark:text-white">Phone:</strong>{' '}
-                <a
-                  href="tel:5732069499"
+                <PhoneLink
                   className="text-primary hover:text-primary-dark underline"
-                  aria-label="Call Lake Ride Pros at 573-206-9499"
                 >
                   (573) 206-9499
-                </a>
+                </PhoneLink>
               </li>
               <li>
                 <strong className="text-lrp-black dark:text-white">Contact Form:</strong>{' '}

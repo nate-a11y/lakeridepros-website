@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DollarSign, Phone, CheckCircle, Info, Clock, Users, MapPin } from 'lucide-react'
 import Link from 'next/link'
+import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
   title: 'Pricing & Rates | Lake of the Ozarks Transportation | Lake Ride Pros',
@@ -442,9 +443,9 @@ export default function PricingPage() {
                     <span className="text-gray-700 dark:text-lrp-gray text-sm">Full weekend packages</span>
                   </li>
                 </ul>
-                <a href="tel:5732069499" className="block w-full text-center bg-lrp-green hover:bg-lrp-green/90 text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                <PhoneLink className="block w-full text-center bg-lrp-green hover:bg-lrp-green/90 text-white px-6 py-3 rounded-lg font-semibold transition-all">
                   Call for Quote
-                </a>
+                </PhoneLink>
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
@@ -656,13 +657,12 @@ export default function PricingPage() {
               >
                 Get Instant Quote
               </Link>
-              <a
-                href="tel:5732069499"
+              <PhoneLink
                 className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
               >
                 <Phone className="w-5 h-5" />
                 (573) 206-9499
-              </a>
+              </PhoneLink>
             </div>
           </div>
         </section>

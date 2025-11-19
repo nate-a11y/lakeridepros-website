@@ -9,6 +9,10 @@ import FeaturedBlogSection from '@/components/FeaturedBlogSection';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import PopularServicesRanking from '@/components/PopularServicesRanking';
+import HowItWorks from '@/components/HowItWorks';
+import WhyChooseUs from '@/components/WhyChooseUs';
+import ServiceAreasMap from '@/components/ServiceAreasMap';
+import FAQAccordion from '@/components/FAQAccordion';
 import {
   getServices,
   getFeaturedVehicles,
@@ -235,264 +239,16 @@ export default async function HomePage() {
       <PopularServicesRanking services={popularServices} />
 
       {/* How It Works Section */}
-      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white text-center mb-4">
-            How Lake Ride Pros Works
-          </h2>
-          <p className="text-center text-lrp-text-secondary dark:text-dark-text-secondary mb-12 max-w-2xl mx-auto">
-            Book professional transportation in four simple steps
-          </p>
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                1
-              </div>
-              <h3 className="font-bold text-lg mb-2 text-neutral-900 dark:text-white">Book Online or Call</h3>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
-                Reserve in 60 seconds online or call (573) 206-9499 for custom quotes
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                2
-              </div>
-              <h3 className="font-bold text-lg mb-2 text-neutral-900 dark:text-white">We Confirm & Prepare</h3>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
-                Receive instant confirmation. Your vehicle is detailed and driver assigned.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                3
-              </div>
-              <h3 className="font-bold text-lg mb-2 text-neutral-900 dark:text-white">Driver Arrives Early</h3>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
-                Your driver shows up 15 minutes early—professional, courteous, ready.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                4
-              </div>
-              <h3 className="font-bold text-lg mb-2 text-neutral-900 dark:text-white">Sit Back & Relax</h3>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
-                Enjoy luxury transportation while we handle everything else.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HowItWorks />
 
       {/* Why Choose Lake Ride Pros Section */}
-      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white text-center mb-4">
-            Why Lake Ride Pros?
-          </h2>
-          <p className="text-center text-lrp-text-secondary dark:text-dark-text-secondary mb-12 max-w-2xl mx-auto">
-            We're not Uber. We're not a national chain. We're Lake Ozarks locals who've built our reputation one ride at a time.
-          </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-8 rounded-lg transition-colors">
-              <h3 className="font-bold text-xl mb-3 text-neutral-900 dark:text-white">We Don't Cancel</h3>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                Booked a ride? Your vehicle is reserved. No driver no-shows. No last-minute cancellations. We show up or we don't charge.
-              </p>
-            </div>
-            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-8 rounded-lg transition-colors">
-              <h3 className="font-bold text-xl mb-3 text-neutral-900 dark:text-white">We Know The Lake</h3>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                Our drivers live here. They know which marinas flood in spring, which venues have tight turnarounds, and which shortcuts save 15 minutes.
-              </p>
-            </div>
-            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-8 rounded-lg transition-colors">
-              <h3 className="font-bold text-xl mb-3 text-neutral-900 dark:text-white">We're Actually Licensed</h3>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                Full commercial insurance. DOT-compliant drivers. Background checks. Not your buddy with a van—a real transportation company.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <WhyChooseUs />
 
       {/* Service Areas Section */}
-      <section aria-labelledby="service-areas" className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 id="service-areas" className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-              Serving Lake of the Ozarks and All of Missouri
-            </h2>
-            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
-              Based at <strong>Lake of the Ozarks</strong>, we provide luxury transportation throughout{' '}
-              <strong>Missouri</strong>, specializing in premium service for the area's top destinations.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-6 rounded-lg transition-colors">
-              <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
-                Osage Beach
-              </h3>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                Tan-Tar-A Resort, Margaritaville, Bagnell Dam Strip, lakefront venues
-              </p>
-            </div>
-
-            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-6 rounded-lg transition-colors">
-              <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
-                Camdenton
-              </h3>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                Old Kinderhook, local wineries, wedding venues, special events
-              </p>
-            </div>
-
-            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-6 rounded-lg transition-colors">
-              <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
-                Lake Ozark
-              </h3>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                Lodge of Four Seasons, lakefront properties, event venues
-              </p>
-            </div>
-
-            <div className="bg-neutral-50 dark:bg-dark-bg-secondary p-6 rounded-lg transition-colors">
-              <h3 className="text-xl font-bold text-primary dark:text-primary-light mb-3">
-                Statewide Service
-              </h3>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                Columbia, Jefferson City, Kansas City, St. Louis, and beyond
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ServiceAreasMap />
 
       {/* FAQ Section */}
-      <section aria-labelledby="faq-heading" className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 id="faq-heading" className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">
-              Everything you need to know about our luxury transportation services
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                What areas does Lake Ride Pros serve?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                Lake Ride Pros provides luxury transportation throughout Missouri with a focus on Lake of the Ozarks,
-                including Osage Beach, Camdenton, Lake Ozark, and surrounding areas. We also service Columbia,
-                Jefferson City, Kansas City, St. Louis, and other Missouri destinations.
-              </p>
-            </details>
-
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                How far in advance should I book?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                For weddings and major events, we recommend booking 2-4 weeks in advance to ensure vehicle availability.
-                However, we often accommodate last-minute bookings based on our fleet availability. Contact us for
-                same-day or next-day service.
-              </p>
-            </details>
-
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                What types of vehicles are available?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                We offer luxury limo buses (14 passengers), sprinter vans (up to 11 passengers), shuttle buses
-                (37 passengers), specialty vehicles, and standard vehicles like Suburbans. All vehicles feature
-                premium amenities including sound systems, LED lighting, and comfortable seating.
-              </p>
-            </details>
-
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                Do you provide transportation for weddings?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                Yes! Wedding transportation is one of our specialties. We provide shuttle services for guests between
-                venues, hotels, and ceremony/reception locations. We serve all major Lake of the Ozarks wedding venues
-                including Tan-Tar-A Resort, Old Kinderhook, Lodge of Four Seasons, and more.
-              </p>
-            </details>
-
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                What is your cancellation policy?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                Cancellations made 48+ hours in advance receive a full refund (minus processing fee). Cancellations
-                made 24-48 hours in advance receive a 50% refund. Cancellations less than 24 hours before service
-                are non-refundable. Weather exceptions apply. See our{' '}
-                <Link href="/terms-of-service" className="text-primary dark:text-primary-light hover:underline">
-                  Terms of Service
-                </Link>
-                {' '}for complete details.
-              </p>
-            </details>
-
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                Are your drivers licensed and insured?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                Absolutely. All Lake Ride Pros drivers are professionally trained, fully licensed, and background-checked.
-                We maintain full commercial liability insurance and all required permits and licenses for transportation
-                services in Missouri. Your safety is our top priority.
-              </p>
-            </details>
-
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                Who is the best transportation company at Lake of the Ozarks?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                Lake Ride Pros is the Lake's most trusted transportation provider, serving over 10,000 passengers annually. We're locally owned, professionally licensed, and specialize in weddings, corporate events, airport transfers, and nightlife transportation.
-              </p>
-            </details>
-
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                How do I get from STL airport to Lake of the Ozarks?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                Lake Ride Pros offers direct airport shuttle service from St. Louis Lambert International Airport (STL) to Lake of the Ozarks. We track your flight, meet you at baggage claim, and provide door-to-door service. Book online or call (573) 206-9499.
-              </p>
-            </details>
-
-            <details className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-sm transition-colors group">
-              <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors">
-                What's the safest way to bar hop on Bagnell Dam Strip?
-              </summary>
-              <p className="mt-4 text-lrp-text-secondary dark:text-dark-text-secondary">
-                Book a Lake Ride Pros party bus or shuttle for Bagnell Dam Strip bar hopping. Our professional drivers know every venue, keep your group together, and ensure everyone gets home safely. Perfect for bachelor/bachelorette parties and group nights out.
-              </p>
-            </details>
-          </div>
-
-          <div className="text-center mt-12">
-            <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
-              Have more questions?
-            </p>
-            <Link
-              href="/contact"
-              className="inline-block bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </div>
-      </section>
+      <FAQAccordion />
 
       {/* Newsletter Signup */}
       <NewsletterSignup />

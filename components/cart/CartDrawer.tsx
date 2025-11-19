@@ -36,7 +36,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary rounded-lg transition-colors"
+            className="p-3 hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary rounded-lg transition-colors"
             aria-label="Close cart"
           >
             <X className="w-6 h-6" aria-hidden="true" />
@@ -88,7 +88,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                          className="w-8 h-8 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
+                          className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
                           aria-label="Decrease quantity"
                         >
                           −
@@ -98,7 +98,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                          className="w-8 h-8 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
+                          className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
                           aria-label="Increase quantity"
                         >
                           +
@@ -114,7 +114,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   {/* Remove */}
                   <button
                     onClick={() => removeItem(item.variantId)}
-                    className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors self-start"
+                    className="p-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors self-start"
                     aria-label="Remove item"
                   >
                     <Trash2 className="w-5 h-5 text-red-500" aria-hidden="true" />

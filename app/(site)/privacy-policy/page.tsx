@@ -45,7 +45,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Information We Collect */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               1. Information We Collect
             </h2>
 
@@ -102,7 +102,7 @@ export default function PrivacyPolicyPage() {
 
           {/* How We Use Your Information */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               2. How We Use Your Information
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
@@ -124,7 +124,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Information Sharing */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               3. How We Share Your Information
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
@@ -160,7 +160,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Data Security */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               4. Data Security
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
@@ -182,7 +182,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Cookies and Tracking */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               5. Cookies and Tracking Technologies
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
@@ -213,7 +213,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Your Rights */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               6. Your Privacy Rights
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
@@ -229,11 +229,11 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               To exercise these rights, please contact us at{' '}
-              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green-dark hover:text-lrp-green">
                 contactus@lakeridepros.com
               </a>
               {' '}or{' '}
-              <PhoneLink className="text-lrp-green hover:text-lrp-green-light">
+              <PhoneLink className="text-lrp-green-dark hover:text-lrp-green">
                 (573) 206-9499
               </PhoneLink>
               .
@@ -242,7 +242,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Data Retention */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               7. Data Retention
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
@@ -262,7 +262,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Third-Party Links */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               8. Third-Party Websites
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary">
@@ -274,7 +274,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Children's Privacy */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               9. Children's Privacy
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary">
@@ -286,7 +286,7 @@ export default function PrivacyPolicyPage() {
 
           {/* California Privacy Rights */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               10. California Privacy Rights
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
@@ -301,7 +301,7 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               To exercise these rights, contact us at{' '}
-              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green-dark hover:text-lrp-green">
                 contactus@lakeridepros.com
               </a>
               .
@@ -310,7 +310,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Email Communications */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               11. Email Communications
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
@@ -328,7 +328,7 @@ export default function PrivacyPolicyPage() {
 
           {/* Updates to Policy */}
           <section className="mb-12">
-            <h2 className="text-2xl font-bold text-lrp-green mb-4">
+            <h2 className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">
               12. Changes to This Privacy Policy
             </h2>
             <p className="text-lrp-black dark:text-dark-text-secondary">
@@ -358,13 +358,13 @@ export default function PrivacyPolicyPage() {
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               Email:{' '}
-              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green-dark hover:text-lrp-green">
                 contactus@lakeridepros.com
               </a>
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               Phone:{' '}
-              <PhoneLink className="text-lrp-green hover:text-lrp-green-light">
+              <PhoneLink className="text-lrp-green-dark hover:text-lrp-green">
                 (573) 206-9499
               </PhoneLink>
             </p>

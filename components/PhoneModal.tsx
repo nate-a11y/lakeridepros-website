@@ -75,7 +75,7 @@ export function PhoneModal() {
           </div>
           <button
             onClick={closeModal}
-            className="p-2 hover:bg-primary-dark rounded-lg transition-colors z-10"
+            className="p-3 hover:bg-primary-dark rounded-lg transition-colors z-10"
             aria-label="Close contact modal"
           >
             <svg

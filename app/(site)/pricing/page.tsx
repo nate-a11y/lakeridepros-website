@@ -361,7 +361,7 @@ export default function PricingPage() {
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Intimate Weddings</h3>
-                <div className="text-3xl font-bold text-lrp-green mb-4">Custom Quote</div>
+                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">Custom Quote</div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
@@ -420,7 +420,7 @@ export default function PricingPage() {
 
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Large Weddings</h3>
-                <div className="text-3xl font-bold text-lrp-green mb-4">Custom Quote</div>
+                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">Custom Quote</div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />

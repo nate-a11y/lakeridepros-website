@@ -99,7 +99,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-primary-dark rounded-lg transition-colors z-10"
+            className="p-3 hover:bg-primary-dark rounded-lg transition-colors z-10"
             aria-label="Close booking modal"
           >
             <svg

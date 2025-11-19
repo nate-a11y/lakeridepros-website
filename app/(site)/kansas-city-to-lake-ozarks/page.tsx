@@ -157,7 +157,7 @@ export default function KansasCityToLakeOzarksPage() {
             </p>
             <Link
               href="/book"
-              className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
+              className="inline-block bg-white text-lrp-green-dark hover:bg-lrp-gray hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
             >
               Book Your MCI Shuttle
             </Link>
@@ -484,7 +484,7 @@ export default function KansasCityToLakeOzarksPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/book"
-                className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
+                className="inline-block bg-white text-lrp-green-dark hover:bg-lrp-gray hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
               >
                 Book Now
               </Link>

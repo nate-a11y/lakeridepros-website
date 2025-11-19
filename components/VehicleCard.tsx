@@ -81,6 +81,25 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             {vehicle.description}
           </p>
         )}
+        {/* Amenities preview */}
+        {vehicle.amenities && vehicle.amenities.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-3">
+            {vehicle.amenities.slice(0, 3).map((item, index) => (
+              <span
+                key={index}
+                className="text-xs bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light px-2 py-0.5 rounded"
+              >
+                {item.amenity}
+              </span>
+            ))}
+            {vehicle.amenities.length > 3 && (
+              <span className="text-xs text-neutral-500 dark:text-neutral-400 px-1">
+                +{vehicle.amenities.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
+
         <div className="flex items-center justify-between">
           <div className="flex items-center text-sm text-neutral-500 dark:text-neutral-400">
             <svg
@@ -99,14 +118,24 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
               Capacity: {vehicle.capacity}
             </span>
           </div>
-          {vehicle.pricing?.hourlyRate && (
-            <span
-              className="text-secondary dark:text-primary font-semibold"
-              aria-label={`Hourly rate: ${vehicle.pricing.hourlyRate} dollars per hour`}
-            >
-              ${vehicle.pricing.hourlyRate}/hr
-            </span>
-          )}
+          <div className="text-right">
+            {vehicle.pricing?.hourlyRate && (
+              <span
+                className="text-secondary dark:text-primary font-semibold"
+                aria-label={`Hourly rate: ${vehicle.pricing.hourlyRate} dollars per hour`}
+              >
+                ${vehicle.pricing.hourlyRate}/hr
+              </span>
+            )}
+            {!vehicle.pricing?.hourlyRate && vehicle.pricing?.pointToPointMinimum && (
+              <span
+                className="text-secondary dark:text-primary font-semibold text-sm"
+                aria-label={`Starting from ${vehicle.pricing.pointToPointMinimum} dollars`}
+              >
+                From ${vehicle.pricing.pointToPointMinimum}
+              </span>
+            )}
+          </div>
         </div>
         <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-dark-bg-secondary">
           <span className="text-primary dark:text-primary-light text-sm font-medium group-hover:underline inline-flex items-center">

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { ChevronDown, Facebook, Instagram, Twitter, Youtube, Share2 } from 'lucide-react';
+import { ChevronDown, Facebook, Instagram, Twitter, Youtube, AtSign } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { BookingModal } from './BookingModal';
 import CartIcon from '@/components/cart/CartIcon';
@@ -338,7 +338,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   }
                 }}
               >
-                <Share2 className="w-4 h-4" />
+                <AtSign className="w-4 h-4" />
               </button>
 
               {/* Animated Dropdown */}

@@ -314,7 +314,7 @@ export default function PricingPage() {
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Lee C Fine (AIZ)</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
+                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">At Lake of the Ozarks</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Private aviation & FBO service</p>
               </div>
@@ -322,7 +322,7 @@ export default function PricingPage() {
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Kansas City (MCI)</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
+                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2.5-3 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Flight tracking included</p>
               </div>
@@ -330,7 +330,7 @@ export default function PricingPage() {
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">St. Louis (STL)</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
+                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2-2.5 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Delay adjustment included</p>
               </div>
@@ -338,7 +338,7 @@ export default function PricingPage() {
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Springfield (SGF)</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
+                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1.5-2 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Round-trip discounts available</p>
               </div>

@@ -28,9 +28,13 @@ This audit covers brand compliance, technical requirements, and ADA/WCAG 2.1 AA 
 | Dark Green | `#3a8e11` | `#3a8e11` | PASS | `globals.css:22` |
 | White | `#ffffff` | `#ffffff` | PASS | `globals.css:17` |
 | Black | `#060606` | `#060606` | PASS | `globals.css:18` |
-| Light Gray | `#e6e6e6` | `#e8e8e8` | **FAIL** | `globals.css:33` |
+| Light Gray | `#e6e6e6` | `#e6e6e6` | PASS | `globals.css:33` (fixed) |
 
-**Issue:** `--lrp-gray` uses `#e8e8e8` but brand spec requires `#e6e6e6`
+**Note:** Gray color can be adjusted for WCAG compliance if needed. Green colors (#4cbb17, #60e421, #3a8e11) are the priority brand colors and must remain exact.
+
+**Gray Usage Guidelines:**
+- OK for backgrounds, borders, decorative elements
+- NOT for text (only 1.4:1 contrast on white - fails WCAG)
 
 #### Hardcoded Colors (Not Using CSS Variables)
 
@@ -176,10 +180,10 @@ This audit covers brand compliance, technical requirements, and ADA/WCAG 2.1 AA 
 | Priority | Issue | File | Effort | Impact |
 |----------|-------|------|--------|--------|
 | P1-01 | Add keyboard support to header dropdowns | `HeaderClient.tsx` | 2h | High - Core navigation |
-| P1-02 | Implement CelebriSans Bold in CSS | `globals.css` | 15m | High - Brand compliance (font file exists) |
+| P1-02 | ~~Implement CelebriSans Bold in CSS~~ | `globals.css` | DONE | Implemented @font-face + .font-celebri class |
 | P1-03 | Add label to newsletter input | `NewsletterSignup.tsx` | 10m | High - Accessibility |
 | P1-04 | Add label to partner search input | `PartnerFilters.tsx` | 10m | High - Accessibility |
-| P1-05 | Fix --lrp-gray to #e6e6e6 | `globals.css:33` | 5m | Medium - Brand accuracy |
+| P1-05 | ~~Fix --lrp-gray to #e6e6e6~~ | `globals.css:33` | DONE | Fixed - Gray flexible for WCAG |
 | P1-06 | Add white/black logo variants | `/public/` | N/A | High - Brand compliance |
 
 ### HIGH (Fix Within 1 Week)

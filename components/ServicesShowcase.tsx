@@ -1,11 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Service } from '@/src/payload-types';
 import { getMediaUrl } from '@/lib/api/payload';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { ChevronRight } from 'lucide-react';
+import { BookingModal } from './BookingModal';
 
 interface ServicesShowcaseProps {
   services: Service[];
@@ -18,15 +20,18 @@ export default function ServicesShowcase({
   title = 'Our Services',
   subtitle = 'From airport transfers to special events, we provide premium transportation for every occasion',
 }: ServicesShowcaseProps) {
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+
   if (services.length === 0) {
     return null;
   }
 
   return (
-    <section
-      aria-labelledby="services-showcase-heading"
-      className="py-16 bg-white dark:bg-dark-bg-primary transition-colors"
-    >
+    <>
+      <section
+        aria-labelledby="services-showcase-heading"
+        className="py-16 bg-white dark:bg-dark-bg-primary transition-colors"
+      >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2
@@ -81,7 +86,16 @@ export default function ServicesShowcase({
                       From ${service.pricing.basePrice}
                     </span>
                   ) : (
-                    <span className="text-neutral-500 dark:text-neutral-400 text-sm">Get Quote</span>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsBookingOpen(true);
+                      }}
+                      className="text-primary dark:text-primary-light font-semibold text-sm hover:underline focus:outline-none focus:underline"
+                    >
+                      Get Quote
+                    </button>
                   )}
                   <span className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm group-hover:gap-2 gap-1 transition-all">
                     Learn More
@@ -104,6 +118,12 @@ export default function ServicesShowcase({
           </Link>
         </div>
       </div>
-    </section>
+      </section>
+
+      <BookingModal
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+      />
+    </>
   );
 }

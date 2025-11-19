@@ -207,40 +207,78 @@ export default async function HomePage() {
 
       {/* Partner Logos Section */}
       {partners.length > 0 && (
-        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
+        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-center text-neutral-900 dark:text-white mb-8">
               Trusted by Leading Organizations
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
-              {partners.map((partner) => {
-                const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
-                const logoImage = (
-                  <Image
-                    src={getMediaUrl(partner.logo.url)}
-                    alt={partner.name}
-                    width={128}
-                    height={64}
-                    className="h-16 w-auto object-contain filter grayscale hover:grayscale-0 transition-all"
-                  />
-                );
+          </div>
+          <div className="space-y-6">
+            {/* First row - scrolling left */}
+            <div className="relative">
+              <div className="flex animate-scroll-left">
+                {[...partners, ...partners].map((partner, index) => {
+                  const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
+                  const logoImage = (
+                    <Image
+                      src={getMediaUrl(partner.logo.url)}
+                      alt={partner.name}
+                      width={128}
+                      height={64}
+                      className="h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all"
+                    />
+                  );
 
-                return partnerLink ? (
-                  <Link
-                    key={partner.id}
-                    href={partnerLink}
-                    className="flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
-                    aria-label={`View ${partner.name} partner page`}
-                    {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  >
-                    {logoImage}
-                  </Link>
-                ) : (
-                  <div key={partner.id} className="flex items-center justify-center">
-                    {logoImage}
-                  </div>
-                );
-              })}
+                  return partnerLink ? (
+                    <Link
+                      key={`row1-${partner.id}-${index}`}
+                      href={partnerLink}
+                      className="flex-shrink-0 mx-8 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
+                      aria-label={`View ${partner.name} partner page`}
+                      {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {logoImage}
+                    </Link>
+                  ) : (
+                    <div key={`row1-${partner.id}-${index}`} className="flex-shrink-0 mx-8 flex items-center justify-center">
+                      {logoImage}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            {/* Second row - scrolling left (delayed) */}
+            <div className="relative">
+              <div className="flex animate-scroll-left-delayed">
+                {[...partners.slice().reverse(), ...partners.slice().reverse()].map((partner, index) => {
+                  const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
+                  const logoImage = (
+                    <Image
+                      src={getMediaUrl(partner.logo.url)}
+                      alt={partner.name}
+                      width={128}
+                      height={64}
+                      className="h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all"
+                    />
+                  );
+
+                  return partnerLink ? (
+                    <Link
+                      key={`row2-${partner.id}-${index}`}
+                      href={partnerLink}
+                      className="flex-shrink-0 mx-8 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
+                      aria-label={`View ${partner.name} partner page`}
+                      {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {logoImage}
+                    </Link>
+                  ) : (
+                    <div key={`row2-${partner.id}-${index}`} className="flex-shrink-0 mx-8 flex items-center justify-center">
+                      {logoImage}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>

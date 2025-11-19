@@ -330,9 +330,9 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
         />
       </button>
 
-      <Link href={`/shop/products/${product.slug}`} className="flex-1 flex flex-col">
+      <Link href={`/shop/products/${product.slug}`} className="flex-1 flex flex-col w-full">
         {/* Premium Image / Branded Placeholder */}
-        <div className="relative aspect-square bg-dark-bg-tertiary overflow-hidden">
+        <div className="relative aspect-square bg-dark-bg-tertiary overflow-hidden w-full">
           {image?.url ? (
             <Image
               src={getMediaUrl(image.url)}

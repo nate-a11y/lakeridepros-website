@@ -70,9 +70,9 @@ export default function ProductActions({ product }: ProductActionsProps) {
   return (
     <div className="flex flex-col lg:flex-row gap-12">
       {/* Image Gallery (Client-side for interactivity) */}
-      <div className="lg:w-1/2">
+      <div className="lg:w-1/2 w-full">
         {/* Main Image */}
-        <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden mb-4">
+        <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden mb-4 w-full">
           {(() => {
             const imageItem = product.images?.[selectedImage];
             const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null;

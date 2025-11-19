@@ -180,10 +180,10 @@ This audit covers brand compliance, technical requirements, and ADA/WCAG 2.1 AA 
 
 | Priority | Issue | File | Effort | Impact |
 |----------|-------|------|--------|--------|
-| P1-01 | Add keyboard support to header dropdowns | `HeaderClient.tsx` | 2h | High - Core navigation |
+| P1-01 | ~~Add keyboard support to header dropdowns~~ | `HeaderClient.tsx` | DONE | Focus/blur, Enter/Space/Escape, ARIA attrs |
 | P1-02 | ~~Implement CelebriSans Bold in CSS~~ | `globals.css` | DONE | Implemented @font-face + .font-celebri class |
-| P1-03 | Add label to newsletter input | `NewsletterSignup.tsx` | 10m | High - Accessibility |
-| P1-04 | Add label to partner search input | `PartnerFilters.tsx` | 10m | High - Accessibility |
+| P1-03 | ~~Add label to newsletter input~~ | `NewsletterSignup.tsx` | DONE | sr-only label + aria-label |
+| P1-04 | ~~Add label to partner search input~~ | `PartnerFilters.tsx` | DONE | sr-only label + aria-label |
 | P1-05 | ~~Fix --lrp-gray to #e6e6e6~~ | `globals.css:33` | DONE | Fixed - Gray flexible for WCAG |
 | P1-06 | ~~Add white/black logo variants~~ | `/public/` | DONE | SVG logos added (color/white/black) |
 

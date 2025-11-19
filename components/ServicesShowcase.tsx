@@ -55,7 +55,7 @@ export default function ServicesShowcase({
             >
               {/* Image */}
               <Link href={`/services/${service.slug}`} className="block">
-                <div style={{ position: 'relative', height: '12rem', width: '100%', overflow: 'hidden' }}>
+                <div style={{ display: 'block', position: 'relative', height: '12rem', width: '100%', overflow: 'hidden' }}>
                   {service.image && typeof service.image === 'object' && (
                     <Image
                       src={getMediaUrl(service.image.url)}

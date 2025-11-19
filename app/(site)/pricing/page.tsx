@@ -46,7 +46,7 @@ const faqSchema = {
       name: 'Are there any hidden fees?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, insurance, and professional driver. The only additional charges may be gratuity (optional), tolls (if applicable), or wait time beyond the agreed window. All potential costs are disclosed upfront.'
+        text: 'No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, estimated tolls (if applicable), insurance, and professional driver. The only additional charges may be gratuity (optional) or wait time beyond the agreed window. All potential costs are disclosed upfront.'
       }
     },
     {
@@ -313,7 +313,7 @@ export default function PricingPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Grand Glaize (KOZS)</h3>
+                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Lee C Fine (AIZ)</h3>
                 <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">At Lake of the Ozarks</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Private aviation & FBO service</p>
@@ -323,7 +323,7 @@ export default function PricingPage() {
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Kansas City (MCI)</h3>
                 <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2-2.5 hours</p>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2.5-3 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Flight tracking included</p>
               </div>
 
@@ -331,7 +331,7 @@ export default function PricingPage() {
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">St. Louis (STL)</h3>
                 <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2.5-3 hours</p>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2-2.5 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Delay adjustment included</p>
               </div>
 
@@ -570,7 +570,7 @@ export default function PricingPage() {
                   Are there any hidden fees?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, insurance, and professional driver. The only additional charges may be gratuity (optional), tolls (if applicable), or wait time beyond the agreed window. All potential costs are disclosed upfront.
+                  No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, estimated tolls (if applicable), insurance, and professional driver. The only additional charges may be gratuity (optional) or wait time beyond the agreed window. All potential costs are disclosed upfront.
                 </p>
               </details>
 

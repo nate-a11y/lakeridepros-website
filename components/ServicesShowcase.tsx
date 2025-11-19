@@ -54,22 +54,24 @@ export default function ServicesShowcase({
               className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
             >
               {/* Image */}
-              <Link href={`/services/${service.slug}`} className="block relative h-48 overflow-hidden">
-                {service.image && typeof service.image === 'object' && (
-                  <Image
-                    src={getMediaUrl(service.image.url)}
-                    alt={service.image.alt || service.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                )}
-                {/* Icon badge */}
-                {service.icon && (
-                  <div className="absolute top-4 left-4 flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-white shadow-lg">
-                    <DynamicIcon name={service.icon} size={20} />
-                  </div>
-                )}
+              <Link href={`/services/${service.slug}`} className="block">
+                <div className="relative h-48 overflow-hidden">
+                  {service.image && typeof service.image === 'object' && (
+                    <Image
+                      src={getMediaUrl(service.image.url)}
+                      alt={service.image.alt || service.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  )}
+                  {/* Icon badge */}
+                  {service.icon && (
+                    <div className="absolute top-4 left-4 flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-white shadow-lg">
+                      <DynamicIcon name={service.icon} size={20} />
+                    </div>
+                  )}
+                </div>
               </Link>
 
               {/* Content */}

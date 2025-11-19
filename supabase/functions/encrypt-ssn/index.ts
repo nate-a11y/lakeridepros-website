@@ -98,7 +98,7 @@ async function encryptSSN(ssn: string, encryptionKey: string): Promise<string> {
 
     // Convert to base64
     return btoa(String.fromCharCode(...combined))
-  } catch (error) {
+  } catch (_error) {
     console.error('Encryption error (details hidden for security)')
     throw new Error('Encryption failed')
   }

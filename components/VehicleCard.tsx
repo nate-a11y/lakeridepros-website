@@ -28,7 +28,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
       className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-bg-secondary"
       aria-label={`View details for ${vehicle.name}`}
     >
-      <div className="relative h-64 overflow-hidden bg-neutral-100 dark:bg-dark-bg-secondary">
+      <div style={{ position: 'relative', height: '16rem', overflow: 'hidden' }} className="bg-neutral-100 dark:bg-dark-bg-secondary">
         {!imageError ? (
           <Image
             src={imageUrl}

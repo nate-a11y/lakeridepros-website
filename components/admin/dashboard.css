@@ -457,9 +457,9 @@
 }
 
 .sync-message.success {
-  background: rgba(76, 187, 23, 0.1);
-  border: 1px solid rgba(76, 187, 23, 0.3);
-  color: #4cbb17;
+  background: var(--primary-alpha-10);
+  border: 1px solid var(--primary-alpha-30);
+  color: var(--primary);
 }
 
 .sync-message.error {

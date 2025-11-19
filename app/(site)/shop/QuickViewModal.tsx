@@ -111,8 +111,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
           <div className="grid md:grid-cols-2 gap-8 p-8">
             {/* Image Gallery */}
-            <div>
-              <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-xl overflow-hidden mb-4">
+            <div className="w-full">
+              <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-xl overflow-hidden mb-4 w-full">
                 {(() => {
                   const imageItem = product.images?.[selectedImage];
                   const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null;

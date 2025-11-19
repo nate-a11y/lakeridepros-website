@@ -169,7 +169,7 @@ export default function FeaturedBlogSection({
                     className="group flex-shrink-0 w-[300px] md:w-[320px] snap-start bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     role="listitem"
                   >
-                    <div style={{ position: 'relative', height: '10rem', overflow: 'hidden' }}>
+                    <div style={{ position: 'relative', height: '10rem', width: '100%', overflow: 'hidden' }}>
                       {imageUrl ? (
                         <Image
                           src={imageUrl}

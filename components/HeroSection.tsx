@@ -18,13 +18,13 @@ export default function HeroSection() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="font-boardson text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-lrp-black dark:text-white">
-              Premium <span className="text-primary dark:text-primary-light">Luxury Transportation</span> at Lake of the Ozarks
+              Premium <span className="text-primary-dark dark:text-primary-light">Luxury Transportation</span> at Lake of the Ozarks
             </h1>
             <p className="text-center text-xl mt-6 mb-8 text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
               Missouri's premier transportation service. Safe rides, good times. Perfect for{' '}
-              <strong className="text-lrp-black dark:text-white">weddings</strong>,{' '}
-              <strong className="text-lrp-black dark:text-white">wine tours</strong>,{' '}
-              <strong className="text-lrp-black dark:text-white">bachelor parties</strong>, and special events.
+              <span className="font-bold text-lrp-black dark:text-white">weddings</span>,{' '}
+              <span className="font-bold text-lrp-black dark:text-white">wine tours</span>,{' '}
+              <span className="font-bold text-lrp-black dark:text-white">bachelor parties</span>, and special events.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button

@@ -53,7 +53,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </p>
               <button
                 onClick={onClose}
-                className="text-lrp-green hover:text-lrp-green-dark font-semibold"
+                className="text-lrp-green-dark hover:text-lrp-green font-semibold"
               >
                 Continue Shopping
               </button>
@@ -105,7 +105,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         </button>
                       </div>
 
-                      <p className="font-bold text-lrp-green">
+                      <p className="font-bold text-lrp-green-dark dark:text-lrp-green">
                         ${(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
@@ -133,7 +133,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <span className="font-semibold text-neutral-900 dark:text-white">
                 Subtotal:
               </span>
-              <span className="font-bold text-lrp-green">
+              <span className="font-bold text-lrp-green-dark dark:text-lrp-green">
                 ${getSubtotal().toFixed(2)}
               </span>
             </div>

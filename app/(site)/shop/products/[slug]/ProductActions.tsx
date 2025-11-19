@@ -132,7 +132,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
         {/* Price */}
         <div className="flex items-baseline gap-3 mb-6">
-          <span className="text-4xl font-bold text-lrp-green dark:text-lrp-green-light">
+          <span className="text-4xl font-bold text-lrp-green-dark dark:text-lrp-green-light">
             ${(selectedVariant?.price || product.price).toFixed(2)}
           </span>
           {product.compareAtPrice && product.compareAtPrice > product.price && (

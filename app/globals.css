@@ -38,6 +38,7 @@
   --lrp-green: #4cbb17;
   --lrp-green-light: #5cd91f;
   --lrp-green-dark: #3a8e11;
+  --lrp-green-text: #3a8e11;  /* WCAG AA compliant (4.5:1) for text on white */
   --lrp-black: #060606;
   --lrp-gray: #e6e6e6;  /* Brand spec: Light Gray */
 

@@ -70,11 +70,14 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
   return (
     <div
       className="booking-modal fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-200"
-      onClick={onClose}
       role="presentation"
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50 dark:bg-black/70" aria-hidden="true" />
+      {/* Backdrop - clickable to close */}
+      <div
+        className="absolute inset-0 bg-black/50 dark:bg-black/70"
+        aria-hidden="true"
+        onClick={onClose}
+      />
 
       {/* Modal - Increased z-index to be above everything */}
       <div

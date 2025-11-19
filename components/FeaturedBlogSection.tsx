@@ -82,6 +82,7 @@ export default function FeaturedBlogSection({
                 src={featuredImageUrl}
                 alt={(featuredPost.featuredImage && typeof featuredPost.featuredImage === 'object' ? featuredPost.featuredImage.alt : null) || featuredPost.title}
                 fill
+                sizes="100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                 priority
               />
@@ -174,6 +175,7 @@ export default function FeaturedBlogSection({
                           src={imageUrl}
                           alt={(post.featuredImage && typeof post.featuredImage === 'object' ? post.featuredImage.alt : null) || post.title}
                           fill
+                          sizes="320px"
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                       ) : (

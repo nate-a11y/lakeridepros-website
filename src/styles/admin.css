@@ -83,7 +83,7 @@ select[aria-invalid="true"]:focus,
 input:not(.error):not([aria-invalid="true"]):not(:focus),
 textarea:not(.error):not([aria-invalid="true"]):not(:focus),
 select:not(.error):not([aria-invalid="true"]):not(:focus) {
-  border-color: rgba(76, 187, 23, 0.3) !important;
+  border-color: var(--primary-alpha-30) !important;
 }
 
 /* Valid focused fields get LRP green */
@@ -91,7 +91,7 @@ input:not(.error):not([aria-invalid="true"]):focus,
 textarea:not(.error):not([aria-invalid="true"]):focus,
 select:not(.error):not([aria-invalid="true"]):focus {
   border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(76, 187, 23, 0.2) !important;
+  box-shadow: 0 0 0 3px var(--primary-alpha-20) !important;
 }
 
 /* Base Admin Container */
@@ -162,7 +162,7 @@ select,
 [class*="input"] {
   background: var(--dark-bg-secondary) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+  border: 1px solid var(--primary-alpha-30) !important;
 }
 
 /* Input Focus States */
@@ -170,7 +170,7 @@ input:focus,
 textarea:focus,
 select:focus {
   border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(76, 187, 23, 0.2) !important;
+  box-shadow: 0 0 0 3px var(--primary-alpha-20) !important;
   outline: none !important;
 }
 
@@ -250,7 +250,7 @@ tbody tr,
 
 tbody tr:hover,
 .list-row:hover {
-  background: rgba(76, 187, 23, 0.05) !important;
+  background: var(--primary-alpha-5) !important;
 }
 
 /* Table Cells */
@@ -281,7 +281,7 @@ td,
 .nav-item:hover,
 .nav-link:hover {
   color: var(--primary-light) !important;
-  background: rgba(76, 187, 23, 0.1) !important;
+  background: var(--primary-alpha-10) !important;
 }
 
 /* Active Nav Item */
@@ -302,12 +302,12 @@ td,
 [class*="modal"],
 [class*="popup"] {
   background: var(--lrp-black) !important;
-  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+  border: 1px solid var(--primary-alpha-30) !important;
 }
 
 .modal-header,
 .popup-header {
-  border-bottom: 1px solid rgba(76, 187, 23, 0.3) !important;
+  border-bottom: 1px solid var(--primary-alpha-30) !important;
 }
 
 /* ============================================
@@ -319,7 +319,7 @@ td,
 [class*="dropdown"],
 [class*="menu"] {
   background: var(--dark-bg-secondary) !important;
-  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+  border: 1px solid var(--primary-alpha-30) !important;
 }
 
 .dropdown-item,
@@ -329,7 +329,7 @@ td,
 
 .dropdown-item:hover,
 .select-option:hover {
-  background: rgba(76, 187, 23, 0.2) !important;
+  background: var(--primary-alpha-20) !important;
 }
 
 /* ============================================
@@ -341,7 +341,7 @@ td,
 [class*="card"],
 [class*="panel"] {
   background: var(--dark-bg-secondary) !important;
-  border: 1px solid rgba(76, 187, 23, 0.2) !important;
+  border: 1px solid var(--primary-alpha-20) !important;
 }
 
 /* ============================================
@@ -353,7 +353,7 @@ td,
 [class*="search"] input {
   background: var(--dark-bg-secondary) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+  border: 1px solid var(--primary-alpha-30) !important;
 }
 
 /* ============================================
@@ -364,7 +364,7 @@ td,
 .tag,
 [class*="badge"],
 [class*="tag"] {
-  background: rgba(76, 187, 23, 0.2) !important;
+  background: var(--primary-alpha-20) !important;
   color: var(--primary) !important;
   border: 1px solid var(--primary) !important;
 }
@@ -415,7 +415,7 @@ input[type="checkbox"] {
 .loader,
 .spinner,
 [class*="loading"] {
-  border-color: rgba(76, 187, 23, 0.2) !important;
+  border-color: var(--primary-alpha-20) !important;
   border-top-color: var(--primary) !important;
 }
 
@@ -425,7 +425,7 @@ input[type="checkbox"] {
 
 .alert-success,
 .notification-success {
-  background: rgba(76, 187, 23, 0.2) !important;
+  background: var(--primary-alpha-20) !important;
   border-color: var(--primary) !important;
   color: #ffffff !important;
 }
@@ -449,11 +449,11 @@ input[type="checkbox"] {
 .pagination button {
   background: var(--dark-bg-secondary) !important;
   color: #ffffff !important;
-  border: 1px solid rgba(76, 187, 23, 0.3) !important;
+  border: 1px solid var(--primary-alpha-30) !important;
 }
 
 .pagination button:hover {
-  background: rgba(76, 187, 23, 0.2) !important;
+  background: var(--primary-alpha-20) !important;
   border-color: var(--primary) !important;
 }
 
@@ -470,7 +470,7 @@ input[type="checkbox"] {
 .rich-text-toolbar,
 [class*="toolbar"] {
   background: var(--lrp-black) !important;
-  border-bottom: 1px solid rgba(76, 187, 23, 0.3) !important;
+  border-bottom: 1px solid var(--primary-alpha-30) !important;
 }
 
 /* ============================================
@@ -479,13 +479,13 @@ input[type="checkbox"] {
 
 .collection-card {
   background: var(--dark-bg-secondary) !important;
-  border: 1px solid rgba(76, 187, 23, 0.2) !important;
+  border: 1px solid var(--primary-alpha-20) !important;
   color: #ffffff !important;
 }
 
 .collection-card:hover {
   border-color: var(--primary) !important;
-  box-shadow: 0 8px 24px rgba(76, 187, 23, 0.3) !important;
+  box-shadow: 0 8px 24px var(--primary-alpha-30) !important;
 }
 
 /* ============================================
@@ -509,7 +509,7 @@ input[type="checkbox"] {
 .checkbox-input:not(.checkbox-input--read-only):focus-within .checkbox-input__input,
 .checkbox-input:not(.checkbox-input--read-only):active .checkbox-input__input {
   border-color: var(--primary-light) !important;
-  box-shadow: 0 0 0 3px rgba(76, 187, 23, 0.3) !important;
+  box-shadow: 0 0 0 3px var(--primary-alpha-30) !important;
 }
 
 /* Checked state - LRP green background */
@@ -558,7 +558,7 @@ input[type="checkbox"] {
 .table__row--selected,
 tr[aria-selected='true'],
 .list-item--selected {
-  background-color: rgba(76, 187, 23, 0.08) !important;
+  background-color: var(--primary-alpha-8) !important;
   border-left: 3px solid var(--primary) !important;
 }
 
@@ -566,13 +566,13 @@ tr[aria-selected='true'],
 .row--selected:hover,
 .table__row--selected:hover,
 tr[aria-selected='true']:hover {
-  background-color: rgba(76, 187, 23, 0.12) !important;
+  background-color: var(--primary-alpha-12) !important;
 }
 
 /* List item selection */
 .collection__list-item--selected,
 .list-item[aria-selected='true'] {
-  background-color: rgba(76, 187, 23, 0.05) !important;
+  background-color: var(--primary-alpha-5) !important;
   border-color: var(--primary) !important;
 }
 

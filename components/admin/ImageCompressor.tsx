@@ -116,6 +116,9 @@ async function compressImage(file: File): Promise<File> {
  */
 export function ImageCompressor() {
   useEffect(() => {
+    // Track which inputs we've already processed to prevent infinite loops
+    const processingInputs = new WeakSet<HTMLInputElement>()
+
     // Override the native file input to compress images before upload
     const handleChange = async (event: Event) => {
       const input = event.target as HTMLInputElement
@@ -125,13 +128,23 @@ export function ImageCompressor() {
         return
       }
 
-      // Check if this is an image upload
-      const files = Array.from(input.files)
-      const hasImages = files.some(f => f.type.startsWith('image/'))
-
-      if (!hasImages) {
+      // Skip if we're already processing this input (prevents infinite loop)
+      if (processingInputs.has(input)) {
+        processingInputs.delete(input)
         return
       }
+
+      // Check if this is an image upload
+      const files = Array.from(input.files)
+      const hasLargeImages = files.some(f => f.type.startsWith('image/') && f.size > 2 * 1024 * 1024)
+
+      // Only process if there are large images to compress
+      if (!hasLargeImages) {
+        return
+      }
+
+      // Mark this input as being processed
+      processingInputs.add(input)
 
       // Prevent the default change event from propagating
       event.stopImmediatePropagation()
@@ -160,8 +173,6 @@ export function ImageCompressor() {
 
     // Add listener to capture file input changes
     document.addEventListener('change', handleChange, true)
-
-    console.log('[ImageCompressor] Client-side image compression enabled')
 
     return () => {
       document.removeEventListener('change', handleChange, true)

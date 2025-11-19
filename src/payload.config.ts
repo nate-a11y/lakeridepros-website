@@ -94,7 +94,6 @@ const config = buildConfig({
         Logo: '@/components/admin/Logo#Logo',
       },
       beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
-      providers: ['@/components/admin/ImageCompressor#ImageCompressor'],
     },
   },
   collections: [Users, Media, Pages, BlogPosts, Services, ServiceAnalytics, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],

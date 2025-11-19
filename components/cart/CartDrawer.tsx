@@ -3,6 +3,7 @@
 import { X, ShoppingCart, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import FocusTrap from 'focus-trap-react'
 import { useCart } from '@/lib/store/cart'
 
 interface CartDrawerProps {
@@ -25,7 +26,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       />
 
       {/* Drawer */}
-      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-dark-bg-primary shadow-2xl z-50 flex flex-col">
+      <FocusTrap
+        focusTrapOptions={{
+          initialFocus: false,
+          allowOutsideClick: true,
+          escapeDeactivates: true,
+          onDeactivate: onClose,
+        }}
+      >
+        <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-dark-bg-primary shadow-2xl z-50 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b dark:border-dark-border">
           <div className="flex items-center gap-3">
@@ -160,7 +169,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
           </div>
         )}
-      </div>
+        </div>
+      </FocusTrap>
     </>
   )
 }

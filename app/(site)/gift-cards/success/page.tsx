@@ -153,7 +153,7 @@ function GiftCardSuccessContent() {
           </p>
           <a
             href="mailto:contactus@lakeridepros.com"
-            className="text-lrp-green hover:text-lrp-green-dark font-semibold"
+            className="text-lrp-green-dark hover:text-lrp-green font-semibold"
           >
             Contact Us: contactus@lakeridepros.com
           </a>

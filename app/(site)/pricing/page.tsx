@@ -123,8 +123,8 @@ export default function PricingPage() {
                 </div>
                 <div>
                   <CheckCircle className="w-6 h-6 text-lrp-green mx-auto mb-2" />
-                  <p className="font-semibold text-lrp-black dark:text-white">Price Match Guarantee</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">We'll match any local competitor</p>
+                  <p className="font-semibold text-lrp-black dark:text-white">Licensed & Insured</p>
+                  <p className="text-sm text-gray-600 dark:text-lrp-gray">Full commercial coverage</p>
                 </div>
                 <div>
                   <CheckCircle className="w-6 h-6 text-lrp-green mx-auto mb-2" />
@@ -449,7 +449,7 @@ export default function PricingPage() {
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
-              Wedding pricing based on hourly rates, vehicle type, guest count, and timeline. All packages include professional driver, fuel, insurance, and coordination. Call (573) 206-9499 for custom quote.
+              Wedding pricing based on hourly rates, vehicle type, guest count, and timeline. All packages include professional driver, fuel, insurance, and coordination. Additional discounted services available through our trusted referral partners. Call (573) 206-9499 for custom quote.
             </p>
           </div>
         </section>

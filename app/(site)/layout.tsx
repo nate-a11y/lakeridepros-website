@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import UnderConstructionBanner from "@/components/UnderConstructionBanner";
+import { PhoneModal } from "@/components/PhoneModal";
 
 export default function SiteLayout({
   children,
@@ -31,6 +32,7 @@ export default function SiteLayout({
           <Footer />
           <CartDrawer />
           <MoovsWidget />
+          <PhoneModal />
         </CartProvider>
       </ThemeProvider>
     </div>

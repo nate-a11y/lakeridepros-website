@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, FormEvent, useEffect, useRef } from 'react';
+import { PhoneLink } from '@/components/PhoneLink';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -134,13 +135,11 @@ export default function ContactPage() {
                     </svg>
                     <div>
                       <p className="font-semibold text-neutral-900 dark:text-white">Phone</p>
-                      <a
-                        href="tel:5732069499"
+                      <PhoneLink
                         className="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
-                        aria-label="Call us at (573) 206-9499"
                       >
                         (573) 206-9499
-                      </a>
+                      </PhoneLink>
                     </div>
                   </div>
 

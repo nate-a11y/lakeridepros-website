@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getServices } from '@/lib/api/payload';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
+import { PhoneLink } from '@/components/PhoneLink';
 
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
@@ -246,13 +247,11 @@ export default async function Footer() {
             <h3 className="text-white font-bold mb-4 text-lg mt-6">Contact</h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="tel:5732069499"
+                <PhoneLink
                   className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  aria-label="Call Lake Ride Pros at 573-206-9499"
                 >
                   (573) 206-9499
-                </a>
+                </PhoneLink>
               </li>
               <li>
                 <a

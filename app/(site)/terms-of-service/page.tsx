@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ExternalLink, FileText, Shield, Scale } from 'lucide-react'
+import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
   title: 'Terms of Service | Lake Ride Pros',
@@ -245,9 +246,9 @@ export default function TermsOfServicePage() {
                 contactus@lakeridepros.com
               </a>
               {' '}or{' '}
-              <a href="tel:5732069499" className="text-lrp-green hover:text-lrp-green-light">
+              <PhoneLink className="text-lrp-green hover:text-lrp-green-light">
                 (573) 206-9499
-              </a>
+              </PhoneLink>
               . We are committed to resolving any issues promptly and fairly.
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
@@ -315,9 +316,9 @@ export default function TermsOfServicePage() {
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               Phone:{' '}
-              <a href="tel:5732069499" className="text-lrp-green hover:text-lrp-green-light">
+              <PhoneLink className="text-lrp-green hover:text-lrp-green-light">
                 (573) 206-9499
-              </a>
+              </PhoneLink>
             </p>
           </div>
         </div>

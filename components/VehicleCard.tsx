@@ -127,9 +127,9 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
                 ${vehicle.pricing.hourlyRate}/hr
               </span>
             )}
-            {!vehicle.pricing?.hourlyRate && vehicle.pricing?.pointToPointMinimum && (
+            {vehicle.pricing?.pointToPointMinimum && (
               <span
-                className="text-secondary dark:text-primary font-semibold text-sm"
+                className={`text-secondary dark:text-primary font-semibold text-sm ${vehicle.pricing?.hourlyRate ? 'block mt-0.5' : ''}`}
                 aria-label={`Starting from ${vehicle.pricing.pointToPointMinimum} dollars`}
               >
                 From ${vehicle.pricing.pointToPointMinimum}

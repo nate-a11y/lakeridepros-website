@@ -51,9 +51,8 @@ export default function PopularServicesRanking({
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
-            <Link
+            <div
               key={service.id}
-              href={`/services/${service.slug}`}
               className="group relative"
             >
               {/* Gradient border effect */}
@@ -73,9 +72,12 @@ export default function PopularServicesRanking({
                 )}
 
                 {/* Content */}
-                <h3 className="font-bold text-lg mb-2 text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="font-bold text-lg mb-2 text-neutral-900 dark:text-white hover:text-primary dark:hover:text-primary-light transition-colors focus:outline-none focus:underline"
+                >
                   {service.title}
-                </h3>
+                </Link>
 
                 {(service.shortDescription || service.description) && (
                   <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mb-4 flex-grow line-clamp-3">
@@ -91,17 +93,19 @@ export default function PopularServicesRanking({
                     </span>
                   ) : (
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsBookingOpen(true);
-                      }}
+                      onClick={() => setIsBookingOpen(true)}
                       className="text-sm text-primary dark:text-primary-light font-semibold hover:underline focus:outline-none focus:underline"
                     >
                       Get Quote
                     </button>
                   )}
-                  <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-primary dark:group-hover:text-primary-light group-hover:translate-x-1 transition-all" />
+                  <Link
+                    href={`/services/${service.slug}`}
+                    className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm hover:gap-2 gap-1 transition-all focus:outline-none focus:underline"
+                  >
+                    Learn More
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
                 </div>
 
                 {/* Popularity indicator */}
@@ -113,7 +117,7 @@ export default function PopularServicesRanking({
                   </div>
                 )}
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

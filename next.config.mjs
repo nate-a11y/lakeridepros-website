@@ -4,6 +4,9 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   experimental: {
     reactCompiler: false,
+    serverActions: {
+      bodySizeLimit: '10mb', // Allow larger file uploads (default is 1mb)
+    },
   },
   sassOptions: {
     silenceDeprecations: ['import', 'legacy-js-api'],

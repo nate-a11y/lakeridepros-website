@@ -40,6 +40,7 @@ export default function AccessibilityPage() {
               className="text-primary hover:text-primary-dark underline"
             >
               Web Content Accessibility Guidelines (WCAG) 2.1 Level AA
+              <span className="sr-only"> (opens in new tab)</span>
             </a>.
             These guidelines explain how to make web content more accessible for people with disabilities
             and user-friendly for everyone.
@@ -185,6 +186,7 @@ export default function AccessibilityPage() {
                 className="text-primary hover:text-primary-dark underline"
               >
                 W3C Accessibility Statement Generator
+                <span className="sr-only"> (opens in new tab)</span>
               </a>.
             </p>
           </div>

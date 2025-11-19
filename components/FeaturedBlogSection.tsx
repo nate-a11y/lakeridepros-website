@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { BlogPost } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload-local';
+import { getMediaUrl } from '@/lib/api/payload';
 import { formatDate } from '@/lib/utils';
 import { FileText, ChevronLeft, ChevronRight } from 'lucide-react';
 

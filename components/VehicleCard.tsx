@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Vehicle } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload-local';
+import { getMediaUrl } from '@/lib/api/payload';
 
 interface VehicleCardProps {
   vehicle: Vehicle;

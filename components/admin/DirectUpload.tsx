@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
-import { useDocumentInfo, useForm } from '@payloadcms/ui'
+import { useDocumentInfo } from '@payloadcms/ui'
 
 /**
  * Compresses an image file using browser Canvas API
@@ -80,36 +80,26 @@ async function compressImage(file: File): Promise<{ file: File; width: number; h
 
 /**
  * Custom Upload component that bypasses Vercel's 4.5MB limit
- * by uploading directly to Supabase.
+ * by uploading directly to Supabase. Supports bulk uploads.
  */
 export function DirectUpload() {
   const { id } = useDocumentInfo()
-  const { submit } = useForm()
 
   const [uploading, setUploading] = useState(false)
+  const [currentFile, setCurrentFile] = useState<string | null>(null)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
-  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; id: string }>>([])
   const [dragActive, setDragActive] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const processUpload = useCallback(async (file: File) => {
-    setUploading(true)
-    setError(null)
-    setProgress(0)
-
+  const processUpload = useCallback(async (file: File): Promise<{ name: string; id: string } | null> => {
     try {
-      // Preview
-      const previewUrl = URL.createObjectURL(file)
-      setPreview(previewUrl)
-
-      // Step 1: Compress
-      setProgress(10)
+      // Compress
       const { file: compressedFile, width, height } = await compressImage(file)
 
-      // Step 2: Get presigned URL
-      setProgress(25)
+      // Get presigned URL
       const presignedRes = await fetch('/api/upload/presigned-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -126,8 +116,7 @@ export function DirectUpload() {
 
       const { signedUrl, path: filePath, publicUrl } = await presignedRes.json()
 
-      // Step 3: Upload to Supabase
-      setProgress(50)
+      // Upload to Supabase
       const uploadRes = await fetch(signedUrl, {
         method: 'PUT',
         headers: { 'Content-Type': compressedFile.type },
@@ -138,9 +127,7 @@ export function DirectUpload() {
         throw new Error('Failed to upload to storage')
       }
 
-      setProgress(75)
-
-      // Step 4: Create media record
+      // Create media record
       const mediaRes = await fetch('/api/upload/create-media', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -161,34 +148,71 @@ export function DirectUpload() {
       }
 
       const mediaData = await mediaRes.json()
-      setProgress(100)
-      setUploadedUrl(publicUrl)
+      console.log('[DirectUpload] Success:', file.name, mediaData.doc.id)
 
-      console.log('[DirectUpload] Success:', mediaData.doc.id)
-
-      // Redirect to the new media item
-      if (mediaData.doc?.id) {
-        window.location.href = `/admin/collections/media/${mediaData.doc.id}`
-      }
+      return { name: file.name, id: mediaData.doc.id }
     } catch (err) {
-      console.error('[DirectUpload] Error:', err)
-      setError(err instanceof Error ? err.message : 'Upload failed')
-    } finally {
-      setUploading(false)
+      console.error('[DirectUpload] Error uploading', file.name, err)
+      throw err
     }
   }, [])
 
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) processUpload(file)
+  const handleFiles = useCallback(async (files: FileList | File[]) => {
+    const fileArray = Array.from(files).filter(f => f.type.startsWith('image/'))
+
+    if (fileArray.length === 0) {
+      setError('No valid image files selected')
+      return
+    }
+
+    setUploading(true)
+    setError(null)
+    setUploadedFiles([])
+
+    const results: Array<{ name: string; id: string }> = []
+
+    for (let i = 0; i < fileArray.length; i++) {
+      const file = fileArray[i]
+      setCurrentFile(file.name)
+      setProgress(Math.round((i / fileArray.length) * 100))
+
+      // Show preview of current file
+      const previewUrl = URL.createObjectURL(file)
+      setPreview(previewUrl)
+
+      try {
+        const result = await processUpload(file)
+        if (result) {
+          results.push(result)
+          setUploadedFiles([...results])
+        }
+      } catch (err) {
+        setError(`Failed to upload ${file.name}: ${err instanceof Error ? err.message : 'Unknown error'}`)
+      }
+    }
+
+    setProgress(100)
+    setCurrentFile(null)
+    setUploading(false)
+    setPreview(null)
+
+    // Don't auto-redirect - user may be uploading from a relationship field
+    // They can click the link to view the uploaded item
   }, [processUpload])
+
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFiles(e.target.files)
+    }
+  }, [handleFiles])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     setDragActive(false)
-    const file = e.dataTransfer.files?.[0]
-    if (file) processUpload(file)
-  }, [processUpload])
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFiles(e.dataTransfer.files)
+    }
+  }, [handleFiles])
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -199,12 +223,12 @@ export function DirectUpload() {
     }
   }, [])
 
-  // If we're editing an existing document, show message
+  // If editing existing document
   if (id) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
         <p>This media item already exists.</p>
-        <p>To upload a new image, create a new media item.</p>
+        <p>To upload new images, create a new media item.</p>
       </div>
     )
   }
@@ -231,6 +255,7 @@ export function DirectUpload() {
           ref={inputRef}
           type="file"
           accept="image/*"
+          multiple
           onChange={handleFileSelect}
           disabled={uploading}
           style={{ display: 'none' }}
@@ -270,7 +295,7 @@ export function DirectUpload() {
         {uploading ? (
           <div>
             <p style={{ marginBottom: '0.5rem', color: '#374151' }}>
-              Uploading... {progress}%
+              {currentFile ? `Uploading: ${currentFile}` : 'Processing...'} ({progress}%)
             </p>
             <div style={{
               width: '100%',
@@ -293,7 +318,7 @@ export function DirectUpload() {
               <strong>Click to upload</strong> or drag and drop
             </p>
             <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-              Images will be compressed and converted to WebP
+              Select multiple images for bulk upload
             </p>
           </div>
         )}
@@ -312,16 +337,29 @@ export function DirectUpload() {
         </div>
       )}
 
-      {uploadedUrl && !uploading && (
+      {uploadedFiles.length > 0 && !uploading && (
         <div style={{
           marginTop: '1rem',
           padding: '0.75rem',
           backgroundColor: '#f0fdf4',
           border: '1px solid #bbf7d0',
           borderRadius: '4px',
-          color: '#16a34a',
         }}>
-          Upload complete! Redirecting...
+          <p style={{ color: '#16a34a', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+            Uploaded {uploadedFiles.length} file{uploadedFiles.length > 1 ? 's' : ''}:
+          </p>
+          <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#166534' }}>
+            {uploadedFiles.map((f) => (
+              <li key={f.id}>
+                <a
+                  href={`/admin/collections/media/${f.id}`}
+                  style={{ color: '#166534', textDecoration: 'underline' }}
+                >
+                  {f.name}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

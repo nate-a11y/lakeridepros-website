@@ -72,9 +72,9 @@ export default function PopularServicesRanking({
                   {service.title}
                 </h3>
 
-                {service.excerpt && (
+                {(service.shortDescription || service.description) && (
                   <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mb-4 flex-grow line-clamp-3">
-                    {service.excerpt}
+                    {service.shortDescription || service.description}
                   </p>
                 )}
 

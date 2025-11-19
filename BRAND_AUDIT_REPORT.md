@@ -195,7 +195,7 @@ This audit covers brand compliance, technical requirements, and ADA/WCAG 2.1 AA 
 | P2-02 | ~~Replace hardcoded colors in ShopClient~~ | `ShopClient.tsx` | DONE | All using CSS variables |
 | P2-03 | ~~Delete duplicate admin components~~ | `src/components/admin/*` | DONE | Directory removed |
 | P2-04 | ~~Delete duplicate dashboard.css~~ | `src/components/admin/dashboard.css` | DONE | File removed |
-| P2-05 | Consolidate custom.scss files | Multiple | 1h | Medium - Maintainability |
+| P2-05 | ~~Consolidate custom.scss files~~ | Multiple | DONE | Kept app/(payload)/custom.scss |
 
 ### MEDIUM (Fix Within 2 Weeks)
 

@@ -616,7 +616,7 @@ export default function PricingPage() {
                   Do you price match competitors?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Yes! We offer a price match guarantee for legitimate local competitors providing the same service (vehicle type, coverage, licensing). Show us a written quote and we'll match or beat it while maintaining our premium service standards.
+                  Nope! We've found that price matching often means service matching, and we're not willing to go there. Our vehicles are newer, our drivers are more experienced, and our dispatch actually answers the phone. Some things are worth paying for—like not ending up stranded at the airport because someone saved $20.
                 </p>
               </details>
 

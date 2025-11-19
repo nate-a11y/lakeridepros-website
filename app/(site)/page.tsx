@@ -84,7 +84,7 @@ export default async function HomePage() {
     getServices({ limit: 6 }).catch(() => ({ docs: [] })), // For "Our Services" section
     getServices({ limit: 100 }).catch(() => ({ docs: [] })), // For filtering popular services
     getFeaturedVehicles(3).catch(() => []),
-    getLatestBlogPosts(3).catch(() => []),
+    getLatestBlogPosts(10).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),
     getPopularServicesLocal(5).catch(() => []),

@@ -82,6 +82,7 @@ export default function FeaturedBlogSection({
                 src={featuredImageUrl}
                 alt={(featuredPost.featuredImage && typeof featuredPost.featuredImage === 'object' ? featuredPost.featuredImage.alt : null) || featuredPost.title}
                 fill
+                sizes="100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                 priority
               />
@@ -168,12 +169,13 @@ export default function FeaturedBlogSection({
                     className="group flex-shrink-0 w-[300px] md:w-[320px] snap-start bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     role="listitem"
                   >
-                    <div className="relative h-40 overflow-hidden">
+                    <div style={{ position: 'relative', height: '10rem', overflow: 'hidden' }}>
                       {imageUrl ? (
                         <Image
                           src={imageUrl}
                           alt={(post.featuredImage && typeof post.featuredImage === 'object' ? post.featuredImage.alt : null) || post.title}
                           fill
+                          sizes="320px"
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                       ) : (

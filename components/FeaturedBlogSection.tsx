@@ -85,6 +85,7 @@ export default function FeaturedBlogSection({
                 sizes="100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                 priority
+                unoptimized
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5 dark:from-primary/10 dark:to-dark-bg-secondary">
@@ -177,6 +178,7 @@ export default function FeaturedBlogSection({
                           fill
                           sizes="320px"
                           className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          unoptimized
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-dark-bg-secondary">

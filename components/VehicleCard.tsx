@@ -38,6 +38,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             onError={() => setImageError(true)}
             priority={false}
+            unoptimized
           />
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500">

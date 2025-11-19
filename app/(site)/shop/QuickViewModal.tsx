@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import FocusTrap from 'focus-trap-react'
 import { X, ShoppingCart, Check, ExternalLink } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl } from '@/lib/utils'
@@ -28,6 +29,17 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   const [selectedImage, setSelectedImage] = useState(0)
 
   const { addItem } = useCart()
+
+  // Handle Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [onClose])
 
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
 
@@ -70,20 +82,24 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] animate-in fade-in duration-200"
         onClick={onClose}
-        onKeyDown={(e) => e.key === 'Escape' && onClose()}
-        role="button"
-        tabIndex={0}
-        aria-label="Close modal"
+        aria-hidden="true"
       />
 
       {/* Modal */}
       <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 pointer-events-none">
-        <div
-          className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto animate-in zoom-in-95 duration-200"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="quickview-modal-title"
+        <FocusTrap
+          focusTrapOptions={{
+            initialFocus: false,
+            allowOutsideClick: true,
+            escapeDeactivates: false,
+          }}
         >
+          <div
+            className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto animate-in zoom-in-95 duration-200"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="quickview-modal-title"
+          >
           {/* Close Button */}
           <button
             onClick={onClose}
@@ -285,7 +301,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </FocusTrap>
       </div>
     </>
   )

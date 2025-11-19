@@ -15,12 +15,11 @@ import ServiceAreasMap from '@/components/ServiceAreasMap';
 import FAQAccordion from '@/components/FAQAccordion';
 import {
   getFeaturedVehicles,
-  getLatestBlogPosts,
   getRandomTestimonials,
   getPartners,
 } from '@/lib/api/payload';
 import { getMediaUrl } from '@/lib/api/payload';
-import { getServicesLocal } from '@/lib/api/payload-local';
+import { getServicesLocal, getBlogPostsLocal } from '@/lib/api/payload-local';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
@@ -83,7 +82,7 @@ export default async function HomePage() {
   const [allServicesData, vehicles, blogPosts, testimonials, partners, popularServicesData] = await Promise.all([
     getServicesLocal().catch(() => []), // Direct database query for services with images
     getFeaturedVehicles(3).catch(() => []),
-    getLatestBlogPosts(3).catch(() => []),
+    getBlogPostsLocal(3).catch(() => []), // Direct database query for blog posts with images
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),
     getPopularServicesLocal(5).catch(() => []),

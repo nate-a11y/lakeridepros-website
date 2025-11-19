@@ -191,10 +191,10 @@ This audit covers brand compliance, technical requirements, and ADA/WCAG 2.1 AA 
 
 | Priority | Issue | File | Effort | Impact |
 |----------|-------|------|--------|--------|
-| P2-01 | Use font-boardson on main headers | `HeroSection.tsx`, other pages | 2h | Medium - Brand consistency |
-| P2-02 | Replace hardcoded colors in ShopClient | `ShopClient.tsx` | 2h | Medium - Maintainability |
-| P2-03 | Delete duplicate admin components | `src/components/admin/*` | 30m | Low - Code hygiene |
-| P2-04 | Delete duplicate dashboard.css | `src/components/admin/dashboard.css` | 15m | Low - Code hygiene |
+| P2-01 | ~~Use font-boardson on main headers~~ | `HeroSection.tsx`, other pages | DONE | 8 pages updated |
+| P2-02 | ~~Replace hardcoded colors in ShopClient~~ | `ShopClient.tsx` | DONE | All using CSS variables |
+| P2-03 | ~~Delete duplicate admin components~~ | `src/components/admin/*` | DONE | Directory removed |
+| P2-04 | ~~Delete duplicate dashboard.css~~ | `src/components/admin/dashboard.css` | DONE | File removed |
 | P2-05 | Consolidate custom.scss files | Multiple | 1h | Medium - Maintainability |
 
 ### MEDIUM (Fix Within 2 Weeks)

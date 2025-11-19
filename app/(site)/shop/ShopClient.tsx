@@ -94,7 +94,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#060606] dark:bg-[#060606]">
+    <div className="min-h-screen bg-lrp-black dark:bg-lrp-black">
       {/* Hero Section - Premium Design */}
       <section className="relative bg-gradient-to-br from-lrp-green via-lrp-green to-lrp-green-dark py-16 md:py-20 overflow-hidden">
         {/* Subtle geometric background pattern */}
@@ -128,7 +128,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-14 pr-12 py-4 rounded-xl bg-[#060606]/80 backdrop-blur-md text-white placeholder:text-neutral-500 border-2 border-transparent focus:border-lrp-green focus:outline-none focus:scale-[1.02] focus:shadow-[0_8px_24px_rgba(76,187,23,0.3)] transition-all duration-200"
+                className="w-full pl-14 pr-12 py-4 rounded-xl bg-lrp-black/80 backdrop-blur-md text-white placeholder:text-neutral-500 border-2 border-transparent focus:border-lrp-green focus:outline-none focus:scale-[1.02] focus:shadow-[0_8px_24px_rgba(76,187,23,0.3)] transition-all duration-200"
               />
               {searchQuery && (
                 <button
@@ -144,7 +144,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       </section>
 
       {/* Filters & Sorting Bar - Premium Pills */}
-      <section className="border-b border-[#1a1a1a] sticky top-0 bg-[#060606] z-30 shadow-lg backdrop-blur-sm">
+      <section className="border-b border-dark-border sticky top-0 bg-lrp-black z-30 shadow-lg backdrop-blur-sm">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             {/* Premium Category Filter Pills */}
@@ -169,10 +169,10 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-[#1a1a1a] bg-[#0f0f0f] text-white font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)]"
+                className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)]"
               >
                 {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-[#0f0f0f]">
+                  <option key={option.value} value={option.value} className="bg-dark-bg-secondary">
                     {option.name}
                   </option>
                 ))}
@@ -194,7 +194,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
         <div className="container mx-auto px-4">
           {filteredAndSortedProducts.length === 0 ? (
             <div className="text-center py-20">
-              <div className="w-24 h-24 bg-[#0f0f0f] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#1a1a1a]">
+              <div className="w-24 h-24 bg-dark-bg-secondary rounded-full flex items-center justify-center mx-auto mb-6 border border-dark-border">
                 <Search className="w-12 h-12 text-neutral-400" />
               </div>
               <h2 className="font-boardson text-4xl font-bold text-white mb-4">
@@ -311,7 +311,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
 
   return (
     <div
-      className="group bg-[#0f0f0f] rounded-2xl border border-lrp-green/10 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(76,187,23,0.2)] hover:border-lrp-green/30 flex flex-col h-full relative"
+      className="group bg-dark-bg-secondary rounded-2xl border border-lrp-green/10 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(76,187,23,0.2)] hover:border-lrp-green/30 flex flex-col h-full relative"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Premium Wishlist Heart */}
@@ -334,7 +334,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
 
       <Link href={`/shop/products/${product.slug}`} className="flex-1 flex flex-col">
         {/* Premium Image / Branded Placeholder */}
-        <div className="relative aspect-square bg-[#1a1a1a] overflow-hidden">
+        <div className="relative aspect-square bg-dark-bg-tertiary overflow-hidden">
           {image?.url ? (
             <Image
               src={getMediaUrl(image.url)}
@@ -354,7 +354,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">
               {/* Branded "No Image" Placeholder */}
-              <div className="absolute inset-0 bg-gradient-radial from-[#0f0f0f] to-[#060606]"></div>
+              <div className="absolute inset-0 bg-gradient-radial from-dark-bg-secondary to-lrp-black"></div>
               <div className="relative z-10 flex flex-col items-center">
                 <ShoppingBag className="w-20 h-20 text-lrp-green/20 mb-3" />
                 <span className="text-sm text-neutral-500 font-medium tracking-wide">No Image</span>

@@ -58,7 +58,7 @@ export default function AboutUsPage() {
         {/* Hero */}
         <section className="bg-primary py-20">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl md:text-6xl font-bold text-white text-center">
+            <h1 className="font-boardson text-4xl md:text-6xl font-bold text-white text-center">
               About Lake Ride Pros
             </h1>
             <p className="text-white/90 text-center mt-6 text-xl max-w-3xl mx-auto">

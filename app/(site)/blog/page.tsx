@@ -21,7 +21,7 @@ export default async function BlogPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">Our Blog</h1>
+          <h1 className="font-boardson text-4xl sm:text-5xl font-bold mb-4">Our Blog</h1>
           <p className="text-xl text-white/90 dark:text-neutral-200 max-w-2xl mx-auto">
             News, tips, and insights from the Lake Ride Pros team
           </p>

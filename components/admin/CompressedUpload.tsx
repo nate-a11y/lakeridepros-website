@@ -1,8 +1,10 @@
 'use client'
 
 import { Upload } from '@payloadcms/ui'
-import type { UploadComponentProps } from '@payloadcms/ui'
-import { useCallback } from 'react'
+import { useCallback, type ComponentProps } from 'react'
+
+// Infer props from the Upload component
+type UploadProps = ComponentProps<typeof Upload>
 
 /**
  * Compresses an image file using browser Canvas API
@@ -116,7 +118,7 @@ async function compressImage(file: File): Promise<File> {
  * Custom Upload component that compresses images before upload
  * to stay within Vercel's 5MB serverless function limit.
  */
-export function CompressedUpload(props: UploadComponentProps) {
+export function CompressedUpload(props: UploadProps) {
   const { onChange, ...rest } = props
 
   // Wrap the onChange handler to compress files before passing to Payload

@@ -195,25 +195,25 @@ This audit covers brand compliance, technical requirements, and ADA/WCAG 2.1 AA 
 | P2-02 | ~~Replace hardcoded colors in ShopClient~~ | `ShopClient.tsx` | DONE | All using CSS variables |
 | P2-03 | ~~Delete duplicate admin components~~ | `src/components/admin/*` | DONE | Directory removed |
 | P2-04 | ~~Delete duplicate dashboard.css~~ | `src/components/admin/dashboard.css` | DONE | File removed |
-| P2-05 | Consolidate custom.scss files | Multiple | 1h | Medium - Maintainability |
+| P2-05 | ~~Consolidate custom.scss files~~ | Multiple | DONE | Kept app/(payload)/custom.scss |
 
 ### MEDIUM (Fix Within 2 Weeks)
 
 | Priority | Issue | File | Effort | Impact |
 |----------|-------|------|--------|--------|
-| P3-01 | Add missing CSS variables | `globals.css` | 30m | Medium - Consistency |
-| P3-02 | Add new tab indicator to external links | `accessibility/page.tsx` | 15m | Low - Accessibility |
-| P3-03 | Fix CartDrawer backdrop accessibility | `CartDrawer.tsx` | 15m | Low - Accessibility |
-| P3-04 | Add aria-hidden to VehicleCard icon | `VehicleCard.tsx` | 5m | Low - Accessibility |
-| P3-05 | Replace inline styles with Tailwind classes | Various | 1h | Low - Consistency |
+| P3-01 | ~~Add missing CSS variables~~ | `globals.css` | DONE | Already existed |
+| P3-02 | ~~Add new tab indicator to external links~~ | `accessibility/page.tsx` | DONE | sr-only spans added |
+| P3-03 | ~~Fix CartDrawer backdrop accessibility~~ | `CartDrawer.tsx` | DONE | aria-hidden added |
+| P3-04 | ~~Add aria-hidden to VehicleCard icon~~ | `VehicleCard.tsx` | DONE | Already had aria-hidden |
+| P3-05 | ~~Replace inline styles with Tailwind classes~~ | Various | DONE | 6 files updated |
 
 ### LOW (Fix When Convenient)
 
 | Priority | Issue | File | Effort | Impact |
 |----------|-------|------|--------|--------|
-| P4-01 | Add spacing/sizing CSS tokens | `globals.css` | 1h | Low - Design system |
-| P4-02 | Add font-size scale variables | `globals.css` | 30m | Low - Design system |
-| P4-03 | Document email template styling approach | Documentation | 30m | Low - Maintainability |
+| P4-01 | ~~Add spacing/sizing CSS tokens~~ | `globals.css` | DONE | Design tokens added |
+| P4-02 | ~~Add font-size scale variables~~ | `globals.css` | DONE | Font scale added |
+| P4-03 | ~~Document email template styling approach~~ | `lib/email.ts` | DONE | JSDoc added |
 
 ---
 

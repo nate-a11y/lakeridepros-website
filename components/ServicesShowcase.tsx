@@ -41,54 +41,52 @@ export default function ServicesShowcase({
         </div>
 
         {/* Services Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* All Services as Cards */}
           {services.map((service) => (
             <Link
               key={service.id}
               href={`/services/${service.slug}`}
-              className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
-              <div className="relative h-[280px]">
+              {/* Image */}
+              <div className="relative h-48 overflow-hidden">
                 {service.image && typeof service.image === 'object' && (
                   <Image
                     src={getMediaUrl(service.image.url)}
                     alt={service.image.alt || service.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                 )}
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-
                 {/* Icon badge */}
                 {service.icon && (
-                  <div className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm text-white">
-                    <DynamicIcon name={service.icon} size={16} />
+                  <div className="absolute top-4 left-4 flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-white shadow-lg">
+                    <DynamicIcon name={service.icon} size={20} />
                   </div>
                 )}
+              </div>
 
-                {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <h3 className="font-bold text-white mb-2 group-hover:text-primary-light transition-colors text-lg">
-                    {service.title}
-                  </h3>
-                  <p className="text-white/90 line-clamp-2 mb-3 text-sm">
-                    {service.shortDescription || service.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    {service.pricing?.basePrice ? (
-                      <span className="text-primary-light font-semibold text-sm">
-                        From ${service.pricing.basePrice}
-                      </span>
-                    ) : (
-                      <span className="text-white/70 text-sm">Get Quote</span>
-                    )}
-                    <span className="inline-flex items-center text-primary-light font-semibold text-sm group-hover:gap-2 gap-1 transition-all">
-                      Learn More
-                      <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              {/* Content */}
+              <div className="p-6">
+                <h3 className="font-bold text-neutral-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-primary-light transition-colors text-lg">
+                  {service.title}
+                </h3>
+                <p className="text-lrp-text-secondary dark:text-dark-text-secondary line-clamp-2 mb-4 text-sm leading-relaxed">
+                  {service.shortDescription || service.description}
+                </p>
+                <div className="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-700">
+                  {service.pricing?.basePrice ? (
+                    <span className="text-primary dark:text-primary-light font-semibold text-sm">
+                      From ${service.pricing.basePrice}
                     </span>
-                  </div>
+                  ) : (
+                    <span className="text-neutral-500 dark:text-neutral-400 text-sm">Get Quote</span>
+                  )}
+                  <span className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm group-hover:gap-2 gap-1 transition-all">
+                    Learn More
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
                 </div>
               </div>
             </Link>

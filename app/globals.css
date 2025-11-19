@@ -144,6 +144,10 @@
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
   --color-primary-light: var(--primary-light);
+  --color-primary-alpha-5: var(--primary-alpha-5);
+  --color-primary-alpha-10: var(--primary-alpha-10);
+  --color-primary-alpha-20: var(--primary-alpha-20);
+  --color-primary-alpha-30: var(--primary-alpha-30);
   --color-secondary: var(--secondary);
   --color-secondary-dark: var(--secondary-dark);
   --color-secondary-light: var(--secondary-light);

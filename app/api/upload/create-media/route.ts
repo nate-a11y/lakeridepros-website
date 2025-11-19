@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
-import config from '@/payload.config'
+import config from '@/src/payload.config'
 
 /**
  * Creates a media record from a file that was already uploaded to Supabase.

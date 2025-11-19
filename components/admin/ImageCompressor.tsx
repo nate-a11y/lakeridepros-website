@@ -192,9 +192,13 @@ export function ImageCompressor() {
       })
 
       if (pendingTasks.length > 0) {
+        // Stop the event completely - prevent default AND stop propagation
+        // This prevents React's onSubmit from firing with uncompressed files
         event.preventDefault()
+        event.stopImmediatePropagation()
+
         await Promise.all(pendingTasks)
-        // Re-submit after compression completes
+        // Re-submit after compression completes with the compressed files
         form.requestSubmit()
       }
     }

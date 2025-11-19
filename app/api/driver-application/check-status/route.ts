@@ -49,6 +49,12 @@ export async function POST(request: NextRequest) {
       .single() as { data: any; error: any }
 
     if (error || !data) {
+      console.error('Application lookup failed:', {
+        applicationId,
+        email: email.toLowerCase(),
+        error: error?.message || 'No data returned',
+        errorCode: error?.code
+      })
       return NextResponse.json(
         { error: 'Application not found. Please check your Application ID and email address.' },
         { status: 404 }

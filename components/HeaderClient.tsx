@@ -342,12 +342,9 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
               </button>
 
               {/* Animated Dropdown */}
+              {socialDropdownOpen && (
               <div
-                className={`absolute top-full right-0 mt-2 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50 min-w-[160px] transition-all duration-200 origin-top-right ${
-                  socialDropdownOpen
-                    ? 'opacity-100 scale-100 translate-y-0'
-                    : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
-                }`}
+                className="absolute top-full right-0 pt-0 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50 min-w-[160px]"
               >
                 {socialLinks.map((social) => {
                   const Icon = social.icon;
@@ -366,6 +363,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   );
                 })}
               </div>
+              )}
             </div>
 
             {/* Theme Toggle */}

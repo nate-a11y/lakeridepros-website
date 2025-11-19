@@ -2,6 +2,14 @@ import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  admin: {
+    components: {
+      edit: {
+        // Direct upload to Supabase - bypasses Vercel's 4.5MB limit
+        Upload: '@/components/admin/DirectUpload#DirectUpload',
+      },
+    },
+  },
   upload: {
     // Resize original to 1024px and convert to WebP
     // This reduces storage by only keeping one optimized version

@@ -1,14 +1,13 @@
 'use client'
 
-import { useState, useCallback } from 'react'
-import { useField } from '@payloadcms/ui'
+import { useState, useCallback, useRef } from 'react'
+import { useDocumentInfo, useForm } from '@payloadcms/ui'
 
 /**
  * Compresses an image file using browser Canvas API
  * Converts to WebP format and resizes to max 1024px
  */
 async function compressImage(file: File): Promise<{ file: File; width: number; height: number }> {
-  // Only compress images
   if (!file.type.startsWith('image/')) {
     return { file, width: 0, height: 0 }
   }
@@ -19,7 +18,6 @@ async function compressImage(file: File): Promise<{ file: File; width: number; h
     const ctx = canvas.getContext('2d')
 
     img.onload = () => {
-      // Calculate new dimensions (max 1024px to match server config)
       const maxDimension = 1024
       let { width, height } = img
 
@@ -37,53 +35,40 @@ async function compressImage(file: File): Promise<{ file: File; width: number; h
       canvas.height = height
 
       if (!ctx) {
-        console.warn('[DirectUpload] Could not get canvas context')
         resolve({ file, width: img.width, height: img.height })
         return
       }
 
-      // Draw and compress
       ctx.drawImage(img, 0, 0, width, height)
 
-      // Try WebP first, fall back to JPEG
-      const tryFormat = (format: string, quality: number) => {
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) {
-              resolve({ file, width, height })
-              return
-            }
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            resolve({ file, width, height })
+            return
+          }
 
-            // Change extension to match format
-            const ext = format === 'image/webp' ? '.webp' : '.jpg'
-            const newName = file.name.replace(/\.[^.]+$/, ext)
+          const ext = '.webp'
+          const newName = file.name.replace(/\.[^.]+$/, ext)
 
-            const compressedFile = new File([blob], newName, {
-              type: format,
-              lastModified: Date.now(),
-            })
+          const compressedFile = new File([blob], newName, {
+            type: 'image/webp',
+            lastModified: Date.now(),
+          })
 
-            console.log(
-              `[DirectUpload] Compressed ${file.name}: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB (${width}x${height})`
-            )
+          console.log(
+            `[DirectUpload] Compressed ${file.name}: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB (${width}x${height})`
+          )
 
-            resolve({ file: compressedFile, width, height })
-          },
-          format,
-          quality
-        )
-      }
-
-      // Use WebP at 80% quality (matches server config)
-      tryFormat('image/webp', 0.8)
+          resolve({ file: compressedFile, width, height })
+        },
+        'image/webp',
+        0.8
+      )
     }
 
-    img.onerror = () => {
-      console.warn('[DirectUpload] Failed to load image')
-      resolve({ file, width: 0, height: 0 })
-    }
+    img.onerror = () => resolve({ file, width: 0, height: 0 })
 
-    // Load image
     const reader = new FileReader()
     reader.onload = (e) => {
       img.src = e.target?.result as string
@@ -93,35 +78,38 @@ async function compressImage(file: File): Promise<{ file: File; width: number; h
   })
 }
 
-interface DirectUploadProps {
-  path: string
-}
-
 /**
- * Custom upload component that uploads directly to Supabase,
- * bypassing Vercel's 4.5MB serverless function limit.
+ * Custom Upload component that bypasses Vercel's 4.5MB limit
+ * by uploading directly to Supabase.
  */
-export function DirectUpload({ path }: DirectUploadProps) {
-  const { value, setValue } = useField<string>({ path })
+export function DirectUpload() {
+  const { id } = useDocumentInfo()
+  const { submit } = useForm()
+
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
+  const [dragActive, setDragActive] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
+  const processUpload = useCallback(async (file: File) => {
     setUploading(true)
     setError(null)
     setProgress(0)
 
     try {
-      // Step 1: Compress the image
+      // Preview
+      const previewUrl = URL.createObjectURL(file)
+      setPreview(previewUrl)
+
+      // Step 1: Compress
       setProgress(10)
       const { file: compressedFile, width, height } = await compressImage(file)
 
       // Step 2: Get presigned URL
-      setProgress(20)
+      setProgress(25)
       const presignedRes = await fetch('/api/upload/presigned-url', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -132,18 +120,17 @@ export function DirectUpload({ path }: DirectUploadProps) {
       })
 
       if (!presignedRes.ok) {
-        throw new Error('Failed to get upload URL')
+        const err = await presignedRes.text()
+        throw new Error(`Failed to get upload URL: ${err}`)
       }
 
       const { signedUrl, path: filePath, publicUrl } = await presignedRes.json()
 
-      // Step 3: Upload directly to Supabase
-      setProgress(40)
+      // Step 3: Upload to Supabase
+      setProgress(50)
       const uploadRes = await fetch(signedUrl, {
         method: 'PUT',
-        headers: {
-          'Content-Type': compressedFile.type,
-        },
+        headers: { 'Content-Type': compressedFile.type },
         body: compressedFile,
       })
 
@@ -151,9 +138,9 @@ export function DirectUpload({ path }: DirectUploadProps) {
         throw new Error('Failed to upload to storage')
       }
 
-      setProgress(80)
+      setProgress(75)
 
-      // Step 4: Create media record in Payload (small JSON, not file upload)
+      // Step 4: Create media record
       const mediaRes = await fetch('/api/upload/create-media', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -169,90 +156,174 @@ export function DirectUpload({ path }: DirectUploadProps) {
       })
 
       if (!mediaRes.ok) {
-        const errorText = await mediaRes.text()
-        throw new Error(`Failed to create media record: ${errorText}`)
+        const err = await mediaRes.text()
+        throw new Error(`Failed to create media: ${err}`)
       }
 
       const mediaData = await mediaRes.json()
       setProgress(100)
+      setUploadedUrl(publicUrl)
 
-      // Set the field value to the new media ID
-      setValue(mediaData.doc.id)
+      console.log('[DirectUpload] Success:', mediaData.doc.id)
 
-      console.log('[DirectUpload] Upload complete:', mediaData.doc.id)
+      // Redirect to the new media item
+      if (mediaData.doc?.id) {
+        window.location.href = `/admin/collections/media/${mediaData.doc.id}`
+      }
     } catch (err) {
       console.error('[DirectUpload] Error:', err)
       setError(err instanceof Error ? err.message : 'Upload failed')
     } finally {
       setUploading(false)
     }
-  }, [setValue])
+  }, [])
+
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) processUpload(file)
+  }, [processUpload])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setDragActive(false)
+    const file = e.dataTransfer.files?.[0]
+    if (file) processUpload(file)
+  }, [processUpload])
+
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true)
+    } else if (e.type === 'dragleave') {
+      setDragActive(false)
+    }
+  }, [])
+
+  // If we're editing an existing document, show message
+  if (id) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
+        <p>This media item already exists.</p>
+        <p>To upload a new image, create a new media item.</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="direct-upload">
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleUpload}
-        disabled={uploading}
-      />
+    <div style={{ padding: '1rem' }}>
+      <div
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+        onClick={() => inputRef.current?.click()}
+        style={{
+          border: `2px dashed ${dragActive ? '#3b82f6' : '#d1d5db'}`,
+          borderRadius: '8px',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          cursor: 'pointer',
+          backgroundColor: dragActive ? '#eff6ff' : '#f9fafb',
+          transition: 'all 0.2s',
+        }}
+      >
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileSelect}
+          disabled={uploading}
+          style={{ display: 'none' }}
+        />
 
-      {uploading && (
-        <div className="upload-progress">
-          <div
-            className="progress-bar"
-            style={{ width: `${progress}%` }}
-          />
-          <span>{progress}%</span>
-        </div>
-      )}
+        {preview ? (
+          <div>
+            <img
+              src={preview}
+              alt="Preview"
+              style={{
+                maxWidth: '200px',
+                maxHeight: '200px',
+                borderRadius: '4px',
+                marginBottom: '1rem',
+              }}
+            />
+          </div>
+        ) : (
+          <div>
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#9ca3af"
+              strokeWidth="2"
+              style={{ margin: '0 auto 1rem' }}
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17,8 12,3 7,8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+          </div>
+        )}
+
+        {uploading ? (
+          <div>
+            <p style={{ marginBottom: '0.5rem', color: '#374151' }}>
+              Uploading... {progress}%
+            </p>
+            <div style={{
+              width: '100%',
+              height: '8px',
+              backgroundColor: '#e5e7eb',
+              borderRadius: '4px',
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                width: `${progress}%`,
+                height: '100%',
+                backgroundColor: '#3b82f6',
+                transition: 'width 0.3s',
+              }} />
+            </div>
+          </div>
+        ) : (
+          <div>
+            <p style={{ color: '#374151', marginBottom: '0.5rem' }}>
+              <strong>Click to upload</strong> or drag and drop
+            </p>
+            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
+              Images will be compressed and converted to WebP
+            </p>
+          </div>
+        )}
+      </div>
 
       {error && (
-        <div className="upload-error">
+        <div style={{
+          marginTop: '1rem',
+          padding: '0.75rem',
+          backgroundColor: '#fef2f2',
+          border: '1px solid #fecaca',
+          borderRadius: '4px',
+          color: '#dc2626',
+        }}>
           {error}
         </div>
       )}
 
-      {value && !uploading && (
-        <div className="upload-success">
-          Uploaded: {value}
+      {uploadedUrl && !uploading && (
+        <div style={{
+          marginTop: '1rem',
+          padding: '0.75rem',
+          backgroundColor: '#f0fdf4',
+          border: '1px solid #bbf7d0',
+          borderRadius: '4px',
+          color: '#16a34a',
+        }}>
+          Upload complete! Redirecting...
         </div>
       )}
-
-      <style jsx>{`
-        .direct-upload {
-          padding: 1rem;
-          border: 2px dashed #ccc;
-          border-radius: 8px;
-        }
-        .upload-progress {
-          margin-top: 0.5rem;
-          background: #eee;
-          border-radius: 4px;
-          overflow: hidden;
-          position: relative;
-        }
-        .progress-bar {
-          height: 20px;
-          background: #3b82f6;
-          transition: width 0.3s;
-        }
-        .progress-bar + span {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          font-size: 12px;
-        }
-        .upload-error {
-          color: #ef4444;
-          margin-top: 0.5rem;
-        }
-        .upload-success {
-          color: #22c55e;
-          margin-top: 0.5rem;
-        }
-      `}</style>
     </div>
   )
 }

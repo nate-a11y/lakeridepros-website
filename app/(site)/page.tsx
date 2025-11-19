@@ -14,12 +14,11 @@ import WhyChooseUs from '@/components/WhyChooseUs';
 import ServiceAreasMap from '@/components/ServiceAreasMap';
 import FAQAccordion from '@/components/FAQAccordion';
 import {
-  getFeaturedVehicles,
   getRandomTestimonials,
   getPartners,
 } from '@/lib/api/payload';
 import { getMediaUrl } from '@/lib/api/payload';
-import { getServicesLocal, getBlogPostsLocal } from '@/lib/api/payload-local';
+import { getServicesLocal, getBlogPostsLocal, getFeaturedVehiclesLocal } from '@/lib/api/payload-local';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
@@ -81,7 +80,7 @@ export default async function HomePage() {
   // Fetch data with error handling
   const [allServicesData, vehicles, blogPosts, testimonials, partners, popularServicesData] = await Promise.all([
     getServicesLocal().catch(() => []), // Direct database query for services with images
-    getFeaturedVehicles(3).catch(() => []),
+    getFeaturedVehiclesLocal(3).catch(() => []), // Direct database query for vehicles with images
     getBlogPostsLocal(3).catch(() => []), // Direct database query for blog posts with images
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),

@@ -49,13 +49,12 @@ export default function ServicesShowcase({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* All Services as Cards */}
           {services.map((service) => (
-            <Link
+            <div
               key={service.id}
-              href={`/services/${service.slug}`}
-              className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
             >
               {/* Image */}
-              <div className="relative h-48 overflow-hidden">
+              <Link href={`/services/${service.slug}`} className="block relative h-48 overflow-hidden">
                 {service.image && typeof service.image === 'object' && (
                   <Image
                     src={getMediaUrl(service.image.url)}
@@ -70,13 +69,16 @@ export default function ServicesShowcase({
                     <DynamicIcon name={service.icon} size={20} />
                   </div>
                 )}
-              </div>
+              </Link>
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="font-bold text-neutral-900 dark:text-white mb-2 group-hover:text-primary dark:group-hover:text-primary-light transition-colors text-lg">
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="font-bold text-neutral-900 dark:text-white mb-2 hover:text-primary dark:hover:text-primary-light transition-colors text-lg block focus:outline-none focus:underline"
+                >
                   {service.title}
-                </h3>
+                </Link>
                 <p className="text-lrp-text-secondary dark:text-dark-text-secondary line-clamp-2 mb-4 text-sm leading-relaxed">
                   {service.shortDescription || service.description}
                 </p>
@@ -87,23 +89,22 @@ export default function ServicesShowcase({
                     </span>
                   ) : (
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setIsBookingOpen(true);
-                      }}
+                      onClick={() => setIsBookingOpen(true)}
                       className="text-primary dark:text-primary-light font-semibold text-sm hover:underline focus:outline-none focus:underline"
                     >
                       Get Quote
                     </button>
                   )}
-                  <span className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm group-hover:gap-2 gap-1 transition-all">
+                  <Link
+                    href={`/services/${service.slug}`}
+                    className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm hover:gap-2 gap-1 transition-all focus:outline-none focus:underline"
+                  >
                     Learn More
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
 

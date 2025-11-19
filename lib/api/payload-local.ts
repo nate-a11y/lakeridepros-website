@@ -1,6 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import type { Service, Partner } from '@/src/payload-types'
+import type { Service, Partner, BlogPost, Vehicle } from '@/src/payload-types'
 
 /**
  * Server-side only functions to query Payload directly without HTTP requests
@@ -113,6 +113,53 @@ export async function getPartnerBySlugLocal(slug: string): Promise<Partner | nul
   } catch (error) {
     console.error(`[Payload Local] Error fetching partner ${slug}:`, error)
     return null
+  }
+}
+
+export async function getBlogPostsLocal(limit = 3): Promise<BlogPost[]> {
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'blog-posts',
+      where: {
+        published: {
+          equals: true,
+        },
+      },
+      sort: '-publishedDate',
+      depth: 2,
+      limit,
+    })
+
+    return result.docs as unknown as BlogPost[]
+  } catch (error) {
+    console.error('[Payload Local] Error fetching blog posts:', error)
+    return []
+  }
+}
+
+export async function getFeaturedVehiclesLocal(limit = 6): Promise<Vehicle[]> {
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'vehicles',
+      where: {
+        featured: {
+          equals: true,
+        },
+        available: {
+          equals: true,
+        },
+      },
+      sort: 'order',
+      depth: 2,
+      limit,
+    })
+
+    return result.docs as unknown as Vehicle[]
+  } catch (error) {
+    console.error('[Payload Local] Error fetching featured vehicles:', error)
+    return []
   }
 }
 

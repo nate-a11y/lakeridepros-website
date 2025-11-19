@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { ChevronDown, Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
+import { ChevronDown, Facebook, Instagram, Twitter, Youtube, AtSign } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { BookingModal } from './BookingModal';
 import CartIcon from '@/components/cart/CartIcon';
@@ -66,6 +66,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [partnersDropdownOpen, setPartnersDropdownOpen] = useState(false);
   const [insidersDropdownOpen, setInsidersDropdownOpen] = useState(false);
+  const [socialDropdownOpen, setSocialDropdownOpen] = useState(false);
 
   // Build service dropdown items dynamically from CMS
   const serviceDropdownItems = [
@@ -310,23 +311,61 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
 
           {/* Right side buttons */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            {/* Social Media Icons - hidden on mobile */}
-            <div className="hidden md:flex items-center space-x-1">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors"
-                    aria-label={`Follow Lake Ride Pros on ${social.name}`}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                );
-              })}
+            {/* Social Media Dropdown - hidden on mobile */}
+            <div
+              className="hidden md:block relative"
+              onMouseEnter={() => setSocialDropdownOpen(true)}
+              onMouseLeave={() => setSocialDropdownOpen(false)}
+              onFocus={() => setSocialDropdownOpen(true)}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setSocialDropdownOpen(false);
+                }
+              }}
+            >
+              <button
+                className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-neutral-100 dark:hover:bg-dark-bg-tertiary"
+                aria-expanded={socialDropdownOpen}
+                aria-haspopup="true"
+                aria-label="Social media links"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSocialDropdownOpen(!socialDropdownOpen);
+                  }
+                  if (e.key === 'Escape') {
+                    setSocialDropdownOpen(false);
+                  }
+                }}
+              >
+                <AtSign className="w-4 h-4" />
+              </button>
+
+              {/* Animated Dropdown */}
+              <div
+                className={`absolute top-full right-0 mt-2 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50 min-w-[160px] transition-all duration-200 origin-top-right ${
+                  socialDropdownOpen
+                    ? 'opacity-100 scale-100 translate-y-0'
+                    : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
+                }`}
+              >
+                {socialLinks.map((social) => {
+                  const Icon = social.icon;
+                  return (
+                    <a
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-lrp-green/10 hover:text-primary dark:hover:text-primary transition-colors"
+                      aria-label={`Follow Lake Ride Pros on ${social.name}`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span>{social.name}</span>
+                    </a>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Theme Toggle */}

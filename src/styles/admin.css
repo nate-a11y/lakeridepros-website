@@ -184,7 +184,7 @@ textarea::placeholder {
 .field-label,
 .label,
 label {
-  color: #e6e6e6 !important;
+  color: var(--lrp-gray-light) !important;
   font-weight: 500;
 }
 
@@ -397,7 +397,7 @@ input[type="checkbox"] {
 
 .breadcrumbs,
 [class*="breadcrumb"] {
-  color: #e6e6e6 !important;
+  color: var(--lrp-gray-light) !important;
 }
 
 .breadcrumbs a {

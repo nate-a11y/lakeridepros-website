@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "payload generate:importmap && payload generate:types && next build",
+    "build": "npm run lint:colors && payload generate:importmap && payload generate:types && next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:colors": "node scripts/audit-colors.js",
+    "lint:a11y": "eslint --no-warn-ignored --rule 'jsx-a11y/*: error' .",
+    "lint:all": "npm run lint && npm run lint:colors",
     "payload": "payload",
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",

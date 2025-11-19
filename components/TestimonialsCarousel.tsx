@@ -152,7 +152,7 @@ export default function TestimonialsCarousel({
                 )}
 
                 {/* Quote Content */}
-                <blockquote className="text-xl md:text-2xl text-center text-neutral-700 dark:text-neutral-200 leading-relaxed mb-8 font-light italic">
+                <blockquote className="text-xl md:text-2xl text-center text-neutral-800 dark:text-white leading-relaxed mb-8 font-light italic">
                   &ldquo;{currentTestimonial.content}&rdquo;
                 </blockquote>
 

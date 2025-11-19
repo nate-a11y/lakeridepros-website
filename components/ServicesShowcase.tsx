@@ -43,53 +43,37 @@ export default function ServicesShowcase({
         {/* Services Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* All Services as Cards */}
-          {services.map((service, index) => (
+          {services.map((service) => (
             <Link
               key={service.id}
               href={`/services/${service.slug}`}
-              className={`group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                index === 0 ? 'md:col-span-2 lg:col-span-2' : ''
-              }`}
+              className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
-              <div className={`relative ${index === 0 ? 'h-[300px] md:h-[350px]' : 'h-[280px]'}`}>
+              <div className="relative h-[280px]">
                 {service.image && typeof service.image === 'object' && (
                   <Image
                     src={getMediaUrl(service.image.url)}
                     alt={service.image.alt || service.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    priority={index === 0}
                   />
                 )}
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-                {/* Featured badge for first item */}
-                {index === 0 && (
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-primary/90 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1 rounded-full">
-                      Featured Service
-                    </span>
-                  </div>
-                )}
-
                 {/* Icon badge */}
                 {service.icon && (
-                  <div className={`absolute ${index === 0 ? 'top-4 right-4' : 'top-3 right-3'} flex items-center justify-center ${index === 0 ? 'w-10 h-10' : 'w-8 h-8'} rounded-full bg-white/20 backdrop-blur-sm text-white`}>
-                    <DynamicIcon name={service.icon} size={index === 0 ? 20 : 16} />
+                  <div className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm text-white">
+                    <DynamicIcon name={service.icon} size={16} />
                   </div>
                 )}
 
                 {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-6">
-                  <h3 className={`font-bold text-white mb-2 group-hover:text-primary-light transition-colors ${
-                    index === 0 ? 'text-xl md:text-2xl' : 'text-lg'
-                  }`}>
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <h3 className="font-bold text-white mb-2 group-hover:text-primary-light transition-colors text-lg">
                     {service.title}
                   </h3>
-                  <p className={`text-white/90 line-clamp-2 mb-3 ${
-                    index === 0 ? 'text-sm md:text-base' : 'text-sm'
-                  }`}>
+                  <p className="text-white/90 line-clamp-2 mb-3 text-sm">
                     {service.shortDescription || service.description}
                   </p>
                   <div className="flex items-center justify-between">

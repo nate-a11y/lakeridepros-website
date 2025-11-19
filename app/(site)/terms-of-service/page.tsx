@@ -242,11 +242,11 @@ export default function TermsOfServicePage() {
           <div className="bg-white dark:bg-dark-bg-secondary border border-lrp-gray dark:border-dark-border p-6 rounded-lg">
             <p className="text-lrp-black dark:text-dark-text-secondary mb-4">
               If you have any concerns about our service, please contact us first at{' '}
-              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green-dark dark:text-lrp-green hover:text-primary">
                 contactus@lakeridepros.com
               </a>
               {' '}or{' '}
-              <PhoneLink className="text-lrp-green hover:text-lrp-green-light">
+              <PhoneLink className="text-lrp-green-dark dark:text-lrp-green hover:text-primary">
                 (573) 206-9499
               </PhoneLink>
               . We are committed to resolving any issues promptly and fairly.
@@ -278,14 +278,14 @@ export default function TermsOfServicePage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/privacy-policy"
-              className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-light font-semibold"
+              className="flex items-center gap-2 text-lrp-green-dark dark:text-lrp-green hover:text-primary font-semibold"
             >
               <FileText className="w-5 h-5" />
               Privacy Policy
             </Link>
             <Link
               href="/accessibility"
-              className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-light font-semibold"
+              className="flex items-center gap-2 text-lrp-green-dark dark:text-lrp-green hover:text-primary font-semibold"
             >
               <Shield className="w-5 h-5" />
               Accessibility Statement
@@ -310,13 +310,13 @@ export default function TermsOfServicePage() {
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               Email:{' '}
-              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:text-lrp-green-light">
+              <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green-dark dark:text-lrp-green hover:text-primary">
                 contactus@lakeridepros.com
               </a>
             </p>
             <p className="text-lrp-black dark:text-dark-text-secondary">
               Phone:{' '}
-              <PhoneLink className="text-lrp-green hover:text-lrp-green-light">
+              <PhoneLink className="text-lrp-green-dark dark:text-lrp-green hover:text-primary">
                 (573) 206-9499
               </PhoneLink>
             </p>

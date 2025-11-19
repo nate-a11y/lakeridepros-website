@@ -379,24 +379,17 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
 
           {/* Premium Quick View Overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center backdrop-blur-0 group-hover:backdrop-blur-sm">
-            <span
-              role="button"
-              tabIndex={0}
+            <button
+              type="button"
               onClick={(e) => {
                 e.preventDefault()
                 onQuickView()
               }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault()
-                  onQuickView()
-                }
-              }}
               aria-label={`Quick view ${product.name}`}
-              className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-lrp-green text-white px-6 py-3 rounded-xl font-bold shadow-xl hover:bg-lrp-green-dark hover:scale-105 transform cursor-pointer"
+              className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-lrp-green text-white px-6 py-3 rounded-xl font-bold shadow-xl hover:bg-lrp-green-dark hover:scale-105 transform"
             >
               Quick View
-            </span>
+            </button>
           </div>
         </div>
 

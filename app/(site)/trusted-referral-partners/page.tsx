@@ -64,7 +64,7 @@ export default async function TrustedReferralPartnersPage() {
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
+            className="inline-block bg-white text-lrp-green-dark hover:bg-lrp-gray hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
           >
             Book Your Ride
           </Link>

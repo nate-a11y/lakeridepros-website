@@ -112,7 +112,7 @@ export default function TrustedReferralPartnersClient({
               href={partner.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-lrp-green hover:text-lrp-green-dark transition-colors"
+              className="flex items-center gap-2 text-sm text-lrp-green-dark hover:text-lrp-green transition-colors"
             >
               <ExternalLink className="w-4 h-4 flex-shrink-0" />
               <span className="truncate">Visit Website</span>

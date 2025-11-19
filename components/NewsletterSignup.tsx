@@ -74,6 +74,9 @@ export default function NewsletterSignup() {
 
           {message && (
             <p
+              role={status === 'success' ? 'status' : 'alert'}
+              aria-live="polite"
+              aria-atomic="true"
               className={`mt-3 text-center text-sm ${
                 status === 'success' ? 'text-green-200 dark:text-primary-light' : 'text-red-200 dark:text-red-300'
               }`}

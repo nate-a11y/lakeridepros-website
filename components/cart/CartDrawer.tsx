@@ -3,6 +3,7 @@
 import { X, ShoppingCart, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import FocusTrap from 'focus-trap-react'
 import { useCart } from '@/lib/store/cart'
 
 interface CartDrawerProps {
@@ -25,7 +26,15 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       />
 
       {/* Drawer */}
-      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-dark-bg-primary shadow-2xl z-50 flex flex-col">
+      <FocusTrap
+        focusTrapOptions={{
+          initialFocus: false,
+          allowOutsideClick: true,
+          escapeDeactivates: true,
+          onDeactivate: onClose,
+        }}
+      >
+        <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-dark-bg-primary shadow-2xl z-50 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b dark:border-dark-border">
           <div className="flex items-center gap-3">
@@ -36,7 +45,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary rounded-lg transition-colors"
+            className="p-3 hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary rounded-lg transition-colors"
             aria-label="Close cart"
           >
             <X className="w-6 h-6" aria-hidden="true" />
@@ -53,7 +62,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </p>
               <button
                 onClick={onClose}
-                className="text-lrp-green hover:text-lrp-green-dark font-semibold"
+                className="text-lrp-green-dark hover:text-lrp-green font-semibold"
               >
                 Continue Shopping
               </button>
@@ -88,7 +97,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                          className="w-8 h-8 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
+                          className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
                           aria-label="Decrease quantity"
                         >
                           −
@@ -98,14 +107,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         </span>
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                          className="w-8 h-8 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
+                          className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
                           aria-label="Increase quantity"
                         >
                           +
                         </button>
                       </div>
 
-                      <p className="font-bold text-lrp-green">
+                      <p className="font-bold text-lrp-green-dark dark:text-lrp-green">
                         ${(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
@@ -114,7 +123,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   {/* Remove */}
                   <button
                     onClick={() => removeItem(item.variantId)}
-                    className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors self-start"
+                    className="p-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors self-start"
                     aria-label="Remove item"
                   >
                     <Trash2 className="w-5 h-5 text-red-500" aria-hidden="true" />
@@ -133,7 +142,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <span className="font-semibold text-neutral-900 dark:text-white">
                 Subtotal:
               </span>
-              <span className="font-bold text-lrp-green">
+              <span className="font-bold text-lrp-green-dark dark:text-lrp-green">
                 ${getSubtotal().toFixed(2)}
               </span>
             </div>
@@ -160,7 +169,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             </div>
           </div>
         )}
-      </div>
+        </div>
+      </FocusTrap>
     </>
   )
 }

@@ -193,6 +193,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               onKeyDown={(e) => e.key === 'Enter' && frontInputRef.current?.click()}
               role="button"
               tabIndex={0}
+              aria-label="Upload license front image"
             >
               {uploading.front || loadingExisting ? (
                 <div className="flex flex-col items-center gap-2">
@@ -238,8 +239,9 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
                   type="button"
                   onClick={() => removeImage('front')}
                   className="text-red-600 hover:text-red-700 p-2"
+                  aria-label="Remove license front image"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -265,6 +267,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               onKeyDown={(e) => e.key === 'Enter' && backInputRef.current?.click()}
               role="button"
               tabIndex={0}
+              aria-label="Upload license back image"
             >
               {uploading.back || loadingExisting ? (
                 <div className="flex flex-col items-center gap-2">
@@ -310,8 +313,9 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
                   type="button"
                   onClick={() => removeImage('back')}
                   className="text-red-600 hover:text-red-700 p-2"
+                  aria-label="Remove license back image"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </div>
             </div>

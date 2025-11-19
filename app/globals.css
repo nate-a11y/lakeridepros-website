@@ -38,6 +38,7 @@
   --lrp-green: #4cbb17;
   --lrp-green-light: #5cd91f;
   --lrp-green-dark: #3a8e11;
+  --lrp-green-text: #3a8e11;  /* WCAG AA compliant (4.5:1) for text on white */
   --lrp-black: #060606;
   --lrp-gray: #e6e6e6;  /* Brand spec: Light Gray */
 
@@ -290,6 +291,22 @@ body:has([data-main-app]) {
   color: var(--foreground);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* WCAG 2.5.5 Touch Target Size Compliance */
+/* Ensure minimum 44x44px touch targets for mobile accessibility */
+input[type="checkbox"] {
+  min-width: 44px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+/* For visual consistency, use appearance to maintain custom styling */
+input[type="checkbox"].h-4 {
+  /* Override Tailwind size but keep visual checkbox small with padding */
+  padding: 14px; /* (44 - 16) / 2 = 14px padding on each side */
+  margin: -14px; /* Negative margin to prevent layout shift */
+  box-sizing: content-box;
 }
 
 @layer utilities {

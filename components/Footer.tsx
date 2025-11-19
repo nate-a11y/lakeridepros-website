@@ -107,7 +107,7 @@ export default async function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-8 items-start">
           {/* Column 1 - Quick Links */}
-          <div>
+          <nav aria-label="Quick links">
             <h3 className="text-white font-bold mb-4 text-lg">Quick Links</h3>
             <ul className="space-y-2">
               {footerLinks.quickLinks.map((link) => (
@@ -121,10 +121,10 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Column 2 - Services */}
-          <div>
+          <nav aria-label="Services">
             <h3 className="text-white font-bold mb-4 text-lg">Services</h3>
             <ul className="space-y-2">
               {footerLinks.services.map((link) => (
@@ -138,10 +138,10 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Column 3 - Service Areas */}
-          <div>
+          <nav aria-label="Service areas">
             <h3 className="text-white font-bold mb-4 text-lg">Service Areas</h3>
             <ul className="space-y-2">
               {footerLinks.serviceAreas.map((link) => (
@@ -155,119 +155,131 @@ export default async function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Column 4 - Partners */}
           <div>
-            <h3 className="text-white font-bold mb-4 text-lg">Partners</h3>
-            <ul className="space-y-2">
-              {footerLinks.partners.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <nav aria-label="Partners">
+              <h3 className="text-white font-bold mb-4 text-lg">Partners</h3>
+              <ul className="space-y-2">
+                {footerLinks.partners.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
             {/* Insiders */}
-            <h3 className="text-white font-bold mb-4 text-lg mt-6">Insiders</h3>
-            <ul className="space-y-2">
-              {footerLinks.insiders.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <nav aria-label="Insiders membership" className="mt-6">
+              <h3 className="text-white font-bold mb-4 text-lg">Insiders</h3>
+              <ul className="space-y-2">
+                {footerLinks.insiders.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
 
           {/* Column 5 - Company */}
           <div>
-            <h3 className="text-white font-bold mb-4 text-lg">Company</h3>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <nav aria-label="Company">
+              <h3 className="text-white font-bold mb-4 text-lg">Company</h3>
+              <ul className="space-y-2">
+                {footerLinks.company.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
             {/* Careers */}
-            <h3 className="text-white font-bold mb-4 text-lg mt-6">Careers</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/careers/driver-application"
-                  className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                >
-                  Driver Application
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/careers/application-status"
-                  className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                >
-                  Application Status
-                </Link>
-              </li>
-            </ul>
+            <nav aria-label="Careers" className="mt-6">
+              <h3 className="text-white font-bold mb-4 text-lg">Careers</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/careers/driver-application"
+                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                  >
+                    Driver Application
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/careers/application-status"
+                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                  >
+                    Application Status
+                  </Link>
+                </li>
+              </ul>
+            </nav>
           </div>
 
           {/* Column 6 - Legal & Contact */}
           <div>
-            <h3 className="text-white font-bold mb-4 text-lg">Legal</h3>
-            <ul className="space-y-2">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <nav aria-label="Legal">
+              <h3 className="text-white font-bold mb-4 text-lg">Legal</h3>
+              <ul className="space-y-2">
+                {footerLinks.legal.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
             {/* Contact */}
-            <h3 className="text-white font-bold mb-4 text-lg mt-6">Contact</h3>
-            <ul className="space-y-2">
-              <li>
-                <PhoneLink
-                  className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                >
-                  (573) 206-9499
-                </PhoneLink>
-              </li>
-              <li>
-                <a
-                  href="mailto:contactus@lakeridepros.com"
-                  className="text-white/90 hover:text-lrp-green-light transition-colors text-sm break-words"
-                  aria-label="Email Lake Ride Pros"
-                >
-                  contactus@lakeridepros.com
-                </a>
-              </li>
-              <li>
-                <span className="text-white/90 text-sm">
-                  Lake of the Ozarks, MO
-                </span>
-              </li>
-            </ul>
+            <div className="mt-6">
+              <h3 className="text-white font-bold mb-4 text-lg">Contact</h3>
+              <ul className="space-y-2">
+                <li>
+                  <PhoneLink
+                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                  >
+                    (573) 206-9499
+                  </PhoneLink>
+                </li>
+                <li>
+                  <a
+                    href="mailto:contactus@lakeridepros.com"
+                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm break-words"
+                    aria-label="Email Lake Ride Pros"
+                  >
+                    contactus@lakeridepros.com
+                  </a>
+                </li>
+                <li>
+                  <span className="text-white/90 text-sm">
+                    Lake of the Ozarks, MO
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 

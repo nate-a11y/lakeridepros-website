@@ -428,5 +428,12 @@ export async function getPageBySlug(slug: string): Promise<Record<string, unknow
 export function getMediaUrl(url: string): string {
   if (!url) return '';
   if (url.startsWith('http')) return url;
-  return `${getPayloadApiUrl()}${url}`;
+
+  // For relative URLs, use the production Payload API URL
+  // This ensures media works correctly on preview deploys
+  const mediaBaseUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
+                       process.env.NEXT_PUBLIC_SERVER_URL ||
+                       'https://lakeridepros-website.vercel.app';
+
+  return `${mediaBaseUrl}${url}`;
 }

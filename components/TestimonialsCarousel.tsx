@@ -176,7 +176,7 @@ export default function TestimonialsCarousel({
                     </p>
                   )}
                   {currentTestimonial.company && (
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                    <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1">
                       {currentTestimonial.company}
                     </p>
                   )}
@@ -192,7 +192,7 @@ export default function TestimonialsCarousel({
                   className="p-2 rounded-full bg-white dark:bg-dark-bg-tertiary shadow-md hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
                   aria-label="Previous testimonial"
                 >
-                  <ChevronLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
+                  <ChevronLeft className="w-5 h-5 text-neutral-700 dark:text-white" />
                 </button>
 
                 {/* Dots */}
@@ -217,7 +217,7 @@ export default function TestimonialsCarousel({
                   className="p-2 rounded-full bg-white dark:bg-dark-bg-tertiary shadow-md hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
                   aria-label="Next testimonial"
                 >
-                  <ChevronRight className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
+                  <ChevronRight className="w-5 h-5 text-neutral-700 dark:text-white" />
                 </button>
 
                 {/* Auto-play toggle */}
@@ -227,9 +227,9 @@ export default function TestimonialsCarousel({
                   aria-label={isAutoPlaying ? 'Pause auto-play' : 'Resume auto-play'}
                 >
                   {isAutoPlaying ? (
-                    <Pause className="w-4 h-4 text-neutral-600 dark:text-neutral-300" />
+                    <Pause className="w-4 h-4 text-neutral-700 dark:text-white" />
                   ) : (
-                    <Play className="w-4 h-4 text-neutral-600 dark:text-neutral-300" />
+                    <Play className="w-4 h-4 text-neutral-700 dark:text-white" />
                   )}
                 </button>
               </div>
@@ -237,7 +237,7 @@ export default function TestimonialsCarousel({
 
             {/* Counter */}
             {testimonials.length > 1 && (
-              <p className="text-center text-sm text-neutral-500 dark:text-neutral-400 mt-4">
+              <p className="text-center text-sm text-neutral-600 dark:text-neutral-300 mt-4">
                 {currentIndex + 1} of {testimonials.length} reviews
               </p>
             )}

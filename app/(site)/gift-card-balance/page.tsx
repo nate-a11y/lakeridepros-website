@@ -293,7 +293,7 @@ export default function GiftCardBalancePage() {
                 <a href="mailto:contactus@lakeridepros.com" className="text-lrp-green hover:underline">
                   contactus@lakeridepros.com
                 </a>{' '}
-                or call{' '}
+                or call/text{' '}
                 <PhoneLink className="text-lrp-green hover:underline">
                   (573) 206-9499
                 </PhoneLink>{' '}

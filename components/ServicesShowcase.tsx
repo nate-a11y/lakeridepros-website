@@ -94,7 +94,7 @@ export default function ServicesShowcase({
           </Link>
 
           {/* Other Services - Smaller Cards */}
-          {otherServices.slice(0, 4).map((service, index) => (
+          {otherServices.slice(0, 4).map((service) => (
             <Link
               key={service.id}
               href={`/services/${service.slug}`}

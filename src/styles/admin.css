@@ -90,7 +90,7 @@ select:not(.error):not([aria-invalid="true"]):not(:focus) {
 input:not(.error):not([aria-invalid="true"]):focus,
 textarea:not(.error):not([aria-invalid="true"]):focus,
 select:not(.error):not([aria-invalid="true"]):focus {
-  border-color: #4cbb17 !important;
+  border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px rgba(76, 187, 23, 0.2) !important;
 }
 
@@ -99,7 +99,7 @@ select:not(.error):not([aria-invalid="true"]):focus {
 .app-wrapper,
 [class*="template-default"],
 [class*="dashboard"] {
-  background: #060606 !important;
+  background: var(--lrp-black) !important;
   color: #ffffff !important;
 }
 
@@ -133,7 +133,7 @@ h1, h2, h3, h4, h5, h6,
 
 .route-settings,
 .route-account {
-  background: #060606 !important;
+  background: var(--lrp-black) !important;
 }
 
 .route-settings h1,
@@ -160,7 +160,7 @@ textarea,
 select,
 .input,
 [class*="input"] {
-  background: #0f0f0f !important;
+  background: var(--dark-bg-secondary) !important;
   color: #ffffff !important;
   border: 1px solid rgba(76, 187, 23, 0.3) !important;
 }
@@ -169,7 +169,7 @@ select,
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #4cbb17 !important;
+  border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px rgba(76, 187, 23, 0.2) !important;
   outline: none !important;
 }
@@ -203,26 +203,26 @@ button[type="submit"],
 .btn--style-primary,
 .form-submit button,
 [class*="button--primary"] {
-  background: #4cbb17 !important;
+  background: var(--primary) !important;
   color: #ffffff !important;
   border: none !important;
 }
 
 button[type="submit"]:hover,
 .btn--style-primary:hover {
-  background: #3a8e11 !important;
+  background: var(--primary-dark) !important;
 }
 
 /* Secondary Buttons */
 .btn--style-secondary,
 [class*="button--secondary"] {
   background: transparent !important;
-  color: #4cbb17 !important;
-  border: 1px solid #4cbb17 !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
 }
 
 .btn--style-secondary:hover {
-  background: #4cbb17 !important;
+  background: var(--primary) !important;
   color: #ffffff !important;
 }
 
@@ -235,16 +235,16 @@ button[type="submit"]:hover,
 .table-header,
 thead th,
 [class*="header-cell"] {
-  background: #060606 !important;
+  background: var(--lrp-black) !important;
   color: #ffffff !important;
-  border-bottom: 2px solid #4cbb17 !important;
+  border-bottom: 2px solid var(--primary) !important;
 }
 
 /* Table Rows */
 tbody tr,
 .list-row,
 [class*="table-row"] {
-  background: #060606 !important;
+  background: var(--lrp-black) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
@@ -268,7 +268,7 @@ td,
 .nav,
 .sidebar,
 [class*="nav-"] {
-  background: #060606 !important;
+  background: var(--lrp-black) !important;
 }
 
 /* Nav Items */
@@ -280,7 +280,7 @@ td,
 
 .nav-item:hover,
 .nav-link:hover {
-  color: #60e421 !important;
+  color: var(--primary-light) !important;
   background: rgba(76, 187, 23, 0.1) !important;
 }
 
@@ -288,8 +288,8 @@ td,
 .nav-item--active,
 .nav-link--active,
 [class*="active"] {
-  color: #4cbb17 !important;
-  border-left: 3px solid #4cbb17 !important;
+  color: var(--primary) !important;
+  border-left: 3px solid var(--primary) !important;
 }
 
 /* ============================================
@@ -301,7 +301,7 @@ td,
 .drawer,
 [class*="modal"],
 [class*="popup"] {
-  background: #060606 !important;
+  background: var(--lrp-black) !important;
   border: 1px solid rgba(76, 187, 23, 0.3) !important;
 }
 
@@ -318,7 +318,7 @@ td,
 .select-options,
 [class*="dropdown"],
 [class*="menu"] {
-  background: #0f0f0f !important;
+  background: var(--dark-bg-secondary) !important;
   border: 1px solid rgba(76, 187, 23, 0.3) !important;
 }
 
@@ -340,7 +340,7 @@ td,
 .panel,
 [class*="card"],
 [class*="panel"] {
-  background: #0f0f0f !important;
+  background: var(--dark-bg-secondary) !important;
   border: 1px solid rgba(76, 187, 23, 0.2) !important;
 }
 
@@ -351,7 +351,7 @@ td,
 .search-input,
 .filter-bar,
 [class*="search"] input {
-  background: #0f0f0f !important;
+  background: var(--dark-bg-secondary) !important;
   color: #ffffff !important;
   border: 1px solid rgba(76, 187, 23, 0.3) !important;
 }
@@ -365,8 +365,8 @@ td,
 [class*="badge"],
 [class*="tag"] {
   background: rgba(76, 187, 23, 0.2) !important;
-  color: #4cbb17 !important;
-  border: 1px solid #4cbb17 !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
 }
 
 /* ============================================
@@ -388,7 +388,7 @@ td,
 /* Custom radio/checkbox styling */
 input[type="radio"],
 input[type="checkbox"] {
-  accent-color: #4cbb17 !important;
+  accent-color: var(--primary) !important;
 }
 
 /* ============================================
@@ -401,11 +401,11 @@ input[type="checkbox"] {
 }
 
 .breadcrumbs a {
-  color: #4cbb17 !important;
+  color: var(--primary) !important;
 }
 
 .breadcrumbs a:hover {
-  color: #60e421 !important;
+  color: var(--primary-light) !important;
 }
 
 /* ============================================
@@ -416,7 +416,7 @@ input[type="checkbox"] {
 .spinner,
 [class*="loading"] {
   border-color: rgba(76, 187, 23, 0.2) !important;
-  border-top-color: #4cbb17 !important;
+  border-top-color: var(--primary) !important;
 }
 
 /* ============================================
@@ -426,7 +426,7 @@ input[type="checkbox"] {
 .alert-success,
 .notification-success {
   background: rgba(76, 187, 23, 0.2) !important;
-  border-color: #4cbb17 !important;
+  border-color: var(--primary) !important;
   color: #ffffff !important;
 }
 
@@ -447,14 +447,14 @@ input[type="checkbox"] {
 }
 
 .pagination button {
-  background: #0f0f0f !important;
+  background: var(--dark-bg-secondary) !important;
   color: #ffffff !important;
   border: 1px solid rgba(76, 187, 23, 0.3) !important;
 }
 
 .pagination button:hover {
   background: rgba(76, 187, 23, 0.2) !important;
-  border-color: #4cbb17 !important;
+  border-color: var(--primary) !important;
 }
 
 /* ============================================
@@ -463,13 +463,13 @@ input[type="checkbox"] {
 
 .rich-text-editor,
 [class*="editor"] {
-  background: #0f0f0f !important;
+  background: var(--dark-bg-secondary) !important;
   color: #ffffff !important;
 }
 
 .rich-text-toolbar,
 [class*="toolbar"] {
-  background: #060606 !important;
+  background: var(--lrp-black) !important;
   border-bottom: 1px solid rgba(76, 187, 23, 0.3) !important;
 }
 
@@ -478,13 +478,13 @@ input[type="checkbox"] {
    ============================================ */
 
 .collection-card {
-  background: #0f0f0f !important;
+  background: var(--dark-bg-secondary) !important;
   border: 1px solid rgba(76, 187, 23, 0.2) !important;
   color: #ffffff !important;
 }
 
 .collection-card:hover {
-  border-color: #4cbb17 !important;
+  border-color: var(--primary) !important;
   box-shadow: 0 8px 24px rgba(76, 187, 23, 0.3) !important;
 }
 
@@ -497,25 +497,25 @@ input[type="checkbox"] {
 
 /* Checkbox wrapper styling - LRP brand colors */
 .checkbox-input__input {
-  border: 2px solid #4cbb17 !important;
-  background: #0f0f0f !important;
+  border: 2px solid var(--primary) !important;
+  background: var(--dark-bg-secondary) !important;
   border-radius: 4px !important;
 }
 
 .checkbox-input:not(.checkbox-input--read-only):hover .checkbox-input__input {
-  border-color: #60e421 !important;
+  border-color: var(--primary-light) !important;
 }
 
 .checkbox-input:not(.checkbox-input--read-only):focus-within .checkbox-input__input,
 .checkbox-input:not(.checkbox-input--read-only):active .checkbox-input__input {
-  border-color: #60e421 !important;
+  border-color: var(--primary-light) !important;
   box-shadow: 0 0 0 3px rgba(76, 187, 23, 0.3) !important;
 }
 
 /* Checked state - LRP green background */
 .checkbox-input--checked .checkbox-input__input {
-  background: #4cbb17 !important;
-  border-color: #4cbb17 !important;
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
 }
 
 /* CRITICAL FIX: Hide the dash icon (.icon--line) completely */
@@ -559,7 +559,7 @@ input[type="checkbox"] {
 tr[aria-selected='true'],
 .list-item--selected {
   background-color: rgba(76, 187, 23, 0.08) !important;
-  border-left: 3px solid #4cbb17 !important;
+  border-left: 3px solid var(--primary) !important;
 }
 
 /* Selected row hover */
@@ -573,7 +573,7 @@ tr[aria-selected='true']:hover {
 .collection__list-item--selected,
 .list-item[aria-selected='true'] {
   background-color: rgba(76, 187, 23, 0.05) !important;
-  border-color: #4cbb17 !important;
+  border-color: var(--primary) !important;
 }
 
 /* Table cell with checkbox */

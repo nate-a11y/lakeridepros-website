@@ -123,6 +123,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                 <div
                   key={item.name}
                   className="relative"
+                  role="none"
                   onMouseEnter={() => {
                     if (item.dropdownType === 'services') setServicesDropdownOpen(true);
                     if (item.dropdownType === 'partners') setPartnersDropdownOpen(true);

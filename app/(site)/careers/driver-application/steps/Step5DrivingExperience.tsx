@@ -77,11 +77,12 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`experience-class-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Class of Equipment *
                   </label>
                   <select
                     {...register(`driving_experience.${index}.class_of_equipment`)}
+                    id={`experience-class-${index}`}
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   >
                     <option value="">Select class</option>
@@ -103,11 +104,12 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`experience-type-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Type of Equipment *
                   </label>
                   <input
                     {...register(`driving_experience.${index}.type`)}
+                    id={`experience-type-${index}`}
                     type="text"
                     placeholder="e.g., Van trailer, Flatbed, Tanker"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
@@ -122,29 +124,32 @@ export default function Step5DrivingExperience({ onNext, onPrevious }: Step5Driv
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">From Date *</label>
+                  <label htmlFor={`experience-from-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">From Date *</label>
                   <input
                     {...register(`driving_experience.${index}.date_from`)}
+                    id={`experience-from-date-${index}`}
                     type="date"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">To Date</label>
+                  <label htmlFor={`experience-to-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">To Date</label>
                   <input
                     {...register(`driving_experience.${index}.date_to`)}
+                    id={`experience-to-date-${index}`}
                     type="date"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`experience-miles-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Approximate Miles
                   </label>
                   <input
                     {...register(`driving_experience.${index}.miles`, { valueAsNumber: true })}
+                    id={`experience-miles-${index}`}
                     type="number"
                     placeholder="0"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"

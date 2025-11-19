@@ -98,18 +98,20 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Date *</label>
+                      <label htmlFor={`conviction-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Date *</label>
                       <input
                         {...register(`traffic_convictions.${index}.date`)}
+                        id={`conviction-date-${index}`}
                         type="date"
                         className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
+                      <label htmlFor={`conviction-state-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">State *</label>
                       <select
                         {...register(`traffic_convictions.${index}.state`)}
+                        id={`conviction-state-${index}`}
                         className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       >
                         <option value="">Select state</option>
@@ -121,9 +123,10 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Violation *</label>
+                    <label htmlFor={`conviction-violation-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Violation *</label>
                     <input
                       {...register(`traffic_convictions.${index}.violation`)}
+                      id={`conviction-violation-${index}`}
                       type="text"
                       placeholder="e.g., Speeding, DUI, Reckless driving"
                       className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
@@ -131,9 +134,10 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Penalty *</label>
+                    <label htmlFor={`conviction-penalty-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Penalty *</label>
                     <input
                       {...register(`traffic_convictions.${index}.penalty`)}
+                      id={`conviction-penalty-${index}`}
                       type="text"
                       placeholder="e.g., Fine, License suspension, Probation"
                       className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"

@@ -143,9 +143,9 @@ export default function GiftCardsPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Card Type Selection */}
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
+                  <span className="block text-sm font-semibold text-neutral-900 mb-3">
                     Card Type
-                  </label>
+                  </span>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
@@ -180,9 +180,9 @@ export default function GiftCardsPage() {
 
                 {/* Amount Selection */}
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-3">
+                  <span className="block text-sm font-semibold text-neutral-900 mb-3">
                     Select Amount
-                  </label>
+                  </span>
                   <div className="grid grid-cols-3 gap-3">
                     {giftCardAmounts.map((amount) => (
                       <button
@@ -203,7 +203,7 @@ export default function GiftCardsPage() {
 
                 {selectedAmount === 0 && (
                   <div>
-                    <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                    <label htmlFor="custom-amount" className="block text-sm font-semibold text-neutral-900 mb-2">
                       Custom Amount
                     </label>
                     <div className="relative">
@@ -211,6 +211,7 @@ export default function GiftCardsPage() {
                         $
                       </span>
                       <input
+                        id="custom-amount"
                         type="number"
                         value={customAmount}
                         onChange={(e) => setCustomAmount(e.target.value)}
@@ -270,10 +271,11 @@ export default function GiftCardsPage() {
                         </p>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                            <label htmlFor="delivery-date" className="block text-sm font-semibold text-neutral-900 mb-2">
                               Delivery Date <span className="text-red-500">*</span>
                             </label>
                             <input
+                              id="delivery-date"
                               type="date"
                               value={scheduledDate}
                               onChange={(e) => setScheduledDate(e.target.value)}
@@ -283,10 +285,11 @@ export default function GiftCardsPage() {
                             />
                           </div>
                           <div>
-                            <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                            <label htmlFor="delivery-time" className="block text-sm font-semibold text-neutral-900 mb-2">
                               Time <span className="text-red-500">*</span>
                             </label>
                             <input
+                              id="delivery-time"
                               type="time"
                               value={scheduledTime}
                               onChange={(e) => setScheduledTime(e.target.value)}
@@ -309,10 +312,11 @@ export default function GiftCardsPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                      <label htmlFor="purchaser-name" className="block text-sm font-semibold text-neutral-900 mb-2">
                         Your Name <span className="text-red-500">*</span>
                       </label>
                       <input
+                        id="purchaser-name"
                         type="text"
                         value={purchaserName}
                         onChange={(e) => setPurchaserName(e.target.value)}
@@ -323,10 +327,11 @@ export default function GiftCardsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                      <label htmlFor="purchaser-email" className="block text-sm font-semibold text-neutral-900 mb-2">
                         Your Email <span className="text-red-500">*</span>
                       </label>
                       <input
+                        id="purchaser-email"
                         type="email"
                         value={purchaserEmail}
                         onChange={(e) => setPurchaserEmail(e.target.value)}
@@ -350,10 +355,11 @@ export default function GiftCardsPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                      <label htmlFor="recipient-name" className="block text-sm font-semibold text-neutral-900 mb-2">
                         Recipient Name
                       </label>
                       <input
+                        id="recipient-name"
                         type="text"
                         value={recipientName}
                         onChange={(e) => setRecipientName(e.target.value)}
@@ -363,10 +369,11 @@ export default function GiftCardsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                      <label htmlFor="recipient-email" className="block text-sm font-semibold text-neutral-900 mb-2">
                         Recipient Email
                       </label>
                       <input
+                        id="recipient-email"
                         type="email"
                         value={recipientEmail}
                         onChange={(e) => setRecipientEmail(e.target.value)}
@@ -389,10 +396,11 @@ export default function GiftCardsPage() {
 
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                        <label htmlFor="shipping-name" className="block text-sm font-semibold text-neutral-900 mb-2">
                           Full Name <span className="text-red-500">*</span>
                         </label>
                         <input
+                          id="shipping-name"
                           type="text"
                           value={shippingName}
                           onChange={(e) => setShippingName(e.target.value)}
@@ -403,10 +411,11 @@ export default function GiftCardsPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                        <label htmlFor="shipping-street1" className="block text-sm font-semibold text-neutral-900 mb-2">
                           Street Address <span className="text-red-500">*</span>
                         </label>
                         <input
+                          id="shipping-street1"
                           type="text"
                           value={shippingStreet1}
                           onChange={(e) => setShippingStreet1(e.target.value)}
@@ -417,10 +426,11 @@ export default function GiftCardsPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                        <label htmlFor="shipping-street2" className="block text-sm font-semibold text-neutral-900 mb-2">
                           Apartment, Suite, etc. (Optional)
                         </label>
                         <input
+                          id="shipping-street2"
                           type="text"
                           value={shippingStreet2}
                           onChange={(e) => setShippingStreet2(e.target.value)}
@@ -431,10 +441,11 @@ export default function GiftCardsPage() {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                          <label htmlFor="shipping-city" className="block text-sm font-semibold text-neutral-900 mb-2">
                             City <span className="text-red-500">*</span>
                           </label>
                           <input
+                            id="shipping-city"
                             type="text"
                             value={shippingCity}
                             onChange={(e) => setShippingCity(e.target.value)}
@@ -445,10 +456,11 @@ export default function GiftCardsPage() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                          <label htmlFor="shipping-state" className="block text-sm font-semibold text-neutral-900 mb-2">
                             State <span className="text-red-500">*</span>
                           </label>
                           <input
+                            id="shipping-state"
                             type="text"
                             value={shippingState}
                             onChange={(e) => setShippingState(e.target.value)}
@@ -461,10 +473,11 @@ export default function GiftCardsPage() {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                          <label htmlFor="shipping-zipcode" className="block text-sm font-semibold text-neutral-900 mb-2">
                             ZIP Code <span className="text-red-500">*</span>
                           </label>
                           <input
+                            id="shipping-zipcode"
                             type="text"
                             value={shippingZipCode}
                             onChange={(e) => setShippingZipCode(e.target.value)}
@@ -475,10 +488,11 @@ export default function GiftCardsPage() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                          <label htmlFor="shipping-country" className="block text-sm font-semibold text-neutral-900 mb-2">
                             Country <span className="text-red-500">*</span>
                           </label>
                           <input
+                            id="shipping-country"
                             type="text"
                             value={shippingCountry}
                             onChange={(e) => setShippingCountry(e.target.value)}
@@ -493,10 +507,11 @@ export default function GiftCardsPage() {
                 )}
 
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-2">
+                  <label htmlFor="personal-message" className="block text-sm font-semibold text-neutral-900 mb-2">
                     Personal Message (Optional)
                   </label>
                   <textarea
+                    id="personal-message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Add a personal message..."

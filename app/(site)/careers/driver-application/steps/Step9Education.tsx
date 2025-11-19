@@ -88,11 +88,12 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`education-school-name-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     School/Institution Name *
                   </label>
                   <input
                     {...register(`education.${index}.school_name`)}
+                    id={`education-school-name-${index}`}
                     type="text"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                     placeholder="e.g., Lincoln High School"
@@ -103,11 +104,12 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`education-location-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Location (City, State) *
                   </label>
                   <input
                     {...register(`education.${index}.location`)}
+                    id={`education-location-${index}`}
                     type="text"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                     placeholder="e.g., Springfield, MO"
@@ -120,11 +122,12 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`education-course-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Course of Study/Major
                   </label>
                   <input
                     {...register(`education.${index}.course_of_study`)}
+                    id={`education-course-${index}`}
                     type="text"
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                     placeholder="e.g., Business Administration"
@@ -132,11 +135,12 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                  <label htmlFor={`education-years-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                     Years Completed
                   </label>
                   <input
                     {...register(`education.${index}.years_completed`, { valueAsNumber: true })}
+                    id={`education-years-${index}`}
                     type="number"
                     min={0}
                     max={20}
@@ -161,11 +165,12 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                <label htmlFor={`education-details-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                   Additional Details
                 </label>
                 <textarea
                   {...register(`education.${index}.details`)}
+                  id={`education-details-${index}`}
                   rows={2}
                   className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                   placeholder="Certifications, honors, relevant coursework, etc."
@@ -186,11 +191,12 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
 
         {/* Other Qualifications */}
         <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
-          <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
+          <label htmlFor="other-qualifications" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
             Other Qualifications, Certifications, or Training
           </label>
           <textarea
             {...register('other_qualifications')}
+            id="other-qualifications"
             rows={4}
             className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary"
             placeholder="List any other relevant qualifications such as CDL training, defensive driving courses, safety certifications, etc."

@@ -97,9 +97,10 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Date *</label>
+                      <label htmlFor={`accident-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Date *</label>
                       <input
                         {...register(`accidents.${index}.date`)}
+                        id={`accident-date-${index}`}
                         type="date"
                         className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       />
@@ -119,11 +120,12 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+                    <label htmlFor={`accident-nature-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
                       Nature of Accident *
                     </label>
                     <textarea
                       {...register(`accidents.${index}.nature`)}
+                      id={`accident-nature-${index}`}
                       rows={3}
                       className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                       placeholder="Describe what happened"
@@ -132,9 +134,10 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Fatalities</label>
+                      <label htmlFor={`accident-fatalities-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Fatalities</label>
                       <input
                         {...register(`accidents.${index}.fatalities`, { valueAsNumber: true })}
+                        id={`accident-fatalities-${index}`}
                         type="number"
                         defaultValue={0}
                         min={0}
@@ -143,9 +146,10 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Injuries</label>
+                      <label htmlFor={`accident-injuries-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">Injuries</label>
                       <input
                         {...register(`accidents.${index}.injuries`, { valueAsNumber: true })}
+                        id={`accident-injuries-${index}`}
                         type="number"
                         defaultValue={0}
                         min={0}

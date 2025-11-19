@@ -179,16 +179,20 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* License Front */}
         <div>
-          <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
+          <label htmlFor="license-front-upload" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
             License Front *
           </label>
 
           {!frontPreview ? (
             <div
+              id="license-front-upload"
               onDrop={(e) => handleDrop(e, 'front')}
               onDragOver={(e) => e.preventDefault()}
               className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
               onClick={() => frontInputRef.current?.click()}
+              onKeyDown={(e) => e.key === 'Enter' && frontInputRef.current?.click()}
+              role="button"
+              tabIndex={0}
             >
               {uploading.front || loadingExisting ? (
                 <div className="flex flex-col items-center gap-2">
@@ -247,16 +251,20 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
 
         {/* License Back */}
         <div>
-          <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
+          <label htmlFor="license-back-upload" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
             License Back *
           </label>
 
           {!backPreview ? (
             <div
+              id="license-back-upload"
               onDrop={(e) => handleDrop(e, 'back')}
               onDragOver={(e) => e.preventDefault()}
               className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
               onClick={() => backInputRef.current?.click()}
+              onKeyDown={(e) => e.key === 'Enter' && backInputRef.current?.click()}
+              role="button"
+              tabIndex={0}
             >
               {uploading.back || loadingExisting ? (
                 <div className="flex flex-col items-center gap-2">

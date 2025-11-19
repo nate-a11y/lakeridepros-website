@@ -104,9 +104,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
         </div>
 
         {/* Diagonal stripe pattern */}
-        <div className="absolute inset-0 opacity-5" style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px)'
-        }}></div>
+        <div className="absolute inset-0 opacity-5 pattern-diagonal-stripes"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -360,9 +358,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
                 <span className="text-sm text-neutral-500 font-medium tracking-wide">No Image</span>
               </div>
               {/* Subtle pattern overlay */}
-              <div className="absolute inset-0 opacity-5" style={{
-                backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(76,187,23,0.1) 10px, rgba(76,187,23,0.1) 20px)'
-              }}></div>
+              <div className="absolute inset-0 opacity-5 pattern-diagonal-green"></div>
             </div>
           )}
 

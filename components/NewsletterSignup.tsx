@@ -49,13 +49,18 @@ export default function NewsletterSignup() {
 
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
           <div className="flex flex-col sm:flex-row gap-3">
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email address
+            </label>
             <input
+              id="newsletter-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               required
               disabled={status === 'loading'}
+              aria-label="Email address for newsletter signup"
               className="flex-1 px-4 py-3 rounded-lg border-0 bg-white dark:bg-dark-bg-secondary dark:text-white dark:placeholder-neutral-400 focus:ring-2 focus:ring-secondary dark:focus:ring-primary focus:outline-none disabled:opacity-50 transition-colors"
             />
             <button

@@ -248,28 +248,6 @@ export default function PricingPage() {
                 </ul>
               </div>
 
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Executive Sprinter</h3>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">Up to 13 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$175<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum (4 hours weekends)</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">First 3-4 hrs: $175/hr</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">After: $155/hr</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Premium executive seating</span>
-                  </li>
-                </ul>
-              </div>
-
               <div className="bg-lrp-green p-8 rounded-lg text-white relative">
                 <div className="absolute top-4 right-4 bg-white text-lrp-green text-xs font-bold px-3 py-1 rounded-full">
                   MOST POPULAR
@@ -291,6 +269,28 @@ export default function PricingPage() {
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
                     <span className="text-white/90">LED lights & premium sound</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
+                <Users className="w-10 h-10 text-lrp-green mb-4" />
+                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Executive Sprinter</h3>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">Up to 13 passengers</p>
+                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$175<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum (4 hours weekends)</p>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">First 3-4 hrs: $175/hr</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">After: $155/hr</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">Premium executive seating</span>
                   </li>
                 </ul>
               </div>

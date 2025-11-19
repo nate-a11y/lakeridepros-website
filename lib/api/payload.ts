@@ -429,8 +429,17 @@ export function getMediaUrl(url: string): string {
   if (!url) return '';
   if (url.startsWith('http')) return url;
 
-  // For relative URLs, use the production Payload API URL
-  // This ensures media works correctly on preview deploys
+  // Extract filename from Payload media path (e.g., /api/media/file/filename.webp)
+  const filename = url.split('/').pop();
+
+  // Use direct Supabase storage URL for better reliability
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (supabaseUrl && filename) {
+    // Extract project ID from Supabase URL (e.g., https://xxx.supabase.co)
+    return `${supabaseUrl}/storage/v1/object/public/media/${filename}`;
+  }
+
+  // Fallback to Payload API URL
   const mediaBaseUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
                        process.env.NEXT_PUBLIC_SERVER_URL ||
                        'https://lakeridepros-website.vercel.app';

@@ -3,11 +3,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import HeroSection from '@/components/HeroSection';
 import BookingWidget from '@/components/BookingWidget';
-import ServiceCard from '@/components/ServiceCard';
+import ServicesShowcase from '@/components/ServicesShowcase';
 import FeaturedVehiclesSection from '@/components/FeaturedVehiclesSection';
 import FeaturedBlogSection from '@/components/FeaturedBlogSection';
 import NewsletterSignup from '@/components/NewsletterSignup';
-import TestimonialsSection from '@/components/TestimonialsSection';
+import TestimonialsCarousel from '@/components/TestimonialsCarousel';
+import PopularServicesRanking from '@/components/PopularServicesRanking';
 import {
   getServices,
   getFeaturedVehicles,
@@ -135,34 +136,7 @@ export default async function HomePage() {
       </section>
 
       {/* Services Overview Section */}
-      {services.length > 0 && (
-        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-                Our Services
-              </h2>
-              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-                From airport transfers to special events, we provide premium transportation
-                for every occasion
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service) => (
-                <ServiceCard key={service.id} service={service} />
-              ))}
-            </div>
-            <div className="text-center mt-12">
-              <Link
-                href="/services"
-                className="inline-block bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-              >
-                View All Services
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+      <ServicesShowcase services={services} />
 
       {/* Featured Vehicles Section */}
       <FeaturedVehiclesSection vehicles={vehicles} />
@@ -171,11 +145,10 @@ export default async function HomePage() {
       <FeaturedBlogSection posts={blogPosts} />
 
       {/* Testimonials Section with Review Schema */}
-      <TestimonialsSection
+      <TestimonialsCarousel
         testimonials={testimonials}
         title="What Our Clients Say"
         subtitle="Hear from those who have experienced our premium service"
-        showCount={3}
         includeSchema={true}
       />
 
@@ -258,34 +231,8 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Most Requested Services Section - Using same logic as header dropdown */}
-      {popularServices.length > 0 && (
-        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white text-center mb-12">
-              Most Requested Services
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {popularServices.map((service) => (
-                <Link
-                  key={service.id}
-                  href={`/services/${service.slug}`}
-                  className="group p-6 bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg hover:bg-primary hover:text-white transition-all duration-300"
-                >
-                  <h3 className="font-bold text-lg mb-2 group-hover:text-white text-neutral-900 dark:text-white">
-                    {service.title}
-                  </h3>
-                  {service.excerpt && (
-                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary group-hover:text-white/90">
-                      {service.excerpt}
-                    </p>
-                  )}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Most Requested Services Section */}
+      <PopularServicesRanking services={popularServices} />
 
       {/* How It Works Section */}
       <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">

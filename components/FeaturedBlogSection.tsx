@@ -73,10 +73,10 @@ export default function FeaturedBlogSection({
         {/* Featured Post - Hero Style */}
         <Link
           href={`/blog/${featuredPost.slug}`}
-          className="group block relative rounded-2xl overflow-hidden mb-8 shadow-lg hover:shadow-2xl transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          className="group block w-full relative rounded-2xl overflow-hidden mb-8 shadow-lg hover:shadow-2xl transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           aria-label={`Read featured article: ${featuredPost.title}`}
         >
-          <div className="relative h-[400px] md:h-[500px]">
+          <div className="relative w-full h-[400px] md:h-[500px]">
             {featuredImageUrl ? (
               <Image
                 src={featuredImageUrl}

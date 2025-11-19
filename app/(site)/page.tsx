@@ -213,8 +213,9 @@ export default async function HomePage() {
               Trusted by Leading Organizations
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
-              {partners.map((partner) => (
-                <div key={partner.id} className="flex items-center justify-center">
+              {partners.map((partner) => {
+                const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
+                const logoImage = (
                   <Image
                     src={getMediaUrl(partner.logo.url)}
                     alt={partner.name}
@@ -222,8 +223,24 @@ export default async function HomePage() {
                     height={64}
                     className="h-16 w-auto object-contain filter grayscale hover:grayscale-0 transition-all"
                   />
-                </div>
-              ))}
+                );
+
+                return partnerLink ? (
+                  <Link
+                    key={partner.id}
+                    href={partnerLink}
+                    className="flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
+                    aria-label={`View ${partner.name} partner page`}
+                    {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    {logoImage}
+                  </Link>
+                ) : (
+                  <div key={partner.id} className="flex items-center justify-center">
+                    {logoImage}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

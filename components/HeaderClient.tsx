@@ -133,12 +133,44 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                     if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
                     if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
                   }}
+                  onFocus={() => {
+                    if (item.dropdownType === 'services') setServicesDropdownOpen(true);
+                    if (item.dropdownType === 'partners') setPartnersDropdownOpen(true);
+                    if (item.dropdownType === 'insiders') setInsidersDropdownOpen(true);
+                  }}
+                  onBlur={(e) => {
+                    // Only close if focus moves outside the dropdown container
+                    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                      if (item.dropdownType === 'services') setServicesDropdownOpen(false);
+                      if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
+                      if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
+                    }
+                  }}
                 >
                   <button
                     className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1"
+                    aria-expanded={
+                      item.dropdownType === 'services' ? servicesDropdownOpen :
+                      item.dropdownType === 'partners' ? partnersDropdownOpen :
+                      item.dropdownType === 'insiders' ? insidersDropdownOpen : false
+                    }
+                    aria-haspopup="true"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if (item.dropdownType === 'services') setServicesDropdownOpen(!servicesDropdownOpen);
+                        if (item.dropdownType === 'partners') setPartnersDropdownOpen(!partnersDropdownOpen);
+                        if (item.dropdownType === 'insiders') setInsidersDropdownOpen(!insidersDropdownOpen);
+                      }
+                      if (e.key === 'Escape') {
+                        if (item.dropdownType === 'services') setServicesDropdownOpen(false);
+                        if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
+                        if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
+                      }
+                    }}
                   >
                     {item.name}
-                    <ChevronDown className="w-4 h-4" />
+                    <ChevronDown className="w-4 h-4" aria-hidden="true" />
                   </button>
 
                   {item.dropdownType === 'services' && servicesDropdownOpen && (

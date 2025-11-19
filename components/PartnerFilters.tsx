@@ -23,14 +23,19 @@ export default function PartnerFilters({
     <div className="mb-8 space-y-4">
       {/* Search Bar */}
       <div className="relative max-w-2xl">
+        <label htmlFor="partner-search" className="sr-only">
+          Search partners
+        </label>
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="h-5 w-5 text-lrp-text-secondary dark:text-dark-text-secondary" />
+          <Search className="h-5 w-5 text-lrp-text-secondary dark:text-dark-text-secondary" aria-hidden="true" />
         </div>
         <input
+          id="partner-search"
           type="text"
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search partners by name or description..."
+          aria-label="Search partners by name or description"
           className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white placeholder-lrp-text-secondary dark:placeholder-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-lrp-green focus:border-transparent"
         />
         {searchTerm && (

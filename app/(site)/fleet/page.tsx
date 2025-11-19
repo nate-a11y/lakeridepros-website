@@ -23,7 +23,7 @@ export default async function FleetPage() {
       {/* Hero */}
       <section className="bg-primary py-16">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-white text-center">
+          <h1 className="font-boardson text-4xl md:text-5xl font-bold text-white text-center">
             Our Luxury Fleet
           </h1>
           <p className="text-white/90 text-center mt-4 text-lg">

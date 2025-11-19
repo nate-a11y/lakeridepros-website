@@ -10,6 +10,15 @@
   font-display: swap;
 }
 
+/* CelebriSans Bold - Brand slogan and emphasis font */
+@font-face {
+  font-family: 'CelebriSans';
+  src: url('/Cerebri Sans Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Tailwind v4 dark mode configuration */
 @variant dark (&:where(.dark, .dark *));
 
@@ -30,7 +39,7 @@
   --lrp-green-light: #5cd91f;
   --lrp-green-dark: #3a8e11;
   --lrp-black: #060606;
-  --lrp-gray: #e8e8e8;
+  --lrp-gray: #e6e6e6;  /* Brand spec: Light Gray */
 
   /* WCAG AA Compliant Text Colors for Light Mode */
   --lrp-text-secondary: #666666;  /* 7:1 contrast on white */
@@ -57,6 +66,39 @@
   --dark-text-primary: #ffffff;
   --dark-text-secondary: #d1d1d1;  /* 10:1 contrast on dark */
   --dark-text-muted: #b8b8b8;      /* 7:1 contrast on dark */
+
+  /* Focus ring colors for accessibility */
+  --focus-ring: #4cbb17;
+  --focus-ring-offset: 2px;
+  --focus-ring-width: 3px;
+
+  /* State colors for form validation and alerts */
+  --error: #dc2626;
+  --error-light: #fecaca;
+  --success: #16a34a;
+  --success-light: #bbf7d0;
+  --warning: #d97706;
+  --warning-light: #fed7aa;
+  --info: #2563eb;
+  --info-light: #bfdbfe;
+
+  /* Link colors */
+  --link: #4cbb17;
+  --link-hover: #3a8e11;
+  --link-visited: #3a8e11;
+
+  /* Shadow colors */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-brand: 0 4px 14px 0 rgba(76, 187, 23, 0.3);
+
+  /* Transition defaults */
+  --transition-fast: 150ms;
+  --transition-normal: 200ms;
+  --transition-slow: 300ms;
 }
 
 @theme inline {
@@ -100,9 +142,24 @@
   --color-dark-text-secondary: var(--dark-text-secondary);
   --color-dark-text-muted: var(--dark-text-muted);
 
+  /* State colors */
+  --color-error: var(--error);
+  --color-error-light: var(--error-light);
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-warning: var(--warning);
+  --color-warning-light: var(--warning-light);
+  --color-info: var(--info);
+  --color-info-light: var(--info-light);
+
+  /* Link colors */
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+
   --font-sans: 'Montserrat', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-boardson: 'Boardson', 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-celebri: 'CelebriSans', 'Montserrat', ui-sans-serif, system-ui, sans-serif;
 
   /* Custom animations */
   --animate-fadeIn: fadeIn 0.5s ease-in;
@@ -342,6 +399,12 @@ body:has([data-main-app]) {
   /* Premium Shop Utilities */
   .font-boardson {
     font-family: var(--font-boardson);
+  }
+
+  /* CelebriSans Bold - for slogans and emphasis */
+  .font-celebri {
+    font-family: var(--font-celebri);
+    font-weight: 700;
   }
 
   .shop-card-hover {

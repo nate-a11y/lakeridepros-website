@@ -98,7 +98,7 @@ export default function PricingPage() {
         <section className="bg-gradient-to-r from-lrp-green to-lrp-green/80 py-16">
           <div className="container mx-auto px-4 text-center">
             <DollarSign className="w-16 h-16 text-white mx-auto mb-6" />
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="font-boardson text-4xl md:text-5xl font-bold text-white mb-4">
               Transparent Pricing for Lake of the Ozarks Transportation
             </h1>
             <p className="text-white/90 text-xl max-w-3xl mx-auto">

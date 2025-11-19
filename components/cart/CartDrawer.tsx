@@ -21,6 +21,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       <div
         className="fixed inset-0 bg-black/50 z-40"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Drawer */}
@@ -28,7 +29,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b dark:border-dark-border">
           <div className="flex items-center gap-3">
-            <ShoppingCart className="w-6 h-6 text-lrp-green" />
+            <ShoppingCart className="w-6 h-6 text-lrp-green" aria-hidden="true" />
             <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
               Cart ({items.length})
             </h2>
@@ -38,7 +39,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             className="p-2 hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary rounded-lg transition-colors"
             aria-label="Close cart"
           >
-            <X className="w-6 h-6" />
+            <X className="w-6 h-6" aria-hidden="true" />
           </button>
         </div>
 
@@ -46,7 +47,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         <div className="flex-1 overflow-y-auto p-6">
           {items.length === 0 ? (
             <div className="text-center py-12">
-              <ShoppingCart className="w-16 h-16 text-neutral-400 dark:text-neutral-400 mx-auto mb-4" />
+              <ShoppingCart className="w-16 h-16 text-neutral-400 dark:text-neutral-400 mx-auto mb-4" aria-hidden="true" />
               <p className="text-neutral-600 dark:text-neutral-400 mb-4">
                 Your cart is empty
               </p>
@@ -116,7 +117,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors self-start"
                     aria-label="Remove item"
                   >
-                    <Trash2 className="w-5 h-5 text-red-500" />
+                    <Trash2 className="w-5 h-5 text-red-500" aria-hidden="true" />
                   </button>
                 </div>
               ))}

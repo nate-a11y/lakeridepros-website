@@ -213,6 +213,50 @@ export default function PricingPage() {
           </div>
         </section>
 
+        {/* Point to Point Rates */}
+        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
+              Point to Point Rates
+            </h2>
+            <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
+              One-way transportation with minimum fares by vehicle type
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <Users className="w-8 h-8 text-lrp-green mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">SUVs</h3>
+                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$15 <span className="text-sm text-gray-600 dark:text-lrp-gray font-normal">minimum</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray">Up to 6 passengers</p>
+              </div>
+
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <Users className="w-8 h-8 text-lrp-green mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Party Bus</h3>
+                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$100 <span className="text-sm text-gray-600 dark:text-lrp-gray font-normal">minimum</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray">Up to 14 passengers</p>
+              </div>
+
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <Users className="w-8 h-8 text-lrp-green mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Executive Sprinter</h3>
+                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$200 <span className="text-sm text-gray-600 dark:text-lrp-gray font-normal">minimum</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray">Up to 13 passengers</p>
+              </div>
+
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <Users className="w-8 h-8 text-lrp-green mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Mini Coach</h3>
+                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$550 <span className="text-sm text-gray-600 dark:text-lrp-gray font-normal">minimum</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray">Up to 37 passengers</p>
+              </div>
+            </div>
+            <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
+              Final pricing based on distance, time of day, and route. <Link href="/book" className="text-lrp-green hover:underline">Get a quote</Link> for exact pricing.
+            </p>
+          </div>
+        </section>
+
         {/* Hourly Rental Rates */}
         <section className="py-16">
           <div className="container mx-auto px-4">

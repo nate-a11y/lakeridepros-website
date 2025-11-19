@@ -14,13 +14,13 @@ import WhyChooseUs from '@/components/WhyChooseUs';
 import ServiceAreasMap from '@/components/ServiceAreasMap';
 import FAQAccordion from '@/components/FAQAccordion';
 import {
-  getServices,
   getFeaturedVehicles,
   getLatestBlogPosts,
   getRandomTestimonials,
   getPartners,
 } from '@/lib/api/payload';
 import { getMediaUrl } from '@/lib/api/payload';
+import { getServicesLocal } from '@/lib/api/payload-local';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
@@ -80,9 +80,8 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Fetch data with error handling
-  const [servicesDataLimited, allServicesData, vehicles, blogPosts, testimonials, partners, popularServicesData] = await Promise.all([
-    getServices({ limit: 6 }).catch(() => ({ docs: [] })), // For "Our Services" section
-    getServices({ limit: 100 }).catch(() => ({ docs: [] })), // For filtering popular services (same as header)
+  const [allServicesData, vehicles, blogPosts, testimonials, partners, popularServicesData] = await Promise.all([
+    getServicesLocal().catch(() => []), // Direct database query for services with images
     getFeaturedVehicles(3).catch(() => []),
     getLatestBlogPosts(3).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
@@ -90,8 +89,8 @@ export default async function HomePage() {
     getPopularServicesLocal(5).catch(() => []),
   ]);
 
-  const services = servicesDataLimited.docs || []; // For "Our Services" section display
-  const allServices = allServicesData.docs || []; // For filtering popular services
+  const services = allServicesData.slice(0, 6); // For "Our Services" section display
+  const allServices = allServicesData; // For filtering popular services
 
   // Use analytics-based popular services, fallback to hardcoded list (same as header)
   const fallbackServiceSlugs = [

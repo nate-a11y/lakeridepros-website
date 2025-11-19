@@ -119,7 +119,7 @@ async function compressImage(file: File): Promise<File> {
  * to stay within Vercel's 5MB serverless function limit.
  */
 export function CompressedUpload(props: UploadProps) {
-  const { onChange, ...rest } = props
+  const { onChange } = props
 
   // Wrap the onChange handler to compress files before passing to Payload
   const handleChange = useCallback(
@@ -164,7 +164,8 @@ export function CompressedUpload(props: UploadProps) {
     [onChange]
   )
 
-  return <Upload {...rest} onChange={handleChange} />
+  // Pass all props through, only override onChange
+  return <Upload {...props} onChange={handleChange} />
 }
 
 export default CompressedUpload

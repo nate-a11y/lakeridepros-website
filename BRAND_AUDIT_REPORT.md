@@ -55,10 +55,11 @@ This audit covers brand compliance, technical requirements, and ADA/WCAG 2.1 AA 
 
 #### Critical Typography Issues
 
-1. **CelebriSans Bold font not implemented**
+1. **CelebriSans Bold font not implemented in CSS**
    - Required for slogans and bold text
-   - Not present in `/public/` directory
-   - Not defined in `@font-face`
+   - Font file NOW present: `/public/Cerebri Sans Bold.woff2`
+   - Needs `@font-face` definition in globals.css
+   - Needs utility class `.font-celebri`
 
 2. **Boardson font underutilized**
    - Defined in globals.css but only used in:
@@ -175,7 +176,7 @@ This audit covers brand compliance, technical requirements, and ADA/WCAG 2.1 AA 
 | Priority | Issue | File | Effort | Impact |
 |----------|-------|------|--------|--------|
 | P1-01 | Add keyboard support to header dropdowns | `HeaderClient.tsx` | 2h | High - Core navigation |
-| P1-02 | Add CelebriSans Bold font | `globals.css`, `/public/` | 1h | High - Brand compliance |
+| P1-02 | Implement CelebriSans Bold in CSS | `globals.css` | 15m | High - Brand compliance (font file exists) |
 | P1-03 | Add label to newsletter input | `NewsletterSignup.tsx` | 10m | High - Accessibility |
 | P1-04 | Add label to partner search input | `PartnerFilters.tsx` | 10m | High - Accessibility |
 | P1-05 | Fix --lrp-gray to #e6e6e6 | `globals.css:33` | 5m | Medium - Brand accuracy |

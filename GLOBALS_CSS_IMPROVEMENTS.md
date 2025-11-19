@@ -83,15 +83,15 @@ Add these variables in the `:root` section after line 59:
 
 ---
 
-## 4. CelebriSans Bold Font (When Available)
+## 4. CelebriSans Bold Font (NOW AVAILABLE)
 
-When the CelebriSans Bold font file is obtained, add after line 11:
+The font file is available at `/public/Cerebri Sans Bold.woff2`. Add after line 11:
 
 ```css
 /* CelebriSans Bold - Brand slogan and emphasis font */
 @font-face {
   font-family: 'CelebriSans';
-  src: url('/CelebriSans-Bold.woff2') format('woff2');
+  src: url('/Cerebri Sans Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;

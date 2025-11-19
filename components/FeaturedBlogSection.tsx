@@ -166,10 +166,11 @@ export default function FeaturedBlogSection({
                   <Link
                     key={post.id}
                     href={`/blog/${post.slug}`}
-                    className="group flex-shrink-0 w-[300px] md:w-[320px] snap-start bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    className="group flex-shrink-0 snap-start bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    style={{ display: 'flex', flexDirection: 'column', width: '320px' }}
                     role="listitem"
                   >
-                    <div style={{ position: 'relative', height: '10rem', overflow: 'hidden' }}>
+                    <div style={{ display: 'block', position: 'relative', height: '10rem', width: '100%', overflow: 'hidden' }}>
                       {imageUrl ? (
                         <Image
                           src={imageUrl}

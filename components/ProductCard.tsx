@@ -63,9 +63,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
           {product.inStock && (
-            <button className="text-sm text-secondary dark:text-primary hover:text-secondary-dark dark:hover:text-primary-light font-medium transition-colors">
-              View Details
-            </button>
+            <span className="text-sm text-secondary dark:text-primary group-hover:text-secondary-dark dark:group-hover:text-primary-light font-medium transition-colors">
+              View Details →
+            </span>
           )}
         </div>
       </div>

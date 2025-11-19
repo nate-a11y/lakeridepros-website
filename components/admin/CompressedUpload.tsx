@@ -123,8 +123,35 @@ export function CompressedUpload(props: UploadProps) {
 
   // Wrap the onChange handler to compress files before passing to Payload
   const handleChange = useCallback(
-    async (incomingValue: File) => {
-      // Check if this is a large image that needs compression
+    async (incomingValue: File | File[] | FileList) => {
+      // Handle array of files (bulk upload)
+      if (Array.isArray(incomingValue)) {
+        const compressedFiles = await Promise.all(
+          incomingValue.map(file =>
+            file instanceof File && file.type.startsWith('image/')
+              ? compressImage(file)
+              : file
+          )
+        )
+        onChange?.(compressedFiles as unknown as File)
+        return
+      }
+
+      // Handle FileList (multiple files from input)
+      if (incomingValue instanceof FileList) {
+        const files = Array.from(incomingValue)
+        const compressedFiles = await Promise.all(
+          files.map(file =>
+            file.type.startsWith('image/')
+              ? compressImage(file)
+              : file
+          )
+        )
+        onChange?.(compressedFiles as unknown as File)
+        return
+      }
+
+      // Handle single file
       if (incomingValue instanceof File && incomingValue.type.startsWith('image/')) {
         const compressed = await compressImage(incomingValue)
         onChange?.(compressed)

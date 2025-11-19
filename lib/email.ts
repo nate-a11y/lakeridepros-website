@@ -1,5 +1,31 @@
 import { Resend } from 'resend'
 
+/**
+ * EMAIL TEMPLATE STYLING APPROACH
+ * ================================
+ *
+ * Why hardcoded colors instead of CSS variables?
+ * Email clients (Gmail, Outlook, Apple Mail, etc.) have very limited CSS support
+ * and do NOT support CSS custom properties (variables). For maximum compatibility,
+ * all colors must be hardcoded inline.
+ *
+ * Brand Color Reference (keep in sync with globals.css):
+ * - Primary Green: #4cbb17 (--primary)
+ * - Dark Green: #3a8e11 (--primary-dark)
+ * - Light Green: #60e421 (--primary-light)
+ * - Black: #060606 (--lrp-black)
+ * - White: #ffffff
+ * - Gray Background: #f5f5f5
+ *
+ * If brand colors change in globals.css, update the hex values in these templates.
+ *
+ * Accessibility Notes:
+ * - All text colors meet WCAG AA contrast requirements
+ * - Uses semantic HTML (headings, lists, links)
+ * - Includes lang="en" for screen readers
+ * - Uses Montserrat font with fallbacks
+ */
+
 interface OrderItem {
   productName: string
   variantName: string

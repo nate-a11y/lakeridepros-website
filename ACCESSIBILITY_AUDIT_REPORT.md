@@ -163,17 +163,17 @@ onMouseLeave={() => setServicesDropdownOpen(false)}
 ## Implementation Checklist
 
 ### Phase 1: Critical (Do First)
-- [ ] Fix header dropdown keyboard navigation
-- [ ] Add label to newsletter email input
-- [ ] Add label to partner filters search
+- [x] Fix header dropdown keyboard navigation
+- [x] Add label to newsletter email input
+- [x] Add label to partner filters search
 
 ### Phase 2: Medium (Do Next)
-- [ ] Add "opens in new tab" indicators to external links
-- [ ] Fix CartDrawer backdrop keyboard access
+- [x] Add "opens in new tab" indicators to external links
+- [x] Fix CartDrawer backdrop keyboard access
 
 ### Phase 3: Low (Polish)
-- [ ] Add aria-hidden to VehicleCard SVG
-- [ ] Enhance PhoneLink aria-labels where needed
+- [x] Add aria-hidden to VehicleCard SVG
+- [x] Enhance PhoneLink aria-labels where needed
 
 ---
 

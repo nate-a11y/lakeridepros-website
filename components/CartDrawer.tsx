@@ -17,6 +17,7 @@ export default function CartDrawer() {
       <div
         className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity"
         onClick={closeCart}
+        aria-hidden="true"
       />
 
       {/* Drawer */}

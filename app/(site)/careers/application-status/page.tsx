@@ -128,11 +128,10 @@ export default function ApplicationStatusPage() {
 
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute top-8 left-0 right-0 h-1 bg-neutral-200 dark:bg-dark-border" style={{ left: '2rem', right: '2rem' }} />
+          <div className="absolute top-8 left-8 right-8 h-1 bg-neutral-200 dark:bg-dark-border" />
           <div
-            className="absolute top-8 left-0 h-1 bg-primary transition-all duration-500"
+            className="absolute top-8 left-8 h-1 bg-primary transition-all duration-500"
             style={{
-              left: '2rem',
               width: currentIndex >= 0 ? `${(currentIndex / (statuses.length - 1)) * (100 - 8)}%` : '0%'
             }}
           />

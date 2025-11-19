@@ -31,8 +31,7 @@ export default function BookPage() {
           <iframe
             src="https://customer.moovs.app/lake-ride-pros/iframe"
             title="Lake Ride Pros Booking System - Select vehicle, date, time and complete your reservation"
-            className="w-full border-0"
-            style={{ minHeight: '900px', height: 'calc(100vh - 250px)' }}
+            className="w-full border-0 min-h-[900px] h-[calc(100vh-250px)]"
             allow="payment"
           />
         </div>

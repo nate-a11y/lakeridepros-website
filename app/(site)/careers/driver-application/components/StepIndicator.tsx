@@ -92,10 +92,9 @@ export default function StepIndicator({ currentStep, onStepClick }: StepIndicato
               {/* Connector line */}
               {index < steps.length - 1 && (
                 <div
-                  className={`flex-1 h-1 mx-2 transition-all duration-200 ${
+                  className={`flex-1 h-1 mx-2 -mt-6 transition-all duration-200 ${
                     step.number < currentStep ? 'bg-primary' : 'bg-neutral-200 dark:bg-neutral-700'
                   }`}
-                  style={{ marginTop: '-24px' }}
                 />
               )}
             </React.Fragment>

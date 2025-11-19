@@ -194,11 +194,10 @@ export function DirectUpload() {
     setProgress(100)
     setCurrentFile(null)
     setUploading(false)
+    setPreview(null)
 
-    // If single file, redirect to it
-    if (results.length === 1) {
-      window.location.href = `/admin/collections/media/${results[0].id}`
-    }
+    // Don't auto-redirect - user may be uploading from a relationship field
+    // They can click the link to view the uploaded item
   }, [processUpload])
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

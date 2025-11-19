@@ -444,7 +444,7 @@ export default function PricingPage() {
                   </li>
                 </ul>
                 <PhoneLink className="block w-full text-center bg-lrp-green hover:bg-lrp-green/90 text-white px-6 py-3 rounded-lg font-semibold transition-all">
-                  Call for Quote
+                  Get Quote
                 </PhoneLink>
               </div>
             </div>

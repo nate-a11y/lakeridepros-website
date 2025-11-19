@@ -58,7 +58,7 @@ export default function BookingWidget({ className = '', serviceSlug }: BookingWi
             <PhoneLink
               className="block w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors"
             >
-              Call: (573) 206-9499
+              (573) 206-9499
             </PhoneLink>
             <a
               href="mailto:contactus@lakeridepros.com"

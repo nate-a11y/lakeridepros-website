@@ -248,6 +248,24 @@
   }
 }
 
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-left-delayed {
+  0% {
+    transform: translateX(-25%);
+  }
+  100% {
+    transform: translateX(-75%);
+  }
+}
+
 /* Dark mode support - green pops even more on dark! */
 .dark {
   --background: #0a0a0a;
@@ -514,6 +532,20 @@ input[type="checkbox"].h-4 {
 
   .bg-gradient-radial {
     background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+
+  /* Partner logo scrolling animations */
+  .animate-scroll-left {
+    animation: scroll-left 30s linear infinite;
+  }
+
+  .animate-scroll-left-delayed {
+    animation: scroll-left-delayed 30s linear infinite;
+  }
+
+  .animate-scroll-left:hover,
+  .animate-scroll-left-delayed:hover {
+    animation-play-state: paused;
   }
 }
 

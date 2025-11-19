@@ -2,15 +2,6 @@ import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
-  admin: {
-    components: {
-      edit: {
-        // Custom upload component that compresses images before upload
-        // to stay within Vercel's 5MB serverless function limit
-        Upload: '@/components/admin/CompressedUpload#CompressedUpload',
-      },
-    },
-  },
   upload: {
     // Resize original to 1024px and convert to WebP
     // This reduces storage by only keeping one optimized version

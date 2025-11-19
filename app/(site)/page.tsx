@@ -4,7 +4,7 @@ import Image from 'next/image';
 import HeroSection from '@/components/HeroSection';
 import BookingWidget from '@/components/BookingWidget';
 import ServiceCard from '@/components/ServiceCard';
-import VehicleCard from '@/components/VehicleCard';
+import FeaturedVehiclesSection from '@/components/FeaturedVehiclesSection';
 import BlogPostCard from '@/components/BlogPostCard';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import TestimonialsSection from '@/components/TestimonialsSection';
@@ -165,33 +165,7 @@ export default async function HomePage() {
       )}
 
       {/* Featured Vehicles Section */}
-      {vehicles.length > 0 && (
-        <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-                Featured Vehicles
-              </h2>
-              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-                Our fleet of luxury vehicles ensures a comfortable and stylish experience
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {vehicles.map((vehicle) => (
-                <VehicleCard key={vehicle.id} vehicle={vehicle} />
-              ))}
-            </div>
-            <div className="text-center mt-12">
-              <Link
-                href="/fleet"
-                className="inline-block bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-              >
-                View Full Fleet
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
+      <FeaturedVehiclesSection vehicles={vehicles} />
 
       {/* Latest Blog Posts Section */}
       {blogPosts.length > 0 && (

@@ -625,7 +625,7 @@ export default function PricingPage() {
                   Is gratuity included or extra?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Gratuity is not included in our quoted rates and is optional. However, if you're satisfied with your driver's service, standard gratuity is 15-20% of the fare. You can add gratuity when booking or provide it directly to your driver.
+                  Gratuity is not included in our quoted rates but is appreciated for great service. Standard gratuity is 20-25% of the fare, with 20% as the minimum selection when booking online. You can also select a custom amount or tip your driver directly in cash.
                 </p>
               </details>
 

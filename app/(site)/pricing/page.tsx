@@ -46,7 +46,7 @@ const faqSchema = {
       name: 'Are there any hidden fees?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, insurance, and professional driver. The only additional charges may be gratuity (optional), tolls (if applicable), or wait time beyond the agreed window. All potential costs are disclosed upfront.'
+        text: 'No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, estimated tolls (if applicable), insurance, and professional driver. The only additional charges may be gratuity (optional) or wait time beyond the agreed window. All potential costs are disclosed upfront.'
       }
     },
     {
@@ -123,8 +123,8 @@ export default function PricingPage() {
                 </div>
                 <div>
                   <CheckCircle className="w-6 h-6 text-lrp-green mx-auto mb-2" />
-                  <p className="font-semibold text-lrp-black dark:text-white">Price Match Guarantee</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">We'll match any local competitor</p>
+                  <p className="font-semibold text-lrp-black dark:text-white">Licensed & Insured</p>
+                  <p className="text-sm text-gray-600 dark:text-lrp-gray">Full commercial coverage</p>
                 </div>
                 <div>
                   <CheckCircle className="w-6 h-6 text-lrp-green mx-auto mb-2" />
@@ -313,8 +313,8 @@ export default function PricingPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Grand Glaize (KOZS)</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
+                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Lee C Fine (AIZ)</h3>
+                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">At Lake of the Ozarks</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Private aviation & FBO service</p>
               </div>
@@ -322,23 +322,23 @@ export default function PricingPage() {
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Kansas City (MCI)</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2-2.5 hours</p>
+                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2.5-3 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Flight tracking included</p>
               </div>
 
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">St. Louis (STL)</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2.5-3 hours</p>
+                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2-2.5 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Delay adjustment included</p>
               </div>
 
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <MapPin className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Springfield (SGF)</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">Call for Quote</div>
+                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1.5-2 hours</p>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">Round-trip discounts available</p>
               </div>
@@ -361,7 +361,7 @@ export default function PricingPage() {
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Intimate Weddings</h3>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">Custom Quote</div>
+                <Link href="/book" className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4 hover:underline block">Custom Quote</Link>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
@@ -386,11 +386,11 @@ export default function PricingPage() {
               </div>
 
               <div className="bg-lrp-green p-8 rounded-lg text-white relative border-4 border-lrp-green-light">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-lrp-green-light text-lrp-green text-xs font-bold px-4 py-2 rounded-full whitespace-nowrap">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-lrp-green-light text-lrp-black text-xs font-bold px-4 py-2 rounded-full whitespace-nowrap">
                   MOST COMMON
                 </div>
                 <h3 className="text-xl font-bold mb-4">Standard Weddings</h3>
-                <div className="text-3xl font-bold mb-4">Custom Quote</div>
+                <Link href="/book" className="text-3xl font-bold mb-4 hover:underline block">Custom Quote</Link>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
@@ -420,7 +420,7 @@ export default function PricingPage() {
 
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Large Weddings</h3>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">Custom Quote</div>
+                <Link href="/book" className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4 hover:underline block">Custom Quote</Link>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
@@ -449,7 +449,7 @@ export default function PricingPage() {
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
-              Wedding pricing based on hourly rates, vehicle type, guest count, and timeline. All packages include professional driver, fuel, insurance, and coordination. Call (573) 206-9499 for custom quote.
+              Wedding pricing based on hourly rates, vehicle type, guest count, and timeline. All packages include professional driver, fuel, insurance, and coordination. Additional discounted services available through our trusted referral partners. Call (573) 206-9499 for custom quote.
             </p>
           </div>
         </section>
@@ -472,7 +472,7 @@ export default function PricingPage() {
                 <Users className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-3">Vehicle Type</h3>
                 <p className="text-gray-700 dark:text-lrp-gray text-sm">
-                  Larger vehicles cost more due to fuel, licensing, and maintenance. But per-person, they're often the best value. A 14-passenger limo bus is $150/hour ($10.71/person).
+                  Larger vehicles cost more due to fuel, licensing, and maintenance. But per-person, they're often the best value. A 14-passenger limo bus is $130/hour ($9.29/person).
                 </p>
               </div>
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
@@ -570,7 +570,7 @@ export default function PricingPage() {
                   Are there any hidden fees?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, insurance, and professional driver. The only additional charges may be gratuity (optional), tolls (if applicable), or wait time beyond the agreed window. All potential costs are disclosed upfront.
+                  No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, estimated tolls (if applicable), insurance, and professional driver. The only additional charges may be gratuity (optional) or wait time beyond the agreed window. All potential costs are disclosed upfront.
                 </p>
               </details>
 
@@ -616,7 +616,7 @@ export default function PricingPage() {
                   Do you price match competitors?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Yes! We offer a price match guarantee for legitimate local competitors providing the same service (vehicle type, coverage, licensing). Show us a written quote and we'll match or beat it while maintaining our premium service standards.
+                  Nope! We've found that price matching often means service matching, and we're not willing to go there. Our vehicles are newer, our drivers are more experienced, and our dispatch actually answers the phone. Some things are worth paying for—like not ending up stranded at the airport because someone saved $20.
                 </p>
               </details>
 
@@ -625,7 +625,7 @@ export default function PricingPage() {
                   Is gratuity included or extra?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Gratuity is not included in our quoted rates and is optional. However, if you're satisfied with your driver's service, standard gratuity is 15-20% of the fare. You can add gratuity when booking or provide it directly to your driver.
+                  Gratuity is not included in our quoted rates but is appreciated for great service. Standard gratuity is 20-25% of the fare, with 20% as the minimum selection when booking online. You can also select a custom amount or tip your driver directly in cash.
                 </p>
               </details>
 

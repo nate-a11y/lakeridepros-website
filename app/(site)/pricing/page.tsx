@@ -361,7 +361,7 @@ export default function PricingPage() {
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Intimate Weddings</h3>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">Custom Quote</div>
+                <Link href="/book" className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4 hover:underline block">Custom Quote</Link>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
@@ -386,11 +386,11 @@ export default function PricingPage() {
               </div>
 
               <div className="bg-lrp-green p-8 rounded-lg text-white relative border-4 border-lrp-green-light">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-lrp-green-light text-lrp-green text-xs font-bold px-4 py-2 rounded-full whitespace-nowrap">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-lrp-green-light text-lrp-black text-xs font-bold px-4 py-2 rounded-full whitespace-nowrap">
                   MOST COMMON
                 </div>
                 <h3 className="text-xl font-bold mb-4">Standard Weddings</h3>
-                <div className="text-3xl font-bold mb-4">Custom Quote</div>
+                <Link href="/book" className="text-3xl font-bold mb-4 hover:underline block">Custom Quote</Link>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
@@ -420,7 +420,7 @@ export default function PricingPage() {
 
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Large Weddings</h3>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4">Custom Quote</div>
+                <Link href="/book" className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4 hover:underline block">Custom Quote</Link>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
@@ -472,7 +472,7 @@ export default function PricingPage() {
                 <Users className="w-8 h-8 text-lrp-green mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-3">Vehicle Type</h3>
                 <p className="text-gray-700 dark:text-lrp-gray text-sm">
-                  Larger vehicles cost more due to fuel, licensing, and maintenance. But per-person, they're often the best value. A 14-passenger limo bus is $150/hour ($10.71/person).
+                  Larger vehicles cost more due to fuel, licensing, and maintenance. But per-person, they're often the best value. A 14-passenger limo bus is $130/hour ($9.29/person).
                 </p>
               </div>
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">

@@ -25,7 +25,8 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   return (
     <Link
       href={`/fleet/${vehicle.slug}`}
-      className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-bg-secondary"
+      className="group bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-bg-secondary"
+      style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
       aria-label={`View details for ${vehicle.name}`}
     >
       <div style={{ display: 'block', position: 'relative', height: '16rem', width: '100%', overflow: 'hidden' }} className="bg-neutral-100 dark:bg-dark-bg-secondary">

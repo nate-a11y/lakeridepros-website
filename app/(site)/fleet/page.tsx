@@ -16,7 +16,19 @@ export const dynamic = 'force-dynamic';
 export default async function FleetPage() {
   // Fetch vehicles from Payload CMS
   const vehiclesData = await getVehicles().catch(() => ({ docs: [] }));
-  const vehicles = vehiclesData.docs || [];
+  const rawVehicles = vehiclesData.docs || [];
+
+  // Shuffle vehicles that share the same order value for variety on each refresh
+  const groupedByOrder: Record<number, typeof rawVehicles> = {};
+  rawVehicles.forEach((vehicle) => {
+    const order = vehicle.order ?? 0;
+    if (!groupedByOrder[order]) groupedByOrder[order] = [];
+    groupedByOrder[order].push(vehicle);
+  });
+
+  const vehicles = Object.keys(groupedByOrder)
+    .sort((a, b) => Number(a) - Number(b))
+    .flatMap((key) => groupedByOrder[Number(key)].sort(() => Math.random() - 0.5));
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">

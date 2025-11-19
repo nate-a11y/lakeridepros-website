@@ -158,6 +158,19 @@ export async function getFeaturedVehicles(limit = 6): Promise<Vehicle[]> {
   return response.docs || [];
 }
 
+export async function getRandomVehicles(limit = 3): Promise<Vehicle[]> {
+  const response = await fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', {
+    params: {
+      where: JSON.stringify({ available: { equals: true } }),
+      depth: 2,
+    },
+  });
+  const vehicles = response.docs || [];
+  // Shuffle all vehicles and return the requested limit
+  const shuffled = vehicles.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, limit);
+}
+
 export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
   const response = await fetchFromPayload<ApiResponse<Vehicle>>('/vehicles', {
     params: { where: JSON.stringify({ slug: { equals: slug } }), depth: 2 },

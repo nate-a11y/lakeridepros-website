@@ -194,8 +194,16 @@ export default function VehicleGallery({
       {/* Lightbox Modal */}
       {isLightboxOpen && (
         <div
+          role="button"
+          tabIndex={0}
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
           onClick={() => setIsLightboxOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape' || e.key === 'Enter') {
+              setIsLightboxOpen(false);
+            }
+          }}
+          aria-label="Close lightbox (click or press Escape)"
         >
           {/* Close button */}
           <button
@@ -213,8 +221,10 @@ export default function VehicleGallery({
 
           {/* Main lightbox image */}
           <div
+            role="presentation"
             className="relative w-full h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
           >
             {currentImage && (
               <div className="relative max-w-7xl max-h-full w-full h-full">

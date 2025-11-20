@@ -39,7 +39,7 @@ export default function BlogPostNavigation({ previous, next }: BlogPostNavigatio
                   Previous Post
                 </div>
                 <div className="flex gap-4">
-                  {previous.featuredImage && (
+                  {previous.featuredImage && typeof previous.featuredImage === 'object' && (
                     <div className="relative w-20 h-20 rounded overflow-hidden flex-shrink-0">
                       <Image
                         src={getMediaUrl(previous.featuredImage.url)}
@@ -96,7 +96,7 @@ export default function BlogPostNavigation({ previous, next }: BlogPostNavigatio
                       </p>
                     )}
                   </div>
-                  {next.featuredImage && (
+                  {next.featuredImage && typeof next.featuredImage === 'object' && (
                     <div className="relative w-20 h-20 rounded overflow-hidden flex-shrink-0">
                       <Image
                         src={getMediaUrl(next.featuredImage.url)}

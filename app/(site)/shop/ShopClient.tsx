@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingBag, Star, Search, X, Heart, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -95,9 +95,9 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   }, [initialProducts, selectedCategory, searchQuery, sortBy, currentPage, pageSize])
 
   // Reset to page 1 when filters change
-  useMemo(() => {
+  useEffect(() => {
     setCurrentPage(1)
-  }, [selectedCategory, searchQuery, sortBy, pageSize])
+  }, [selectedCategory, searchQuery, sortBy])
 
   const toggleWishlist = (productId: string | number) => {
     setWishlist(prev => {

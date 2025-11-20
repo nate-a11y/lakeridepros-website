@@ -313,17 +313,9 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Social Media Dropdown - hidden on mobile */}
             <div
-              role="group"
-              aria-label="Social media dropdown"
               className="hidden md:block relative"
               onMouseEnter={() => setSocialDropdownOpen(true)}
               onMouseLeave={() => setSocialDropdownOpen(false)}
-              onFocus={() => setSocialDropdownOpen(true)}
-              onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                  setSocialDropdownOpen(false);
-                }
-              }}
             >
               <button
                 className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-neutral-100 dark:hover:bg-dark-bg-tertiary"

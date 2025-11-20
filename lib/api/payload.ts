@@ -227,6 +227,33 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   return matchingPost || null;
 }
 
+export async function getAdjacentBlogPosts(currentSlug: string): Promise<{
+  previous: BlogPost | null;
+  next: BlogPost | null;
+}> {
+  // Get all published posts sorted by date
+  const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', {
+    params: {
+      where: JSON.stringify({ published: { equals: true } }),
+      sort: '-publishedDate',
+      depth: 2,
+      limit: 1000,
+    },
+  });
+
+  const posts = response.docs || [];
+  const currentIndex = posts.findIndex(post => post.slug === currentSlug);
+
+  if (currentIndex === -1) {
+    return { previous: null, next: null };
+  }
+
+  return {
+    previous: currentIndex > 0 ? posts[currentIndex - 1] : null,
+    next: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+  };
+}
+
 // Products API
 export async function getProducts(params?: PaginationParams & FilterParams): Promise<ApiResponse<Product>> {
   const baseParams = {

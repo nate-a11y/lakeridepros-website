@@ -2,10 +2,11 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBlogPostBySlug, getMediaUrl } from '@/lib/api/payload';
+import { getBlogPostBySlug, getAdjacentBlogPosts, getMediaUrl } from '@/lib/api/payload';
 import { formatDate } from '@/lib/utils';
 import { serializeLexical } from '@/lib/serializeLexical';
 import type { User } from '@/src/payload-types';
+import BlogPostNavigation from '@/components/BlogPostNavigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,6 +107,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!post) {
     notFound();
   }
+
+  // Get adjacent posts for navigation
+  const adjacentPosts = await getAdjacentBlogPosts(slug).catch(() => ({
+    previous: null,
+    next: null,
+  }));
 
   // Article Schema for SEO
   const articleSchema = {
@@ -262,6 +269,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           )}
         </div>
       </article>
+
+      {/* Next/Previous Navigation */}
+      <BlogPostNavigation
+        previous={adjacentPosts.previous}
+        next={adjacentPosts.next}
+      />
     </>
   );
 }

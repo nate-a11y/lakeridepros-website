@@ -95,9 +95,9 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   }, [initialProducts, selectedCategory, searchQuery, sortBy, currentPage, pageSize])
 
   // Reset to page 1 when filters change
-  useMemo(() => {
+  useEffect(() => {
     setCurrentPage(1)
-  }, [selectedCategory, searchQuery, sortBy, pageSize])
+  }, [selectedCategory, searchQuery, sortBy])
 
   const toggleWishlist = (productId: string | number) => {
     setWishlist(prev => {

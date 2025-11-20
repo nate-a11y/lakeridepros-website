@@ -1,11 +1,10 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import BookingWidget from '@/components/BookingWidget';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import VehicleGallery from '@/components/VehicleGallery';
-import { getVehicleBySlug, getMediaUrl, getVehicleRelatedTestimonials } from '@/lib/api/payload';
+import { getVehicleBySlug, getVehicleRelatedTestimonials } from '@/lib/api/payload';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,7 +40,6 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   const testimonials = await getVehicleRelatedTestimonials(3, 5).catch(() => []);
 
   const images = vehicle.images || [];
-  const mainImage = vehicle.featuredImage || (images[0]?.image);
 
   // Breadcrumb Schema for SEO
   const breadcrumbSchema = {

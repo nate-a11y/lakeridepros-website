@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BookingWidget from '@/components/BookingWidget';
 import TestimonialsSection from '@/components/TestimonialsSection';
+import VehicleGallery from '@/components/VehicleGallery';
 import { getVehicleBySlug, getMediaUrl, getVehicleRelatedTestimonials } from '@/lib/api/payload';
 
 export const dynamic = 'force-dynamic';
@@ -96,32 +97,13 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Images */}
+            {/* Images Gallery */}
             <div>
-              {mainImage && (
-                <div className="relative h-96 rounded-lg overflow-hidden mb-4">
-                  <Image
-                    src={getMediaUrl(mainImage.url)}
-                    alt={vehicle.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-              {images.length > 1 && (
-                <div className="grid grid-cols-3 gap-4">
-                  {images.slice(1, 4).map((imageWrapper, index) => (
-                    <div key={index} className="relative h-24 rounded-lg overflow-hidden">
-                      <Image
-                        src={getMediaUrl(imageWrapper.image.url)}
-                        alt={imageWrapper.alt || `${vehicle.name} ${index + 2}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+              <VehicleGallery
+                images={images}
+                vehicleName={vehicle.name}
+                featuredImage={vehicle.featuredImage}
+              />
             </div>
 
             {/* Details */}

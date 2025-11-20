@@ -432,16 +432,22 @@ export const syncPrintifyProducts = inngest.createFunction(
         const responseData = await response.json()
         const { data, current_page, last_page } = responseData
 
+        console.log(`[Inngest Sync] Page ${current_page}/${last_page}: ${data.length} products`)
         products.push(...data)
         hasMorePages = current_page < last_page
         currentPage++
       }
 
-      console.log(`[Inngest Sync] Fetched ${products.length} products from Printify`)
+      console.log(`[Inngest Sync] Fetched ${products.length} total products from Printify`)
+
+      // Log visibility breakdown
+      const visibleCount = products.filter(p => p.visible === true).length
+      const hiddenCount = products.length - visibleCount
+      console.log(`[Inngest Sync] Visibility breakdown: ${visibleCount} visible, ${hiddenCount} hidden`)
 
       // Filter to only include visible/published products
       const visibleProducts = products.filter(p => p.visible === true)
-      console.log(`[Inngest Sync] Filtered to ${visibleProducts.length} visible products`)
+      console.log(`[Inngest Sync] Will sync ${visibleProducts.length} visible products`)
 
       return visibleProducts
     })
@@ -514,20 +520,60 @@ export const syncPrintifyProducts = inngest.createFunction(
       results.errors.push(...batchResult.errors)
     }
 
-    // Step 3: Revalidate paths after all products are synced
+    // Step 3: Clean up products that are no longer visible in Printify
+    const cleanupResult = await step.run('cleanup-hidden-products', async () => {
+      const payload = await getPayload({ config })
+
+      // Get all products from Payload that have a printifyProductId
+      const payloadProducts = await payload.find({
+        collection: 'products',
+        where: {
+          printifyProductId: {
+            exists: true,
+          },
+        },
+        limit: 1000, // Adjust if you have more products
+      })
+
+      const visiblePrintifyIds = new Set(allProducts.map(p => p.id))
+      let deactivated = 0
+
+      for (const product of payloadProducts.docs) {
+        // If product is not in the visible Printify products list, mark as draft
+        if (!visiblePrintifyIds.has(product.printifyProductId as string)) {
+          await payload.update({
+            collection: 'products',
+            id: product.id,
+            data: {
+              status: 'draft',
+            },
+            overrideAccess: true,
+          })
+          deactivated++
+          console.log(`[Inngest Sync] Deactivated product "${product.name}" (not visible in Printify)`)
+        }
+      }
+
+      return { deactivated, total: payloadProducts.docs.length }
+    })
+
+    // Step 4: Revalidate paths after all changes
     await step.run('revalidate-paths', async () => {
-      if (results.created > 0 || results.updated > 0) {
+      if (results.created > 0 || results.updated > 0 || cleanupResult.deactivated > 0) {
         console.log('[Inngest Sync] Triggering revalidation for /shop and /')
         await revalidatePaths(['/shop', '/'])
       }
     })
 
-    console.log(`[Inngest Sync] Completed - ${results.created} created, ${results.updated} updated, ${results.failed} failed`)
+    console.log(`[Inngest Sync] Completed - ${results.created} created, ${results.updated} updated, ${results.failed} failed, ${cleanupResult.deactivated} deactivated`)
 
     return {
       success: true,
-      message: `Synced ${results.total} products (${results.created} created, ${results.updated} updated, ${results.failed} failed)`,
-      results,
+      message: `Synced ${results.total} products (${results.created} created, ${results.updated} updated, ${results.failed} failed, ${cleanupResult.deactivated} deactivated)`,
+      results: {
+        ...results,
+        deactivated: cleanupResult.deactivated,
+      },
     }
   }
 )

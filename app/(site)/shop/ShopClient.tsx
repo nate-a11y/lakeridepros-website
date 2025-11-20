@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingBag, Star, Search, X, Heart, ChevronDown } from 'lucide-react'
+import { ShoppingBag, Star, Search, X, Heart, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import QuickViewModal from './QuickViewModal'
 import { getMediaUrl } from '@/lib/utils'
 import type { Product, Media } from '@/src/payload-types'
@@ -18,6 +18,8 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   const [sortBy, setSortBy] = useState('featured')
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null)
   const [wishlist, setWishlist] = useState<Set<string | number>>(new Set())
+  const [currentPage, setCurrentPage] = useState(1)
+  const [pageSize, setPageSize] = useState(20)
 
   const categories = [
     { name: 'All Products', value: 'all' },
@@ -35,7 +37,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   ]
 
   // Filter, search, and sort products
-  const filteredAndSortedProducts = useMemo(() => {
+  const { filteredAndSortedProducts, totalProducts, totalPages } = useMemo(() => {
     let filtered = initialProducts
 
     // Category filter
@@ -78,8 +80,24 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
         })
     }
 
-    return sorted
-  }, [initialProducts, selectedCategory, searchQuery, sortBy])
+    // Pagination
+    const total = sorted.length
+    const pages = Math.ceil(total / pageSize)
+    const startIndex = (currentPage - 1) * pageSize
+    const endIndex = startIndex + pageSize
+    const paginated = sorted.slice(startIndex, endIndex)
+
+    return {
+      filteredAndSortedProducts: paginated,
+      totalProducts: total,
+      totalPages: pages,
+    }
+  }, [initialProducts, selectedCategory, searchQuery, sortBy, currentPage, pageSize])
+
+  // Reset to page 1 when filters change
+  useMemo(() => {
+    setCurrentPage(1)
+  }, [selectedCategory, searchQuery, sortBy, pageSize])
 
   const toggleWishlist = (productId: string | number) => {
     setWishlist(prev => {
@@ -179,10 +197,29 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
             </div>
           </div>
 
-          {/* Results Count */}
-          <div className="mt-4 text-sm text-neutral-400" suppressHydrationWarning>
-            {filteredAndSortedProducts.length} {filteredAndSortedProducts.length === 1 ? 'product' : 'products'}
-            {searchQuery && <span className="text-lrp-green"> matching "{searchQuery}"</span>}
+          {/* Results Count & Page Size Selector */}
+          <div className="mt-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="text-sm text-neutral-400" suppressHydrationWarning>
+              Showing {((currentPage - 1) * pageSize) + 1}-{Math.min(currentPage * pageSize, totalProducts)} of {totalProducts} {totalProducts === 1 ? 'product' : 'products'}
+              {searchQuery && <span className="text-lrp-green"> matching "{searchQuery}"</span>}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <label htmlFor="page-size" className="text-sm text-neutral-400 whitespace-nowrap">
+                Show:
+              </label>
+              <select
+                id="page-size"
+                value={pageSize}
+                onChange={(e) => setPageSize(Number(e.target.value))}
+                className="appearance-none pl-3 pr-8 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white text-sm font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green"
+              >
+                <option value={20}>20</option>
+                <option value={40}>40</option>
+                <option value={60}>60</option>
+                <option value={100}>100</option>
+              </select>
+            </div>
           </div>
         </div>
       </section>
@@ -227,6 +264,82 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                   index={index}
                 />
               ))}
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mt-12">
+              {/* Page Info */}
+              <div className="text-sm text-neutral-400">
+                Page {currentPage} of {totalPages}
+              </div>
+
+              {/* Pagination Buttons */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage(1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                >
+                  First
+                </button>
+                <button
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  aria-label="Previous page"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex gap-2">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    // Show pages around current page
+                    let pageNum
+                    if (totalPages <= 5) {
+                      pageNum = i + 1
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i
+                    } else {
+                      pageNum = currentPage - 2 + i
+                    }
+
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`px-4 py-2 rounded-lg border-2 font-semibold transition-all ${
+                          currentPage === pageNum
+                            ? 'border-lrp-green bg-lrp-green text-white'
+                            : 'border-dark-border bg-dark-bg-secondary text-white hover:border-lrp-green'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                <button
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="p-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  aria-label="Next page"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setCurrentPage(totalPages)}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                >
+                  Last
+                </button>
+              </div>
             </div>
           )}
         </div>

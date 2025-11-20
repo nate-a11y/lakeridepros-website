@@ -159,8 +159,9 @@ export default function ProductActions({ product }: ProductActionsProps) {
           }}
         />
 
-        {/* Variant Selection - Show size selector OR general variant selector */}
-        {sizes.length > 0 ? (
+        {/* Variant Selection - Improved UI */}
+        {sizes.length > 0 && sizes.length <= 8 ? (
+          // Show size buttons if 8 or fewer sizes
           <div className="mb-6">
             <label htmlFor="product-size-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
               Select Size:
@@ -193,7 +194,35 @@ export default function ProductActions({ product }: ProductActionsProps) {
               })}
             </div>
           </div>
-        ) : product.variants && product.variants.length > 1 ? (
+        ) : sizes.length > 8 ? (
+          // Show dropdown if more than 8 sizes
+          <div className="mb-6">
+            <label htmlFor="product-size-dropdown" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+              Select Size:
+            </label>
+            <select
+              id="product-size-dropdown"
+              value={selectedVariant?.size || ''}
+              onChange={(e) => {
+                const variant = product.variants?.find((v: ProductVariant) => v.size === e.target.value)
+                if (variant) setSelectedVariant(variant)
+              }}
+              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold focus:outline-none focus:border-lrp-green transition-all"
+            >
+              {sizes.map((size: string) => {
+                const variant = product.variants?.find((v: ProductVariant) => v.size === size)
+                const inStock = variant?.inStock
+
+                return (
+                  <option key={size} value={size} disabled={!inStock}>
+                    {size.toUpperCase()} {!inStock ? '(Out of Stock)' : ''}
+                  </option>
+                )
+              })}
+            </select>
+          </div>
+        ) : product.variants && product.variants.length > 1 && product.variants.length <= 5 ? (
+          // Show buttons if 5 or fewer general variants
           <div className="mb-6">
             <label htmlFor="product-option-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
               Select Option:
@@ -229,6 +258,35 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 )
               })}
             </div>
+          </div>
+        ) : product.variants && product.variants.length > 5 ? (
+          // Show dropdown if more than 5 general variants
+          <div className="mb-6">
+            <label htmlFor="product-option-dropdown" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+              Select Option:
+            </label>
+            <select
+              id="product-option-dropdown"
+              value={selectedVariant?.sku || ''}
+              onChange={(e) => {
+                const variant = product.variants?.find((v: ProductVariant) => v.sku === e.target.value)
+                if (variant) setSelectedVariant(variant)
+              }}
+              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold focus:outline-none focus:border-lrp-green transition-all"
+            >
+              {product.variants?.map((variant: ProductVariant, index: number) => {
+                const inStock = variant.inStock
+                const priceDisplay = variant.price && variant.price !== product.price
+                  ? ` - $${variant.price.toFixed(2)}`
+                  : ''
+
+                return (
+                  <option key={variant.sku || index} value={variant.sku} disabled={!inStock}>
+                    {variant.name}{priceDisplay} {!inStock ? '(Out of Stock)' : ''}
+                  </option>
+                )
+              })}
+            </select>
           </div>
         ) : null}
 

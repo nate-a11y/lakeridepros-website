@@ -44,6 +44,7 @@ interface PrintifyProduct {
   variants: PrintifyVariant[]
   blueprint_id: number
   print_provider_id: number
+  visible: boolean
   [key: string]: unknown
 }
 
@@ -437,7 +438,12 @@ export const syncPrintifyProducts = inngest.createFunction(
       }
 
       console.log(`[Inngest Sync] Fetched ${products.length} products from Printify`)
-      return products
+
+      // Filter to only include visible/published products
+      const visibleProducts = products.filter(p => p.visible === true)
+      console.log(`[Inngest Sync] Filtered to ${visibleProducts.length} visible products`)
+
+      return visibleProducts
     })
 
     // Step 2: Process products in batches

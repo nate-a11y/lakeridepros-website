@@ -281,11 +281,19 @@ export function DirectUpload() {
       {selectedFiles.length === 0 ? (
         // File selection drop zone
         <div
+          role="button"
+          tabIndex={0}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              inputRef.current?.click()
+            }
+          }}
           style={{
             border: `2px dashed ${dragActive ? '#3b82f6' : '#d1d5db'}`,
             borderRadius: '8px',
@@ -362,6 +370,7 @@ export function DirectUpload() {
                 }}
               >
                 <div style={{ display: 'flex', gap: '1rem' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={fileWithMeta.preview}
                     alt="Preview"
@@ -385,10 +394,11 @@ export function DirectUpload() {
                     </div>
 
                     <div style={{ marginBottom: '0.75rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: '#374151' }}>
+                      <label htmlFor={`alt-${index}`} style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: '#374151' }}>
                         Alt Text <span style={{ color: '#dc2626' }}>*</span>
                       </label>
                       <input
+                        id={`alt-${index}`}
                         type="text"
                         value={fileWithMeta.alt}
                         onChange={(e) => updateFileMetadata(index, 'alt', e.target.value)}
@@ -409,10 +419,11 @@ export function DirectUpload() {
                     </div>
 
                     <div style={{ marginBottom: '0.5rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: '#374151' }}>
+                      <label htmlFor={`caption-${index}`} style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: '#374151' }}>
                         Caption (optional)
                       </label>
                       <input
+                        id={`caption-${index}`}
                         type="text"
                         value={fileWithMeta.caption}
                         onChange={(e) => updateFileMetadata(index, 'caption', e.target.value)}

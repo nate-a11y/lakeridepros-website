@@ -4,8 +4,7 @@
       "maxDuration": 30
     },
     "app/(payload)/api/[...slug]/route.ts": {
-      "maxDuration": 60,
-      "memory": 1024
+      "maxDuration": 60
     },
     "app/api/printify/sync-products/route.ts": {
       "maxDuration": 300

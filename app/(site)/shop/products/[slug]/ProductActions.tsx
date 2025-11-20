@@ -21,6 +21,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [personalizationText, setPersonalizationText] = useState('')
 
   const { addItem } = useCart()
 
@@ -51,6 +52,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
       quantity,
       image: featuredImage?.url ? getMediaUrl(featuredImage.url) : '',
       imageAlt: featuredImage?.alt || product.name,
+      personalization: personalizationText || undefined,
     })
 
     setAddedToCart(true)
@@ -318,6 +320,27 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 )
               })}
             </div>
+          </div>
+        )}
+
+        {/* Personalization */}
+        {product.personalization?.enabled && (
+          <div className="mb-6">
+            <label htmlFor="product-personalization" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+              {product.personalization.instructions || 'Personalize your item'}:
+            </label>
+            <input
+              id="product-personalization"
+              type="text"
+              value={personalizationText}
+              onChange={(e) => setPersonalizationText(e.target.value)}
+              maxLength={product.personalization.maxLength || 100}
+              placeholder={product.personalization.instructions || 'Enter your personalization text'}
+              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white focus:outline-none focus:border-lrp-green transition-all"
+            />
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+              {personalizationText.length}/{product.personalization.maxLength || 100} characters
+            </p>
           </div>
         )}
 

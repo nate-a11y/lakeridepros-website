@@ -35,6 +35,16 @@ interface PrintifyVariant {
   options: PrintifyVariantOption[]
 }
 
+interface PrintifyPersonalization {
+  instructions: string
+  buyer_response_limit?: number
+}
+
+interface PrintifySalesChannelProperties {
+  personalisation?: PrintifyPersonalization[]
+  [key: string]: unknown
+}
+
 interface PrintifyProduct {
   id: string
   title: string
@@ -45,6 +55,7 @@ interface PrintifyProduct {
   blueprint_id: number
   print_provider_id: number
   visible: boolean
+  sales_channel_properties?: PrintifySalesChannelProperties
   [key: string]: unknown
 }
 
@@ -327,6 +338,21 @@ async function processProduct(
     categories.push('apparel')
   }
 
+  // Extract personalization settings from sales_channel_properties
+  const personalization = {
+    enabled: false,
+    instructions: '',
+    maxLength: 0,
+  }
+
+  if (printifyProduct.sales_channel_properties?.personalisation &&
+      printifyProduct.sales_channel_properties.personalisation.length > 0) {
+    const firstPersonalization = printifyProduct.sales_channel_properties.personalisation[0]
+    personalization.enabled = true
+    personalization.instructions = firstPersonalization.instructions || ''
+    personalization.maxLength = firstPersonalization.buyer_response_limit || 100
+  }
+
   const productData = {
     name: printifyProduct.title,
     slug,
@@ -359,6 +385,7 @@ async function processProduct(
     printifyProductId: printifyProduct.id,
     printifyBlueprintId: printifyProduct.blueprint_id.toString(),
     printifyPrintProviderId: printifyProduct.print_provider_id.toString(),
+    personalization,
     status: 'active' as const,
     metaTitle: printifyProduct.title,
     metaDescription: printifyProduct.description?.substring(0, 160) || printifyProduct.title,

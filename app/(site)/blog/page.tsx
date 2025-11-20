@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import BlogPostCard from '@/components/BlogPostCard';
+import BlogPostsGrid from '@/components/BlogPostsGrid';
 import { getBlogPosts } from '@/lib/api/payload';
 
 export const metadata: Metadata = {
@@ -13,8 +13,15 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default async function BlogPage() {
-  const blogData = await getBlogPosts({ limit: 12 }).catch(() => ({ docs: [], hasNextPage: false }));
+  const blogData = await getBlogPosts({ limit: 12 }).catch(() => ({
+    docs: [],
+    hasNextPage: false,
+    page: 1
+  }));
+
   const posts = blogData.docs || [];
+  const hasNextPage = 'hasNextPage' in blogData ? blogData.hasNextPage : false;
+  const currentPage = 'page' in blogData ? blogData.page : 1;
 
   return (
     <>
@@ -31,28 +38,11 @@ export default async function BlogPage() {
       {/* Blog Posts Grid */}
       <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {posts.length > 0 ? (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {posts.map((post) => (
-                  <BlogPostCard key={post.id} post={post} />
-                ))}
-              </div>
-              {'hasNextPage' in blogData && blogData.hasNextPage && (
-                <div className="text-center mt-12">
-                  <button className="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors">
-                    Load More
-                  </button>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-neutral-600 dark:text-lrp-text-muted">
-                Blog posts will be available soon. Check back later for updates!
-              </p>
-            </div>
-          )}
+          <BlogPostsGrid
+            initialPosts={posts}
+            initialHasNextPage={hasNextPage}
+            initialPage={currentPage}
+          />
         </div>
       </section>
     </>

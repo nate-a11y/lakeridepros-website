@@ -16,7 +16,8 @@ export const dynamic = 'force-dynamic'
 async function getProducts() {
   try {
     const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
-    const res = await fetch(`${payloadUrl}/api/products?where[status][equals]=active&limit=100&depth=2`, {
+    // Fetch all products (no limit) for client-side pagination
+    const res = await fetch(`${payloadUrl}/api/products?where[status][equals]=active&limit=1000&depth=2`, {
       next: { revalidate: 3600 }, // Revalidate every hour
     })
 

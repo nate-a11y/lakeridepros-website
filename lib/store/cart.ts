@@ -13,6 +13,7 @@ export interface CartItem {
   quantity: number
   image: string
   imageAlt: string
+  personalization?: string
 }
 
 interface CartState {

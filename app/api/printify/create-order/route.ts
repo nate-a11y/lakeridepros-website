@@ -8,6 +8,7 @@ interface CartItem {
   productId: string
   variantId: string
   quantity: number
+  personalization?: string
 }
 
 export async function POST(request: NextRequest) {
@@ -42,12 +43,27 @@ export async function POST(request: NextRequest) {
           throw new Error(`Printify variant ID not found for SKU: ${item.variantId}`)
         }
 
-        return {
+        const lineItem: {
+          print_provider_id: number
+          blueprint_id: number
+          variant_id: number
+          quantity: number
+          metadata?: { personalization: string }
+        } = {
           print_provider_id: parseInt(productData.doc.printifyPrintProviderId),
           blueprint_id: parseInt(productData.doc.printifyBlueprintId),
           variant_id: parseInt(variant.printifyVariantId),
           quantity: item.quantity,
         }
+
+        // Add personalization if provided
+        if (item.personalization) {
+          lineItem.metadata = {
+            personalization: item.personalization,
+          }
+        }
+
+        return lineItem
       })
     )
 

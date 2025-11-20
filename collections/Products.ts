@@ -221,6 +221,39 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      name: 'personalization',
+      type: 'group',
+      admin: {
+        description: 'Personalization settings from Printify',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Enable personalization for this product',
+          },
+        },
+        {
+          name: 'instructions',
+          type: 'text',
+          admin: {
+            description: 'Instructions shown to customers (e.g., "Enter name to be printed")',
+            condition: (data, siblingData) => siblingData?.enabled,
+          },
+        },
+        {
+          name: 'maxLength',
+          type: 'number',
+          admin: {
+            description: 'Maximum character limit for personalization',
+            condition: (data, siblingData) => siblingData?.enabled,
+          },
+        },
+      ],
+    },
+    {
       name: 'status',
       type: 'select',
       required: true,

@@ -111,7 +111,7 @@ export default function VehicleGallery({
               src={getImageUrl(currentImage.image)}
               alt={currentImage.alt || `${vehicleName} - Image ${currentIndex + 1}`}
               fill
-              className={`object-cover transition-opacity duration-300 ${
+              className={`object-contain transition-opacity duration-300 ${
                 isTransitioning ? 'opacity-0' : 'opacity-100'
               }`}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

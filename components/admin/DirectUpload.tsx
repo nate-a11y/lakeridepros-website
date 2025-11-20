@@ -269,7 +269,7 @@ export function DirectUpload() {
   // If editing existing document
   if (id) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
+      <div className="p-8 text-center text-neutral-600 dark:text-neutral-400">
         <p>This media item already exists.</p>
         <p>To upload new images, create a new media item.</p>
       </div>
@@ -277,7 +277,7 @@ export function DirectUpload() {
   }
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div className="p-4">
       {selectedFiles.length === 0 ? (
         // File selection drop zone
         <div
@@ -294,15 +294,11 @@ export function DirectUpload() {
               inputRef.current?.click()
             }
           }}
-          style={{
-            border: `2px dashed ${dragActive ? '#3b82f6' : '#d1d5db'}`,
-            borderRadius: '8px',
-            padding: '3rem 2rem',
-            textAlign: 'center',
-            cursor: 'pointer',
-            backgroundColor: dragActive ? '#eff6ff' : '#f9fafb',
-            transition: 'all 0.2s',
-          }}
+          className={`border-2 border-dashed rounded-lg py-12 px-8 text-center cursor-pointer transition-all ${
+            dragActive
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/20'
+              : 'border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800'
+          }`}
         >
           <input
             ref={inputRef}
@@ -311,7 +307,7 @@ export function DirectUpload() {
             multiple
             onChange={handleFileSelect}
             disabled={uploading}
-            style={{ display: 'none' }}
+            className="hidden"
           />
 
           <svg
@@ -319,83 +315,63 @@ export function DirectUpload() {
             height="48"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#9ca3af"
+            className="mx-auto mb-4 stroke-neutral-400 dark:stroke-neutral-500"
             strokeWidth="2"
-            style={{ margin: '0 auto 1rem' }}
           >
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="17,8 12,3 7,8" />
             <line x1="12" y1="3" x2="12" y2="15" />
           </svg>
 
-          <p style={{ color: '#374151', marginBottom: '0.5rem' }}>
+          <p className="text-neutral-700 dark:text-neutral-200 mb-2">
             <strong>Click to upload</strong> or drag and drop
           </p>
-          <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm">
             Select multiple images for bulk upload
           </p>
         </div>
       ) : (
         // Metadata collection form
         <div>
-          <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>
+          <div className="mb-4 flex justify-between items-center">
+            <h3 className="m-0 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
               Add Image Details ({selectedFiles.length} image{selectedFiles.length > 1 ? 's' : ''})
             </h3>
             <button
               onClick={() => setSelectedFiles([])}
-              style={{
-                padding: '0.5rem 1rem',
-                backgroundColor: '#f3f4f6',
-                border: '1px solid #d1d5db',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                fontSize: '0.875rem',
-              }}
+              className="py-2 px-4 bg-neutral-100 dark:bg-neutral-700 border border-neutral-300 dark:border-neutral-600 rounded cursor-pointer text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
             >
               Cancel
             </button>
           </div>
 
-          <div style={{ maxHeight: '60vh', overflowY: 'auto', marginBottom: '1rem' }}>
+          <div className="max-h-[60vh] overflow-y-auto mb-4">
             {selectedFiles.map((fileWithMeta, index) => (
               <div
                 key={index}
-                style={{
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  padding: '1rem',
-                  marginBottom: '1rem',
-                  backgroundColor: '#fff',
-                }}
+                className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-4 mb-4 bg-white dark:bg-neutral-800"
               >
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div className="flex gap-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={fileWithMeta.preview}
                     alt="Preview"
-                    style={{
-                      width: '120px',
-                      height: '120px',
-                      objectFit: 'cover',
-                      borderRadius: '4px',
-                      flexShrink: 0,
-                    }}
+                    className="w-[120px] h-[120px] object-cover rounded flex-shrink-0"
                   />
 
-                  <div style={{ flex: 1 }}>
-                    <div style={{ marginBottom: '0.5rem' }}>
-                      <strong style={{ fontSize: '0.875rem', color: '#374151' }}>
+                  <div className="flex-1">
+                    <div className="mb-2">
+                      <strong className="text-sm text-neutral-700 dark:text-neutral-200">
                         {fileWithMeta.file.name}
                       </strong>
-                      <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', color: '#6b7280' }}>
+                      <span className="ml-2 text-xs text-neutral-500 dark:text-neutral-400">
                         ({(fileWithMeta.file.size / 1024 / 1024).toFixed(2)} MB)
                       </span>
                     </div>
 
-                    <div style={{ marginBottom: '0.75rem' }}>
-                      <label htmlFor={`alt-${index}`} style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: '#374151' }}>
-                        Alt Text <span style={{ color: '#dc2626' }}>*</span>
+                    <div className="mb-3">
+                      <label htmlFor={`alt-${index}`} className="block text-sm font-medium mb-1 text-neutral-700 dark:text-neutral-200">
+                        Alt Text <span className="text-red-600 dark:text-red-400">*</span>
                       </label>
                       <input
                         id={`alt-${index}`}
@@ -403,23 +379,21 @@ export function DirectUpload() {
                         value={fileWithMeta.alt}
                         onChange={(e) => updateFileMetadata(index, 'alt', e.target.value)}
                         placeholder="Describe this image for accessibility"
-                        style={{
-                          width: '100%',
-                          padding: '0.5rem',
-                          border: `1px solid ${fileWithMeta.alt.trim() ? '#d1d5db' : '#fca5a5'}`,
-                          borderRadius: '4px',
-                          fontSize: '0.875rem',
-                        }}
+                        className={`w-full p-2 rounded text-sm bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 border ${
+                          fileWithMeta.alt.trim()
+                            ? 'border-neutral-300 dark:border-neutral-600'
+                            : 'border-red-300 dark:border-red-500'
+                        } focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400`}
                       />
                       {!fileWithMeta.alt.trim() && (
-                        <span style={{ fontSize: '0.75rem', color: '#dc2626' }}>
+                        <span className="text-xs text-red-600 dark:text-red-400">
                           Required for accessibility
                         </span>
                       )}
                     </div>
 
-                    <div style={{ marginBottom: '0.5rem' }}>
-                      <label htmlFor={`caption-${index}`} style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: '#374151' }}>
+                    <div className="mb-2">
+                      <label htmlFor={`caption-${index}`} className="block text-sm font-medium mb-1 text-neutral-700 dark:text-neutral-200">
                         Caption (optional)
                       </label>
                       <input
@@ -428,27 +402,13 @@ export function DirectUpload() {
                         value={fileWithMeta.caption}
                         onChange={(e) => updateFileMetadata(index, 'caption', e.target.value)}
                         placeholder="Optional caption"
-                        style={{
-                          width: '100%',
-                          padding: '0.5rem',
-                          border: '1px solid #d1d5db',
-                          borderRadius: '4px',
-                          fontSize: '0.875rem',
-                        }}
+                        className="w-full p-2 border border-neutral-300 dark:border-neutral-600 rounded text-sm bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
                       />
                     </div>
 
                     <button
                       onClick={() => removeFile(index)}
-                      style={{
-                        padding: '0.25rem 0.5rem',
-                        backgroundColor: '#fef2f2',
-                        color: '#dc2626',
-                        border: '1px solid #fecaca',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '0.75rem',
-                      }}
+                      className="py-1 px-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 rounded cursor-pointer text-xs hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
                     >
                       Remove
                     </button>
@@ -461,70 +421,43 @@ export function DirectUpload() {
           <button
             onClick={handleUpload}
             disabled={uploading || selectedFiles.some(f => !f.alt.trim())}
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              backgroundColor: uploading || selectedFiles.some(f => !f.alt.trim()) ? '#d1d5db' : '#3b82f6',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: uploading || selectedFiles.some(f => !f.alt.trim()) ? 'not-allowed' : 'pointer',
-              fontSize: '1rem',
-              fontWeight: 600,
-            }}
+            className={`w-full py-3 border-none rounded text-base font-semibold transition-colors ${
+              uploading || selectedFiles.some(f => !f.alt.trim())
+                ? 'bg-neutral-300 dark:bg-neutral-600 text-neutral-500 dark:text-neutral-400 cursor-not-allowed'
+                : 'bg-blue-500 dark:bg-blue-600 text-white cursor-pointer hover:bg-blue-600 dark:hover:bg-blue-700'
+            }`}
           >
             {uploading ? `Uploading ${currentFile}... (${progress}%)` : `Upload ${selectedFiles.length} Image${selectedFiles.length > 1 ? 's' : ''}`}
           </button>
 
           {uploading && (
-            <div style={{
-              marginTop: '0.5rem',
-              height: '8px',
-              backgroundColor: '#e5e7eb',
-              borderRadius: '4px',
-              overflow: 'hidden',
-            }}>
-              <div style={{
-                width: `${progress}%`,
-                height: '100%',
-                backgroundColor: '#3b82f6',
-                transition: 'width 0.3s',
-              }} />
+            <div className="mt-2 h-2 bg-neutral-200 dark:bg-neutral-700 rounded overflow-hidden">
+              <div
+                className="h-full bg-blue-500 dark:bg-blue-600 transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
             </div>
           )}
         </div>
       )}
 
       {error && (
-        <div style={{
-          marginTop: '1rem',
-          padding: '0.75rem',
-          backgroundColor: '#fef2f2',
-          border: '1px solid #fecaca',
-          borderRadius: '4px',
-          color: '#dc2626',
-        }}>
+        <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-red-600 dark:text-red-400">
           {error}
         </div>
       )}
 
       {uploadedFiles.length > 0 && !uploading && (
-        <div style={{
-          marginTop: '1rem',
-          padding: '0.75rem',
-          backgroundColor: '#f0fdf4',
-          border: '1px solid #bbf7d0',
-          borderRadius: '4px',
-        }}>
-          <p style={{ color: '#16a34a', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+        <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
+          <p className="text-green-600 dark:text-green-400 font-bold mb-2">
             ✓ Uploaded {uploadedFiles.length} file{uploadedFiles.length > 1 ? 's' : ''}
           </p>
-          <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#166534' }}>
+          <ul className="m-0 pl-6 text-green-700 dark:text-green-300">
             {uploadedFiles.map((f) => (
               <li key={f.id}>
                 <a
                   href={`/admin/collections/media/${f.id}`}
-                  style={{ color: '#166534', textDecoration: 'underline' }}
+                  className="text-green-700 dark:text-green-300 underline hover:text-green-800 dark:hover:text-green-200"
                 >
                   {f.name}
                 </a>

@@ -105,7 +105,7 @@ export default function VehicleGallery({
     <div className="space-y-4">
       {/* Main Image Display */}
       <div className="relative group">
-        <div className="relative h-96 rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+        <div className="relative h-96 rounded-lg overflow-hidden bg-gradient-to-br from-neutral-800 via-neutral-900 to-black">
           {currentImage && (
             <Image
               src={getImageUrl(currentImage.image)}

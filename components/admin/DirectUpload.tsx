@@ -78,6 +78,13 @@ async function compressImage(file: File): Promise<{ file: File; width: number; h
   })
 }
 
+interface FileWithMetadata {
+  file: File
+  preview: string
+  alt: string
+  caption: string
+}
+
 /**
  * Custom Upload component that bypasses Vercel's 4.5MB limit
  * by uploading directly to Supabase. Supports bulk uploads.
@@ -85,17 +92,19 @@ async function compressImage(file: File): Promise<{ file: File; width: number; h
 export function DirectUpload() {
   const { id } = useDocumentInfo()
 
+  const [selectedFiles, setSelectedFiles] = useState<FileWithMetadata[]>([])
   const [uploading, setUploading] = useState(false)
   const [currentFile, setCurrentFile] = useState<string | null>(null)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ name: string; id: string }>>([])
   const [dragActive, setDragActive] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const processUpload = useCallback(async (file: File): Promise<{ name: string; id: string } | null> => {
+  const processUpload = useCallback(async (fileWithMeta: FileWithMetadata): Promise<{ name: string; id: string } | null> => {
     try {
+      const { file, alt, caption } = fileWithMeta
+
       // Compress
       const { file: compressedFile, width, height } = await compressImage(file)
 
@@ -127,7 +136,7 @@ export function DirectUpload() {
         throw new Error('Failed to upload to storage')
       }
 
-      // Create media record
+      // Create media record with user-provided metadata
       const mediaRes = await fetch('/api/upload/create-media', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -138,7 +147,8 @@ export function DirectUpload() {
           width,
           height,
           url: publicUrl,
-          alt: file.name.replace(/\.[^.]+$/, ''),
+          alt: alt.trim() || file.name.replace(/\.[^.]+$/, ''), // Use provided alt or fallback to filename
+          caption: caption.trim() || undefined,
         }),
       })
 
@@ -152,16 +162,55 @@ export function DirectUpload() {
 
       return { name: file.name, id: mediaData.doc.id }
     } catch (err) {
-      console.error('[DirectUpload] Error uploading', file.name, err)
+      console.error('[DirectUpload] Error uploading', fileWithMeta.file.name, err)
       throw err
     }
   }, [])
 
-  const handleFiles = useCallback(async (files: FileList | File[]) => {
+  const handleFilesSelected = useCallback((files: FileList | File[]) => {
     const fileArray = Array.from(files).filter(f => f.type.startsWith('image/'))
 
     if (fileArray.length === 0) {
       setError('No valid image files selected')
+      return
+    }
+
+    // Create metadata entries for each file with preview
+    const filesWithMeta: FileWithMetadata[] = fileArray.map(file => ({
+      file,
+      preview: URL.createObjectURL(file),
+      alt: '', // Empty by default - user must fill
+      caption: '',
+    }))
+
+    setSelectedFiles(filesWithMeta)
+    setError(null)
+  }, [])
+
+  const updateFileMetadata = useCallback((index: number, field: 'alt' | 'caption', value: string) => {
+    setSelectedFiles(prev => {
+      const updated = [...prev]
+      updated[index] = { ...updated[index], [field]: value }
+      return updated
+    })
+  }, [])
+
+  const removeFile = useCallback((index: number) => {
+    setSelectedFiles(prev => {
+      const updated = [...prev]
+      URL.revokeObjectURL(updated[index].preview)
+      updated.splice(index, 1)
+      return updated
+    })
+  }, [])
+
+  const handleUpload = useCallback(async () => {
+    if (selectedFiles.length === 0) return
+
+    // Check for missing alt text
+    const missingAlt = selectedFiles.filter(f => !f.alt.trim())
+    if (missingAlt.length > 0) {
+      setError(`Please provide alt text for all images (${missingAlt.length} missing)`)
       return
     }
 
@@ -171,48 +220,42 @@ export function DirectUpload() {
 
     const results: Array<{ name: string; id: string }> = []
 
-    for (let i = 0; i < fileArray.length; i++) {
-      const file = fileArray[i]
-      setCurrentFile(file.name)
-      setProgress(Math.round((i / fileArray.length) * 100))
-
-      // Show preview of current file
-      const previewUrl = URL.createObjectURL(file)
-      setPreview(previewUrl)
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const fileWithMeta = selectedFiles[i]
+      setCurrentFile(fileWithMeta.file.name)
+      setProgress(Math.round((i / selectedFiles.length) * 100))
 
       try {
-        const result = await processUpload(file)
+        const result = await processUpload(fileWithMeta)
         if (result) {
           results.push(result)
           setUploadedFiles([...results])
         }
       } catch (err) {
-        setError(`Failed to upload ${file.name}: ${err instanceof Error ? err.message : 'Unknown error'}`)
+        setError(`Failed to upload ${fileWithMeta.file.name}: ${err instanceof Error ? err.message : 'Unknown error'}`)
+        break
       }
     }
 
     setProgress(100)
     setCurrentFile(null)
     setUploading(false)
-    setPreview(null)
-
-    // Don't auto-redirect - user may be uploading from a relationship field
-    // They can click the link to view the uploaded item
-  }, [processUpload])
+    setSelectedFiles([])
+  }, [selectedFiles, processUpload])
 
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      handleFiles(e.target.files)
+      handleFilesSelected(e.target.files)
     }
-  }, [handleFiles])
+  }, [handleFilesSelected])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     setDragActive(false)
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFiles(e.dataTransfer.files)
+      handleFilesSelected(e.dataTransfer.files)
     }
-  }, [handleFiles])
+  }, [handleFilesSelected])
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -235,70 +278,196 @@ export function DirectUpload() {
 
   return (
     <div style={{ padding: '1rem' }}>
-      <div
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
-        style={{
-          border: `2px dashed ${dragActive ? '#3b82f6' : '#d1d5db'}`,
-          borderRadius: '8px',
-          padding: '3rem 2rem',
-          textAlign: 'center',
-          cursor: 'pointer',
-          backgroundColor: dragActive ? '#eff6ff' : '#f9fafb',
-          transition: 'all 0.2s',
-        }}
-      >
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleFileSelect}
-          disabled={uploading}
-          style={{ display: 'none' }}
-        />
+      {selectedFiles.length === 0 ? (
+        // File selection drop zone
+        <div
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+          onClick={() => inputRef.current?.click()}
+          style={{
+            border: `2px dashed ${dragActive ? '#3b82f6' : '#d1d5db'}`,
+            borderRadius: '8px',
+            padding: '3rem 2rem',
+            textAlign: 'center',
+            cursor: 'pointer',
+            backgroundColor: dragActive ? '#eff6ff' : '#f9fafb',
+            transition: 'all 0.2s',
+          }}
+        >
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFileSelect}
+            disabled={uploading}
+            style={{ display: 'none' }}
+          />
 
-        {preview ? (
-          <div>
-            <img
-              src={preview}
-              alt="Preview"
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#9ca3af"
+            strokeWidth="2"
+            style={{ margin: '0 auto 1rem' }}
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17,8 12,3 7,8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+
+          <p style={{ color: '#374151', marginBottom: '0.5rem' }}>
+            <strong>Click to upload</strong> or drag and drop
+          </p>
+          <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
+            Select multiple images for bulk upload
+          </p>
+        </div>
+      ) : (
+        // Metadata collection form
+        <div>
+          <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>
+              Add Image Details ({selectedFiles.length} image{selectedFiles.length > 1 ? 's' : ''})
+            </h3>
+            <button
+              onClick={() => setSelectedFiles([])}
               style={{
-                maxWidth: '200px',
-                maxHeight: '200px',
+                padding: '0.5rem 1rem',
+                backgroundColor: '#f3f4f6',
+                border: '1px solid #d1d5db',
                 borderRadius: '4px',
-                marginBottom: '1rem',
+                cursor: 'pointer',
+                fontSize: '0.875rem',
               }}
-            />
-          </div>
-        ) : (
-          <div>
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#9ca3af"
-              strokeWidth="2"
-              style={{ margin: '0 auto 1rem' }}
             >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17,8 12,3 7,8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
+              Cancel
+            </button>
           </div>
-        )}
 
-        {uploading ? (
-          <div>
-            <p style={{ marginBottom: '0.5rem', color: '#374151' }}>
-              {currentFile ? `Uploading: ${currentFile}` : 'Processing...'} ({progress}%)
-            </p>
-            <div style={{
+          <div style={{ maxHeight: '60vh', overflowY: 'auto', marginBottom: '1rem' }}>
+            {selectedFiles.map((fileWithMeta, index) => (
+              <div
+                key={index}
+                style={{
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  padding: '1rem',
+                  marginBottom: '1rem',
+                  backgroundColor: '#fff',
+                }}
+              >
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <img
+                    src={fileWithMeta.preview}
+                    alt="Preview"
+                    style={{
+                      width: '120px',
+                      height: '120px',
+                      objectFit: 'cover',
+                      borderRadius: '4px',
+                      flexShrink: 0,
+                    }}
+                  />
+
+                  <div style={{ flex: 1 }}>
+                    <div style={{ marginBottom: '0.5rem' }}>
+                      <strong style={{ fontSize: '0.875rem', color: '#374151' }}>
+                        {fileWithMeta.file.name}
+                      </strong>
+                      <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', color: '#6b7280' }}>
+                        ({(fileWithMeta.file.size / 1024 / 1024).toFixed(2)} MB)
+                      </span>
+                    </div>
+
+                    <div style={{ marginBottom: '0.75rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: '#374151' }}>
+                        Alt Text <span style={{ color: '#dc2626' }}>*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={fileWithMeta.alt}
+                        onChange={(e) => updateFileMetadata(index, 'alt', e.target.value)}
+                        placeholder="Describe this image for accessibility"
+                        style={{
+                          width: '100%',
+                          padding: '0.5rem',
+                          border: `1px solid ${fileWithMeta.alt.trim() ? '#d1d5db' : '#fca5a5'}`,
+                          borderRadius: '4px',
+                          fontSize: '0.875rem',
+                        }}
+                      />
+                      {!fileWithMeta.alt.trim() && (
+                        <span style={{ fontSize: '0.75rem', color: '#dc2626' }}>
+                          Required for accessibility
+                        </span>
+                      )}
+                    </div>
+
+                    <div style={{ marginBottom: '0.5rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem', color: '#374151' }}>
+                        Caption (optional)
+                      </label>
+                      <input
+                        type="text"
+                        value={fileWithMeta.caption}
+                        onChange={(e) => updateFileMetadata(index, 'caption', e.target.value)}
+                        placeholder="Optional caption"
+                        style={{
+                          width: '100%',
+                          padding: '0.5rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '4px',
+                          fontSize: '0.875rem',
+                        }}
+                      />
+                    </div>
+
+                    <button
+                      onClick={() => removeFile(index)}
+                      style={{
+                        padding: '0.25rem 0.5rem',
+                        backgroundColor: '#fef2f2',
+                        color: '#dc2626',
+                        border: '1px solid #fecaca',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        fontSize: '0.75rem',
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={handleUpload}
+            disabled={uploading || selectedFiles.some(f => !f.alt.trim())}
+            style={{
               width: '100%',
+              padding: '0.75rem',
+              backgroundColor: uploading || selectedFiles.some(f => !f.alt.trim()) ? '#d1d5db' : '#3b82f6',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: uploading || selectedFiles.some(f => !f.alt.trim()) ? 'not-allowed' : 'pointer',
+              fontSize: '1rem',
+              fontWeight: 600,
+            }}
+          >
+            {uploading ? `Uploading ${currentFile}... (${progress}%)` : `Upload ${selectedFiles.length} Image${selectedFiles.length > 1 ? 's' : ''}`}
+          </button>
+
+          {uploading && (
+            <div style={{
+              marginTop: '0.5rem',
               height: '8px',
               backgroundColor: '#e5e7eb',
               borderRadius: '4px',
@@ -311,18 +480,9 @@ export function DirectUpload() {
                 transition: 'width 0.3s',
               }} />
             </div>
-          </div>
-        ) : (
-          <div>
-            <p style={{ color: '#374151', marginBottom: '0.5rem' }}>
-              <strong>Click to upload</strong> or drag and drop
-            </p>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-              Select multiple images for bulk upload
-            </p>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {error && (
         <div style={{
@@ -346,7 +506,7 @@ export function DirectUpload() {
           borderRadius: '4px',
         }}>
           <p style={{ color: '#16a34a', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-            Uploaded {uploadedFiles.length} file{uploadedFiles.length > 1 ? 's' : ''}:
+            ✓ Uploaded {uploadedFiles.length} file{uploadedFiles.length > 1 ? 's' : ''}
           </p>
           <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#166534' }}>
             {uploadedFiles.map((f) => (

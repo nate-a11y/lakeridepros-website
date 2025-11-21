@@ -218,11 +218,15 @@ export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const now = new Date().toISOString();
   const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', {
     params: {
       where: JSON.stringify({
-        slug: { equals: slug },
-        published: { equals: true }
+        and: [
+          { slug: { equals: slug } },
+          { published: { equals: true } },
+          { publishedDate: { less_than_equal: now } },
+        ],
       }),
       depth: 2,
       limit: 100, // Ensure we get the response even if there are many posts
@@ -232,7 +236,11 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   // WORKAROUND: Payload API is not respecting the where clause for BlogPosts collection
   // Filter manually in application code until the API issue is resolved
   const posts = response.docs || [];
-  const matchingPost = posts.find(post => post.slug === slug && post.published);
+  const matchingPost = posts.find(post =>
+    post.slug === slug &&
+    post.published &&
+    (!post.publishedDate || new Date(post.publishedDate) <= new Date())
+  );
 
   return matchingPost || null;
 }
@@ -241,10 +249,16 @@ export async function getAdjacentBlogPosts(currentSlug: string): Promise<{
   previous: BlogPost | null;
   next: BlogPost | null;
 }> {
-  // Get all published posts sorted by date
+  const now = new Date().toISOString();
+  // Get all published posts sorted by date (only past/current dates)
   const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', {
     params: {
-      where: JSON.stringify({ published: { equals: true } }),
+      where: JSON.stringify({
+        and: [
+          { published: { equals: true } },
+          { publishedDate: { less_than_equal: now } },
+        ],
+      }),
       sort: '-publishedDate',
       depth: 2,
       limit: 1000,

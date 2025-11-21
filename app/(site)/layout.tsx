@@ -6,9 +6,6 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import { PhoneModal } from "@/components/PhoneModal";
 
-// Force dynamic rendering - skip static generation to avoid build-time DB issues
-export const dynamic = "force-dynamic";
-
 export default function SiteLayout({
   children,
 }: {

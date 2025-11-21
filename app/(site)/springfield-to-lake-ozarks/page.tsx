@@ -13,7 +13,10 @@ export const metadata: Metadata = {
     'Springfield MO to Lake Ozarks',
     'SGF airport to Lake Ozarks',
     'Missouri State to Lake Ozarks',
-    'Springfield to Osage Beach'
+    'Springfield to Osage Beach',
+    'Bass Pro to Lake Ozarks transportation',
+    'Springfield corporate retreat Lake Ozarks',
+    'Branson alternative Lake transportation'
   ],
   alternates: {
     canonical: 'https://www.lakeridepros.com/springfield-to-lake-ozarks',
@@ -207,6 +210,12 @@ export default function SpringfieldToLakeOzarksPage() {
                 </p>
               </div>
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
+                <h3 className="font-bold text-xl text-lrp-black dark:text-white mb-3">Bass Pro & Corporate Groups</h3>
+                <p className="text-gray-700 dark:text-lrp-gray">
+                  Springfield is home to Bass Pro Shops headquarters. We transport corporate groups, executives, and teams from Bass Pro and other Springfield companies for Lake of the Ozarks retreats, team building events, and client entertainment. The Lake is a natural fit for outdoor-focused corporate culture.
+                </p>
+              </div>
+              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
                 <h3 className="font-bold text-xl text-lrp-black dark:text-white mb-3">Common Springfield Routes</h3>
                 <ul className="text-gray-700 dark:text-lrp-gray space-y-2 mt-3">
                   <li>• SGF Airport ↔ Lake of the Ozarks venues (weddings, events)</li>
@@ -214,7 +223,14 @@ export default function SpringfieldToLakeOzarksPage() {
                   <li>• Springfield ↔ Margaritaville Lake Resort</li>
                   <li>• Missouri State campus ↔ Bagnell Dam Strip (nightlife)</li>
                   <li>• Springfield ↔ Lake vacation rentals</li>
+                  <li>• Bass Pro HQ ↔ Lake corporate retreats</li>
                 </ul>
+                <p className="text-gray-700 dark:text-lrp-gray mt-3 text-sm">
+                  <strong>Route:</strong> US-65 N to US-54 E • ~115 miles • 2 hours
+                </p>
+                <p className="text-gray-700 dark:text-lrp-gray mt-2 text-sm">
+                  <strong>Not Branson:</strong> Lake of the Ozarks offers a different vibe than Branson—more water activities, nightlife, and lakefront entertainment. We make it easy to experience the Lake from Springfield.
+                </p>
               </div>
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
                 <h3 className="font-bold text-xl text-lrp-black dark:text-white mb-3">Weekend Getaway Specialist</h3>

@@ -13,7 +13,11 @@ export const metadata: Metadata = {
     'MU to Lake Ozarks',
     'Columbia Missouri Lake shuttle',
     'Mizzou Lake of the Ozarks transportation',
-    'Columbia MO to Osage Beach'
+    'Columbia MO to Osage Beach',
+    'COU airport to Lake Ozarks',
+    'Mizzou graduation transportation',
+    'Greek formal Lake Ozarks',
+    'Columbia Regional Airport Lake shuttle'
   ],
   alternates: {
     canonical: 'https://www.lakeridepros.com/columbia-to-lake-ozarks',
@@ -197,7 +201,13 @@ export default function ColumbiaToLakeOzarksPage() {
                   Mizzou Student Friendly
                 </h3>
                 <p className="text-gray-700 dark:text-lrp-gray">
-                  We pick up directly from MU campus, student housing, and Columbia apartments. Popular for spring break trips, birthday weekends, and Greek life events. Group rates make it affordable to split costs.
+                  We pick up directly from MU campus, student housing, and Columbia apartments. Popular for spring break trips, birthday weekends, Greek formals, and sorority/fraternity events. Group rates make it affordable to split costs. Also serving Parents Weekend, Move-In Day, and Mizzou Graduation transportation.
+                </p>
+              </div>
+              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
+                <h3 className="font-bold text-xl text-lrp-black dark:text-white mb-3">Columbia Regional Airport (COU)</h3>
+                <p className="text-gray-700 dark:text-lrp-gray">
+                  Flying into Columbia Regional Airport? We provide direct transfers from COU to Lake of the Ozarks destinations. Popular for destination wedding guests and corporate travelers connecting to Lake events.
                 </p>
               </div>
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
@@ -214,7 +224,12 @@ export default function ColumbiaToLakeOzarksPage() {
                   <li>• Columbia ↔ Margaritaville Lake Resort</li>
                   <li>• Columbia ↔ Lake vacation rentals</li>
                   <li>• Columbia ↔ Lake Ozarks boat parties/events</li>
+                  <li>• COU Airport ↔ Lake of the Ozarks venues</li>
+                  <li>• Greek houses ↔ Lake formal event venues</li>
                 </ul>
+                <p className="text-gray-700 dark:text-lrp-gray mt-3 text-sm">
+                  <strong>Route:</strong> I-70 W to US-63 S to US-54 W • ~90 miles • 1.5 hours
+                </p>
               </div>
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
                 <h3 className="font-bold text-xl text-lrp-black dark:text-white mb-3">Perfect for Groups</h3>

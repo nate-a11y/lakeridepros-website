@@ -54,11 +54,13 @@ export default function PartnerFilters({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => onSubcategoryFilterChange('all')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            className={`px-4 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
               subcategoryFilter === 'all'
                 ? 'bg-lrp-green text-white'
                 : 'bg-lrp-gray dark:bg-dark-bg-secondary text-lrp-black dark:text-white hover:bg-lrp-green hover:text-white'
             }`}
+            aria-label="Show all partner categories"
+            aria-pressed={subcategoryFilter === 'all'}
           >
             All Categories
           </button>
@@ -66,11 +68,13 @@ export default function PartnerFilters({
             <button
               key={subcategory}
               onClick={() => onSubcategoryFilterChange(subcategory)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-4 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                 subcategoryFilter === subcategory
                   ? 'bg-lrp-green text-white'
                   : 'bg-lrp-gray dark:bg-dark-bg-secondary text-lrp-black dark:text-white hover:bg-lrp-green hover:text-white'
               }`}
+              aria-label={`Filter by ${subcategoryLabels[subcategory] || subcategory}`}
+              aria-pressed={subcategoryFilter === subcategory}
             >
               {subcategoryLabels[subcategory] || subcategory}
             </button>

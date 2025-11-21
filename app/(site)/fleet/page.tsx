@@ -160,6 +160,7 @@ export default async function FleetPage() {
                         <Link
                           href={`/fleet/${vehicle.slug}`}
                           className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-semibold transition-all text-center"
+                          aria-label={`View details about ${vehicle.name}`}
                         >
                           View Details
                         </Link>

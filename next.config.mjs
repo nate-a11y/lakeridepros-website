@@ -54,6 +54,16 @@ const nextConfig = {
 
     return webpackConfig
   },
+  // Redirects for SEO
+  async redirects() {
+    return [
+      {
+        source: '/home',
+        destination: '/',
+        permanent: true, // 308 permanent redirect
+      },
+    ];
+  },
   // Security headers for SEO and security
   async headers() {
     return [

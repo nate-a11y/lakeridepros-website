@@ -113,12 +113,12 @@ export default function CartDrawer() {
                               item.variant?.id
                             )
                           }
-                          className="h-6 w-6 rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white flex items-center justify-center hover:border-primary dark:hover:border-primary-light transition-colors"
-                          aria-label="Decrease quantity"
+                          className="h-10 w-10 rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white flex items-center justify-center hover:border-primary dark:hover:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+                          aria-label={`Decrease quantity of ${item.product.name}`}
                         >
-                          <span className="text-sm">−</span>
+                          <span className="text-lg">−</span>
                         </button>
-                        <span className="text-sm font-medium text-neutral-900 dark:text-white">{item.quantity}</span>
+                        <span className="text-sm font-medium text-neutral-900 dark:text-white min-w-[2rem] text-center">{item.quantity}</span>
                         <button
                           onClick={() =>
                             updateQuantity(
@@ -127,10 +127,10 @@ export default function CartDrawer() {
                               item.variant?.id
                             )
                           }
-                          className="h-6 w-6 rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white flex items-center justify-center hover:border-primary dark:hover:border-primary-light transition-colors"
-                          aria-label="Increase quantity"
+                          className="h-10 w-10 rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white flex items-center justify-center hover:border-primary dark:hover:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+                          aria-label={`Increase quantity of ${item.product.name}`}
                         >
-                          <span className="text-sm">+</span>
+                          <span className="text-lg">+</span>
                         </button>
                         <button
                           onClick={() =>

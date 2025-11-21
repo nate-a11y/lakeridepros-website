@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import { MapPin, Phone, CheckCircle, Star, ArrowRight, Wine } from 'lucide-react'
+import { MapPin, Phone, CheckCircle, ArrowRight, Wine } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Transportation in Camdenton MO | Lake Ride Pros',
@@ -86,7 +88,10 @@ const faqSchema = {
   ]
 }
 
-export default function CamdentonTransportationPage() {
+export default async function CamdentonTransportationPage() {
+  // Fetch random 5-star testimonials
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+
   return (
     <>
       {/* Structured Data */}
@@ -336,27 +341,13 @@ export default function CamdentonTransportationPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
-                "We had our wedding at Old Kinderhook and used Lake Ride Pros for all our guest transportation. They handled shuttles from 3 different hotels in Camdenton without any issues. Drivers were punctual and professional. Highly recommend for any Camdenton event!"
-              </p>
-              <p className="font-bold text-lrp-black dark:text-white">
-                Lauren & Chris
-              </p>
-              <p className="text-sm text-gray-600 dark:text-lrp-gray">
-                Married at Old Kinderhook, Camdenton
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Testimonials */}
+        <TestimonialsCarousel
+          testimonials={testimonials}
+          title="What Our Camdenton Clients Say"
+          subtitle="Real experiences from customers we've served in Camdenton"
+          includeSchema={false}
+        />
 
         {/* Related Services */}
         <RelatedServices services={[

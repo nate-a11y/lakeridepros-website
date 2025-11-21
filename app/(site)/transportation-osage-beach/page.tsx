@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import { MapPin, Phone, CheckCircle, Star, ArrowRight } from 'lucide-react'
+import { MapPin, Phone, CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Transportation in Osage Beach MO | Lake Ride Pros',
@@ -103,7 +105,10 @@ const faqSchema = {
   ]
 }
 
-export default function OsageBeachTransportationPage() {
+export default async function OsageBeachTransportationPage() {
+  // Fetch random 5-star testimonials
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+
   return (
     <>
       {/* Structured Data */}
@@ -353,27 +358,13 @@ export default function OsageBeachTransportationPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
-                "We used Lake Ride Pros for our wedding at Tan-Tar-A and they were phenomenal. Shuttled 60 guests between three hotels and the venue without a single hiccup. Their drivers know Osage Beach inside and out. Can't recommend them enough!"
-              </p>
-              <p className="font-bold text-lrp-black dark:text-white">
-                Emily & Jason
-              </p>
-              <p className="text-sm text-gray-600 dark:text-lrp-gray">
-                Married at Tan-Tar-A Resort, Osage Beach
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Testimonials */}
+        <TestimonialsCarousel
+          testimonials={testimonials}
+          title="What Our Osage Beach Clients Say"
+          subtitle="Real experiences from customers we've served in Osage Beach"
+          includeSchema={false}
+        />
 
         {/* Related Services */}
         <RelatedServices services={[

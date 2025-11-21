@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import { MapPin, Phone, CheckCircle, Star, ArrowRight, Home } from 'lucide-react'
+import { MapPin, Phone, CheckCircle, ArrowRight, Home } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Transportation in Lake Ozark MO | Lake Ride Pros',
@@ -86,7 +88,10 @@ const faqSchema = {
   ]
 }
 
-export default function LakeOzarkTransportationPage() {
+export default async function LakeOzarkTransportationPage() {
+  // Fetch random 5-star testimonials
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+
   return (
     <>
       {/* Structured Data */}
@@ -336,27 +341,13 @@ export default function LakeOzarkTransportationPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
-                "Our company held a corporate retreat at Lodge of Four Seasons and Lake Ride Pros handled all our transportation needs. They navigated the waterfront property perfectly and shuttled our executives between the Lodge and off-site dinners. Professional and reliable service!"
-              </p>
-              <p className="font-bold text-lrp-black dark:text-white">
-                Michael P.
-              </p>
-              <p className="text-sm text-gray-600 dark:text-lrp-gray">
-                Corporate Event Coordinator, Lake Ozark
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Testimonials */}
+        <TestimonialsCarousel
+          testimonials={testimonials}
+          title="What Our Lake Ozark Clients Say"
+          subtitle="Real experiences from customers we've served in Lake Ozark"
+          includeSchema={false}
+        />
 
         {/* Related Services */}
         <RelatedServices services={[

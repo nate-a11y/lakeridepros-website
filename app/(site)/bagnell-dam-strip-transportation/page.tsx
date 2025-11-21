@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import { MapPin, Phone, CheckCircle, Star, ArrowRight, PartyPopper, Shield, Clock } from 'lucide-react'
+import { MapPin, Phone, CheckCircle, ArrowRight, PartyPopper, Shield, Clock } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Bagnell Dam Strip Transportation | Bar Hopping Party Bus | Lake Ride Pros',
@@ -119,7 +121,10 @@ const faqSchema = {
   ]
 }
 
-export default function BagnellDamStripTransportationPage() {
+export default async function BagnellDamStripTransportationPage() {
+  // Fetch random 5-star testimonials
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+
   return (
     <>
       {/* Structured Data */}
@@ -466,27 +471,13 @@ export default function BagnellDamStripTransportationPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
-                "Best decision we made for my bachelorette party! Lake Ride Pros drove us to 5 different bars on the Bagnell Dam Strip. No worrying about parking, no splitting up the group, and we all got home safe. The party bus had great music and lighting. 10/10 would book again!"
-              </p>
-              <p className="font-bold text-lrp-black dark:text-white">
-                Ashley K.
-              </p>
-              <p className="text-sm text-gray-600 dark:text-lrp-gray">
-                Bachelorette Party, Bagnell Dam Strip
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Testimonials */}
+        <TestimonialsCarousel
+          testimonials={testimonials}
+          title="What Our Bagnell Dam Strip Clients Say"
+          subtitle="Real experiences from customers who partied safely with us on the Strip"
+          includeSchema={false}
+        />
 
         {/* Related Services */}
         <RelatedServices services={[

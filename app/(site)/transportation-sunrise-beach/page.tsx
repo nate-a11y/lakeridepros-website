@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import { MapPin, Phone, CheckCircle, Star, ArrowRight } from 'lucide-react'
+import { MapPin, Phone, CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Transportation in Sunrise Beach MO | Lake Ride Pros',
@@ -103,7 +105,10 @@ const faqSchema = {
   ]
 }
 
-export default function SunriseBeachTransportationPage() {
+export default async function SunriseBeachTransportationPage() {
+  // Fetch random 5-star testimonials
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+
   return (
     <>
       {/* Structured Data */}
@@ -377,27 +382,13 @@ export default function SunriseBeachTransportationPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
-                "We rent a condo in Sunrise Beach every summer and always use Lake Ride Pros for our nights out on the Strip. They pick us up at the condo, drop us at the bars, and get us home safe at 1:30 AM. Way better than trying to find an Uber out here!"
-              </p>
-              <p className="font-bold text-lrp-black dark:text-white">
-                Mike & Sarah
-              </p>
-              <p className="text-sm text-gray-600 dark:text-lrp-gray">
-                Annual Sunrise Beach Visitors
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Testimonials */}
+        <TestimonialsCarousel
+          testimonials={testimonials}
+          title="What Our Sunrise Beach Clients Say"
+          subtitle="Real experiences from customers we've served in Sunrise Beach"
+          includeSchema={false}
+        />
 
         {/* Related Services */}
         <RelatedServices services={[

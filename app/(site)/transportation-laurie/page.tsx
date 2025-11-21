@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import { MapPin, Phone, CheckCircle, Star, ArrowRight } from 'lucide-react'
+import { MapPin, Phone, CheckCircle, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Transportation in Laurie MO | Lake Ride Pros',
@@ -95,7 +97,10 @@ const faqSchema = {
   ]
 }
 
-export default function LaurieTransportationPage() {
+export default async function LaurieTransportationPage() {
+  // Fetch random 5-star testimonials
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+
   return (
     <>
       {/* Structured Data */}
@@ -360,27 +365,13 @@ export default function LaurieTransportationPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
-                "We have a lake house in Laurie and use Lake Ride Pros whenever we have guests. They pick everyone up from the airport and get them to us on the west side. Return trips too. Professional service that knows this area."
-              </p>
-              <p className="font-bold text-lrp-black dark:text-white">
-                The Henderson Family
-              </p>
-              <p className="text-sm text-gray-600 dark:text-lrp-gray">
-                Laurie Lake House Owners
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Testimonials */}
+        <TestimonialsCarousel
+          testimonials={testimonials}
+          title="What Our Laurie Clients Say"
+          subtitle="Real experiences from customers we've served in Laurie"
+          includeSchema={false}
+        />
 
         {/* Related Services */}
         <RelatedServices services={[

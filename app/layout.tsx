@@ -33,6 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Lake Ride Pros - Premium Luxury Transportation",
     description: "Experience premium luxury transportation services at Lake of the Ozarks, Missouri.",
+    images: ['/og-image.jpg'],
   },
   verification: {
     // Add Google Search Console verification code here after setup

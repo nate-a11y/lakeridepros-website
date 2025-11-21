@@ -46,8 +46,20 @@ const nextConfig = {
 
     return webpackConfig
   },
-  // Redirects removed - no legacy URLs to redirect from
-  // Add back only if needed for actual production URLs that need redirecting
+  // Security headers for SEO and security
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        ],
+      },
+    ];
+  },
 }
 
 export default withPayload(nextConfig, {

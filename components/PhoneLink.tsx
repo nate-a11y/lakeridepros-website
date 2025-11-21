@@ -16,6 +16,7 @@ export function PhoneLink({ children, className }: PhoneLinkProps) {
       onClick={openModal}
       className={className}
       type="button"
+      aria-label="Call Lake Ride Pros - Opens phone options"
     >
       {children}
     </button>

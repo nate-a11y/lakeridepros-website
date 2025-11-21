@@ -192,7 +192,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   }}
                 >
                   <button
-                    className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1"
+                    className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md px-1 -mx-1"
                     aria-expanded={
                       item.dropdownType === 'services' ? servicesDropdownOpen :
                       item.dropdownType === 'partners' ? partnersDropdownOpen :

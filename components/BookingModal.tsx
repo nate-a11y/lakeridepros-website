@@ -128,9 +128,10 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
           <div className="relative w-full h-[calc(90vh-100px)] overflow-y-auto">
             <iframe
               src="https://customer.moovs.app/lake-ride-pros/iframe"
-              title="Lake Ride Pros Booking"
+              title="Lake Ride Pros Booking Form - Reserve your luxury transportation"
               className="w-full h-full border-0"
               allow="payment"
+              aria-label="Booking form for Lake Ride Pros transportation services"
             />
           </div>
         </div>

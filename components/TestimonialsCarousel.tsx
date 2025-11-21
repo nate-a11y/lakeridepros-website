@@ -135,7 +135,11 @@ export default function TestimonialsCarousel({
               >
                 {/* Star Rating */}
                 {currentTestimonial.rating && (
-                  <div className="flex justify-center mb-6">
+                  <div
+                    className="flex justify-center mb-6"
+                    role="img"
+                    aria-label={`Rating: ${currentTestimonial.rating} out of 5 stars`}
+                  >
                     {Array.from({ length: 5 }).map((_, i) => (
                       <svg
                         key={i}
@@ -235,10 +239,14 @@ export default function TestimonialsCarousel({
               </div>
             )}
 
-            {/* Counter */}
+            {/* Counter with aria-live for screen readers */}
             {testimonials.length > 1 && (
-              <p className="text-center text-sm text-neutral-600 dark:text-neutral-300 mt-4">
-                {currentIndex + 1} of {testimonials.length} reviews
+              <p
+                className="text-center text-sm text-neutral-600 dark:text-neutral-300 mt-4"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                Showing review {currentIndex + 1} of {testimonials.length}
               </p>
             )}
           </div>

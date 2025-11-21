@@ -92,6 +92,7 @@ export default function FAQAccordion() {
               className="bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"
             >
               <button
+                id={`faq-question-${index}`}
                 onClick={() => toggleItem(index)}
                 className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
                 aria-expanded={openIndex === index}
@@ -113,7 +114,10 @@ export default function FAQAccordion() {
 
               <div
                 id={`faq-answer-${index}`}
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                role="region"
+                aria-labelledby={`faq-question-${index}`}
+                hidden={openIndex !== index}
+                className={`overflow-hidden transition-all duration-300 ease-in-out motion-reduce:transition-none ${
                   openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >

@@ -113,12 +113,12 @@ export default function CartDrawer() {
                               item.variant?.id
                             )
                           }
-                          className="h-6 w-6 rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white flex items-center justify-center hover:border-primary dark:hover:border-primary-light transition-colors"
-                          aria-label="Decrease quantity"
+                          className="h-10 w-10 rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white flex items-center justify-center hover:border-primary dark:hover:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+                          aria-label={`Decrease quantity of ${item.product.name}`}
                         >
-                          <span className="text-sm">−</span>
+                          <span className="text-lg">−</span>
                         </button>
-                        <span className="text-sm font-medium text-neutral-900 dark:text-white">{item.quantity}</span>
+                        <span className="text-sm font-medium text-neutral-900 dark:text-white min-w-[2rem] text-center">{item.quantity}</span>
                         <button
                           onClick={() =>
                             updateQuantity(
@@ -127,16 +127,17 @@ export default function CartDrawer() {
                               item.variant?.id
                             )
                           }
-                          className="h-6 w-6 rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white flex items-center justify-center hover:border-primary dark:hover:border-primary-light transition-colors"
-                          aria-label="Increase quantity"
+                          className="h-10 w-10 rounded-full border border-neutral-300 dark:border-neutral-600 text-neutral-900 dark:text-white flex items-center justify-center hover:border-primary dark:hover:border-primary-light focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors"
+                          aria-label={`Increase quantity of ${item.product.name}`}
                         >
-                          <span className="text-sm">+</span>
+                          <span className="text-lg">+</span>
                         </button>
                         <button
                           onClick={() =>
                             removeFromCart(item.product.id, item.variant?.id)
                           }
-                          className="ml-auto text-xs text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                          className="ml-auto px-3 py-2 text-xs text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+                          aria-label={`Remove ${item.product.name} from cart`}
                         >
                           Remove
                         </button>
@@ -159,7 +160,7 @@ export default function CartDrawer() {
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               Shipping and taxes calculated at checkout
             </p>
-            <button className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+            <button className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
               Checkout
             </button>
             <Link

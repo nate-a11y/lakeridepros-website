@@ -469,11 +469,12 @@ export function getMediaUrl(url: string): string {
   if (!url) return '';
   if (url.startsWith('http')) return url;
 
-  // For relative URLs, use the production Payload API URL
-  // This ensures media works correctly on preview deploys
+  // For relative URLs, use the site URL from environment
+  // Falls back to production URL only if no env vars are set
   const mediaBaseUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
                        process.env.NEXT_PUBLIC_SERVER_URL ||
-                       'https://lakeridepros-website.vercel.app';
+                       process.env.NEXT_PUBLIC_SITE_URL ||
+                       'https://www.lakeridepros.com';
 
   return `${mediaBaseUrl}${url}`;
 }

@@ -1,6 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#1a1a2e',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
@@ -13,11 +20,20 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Lake Ride Pros",
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Lake Ride Pros - Luxury Transportation at Lake of the Ozarks',
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Lake Ride Pros - Premium Luxury Transportation",
     description: "Experience premium luxury transportation services at Lake of the Ozarks, Missouri.",
+    images: ['/og-image.jpg'],
   },
   verification: {
     // Add Google Search Console verification code here after setup

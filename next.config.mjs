@@ -62,6 +62,11 @@ const nextConfig = {
         destination: '/',
         permanent: true, // 308 permanent redirect
       },
+      {
+        source: '/what-our-customers-say',
+        destination: '/',
+        permanent: true, // 308 permanent redirect
+      },
     ];
   },
   // Security headers for SEO and security

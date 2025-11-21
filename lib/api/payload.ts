@@ -187,7 +187,12 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
 // Blog API
 export async function getBlogPosts(params?: PaginationParams & FilterParams): Promise<ApiResponse<BlogPost>> {
   const baseParams = {
-    where: JSON.stringify({ published: { equals: true } }),
+    where: JSON.stringify({
+      and: [
+        { published: { equals: true } },
+        { publishedDate: { less_than_equal: new Date().toISOString() } },
+      ],
+    }),
     sort: '-publishedDate',
     depth: 2,
     ...params,
@@ -198,7 +203,12 @@ export async function getBlogPosts(params?: PaginationParams & FilterParams): Pr
 export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
   const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', {
     params: {
-      where: JSON.stringify({ published: { equals: true } }),
+      where: JSON.stringify({
+        and: [
+          { published: { equals: true } },
+          { publishedDate: { less_than_equal: new Date().toISOString() } },
+        ],
+      }),
       sort: '-publishedDate',
       limit,
       depth: 2,

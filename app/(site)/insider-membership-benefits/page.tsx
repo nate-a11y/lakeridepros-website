@@ -111,6 +111,21 @@ export default function InsiderMembershipBenefitsPage() {
         </div>
       </section>
 
+      {/* Pricing Widget Section */}
+      <section className="py-16 bg-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-heading text-center mb-8">
+            Choose Your Membership
+          </h2>
+          <div
+            id="pricify-hosted-pricing-page"
+            data-pricify-site="01JH3A1YVSSYZYY4TNPCTMCVB7"
+            data-pricify-pricingpage="01JH3A1ZZA7XFPWXCVXEBH0RR4"
+            data-pricify-viewport-defaultheight="556px"
+          />
+        </div>
+      </section>
+
       {/* Membership Tiers Comparison Table */}
       <section className="py-16 bg-section-alt">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -368,21 +383,6 @@ export default function InsiderMembershipBenefitsPage() {
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
-
-      {/* Pricing Widget Section */}
-      <section className="py-16 bg-section">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-heading text-center mb-8">
-            Choose Your Membership
-          </h2>
-          <div
-            id="pricify-hosted-pricing-page"
-            data-pricify-site="01JH3A1YVSSYZYY4TNPCTMCVB7"
-            data-pricify-pricingpage="01JH3A1ZZA7XFPWXCVXEBH0RR4"
-            data-pricify-viewport-defaultheight="556px"
-          />
         </div>
       </section>
 

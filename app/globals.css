@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 @import "tailwindcss";
+
+/* Google Fonts Montserrat - Loaded via <link> in layout.tsx for better performance */
 
 /* Tell Tailwind v4 where to find class names */
 @source "../components/**/*.tsx";

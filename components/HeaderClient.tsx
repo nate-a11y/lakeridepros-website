@@ -154,6 +154,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                 width={150}
                 height={50}
                 className="w-auto h-full max-w-[128px] sm:max-w-[144px] md:max-w-[160px] object-contain"
+                quality={65}
                 priority
               />
             </Link>

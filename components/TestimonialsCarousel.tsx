@@ -200,19 +200,21 @@ export default function TestimonialsCarousel({
                 </button>
 
                 {/* Dots */}
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                   {testimonials.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => goToSlide(index)}
-                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                      className={`p-2 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2`}
+                      aria-label={`Go to testimonial ${index + 1}`}
+                      aria-current={index === currentIndex ? 'true' : 'false'}
+                    >
+                      <span className={`block w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                         index === currentIndex
                           ? 'bg-primary w-8'
                           : 'bg-neutral-300 dark:bg-neutral-600 hover:bg-neutral-400 dark:hover:bg-neutral-500'
-                      }`}
-                      aria-label={`Go to testimonial ${index + 1}`}
-                      aria-current={index === currentIndex ? 'true' : 'false'}
-                    />
+                      }`} />
+                    </button>
                   ))}
                 </div>
 

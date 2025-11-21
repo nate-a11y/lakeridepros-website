@@ -96,7 +96,7 @@ const config = buildConfig({
       beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
   },
-  collections: [Users, Media, Pages, BlogPosts, Services, ServiceAnalytics, Vehicles, Testimonials, Products, GiftCards, Orders, Partners],
+  collections: [BlogPosts, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, Testimonials, Users, Vehicles],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

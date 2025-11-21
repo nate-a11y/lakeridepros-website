@@ -1,4 +1,11 @@
 import { MetadataRoute } from 'next';
+import {
+  getServicesLocal,
+  getBlogPostsLocal,
+  getVehiclesLocal,
+  getProductsLocal,
+  getPagesLocal,
+} from '@/lib/api/payload-local';
 
 interface PayloadDoc {
   slug: string;
@@ -7,23 +14,15 @@ interface PayloadDoc {
 }
 
 async function getPayloadData() {
-  const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001';
-
   try {
-    // Fetch all dynamic content from Payload CMS
-    const [servicesRes, blogRes, vehiclesRes, productsRes, pagesRes] = await Promise.all([
-      fetch(`${payloadUrl}/api/services?limit=100`, { next: { revalidate: 3600 } }),
-      fetch(`${payloadUrl}/api/blog-posts?limit=100&where[published][equals]=true`, { next: { revalidate: 3600 } }),
-      fetch(`${payloadUrl}/api/vehicles?limit=100`, { next: { revalidate: 3600 } }),
-      fetch(`${payloadUrl}/api/products?limit=100&where[status][equals]=published`, { next: { revalidate: 3600 } }),
-      fetch(`${payloadUrl}/api/pages?limit=100&where[published][equals]=true`, { next: { revalidate: 3600 } }),
+    // Fetch all dynamic content using local Payload queries (no HTTP)
+    const [services, blogPosts, vehicles, products, pages] = await Promise.all([
+      getServicesLocal(),
+      getBlogPostsLocal(100),
+      getVehiclesLocal(),
+      getProductsLocal(),
+      getPagesLocal(),
     ]);
-
-    const services = servicesRes.ok ? (await servicesRes.json()).docs : [];
-    const blogPosts = blogRes.ok ? (await blogRes.json()).docs : [];
-    const vehicles = vehiclesRes.ok ? (await vehiclesRes.json()).docs : [];
-    const products = productsRes.ok ? (await productsRes.json()).docs : [];
-    const pages = pagesRes.ok ? (await pagesRes.json()).docs : [];
 
     return { services, blogPosts, vehicles, products, pages };
   } catch (error) {

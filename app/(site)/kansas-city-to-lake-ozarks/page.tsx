@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import { MapPin, Phone, CheckCircle, Star, ArrowRight, Clock, Users, Shield } from 'lucide-react'
+import { MapPin, Phone, CheckCircle, ArrowRight, Clock, Users, Shield } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Kansas City to Lake of the Ozarks Transportation | MCI Airport Shuttle | Lake Ride Pros',
@@ -131,7 +133,10 @@ const faqSchema = {
   ]
 }
 
-export default function KansasCityToLakeOzarksPage() {
+export default async function KansasCityToLakeOzarksPage() {
+  // Fetch random 5-star testimonials
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+
   return (
     <>
       {/* Structured Data */}
@@ -443,27 +448,13 @@ export default function KansasCityToLakeOzarksPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
-                "Flew in from Denver to MCI for my buddy's bachelor party at the Lake. Lake Ride Pros had a shuttle waiting for all 12 of us. Stocked with coolers, comfortable seats, and the driver was awesome. Made the 2-hour trip fly by. Would definitely use again!"
-              </p>
-              <p className="font-bold text-lrp-black dark:text-white">
-                Brad T.
-              </p>
-              <p className="text-sm text-gray-600 dark:text-lrp-gray">
-                Kansas City to Osage Beach, Bachelor Party
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Testimonials */}
+        <TestimonialsCarousel
+          testimonials={testimonials}
+          title="What Our Kansas City Clients Say"
+          subtitle="Real experiences from customers traveling from Kansas City to Lake of the Ozarks"
+          includeSchema={false}
+        />
 
         {/* Related Services */}
         <RelatedServices services={[

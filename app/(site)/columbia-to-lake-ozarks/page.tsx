@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import { MapPin, GraduationCap, Users, Clock, Star, Phone, ArrowRight } from 'lucide-react'
+import { MapPin, GraduationCap, Users, Clock, Phone, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Columbia MO to Lake of the Ozarks Transportation | Shuttle Service',
@@ -124,7 +126,10 @@ const breadcrumbSchema = {
   ]
 }
 
-export default function ColumbiaToLakeOzarksPage() {
+export default async function ColumbiaToLakeOzarksPage() {
+  // Fetch random 5-star testimonials
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+
   return (
     <>
       <script
@@ -343,27 +348,13 @@ export default function ColumbiaToLakeOzarksPage() {
           </div>
         </section>
 
-        {/* Testimonial */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
-              <div className="flex gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-700 dark:text-lrp-gray text-lg italic mb-4">
-                "We're Mizzou students who wanted a Lake weekend without worrying about who's driving. Lake Ride Pros picked us up from campus Friday afternoon, dropped us at our Lake house, and picked us up Sunday. Perfect for spring break trips!"
-              </p>
-              <p className="font-bold text-lrp-black dark:text-white">
-                Tyler & Friends
-              </p>
-              <p className="text-sm text-gray-600 dark:text-lrp-gray">
-                University of Missouri Students
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Testimonials */}
+        <TestimonialsCarousel
+          testimonials={testimonials}
+          title="What Our Columbia Clients Say"
+          subtitle="Real experiences from customers traveling from Columbia to Lake of the Ozarks"
+          includeSchema={false}
+        />
 
         {/* Related Services */}
         <RelatedServices services={[

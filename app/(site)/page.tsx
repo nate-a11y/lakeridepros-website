@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import HeroSection from '@/components/HeroSection';
 import BookingWidget from '@/components/BookingWidget';
+import SpotifyEmbed from '@/components/SpotifyEmbed';
 import ServicesShowcase from '@/components/ServicesShowcase';
 import FeaturedVehiclesSection from '@/components/FeaturedVehiclesSection';
 import FeaturedBlogSection from '@/components/FeaturedBlogSection';
@@ -138,6 +139,13 @@ export default async function HomePage() {
           <BookingWidget />
         </div>
       </section>
+
+      {/* Spotify Music Section */}
+      <SpotifyEmbed
+        artistId="44y7Dl9jKhtIq1SJ7uKv7v"
+        title="Ride With The Vibe"
+        subtitle="Set the mood for your Lake trip with music from our featured artist"
+      />
 
       {/* Services Overview Section */}
       <ServicesShowcase services={services} />

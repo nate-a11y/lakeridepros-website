@@ -6,6 +6,9 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import { PhoneModal } from "@/components/PhoneModal";
 
+// Force all pages to be dynamic (SSR) - no static generation at build time
+export const dynamic = "force-dynamic";
+
 export default function SiteLayout({
   children,
 }: {

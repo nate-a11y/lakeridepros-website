@@ -4,7 +4,6 @@ import { MoovsWidget } from "@/components/MoovsWidget";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
-import UnderConstructionBanner from "@/components/UnderConstructionBanner";
 import { PhoneModal } from "@/components/PhoneModal";
 
 export default function SiteLayout({
@@ -16,7 +15,7 @@ export default function SiteLayout({
     <div data-main-app>
       <ThemeProvider
         attribute="class"
-        defaultTheme="system"
+        defaultTheme="dark"
         enableSystem={true}
         disableTransitionOnChange={false}
       >
@@ -25,7 +24,6 @@ export default function SiteLayout({
             Skip to main content
           </a>
           <Header />
-          <UnderConstructionBanner />
           <main id="main-content" className="min-h-screen">
             {children}
           </main>

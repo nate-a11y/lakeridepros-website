@@ -13,7 +13,11 @@ export const metadata: Metadata = {
     'Jeff City to Lake Ozarks',
     'Jefferson City Missouri Lake shuttle',
     'Capitol to Lake Ozarks',
-    'Jefferson City to Osage Beach'
+    'Jefferson City to Osage Beach',
+    'Missouri state government Lake transportation',
+    'Lincoln University Lake Ozarks',
+    'JLN airport Lake shuttle',
+    'Legislative session Lake transportation'
   ],
   alternates: {
     canonical: 'https://www.lakeridepros.com/jefferson-city-to-lake-ozarks',
@@ -197,7 +201,13 @@ export default function JeffersonCityToLakeOzarksPage() {
                   Serving State & Corporate Groups
                 </h3>
                 <p className="text-gray-700 dark:text-lrp-gray">
-                  We regularly transport Missouri state government groups, legislative staff, lobbyists, and corporate teams from Jefferson City for Lake of the Ozarks retreats, conferences, and team building events. Professional, discrete service you can trust.
+                  We regularly transport Missouri state government groups, legislative staff during session, lobbyists, and corporate teams from Jefferson City for Lake of the Ozarks retreats, conferences, and team building events. Professional, discrete service you can trust.
+                </p>
+              </div>
+              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
+                <h3 className="font-bold text-xl text-lrp-black dark:text-white mb-3">Lincoln University & JLN Airport</h3>
+                <p className="text-gray-700 dark:text-lrp-gray">
+                  Serving Lincoln University students and staff for Lake getaways. Also providing transfers from Jefferson City Memorial Airport (JLN) for private aviation guests heading to Lake of the Ozarks events and properties.
                 </p>
               </div>
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
@@ -214,7 +224,12 @@ export default function JeffersonCityToLakeOzarksPage() {
                   <li>• Jeff City ↔ Margaritaville Lake Resort</li>
                   <li>• Jefferson City ↔ Osage Beach (shopping, dining, nightlife)</li>
                   <li>• Downtown Jeff City ↔ Lake vacation properties</li>
+                  <li>• Lincoln University ↔ Lake weekend getaways</li>
+                  <li>• JLN Airport ↔ Lake of the Ozarks (private aviation)</li>
                 </ul>
+                <p className="text-gray-700 dark:text-lrp-gray mt-3 text-sm">
+                  <strong>Route:</strong> US-54 W direct • ~60 miles • 1 hour
+                </p>
               </div>
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
                 <h3 className="font-bold text-xl text-lrp-black dark:text-white mb-3">Same-Day Trips Easy</h3>

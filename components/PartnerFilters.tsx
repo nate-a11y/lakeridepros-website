@@ -1,6 +1,6 @@
 'use client'
 
-import { Search, X } from 'lucide-react'
+import { Search, X, ChevronDown } from 'lucide-react'
 
 interface PartnerFiltersProps {
   searchTerm: string
@@ -20,67 +20,63 @@ export default function PartnerFilters({
   subcategoryLabels,
 }: PartnerFiltersProps) {
   return (
-    <div className="mb-8 space-y-4">
-      {/* Search Bar */}
-      <div className="relative max-w-2xl">
-        <label htmlFor="partner-search" className="sr-only">
-          Search partners
-        </label>
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search className="h-5 w-5 text-lrp-text-secondary dark:text-dark-text-secondary" aria-hidden="true" />
+    <div className="mb-8">
+      {/* Search and Filter Row */}
+      <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+        {/* Search Bar */}
+        <div className="relative flex-1 max-w-md">
+          <label htmlFor="partner-search" className="sr-only">
+            Search partners
+          </label>
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-lrp-text-secondary dark:text-dark-text-secondary" aria-hidden="true" />
+          </div>
+          <input
+            id="partner-search"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search partners..."
+            aria-label="Search partners by name or description"
+            className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white placeholder-lrp-text-secondary dark:placeholder-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-lrp-green focus:border-transparent"
+          />
+          {searchTerm && (
+            <button
+              onClick={() => onSearchChange('')}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              aria-label="Clear search"
+            >
+              <X className="h-5 w-5 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-black dark:hover:text-white" />
+            </button>
+          )}
         </div>
-        <input
-          id="partner-search"
-          type="text"
-          value={searchTerm}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search partners by name or description..."
-          aria-label="Search partners by name or description"
-          className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white placeholder-lrp-text-secondary dark:placeholder-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-lrp-green focus:border-transparent"
-        />
-        {searchTerm && (
-          <button
-            onClick={() => onSearchChange('')}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-            aria-label="Clear search"
-          >
-            <X className="h-5 w-5 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-black dark:hover:text-white" />
-          </button>
+
+        {/* Category Dropdown */}
+        {subcategories && subcategoryLabels && onSubcategoryFilterChange && (
+          <div className="relative min-w-[200px] sm:w-auto">
+            <label htmlFor="category-filter" className="sr-only">
+              Filter by category
+            </label>
+            <select
+              id="category-filter"
+              value={subcategoryFilter || 'all'}
+              onChange={(e) => onSubcategoryFilterChange(e.target.value)}
+              className="appearance-none w-full py-3 pl-4 pr-10 border border-gray-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white focus:outline-none focus:ring-2 focus:ring-lrp-green focus:border-transparent cursor-pointer"
+              aria-label="Filter partners by category"
+            >
+              <option value="all">All Categories</option>
+              {subcategories.map((subcategory) => (
+                <option key={subcategory} value={subcategory}>
+                  {subcategoryLabels[subcategory] || subcategory}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+              <ChevronDown className="h-5 w-5 text-lrp-text-secondary dark:text-dark-text-secondary" aria-hidden="true" />
+            </div>
+          </div>
         )}
       </div>
-
-      {/* Subcategory Filter (optional) */}
-      {subcategories && subcategoryLabels && onSubcategoryFilterChange && (
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => onSubcategoryFilterChange('all')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-              subcategoryFilter === 'all'
-                ? 'bg-lrp-green text-white'
-                : 'bg-lrp-gray dark:bg-dark-bg-secondary text-lrp-black dark:text-white hover:bg-lrp-green hover:text-white'
-            }`}
-            aria-label="Show all partner categories"
-            aria-pressed={subcategoryFilter === 'all'}
-          >
-            All Categories
-          </button>
-          {subcategories.map((subcategory) => (
-            <button
-              key={subcategory}
-              onClick={() => onSubcategoryFilterChange(subcategory)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                subcategoryFilter === subcategory
-                  ? 'bg-lrp-green text-white'
-                  : 'bg-lrp-gray dark:bg-dark-bg-secondary text-lrp-black dark:text-white hover:bg-lrp-green hover:text-white'
-              }`}
-              aria-label={`Filter by ${subcategoryLabels[subcategory] || subcategory}`}
-              aria-pressed={subcategoryFilter === subcategory}
-            >
-              {subcategoryLabels[subcategory] || subcategory}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

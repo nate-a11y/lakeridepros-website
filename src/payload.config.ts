@@ -28,6 +28,9 @@ const dirname = path.dirname(filename)
 // Detect if we're running migrations
 const isMigration = process.argv.includes('migrate') || process.env.PAYLOAD_MIGRATING === 'true'
 
+// Detect if we're in a build environment (CI/Vercel build phase)
+const isBuild = process.env.CI === 'true' || process.env.VERCEL_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build'
+
 // Helper to get the appropriate Postgres connection string with SSL disabled
 function getPostgresConnectionString() {
   // For migrations: Use POSTGRES_URL_NON_POOLING (direct connection on port 5432) - needed for DDL operations like ALTER TABLE
@@ -48,32 +51,42 @@ function getPostgresConnectionString() {
   return connStr
 }
 
-// Get pool configuration based on whether we're migrating or running serverless
+// Get pool configuration based on environment
 function getPoolConfig() {
   if (isMigration) {
     // Migration pool config: more connections, longer timeouts for slow build environments
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 5, // Reduced from 10 to avoid overwhelming the database
+      max: 5,
       min: 0,
-      idleTimeoutMillis: 180000, // 3 minutes - allow time for slow migrations
-      connectionTimeoutMillis: 180000, // 3 minutes - handle network latency and cold starts
+      idleTimeoutMillis: 180000,
+      connectionTimeoutMillis: 180000,
       allowExitOnIdle: true,
-      // Set statement timeout to prevent queries from hanging indefinitely (120 seconds)
       options: '-c statement_timeout=120000',
     }
-  } else {
-    // Serverless pool config: minimal connections to maximize concurrent functions
+  } else if (isBuild) {
+    // Build-time config: moderate pool for parallel static page generation
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 1, // Single connection per function - allows up to 200 concurrent functions
+      max: 5,
       min: 0,
-      idleTimeoutMillis: 120000, // 2 minutes - allow time for image uploads and heavy operations
-      connectionTimeoutMillis: 120000, // 2 minutes - handle cold starts and connection pooler delays
+      idleTimeoutMillis: 60000,
+      connectionTimeoutMillis: 60000,
       allowExitOnIdle: true,
-      // Set statement timeout to prevent queries from hanging indefinitely (60 seconds)
+      options: '-c statement_timeout=90000',
+    }
+  } else {
+    // Serverless runtime: minimal connections to maximize concurrent functions
+    return {
+      connectionString: getPostgresConnectionString(),
+      ssl: { rejectUnauthorized: false },
+      max: 1,
+      min: 0,
+      idleTimeoutMillis: 120000,
+      connectionTimeoutMillis: 120000,
+      allowExitOnIdle: true,
       options: '-c statement_timeout=60000',
     }
   }

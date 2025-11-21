@@ -15,6 +15,31 @@ export default function robots(): MetadataRoute.Robots {
           '/private/',
         ],
       },
+      // AI Crawler policies - allow indexing for AI search
+      {
+        userAgent: 'GPTBot',
+        allow: '/',
+        disallow: ['/api/', '/admin/', '/private/'],
+      },
+      {
+        userAgent: 'Claude-Web',
+        allow: '/',
+        disallow: ['/api/', '/admin/', '/private/'],
+      },
+      {
+        userAgent: 'Anthropic-AI',
+        allow: '/',
+        disallow: ['/api/', '/admin/', '/private/'],
+      },
+      {
+        userAgent: 'Google-Extended',
+        allow: '/',
+      },
+      {
+        userAgent: 'Bingbot',
+        allow: '/',
+        disallow: ['/api/', '/admin/', '/private/'],
+      },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   };

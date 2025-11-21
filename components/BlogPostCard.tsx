@@ -29,6 +29,7 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
     <Link
       href={`/blog/${post.slug}`}
       className="group block bg-white dark:bg-dark-bg-tertiary rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300"
+      aria-label={`Read article: ${post.title}`}
     >
       <div className="relative h-48 overflow-hidden">
         {imageUrl ? (

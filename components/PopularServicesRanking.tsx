@@ -102,6 +102,7 @@ export default function PopularServicesRanking({
                   <Link
                     href={`/services/${service.slug}`}
                     className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm hover:gap-2 gap-1 transition-all focus:outline-none focus:underline"
+                    aria-label={`Learn more about ${service.title}`}
                   >
                     Learn More
                     <ChevronRight className="w-4 h-4" />

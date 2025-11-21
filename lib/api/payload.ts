@@ -186,43 +186,64 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
 
 // Blog API
 export async function getBlogPosts(params?: PaginationParams & FilterParams): Promise<ApiResponse<BlogPost>> {
+  const now = new Date();
   const baseParams = {
     where: JSON.stringify({
       and: [
         { published: { equals: true } },
-        { publishedDate: { less_than_equal: new Date().toISOString() } },
+        { publishedDate: { less_than_equal: now.toISOString() } },
       ],
     }),
     sort: '-publishedDate',
     depth: 2,
     ...params,
   };
-  return fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', { params: baseParams as Record<string, unknown> });
+  const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', { params: baseParams as Record<string, unknown> });
+
+  // WORKAROUND: Payload API may not respect where clause - filter manually
+  const filteredDocs = (response.docs || []).filter(post =>
+    post.published &&
+    (!post.publishedDate || new Date(post.publishedDate) <= now)
+  );
+
+  return { ...response, docs: filteredDocs };
 }
 
 export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
+  const now = new Date();
   const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', {
     params: {
       where: JSON.stringify({
         and: [
           { published: { equals: true } },
-          { publishedDate: { less_than_equal: new Date().toISOString() } },
+          { publishedDate: { less_than_equal: now.toISOString() } },
         ],
       }),
       sort: '-publishedDate',
-      limit,
+      limit: 100, // Fetch more to filter manually
       depth: 2,
     },
   });
-  return response.docs || [];
+
+  // WORKAROUND: Payload API may not respect where clause - filter manually
+  const filteredDocs = (response.docs || []).filter(post =>
+    post.published &&
+    (!post.publishedDate || new Date(post.publishedDate) <= now)
+  );
+
+  return filteredDocs.slice(0, limit);
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const now = new Date().toISOString();
   const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', {
     params: {
       where: JSON.stringify({
-        slug: { equals: slug },
-        published: { equals: true }
+        and: [
+          { slug: { equals: slug } },
+          { published: { equals: true } },
+          { publishedDate: { less_than_equal: now } },
+        ],
       }),
       depth: 2,
       limit: 100, // Ensure we get the response even if there are many posts
@@ -232,7 +253,11 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
   // WORKAROUND: Payload API is not respecting the where clause for BlogPosts collection
   // Filter manually in application code until the API issue is resolved
   const posts = response.docs || [];
-  const matchingPost = posts.find(post => post.slug === slug && post.published);
+  const matchingPost = posts.find(post =>
+    post.slug === slug &&
+    post.published &&
+    (!post.publishedDate || new Date(post.publishedDate) <= new Date())
+  );
 
   return matchingPost || null;
 }
@@ -241,17 +266,27 @@ export async function getAdjacentBlogPosts(currentSlug: string): Promise<{
   previous: BlogPost | null;
   next: BlogPost | null;
 }> {
-  // Get all published posts sorted by date
+  const now = new Date();
+  // Get all published posts sorted by date (only past/current dates)
   const response = await fetchFromPayload<ApiResponse<BlogPost>>('/blog-posts', {
     params: {
-      where: JSON.stringify({ published: { equals: true } }),
+      where: JSON.stringify({
+        and: [
+          { published: { equals: true } },
+          { publishedDate: { less_than_equal: now.toISOString() } },
+        ],
+      }),
       sort: '-publishedDate',
       depth: 2,
       limit: 1000,
     },
   });
 
-  const posts = response.docs || [];
+  // WORKAROUND: Payload API may not respect where clause - filter manually
+  const posts = (response.docs || []).filter(post =>
+    post.published &&
+    (!post.publishedDate || new Date(post.publishedDate) <= now)
+  );
   const currentIndex = posts.findIndex(post => post.slug === currentSlug);
 
   if (currentIndex === -1) {

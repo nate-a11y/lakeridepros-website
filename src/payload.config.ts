@@ -78,11 +78,11 @@ function getPoolConfig() {
       options: '-c statement_timeout=90000',
     }
   } else {
-    // Serverless runtime: minimal connections to maximize concurrent functions
+    // Serverless runtime: balanced for performance
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 1,
+      max: 3,
       min: 0,
       idleTimeoutMillis: 120000,
       connectionTimeoutMillis: 120000,

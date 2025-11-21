@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getServices } from '@/lib/api/payload';
+import { getServicesLocal } from '@/lib/api/payload-local';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 import { PhoneLink } from '@/components/PhoneLink';
 import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
@@ -75,14 +75,14 @@ export default async function Footer() {
     popularServiceSlugs = fallbackServiceSlugs;
   }
 
-  // Fetch services dynamically from CMS, but only show popular ones
+  // Fetch services dynamically from CMS (using local Payload to avoid HTTP during build)
   let dynamicServices: Array<{ name: string; href: string }> = [];
   try {
-    const servicesResponse = await getServices({ limit: 100 });
+    const servicesData = await getServicesLocal();
     // Filter to only popular services and maintain order
     dynamicServices = popularServiceSlugs
       .map(slug => {
-        const service = servicesResponse.docs.find(s => s.slug === slug);
+        const service = servicesData.find(s => s.slug === slug);
         return service ? { name: service.title, href: `/services/${service.slug}` } : null;
       })
       .filter((s): s is { name: string; href: string } => s !== null);

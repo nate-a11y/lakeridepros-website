@@ -163,6 +163,57 @@ export async function getFeaturedVehiclesLocal(limit = 6): Promise<Vehicle[]> {
   }
 }
 
+export async function getVehiclesLocal(): Promise<Vehicle[]> {
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'vehicles',
+      limit: 100,
+      depth: 1,
+    })
+    return result.docs as unknown as Vehicle[]
+  } catch (error) {
+    console.error('[Payload Local] Error fetching vehicles:', error)
+    return []
+  }
+}
+
+export async function getProductsLocal(): Promise<unknown[]> {
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'products',
+      where: {
+        status: { equals: 'published' },
+      },
+      limit: 100,
+      depth: 1,
+    })
+    return result.docs
+  } catch (error) {
+    console.error('[Payload Local] Error fetching products:', error)
+    return []
+  }
+}
+
+export async function getPagesLocal(): Promise<unknown[]> {
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'pages',
+      where: {
+        published: { equals: true },
+      },
+      limit: 100,
+      depth: 1,
+    })
+    return result.docs
+  } catch (error) {
+    console.error('[Payload Local] Error fetching pages:', error)
+    return []
+  }
+}
+
 // Helper to get full media URL
 export function getMediaUrl(url: string | undefined): string {
   if (!url) return ''

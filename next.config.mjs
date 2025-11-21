@@ -19,6 +19,14 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'www.lakeridepros.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lakeridepros.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'lakeridepros-website.vercel.app',
       },
       {

@@ -473,7 +473,7 @@ export function getMediaUrl(url: string): string {
   // This ensures media works correctly on preview deploys
   const mediaBaseUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
                        process.env.NEXT_PUBLIC_SERVER_URL ||
-                       'https://lakeridepros-website.vercel.app';
+                       'https://www.lakeridepros.com';
 
   return `${mediaBaseUrl}${url}`;
 }

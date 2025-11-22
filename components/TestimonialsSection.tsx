@@ -51,7 +51,7 @@ export default function TestimonialsSection({
       worstRating: 1,
     },
     review: displayedTestimonials
-      .filter(t => t.rating)
+      .filter(t => t.rating && t.createdAt)
       .map(testimonial => ({
         '@type': 'Review',
         author: {
@@ -65,7 +65,7 @@ export default function TestimonialsSection({
           worstRating: 1,
         },
         reviewBody: testimonial.content,
-        datePublished: testimonial.createdAt || new Date().toISOString(),
+        datePublished: testimonial.createdAt,
       })),
   } : null;
 

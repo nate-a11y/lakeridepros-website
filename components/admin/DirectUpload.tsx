@@ -12,6 +12,10 @@ async function compressImage(file: File): Promise<{ file: File; width: number; h
     return { file, width: 0, height: 0 }
   }
 
+  if (typeof window === 'undefined') {
+    return { file, width: 0, height: 0 }
+  }
+
   return new Promise((resolve) => {
     const img = new Image()
     const canvas = document.createElement('canvas')

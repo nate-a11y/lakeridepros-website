@@ -238,7 +238,7 @@ export const Dashboard: React.FC = () => {
                   {syncStatus.lastSync && (
                     <div className="sync-stat">
                       <span className="sync-stat-label">Last Sync:</span>
-                      <span className="sync-stat-value">
+                      <span className="sync-stat-value" suppressHydrationWarning>
                         {new Date(syncStatus.lastSync).toLocaleString()}
                       </span>
                     </div>

@@ -20,6 +20,8 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
   }, [])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     if (isOpen) {
       // Lock body scroll
       document.body.style.overflow = 'hidden'
@@ -56,6 +58,8 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
   // Handle Escape key
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         onClose()

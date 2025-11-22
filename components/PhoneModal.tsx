@@ -17,6 +17,8 @@ export function PhoneModal() {
   }, [])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     if (isOpen) {
       // Lock body scroll
       document.body.style.overflow = 'hidden'
@@ -32,6 +34,8 @@ export function PhoneModal() {
 
   // Handle Escape key
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         closeModal()

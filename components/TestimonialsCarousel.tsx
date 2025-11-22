@@ -70,7 +70,7 @@ export default function TestimonialsCarousel({
       worstRating: 1,
     },
     review: testimonials
-      .filter(t => t.rating)
+      .filter(t => t.rating && t.createdAt)
       .map(testimonial => ({
         '@type': 'Review',
         author: {
@@ -84,7 +84,7 @@ export default function TestimonialsCarousel({
           worstRating: 1,
         },
         reviewBody: testimonial.content,
-        datePublished: testimonial.createdAt || new Date().toISOString(),
+        datePublished: testimonial.createdAt,
       })),
   } : null;
 

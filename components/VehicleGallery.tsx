@@ -67,6 +67,8 @@ export default function VehicleGallery({
 
   // Keyboard navigation
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
         prevSlide();
@@ -83,6 +85,8 @@ export default function VehicleGallery({
 
   // Prevent body scroll when lightbox is open
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     if (isLightboxOpen) {
       document.body.style.overflow = 'hidden';
     } else {

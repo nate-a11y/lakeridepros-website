@@ -53,6 +53,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Load cart from localStorage on mount
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const savedCart = localStorage.getItem(CART_STORAGE_KEY);
     if (savedCart) {
       try {
@@ -66,6 +68,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     if (items.length > 0) {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
     } else {

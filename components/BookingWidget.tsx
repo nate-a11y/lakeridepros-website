@@ -23,6 +23,8 @@ export default function BookingWidget({ className = '', serviceSlug }: BookingWi
   }, [serviceSlug]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     // This will load the Moovs booking widget iframe when available
     if (containerRef.current && moovsEmbedUrl) {
       // Clear any existing content

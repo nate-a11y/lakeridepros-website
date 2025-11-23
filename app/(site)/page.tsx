@@ -172,7 +172,7 @@ export default async function HomePage() {
               Trusted by Leading Organizations
             </h2>
           </div>
-          <div className="relative">
+          <div className="relative overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing" style={{ scrollBehavior: 'smooth' }}>
             <div className="flex animate-scroll-left">
               {[...partners, ...partners].map((partner, index) => {
                 const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
@@ -202,7 +202,7 @@ export default async function HomePage() {
                   <Link
                     key={`partner-${partner.id}-${index}`}
                     href={partnerLink}
-                    className="flex-shrink-0 mx-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-xl hover:scale-105 transition-transform"
+                    className="flex-shrink-0 mx-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-xl hover:scale-105 transition-transform cursor-pointer"
                     aria-label={`View ${partner.name} partner page`}
                     {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   >

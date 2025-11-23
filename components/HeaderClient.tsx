@@ -313,6 +313,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
           {/* Right side buttons */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Social Media Dropdown - hidden on mobile */}
+            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
             <div
               className="hidden md:block relative"
               onMouseEnter={() => setSocialDropdownOpen(true)}

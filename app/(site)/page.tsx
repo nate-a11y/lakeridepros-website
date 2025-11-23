@@ -177,7 +177,7 @@ export default async function HomePage() {
               {[...partners, ...partners].map((partner, index) => {
                 const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
                 const partnerContent = (
-                  <div className="flex flex-col items-center space-y-3 max-w-xs">
+                  <div className="flex flex-col items-center space-y-3 p-6 bg-white dark:bg-dark-bg-secondary border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-md hover:shadow-xl transition-all w-80">
                     <Image
                       src={getMediaUrl(partner.logo.url)}
                       alt={partner.name}
@@ -202,14 +202,14 @@ export default async function HomePage() {
                   <Link
                     key={`partner-${partner.id}-${index}`}
                     href={partnerLink}
-                    className="flex-shrink-0 mx-8 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg hover:scale-105 transition-transform"
+                    className="flex-shrink-0 mx-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-xl hover:scale-105 transition-transform"
                     aria-label={`View ${partner.name} partner page`}
                     {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   >
                     {partnerContent}
                   </Link>
                 ) : (
-                  <div key={`partner-${partner.id}-${index}`} className="flex-shrink-0 mx-8 flex items-center justify-center">
+                  <div key={`partner-${partner.id}-${index}`} className="flex-shrink-0 mx-4 flex items-center justify-center">
                     {partnerContent}
                   </div>
                 );

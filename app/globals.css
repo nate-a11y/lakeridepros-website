@@ -542,11 +542,11 @@ input[type="checkbox"].h-4 {
 
   /* Partner logo scrolling animations */
   .animate-scroll-left {
-    animation: scroll-left 30s linear infinite;
+    animation: scroll-left 20s linear infinite;
   }
 
   .animate-scroll-left-delayed {
-    animation: scroll-left-delayed 30s linear infinite;
+    animation: scroll-left-delayed 20s linear infinite;
   }
 
   .animate-scroll-left:hover,

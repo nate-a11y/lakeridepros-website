@@ -172,72 +172,48 @@ export default async function HomePage() {
               Trusted by Leading Organizations
             </h2>
           </div>
-          <div className="space-y-6">
-            {/* First row - scrolling left */}
-            <div className="relative">
-              <div className="flex animate-scroll-left">
-                {[...partners, ...partners].map((partner, index) => {
-                  const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
-                  const logoImage = (
+          <div className="relative overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing" style={{ scrollBehavior: 'smooth' }}>
+            <div className="flex animate-scroll-left">
+              {[...partners, ...partners].map((partner, index) => {
+                const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
+                const partnerContent = (
+                  <div className="flex flex-col items-center space-y-3 p-6 bg-white dark:bg-dark-bg-secondary border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-md hover:shadow-xl transition-all w-80">
                     <Image
                       src={getMediaUrl(partner.logo.url)}
                       alt={partner.name}
-                      width={128}
-                      height={64}
-                      className="h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all"
+                      width={200}
+                      height={100}
+                      className="h-24 w-auto object-contain transition-all"
                     />
-                  );
-
-                  return partnerLink ? (
-                    <Link
-                      key={`row1-${partner.id}-${index}`}
-                      href={partnerLink}
-                      className="flex-shrink-0 mx-8 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
-                      aria-label={`View ${partner.name} partner page`}
-                      {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    >
-                      {logoImage}
-                    </Link>
-                  ) : (
-                    <div key={`row1-${partner.id}-${index}`} className="flex-shrink-0 mx-8 flex items-center justify-center">
-                      {logoImage}
+                    <div className="text-center">
+                      <h3 className="font-semibold text-neutral-900 dark:text-white text-lg mb-1">
+                        {partner.name}
+                      </h3>
+                      {partner.blurb && (
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
+                          {partner.blurb}
+                        </p>
+                      )}
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-            {/* Second row - scrolling left (delayed) */}
-            <div className="relative">
-              <div className="flex animate-scroll-left-delayed">
-                {[...partners.slice().reverse(), ...partners.slice().reverse()].map((partner, index) => {
-                  const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
-                  const logoImage = (
-                    <Image
-                      src={getMediaUrl(partner.logo.url)}
-                      alt={partner.name}
-                      width={128}
-                      height={64}
-                      className="h-12 w-auto object-contain filter grayscale hover:grayscale-0 transition-all"
-                    />
-                  );
+                  </div>
+                );
 
-                  return partnerLink ? (
-                    <Link
-                      key={`row2-${partner.id}-${index}`}
-                      href={partnerLink}
-                      className="flex-shrink-0 mx-8 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg"
-                      aria-label={`View ${partner.name} partner page`}
-                      {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    >
-                      {logoImage}
-                    </Link>
-                  ) : (
-                    <div key={`row2-${partner.id}-${index}`} className="flex-shrink-0 mx-8 flex items-center justify-center">
-                      {logoImage}
-                    </div>
-                  );
-                })}
-              </div>
+                return partnerLink ? (
+                  <Link
+                    key={`partner-${partner.id}-${index}`}
+                    href={partnerLink}
+                    className="flex-shrink-0 mx-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-xl hover:scale-105 transition-transform cursor-pointer"
+                    aria-label={`View ${partner.name} partner page`}
+                    {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    {partnerContent}
+                  </Link>
+                ) : (
+                  <div key={`partner-${partner.id}-${index}`} className="flex-shrink-0 mx-4 flex items-center justify-center">
+                    {partnerContent}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

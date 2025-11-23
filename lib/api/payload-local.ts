@@ -184,7 +184,7 @@ export async function getProductsLocal(): Promise<unknown[]> {
     const result = await payload.find({
       collection: 'products',
       where: {
-        status: { equals: 'published' },
+        status: { equals: 'active' },
       },
       limit: 100,
       depth: 1,

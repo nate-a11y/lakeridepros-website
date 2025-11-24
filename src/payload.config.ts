@@ -20,8 +20,7 @@ import { Products } from '../collections/Products'
 import { GiftCards } from '../collections/GiftCards'
 import { Orders } from '../collections/Orders'
 import { Partners } from '../collections/Partners'
-// import { TeamMembers } from '../collections/TeamMembers'
-import { TeamMembersMinimal } from '../collections/TeamMembersMinimal'
+import { TeamMembers } from '../collections/TeamMembers'
 import { supabaseAdapter } from '../lib/supabase-adapter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -111,7 +110,7 @@ const config = buildConfig({
       beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
   },
-  collections: [BlogPosts, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, TeamMembersMinimal, Testimonials, Users, Vehicles],
+  collections: [BlogPosts, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, TeamMembers, Testimonials, Users, Vehicles],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

@@ -32,36 +32,12 @@ export const TeamMembers: CollectionConfig = {
   //   ],
   // },
   access: {
-    // Public can read active team members shown on team page
-    read: ({ req: { user } }) => {
-      // Authenticated users can read all
-      if (user) return true
-      // Public can only read active team members shown on the page
-      return {
-        and: [
-          {
-            showOnTeamPage: {
-              equals: true,
-            },
-          },
-          {
-            status: {
-              equals: 'active',
-            },
-          },
-        ],
-      }
-    },
+    // Allow public read access (like Products and Vehicles)
+    read: () => true,
     // Only admins can create, update, or delete
-    create: ({ req: { user } }) => {
-      return !!user && user.role === 'admin'
-    },
-    update: ({ req: { user } }) => {
-      return !!user && user.role === 'admin'
-    },
-    delete: ({ req: { user } }) => {
-      return !!user && user.role === 'admin'
-    },
+    create: ({ req: { user } }) => !!user && user.role === 'admin',
+    update: ({ req: { user } }) => !!user && user.role === 'admin',
+    delete: ({ req: { user } }) => !!user && user.role === 'admin',
   },
   fields: [
     {

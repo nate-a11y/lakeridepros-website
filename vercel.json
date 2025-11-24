@@ -1,4 +1,17 @@
 {
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "lakeridepros.com"
+        }
+      ],
+      "destination": "https://www.lakeridepros.com/:path*",
+      "permanent": true
+    }
+  ],
   "functions": {
     "app/(payload)/admin/[[...segments]]/page.tsx": {
       "maxDuration": 30

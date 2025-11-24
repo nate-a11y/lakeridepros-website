@@ -20,7 +20,10 @@ export interface TeamMember {
  */
 export async function getTeamMembers(): Promise<TeamMember[]> {
   try {
-    const payload = await getPayload({ config });
+    // TEMPORARILY DISABLED - TeamMembers collection removed from config for testing
+    return [];
+
+    /* const payload = await getPayload({ config });
 
     // Query team members from Payload CMS
     const { docs: teamMembers } = await payload.find({
@@ -79,7 +82,7 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
       };
     });
 
-    return teamMembersData;
+    return teamMembersData; */
   } catch (error) {
     console.error('Error in getTeamMembers:', error);
     console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');

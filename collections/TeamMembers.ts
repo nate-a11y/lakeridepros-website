@@ -39,7 +39,7 @@ export const TeamMembers: CollectionConfig = {
                 employment_status: doc.status,
                 hire_date: doc.hireDate,
                 role: 'user', // CMS role default
-              })
+              } as any)
               .select()
               .single()
 
@@ -59,7 +59,7 @@ export const TeamMembers: CollectionConfig = {
                 is_active: doc.showOnTeamPage && doc.status === 'active',
                 photo_url: photoUrl,
                 vehicles: vehicles,
-              })
+              } as any)
 
             if (dirError) {
               console.error('Error creating directory entry:', dirError)
@@ -86,7 +86,7 @@ export const TeamMembers: CollectionConfig = {
                   phone: doc.phone,
                   employment_status: doc.status,
                   hire_date: doc.hireDate,
-                })
+                } as any)
                 .eq('id', existingUser.id)
 
               // Update directory table
@@ -99,7 +99,7 @@ export const TeamMembers: CollectionConfig = {
                   is_active: doc.showOnTeamPage && doc.status === 'active',
                   photo_url: photoUrl,
                   vehicles: vehicles,
-                })
+                } as any)
                 .eq('user_id', existingUser.id)
 
               console.log(`Synced team member update to directory: ${doc.displayName}`)
@@ -127,14 +127,14 @@ export const TeamMembers: CollectionConfig = {
               .from('directory')
               .update({
                 is_active: false,
-              })
+              } as any)
               .eq('user_id', existingUser.id)
 
             await supabase
               .from('users')
               .update({
                 employment_status: 'terminated',
-              })
+              } as any)
               .eq('id', existingUser.id)
 
             console.log(`Marked team member as inactive in directory: ${doc.displayName}`)

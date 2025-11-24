@@ -107,8 +107,7 @@ const config = buildConfig({
         Icon: '@/components/admin/Icon#Icon',
         Logo: '@/components/admin/Logo#Logo',
       },
-      // TEMPORARILY DISABLED - Testing if Dashboard is still causing hydration errors
-      // beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
+      beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
   },
   collections: [BlogPosts, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, TeamMembers, Testimonials, Users, Vehicles],

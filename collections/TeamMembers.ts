@@ -3,7 +3,7 @@ import type { CollectionConfig } from 'payload'
 // import { getSupabaseServerClient } from '../lib/supabase/client'
 
 export const TeamMembers: CollectionConfig = {
-  slug: 'team-members',
+  slug: 'teammembers',  // Changed from 'team-members' - testing if hyphen breaks things
   admin: {
     useAsTitle: 'displayName',
     defaultColumns: ['displayName', 'role', 'status', 'priority'],
@@ -32,8 +32,16 @@ export const TeamMembers: CollectionConfig = {
   //   ],
   // },
   access: {
-    // Allow public read access (like Products and Vehicles)
-    read: () => true,
+    // Authenticated users can read all, public can only read active members shown on page
+    read: ({ req: { user } }) => {
+      if (user) return true
+      return {
+        and: [
+          { showOnTeamPage: { equals: true } },
+          { status: { equals: 'active' } },
+        ],
+      }
+    },
     // Only admins can create, update, or delete
     create: ({ req: { user } }) => !!user && user.role === 'admin',
     update: ({ req: { user } }) => !!user && user.role === 'admin',

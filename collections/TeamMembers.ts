@@ -6,7 +6,6 @@ export const TeamMembers: CollectionConfig = {
   admin: {
     useAsTitle: 'displayName',
     defaultColumns: ['displayName', 'role', 'status', 'priority'],
-    group: 'Content',
   },
   hooks: {
     afterChange: [

@@ -45,6 +45,12 @@ export const Dashboard: React.FC = () => {
   const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [syncMessage, setSyncMessage] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  // Prevent hydration mismatch by only rendering dates client-side
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -238,8 +244,8 @@ export const Dashboard: React.FC = () => {
                   {syncStatus.lastSync && (
                     <div className="sync-stat">
                       <span className="sync-stat-label">Last Sync:</span>
-                      <span className="sync-stat-value" suppressHydrationWarning>
-                        {new Date(syncStatus.lastSync).toLocaleString()}
+                      <span className="sync-stat-value">
+                        {mounted ? new Date(syncStatus.lastSync).toLocaleString() : 'Loading...'}
                       </span>
                     </div>
                   )}

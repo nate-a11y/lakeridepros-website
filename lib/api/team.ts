@@ -34,58 +34,71 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
   try {
     const supabase = getSupabaseClient();
 
-    // Query users table and join with directory table
+    // First, try to get directory entries with user info using a different approach
+    // Query directory table and join with users table
     const { data, error } = await supabase
-      .from('users')
+      .from('directory')
       .select(`
         id,
-        name,
-        display_name,
-        first_name,
-        last_name,
-        email,
         role,
-        employment_status,
-        directory (
+        photo_url,
+        vehicles,
+        is_active,
+        priority,
+        user_id,
+        users!inner (
+          id,
+          name,
+          display_name,
+          first_name,
+          last_name,
+          email,
           role,
-          photo_url,
-          vehicles,
-          is_active,
-          priority
+          employment_status
         )
       `)
-      .eq('employment_status', 'active')
-      .eq('directory.is_active', true)
-      .order('directory.priority', { ascending: true });
+      .eq('is_active', true)
+      .eq('users.employment_status', 'active')
+      .order('priority', { ascending: true });
 
     if (error) {
       console.error('Error fetching team members:', error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
       return [];
     }
 
-    if (!data) {
+    if (!data || data.length === 0) {
+      console.log('No team members found in database');
       return [];
     }
+
+    console.log(`Found ${data.length} team members`);
 
     // Transform the data to our TeamMember interface
     const teamMembers: TeamMember[] = data
-      .filter((user: any) => user.directory) // Only include users with directory entries
-      .map((user: any) => ({
-        id: user.id.toString(),
-        name: user.display_name || user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim(),
-        displayName: user.display_name,
-        email: user.email,
-        role: user.role || 'user',
-        departmentRole: user.directory?.role,
-        photoUrl: user.directory?.photo_url,
-        vehicles: user.directory?.vehicles || [],
-        isActive: user.directory?.is_active ?? true,
-        priority: user.directory?.priority ?? 0,
-      }));
+      .map((directory: any) => {
+        const user = directory.users;
+        if (!user) return null;
+
+        return {
+          id: user.id.toString(),
+          name: user.display_name || user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unknown',
+          displayName: user.display_name,
+          email: user.email,
+          role: user.role || 'user',
+          departmentRole: directory.role,
+          photoUrl: directory.photo_url,
+          vehicles: directory.vehicles || [],
+          isActive: directory.is_active ?? true,
+          priority: directory.priority ?? 0,
+        };
+      })
+      .filter((member): member is TeamMember => member !== null);
 
     return teamMembers;
   } catch (error) {
     console.error('Error in getTeamMembers:', error);
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
     return [];
   }
 }

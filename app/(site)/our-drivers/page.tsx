@@ -129,11 +129,47 @@ export default async function OurDriversPage() {
 
       {/* Empty State */}
       {owners.length === 0 && dispatchers.length === 0 && drivers.length === 0 && (
-        <section className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-              Team information will be available soon.
-            </p>
+        <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg p-8 text-center">
+              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
+                No Team Members Found
+              </h2>
+              <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
+                To display team members on this page, you need to:
+              </p>
+              <div className="text-left max-w-xl mx-auto space-y-4">
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">1</span>
+                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                    Add users to the <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">users</code> table in Supabase
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">2</span>
+                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                    Add corresponding entries to the <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">directory</code> table with <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">is_active = true</code>
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">3</span>
+                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                    Set the <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">role</code> field in directory to "Owner", "Dispatcher", or "Driver"
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">4</span>
+                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                    Ensure users have <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">employment_status = 'active'</code>
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  Check the server console for detailed error messages if data exists but isn't displaying.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
       )}

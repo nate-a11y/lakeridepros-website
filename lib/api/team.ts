@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/server';
+import { getPayload } from 'payload';
+import config from '@payload-config';
 
 // Team member type definition
 export interface TeamMember {
@@ -15,67 +16,64 @@ export interface TeamMember {
 }
 
 /**
- * Fetch all active team members from Supabase (users + directory JOIN)
+ * Fetch all active team members from Payload CMS
  */
 export async function getTeamMembers(): Promise<TeamMember[]> {
   try {
-    const supabase = await createClient();
+    const payload = await getPayload({ config });
 
-    // Query users and directory tables with JOIN
-    const { data: teamMembers, error } = await supabase
-      .from('directory')
-      .select(`
-        id,
-        role,
-        department,
-        priority,
-        is_active,
-        photo_url,
-        vehicles,
-        user_id,
-        users!inner (
-          id,
-          name,
-          email,
-          display_name,
-          phone,
-          employment_status,
-          first_name,
-          last_name
-        )
-      `)
-      .eq('is_active', true)
-      .eq('users.employment_status', 'active')
-      .order('priority', { ascending: true })
-      .limit(100);
-
-    if (error) {
-      console.error('Error fetching team members from Supabase:', error);
-      return [];
-    }
+    // Query team members from Payload CMS
+    const { docs: teamMembers } = await payload.find({
+      collection: 'team-members',
+      where: {
+        and: [
+          {
+            showOnTeamPage: {
+              equals: true,
+            },
+          },
+          {
+            status: {
+              equals: 'active',
+            },
+          },
+        ],
+      },
+      sort: 'priority',
+      limit: 100,
+    });
 
     if (!teamMembers || teamMembers.length === 0) {
-      console.log('No team members found in Supabase');
+      console.log('No team members found in Payload CMS');
       return [];
     }
 
-    console.log(`Found ${teamMembers.length} team members from Supabase`);
+    console.log(`Found ${teamMembers.length} team members from Payload CMS`);
 
     // Transform the data to our TeamMember interface
     const teamMembersData: TeamMember[] = teamMembers.map((member) => {
-      const user = member.users as any;
+      // Get photo URL
+      let photoUrl: string | undefined;
+      if (member.photo && typeof member.photo === 'object' && 'url' in member.photo) {
+        photoUrl = member.photo.url as string;
+      }
+
+      // Get vehicles array
+      const vehicles = Array.isArray(member.vehicles)
+        ? member.vehicles.map((v: any) => v.vehicle).filter(Boolean)
+        : [];
 
       return {
-        id: member.id,
-        name: user.display_name || user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unknown',
-        displayName: user.display_name,
-        email: user.email,
+        id: member.id.toString(),
+        name: member.displayName || `${member.firstName || ''} ${member.lastName || ''}`.trim() || 'Unknown',
+        displayName: member.displayName,
+        email: member.email || '',
         role: member.role || '',
         departmentRole: member.role,
-        photoUrl: member.photo_url || undefined,
-        vehicles: member.vehicles || [],
-        isActive: member.is_active,
-        priority: member.priority ?? 999,
+        photoUrl,
+        vehicles,
+        isActive: true, // Already filtered in query
+        priority: (member.priority as number) ?? 999,
       };
     });
 

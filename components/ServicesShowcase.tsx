@@ -55,7 +55,7 @@ export default function ServicesShowcase({
               style={{ width: '100%' }}
             >
               {/* Image */}
-              <Link href={`/services/${service.slug}`} className="block" style={{ display: 'block', width: '100%' }}>
+              <Link href={`/services/${service.slug}`} className="block" style={{ display: 'block', width: '100%' }} aria-label={`View details for ${service.title}`}>
                 <div style={{ display: 'block', position: 'relative', height: '12rem', width: '100%', overflow: 'hidden' }}>
                   {service.image && typeof service.image === 'object' && (
                     <Image
@@ -102,9 +102,8 @@ export default function ServicesShowcase({
                   <Link
                     href={`/services/${service.slug}`}
                     className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm hover:gap-2 gap-1 transition-all focus:outline-none focus:underline"
-                    aria-label={`Learn more about ${service.title}`}
                   >
-                    Learn More
+                    Learn More About {service.title}
                     <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -117,7 +116,7 @@ export default function ServicesShowcase({
         <div className="text-center mt-10">
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="inline-flex items-center gap-2 bg-primary-dark hover:bg-primary text-white font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
             View All Services
             <ChevronRight className="w-5 h-5" />

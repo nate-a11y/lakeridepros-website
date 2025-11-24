@@ -108,7 +108,7 @@ export default function WeddingPartnersClient({ partners }: WeddingPartnersClien
                         href={`/partners/${partner.slug}`}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-lrp-green hover:bg-lrp-green-dark text-white rounded-md font-medium transition-colors text-sm"
                       >
-                        <span>Learn More</span>
+                        <span>Learn More About {partner.name}</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                     )}

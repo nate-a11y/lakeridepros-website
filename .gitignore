@@ -142,3 +142,4 @@ vite.config.ts.timestamp-*
 payload-types.ts
 media/
 *.backup_*
+*.original.png

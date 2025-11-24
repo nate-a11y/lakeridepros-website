@@ -446,7 +446,7 @@ export default function PricingPage() {
                     <span className="text-gray-700 dark:text-lrp-gray text-sm">Hotel-to-venue shuttles</span>
                   </li>
                 </ul>
-                <Link href="/book" className="block w-full text-center bg-lrp-green hover:bg-lrp-green/90 text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                <Link href="/book" className="block w-full text-center bg-lrp-green-dark hover:bg-lrp-green text-white px-6 py-3 rounded-lg font-semibold transition-all">
                   Get Quote
                 </Link>
               </div>
@@ -479,7 +479,7 @@ export default function PricingPage() {
                     <span className="text-white/90 text-sm">"Stop the Clock" option</span>
                   </li>
                 </ul>
-                <Link href="/book" className="block w-full text-center bg-white text-lrp-green hover:bg-lrp-gray px-6 py-3 rounded-lg font-semibold transition-all">
+                <Link href="/book" className="block w-full text-center bg-white text-lrp-green-dark hover:bg-lrp-gray px-6 py-3 rounded-lg font-semibold transition-all">
                   Get Quote
                 </Link>
               </div>
@@ -509,7 +509,7 @@ export default function PricingPage() {
                     <span className="text-gray-700 dark:text-lrp-gray text-sm">Full weekend packages</span>
                   </li>
                 </ul>
-                <PhoneLink className="block w-full text-center bg-lrp-green hover:bg-lrp-green/90 text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                <PhoneLink className="block w-full text-center bg-lrp-green-dark hover:bg-lrp-green text-white px-6 py-3 rounded-lg font-semibold transition-all">
                   Call/Text for Quote
                 </PhoneLink>
               </div>

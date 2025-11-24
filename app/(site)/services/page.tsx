@@ -1,7 +1,10 @@
 import { Metadata } from 'next';
-import ServiceCard from '@/components/ServiceCard';
+import Link from 'next/link';
+import Image from 'next/image';
 import BookingWidget from '@/components/BookingWidget';
-import { getServices } from '@/lib/api/payload';
+import { getServices, getMediaUrl } from '@/lib/api/payload';
+import { DynamicIcon } from '@/lib/iconMapper';
+import { ChevronRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Transportation Services | Lake Ride Pros',
@@ -129,12 +132,68 @@ export default async function ServicesPage() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-16">
+      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {services.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service) => (
-                <ServiceCard key={service.id} service={service} />
+                <div
+                  key={service.id}
+                  className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+                >
+                  {/* Image */}
+                  <Link href={`/services/${service.slug}`} className="block">
+                    <div className="relative h-48 overflow-hidden">
+                      {service.image && typeof service.image === 'object' && (
+                        <Image
+                          src={getMediaUrl(service.image.url)}
+                          alt={service.image.alt || service.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                      )}
+                      {/* Icon badge */}
+                      {service.icon && (
+                        <div className="absolute top-4 left-4 flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-white shadow-lg">
+                          <DynamicIcon name={service.icon} size={20} />
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <Link
+                      href={`/services/${service.slug}`}
+                      className="font-bold text-neutral-900 dark:text-white mb-2 hover:text-primary dark:hover:text-primary-light transition-colors text-lg block focus:outline-none focus:underline"
+                    >
+                      {service.title}
+                    </Link>
+                    <p className="text-lrp-text-secondary dark:text-dark-text-secondary line-clamp-2 mb-4 text-sm leading-relaxed">
+                      {service.shortDescription || service.description}
+                    </p>
+                    <div className="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-700">
+                      {service.pricing?.basePrice ? (
+                        <span className="text-primary dark:text-primary-light font-semibold text-sm">
+                          From ${service.pricing.basePrice}
+                        </span>
+                      ) : (
+                        <span className="text-lrp-text-secondary dark:text-dark-text-secondary text-sm">
+                          Custom Pricing
+                        </span>
+                      )}
+                      <Link
+                        href={`/services/${service.slug}`}
+                        className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm hover:gap-2 gap-1 transition-all focus:outline-none focus:underline"
+                        aria-label={`Learn more about ${service.title}`}
+                      >
+                        Learn More
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           ) : (

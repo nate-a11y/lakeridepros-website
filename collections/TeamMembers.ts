@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { getSupabaseServerClient } from '../lib/supabase/client'
+// TEMPORARILY REMOVED - Testing if this import causes hydration errors
+// import { getSupabaseServerClient } from '../lib/supabase/client'
 
 export const TeamMembers: CollectionConfig = {
   slug: 'team-members',

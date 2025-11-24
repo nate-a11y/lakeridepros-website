@@ -4,7 +4,7 @@ export const Users: CollectionConfig = {
   slug: 'users',
   auth: true,
   admin: {
-    useAsTitle: 'displayName',
+    useAsTitle: 'email',
   },
   access: {
     // Allow authenticated users to read user list (for dashboard counts)

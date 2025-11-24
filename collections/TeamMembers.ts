@@ -20,10 +20,12 @@ export const TeamMembers: CollectionConfig = {
             photoUrl = doc.photo.url
           }
 
+          // TEMPORARILY DISABLED - vehicles field removed for testing
           // Extract vehicles array
-          const vehicles = Array.isArray(doc.vehicles)
-            ? doc.vehicles.map((v: any) => v.vehicle).filter(Boolean)
-            : []
+          // const vehicles = Array.isArray(doc.vehicles)
+          //   ? doc.vehicles.map((v: any) => v.vehicle).filter(Boolean)
+          //   : []
+          const vehicles: string[] = []
 
           if (operation === 'create') {
             // Create new user in users table
@@ -217,19 +219,20 @@ export const TeamMembers: CollectionConfig = {
         mimeType: { contains: 'image' },
       },
     },
-    {
-      name: 'vehicles',
-      type: 'array',
-      label: 'Assigned Vehicles',
-      required: false,
-      fields: [
-        {
-          name: 'vehicle',
-          type: 'text',
-          required: false,
-        },
-      ],
-    },
+    // TEMPORARILY DISABLED for testing - vehicles array field might be causing edit page to break
+    // {
+    //   name: 'vehicles',
+    //   type: 'array',
+    //   label: 'Assigned Vehicles',
+    //   required: false,
+    //   fields: [
+    //     {
+    //       name: 'vehicle',
+    //       type: 'text',
+    //       required: false,
+    //     },
+    //   ],
+    // },
     {
       name: 'showOnTeamPage',
       type: 'checkbox',

@@ -76,7 +76,7 @@ export const TeamMembers: CollectionConfig = {
 
             if (existingUser) {
               // Update users table
-              await supabase
+              await (supabase
                 .from('users')
                 .update({
                   name: doc.displayName || `${doc.firstName} ${doc.lastName}`,
@@ -87,10 +87,10 @@ export const TeamMembers: CollectionConfig = {
                   employment_status: doc.status,
                   hire_date: doc.hireDate,
                 } as any)
-                .eq('id', existingUser.id)
+                .eq('id', (existingUser as any).id) as any)
 
               // Update directory table
-              await supabase
+              await (supabase
                 .from('directory')
                 .update({
                   role: doc.role,
@@ -100,7 +100,7 @@ export const TeamMembers: CollectionConfig = {
                   photo_url: photoUrl,
                   vehicles: vehicles,
                 } as any)
-                .eq('user_id', existingUser.id)
+                .eq('user_id', (existingUser as any).id) as any)
 
               console.log(`Synced team member update to directory: ${doc.displayName}`)
             }
@@ -123,19 +123,19 @@ export const TeamMembers: CollectionConfig = {
             .single()
 
           if (existingUser) {
-            await supabase
+            await (supabase
               .from('directory')
               .update({
                 is_active: false,
               } as any)
-              .eq('user_id', existingUser.id)
+              .eq('user_id', (existingUser as any).id) as any)
 
-            await supabase
+            await (supabase
               .from('users')
               .update({
                 employment_status: 'terminated',
               } as any)
-              .eq('id', existingUser.id)
+              .eq('id', (existingUser as any).id) as any)
 
             console.log(`Marked team member as inactive in directory: ${doc.displayName}`)
           }

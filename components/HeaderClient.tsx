@@ -65,6 +65,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [partnersDropdownOpen, setPartnersDropdownOpen] = useState(false);
+  const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const [insidersDropdownOpen, setInsidersDropdownOpen] = useState(false);
   const [socialDropdownOpen, setSocialDropdownOpen] = useState(false);
 
@@ -126,8 +127,16 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
       ]
     },
     { name: 'Blog', href: '/blog' },
-    { name: 'Shop', href: '/shop' },
-    { name: 'Gift Cards', href: '/gift-cards' },
+    {
+      name: 'Shop',
+      href: '/shop',
+      hasDropdown: true,
+      dropdownType: 'shop',
+      dropdownItems: [
+        { name: 'Merch Store', href: '/shop' },
+        { name: 'Gift Cards', href: '/gift-cards' },
+      ]
+    },
     {
       name: 'Insiders',
       href: '/insider-membership-benefits',
@@ -171,16 +180,19 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   onMouseEnter={() => {
                     if (item.dropdownType === 'services') setServicesDropdownOpen(true);
                     if (item.dropdownType === 'partners') setPartnersDropdownOpen(true);
+                    if (item.dropdownType === 'shop') setShopDropdownOpen(true);
                     if (item.dropdownType === 'insiders') setInsidersDropdownOpen(true);
                   }}
                   onMouseLeave={() => {
                     if (item.dropdownType === 'services') setServicesDropdownOpen(false);
                     if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
+                    if (item.dropdownType === 'shop') setShopDropdownOpen(false);
                     if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
                   }}
                   onFocus={() => {
                     if (item.dropdownType === 'services') setServicesDropdownOpen(true);
                     if (item.dropdownType === 'partners') setPartnersDropdownOpen(true);
+                    if (item.dropdownType === 'shop') setShopDropdownOpen(true);
                     if (item.dropdownType === 'insiders') setInsidersDropdownOpen(true);
                   }}
                   onBlur={(e) => {
@@ -188,6 +200,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
                       if (item.dropdownType === 'services') setServicesDropdownOpen(false);
                       if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
+                      if (item.dropdownType === 'shop') setShopDropdownOpen(false);
                       if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
                     }
                   }}
@@ -197,6 +210,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                     aria-expanded={
                       item.dropdownType === 'services' ? servicesDropdownOpen :
                       item.dropdownType === 'partners' ? partnersDropdownOpen :
+                      item.dropdownType === 'shop' ? shopDropdownOpen :
                       item.dropdownType === 'insiders' ? insidersDropdownOpen : false
                     }
                     aria-haspopup="true"
@@ -205,11 +219,13 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                         e.preventDefault();
                         if (item.dropdownType === 'services') setServicesDropdownOpen(!servicesDropdownOpen);
                         if (item.dropdownType === 'partners') setPartnersDropdownOpen(!partnersDropdownOpen);
+                        if (item.dropdownType === 'shop') setShopDropdownOpen(!shopDropdownOpen);
                         if (item.dropdownType === 'insiders') setInsidersDropdownOpen(!insidersDropdownOpen);
                       }
                       if (e.key === 'Escape') {
                         if (item.dropdownType === 'services') setServicesDropdownOpen(false);
                         if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
+                        if (item.dropdownType === 'shop') setShopDropdownOpen(false);
                         if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
                       }
                     }}
@@ -263,6 +279,20 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   )}
 
                   {item.dropdownType === 'partners' && partnersDropdownOpen && (
+                    <div className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                      {item.dropdownItems?.map((dropdownItem) => (
+                        <Link
+                          key={dropdownItem.name}
+                          href={dropdownItem.href}
+                          className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
+                        >
+                          {dropdownItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+
+                  {item.dropdownType === 'shop' && shopDropdownOpen && (
                     <div className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link

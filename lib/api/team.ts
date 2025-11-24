@@ -1,6 +1,6 @@
 import { getPayload } from 'payload';
 import config from '@payload-config';
-import type { User } from '@/src/payload-types';
+import type { TeamMember as TeamMemberType } from '@/src/payload-types';
 
 // Team member type definition
 export interface TeamMember {
@@ -23,9 +23,9 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
   try {
     const payload = await getPayload({ config });
 
-    // Query users from Payload CMS
-    const { docs: users } = await payload.find({
-      collection: 'users',
+    // Query team members from Payload CMS
+    const { docs: teamMembers } = await payload.find({
+      collection: 'team-members',
       where: {
         and: [
           {
@@ -44,41 +44,41 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
       limit: 100,
     });
 
-    if (!users || users.length === 0) {
+    if (!teamMembers || teamMembers.length === 0) {
       console.log('No team members found in Payload CMS');
       return [];
     }
 
-    console.log(`Found ${users.length} team members from Payload CMS`);
+    console.log(`Found ${teamMembers.length} team members from Payload CMS`);
 
     // Transform the data to our TeamMember interface
-    const teamMembers: TeamMember[] = users.map((user) => {
+    const teamMembersData: TeamMember[] = teamMembers.map((member) => {
       // Get photo URL
       let photoUrl: string | undefined;
-      if (user.photo && typeof user.photo === 'object' && 'url' in user.photo) {
-        photoUrl = user.photo.url as string;
+      if (member.photo && typeof member.photo === 'object' && 'url' in member.photo) {
+        photoUrl = member.photo.url as string;
       }
 
       // Get vehicles array
-      const vehicles = Array.isArray(user.vehicles)
-        ? user.vehicles.map((v: any) => v.vehicle).filter(Boolean)
+      const vehicles = Array.isArray(member.vehicles)
+        ? member.vehicles.map((v: any) => v.vehicle).filter(Boolean)
         : [];
 
       return {
-        id: user.id.toString(),
-        name: user.displayName || user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown',
-        displayName: user.displayName,
-        email: user.email,
-        role: user.role || 'user',
-        departmentRole: user.departmentRole,
+        id: member.id.toString(),
+        name: member.displayName || `${member.firstName || ''} ${member.lastName || ''}`.trim() || 'Unknown',
+        displayName: member.displayName,
+        email: member.email || '',
+        role: member.departmentRole || '',
+        departmentRole: member.departmentRole,
         photoUrl,
         vehicles,
         isActive: true, // Already filtered in query
-        priority: (user.priority as number) ?? 999,
+        priority: (member.priority as number) ?? 999,
       };
     });
 
-    return teamMembers;
+    return teamMembersData;
   } catch (error) {
     console.error('Error in getTeamMembers:', error);
     console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');

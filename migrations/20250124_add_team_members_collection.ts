@@ -179,7 +179,7 @@ export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): P
                 ) VALUES (
                   vehicle_index,
                   new_team_member_id,
-                  dir_record.dir_id || '-' || vehicle_index,
+                  gen_random_uuid()::text,
                   vehicle_text
                 );
                 vehicle_index := vehicle_index + 1;

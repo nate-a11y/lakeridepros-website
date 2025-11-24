@@ -136,31 +136,43 @@ export default async function OurDriversPage() {
                 No Team Members Found
               </h2>
               <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
-                To display team members on this page, you need to:
+                To display team members on this page:
               </p>
               <div className="text-left max-w-xl mx-auto space-y-4">
                 <div className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">1</span>
                   <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Add users to the <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">users</code> table in Supabase
+                    Go to the <strong>Payload CMS Admin</strong> at <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">/admin</code>
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">2</span>
                   <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Add corresponding entries to the <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">directory</code> table with <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">is_active = true</code>
+                    Navigate to <strong>Users</strong> collection
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">3</span>
                   <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Set the <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">role</code> field in directory to "Owner", "Dispatcher", or "Driver"
+                    Create or edit a user and go to the <strong>Team Profile</strong> tab
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">4</span>
                   <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Ensure users have <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">employment_status = 'active'</code>
+                    Check <strong>"Show on Team Page"</strong> and select their <strong>Department Role</strong> (Owner, Dispatcher, or Driver)
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">5</span>
+                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                    Upload a profile photo and add vehicle assignments (optional)
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">6</span>
+                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
+                    Ensure <strong>Employment Status</strong> is set to "Active"
                   </p>
                 </div>
               </div>

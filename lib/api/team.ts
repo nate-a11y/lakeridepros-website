@@ -1,4 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import { getPayload } from 'payload';
+import config from '@payload-config';
+import type { User } from '@/src/payload-types';
 
 // Team member type definition
 export interface TeamMember {
@@ -14,90 +16,67 @@ export interface TeamMember {
   priority: number;
 }
 
-// Get Supabase client
-function getSupabaseClient() {
-  const url = process.env.SUPABASE_URL?.trim();
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
-
-  if (!url || !key) {
-    throw new Error('Missing Supabase credentials');
-  }
-
-  return createClient(url, key);
-}
-
 /**
- * Fetch all active team members from Supabase
- * Joins users table with directory table to get complete information
+ * Fetch all active team members from Payload CMS
  */
 export async function getTeamMembers(): Promise<TeamMember[]> {
   try {
-    const supabase = getSupabaseClient();
+    const payload = await getPayload({ config });
 
-    // Query directory table and join with users table
-    // We'll filter is_active in JavaScript to handle both boolean and string values
-    const { data, error } = await supabase
-      .from('directory')
-      .select(`
-        id,
-        role,
-        photo_url,
-        vehicles,
-        is_active,
-        priority,
-        user_id,
-        users!inner (
-          id,
-          name,
-          display_name,
-          first_name,
-          last_name,
-          email,
-          role,
-          employment_status
-        )
-      `)
-      .eq('users.employment_status', 'active')
-      .order('priority', { ascending: true });
+    // Query users from Payload CMS
+    const { docs: users } = await payload.find({
+      collection: 'users',
+      where: {
+        and: [
+          {
+            showOnTeamPage: {
+              equals: true,
+            },
+          },
+          {
+            employmentStatus: {
+              equals: 'active',
+            },
+          },
+        ],
+      },
+      sort: 'priority',
+      limit: 100,
+    });
 
-    if (error) {
-      console.error('Error fetching team members:', error);
-      console.error('Error details:', JSON.stringify(error, null, 2));
+    if (!users || users.length === 0) {
+      console.log('No team members found in Payload CMS');
       return [];
     }
 
-    if (!data || data.length === 0) {
-      console.log('No team members found in database');
-      return [];
-    }
-
-    console.log(`Found ${data.length} team members`);
+    console.log(`Found ${users.length} team members from Payload CMS`);
 
     // Transform the data to our TeamMember interface
-    const teamMembers: TeamMember[] = data
-      .filter((directory: any) => {
-        // Handle is_active being boolean, string, or null
-        const isActive = directory.is_active === true ||
-                        directory.is_active === 'true' ||
-                        directory.is_active === 't';
-        return isActive && directory.users;
-      })
-      .map((directory: any) => {
-        const user = directory.users;
+    const teamMembers: TeamMember[] = users.map((user) => {
+      // Get photo URL
+      let photoUrl: string | undefined;
+      if (user.photo && typeof user.photo === 'object' && 'url' in user.photo) {
+        photoUrl = user.photo.url as string;
+      }
 
-        return {
-          id: user.id.toString(),
-          name: user.display_name || user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unknown',
-          displayName: user.display_name,
-          email: user.email,
-          role: user.role || 'user',
-          departmentRole: directory.role,
-          photoUrl: directory.photo_url,
-          vehicles: directory.vehicles || [],
-          isActive: true, // Already filtered above
-          priority: directory.priority ?? 999,
-        };
-      });
+      // Get vehicles array
+      const vehicles = Array.isArray(user.vehicles)
+        ? user.vehicles.map((v: any) => v.vehicle).filter(Boolean)
+        : [];
+
+      return {
+        id: user.id.toString(),
+        name: user.displayName || user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown',
+        displayName: user.displayName,
+        email: user.email,
+        role: user.role || 'user',
+        departmentRole: user.departmentRole,
+        photoUrl,
+        vehicles,
+        isActive: true, // Already filtered in query
+        priority: (user.priority as number) ?? 999,
+      };
+    });
 
     return teamMembers;
   } catch (error) {

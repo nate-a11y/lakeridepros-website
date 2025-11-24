@@ -1,11 +1,149 @@
 import type { CollectionConfig } from 'payload'
+import { getSupabaseServerClient } from '../lib/supabase/client'
 
 export const TeamMembers: CollectionConfig = {
   slug: 'team-members',
   admin: {
     useAsTitle: 'displayName',
-    defaultColumns: ['displayName', 'departmentRole', 'employmentStatus', 'priority'],
+    defaultColumns: ['displayName', 'role', 'status', 'priority'],
     group: 'Content',
+  },
+  hooks: {
+    afterChange: [
+      async ({ doc, operation }) => {
+        try {
+          const supabase = getSupabaseServerClient()
+
+          // Extract photo URL if it exists
+          let photoUrl: string | null = null
+          if (doc.photo && typeof doc.photo === 'object' && 'url' in doc.photo) {
+            photoUrl = doc.photo.url
+          }
+
+          // Extract vehicles array
+          const vehicles = Array.isArray(doc.vehicles)
+            ? doc.vehicles.map((v: any) => v.vehicle).filter(Boolean)
+            : []
+
+          if (operation === 'create') {
+            // Create new user in users table
+            const { data: userData, error: userError } = await supabase
+              .from('users')
+              .insert({
+                name: doc.displayName || `${doc.firstName} ${doc.lastName}`,
+                email: doc.email,
+                display_name: doc.displayName,
+                first_name: doc.firstName,
+                last_name: doc.lastName,
+                phone: doc.phone,
+                employment_status: doc.status,
+                hire_date: doc.hireDate,
+                role: 'user', // CMS role default
+              })
+              .select()
+              .single()
+
+            if (userError) {
+              console.error('Error creating user in users table:', userError)
+              return
+            }
+
+            // Create directory entry
+            const { error: dirError } = await supabase
+              .from('directory')
+              .insert({
+                user_id: userData.id,
+                role: doc.role,
+                department: doc.department,
+                priority: doc.priority ?? 999,
+                is_active: doc.showOnTeamPage && doc.status === 'active',
+                photo_url: photoUrl,
+                vehicles: vehicles,
+              })
+
+            if (dirError) {
+              console.error('Error creating directory entry:', dirError)
+            } else {
+              console.log(`Synced new team member to directory: ${doc.displayName}`)
+            }
+          } else if (operation === 'update') {
+            // Find the corresponding user by email or name
+            const { data: existingUser } = await supabase
+              .from('users')
+              .select('id')
+              .eq('email', doc.email)
+              .single()
+
+            if (existingUser) {
+              // Update users table
+              await supabase
+                .from('users')
+                .update({
+                  name: doc.displayName || `${doc.firstName} ${doc.lastName}`,
+                  display_name: doc.displayName,
+                  first_name: doc.firstName,
+                  last_name: doc.lastName,
+                  phone: doc.phone,
+                  employment_status: doc.status,
+                  hire_date: doc.hireDate,
+                })
+                .eq('id', existingUser.id)
+
+              // Update directory table
+              await supabase
+                .from('directory')
+                .update({
+                  role: doc.role,
+                  department: doc.department,
+                  priority: doc.priority ?? 999,
+                  is_active: doc.showOnTeamPage && doc.status === 'active',
+                  photo_url: photoUrl,
+                  vehicles: vehicles,
+                })
+                .eq('user_id', existingUser.id)
+
+              console.log(`Synced team member update to directory: ${doc.displayName}`)
+            }
+          }
+        } catch (error) {
+          console.error('Error syncing team member to directory:', error)
+        }
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        try {
+          const supabase = getSupabaseServerClient()
+
+          // Mark as inactive in directory instead of deleting
+          const { data: existingUser } = await supabase
+            .from('users')
+            .select('id')
+            .eq('email', doc.email)
+            .single()
+
+          if (existingUser) {
+            await supabase
+              .from('directory')
+              .update({
+                is_active: false,
+              })
+              .eq('user_id', existingUser.id)
+
+            await supabase
+              .from('users')
+              .update({
+                employment_status: 'terminated',
+              })
+              .eq('id', existingUser.id)
+
+            console.log(`Marked team member as inactive in directory: ${doc.displayName}`)
+          }
+        } catch (error) {
+          console.error('Error marking team member as inactive:', error)
+        }
+      },
+    ],
   },
   access: {
     // Public can read active team members shown on team page
@@ -21,7 +159,7 @@ export const TeamMembers: CollectionConfig = {
             },
           },
           {
-            employmentStatus: {
+            status: {
               equals: 'active',
             },
           },
@@ -91,13 +229,13 @@ export const TeamMembers: CollectionConfig = {
               name: 'showOnTeamPage',
               type: 'checkbox',
               label: 'Show on Team Page',
-              defaultValue: false,
+              defaultValue: true,
               admin: {
                 description: 'Display this person on the public "Our Drivers" team page',
               },
             },
             {
-              name: 'departmentRole',
+              name: 'role',
               type: 'select',
               label: 'Department Role',
               options: [
@@ -105,9 +243,9 @@ export const TeamMembers: CollectionConfig = {
                 { label: 'Dispatcher', value: 'Dispatcher' },
                 { label: 'Driver', value: 'Driver' },
               ],
+              required: true,
               admin: {
                 description: 'Role shown on the team page (Owner, Dispatcher, or Driver)',
-                condition: (data) => data.showOnTeamPage === true,
               },
             },
             {
@@ -117,7 +255,6 @@ export const TeamMembers: CollectionConfig = {
               label: 'Profile Photo',
               admin: {
                 description: 'Photo displayed on the team page',
-                condition: (data) => data.showOnTeamPage === true,
               },
             },
             {
@@ -126,13 +263,15 @@ export const TeamMembers: CollectionConfig = {
               label: 'Assigned Vehicles',
               admin: {
                 description: 'Vehicles this person drives',
-                condition: (data) => data.showOnTeamPage === true,
               },
               fields: [
                 {
                   name: 'vehicle',
                   type: 'text',
                   required: true,
+                  admin: {
+                    placeholder: 'e.g., Cadillac Escalade, Mercedes Sprinter',
+                  },
                 },
               ],
             },
@@ -143,7 +282,6 @@ export const TeamMembers: CollectionConfig = {
               defaultValue: 999,
               admin: {
                 description: 'Lower numbers appear first (0 = highest priority)',
-                condition: (data) => data.showOnTeamPage === true,
               },
             },
           ],
@@ -152,7 +290,7 @@ export const TeamMembers: CollectionConfig = {
           label: 'Employment',
           fields: [
             {
-              name: 'employmentStatus',
+              name: 'status',
               type: 'select',
               label: 'Employment Status',
               options: [
@@ -170,6 +308,14 @@ export const TeamMembers: CollectionConfig = {
               label: 'Hire Date',
               admin: {
                 description: 'Date this person was hired',
+              },
+            },
+            {
+              name: 'department',
+              type: 'text',
+              label: 'Department',
+              admin: {
+                description: 'Optional department classification',
               },
             },
           ],

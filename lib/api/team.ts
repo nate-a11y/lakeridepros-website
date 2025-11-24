@@ -1,6 +1,5 @@
 import { getPayload } from 'payload';
 import config from '@payload-config';
-import type { TeamMember as TeamMemberType } from '@/src/payload-types';
 
 // Team member type definition
 export interface TeamMember {
@@ -34,7 +33,7 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
             },
           },
           {
-            employmentStatus: {
+            status: {
               equals: 'active',
             },
           },
@@ -69,8 +68,8 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
         name: member.displayName || `${member.firstName || ''} ${member.lastName || ''}`.trim() || 'Unknown',
         displayName: member.displayName,
         email: member.email || '',
-        role: member.departmentRole || '',
-        departmentRole: member.departmentRole,
+        role: member.role || '',
+        departmentRole: member.role,
         photoUrl,
         vehicles,
         isActive: true, // Already filtered in query

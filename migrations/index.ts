@@ -4,6 +4,7 @@ import * as migration_20251111_214800_add_locked_documents from './20251111_2148
 import * as migration_20251112_remove_old_collections from './20251112_remove_old_collections';
 import * as migration_20250116_add_point_to_point_pricing from './20250116_add_point_to_point_pricing';
 import * as migration_20251117_add_partner_promotion_fields from './20251117_add_partner_promotion_fields';
+import * as migration_20250124_add_team_members_collection from './20250124_add_team_members_collection';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20251117_add_partner_promotion_fields.up,
     down: migration_20251117_add_partner_promotion_fields.down,
     name: '20251117_add_partner_promotion_fields'
+  },
+  {
+    up: migration_20250124_add_team_members_collection.up,
+    down: migration_20250124_add_team_members_collection.down,
+    name: '20250124_add_team_members_collection'
   },
 ];

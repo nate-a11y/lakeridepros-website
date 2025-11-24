@@ -39,11 +39,11 @@ export const TeamMembers: CollectionConfig = {
                 employment_status: doc.status,
                 hire_date: doc.hireDate,
                 role: 'user', // CMS role default
-              })
+              } as any)
               .select()
               .single()
 
-            if (userError) {
+            if (userError || !userData) {
               console.error('Error creating user in users table:', userError)
               return
             }
@@ -52,14 +52,14 @@ export const TeamMembers: CollectionConfig = {
             const { error: dirError } = await supabase
               .from('directory')
               .insert({
-                user_id: userData.id,
+                user_id: (userData as any).id,
                 role: doc.role,
                 department: doc.department,
                 priority: doc.priority ?? 999,
                 is_active: doc.showOnTeamPage && doc.status === 'active',
                 photo_url: photoUrl,
                 vehicles: vehicles,
-              })
+              } as any)
 
             if (dirError) {
               console.error('Error creating directory entry:', dirError)
@@ -76,31 +76,25 @@ export const TeamMembers: CollectionConfig = {
 
             if (existingUser) {
               // Update users table
-              await supabase
-                .from('users')
-                .update({
-                  name: doc.displayName || `${doc.firstName} ${doc.lastName}`,
-                  display_name: doc.displayName,
-                  first_name: doc.firstName,
-                  last_name: doc.lastName,
-                  phone: doc.phone,
-                  employment_status: doc.status,
-                  hire_date: doc.hireDate,
-                })
-                .eq('id', existingUser.id)
+              await ((supabase.from('users') as any).update({
+                name: doc.displayName || `${doc.firstName} ${doc.lastName}`,
+                display_name: doc.displayName,
+                first_name: doc.firstName,
+                last_name: doc.lastName,
+                phone: doc.phone,
+                employment_status: doc.status,
+                hire_date: doc.hireDate,
+              }).eq('id', (existingUser as any).id))
 
               // Update directory table
-              await supabase
-                .from('directory')
-                .update({
-                  role: doc.role,
-                  department: doc.department,
-                  priority: doc.priority ?? 999,
-                  is_active: doc.showOnTeamPage && doc.status === 'active',
-                  photo_url: photoUrl,
-                  vehicles: vehicles,
-                })
-                .eq('user_id', existingUser.id)
+              await ((supabase.from('directory') as any).update({
+                role: doc.role,
+                department: doc.department,
+                priority: doc.priority ?? 999,
+                is_active: doc.showOnTeamPage && doc.status === 'active',
+                photo_url: photoUrl,
+                vehicles: vehicles,
+              }).eq('user_id', (existingUser as any).id))
 
               console.log(`Synced team member update to directory: ${doc.displayName}`)
             }
@@ -123,19 +117,13 @@ export const TeamMembers: CollectionConfig = {
             .single()
 
           if (existingUser) {
-            await supabase
-              .from('directory')
-              .update({
-                is_active: false,
-              })
-              .eq('user_id', existingUser.id)
+            await ((supabase.from('directory') as any).update({
+              is_active: false,
+            }).eq('user_id', (existingUser as any).id))
 
-            await supabase
-              .from('users')
-              .update({
-                employment_status: 'terminated',
-              })
-              .eq('id', existingUser.id)
+            await ((supabase.from('users') as any).update({
+              employment_status: 'terminated',
+            }).eq('id', (existingUser as any).id))
 
             console.log(`Marked team member as inactive in directory: ${doc.displayName}`)
           }

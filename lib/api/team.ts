@@ -34,8 +34,8 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
   try {
     const supabase = getSupabaseClient();
 
-    // First, try to get directory entries with user info using a different approach
     // Query directory table and join with users table
+    // We'll filter is_active in JavaScript to handle both boolean and string values
     const { data, error } = await supabase
       .from('directory')
       .select(`
@@ -57,7 +57,6 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
           employment_status
         )
       `)
-      .eq('is_active', true)
       .eq('users.employment_status', 'active')
       .order('priority', { ascending: true });
 
@@ -76,9 +75,15 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
 
     // Transform the data to our TeamMember interface
     const teamMembers: TeamMember[] = data
+      .filter((directory: any) => {
+        // Handle is_active being boolean, string, or null
+        const isActive = directory.is_active === true ||
+                        directory.is_active === 'true' ||
+                        directory.is_active === 't';
+        return isActive && directory.users;
+      })
       .map((directory: any) => {
         const user = directory.users;
-        if (!user) return null;
 
         return {
           id: user.id.toString(),
@@ -89,11 +94,10 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
           departmentRole: directory.role,
           photoUrl: directory.photo_url,
           vehicles: directory.vehicles || [],
-          isActive: directory.is_active ?? true,
-          priority: directory.priority ?? 0,
+          isActive: true, // Already filtered above
+          priority: directory.priority ?? 999,
         };
-      })
-      .filter((member): member is TeamMember => member !== null);
+      });
 
     return teamMembers;
   } catch (error) {

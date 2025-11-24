@@ -126,11 +126,15 @@ const config = buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || process.env.SERVER_URL || 'http://localhost:3000',
   cors: [
     process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
+    'https://www.lakeridepros.com',
+    'https://lakeridepros.com',
     'https://lakeridepros-website.vercel.app',
     'http://localhost:3000',
   ].filter(Boolean) as string[],
   csrf: [
     process.env.NEXT_PUBLIC_SERVER_URL || process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com',
+    'https://www.lakeridepros.com',
+    'https://lakeridepros.com',
     'https://lakeridepros-website.vercel.app',
     'http://localhost:3000',
   ].filter(Boolean) as string[],

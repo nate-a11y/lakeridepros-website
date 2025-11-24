@@ -43,7 +43,7 @@ export const TeamMembers: CollectionConfig = {
               .select()
               .single()
 
-            if (userError) {
+            if (userError || !userData) {
               console.error('Error creating user in users table:', userError)
               return
             }

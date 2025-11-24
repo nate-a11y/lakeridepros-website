@@ -171,20 +171,19 @@ export const TeamMembers: CollectionConfig = {
       type: 'text',
       label: 'First Name',
       required: true,
+      defaultValue: '',
     },
     {
       name: 'lastName',
       type: 'text',
       label: 'Last Name',
       required: true,
+      defaultValue: '',
     },
     {
       name: 'displayName',
       type: 'text',
       label: 'Display Name',
-      admin: {
-        description: 'Name shown on the website (defaults to First + Last name if not set)',
-      },
     },
     {
       name: 'email',
@@ -206,22 +205,28 @@ export const TeamMembers: CollectionConfig = {
         { label: 'Driver', value: 'Driver' },
       ],
       required: true,
+      defaultValue: 'Driver',
     },
     {
       name: 'photo',
       type: 'upload',
       relationTo: 'media',
       label: 'Profile Photo',
+      required: false,
+      filterOptions: {
+        mimeType: { contains: 'image' },
+      },
     },
     {
       name: 'vehicles',
       type: 'array',
       label: 'Assigned Vehicles',
+      required: false,
       fields: [
         {
           name: 'vehicle',
           type: 'text',
-          required: true,
+          required: false,
         },
       ],
     },
@@ -236,9 +241,6 @@ export const TeamMembers: CollectionConfig = {
       type: 'number',
       label: 'Display Priority',
       defaultValue: 999,
-      admin: {
-        description: 'Lower numbers appear first (0 = highest priority)',
-      },
     },
     {
       name: 'status',
@@ -257,11 +259,13 @@ export const TeamMembers: CollectionConfig = {
       name: 'hireDate',
       type: 'date',
       label: 'Hire Date',
+      required: false,
     },
     {
       name: 'department',
       type: 'text',
       label: 'Department',
+      required: false,
     },
   ],
 }

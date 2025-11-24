@@ -52,7 +52,7 @@ export const TeamMembers: CollectionConfig = {
             const { error: dirError } = await supabase
               .from('directory')
               .insert({
-                user_id: userData.id,
+                user_id: (userData as any).id,
                 role: doc.role,
                 department: doc.department,
                 priority: doc.priority ?? 999,

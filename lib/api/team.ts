@@ -58,10 +58,12 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
         photoUrl = member.photo.url as string;
       }
 
+      // TEMPORARILY DISABLED - vehicles field removed for testing
       // Get vehicles array
-      const vehicles = Array.isArray(member.vehicles)
-        ? member.vehicles.map((v: any) => v.vehicle).filter(Boolean)
-        : [];
+      // const vehicles = Array.isArray(member.vehicles)
+      //   ? member.vehicles.map((v: any) => v.vehicle).filter(Boolean)
+      //   : [];
+      const vehicles: string[] = [];
 
       return {
         id: member.id.toString(),

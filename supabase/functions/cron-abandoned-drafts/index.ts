@@ -6,7 +6,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 
-const SEND_EMAIL_URL = Deno.env.get('SUPABASE_URL')! + '/functions/v1/send-email'
+const SEND_EMAIL_URL = Deno.env.get('SUPABASE_URL')! + '/functions/v1/send-email-website'
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -219,7 +219,7 @@ serve(async (req) => {
           },
           body: JSON.stringify({
             to: draft.email,
-            from: 'noreply@updates.lakeridepros.com',
+            from: 'noreply@send.updates.lakeridepros.com',
             replyTo: 'contactus@lakeridepros.com',
             subject: 'Complete Your Driver Application - Lake Ride Pros',
             html: htmlContent

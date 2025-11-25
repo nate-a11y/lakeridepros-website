@@ -77,7 +77,7 @@ describe('Email Functions', () => {
         expect.objectContaining({
           to: 'customer@example.com',
           subject: 'Order Confirmation - ORD-123456',
-          from: 'Lake Ride Pros <hello@updates.lakeridepros.com>',
+          from: 'Lake Ride Pros <contactus@send.updates.lakeridepros.com>',
           replyTo: 'contactus@lakeridepros.com',
         })
       )

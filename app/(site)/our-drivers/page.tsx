@@ -129,7 +129,7 @@ export default async function OurDriversPage() {
                           {driver.vehicles.map((vehicle) => (
                             <span
                               key={vehicle}
-                              className="inline-block px-2 py-0.5 text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full"
+                              className="inline-block px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light rounded-full"
                             >
                               {vehicle
                                 .split('_')

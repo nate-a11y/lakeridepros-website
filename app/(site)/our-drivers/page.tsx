@@ -83,7 +83,7 @@ export default async function OurDriversPage() {
               {drivers.map((driver) => {
                 const imageUrl = getDriverImageUrl(driver);
                 const roleLabel = getDriverRoleLabel(driver.role);
-                const isOwner = driver.role === 'owner';
+                const isOwner = driver.role && driver.role.includes('owner');
 
                 // Format name as "First L."
                 const nameParts = driver.name.trim().split(/\s+/);

@@ -20,6 +20,7 @@ import { Products } from '../collections/Products'
 import { GiftCards } from '../collections/GiftCards'
 import { Orders } from '../collections/Orders'
 import { Partners } from '../collections/Partners'
+import { Directory } from '../collections/Directory'
 import { supabaseAdapter } from '../lib/supabase-adapter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -109,7 +110,7 @@ const config = buildConfig({
       beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
   },
-  collections: [BlogPosts, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, Testimonials, Users, Vehicles],
+  collections: [BlogPosts, Directory, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, Testimonials, Users, Vehicles],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

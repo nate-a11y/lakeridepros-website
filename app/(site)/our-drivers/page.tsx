@@ -95,7 +95,7 @@ export default async function OurDriversPage() {
                           src={imageUrl}
                           alt={driver.media?.alt || `${driver.name} - ${roleLabel}`}
                           fill
-                          className="object-cover"
+                          className="object-contain"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                         />
                       ) : (
@@ -114,9 +114,24 @@ export default async function OurDriversPage() {
                       <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-1">
                         {driver.name}
                       </h3>
-                      <p className="text-sm font-medium text-primary dark:text-primary-light mb-3">
+                      <p className="text-sm font-medium text-primary dark:text-primary-light mb-2">
                         {roleLabel}
                       </p>
+                      {driver.vehicles && driver.vehicles.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {driver.vehicles.map((vehicle) => (
+                            <span
+                              key={vehicle}
+                              className="inline-block px-2 py-0.5 text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full"
+                            >
+                              {vehicle
+                                .split('_')
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(' ')}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       {driver.bio && (
                         <p className="text-lrp-text-secondary dark:text-dark-text-secondary text-sm line-clamp-4">
                           {driver.bio}

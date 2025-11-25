@@ -170,3 +170,88 @@ export function getDriverRoleLabel(role: Driver['role']): string {
       return 'Team Member'
   }
 }
+
+/**
+ * Fetch a single driver by ID
+ * Only returns if active = true AND display_on_website = true
+ */
+export async function getDriverById(id: string): Promise<Driver | null> {
+  try {
+    const supabase = getSupabaseServerClient()
+
+    const { data, error } = await supabase
+      .from('drivers')
+      .select(`
+        id,
+        name,
+        email,
+        phone,
+        active,
+        role,
+        portal_role,
+        priority,
+        vehicles,
+        availability_hours,
+        bio,
+        display_on_website,
+        notes,
+        created_at,
+        updated_at,
+        image_id,
+        media:image_id (
+          id,
+          url,
+          alt,
+          filename
+        )
+      `)
+      .eq('id', id)
+      .eq('active', true)
+      .eq('display_on_website', true)
+      .single()
+
+    if (error || !data) {
+      console.error('[Supabase Drivers] Error fetching driver by ID:', error)
+      return null
+    }
+
+    const row = data as unknown as DriverRow
+    return {
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      phone: row.phone,
+      active: row.active,
+      role: row.role as Driver['role'],
+      portal_role: row.portal_role as Driver['portal_role'],
+      priority: row.priority,
+      vehicles: row.vehicles,
+      availability_hours: row.availability_hours,
+      bio: row.bio,
+      display_on_website: row.display_on_website,
+      notes: row.notes,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
+      image_id: row.image_id,
+      media: row.media,
+    }
+  } catch (error) {
+    console.error('[Supabase Drivers] Exception fetching driver by ID:', error)
+    return null
+  }
+}
+
+/**
+ * Format driver name for display
+ * For owners: full name
+ * For others: First name + last initial (e.g., "John S.")
+ */
+export function formatDriverDisplayName(driver: Driver): string {
+  if (driver.role === 'owner') {
+    return driver.name
+  }
+  const nameParts = driver.name.trim().split(/\s+/)
+  return nameParts.length > 1
+    ? `${nameParts[0]} ${nameParts[nameParts.length - 1].charAt(0)}.`
+    : nameParts[0]
+}

@@ -82,6 +82,13 @@ export default async function OurDriversPage() {
               {drivers.map((driver) => {
                 const imageUrl = getDriverImageUrl(driver);
                 const roleLabel = getDriverRoleLabel(driver.role);
+                const isOwner = driver.role === 'owner';
+
+                // Format name as "First L."
+                const nameParts = driver.name.trim().split(/\s+/);
+                const displayName = nameParts.length > 1
+                  ? `${nameParts[0]} ${nameParts[nameParts.length - 1].charAt(0)}.`
+                  : nameParts[0];
 
                 return (
                   <div
@@ -93,7 +100,7 @@ export default async function OurDriversPage() {
                       {imageUrl ? (
                         <Image
                           src={imageUrl}
-                          alt={driver.media?.alt || `${driver.name} - ${roleLabel}`}
+                          alt={driver.media?.alt || `${displayName} - ${roleLabel}`}
                           fill
                           className="object-contain"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
@@ -112,7 +119,7 @@ export default async function OurDriversPage() {
                     {/* Driver Info */}
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-1">
-                        {driver.name}
+                        {isOwner ? driver.name : displayName}
                       </h3>
                       <p className="text-sm font-medium text-primary dark:text-primary-light mb-2">
                         {roleLabel}
@@ -122,7 +129,7 @@ export default async function OurDriversPage() {
                           {driver.vehicles.map((vehicle) => (
                             <span
                               key={vehicle}
-                              className="inline-block px-2 py-0.5 text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full"
+                              className="inline-block px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light rounded-full"
                             >
                               {vehicle
                                 .split('_')
@@ -136,6 +143,26 @@ export default async function OurDriversPage() {
                         <p className="text-lrp-text-secondary dark:text-dark-text-secondary text-sm line-clamp-4">
                           {driver.bio}
                         </p>
+                      )}
+                      {isOwner && (driver.phone || driver.email) && (
+                        <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700 space-y-1">
+                          {driver.phone && (
+                            <a
+                              href={`tel:${driver.phone}`}
+                              className="block text-sm text-lrp-text-secondary dark:text-dark-text-secondary hover:text-primary dark:hover:text-primary-light transition-colors"
+                            >
+                              {driver.phone}
+                            </a>
+                          )}
+                          {driver.email && (
+                            <a
+                              href={`mailto:${driver.email}`}
+                              className="block text-sm text-lrp-text-secondary dark:text-dark-text-secondary hover:text-primary dark:hover:text-primary-light transition-colors truncate"
+                            >
+                              {driver.email}
+                            </a>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>

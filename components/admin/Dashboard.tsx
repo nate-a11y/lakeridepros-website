@@ -18,18 +18,20 @@ interface CollectionStats {
   color: string
 }
 
+// NOTE: Icons are rendered client-side only to avoid hydration mismatches
+// (emoji characters can render differently on server vs browser)
 const collections = [
-  { name: 'Services', icon: '🚗', slug: 'services', color: BRAND_COLORS.primary },
-  { name: 'Vehicles', icon: '🚙', slug: 'vehicles', color: BRAND_COLORS.light },
-  { name: 'Partners', icon: '🤝', slug: 'partners', color: BRAND_COLORS.primary },
-  { name: 'Testimonials', icon: '⭐', slug: 'testimonials', color: BRAND_COLORS.light },
-  { name: 'Products', icon: '🛍️', slug: 'products', color: BRAND_COLORS.primary },
-  { name: 'Gift Cards', icon: '🎁', slug: 'gift-cards', color: BRAND_COLORS.light },
-  { name: 'Orders', icon: '📦', slug: 'orders', color: BRAND_COLORS.primary },
-  { name: 'Blog Posts', icon: '📝', slug: 'blog-posts', color: BRAND_COLORS.light },
-  { name: 'Pages', icon: '📄', slug: 'pages', color: BRAND_COLORS.primary },
-  { name: 'Media', icon: '🖼️', slug: 'media', color: BRAND_COLORS.light },
-  { name: 'Users', icon: '👥', slug: 'users', color: BRAND_COLORS.primary },
+  { name: 'Services', icon: '\u{1F697}', slug: 'services', color: BRAND_COLORS.primary },
+  { name: 'Vehicles', icon: '\u{1F699}', slug: 'vehicles', color: BRAND_COLORS.light },
+  { name: 'Partners', icon: '\u{1F91D}', slug: 'partners', color: BRAND_COLORS.primary },
+  { name: 'Testimonials', icon: '\u{2B50}', slug: 'testimonials', color: BRAND_COLORS.light },
+  { name: 'Products', icon: '\u{1F6CD}\u{FE0F}', slug: 'products', color: BRAND_COLORS.primary },
+  { name: 'Gift Cards', icon: '\u{1F381}', slug: 'gift-cards', color: BRAND_COLORS.light },
+  { name: 'Orders', icon: '\u{1F4E6}', slug: 'orders', color: BRAND_COLORS.primary },
+  { name: 'Blog Posts', icon: '\u{1F4DD}', slug: 'blog-posts', color: BRAND_COLORS.light },
+  { name: 'Pages', icon: '\u{1F4C4}', slug: 'pages', color: BRAND_COLORS.primary },
+  { name: 'Media', icon: '\u{1F5BC}\u{FE0F}', slug: 'media', color: BRAND_COLORS.light },
+  { name: 'Users', icon: '\u{1F465}', slug: 'users', color: BRAND_COLORS.primary },
 ]
 
 interface SyncStatus {
@@ -47,12 +49,16 @@ export const Dashboard: React.FC = () => {
   const [syncMessage, setSyncMessage] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
 
-  // Prevent hydration mismatch by only rendering dates client-side
+  // Prevent hydration mismatch by only rendering client-specific content after mount
+  // This ensures server HTML matches initial client render
   useEffect(() => {
     setMounted(true)
   }, [])
 
   useEffect(() => {
+    // Only fetch data after component is mounted
+    if (!mounted) return
+
     const fetchStats = async () => {
       try {
         setLoading(true)
@@ -104,9 +110,12 @@ export const Dashboard: React.FC = () => {
     }
 
     fetchStats()
-  }, [])
+  }, [mounted])
 
   useEffect(() => {
+    // Only fetch data after component is mounted
+    if (!mounted) return
+
     const fetchSyncStatus = async () => {
       try {
         const response = await fetch('/api/sync-google-reviews', {
@@ -122,7 +131,7 @@ export const Dashboard: React.FC = () => {
     }
 
     fetchSyncStatus()
-  }, [])
+  }, [mounted])
 
   const handleSyncGoogleReviews = async () => {
     setSyncing(true)
@@ -140,17 +149,29 @@ export const Dashboard: React.FC = () => {
       const data = await response.json()
 
       if (response.ok) {
-        setSyncMessage(`✅ ${data.message} (Created: ${data.stats.created}, Updated: ${data.stats.updated}, Skipped: ${data.stats.skipped})`)
+        setSyncMessage(`Success: ${data.message} (Created: ${data.stats.created}, Updated: ${data.stats.updated}, Skipped: ${data.stats.skipped})`)
         // Refresh stats
         window.location.reload()
       } else {
-        setSyncMessage(`❌ ${data.error || 'Sync failed'}`)
+        setSyncMessage(`Error: ${data.error || 'Sync failed'}`)
       }
     } catch (err) {
-      setSyncMessage(`❌ Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
+      setSyncMessage(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
     } finally {
       setSyncing(false)
     }
+  }
+
+  // Show loading state until mounted to prevent hydration issues with emojis/dynamic content
+  if (!mounted) {
+    return (
+      <div className="dashboard-container">
+        <div className="dashboard-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading dashboard...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -177,7 +198,7 @@ export const Dashboard: React.FC = () => {
       {!loading && !error && (
         <div className="dashboard-stats-overview">
           <div className="stat-card">
-            <div className="stat-icon">🚀</div>
+            <div className="stat-icon" suppressHydrationWarning>{'\u{1F680}'}</div>
             <div className="stat-content">
               <div className="stat-value">
                 {stats.find(s => s.slug === 'services')?.count || 0}
@@ -186,7 +207,7 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">🚙</div>
+            <div className="stat-icon" suppressHydrationWarning>{'\u{1F699}'}</div>
             <div className="stat-content">
               <div className="stat-value">
                 {stats.find(s => s.slug === 'vehicles')?.count || 0}
@@ -195,7 +216,7 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">📦</div>
+            <div className="stat-icon" suppressHydrationWarning>{'\u{1F4E6}'}</div>
             <div className="stat-content">
               <div className="stat-value">
                 {stats.find(s => s.slug === 'orders')?.count || 0}
@@ -204,7 +225,7 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">🛍️</div>
+            <div className="stat-icon" suppressHydrationWarning>{'\u{1F6CD}\u{FE0F}'}</div>
             <div className="stat-content">
               <div className="stat-value">
                 {stats.find(s => s.slug === 'products')?.count || 0}
@@ -221,7 +242,7 @@ export const Dashboard: React.FC = () => {
           <h2 className="section-title">Google Business Profile Integration</h2>
           <div className="sync-card">
             <div className="sync-header">
-              <div className="sync-icon">⭐</div>
+              <div className="sync-icon" suppressHydrationWarning>{'\u{2B50}'}</div>
               <div>
                 <h3 className="sync-title">Google Reviews Sync</h3>
                 <p className="sync-description">
@@ -235,7 +256,7 @@ export const Dashboard: React.FC = () => {
                 <>
                   <div className="sync-stat">
                     <span className="sync-stat-label">Status:</span>
-                    <span className="sync-stat-value status-active">✅ Configured</span>
+                    <span className="sync-stat-value status-active">Configured</span>
                   </div>
                   <div className="sync-stat">
                     <span className="sync-stat-label">Google Reviews:</span>
@@ -244,8 +265,8 @@ export const Dashboard: React.FC = () => {
                   {syncStatus.lastSync && (
                     <div className="sync-stat">
                       <span className="sync-stat-label">Last Sync:</span>
-                      <span className="sync-stat-value">
-                        {mounted ? new Date(syncStatus.lastSync).toLocaleString() : 'Loading...'}
+                      <span className="sync-stat-value" suppressHydrationWarning>
+                        {new Date(syncStatus.lastSync).toLocaleString()}
                       </span>
                     </div>
                   )}
@@ -253,13 +274,13 @@ export const Dashboard: React.FC = () => {
               ) : (
                 <div className="sync-stat">
                   <span className="sync-stat-label">Status:</span>
-                  <span className="sync-stat-value status-inactive">⚠️ Not Configured</span>
+                  <span className="sync-stat-value status-inactive">Not Configured</span>
                 </div>
               )}
             </div>
 
             {syncMessage && (
-              <div className={`sync-message ${syncMessage.includes('✅') ? 'success' : 'error'}`}>
+              <div className={`sync-message ${syncMessage.startsWith('Success') ? 'success' : 'error'}`}>
                 {syncMessage}
               </div>
             )}
@@ -270,7 +291,7 @@ export const Dashboard: React.FC = () => {
                 disabled={!syncStatus.configured || syncing}
                 className="dashboard-btn dashboard-btn-primary"
               >
-                {syncing ? '⏳ Syncing...' : '🔄 Sync Reviews Now'}
+                {syncing ? 'Syncing...' : 'Sync Reviews Now'}
               </button>
               {!syncStatus.configured && (
                 <p className="sync-help-text">
@@ -315,7 +336,7 @@ export const Dashboard: React.FC = () => {
                 style={{ '--card-color': collection.color } as React.CSSProperties}
               >
                 <div className="collection-card-header">
-                  <div className="collection-icon">{collection.icon}</div>
+                  <div className="collection-icon" suppressHydrationWarning>{collection.icon}</div>
                   <h3 className="collection-name">{collection.name}</h3>
                 </div>
 

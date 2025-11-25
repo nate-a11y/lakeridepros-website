@@ -424,7 +424,9 @@ export async function sendOwnerGiftCardNotification(
   recipientName: string | null,
   recipientEmail: string | null,
   deliveryMethod?: string,
-  scheduledDate?: string | null
+  scheduledDate?: string | null,
+  purchaseAmount?: number, // Original purchase amount (if promo)
+  bonusAmount?: number // Bonus amount (if promo)
 ) {
   try {
     const resend = getResend()
@@ -436,10 +438,26 @@ export async function sendOwnerGiftCardNotification(
           : 'Immediate delivery')
       : 'Physical card - pending fulfillment'
 
+    const isPromotion = purchaseAmount !== undefined && bonusAmount !== undefined && bonusAmount > 0
+    const promoSection = isPromotion ? `
+      <div style="background-color: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin: 15px 0;">
+        <p style="color: #856404; margin: 0; font-weight: bold;">
+          🎉 HOLIDAY BONUS PROMOTION
+        </p>
+        <p style="color: #856404; margin: 5px 0 0 0;">
+          Customer paid: $${purchaseAmount?.toFixed(2)}<br>
+          Bonus added: +$${bonusAmount?.toFixed(2)}<br>
+          <strong>Total card value: $${amount.toFixed(2)}</strong>
+        </p>
+      </div>
+    ` : ''
+
     const content = `
       <p style="font-size: 32px; font-weight: 700; color: #4cbb17; text-align: center; margin: 20px 0;">
         $${amount.toFixed(2)}
       </p>
+
+      ${promoSection}
 
       <div class="section">
         <h3>Gift Card Details</h3>
@@ -477,11 +495,15 @@ export async function sendOwnerGiftCardNotification(
       </p>
     `
 
+    const subjectLine = isPromotion
+      ? `🎁 New Gift Card Purchase - $${amount.toFixed(2)} (Holiday Bonus: $${bonusAmount?.toFixed(2)} added!)`
+      : `🎁 New Gift Card Purchase - $${amount.toFixed(2)}`
+
     const { data, error } = await resend.emails.send({
       from: 'Lake Ride Pros <hello@updates.lakeridepros.com>',
       replyTo: purchaserEmail,
       to: 'owners@lakeridepros.com',
-      subject: `🎁 New Gift Card Purchase - $${amount.toFixed(2)}`,
+      subject: subjectLine,
       html: getEmailTemplate('🎁 New Gift Card Purchase', content),
     })
 

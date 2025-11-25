@@ -6,7 +6,7 @@
 
 import { logNotification } from './notification-logger'
 
-const SEND_EMAIL_URL = 'https://dhwnlzborisjihhauchp.supabase.co/functions/v1/send-email'
+const SEND_EMAIL_URL = `${process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-email`
 
 export interface ApplicationConfirmationData {
   applicationId: string

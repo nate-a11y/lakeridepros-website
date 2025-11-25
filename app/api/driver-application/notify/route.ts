@@ -9,7 +9,7 @@ import { sendApplicationConfirmation } from '@/lib/notifications/send-applicatio
 import { sendAdminNotification } from '@/lib/notifications/send-admin-notification'
 import { getSupabaseServerClient } from '@/lib/supabase/client'
 
-const SMS_FUNCTION_URL = 'https://dhwnlzborisjihhauchp.supabase.co/functions/v1/send-sms'
+const SMS_FUNCTION_URL = `${process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-sms`
 
 export async function POST(request: NextRequest) {
   try {

@@ -6,7 +6,7 @@
 import { logNotification } from './notification-logger'
 import { generateResumeUrl } from '@/lib/resume-link'
 
-const SEND_EMAIL_URL = 'https://dhwnlzborisjihhauchp.supabase.co/functions/v1/send-email'
+const SEND_EMAIL_URL = `${process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-email`
 
 export interface DraftReminderData {
   applicationId: string
@@ -149,11 +149,14 @@ export async function sendDraftReminder(
         'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`
       },
       body: JSON.stringify({
-        to: data.email,
-        from: 'noreply@updates.lakeridepros.com',
-        replyTo: 'contactus@lakeridepros.com',
-        subject: 'Complete Your Driver Application - Lake Ride Pros',
-        html: htmlContent
+        operation: 'sendNotificationEmail',
+        params: {
+          to: data.email,
+          subject: 'Complete Your Driver Application - Lake Ride Pros',
+          message: `Complete your driver application with Lake Ride Pros. Application ID: ${data.applicationId}`,
+          html: htmlContent,
+          replyTo: 'contactus@lakeridepros.com'
+        }
       })
     })
 

@@ -114,6 +114,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
       dropdownItems: serviceDropdownItems,
     },
     { name: 'Fleet', href: '/fleet' },
+    { name: 'Our Team', href: '/our-drivers' },
     { name: 'Pricing', href: '/pricing' },
     {
       name: 'Partners',

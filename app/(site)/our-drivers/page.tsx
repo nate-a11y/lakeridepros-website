@@ -99,7 +99,7 @@ export default async function OurDriversPage() {
                     {/* Driver Image - Clickable */}
                     <Link
                       href={`/our-drivers/${driver.id}`}
-                      className="block relative aspect-square bg-gradient-to-br from-primary/10 to-primary/5"
+                      className="block relative w-full aspect-square bg-gradient-to-br from-primary/10 to-primary/5"
                     >
                       {imageUrl ? (
                         <Image

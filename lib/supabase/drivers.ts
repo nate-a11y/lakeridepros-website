@@ -80,7 +80,22 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
 
     // Transform the data to match our Driver interface
     const drivers: Driver[] = (data || []).map((driver) => ({
-      ...driver,
+      id: driver.id,
+      name: driver.name,
+      email: driver.email,
+      phone: driver.phone,
+      active: driver.active,
+      role: driver.role as Driver['role'],
+      portal_role: driver.portal_role as Driver['portal_role'],
+      priority: driver.priority,
+      vehicles: driver.vehicles,
+      availability_hours: driver.availability_hours,
+      bio: driver.bio,
+      display_on_website: driver.display_on_website,
+      notes: driver.notes,
+      created_at: driver.created_at,
+      updated_at: driver.updated_at,
+      image_id: driver.image_id,
       media: driver.media as DriverMedia | null,
     }))
 

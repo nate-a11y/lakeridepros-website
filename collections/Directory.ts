@@ -21,7 +21,7 @@ export const Directory: CollectionConfig = {
     delete: ({ req: { user } }) => !!user && user.role === 'admin',
   },
   fields: [
-    // Relationship to Users collection - this is the key field that links the two tables
+    // Relationship to Users collection - Payload auto-creates user_id column
     {
       name: 'user',
       type: 'relationship',
@@ -32,8 +32,6 @@ export const Directory: CollectionConfig = {
       admin: {
         description: 'The user account associated with this directory entry',
       },
-      // Map to the existing 'user_id' column in the database
-      dbName: 'user_id',
     },
     {
       name: 'role',
@@ -58,29 +56,26 @@ export const Directory: CollectionConfig = {
       },
     },
     {
+      // Payload converts camelCase to snake_case: isActive -> is_active
       name: 'isActive',
       type: 'checkbox',
       label: 'Active',
       defaultValue: true,
-      // Map to the existing 'is_active' column
-      dbName: 'is_active',
     },
     {
+      // Payload converts: photoUrl -> photo_url
       name: 'photoUrl',
       type: 'text',
       label: 'Photo URL',
-      // Map to the existing 'photo_url' column
-      dbName: 'photo_url',
       admin: {
         description: 'URL to profile photo (consider using Media collection instead)',
       },
     },
     {
+      // Payload converts: escalationTiers -> escalation_tiers
       name: 'escalationTiers',
       type: 'json',
       label: 'Escalation Tiers',
-      // Map to the existing 'escalation_tiers' column
-      dbName: 'escalation_tiers',
       admin: {
         description: 'Array of escalation tier assignments',
       },
@@ -94,11 +89,10 @@ export const Directory: CollectionConfig = {
       },
     },
     {
+      // Payload converts: availabilityHours -> availability_hours
       name: 'availabilityHours',
       type: 'text',
       label: 'Availability Hours',
-      // Map to the existing 'availability_hours' column
-      dbName: 'availability_hours',
       admin: {
         description: 'Working hours or availability schedule',
       },
@@ -112,22 +106,20 @@ export const Directory: CollectionConfig = {
       },
     },
     {
+      // Payload converts: createdBy -> created_by
       name: 'createdBy',
       type: 'text',
       label: 'Created By',
-      // Map to the existing 'created_by' column
-      dbName: 'created_by',
       admin: {
         readOnly: true,
         position: 'sidebar',
       },
     },
     {
+      // Payload converts: updatedBy -> updated_by
       name: 'updatedBy',
       type: 'text',
       label: 'Updated By',
-      // Map to the existing 'updated_by' column
-      dbName: 'updated_by',
       admin: {
         readOnly: true,
         position: 'sidebar',

@@ -1,6 +1,4 @@
 import { Metadata } from 'next';
-import TeamMemberCard from '@/components/TeamMemberCard';
-import { getTeamMembersByRole } from '@/lib/api/team';
 
 export const metadata: Metadata = {
   title: 'Our Team | Lake Ride Pros',
@@ -44,12 +42,7 @@ export const metadata: Metadata = {
   },
 };
 
-// Force dynamic rendering to fetch fresh data from Supabase
-export const dynamic = 'force-dynamic';
-
-export default async function OurDriversPage() {
-  const { owners, dispatchers, drivers } = await getTeamMembersByRole();
-
+export default function OurDriversPage() {
   return (
     <>
       {/* Hero Section */}
@@ -64,127 +57,19 @@ export default async function OurDriversPage() {
         </div>
       </section>
 
-      {/* Owners Section */}
-      {owners.length > 0 && (
-        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
-                Owners
-              </h2>
-              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-                Leadership dedicated to providing exceptional service
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {owners.map((member) => (
-                <TeamMemberCard key={member.id} member={member} />
-              ))}
-            </div>
+      {/* Coming Soon Section */}
+      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg p-8 text-center">
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
+              Coming Soon
+            </h2>
+            <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
+              We&apos;re working on something great. Check back soon to meet our amazing team!
+            </p>
           </div>
-        </section>
-      )}
-
-      {/* Dispatchers Section */}
-      {dispatchers.length > 0 && (
-        <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
-                Dispatchers
-              </h2>
-              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-                Coordinating your seamless transportation experience
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {dispatchers.map((member) => (
-                <TeamMemberCard key={member.id} member={member} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Drivers Section */}
-      {drivers.length > 0 && (
-        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
-                Drivers
-              </h2>
-              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-                Professional drivers ensuring safe and comfortable journeys
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {drivers.map((member) => (
-                <TeamMemberCard key={member.id} member={member} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Empty State */}
-      {owners.length === 0 && dispatchers.length === 0 && drivers.length === 0 && (
-        <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg p-8 text-center">
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
-                No Team Members Found
-              </h2>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
-                To display team members on this page:
-              </p>
-              <div className="text-left max-w-xl mx-auto space-y-4">
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">1</span>
-                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Go to the <strong>Payload CMS Admin</strong> at <code className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded text-xs">/admin</code>
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">2</span>
-                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Navigate to <strong>Users</strong> collection
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">3</span>
-                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Create or edit a user and go to the <strong>Team Profile</strong> tab
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">4</span>
-                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Check <strong>"Show on Team Page"</strong> and select their <strong>Department Role</strong> (Owner, Dispatcher, or Driver)
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">5</span>
-                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Upload a profile photo and add vehicle assignments (optional)
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold">6</span>
-                  <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                    Ensure <strong>Employment Status</strong> is set to "Active"
-                  </p>
-                </div>
-              </div>
-              <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  Check the server console for detailed error messages if data exists but isn't displaying.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+        </div>
+      </section>
     </>
   );
 }

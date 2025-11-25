@@ -135,6 +135,7 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
 
 /**
  * Helper function to get the full image URL for a driver
+ * Matches the logic in lib/api/payload.ts getMediaUrl()
  */
 export function getDriverImageUrl(driver: Driver): string | null {
   if (!driver.media?.url) return null
@@ -143,11 +144,13 @@ export function getDriverImageUrl(driver: Driver): string | null {
   // If already a full URL, return as-is
   if (url.startsWith('http')) return url
 
-  // Otherwise, prepend the server URL
+  // For relative URLs, use the site URL from environment
+  // Falls back to production URL only if no env vars are set
   const baseUrl =
-    process.env.NEXT_PUBLIC_SERVER_URL ||
     process.env.NEXT_PUBLIC_PAYLOAD_API_URL ||
-    ''
+    process.env.NEXT_PUBLIC_SERVER_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    'https://www.lakeridepros.com'
 
   return `${baseUrl}${url}`
 }

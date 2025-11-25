@@ -122,9 +122,12 @@ export default async function OurDriversPage() {
                           {driver.vehicles.map((vehicle) => (
                             <span
                               key={vehicle}
-                              className="inline-block px-2 py-0.5 text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full capitalize"
+                              className="inline-block px-2 py-0.5 text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-full"
                             >
-                              {vehicle.replace(/_/g, ' ')}
+                              {vehicle
+                                .split('_')
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(' ')}
                             </span>
                           ))}
                         </div>

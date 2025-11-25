@@ -95,7 +95,7 @@ export default async function OurDriversPage() {
                           src={imageUrl}
                           alt={driver.media?.alt || `${driver.name} - ${roleLabel}`}
                           fill
-                          className="object-cover"
+                          className="object-contain"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                         />
                       ) : (

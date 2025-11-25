@@ -21,6 +21,7 @@ import { GiftCards } from '../collections/GiftCards'
 import { Orders } from '../collections/Orders'
 import { Partners } from '../collections/Partners'
 import { supabaseAdapter } from '../lib/supabase-adapter'
+import { migrations } from '../migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -119,6 +120,8 @@ const config = buildConfig({
     pool: getPoolConfig(),
     // Use migrations only, no auto-push
     push: false,
+    migrationDir: path.resolve(dirname, '../migrations'),
+    migrations,
   }),
   sharp,
   // CRITICAL: Use NEXT_PUBLIC_ prefix so the admin client can access this in the browser

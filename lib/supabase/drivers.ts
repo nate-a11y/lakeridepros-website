@@ -33,6 +33,32 @@ export interface Driver {
   media: DriverMedia | null
 }
 
+// Raw type for Supabase query response (before transformation)
+interface DriverRow {
+  id: string
+  name: string
+  email: string
+  phone: string | null
+  active: boolean
+  role: string | null
+  portal_role: string | null
+  priority: number | null
+  vehicles: string[] | null
+  availability_hours: number | null
+  bio: string | null
+  display_on_website: boolean | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+  image_id: number | null
+  media: {
+    id: number
+    url: string
+    alt: string | null
+    filename: string | null
+  } | null
+}
+
 /**
  * Fetch all drivers that should be displayed on the website
  * Filters by: active = true AND display_on_website = true
@@ -78,8 +104,9 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
       return []
     }
 
-    // Transform the data to match our Driver interface
-    const drivers: Driver[] = (data || []).map((driver) => ({
+    // Cast data to our expected type and transform
+    const rows = (data || []) as unknown as DriverRow[]
+    const drivers: Driver[] = rows.map((driver) => ({
       id: driver.id,
       name: driver.name,
       email: driver.email,
@@ -96,7 +123,7 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
       created_at: driver.created_at,
       updated_at: driver.updated_at,
       image_id: driver.image_id,
-      media: driver.media as DriverMedia | null,
+      media: driver.media,
     }))
 
     return drivers

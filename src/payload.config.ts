@@ -119,6 +119,7 @@ const config = buildConfig({
     pool: getPoolConfig(),
     // Use migrations only, no auto-push
     push: false,
+    migrationDir: path.resolve(dirname, '../migrations'),
   }),
   sharp,
   // CRITICAL: Use NEXT_PUBLIC_ prefix so the admin client can access this in the browser

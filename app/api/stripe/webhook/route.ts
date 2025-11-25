@@ -252,7 +252,7 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     console.log('Processing gift card purchase:', session.id)
 
     const cardType = session.metadata?.cardType || 'digital'
-    const amount = parseFloat(session.metadata?.amount || '0')
+    const purchaseAmount = parseFloat(session.metadata?.amount || '0')
     const purchaserName = session.metadata?.purchaserName || ''
     const purchaserEmail = session.metadata?.purchaserEmail || ''
     const recipientName = session.metadata?.recipientName || null
@@ -260,6 +260,13 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     const message = session.metadata?.message || null
     const deliveryMethod = session.metadata?.deliveryMethod || 'immediate'
     const scheduledDeliveryDate = session.metadata?.scheduledDeliveryDate || null
+
+    // Promotion fields
+    const isPromotion = session.metadata?.isPromotion === 'true'
+    const bonusAmount = parseFloat(session.metadata?.bonusAmount || '0')
+    const giftCardValue = parseFloat(session.metadata?.giftCardValue || purchaseAmount.toString())
+
+    console.log('Gift card promotion info:', { isPromotion, purchaseAmount, bonusAmount, giftCardValue })
 
     // Create gift card in Payload CMS using Local API
     const payload = await getPayload({ config })
@@ -269,11 +276,12 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
     const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase()
     const code = `GC-${timestamp}-${randomPart}`
 
+    // Use giftCardValue (includes bonus) for the balance
     const giftCardData: Partial<GiftCard> = {
       code,
       type: cardType as 'digital' | 'physical',
-      initialAmount: amount,
-      currentBalance: amount,
+      initialAmount: giftCardValue, // Total value including bonus
+      currentBalance: giftCardValue, // Total value including bonus
       purchaserName,
       purchaserEmail,
       recipientName: recipientName || undefined,
@@ -334,7 +342,7 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
         await sendScheduledGiftCardConfirmation(
           purchaserName,
           purchaserEmail,
-          amount,
+          giftCardValue, // Use actual gift card value (includes bonus)
           scheduledDeliveryDate,
           recipientName,
           recipientEmail,
@@ -346,22 +354,24 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
       await sendPhysicalGiftCardConfirmation(
         purchaserName,
         purchaserEmail,
-        amount,
+        giftCardValue, // Use actual gift card value (includes bonus)
         giftCardData.shippingAddress as Record<string, unknown>
       )
     }
 
-    // Send notification email to owners
+    // Send notification email to owners (include both values for tracking)
     await sendOwnerGiftCardNotification(
       giftCard.code || 'Pending',
       cardType,
-      amount,
+      giftCardValue, // Use actual gift card value (includes bonus)
       purchaserName,
       purchaserEmail,
       recipientName,
       recipientEmail,
       deliveryMethod,
-      scheduledDeliveryDate
+      scheduledDeliveryDate,
+      isPromotion ? purchaseAmount : undefined, // Pass purchase amount if promo
+      isPromotion ? bonusAmount : undefined // Pass bonus amount if promo
     )
 
   } catch (error) {

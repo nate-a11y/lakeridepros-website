@@ -1,8 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { formatPrice } from '@/lib/utils';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Gift, Sparkles } from 'lucide-react';
+
+// Promotion configuration (must match server-side)
+const PROMO_DATES = ['2025-11-28', '2025-12-01'];
+const BONUS_PERCENTAGE = 0.25;
+const PROMO_MIN_AMOUNT = 100;
+
+function isPromotionalPeriod(): boolean {
+  const now = new Date();
+  const centralTimeDate = now.toLocaleDateString('en-CA', {
+    timeZone: 'America/Chicago',
+  });
+  return PROMO_DATES.includes(centralTimeDate);
+}
+
+function calculateBonusAmount(amount: number): number {
+  if (amount < PROMO_MIN_AMOUNT) return 0;
+  const increments = Math.floor(amount / PROMO_MIN_AMOUNT);
+  return increments * PROMO_MIN_AMOUNT * BONUS_PERCENTAGE;
+}
 
 const giftCardAmounts = [
   { value: 25, label: '$25' },
@@ -33,10 +52,18 @@ export default function GiftCardsPage() {
   const [shippingCountry, setShippingCountry] = useState('United States');
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
+  const [isPromo, setIsPromo] = useState(false);
+
+  // Check promotion status on mount
+  useEffect(() => {
+    setIsPromo(isPromotionalPeriod());
+  }, []);
 
   const finalAmount = selectedAmount === 0 ? parseFloat(customAmount) || 0 : selectedAmount;
   const PHYSICAL_CARD_SHIPPING_FEE = 5;
-  const totalAmount = cardType === 'physical' ? finalAmount + PHYSICAL_CARD_SHIPPING_FEE : finalAmount;
+  const bonusAmount = isPromo ? calculateBonusAmount(finalAmount) : 0;
+  const giftCardValue = finalAmount + bonusAmount;
+  const totalPayment = cardType === 'physical' ? finalAmount + PHYSICAL_CARD_SHIPPING_FEE : finalAmount;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,6 +158,27 @@ export default function GiftCardsPage() {
         </div>
       </section>
 
+      {/* Promotional Banner - Only shown during promo period */}
+      {isPromo && (
+        <section className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-8 h-8" />
+                <span className="text-2xl font-bold">Holiday Bonus Sale!</span>
+                <Sparkles className="w-8 h-8" />
+              </div>
+              <div className="text-lg">
+                Buy $100, get <span className="font-bold">$125</span> value! Buy $200, get <span className="font-bold">$250</span> value!
+              </div>
+            </div>
+            <p className="text-center text-white/90 mt-2 text-sm">
+              25% bonus on all gift cards $100+ (in $100 increments). Limited time only!
+            </p>
+          </div>
+        </section>
+      )}
+
       {/* Content */}
       <section className="py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -182,22 +230,38 @@ export default function GiftCardsPage() {
                 <div>
                   <span className="block text-sm font-semibold text-neutral-900 mb-3">
                     Select Amount
+                    {isPromo && (
+                      <span className="text-amber-600 ml-2 text-xs font-normal">
+                        (Bonus on $100+!)
+                      </span>
+                    )}
                   </span>
                   <div className="grid grid-cols-3 gap-3">
-                    {giftCardAmounts.map((amount) => (
-                      <button
-                        key={amount.value}
-                        type="button"
-                        onClick={() => setSelectedAmount(amount.value)}
-                        className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors ${
-                          selectedAmount === amount.value
-                            ? 'border-primary bg-primary text-white'
-                            : 'border-neutral-300 text-neutral-700 hover:border-primary'
-                        }`}
-                      >
-                        {amount.label}
-                      </button>
-                    ))}
+                    {giftCardAmounts.map((amount) => {
+                      const amountBonus = isPromo ? calculateBonusAmount(amount.value) : 0;
+                      const hasBonus = amountBonus > 0;
+                      return (
+                        <button
+                          key={amount.value}
+                          type="button"
+                          onClick={() => setSelectedAmount(amount.value)}
+                          className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors relative ${
+                            selectedAmount === amount.value
+                              ? 'border-primary bg-primary text-white'
+                              : 'border-neutral-300 text-neutral-700 hover:border-primary'
+                          } ${hasBonus ? 'pb-6' : ''}`}
+                        >
+                          {amount.label}
+                          {hasBonus && (
+                            <span className={`absolute bottom-1 left-0 right-0 text-xs ${
+                              selectedAmount === amount.value ? 'text-white/90' : 'text-amber-600'
+                            }`}>
+                              Get ${amount.value + amountBonus}!
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -522,6 +586,37 @@ export default function GiftCardsPage() {
 
                 {/* Total */}
                 <div className="bg-neutral-50 p-6 rounded-lg">
+                  {/* Show bonus info when promotion is active */}
+                  {isPromo && bonusAmount > 0 && (
+                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-400 rounded-lg p-4 mb-4">
+                      <div className="flex items-center gap-2 text-amber-700 font-bold mb-2">
+                        <Gift className="w-5 h-5" />
+                        <span>Holiday Bonus Applied!</span>
+                      </div>
+                      <div className="space-y-1 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-neutral-600">You pay:</span>
+                          <span className="text-neutral-900">{formatPrice(finalAmount)}</span>
+                        </div>
+                        <div className="flex justify-between text-amber-600">
+                          <span>Bonus added:</span>
+                          <span className="font-semibold">+{formatPrice(bonusAmount)}</span>
+                        </div>
+                        <div className="flex justify-between text-lg font-bold border-t border-amber-300 pt-1 mt-1">
+                          <span className="text-neutral-900">Card value:</span>
+                          <span className="text-primary">{formatPrice(giftCardValue)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Prompt for higher amount if close to bonus threshold */}
+                  {isPromo && finalAmount >= 75 && finalAmount < 100 && (
+                    <div className="bg-amber-50 border border-amber-300 rounded-lg p-3 mb-4 text-sm text-amber-800">
+                      <strong>Tip:</strong> Spend ${100 - finalAmount} more to get a $25 bonus!
+                    </div>
+                  )}
+
                   {cardType === 'physical' && (
                     <>
                       <div className="flex justify-between items-center mb-2">
@@ -536,9 +631,11 @@ export default function GiftCardsPage() {
                     </>
                   )}
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-lg font-semibold text-neutral-900">Total:</span>
+                    <span className="text-lg font-semibold text-neutral-900">
+                      {isPromo && bonusAmount > 0 ? 'You Pay:' : 'Total:'}
+                    </span>
                     <span className="text-2xl font-bold text-primary">
-                      {formatPrice(totalAmount)}
+                      {formatPrice(totalPayment)}
                     </span>
                   </div>
 

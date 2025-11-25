@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import {
+  isPromotionalPeriod,
+  calculateBonusAmount,
+  calculateTotalGiftCardValue,
+} from '@/lib/gift-card-promotion'
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -54,19 +59,33 @@ export async function POST(request: NextRequest) {
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
+    // Check for promotional period and calculate bonus
+    const isPromo = isPromotionalPeriod()
+    const bonusAmount = isPromo ? calculateBonusAmount(amount) : 0
+    const giftCardValue = calculateTotalGiftCardValue(amount, isPromo)
+
+    // Build product description with promo info
+    let productDescription = type === 'physical'
+      ? 'Physical gift card shipped via USPS'
+      : 'Digital gift card delivered via email'
+
+    if (isPromo && bonusAmount > 0) {
+      productDescription += ` - BONUS: $${giftCardValue} value for $${amount}!`
+    }
+
     // Build line items
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [
       {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: `Lake Ride Pros ${type === 'physical' ? 'Physical' : 'Digital'} Gift Card`,
-            description: type === 'physical'
-              ? 'Physical gift card shipped via USPS'
-              : 'Digital gift card delivered via email',
+            name: isPromo && bonusAmount > 0
+              ? `Lake Ride Pros ${type === 'physical' ? 'Physical' : 'Digital'} Gift Card - Holiday Bonus!`
+              : `Lake Ride Pros ${type === 'physical' ? 'Physical' : 'Digital'} Gift Card`,
+            description: productDescription,
             images: ['https://www.lakeridepros.com/images/gift-card-preview.png'],
           },
-          unit_amount: Math.round(amount * 100), // Convert to cents
+          unit_amount: Math.round(amount * 100), // Convert to cents (customer pays the purchase amount)
         },
         quantity: 1,
       },
@@ -99,6 +118,10 @@ export async function POST(request: NextRequest) {
       message: message || '',
       deliveryMethod: deliveryMethod || 'immediate',
       scheduledDeliveryDate: scheduledDeliveryDate || '',
+      // Promotion fields
+      isPromotion: isPromo ? 'true' : 'false',
+      bonusAmount: bonusAmount.toString(),
+      giftCardValue: giftCardValue.toString(),
     }
 
     // Add shipping address to metadata for physical cards

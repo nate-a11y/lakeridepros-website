@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Phone, Mail } from 'lucide-react';
 import { getDriversForWebsite, getDriverImageUrl, getDriverRoleLabel } from '@/lib/supabase/drivers';
 
 export const metadata: Metadata = {
@@ -145,21 +146,25 @@ export default async function OurDriversPage() {
                         </p>
                       )}
                       {isOwner && (driver.phone || driver.email) && (
-                        <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700 space-y-1">
+                        <div className="mt-4 flex gap-2">
                           {driver.phone && (
                             <a
                               href={`tel:${driver.phone}`}
-                              className="block text-sm text-lrp-text-secondary dark:text-dark-text-secondary hover:text-primary dark:hover:text-primary-light transition-colors"
+                              className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-white rounded-lg text-sm font-medium transition-colors"
+                              title={driver.phone}
                             >
-                              {driver.phone}
+                              <Phone className="w-4 h-4" />
+                              <span>Call</span>
                             </a>
                           )}
                           {driver.email && (
                             <a
                               href={`mailto:${driver.email}`}
-                              className="block text-sm text-lrp-text-secondary dark:text-dark-text-secondary hover:text-primary dark:hover:text-primary-light transition-colors truncate"
+                              className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-white rounded-lg text-sm font-medium transition-colors"
+                              title={driver.email}
                             >
-                              {driver.email}
+                              <Mail className="w-4 h-4" />
+                              <span>Email</span>
                             </a>
                           )}
                         </div>

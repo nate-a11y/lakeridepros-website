@@ -64,7 +64,7 @@ export default async function DriverDetailPage({ params }: Props) {
   const imageUrl = getDriverImageUrl(driver);
   const roleLabel = getDriverRoleLabel(driver.role);
   const displayName = formatDriverDisplayName(driver);
-  const isOwner = driver.role === 'owner';
+  const isOwner = driver.role && driver.role.includes('owner');
 
   return (
     <>

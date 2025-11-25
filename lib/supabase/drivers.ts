@@ -18,7 +18,7 @@ export interface Driver {
   email: string
   phone: string | null
   active: boolean
-  role: 'owner' | 'dispatcher' | 'driver' | null
+  role: ('owner' | 'dispatcher' | 'driver' | 'cdl_trainer' | 'aesthetic_master_technician')[] | null
   portal_role: 'admin' | 'dispatcher' | 'driver' | null
   priority: number | null
   vehicles: string[] | null
@@ -40,7 +40,7 @@ interface DriverRow {
   email: string
   phone: string | null
   active: boolean
-  role: string | null
+  role: string[] | null
   portal_role: string | null
   priority: number | null
   vehicles: string[] | null
@@ -157,18 +157,31 @@ export function getDriverImageUrl(driver: Driver): string | null {
 
 /**
  * Get a display-friendly role label
+ * Handles multiple roles and joins them with " & "
  */
 export function getDriverRoleLabel(role: Driver['role']): string {
-  switch (role) {
-    case 'owner':
-      return 'Owner'
-    case 'dispatcher':
-      return 'Dispatcher'
-    case 'driver':
-      return 'Professional Driver'
-    default:
-      return 'Team Member'
+  if (!role || role.length === 0) {
+    return 'Team Member'
   }
+
+  const labels = role.map((r) => {
+    switch (r) {
+      case 'owner':
+        return 'Owner'
+      case 'dispatcher':
+        return 'Dispatcher'
+      case 'driver':
+        return 'Professional Driver'
+      case 'cdl_trainer':
+        return 'CDL Trainer'
+      case 'aesthetic_master_technician':
+        return 'Aesthetic Master Technician'
+      default:
+        return 'Team Member'
+    }
+  })
+
+  return labels.join(' & ')
 }
 
 /**
@@ -247,7 +260,7 @@ export async function getDriverById(id: string): Promise<Driver | null> {
  * For others: First name + last initial (e.g., "John S.")
  */
 export function formatDriverDisplayName(driver: Driver): string {
-  if (driver.role === 'owner') {
+  if (driver.role && driver.role.includes('owner')) {
     return driver.name
   }
   const nameParts = driver.name.trim().split(/\s+/)

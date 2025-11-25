@@ -92,13 +92,15 @@ export default async function OurDriversPage() {
                   : nameParts[0];
 
                 return (
-                  <Link
+                  <div
                     key={driver.id}
-                    href={`/our-drivers/${driver.id}`}
-                    className="block bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] hover:shadow-xl group"
+                    className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] hover:shadow-xl group"
                   >
-                    {/* Driver Image */}
-                    <div className="relative aspect-square bg-gradient-to-br from-primary/10 to-primary/5">
+                    {/* Driver Image - Clickable */}
+                    <Link
+                      href={`/our-drivers/${driver.id}`}
+                      className="block relative aspect-square bg-gradient-to-br from-primary/10 to-primary/5"
+                    >
                       {imageUrl ? (
                         <Image
                           src={imageUrl}
@@ -116,13 +118,15 @@ export default async function OurDriversPage() {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </Link>
 
                     {/* Driver Info */}
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-1 group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
-                        {isOwner ? driver.name : displayName}
-                      </h3>
+                      <Link href={`/our-drivers/${driver.id}`}>
+                        <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-1 group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
+                          {isOwner ? driver.name : displayName}
+                        </h3>
+                      </Link>
                       <p className="text-sm font-medium text-primary dark:text-primary-light mb-2">
                         {roleLabel}
                       </p>
@@ -147,13 +151,12 @@ export default async function OurDriversPage() {
                         </p>
                       )}
                       {isOwner && (driver.phone || driver.email) && (
-                        <div className="mt-4 flex gap-2" onClick={(e) => e.stopPropagation()}>
+                        <div className="mt-4 flex gap-2">
                           {driver.phone && (
                             <a
                               href={`tel:${driver.phone}`}
                               className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-white rounded-lg text-sm font-medium transition-colors"
                               title={driver.phone}
-                              onClick={(e) => e.stopPropagation()}
                             >
                               <Phone className="w-4 h-4" />
                               <span>Call</span>
@@ -164,7 +167,6 @@ export default async function OurDriversPage() {
                               href={`mailto:${driver.email}`}
                               className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-white rounded-lg text-sm font-medium transition-colors"
                               title={driver.email}
-                              onClick={(e) => e.stopPropagation()}
                             >
                               <Mail className="w-4 h-4" />
                               <span>Email</span>
@@ -172,11 +174,14 @@ export default async function OurDriversPage() {
                           )}
                         </div>
                       )}
-                      <p className="mt-3 text-sm font-medium text-primary dark:text-primary-light opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Link
+                        href={`/our-drivers/${driver.id}`}
+                        className="mt-3 text-sm font-medium text-primary dark:text-primary-light opacity-0 group-hover:opacity-100 transition-opacity inline-block"
+                      >
                         View Profile →
-                      </p>
+                      </Link>
                     </div>
-                  </Link>
+                  </div>
                 );
               })}
             </div>

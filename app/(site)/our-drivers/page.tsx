@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { getDriversForWebsite, getDriverImageUrl, getDriverRoleLabel } from '@/lib/supabase/drivers';
 
 export const metadata: Metadata = {
@@ -139,12 +140,12 @@ export default async function OurDriversPage() {
           <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-8">
             Are you a professional driver looking for a great opportunity? We&apos;re always looking for talented individuals to join our team.
           </p>
-          <a
+          <Link
             href="/careers"
             className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-primary hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           >
             View Career Opportunities
-          </a>
+          </Link>
         </div>
       </section>
     </>

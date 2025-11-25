@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const greenTheme = '#4cbb17'
 
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <hello@updates.lakeridepros.com>',
+      from: 'Lake Ride Pros <contactus@send.updates.lakeridepros.com>',
       replyTo: 'contactus@lakeridepros.com',
       to: purchaserEmail,
       subject: 'Your Lake Ride Pros Physical Gift Card Order Confirmation',

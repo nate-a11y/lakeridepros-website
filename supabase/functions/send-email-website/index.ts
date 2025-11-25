@@ -58,7 +58,7 @@ serve(async (req) => {
           })
         }
 
-        const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') || 'contactus@updates.lakeridepros.com'
+        const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') || 'contactus@send.updates.lakeridepros.com'
         const defaultReplyTo = replyTo || 'contactus@lakeridepros.com'
 
         const emailData: Record<string, unknown> = {
@@ -110,7 +110,7 @@ serve(async (req) => {
           })
         }
 
-        const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') || 'contactus@updates.lakeridepros.com'
+        const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') || 'contactus@send.updates.lakeridepros.com'
         const subject = `Lake Ride Pros Shuttle Ticket ${ticketId}`
         const text = `Attached is your Lake Ride Pros shuttle ticket ${ticketId}. Please present it during boarding.`
 
@@ -165,7 +165,7 @@ serve(async (req) => {
           })
         }
 
-        const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') || 'contactus@updates.lakeridepros.com'
+        const fromEmail = Deno.env.get('RESEND_FROM_EMAIL') || 'contactus@send.updates.lakeridepros.com'
 
         const emailData = {
           from: `Lake Ride Pros <${fromEmail}>`,

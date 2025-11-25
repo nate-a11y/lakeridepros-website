@@ -6,7 +6,7 @@
 import { logNotification } from './notification-logger'
 import { generateResumeUrl } from '@/lib/resume-link'
 
-const SEND_EMAIL_URL = `${process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-email`
+const SEND_EMAIL_URL = `${process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/send-email-website`
 
 export interface DraftReminderData {
   applicationId: string

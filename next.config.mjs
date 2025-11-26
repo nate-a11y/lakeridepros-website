@@ -209,6 +209,112 @@ const nextConfig = {
         destination: '/shop',
         permanent: true,
       },
+
+      // Root-level service URLs → /services/* format
+      {
+        source: '/airport-shuttle',
+        destination: '/services/airport-shuttle',
+        permanent: true,
+      },
+      {
+        source: '/bachelor-party-transportation',
+        destination: '/services/bachelor-bachelorette-transportation',
+        permanent: true,
+      },
+      {
+        source: '/concert-transportation',
+        destination: '/services/concert-transportation',
+        permanent: true,
+      },
+      {
+        source: '/corporate-transportation',
+        destination: '/services/corporate-transportation',
+        permanent: true,
+      },
+      {
+        source: '/golf-outing-transportation',
+        destination: '/services/golf-outing-transportation',
+        permanent: true,
+      },
+      {
+        source: '/group-event-transportation',
+        destination: '/services/group-event-transportation',
+        permanent: true,
+      },
+      {
+        source: '/nightlife-transportation',
+        destination: '/services/nightlife-transportation',
+        permanent: true,
+      },
+      {
+        source: '/wedding-transportation',
+        destination: '/services/wedding-transportation',
+        permanent: true,
+      },
+      {
+        source: '/wine-tour-shuttle',
+        destination: '/services/wine-tour-shuttle',
+        permanent: true,
+      },
+      {
+        source: '/old-kinderhook-transportation',
+        destination: '/services',
+        permanent: true,
+      },
+
+      // Careers redirect
+      {
+        source: '/careers',
+        destination: '/careers/driver-application',
+        permanent: true,
+      },
+
+      // Service pages with missing CMS content → main services page
+      {
+        source: '/services/airport-shuttle',
+        destination: '/lake-ozarks-airport-transportation',
+        permanent: true,
+      },
+      {
+        source: '/services/bachelor-bachelorette-transportation',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/services/birthday-celebration-transportation',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/services/concert-transportation',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/services/corporate-transportation',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/services/golf-outing-transportation',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/services/nightlife-transportation',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/services/private-aviation-transportation',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/services/wine-tour-shuttle',
+        destination: '/services',
+        permanent: true,
+      },
     ];
   },
   // Security headers for SEO and security

@@ -113,6 +113,16 @@ const nextConfig = {
         destination: '/fleet',
         permanent: true,
       },
+      {
+        source: '/fleet/executive-shuttle-bus',
+        destination: '/fleet/shuttle-bus',
+        permanent: true,
+      },
+      {
+        source: '/fleet/executive-sprinter-van',
+        destination: '/fleet/sprinter-van',
+        permanent: true,
+      },
 
       // Old service pages → Services or relevant pages
       {

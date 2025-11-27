@@ -319,7 +319,7 @@ export async function sendOrderConfirmation(
     `
 
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <contactus@send.updates.lakeridepros.com>',
+      from: 'Lake Ride Pros <contactus@updates.lakeridepros.com>',
       replyTo: 'contactus@lakeridepros.com',
       to: customerEmail,
       subject: `Order Confirmation - ${orderNumber}`,
@@ -394,7 +394,7 @@ export async function sendOwnerOrderNotification(
     `
 
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <contactus@send.updates.lakeridepros.com>',
+      from: 'Lake Ride Pros <contactus@updates.lakeridepros.com>',
       replyTo: customerEmail,
       to: 'owners@lakeridepros.com',
       subject: `🛍️ New Shop Order - ${orderNumber}`,
@@ -500,7 +500,7 @@ export async function sendOwnerGiftCardNotification(
       : `🎁 New Gift Card Purchase - $${amount.toFixed(2)}`
 
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <contactus@send.updates.lakeridepros.com>',
+      from: 'Lake Ride Pros <contactus@updates.lakeridepros.com>',
       replyTo: purchaserEmail,
       to: 'owners@lakeridepros.com',
       subject: subjectLine,
@@ -555,7 +555,7 @@ export async function sendContactNotification(
     `
 
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <contactus@send.updates.lakeridepros.com>',
+      from: 'Lake Ride Pros <contactus@updates.lakeridepros.com>',
       replyTo: email,
       to: 'contactus@lakeridepros.com',
       subject: `📧 New Contact Form Message${subject ? `: ${subject}` : ''}`,
@@ -611,7 +611,7 @@ export async function sendContactConfirmation(
     `
 
     const { data, error } = await resend.emails.send({
-      from: 'Lake Ride Pros <contactus@send.updates.lakeridepros.com>',
+      from: 'Lake Ride Pros <contactus@updates.lakeridepros.com>',
       replyTo: 'contactus@lakeridepros.com',
       to: email,
       subject: 'We received your message - Lake Ride Pros',

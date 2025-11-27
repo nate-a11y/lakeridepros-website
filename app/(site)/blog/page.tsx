@@ -12,6 +12,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.lakeridepros.com/blog',
   },
+  openGraph: {
+    title: 'Blog | Lake Ride Pros',
+    description: 'Read the latest news, tips, and updates from Lake Ride Pros. Stay informed about luxury transportation at Lake of the Ozarks.',
+    url: 'https://www.lakeridepros.com/blog',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Blog' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog | Lake Ride Pros',
+    description: 'Read the latest news, tips, and updates from Lake Ride Pros.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export const dynamic = 'force-dynamic';

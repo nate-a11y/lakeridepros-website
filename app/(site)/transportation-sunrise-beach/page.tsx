@@ -26,8 +26,15 @@ export const metadata: Metadata = {
     description: 'Professional transportation throughout Sunrise Beach. Serving condos, resorts, and vacation rentals on the west side of Lake of the Ozarks.',
     url: 'https://www.lakeridepros.com/transportation-sunrise-beach',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Sunrise Beach Transportation' }],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Transportation in Sunrise Beach MO | Lake Ride Pros',
+    description: 'Professional transportation throughout Sunrise Beach.',
+    images: ['/og-image.jpg'],
   },
 }
 

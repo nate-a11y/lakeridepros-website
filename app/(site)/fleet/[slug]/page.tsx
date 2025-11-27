@@ -22,9 +22,31 @@ export async function generateMetadata({ params }: VehiclePageProps): Promise<Me
     };
   }
 
+  const imageUrl = vehicle.featuredImage?.url || vehicle.images?.[0]?.image?.url;
+
   return {
     title: `${vehicle.name} | Lake Ride Pros Fleet`,
     description: vehicle.description,
+    alternates: {
+      canonical: `https://www.lakeridepros.com/fleet/${slug}`,
+    },
+    openGraph: {
+      title: `${vehicle.name} | Lake Ride Pros Fleet`,
+      description: vehicle.description || `${vehicle.name} - Luxury transportation at Lake of the Ozarks`,
+      url: `https://www.lakeridepros.com/fleet/${slug}`,
+      siteName: 'Lake Ride Pros',
+      images: imageUrl
+        ? [{ url: imageUrl, width: 1200, height: 630, alt: vehicle.name }]
+        : [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Fleet' }],
+      locale: 'en_US',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${vehicle.name} | Lake Ride Pros Fleet`,
+      description: vehicle.description || `${vehicle.name} - Luxury transportation at Lake of the Ozarks`,
+      images: imageUrl ? [imageUrl] : ['/og-image.jpg'],
+    },
   };
 }
 

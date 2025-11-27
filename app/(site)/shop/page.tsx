@@ -8,6 +8,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.lakeridepros.com/shop',
   },
+  openGraph: {
+    title: 'Shop Lake Ride Pros Merchandise',
+    description: 'Shop official Lake Ride Pros merchandise. High-quality t-shirts, hats, hoodies and accessories.',
+    url: 'https://www.lakeridepros.com/shop',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Shop' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Shop Lake Ride Pros Merchandise',
+    description: 'Shop official Lake Ride Pros merchandise. Show your Lake Ozarks pride!',
+    images: ['/og-image.jpg'],
+  },
 }
 
 // Force dynamic rendering so Payload CMS is available at request time

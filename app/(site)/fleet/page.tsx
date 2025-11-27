@@ -9,6 +9,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.lakeridepros.com/fleet',
   },
+  openGraph: {
+    title: 'Our Fleet | Lake Ride Pros',
+    description: 'View our fleet of luxury transportation vehicles at Lake of the Ozarks. Limo buses, sprinter vans, shuttle buses, and more.',
+    url: 'https://www.lakeridepros.com/fleet',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Fleet' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Our Fleet | Lake Ride Pros',
+    description: 'View our fleet of luxury transportation vehicles at Lake of the Ozarks.',
+    images: ['/og-image.jpg'],
+  },
 };
 
 export const dynamic = 'force-dynamic';

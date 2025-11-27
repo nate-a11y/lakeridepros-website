@@ -8,6 +8,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.lakeridepros.com/about-us',
   },
+  openGraph: {
+    title: 'About Us | Lake Ride Pros',
+    description: 'Learn about Lake Ride Pros, Missouri\'s premier luxury transportation company at Lake of the Ozarks.',
+    url: 'https://www.lakeridepros.com/about-us',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Team' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Us | Lake Ride Pros',
+    description: 'Learn about Lake Ride Pros, Missouri\'s premier luxury transportation company at Lake of the Ozarks.',
+    images: ['/og-image.jpg'],
+  },
 }
 
 export default function AboutUsPage() {

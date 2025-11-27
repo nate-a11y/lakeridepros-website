@@ -7,6 +7,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.lakeridepros.com/book',
   },
+  openGraph: {
+    title: 'Book Your Ride | Lake Ride Pros',
+    description: 'Book your luxury transportation at Lake of the Ozarks. Available 24/7 for weddings, events, wine tours, and nights out.',
+    url: 'https://www.lakeridepros.com/book',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Book Lake Ride Pros' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Book Your Ride | Lake Ride Pros',
+    description: 'Book your luxury transportation at Lake of the Ozarks. Available 24/7.',
+    images: ['/og-image.jpg'],
+  },
 }
 
 export default function BookPage() {

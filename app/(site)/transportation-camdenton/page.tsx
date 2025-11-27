@@ -26,8 +26,15 @@ export const metadata: Metadata = {
     description: 'Premium transportation in Camdenton. Serving Old Kinderhook, wineries, downtown & all major venues.',
     url: 'https://www.lakeridepros.com/transportation-camdenton',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Camdenton Transportation' }],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Transportation in Camdenton MO | Lake Ride Pros',
+    description: 'Premium transportation in Camdenton.',
+    images: ['/og-image.jpg'],
   },
 }
 

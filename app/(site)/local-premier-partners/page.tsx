@@ -5,6 +5,21 @@ import LocalPremierPartnersClient from '@/components/LocalPremierPartnersClient'
 export const metadata = {
   title: 'Local Premier Partners | Lake Ride Pros',
   description: 'Our premier local business partners at Lake of the Ozarks. Supporting local excellence.',
+  openGraph: {
+    title: 'Local Premier Partners | Lake Ride Pros',
+    description: 'Our premier local business partners at Lake of the Ozarks. Supporting local excellence.',
+    url: 'https://www.lakeridepros.com/local-premier-partners',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Local Partners' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Local Premier Partners | Lake Ride Pros',
+    description: 'Our premier local business partners at Lake of the Ozarks.',
+    images: ['/og-image.jpg'],
+  },
 }
 
 // Force dynamic rendering so Payload CMS is available at request time

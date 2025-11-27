@@ -27,8 +27,15 @@ export const metadata: Metadata = {
     description: 'Professional party bus and shuttle service for Bagnell Dam Strip bar hopping. Safe nightlife transportation at Lake of the Ozarks.',
     url: 'https://www.lakeridepros.com/bagnell-dam-strip-transportation',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Bagnell Dam Strip Transportation' }],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Bagnell Dam Strip Transportation | Lake Ride Pros',
+    description: 'Professional party bus and shuttle service for Bagnell Dam Strip bar hopping.',
+    images: ['/og-image.jpg'],
   },
 }
 

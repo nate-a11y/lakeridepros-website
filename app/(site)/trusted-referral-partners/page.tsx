@@ -5,6 +5,21 @@ import TrustedReferralPartnersClient from '@/components/TrustedReferralPartnersC
 export const metadata = {
   title: 'Trusted Referral Partners | Lake Ride Pros',
   description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
+  openGraph: {
+    title: 'Trusted Referral Partners | Lake Ride Pros',
+    description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
+    url: 'https://www.lakeridepros.com/trusted-referral-partners',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Trusted Partners' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Trusted Referral Partners | Lake Ride Pros',
+    description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
+    images: ['/og-image.jpg'],
+  },
 }
 
 // Force dynamic rendering so Payload CMS is available at request time

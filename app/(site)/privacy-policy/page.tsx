@@ -7,6 +7,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.lakeridepros.com/privacy-policy',
   },
+  openGraph: {
+    title: 'Privacy Policy | Lake Ride Pros',
+    description: 'Lake Ride Pros privacy policy and data protection practices.',
+    url: 'https://www.lakeridepros.com/privacy-policy',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Privacy Policy' }],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy | Lake Ride Pros',
+    description: 'Lake Ride Pros privacy policy and data protection practices.',
+    images: ['/og-image.jpg'],
+  },
 }
 
 export default function PrivacyPolicyPage() {

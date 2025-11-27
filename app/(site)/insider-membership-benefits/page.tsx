@@ -14,7 +14,15 @@ export const metadata: Metadata = {
     description: 'Unlock VIP benefits with the Lake Ride Pros Insider Membership - from exclusive offers to up to 20% off rides, experience luxury travel at Lake of the Ozarks.',
     url: 'https://www.lakeridepros.com/insider-membership-benefits',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Insider Membership' }],
+    locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Insider Membership Benefits | Lake Ride Pros',
+    description: 'Unlock VIP benefits with the Lake Ride Pros Insider Membership.',
+    images: ['/og-image.jpg'],
   },
 }
 

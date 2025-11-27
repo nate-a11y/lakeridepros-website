@@ -27,8 +27,15 @@ export const metadata: Metadata = {
     description: 'Professional shuttle service from St. Louis Lambert Airport (STL) to Lake of the Ozarks. Luxury vehicles, experienced drivers, flight tracking.',
     url: 'https://www.lakeridepros.com/st-louis-to-lake-ozarks',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'St Louis to Lake Ozarks Transportation' }],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'St Louis to Lake of the Ozarks Transportation | Lake Ride Pros',
+    description: 'Professional shuttle service from St. Louis (STL) to Lake of the Ozarks.',
+    images: ['/og-image.jpg'],
   },
 }
 

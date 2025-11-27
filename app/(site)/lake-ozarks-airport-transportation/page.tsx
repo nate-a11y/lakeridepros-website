@@ -27,8 +27,15 @@ export const metadata: Metadata = {
     description: 'Professional airport shuttle and private aviation transportation at Lake of the Ozarks. Grand Glaize Airport (KOZS), MCI, STL, SGF.',
     url: 'https://www.lakeridepros.com/lake-ozarks-airport-transportation',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ozarks Airport Transportation' }],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Lake of the Ozarks Airport Transportation | Lake Ride Pros',
+    description: 'Professional airport shuttle and private aviation transportation at Lake of the Ozarks.',
+    images: ['/og-image.jpg'],
   },
 }
 

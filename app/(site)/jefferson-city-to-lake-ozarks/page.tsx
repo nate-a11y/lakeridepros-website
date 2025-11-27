@@ -29,8 +29,15 @@ export const metadata: Metadata = {
     description: 'Direct shuttle service from Missouri\'s capital to Lake of the Ozarks. Just 1 hour away!',
     url: 'https://www.lakeridepros.com/jefferson-city-to-lake-ozarks',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Jefferson City to Lake Ozarks Transportation' }],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Jefferson City to Lake of the Ozarks Transportation | Lake Ride Pros',
+    description: 'Direct shuttle service from Missouri\'s capital to Lake of the Ozarks.',
+    images: ['/og-image.jpg'],
   },
 }
 

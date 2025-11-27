@@ -27,8 +27,15 @@ export const metadata: Metadata = {
     description: 'Professional shuttle service from Kansas City International Airport (MCI) to Lake of the Ozarks. Luxury vehicles, experienced drivers, flight tracking.',
     url: 'https://www.lakeridepros.com/kansas-city-to-lake-ozarks',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Kansas City to Lake Ozarks Transportation' }],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Kansas City to Lake of the Ozarks Transportation | Lake Ride Pros',
+    description: 'Professional shuttle service from Kansas City (MCI) to Lake of the Ozarks.',
+    images: ['/og-image.jpg'],
   },
 }
 

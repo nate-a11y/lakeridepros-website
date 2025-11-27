@@ -26,8 +26,15 @@ export const metadata: Metadata = {
     description: 'Premium transportation in Lake Ozark. Serving Lodge of Four Seasons, waterfront properties & all major venues.',
     url: 'https://www.lakeridepros.com/transportation-lake-ozark',
     siteName: 'Lake Ride Pros',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ozark Transportation' }],
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Transportation in Lake Ozark MO | Lake Ride Pros',
+    description: 'Premium transportation in Lake Ozark.',
+    images: ['/og-image.jpg'],
   },
 }
 

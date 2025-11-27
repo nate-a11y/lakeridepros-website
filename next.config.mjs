@@ -113,16 +113,6 @@ const nextConfig = {
         destination: '/fleet',
         permanent: true,
       },
-      {
-        source: '/fleet/executive-shuttle-bus',
-        destination: '/fleet/shuttle-bus',
-        permanent: true,
-      },
-      {
-        source: '/fleet/executive-sprinter-van',
-        destination: '/fleet/sprinter-van',
-        permanent: true,
-      },
 
       // Old service pages → Services or relevant pages
       {
@@ -296,17 +286,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/services/concert-transportation',
-        destination: '/services',
-        permanent: true,
-      },
-      {
         source: '/services/corporate-transportation',
-        destination: '/services',
-        permanent: true,
-      },
-      {
-        source: '/services/golf-outing-transportation',
         destination: '/services',
         permanent: true,
       },
@@ -317,11 +297,6 @@ const nextConfig = {
       },
       {
         source: '/services/private-aviation-transportation',
-        destination: '/services',
-        permanent: true,
-      },
-      {
-        source: '/services/wine-tour-shuttle',
         destination: '/services',
         permanent: true,
       },

@@ -5,7 +5,7 @@ import { formatPrice } from '@/lib/utils';
 import { Loader2, Gift, Sparkles } from 'lucide-react';
 
 // Promotion configuration (must match server-side)
-const PROMO_DATES = ['2025-11-28', '2025-12-01'];
+const PROMO_DATES = ['2025-11-28', '2025-11-29', '2025-11-30', '2025-12-01'];
 const BONUS_PERCENTAGE = 0.25;
 const PROMO_MIN_AMOUNT = 100;
 

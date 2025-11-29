@@ -2,13 +2,13 @@
  * Gift Card Promotion Utilities
  *
  * Black Friday / Cyber Monday 2025 Promotion:
- * - Dates: November 28, 2025 and December 1, 2025
+ * - Dates: November 28-30, 2025 and December 1, 2025
  * - Bonus: 25% extra value on gift cards in $100 increments
  * - Example: Buy $100, get $125. Buy $200, get $250.
  */
 
 // Promotional dates (in Central Time)
-export const PROMO_DATES = ['2025-11-28', '2025-12-01'] as const
+export const PROMO_DATES = ['2025-11-28', '2025-11-29', '2025-11-30', '2025-12-01'] as const
 
 // Bonus percentage (25% extra)
 export const BONUS_PERCENTAGE = 0.25

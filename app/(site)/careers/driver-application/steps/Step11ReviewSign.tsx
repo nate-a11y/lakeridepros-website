@@ -117,16 +117,35 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
       }
 
       // Send notification email and SMS
-      await fetch('/api/driver-application/notify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          applicationId: applicationId,
-          applicantName: `${applicationData.first_name} ${applicationData.last_name}`,
-          applicantEmail: applicationData.email,
-          applicantPhone: applicationData.phone
+      try {
+        const notifyResponse = await fetch('/api/driver-application/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            applicationId: applicationId,
+            applicantName: `${applicationData.first_name} ${applicationData.last_name}`,
+            applicantEmail: applicationData.email,
+            applicantPhone: applicationData.phone
+          })
         })
-      })
+
+        if (!notifyResponse.ok) {
+          const notifyError = await notifyResponse.text()
+          console.error('Failed to send notification emails:', notifyError)
+        } else {
+          const notifyResult = await notifyResponse.json()
+          // Log if individual notifications failed
+          if (notifyResult.applicantEmail && !notifyResult.applicantEmail.success) {
+            console.error('Applicant confirmation email failed:', notifyResult.applicantEmail.error)
+          }
+          if (notifyResult.adminEmail && !notifyResult.adminEmail.success) {
+            console.error('Admin notification email failed:', notifyResult.adminEmail.error)
+          }
+        }
+      } catch (notifyError) {
+        // Log but don't block submission - the application was already saved
+        console.error('Error sending notification emails:', notifyError)
+      }
 
       // Clear localStorage
       localStorage.removeItem('driver-application-id')

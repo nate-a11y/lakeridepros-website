@@ -2,45 +2,42 @@
 
 import { useState, useEffect } from 'react';
 
+type ParadeEvent = { date: string; name: string };
+
 export default function ParadeMusicBanner() {
   const [isVisible, setIsVisible] = useState(true);
   const [showBookmarkTip, setShowBookmarkTip] = useState(false);
   const [isMac, setIsMac] = useState(false);
+  const [events, setEvents] = useState<ParadeEvent[] | null>(null);
 
   const bookmarkUrl = 'https://www.lakeride.pro/parade-music';
 
   useEffect(() => {
     // Detect Mac for keyboard shortcut display
     setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0);
-  }, []);
 
-  // Determine which events to show based on current date
-  // Banner is for 2025 parade season only
-  const getEvents = () => {
+    // Calculate events based on current date (client-side only to avoid hydration issues)
     const now = new Date();
     const december7_2025 = new Date(2025, 11, 7); // December 7, 2025
     const december14_2025 = new Date(2025, 11, 14); // December 14, 2025
 
     // Hide banner after December 13, 2025 (on 14th or later)
     if (now >= december14_2025) {
-      return [];
+      setEvents([]);
+      return;
     }
 
     // If current date is before December 7, 2025, show both events
     if (now < december7_2025) {
-      return [
+      setEvents([
         { date: '12/6', name: 'Eldon Lighted Parade' },
         { date: '12/13', name: 'Lake Area Chamber in Lake Ozark' },
-      ];
+      ]);
+    } else {
+      // On or after December 7th, only show the second event
+      setEvents([{ date: '12/13', name: 'Lake Area Chamber in Lake Ozark' }]);
     }
-    // On or after December 7th, only show the second event
-    return [{ date: '12/13', name: 'Lake Area Chamber in Lake Ozark' }];
-  };
-
-  const events = getEvents();
-
-  // Don't render if no events (after December 13, 2025)
-  if (events.length === 0) return null;
+  }, []);
 
   const handleBookmarkClick = () => {
     // Try to trigger bookmark dialog (works in some browsers)
@@ -69,7 +66,8 @@ export default function ParadeMusicBanner() {
     }
   };
 
-  if (!isVisible) return null;
+  // Don't render until client-side date check completes, or if dismissed, or if no events
+  if (!isVisible || events === null || events.length === 0) return null;
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 text-white">

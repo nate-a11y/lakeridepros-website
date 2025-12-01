@@ -163,11 +163,11 @@ export default function ParadeMusicBanner() {
           </div>
 
           {/* Bookmark CTA */}
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+          <div className="flex flex-col items-center gap-2">
             <p className="text-xs sm:text-sm text-purple-100">
               Save the music page to tune in during the parade:
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               <a
                 href={bookmarkUrl}
                 target="_blank"
@@ -211,18 +211,17 @@ export default function ParadeMusicBanner() {
                 Bookmark
               </button>
             </div>
+            {/* Bookmark tip - shown inline below buttons */}
+            {showBookmarkTip && (
+              <div className="bg-white/95 text-purple-900 text-xs sm:text-sm px-4 py-2 rounded-lg shadow-lg animate-pulse">
+                Press{' '}
+                <kbd className="bg-purple-100 px-1.5 py-0.5 rounded text-xs font-mono font-bold">
+                  {isMac ? '⌘' : 'Ctrl'}+D
+                </kbd>{' '}
+                to bookmark this page!
+              </div>
+            )}
           </div>
-
-          {/* Bookmark tip tooltip */}
-          {showBookmarkTip && (
-            <div className="absolute bottom-full mb-2 bg-white text-gray-800 text-xs sm:text-sm px-3 py-2 rounded-lg shadow-lg animate-fadeIn">
-              Press{' '}
-              <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">
-                {isMac ? '⌘' : 'Ctrl'}+D
-              </kbd>{' '}
-              to bookmark this page
-            </div>
-          )}
 
           {/* Footer note */}
           <p className="text-[10px] sm:text-xs text-purple-200/70">

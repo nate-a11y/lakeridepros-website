@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import { PhoneModal } from "@/components/PhoneModal";
+import ParadeMusicBanner from "@/components/ParadeMusicBanner";
 
 export default function SiteLayout({
   children,
@@ -24,6 +25,7 @@ export default function SiteLayout({
             Skip to main content
           </a>
           <Header />
+          <ParadeMusicBanner />
           <main id="main-content" className="min-h-screen">
             {children}
           </main>

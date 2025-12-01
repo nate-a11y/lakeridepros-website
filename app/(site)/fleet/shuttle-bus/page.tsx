@@ -21,6 +21,7 @@ export default function ShuttleBusPage() {
     "@type": "Product",
     "name": "Shuttle Bus Service",
     "description": "37-passenger shuttle bus for weddings, corporate events, and large groups at Lake of the Ozarks",
+    "image": "https://www.lakeridepros.com/shuttle-bus-og.jpg",
     "brand": {
       "@type": "Brand",
       "name": "Lake Ride Pros"

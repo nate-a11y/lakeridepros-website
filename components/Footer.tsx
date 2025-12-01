@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { getServicesLocal } from '@/lib/api/payload-local';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
-import { PhoneLink } from '@/components/PhoneLink';
 import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 
 // TikTok icon component (not available in lucide-react)
@@ -303,11 +302,13 @@ export default async function Footer() {
               <h3 className="text-white font-bold mb-4 text-lg">Contact</h3>
               <ul className="space-y-2">
                 <li>
-                  <PhoneLink
+                  <a
+                    href="tel:5732069499"
                     className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
+                    aria-label="Call Lake Ride Pros"
                   >
                     (573) 206-9499
-                  </PhoneLink>
+                  </a>
                 </li>
                 <li>
                   <a

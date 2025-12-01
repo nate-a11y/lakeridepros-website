@@ -21,6 +21,7 @@ export default function RescueSquadPage() {
     "@type": "Product",
     "name": "Rescue Squad Specialty Vehicle",
     "description": "Unique rescue squad specialty vehicle for memorable parties and events at Lake of the Ozarks",
+    "image": "https://www.lakeridepros.com/rescue-squad-og.jpg",
     "brand": {
       "@type": "Brand",
       "name": "Lake Ride Pros"

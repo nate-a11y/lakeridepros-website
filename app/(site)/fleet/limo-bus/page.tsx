@@ -21,6 +21,7 @@ export default function LimoBusPage() {
     "@type": "Product",
     "name": "Luxury Limo Bus Rental",
     "description": "14-passenger luxury limo bus for weddings, parties, and events at Lake of the Ozarks",
+    "image": "https://www.lakeridepros.com/limo-bus-og.jpg",
     "brand": {
       "@type": "Brand",
       "name": "Lake Ride Pros"

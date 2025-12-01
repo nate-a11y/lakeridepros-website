@@ -21,6 +21,7 @@ export default function SprinterVanPage() {
     "@type": "Product",
     "name": "Luxury Sprinter Van Rental",
     "description": "Luxury sprinter van for small groups, wine tours, and intimate events at Lake of the Ozarks",
+    "image": "https://www.lakeridepros.com/sprinter-van-og.jpg",
     "brand": {
       "@type": "Brand",
       "name": "Lake Ride Pros"

@@ -10,7 +10,7 @@ Your Resend email integration is set up in the code but not properly configured.
 You don't have a `.env` file with your Resend API key. The application can't send emails without this.
 
 ### 2. Domain Not Verified (FIXED)
-Emails are now configured to send from `contactus@send.updates.lakeridepros.com` which matches your verified domain.
+Emails are now configured to send from `contactus@updates.lakeridepros.com` which matches your verified domain.
 
 ### 3. Where Emails Are Sent From
 
@@ -44,13 +44,13 @@ POSTGRES_URL=your-postgres-connection-string
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 
 # For email configuration
-EMAIL_FROM=contactus@send.updates.lakeridepros.com
+EMAIL_FROM=contactus@updates.lakeridepros.com
 EMAIL_FROM_NAME=Lake Ride Pros
 ```
 
 ### Step 3: Domain Already Verified ✅
 
-Your domain `send.updates.lakeridepros.com` is verified in Resend! All email FROM addresses have been updated to use `contactus@send.updates.lakeridepros.com`.
+Your domain `updates.lakeridepros.com` is verified in Resend! All email FROM addresses have been updated to use `contactus@updates.lakeridepros.com`.
 
 **Updated files:**
 - ✅ `lib/email.ts:20` - Order confirmations

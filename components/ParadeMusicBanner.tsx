@@ -2,45 +2,42 @@
 
 import { useState, useEffect } from 'react';
 
+type ParadeEvent = { date: string; name: string };
+
 export default function ParadeMusicBanner() {
   const [isVisible, setIsVisible] = useState(true);
   const [showBookmarkTip, setShowBookmarkTip] = useState(false);
   const [isMac, setIsMac] = useState(false);
+  const [events, setEvents] = useState<ParadeEvent[] | null>(null);
 
   const bookmarkUrl = 'https://www.lakeride.pro/parade-music';
 
   useEffect(() => {
     // Detect Mac for keyboard shortcut display
     setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0);
-  }, []);
 
-  // Determine which events to show based on current date
-  // Banner is for 2025 parade season only
-  const getEvents = () => {
+    // Calculate events based on current date (client-side only to avoid hydration issues)
     const now = new Date();
     const december7_2025 = new Date(2025, 11, 7); // December 7, 2025
     const december14_2025 = new Date(2025, 11, 14); // December 14, 2025
 
     // Hide banner after December 13, 2025 (on 14th or later)
     if (now >= december14_2025) {
-      return [];
+      setEvents([]);
+      return;
     }
 
     // If current date is before December 7, 2025, show both events
     if (now < december7_2025) {
-      return [
+      setEvents([
         { date: '12/6', name: 'Eldon Lighted Parade' },
         { date: '12/13', name: 'Lake Area Chamber in Lake Ozark' },
-      ];
+      ]);
+    } else {
+      // On or after December 7th, only show the second event
+      setEvents([{ date: '12/13', name: 'Lake Area Chamber in Lake Ozark' }]);
     }
-    // On or after December 7th, only show the second event
-    return [{ date: '12/13', name: 'Lake Area Chamber in Lake Ozark' }];
-  };
-
-  const events = getEvents();
-
-  // Don't render if no events (after December 13, 2025)
-  if (events.length === 0) return null;
+  }, []);
 
   const handleBookmarkClick = () => {
     // Try to trigger bookmark dialog (works in some browsers)
@@ -69,7 +66,8 @@ export default function ParadeMusicBanner() {
     }
   };
 
-  if (!isVisible) return null;
+  // Don't render until client-side date check completes, or if dismissed, or if no events
+  if (!isVisible || events === null || events.length === 0) return null;
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-purple-900 via-indigo-900 to-purple-900 text-white">
@@ -165,11 +163,11 @@ export default function ParadeMusicBanner() {
           </div>
 
           {/* Bookmark CTA */}
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+          <div className="flex flex-col items-center gap-2">
             <p className="text-xs sm:text-sm text-purple-100">
               Save the music page to tune in during the parade:
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-2">
               <a
                 href={bookmarkUrl}
                 target="_blank"
@@ -213,18 +211,17 @@ export default function ParadeMusicBanner() {
                 Bookmark
               </button>
             </div>
+            {/* Bookmark tip - shown inline below buttons */}
+            {showBookmarkTip && (
+              <div className="bg-white/95 text-purple-900 text-xs sm:text-sm px-4 py-2 rounded-lg shadow-lg animate-pulse">
+                Press{' '}
+                <kbd className="bg-purple-100 px-1.5 py-0.5 rounded text-xs font-mono font-bold">
+                  {isMac ? '⌘' : 'Ctrl'}+D
+                </kbd>{' '}
+                to bookmark this page!
+              </div>
+            )}
           </div>
-
-          {/* Bookmark tip tooltip */}
-          {showBookmarkTip && (
-            <div className="absolute bottom-full mb-2 bg-white text-gray-800 text-xs sm:text-sm px-3 py-2 rounded-lg shadow-lg animate-fadeIn">
-              Press{' '}
-              <kbd className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">
-                {isMac ? '⌘' : 'Ctrl'}+D
-              </kbd>{' '}
-              to bookmark this page
-            </div>
-          )}
 
           {/* Footer note */}
           <p className="text-[10px] sm:text-xs text-purple-200/70">

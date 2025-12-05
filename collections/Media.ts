@@ -8,6 +8,7 @@ export const Media: CollectionConfig = {
         // Direct upload to Supabase - bypasses Vercel's 4.5MB limit
         Upload: '@/components/admin/DirectUpload#DirectUpload',
       },
+      beforeList: ['@/components/admin/MediaListHeader#MediaListHeader'],
     },
   },
   upload: {

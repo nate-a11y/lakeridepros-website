@@ -108,6 +108,12 @@ const config = buildConfig({
       },
       beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
+    views: {
+      bulkUpload: {
+        Component: '@/components/admin/BulkUploadView#BulkUploadView',
+        path: '/bulk-upload',
+      },
+    },
   },
   collections: [BlogPosts, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, Testimonials, Users, Vehicles],
   editor: lexicalEditor(),

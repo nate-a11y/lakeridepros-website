@@ -115,14 +115,19 @@ function getPoolConfig() {
       options: '-c statement_timeout=120000',
     }
   } else if (isBuild) {
-    // Build-time config: higher pool for parallel static page generation
-    // Uses non-pooling direct connection for better throughput
+    // Build-time config for static page generation
+    // WARNING: If POSTGRES_URL_NON_POOLING is not set, this falls back to pooler
+    // which has strict session limits. Keep max low to avoid exhaustion.
+    const usingPooler = !process.env.POSTGRES_URL_NON_POOLING
+    if (usingPooler) {
+      console.warn('[Payload DB] WARNING: POSTGRES_URL_NON_POOLING not set - using pooler with limited connections')
+    }
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 10, // Higher pool for parallel static generation
+      max: usingPooler ? 3 : 10, // Low pool for pooler, higher for direct
       min: 0,
-      idleTimeoutMillis: 30000,
+      idleTimeoutMillis: usingPooler ? 5000 : 30000, // Release quickly on pooler
       connectionTimeoutMillis: 120000, // 2 min timeout for slow cold starts
       allowExitOnIdle: true,
       options: '-c statement_timeout=90000',

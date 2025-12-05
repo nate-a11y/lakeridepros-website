@@ -36,15 +36,57 @@ const isBuild = !!(
   process.env.NEXT_PHASE === 'phase-production-build'
 )
 
+// Convert a Supabase pooler URL to direct connection URL
+// Pooler uses port 6543, direct uses port 5432
+// Pooler hostname: aws-0-region.pooler.supabase.com
+// Direct hostname: db.projectref.supabase.co
+function convertToDirectConnection(url: string): string {
+  if (!url) return url
+
+  try {
+    const parsed = new URL(url)
+
+    // If using pooler port 6543, switch to direct port 5432
+    if (parsed.port === '6543') {
+      parsed.port = '5432'
+    }
+
+    // If hostname contains 'pooler.supabase.com', we need the direct host
+    // This requires POSTGRES_URL_NON_POOLING to be set correctly
+    // We can't auto-convert the hostname as it requires project ref
+
+    return parsed.toString()
+  } catch {
+    // If URL parsing fails, try simple port replacement
+    return url.replace(':6543/', ':5432/')
+  }
+}
+
 // Helper to get the appropriate Postgres connection string with SSL disabled
 function getPostgresConnectionString() {
   // For migrations and builds: Use POSTGRES_URL_NON_POOLING (direct connection on port 5432)
   // - Migrations need direct connection for DDL operations like ALTER TABLE
   // - Builds need direct connection for parallel static page generation (pooler has limits)
   // For serverless runtime: Use POSTGRES_PRISMA_URL (transaction pooler on port 6543)
-  let connStr = (isMigration || isBuild)
-    ? (process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
-    : (process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
+  let connStr: string
+
+  if (isMigration || isBuild) {
+    // Prefer non-pooling, but convert pooler URL to direct if needed
+    connStr = process.env.POSTGRES_URL_NON_POOLING
+      || convertToDirectConnection(process.env.POSTGRES_URL || '')
+      || process.env.DATABASE_URI
+      || ''
+
+    // Log connection info during build for debugging (redacted for security)
+    if (isBuild && connStr) {
+      const redacted = connStr.replace(/\/\/[^:]+:[^@]+@/, '//***:***@')
+      console.log(`[Payload DB] Build mode - using connection: ${redacted.substring(0, 80)}...`)
+      console.log(`[Payload DB] POSTGRES_URL_NON_POOLING set: ${!!process.env.POSTGRES_URL_NON_POOLING}`)
+    }
+  } else {
+    // Runtime: use pooler for connection multiplexing
+    connStr = process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL || process.env.DATABASE_URI || ''
+  }
 
   // Supabase URLs come with sslmode=require - we need to override it to disable cert verification
   if (connStr.includes('sslmode=require')) {

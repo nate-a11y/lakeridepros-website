@@ -29,14 +29,21 @@ const dirname = path.dirname(filename)
 const isMigration = process.argv.includes('migrate') || process.env.PAYLOAD_MIGRATING === 'true'
 
 // Detect if we're in a build environment (CI/Vercel build phase)
-const isBuild = process.env.CI === 'true' || process.env.VERCEL_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build'
+// Vercel sets CI=true and VERCEL=1 during builds
+const isBuild = !!(
+  process.env.CI === 'true' ||
+  process.env.VERCEL === '1' ||
+  process.env.NEXT_PHASE === 'phase-production-build'
+)
 
 // Helper to get the appropriate Postgres connection string with SSL disabled
 function getPostgresConnectionString() {
-  // For migrations: Use POSTGRES_URL_NON_POOLING (direct connection on port 5432) - needed for DDL operations like ALTER TABLE
-  // For serverless runtime: Use POSTGRES_PRISMA_URL (transaction pooler on port 6543) - handles thousands of connections
-  let connStr = isMigration
-    ? (process.env.POSTGRES_URL_NON_POOLING || process.env.DATABASE_URI || '')
+  // For migrations and builds: Use POSTGRES_URL_NON_POOLING (direct connection on port 5432)
+  // - Migrations need direct connection for DDL operations like ALTER TABLE
+  // - Builds need direct connection for parallel static page generation (pooler has limits)
+  // For serverless runtime: Use POSTGRES_PRISMA_URL (transaction pooler on port 6543)
+  let connStr = (isMigration || isBuild)
+    ? (process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
     : (process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL || process.env.DATABASE_URI || '')
 
   // Supabase URLs come with sslmode=require - we need to override it to disable cert verification
@@ -66,14 +73,15 @@ function getPoolConfig() {
       options: '-c statement_timeout=120000',
     }
   } else if (isBuild) {
-    // Build-time config: moderate pool for parallel static page generation
+    // Build-time config: higher pool for parallel static page generation
+    // Uses non-pooling direct connection for better throughput
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 5,
+      max: 10, // Higher pool for parallel static generation
       min: 0,
-      idleTimeoutMillis: 60000,
-      connectionTimeoutMillis: 60000,
+      idleTimeoutMillis: 30000,
+      connectionTimeoutMillis: 120000, // 2 min timeout for slow cold starts
       allowExitOnIdle: true,
       options: '-c statement_timeout=90000',
     }

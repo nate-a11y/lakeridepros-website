@@ -134,12 +134,13 @@ function getPoolConfig() {
       options: '-c statement_timeout=90000',
     }
   } else {
-    // Serverless runtime: aggressive settings to prevent connection exhaustion
-    // Each serverless instance should use minimal connections since many instances may run concurrently
+    // Serverless runtime: balanced settings for Supabase pooler
+    // The pooler (port 6543) handles connection multiplexing, so we can use more connections
+    // per instance without exhausting the underlying Postgres connections
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 1, // Single connection per serverless instance - prevents pool exhaustion
+      max: 5, // Allow parallel queries within a single request
       min: 0,
       idleTimeoutMillis: 10000, // Release idle connections after 10 seconds
       connectionTimeoutMillis: 30000, // 30 second connection timeout

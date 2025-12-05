@@ -17,11 +17,11 @@ import FAQAccordion from '@/components/FAQAccordion';
 import {
   getServices,
   getRandomVehicles,
-  getLatestBlogPosts,
   getRandomTestimonials,
   getPartners,
   getMediaUrl,
 } from '@/lib/api/payload';
+import { getLatestBlogPostsLocal } from '@/lib/api/payload-local';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
@@ -85,7 +85,7 @@ export default async function HomePage() {
     getServices({ limit: 6 }).catch(() => ({ docs: [] })), // For "Our Services" section
     getServices({ limit: 100 }).catch(() => ({ docs: [] })), // For filtering popular services
     getRandomVehicles(3).catch(() => []),
-    getLatestBlogPosts(10).catch(() => []),
+    getLatestBlogPostsLocal(10).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),
     getPopularServicesLocal(5).catch(() => []),

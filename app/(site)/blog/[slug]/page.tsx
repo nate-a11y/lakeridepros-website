@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBlogPostBySlug, getAdjacentBlogPosts, getMediaUrl } from '@/lib/api/payload';
+import { getMediaUrl } from '@/lib/api/payload';
+import { getBlogPostBySlugLocal, getAdjacentBlogPostsLocal } from '@/lib/api/payload-local';
 import { formatDate } from '@/lib/utils';
 import { serializeLexical } from '@/lib/serializeLexical';
 import type { User } from '@/src/payload-types';
@@ -21,9 +22,9 @@ const getCategoryLabel = (categoryValue: string): string => {
   return categoryMap[categoryValue] || categoryValue;
 };
 
-// Helper function to get author name from either string or object
-const getAuthorName = (author: User | string | undefined): string => {
-  if (!author) {
+// Helper function to get author name from either ID, string, or object
+const getAuthorName = (author: User | string | number | null | undefined): string => {
+  if (!author || typeof author === 'number') {
     return 'Lake Ride Pros';
   }
   if (typeof author === 'string') {
@@ -40,7 +41,7 @@ interface BlogPostPageProps {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug).catch(() => null);
+  const post = await getBlogPostBySlugLocal(slug);
 
   if (!post) {
     return {
@@ -51,14 +52,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const description = post.excerpt
     ? post.excerpt.substring(0, 155)
     : post.title.substring(0, 155);
-  const imageUrl = post.featuredImage
+  const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
     ? getMediaUrl(post.featuredImage.url)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   return {
     title: `${post.title} | Lake Ozarks Transportation Blog`,
     description: `${description}. Expert tips from Lake Ride Pros.`,
-    keywords: post.tags ? `${post.tags.join(', ')}, Lake of the Ozarks, transportation tips` : 'Lake of the Ozarks, transportation, travel tips',
+    keywords: post.categories?.length ? `${post.categories.join(', ')}, Lake of the Ozarks, transportation tips` : 'Lake of the Ozarks, transportation, travel tips',
     alternates: {
       canonical: `https://www.lakeridepros.com/blog/${slug}`,
     },
@@ -102,17 +103,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug).catch(() => null);
+  const post = await getBlogPostBySlugLocal(slug);
 
   if (!post) {
     notFound();
   }
 
   // Get adjacent posts for navigation
-  const adjacentPosts = await getAdjacentBlogPosts(slug).catch(() => ({
-    previous: null,
-    next: null,
-  }));
+  const adjacentPosts = await getAdjacentBlogPostsLocal(slug);
 
   // Article Schema for SEO
   const articleSchema = {
@@ -120,7 +118,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt || post.title,
-    image: post.featuredImage
+    image: post.featuredImage && typeof post.featuredImage === 'object'
       ? getMediaUrl(post.featuredImage.url)
       : 'https://www.lakeridepros.com/og-image.jpg',
     author: {
@@ -194,7 +192,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             Back to Blog
           </Link>
 
-          {post.featuredImage && (
+          {post.featuredImage && typeof post.featuredImage === 'object' && (
             <div className="relative h-96 rounded-lg overflow-hidden mb-8">
               <Image
                 src={getMediaUrl(post.featuredImage.url)}
@@ -213,9 +211,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <>
                 <span className="mx-2">•</span>
                 <span className="text-primary">
-                  {typeof post.categories[0] === 'string'
-                    ? getCategoryLabel(post.categories[0])
-                    : post.categories[0]?.name || ''}
+                  {getCategoryLabel(post.categories[0])}
                 </span>
               </>
             )}
@@ -252,16 +248,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             )}
           </div>
 
-          {post.tags && post.tags.length > 0 && (
+          {post.categories && post.categories.length > 0 && (
             <div className="mt-12 pt-8 border-t">
-              <h3 className="text-sm font-semibold text-neutral-900 mb-4">Tags:</h3>
+              <h3 className="text-sm font-semibold text-neutral-900 mb-4">Categories:</h3>
               <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
+                {post.categories.map((category) => (
                   <span
-                    key={tag}
+                    key={category}
                     className="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm"
                   >
-                    {tag}
+                    {getCategoryLabel(category)}
                   </span>
                 ))}
               </div>

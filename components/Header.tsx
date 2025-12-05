@@ -1,12 +1,12 @@
-import { getServices } from '@/lib/api/payload';
+import { getServicesLocal } from '@/lib/api/payload-local';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 import HeaderClient from './HeaderClient';
 
 export default async function Header() {
-  // Fetch all services dynamically from CMS
+  // Fetch all services dynamically from CMS (using local Payload - required for build-time static generation)
   let services: Array<{ name: string; slug: string }> = [];
   try {
-    const servicesResponse = await getServices({ limit: 100 });
+    const servicesResponse = await getServicesLocal();
     services = servicesResponse.docs.map((service) => ({
       name: service.title,
       slug: service.slug,

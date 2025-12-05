@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getServices } from '@/lib/api/payload';
+import { getServicesLocal } from '@/lib/api/payload-local';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 
@@ -74,10 +74,10 @@ export default async function Footer() {
     popularServiceSlugs = fallbackServiceSlugs;
   }
 
-  // Fetch services dynamically from CMS, but only show popular ones
+  // Fetch services dynamically from CMS (using local Payload - required for build-time static generation)
   let dynamicServices: Array<{ name: string; href: string }> = [];
   try {
-    const servicesResponse = await getServices({ limit: 100 });
+    const servicesResponse = await getServicesLocal();
     // Filter to only popular services and maintain order
     dynamicServices = popularServiceSlugs
       .map(slug => {

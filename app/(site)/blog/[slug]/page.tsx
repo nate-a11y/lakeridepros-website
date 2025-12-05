@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt || post.title,
-    image: post.featuredImage
+    image: post.featuredImage && typeof post.featuredImage === 'object'
       ? getMediaUrl(post.featuredImage.url)
       : 'https://www.lakeridepros.com/og-image.jpg',
     author: {
@@ -192,7 +192,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             Back to Blog
           </Link>
 
-          {post.featuredImage && (
+          {post.featuredImage && typeof post.featuredImage === 'object' && (
             <div className="relative h-96 rounded-lg overflow-hidden mb-8">
               <Image
                 src={getMediaUrl(post.featuredImage.url)}

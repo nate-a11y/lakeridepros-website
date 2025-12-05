@@ -16,7 +16,7 @@ interface PayloadDoc {
 async function getPayloadData() {
   try {
     // Fetch all dynamic content using local Payload queries (no HTTP)
-    const [services, blogPosts, vehicles, products, pages] = await Promise.all([
+    const [servicesResponse, blogPosts, vehicles, products, pages] = await Promise.all([
       getServicesLocal(),
       getBlogPostsLocal(100),
       getVehiclesLocal(),
@@ -24,7 +24,7 @@ async function getPayloadData() {
       getPagesLocal(),
     ]);
 
-    return { services, blogPosts, vehicles, products, pages };
+    return { services: servicesResponse.docs, blogPosts, vehicles, products, pages };
   } catch (error) {
     console.error('Error fetching Payload data for sitemap:', error);
     return { services: [], blogPosts: [], vehicles: [], products: [], pages: [] };

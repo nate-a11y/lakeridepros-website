@@ -22,9 +22,9 @@ const getCategoryLabel = (categoryValue: string): string => {
   return categoryMap[categoryValue] || categoryValue;
 };
 
-// Helper function to get author name from either string or object
-const getAuthorName = (author: User | string | undefined): string => {
-  if (!author) {
+// Helper function to get author name from either ID, string, or object
+const getAuthorName = (author: User | string | number | null | undefined): string => {
+  if (!author || typeof author === 'number') {
     return 'Lake Ride Pros';
   }
   if (typeof author === 'string') {

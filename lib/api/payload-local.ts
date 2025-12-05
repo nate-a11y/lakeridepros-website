@@ -1,6 +1,6 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import type { Service, Partner, BlogPost, Vehicle } from '@/src/payload-types'
+import type { Service, Partner, BlogPost, Vehicle, Testimonial } from '@/src/payload-types'
 
 /**
  * Server-side only functions to query Payload directly without HTTP requests
@@ -212,6 +212,52 @@ export async function getPagesLocal(): Promise<unknown[]> {
     console.error('[Payload Local] Error fetching pages:', error)
     return []
   }
+}
+
+export async function getTestimonialsLocal(minRating = 5): Promise<Testimonial[]> {
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'testimonials',
+      where: {
+        rating: {
+          greater_than_equal: minRating,
+        },
+      },
+      sort: 'order',
+      depth: 2,
+      limit: 100,
+    })
+
+    // Filter out testimonials with placeholder content
+    const placeholderTexts = ['No comment provided', 'No content provided', '']
+    const validTestimonials = (result.docs as unknown as Testimonial[]).filter(testimonial => {
+      const content = testimonial.content?.trim() || ''
+      return content.length > 0 && !placeholderTexts.includes(content)
+    })
+
+    return validTestimonials
+  } catch (error) {
+    console.error('[Payload Local] Error fetching testimonials:', error)
+    return []
+  }
+}
+
+export async function getRandomTestimonialsLocal(count = 3, minRating = 5): Promise<Testimonial[]> {
+  const allTestimonials = await getTestimonialsLocal(minRating)
+
+  if (allTestimonials.length <= count) {
+    return allTestimonials
+  }
+
+  // Fisher-Yates shuffle algorithm for randomization
+  const shuffled = [...allTestimonials]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+
+  return shuffled.slice(0, count)
 }
 
 // Helper to get full media URL

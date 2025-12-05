@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title: `${post.title} | Lake Ozarks Transportation Blog`,
     description: `${description}. Expert tips from Lake Ride Pros.`,
-    keywords: post.tags ? `${post.tags.join(', ')}, Lake of the Ozarks, transportation tips` : 'Lake of the Ozarks, transportation, travel tips',
+    keywords: post.categories?.length ? `${post.categories.join(', ')}, Lake of the Ozarks, transportation tips` : 'Lake of the Ozarks, transportation, travel tips',
     alternates: {
       canonical: `https://www.lakeridepros.com/blog/${slug}`,
     },
@@ -250,16 +250,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             )}
           </div>
 
-          {post.tags && post.tags.length > 0 && (
+          {post.categories && post.categories.length > 0 && (
             <div className="mt-12 pt-8 border-t">
-              <h3 className="text-sm font-semibold text-neutral-900 mb-4">Tags:</h3>
+              <h3 className="text-sm font-semibold text-neutral-900 mb-4">Categories:</h3>
               <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
+                {post.categories.map((category) => (
                   <span
-                    key={tag}
+                    key={category}
                     className="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm"
                   >
-                    {tag}
+                    {getCategoryLabel(category)}
                   </span>
                 ))}
               </div>

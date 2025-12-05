@@ -211,9 +211,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <>
                 <span className="mx-2">•</span>
                 <span className="text-primary">
-                  {typeof post.categories[0] === 'string'
-                    ? getCategoryLabel(post.categories[0])
-                    : post.categories[0]?.name || ''}
+                  {getCategoryLabel(post.categories[0])}
                 </span>
               </>
             )}

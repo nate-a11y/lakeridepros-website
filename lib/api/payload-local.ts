@@ -52,12 +52,10 @@ export async function getServiceBySlugLocal(slug: string): Promise<Service | nul
     const result = await payload.find({
       collection: 'services',
       where: {
-        slug: {
-          equals: slug,
-        },
-        active: {
-          equals: true,
-        },
+        and: [
+          { slug: { equals: slug } },
+          { active: { equals: true } },
+        ],
       },
       depth: 2,
       limit: 1,
@@ -112,12 +110,10 @@ export async function getPartnerBySlugLocal(slug: string): Promise<Partner | nul
     const result = await payload.find({
       collection: 'partners',
       where: {
-        slug: {
-          equals: slug,
-        },
-        active: {
-          equals: true,
-        },
+        and: [
+          { slug: { equals: slug } },
+          { active: { equals: true } },
+        ],
       },
       depth: 2,
       limit: 1,

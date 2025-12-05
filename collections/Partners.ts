@@ -149,6 +149,15 @@ export const Partners: CollectionConfig = {
       },
     },
     {
+      name: 'bulkUploadImages',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/admin/BulkUploadForArray#BulkUploadForArray',
+        },
+      },
+    },
+    {
       name: 'images',
       type: 'array',
       fields: [

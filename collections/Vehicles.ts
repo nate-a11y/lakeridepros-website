@@ -61,6 +61,23 @@ export const Vehicles: CollectionConfig = {
       },
     },
     {
+      name: 'featuredImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Main image for cards and previews',
+      },
+    },
+    {
+      name: 'bulkUploadImages',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/admin/BulkUploadForArray#BulkUploadForArray',
+        },
+      },
+    },
+    {
       name: 'images',
       type: 'array',
       fields: [
@@ -75,14 +92,6 @@ export const Vehicles: CollectionConfig = {
           type: 'text',
         },
       ],
-    },
-    {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
-      admin: {
-        description: 'Main image for cards and previews',
-      },
     },
     {
       name: 'amenities',

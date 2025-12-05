@@ -183,6 +183,12 @@ export const Dashboard: React.FC = () => {
           <p className="dashboard-subtitle">Manage your luxury transportation business</p>
         </div>
         <div className="dashboard-header-actions">
+          <Link
+            href="/admin/bulk-upload"
+            className="dashboard-btn dashboard-btn-primary"
+          >
+            Bulk Upload Images
+          </Link>
           <a
             href="/"
             target="_blank"

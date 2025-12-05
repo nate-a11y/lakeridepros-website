@@ -52,6 +52,15 @@ export const Products: CollectionConfig = {
       required: true,
     },
     {
+      name: 'bulkUploadImages',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: '@/components/admin/BulkUploadForArray#BulkUploadForArray',
+        },
+      },
+    },
+    {
       name: 'images',
       type: 'array',
       fields: [

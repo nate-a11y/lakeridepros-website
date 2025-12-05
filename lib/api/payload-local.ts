@@ -16,7 +16,15 @@ async function getPayloadClient() {
   return payloadPromise
 }
 
-export async function getServicesLocal(): Promise<Service[]> {
+interface ServiceParams {
+  limit?: number
+}
+
+interface ServiceResponse {
+  docs: Service[]
+}
+
+export async function getServicesLocal(params?: ServiceParams): Promise<ServiceResponse> {
   try {
     const payload = await getPayloadClient()
     const result = await payload.find({
@@ -28,13 +36,13 @@ export async function getServicesLocal(): Promise<Service[]> {
       },
       sort: 'order',
       depth: 2,
-      limit: 1000,
+      limit: params?.limit ?? 1000,
     })
 
-    return result.docs as unknown as Service[]
+    return { docs: result.docs as unknown as Service[] }
   } catch (error) {
     console.error('[Payload Local] Error fetching services:', error)
-    return []
+    return { docs: [] }
   }
 }
 
@@ -62,7 +70,7 @@ export async function getServiceBySlugLocal(slug: string): Promise<Service | nul
   }
 }
 
-export async function getPartnersLocal(category?: string): Promise<Partner[]> {
+export async function getPartnersLocal(category?: string, featured = false): Promise<Partner[]> {
   try {
     const payload = await getPayloadClient()
     const whereClause: Record<string, unknown> = {
@@ -74,6 +82,12 @@ export async function getPartnersLocal(category?: string): Promise<Partner[]> {
     if (category) {
       whereClause.category = {
         equals: category,
+      }
+    }
+
+    if (featured) {
+      whereClause.featured = {
+        equals: true,
       }
     }
 

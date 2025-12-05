@@ -314,10 +314,19 @@ export function BulkUploadModal({ isOpen, onClose, onUploadComplete }: BulkUploa
       aria-labelledby="bulk-upload-title"
     >
       {/* Backdrop - clicking closes modal */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
+        role="button"
+        tabIndex={uploading ? -1 : 0}
         className="absolute inset-0 bg-black/50"
         onClick={!uploading ? onClose : undefined}
+        onKeyDown={(e) => {
+          if (!uploading && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault()
+            onClose()
+          }
+        }}
+        aria-label="Close bulk upload modal"
+        aria-disabled={uploading}
       />
 
       {/* Modal */}

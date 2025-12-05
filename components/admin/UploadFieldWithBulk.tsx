@@ -253,7 +253,19 @@ function MediaSelectDrawer({
   return (
     <div className="fixed inset-0 z-[9999] flex">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div
+        role="button"
+        tabIndex={0}
+        className="absolute inset-0 bg-black/50"
+        onClick={onClose}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            onClose()
+          }
+        }}
+        aria-label="Close image selector"
+      />
 
       {/* Drawer */}
       <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white dark:bg-neutral-900 shadow-xl flex flex-col">

@@ -243,7 +243,8 @@ export async function getTestimonialsLocal(minRating = 5): Promise<Testimonial[]
   }
 }
 
-export async function getRandomTestimonialsLocal(count = 3, minRating = 5): Promise<Testimonial[]> {
+export async function getRandomTestimonialsLocal(count = 3, _showAll = false, minRating = 5): Promise<Testimonial[]> {
+  // Note: _showAll parameter exists for API compatibility but is unused (we always filter by minRating)
   const allTestimonials = await getTestimonialsLocal(minRating)
 
   if (allTestimonials.length <= count) {

@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import BlogPostsGrid from '@/components/BlogPostsGrid';
-import { getBlogPosts, getMediaUrl } from '@/lib/api/payload';
+import { getBlogPostsLocal } from '@/lib/api/payload-local';
+import { getMediaUrl } from '@/lib/api/payload';
 import { formatDate } from '@/lib/utils';
 import { FileText, ArrowRight } from 'lucide-react';
 
@@ -43,15 +44,11 @@ const getCategoryLabel = (categoryValue: string): string => {
 };
 
 export default async function BlogPage() {
-  const blogData = await getBlogPosts({ limit: 12 }).catch(() => ({
-    docs: [],
-    hasNextPage: false,
-    page: 1
-  }));
+  const blogData = await getBlogPostsLocal({ limit: 12 });
 
-  const posts = blogData.docs || [];
-  const hasNextPage = 'hasNextPage' in blogData ? blogData.hasNextPage : false;
-  const currentPage = 'page' in blogData ? blogData.page : 1;
+  const posts = blogData.docs;
+  const hasNextPage = blogData.hasNextPage;
+  const currentPage = blogData.page;
 
   // Get featured post (first post) and remaining posts
   const featuredPost = posts[0];

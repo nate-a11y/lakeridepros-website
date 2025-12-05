@@ -130,25 +130,126 @@ export async function getPartnerBySlugLocal(slug: string): Promise<Partner | nul
   }
 }
 
-export async function getBlogPostsLocal(limit = 3): Promise<BlogPost[]> {
+interface BlogPostsLocalParams {
+  limit?: number
+  page?: number
+}
+
+interface BlogPostsLocalResponse {
+  docs: BlogPost[]
+  hasNextPage: boolean
+  page: number
+  totalDocs: number
+  totalPages: number
+}
+
+export async function getBlogPostsLocal(params?: BlogPostsLocalParams): Promise<BlogPostsLocalResponse> {
+  const { limit = 12, page = 1 } = params || {}
+  const now = new Date()
+
   try {
     const payload = await getPayloadClient()
     const result = await payload.find({
       collection: 'blog-posts',
       where: {
-        published: {
-          equals: true,
-        },
+        and: [
+          {
+            published: {
+              equals: true,
+            },
+          },
+          {
+            publishedDate: {
+              less_than_equal: now.toISOString(),
+            },
+          },
+        ],
       },
       sort: '-publishedDate',
       depth: 2,
       limit,
+      page,
     })
 
-    return result.docs as unknown as BlogPost[]
+    return {
+      docs: result.docs as unknown as BlogPost[],
+      hasNextPage: result.hasNextPage,
+      page: result.page,
+      totalDocs: result.totalDocs,
+      totalPages: result.totalPages,
+    }
   } catch (error) {
     console.error('[Payload Local] Error fetching blog posts:', error)
-    return []
+    return { docs: [], hasNextPage: false, page: 1, totalDocs: 0, totalPages: 0 }
+  }
+}
+
+export async function getLatestBlogPostsLocal(limit = 3): Promise<BlogPost[]> {
+  const result = await getBlogPostsLocal({ limit })
+  return result.docs
+}
+
+export async function getBlogPostBySlugLocal(slug: string): Promise<BlogPost | null> {
+  const now = new Date()
+
+  try {
+    const payload = await getPayloadClient()
+    const result = await payload.find({
+      collection: 'blog-posts',
+      where: {
+        and: [
+          { slug: { equals: slug } },
+          { published: { equals: true } },
+          { publishedDate: { less_than_equal: now.toISOString() } },
+        ],
+      },
+      depth: 2,
+      limit: 1,
+    })
+
+    return (result.docs[0] as unknown as BlogPost) || null
+  } catch (error) {
+    console.error(`[Payload Local] Error fetching blog post ${slug}:`, error)
+    return null
+  }
+}
+
+export async function getAdjacentBlogPostsLocal(currentSlug: string): Promise<{
+  previous: BlogPost | null
+  next: BlogPost | null
+}> {
+  const now = new Date()
+
+  try {
+    const payload = await getPayloadClient()
+    // Get all published posts sorted by date
+    const result = await payload.find({
+      collection: 'blog-posts',
+      where: {
+        and: [
+          { published: { equals: true } },
+          { publishedDate: { less_than_equal: now.toISOString() } },
+        ],
+      },
+      sort: '-publishedDate',
+      depth: 1,
+      limit: 100,
+    })
+
+    const posts = result.docs as unknown as BlogPost[]
+    const currentIndex = posts.findIndex((post) => post.slug === currentSlug)
+
+    if (currentIndex === -1) {
+      return { previous: null, next: null }
+    }
+
+    return {
+      previous: currentIndex > 0 ? posts[currentIndex - 1] : null,
+      next: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+    }
+  } catch (error) {
+    console.error('[Payload Local] Error fetching adjacent blog posts:', error)
+    return { previous: null, next: null }
   }
 }
 

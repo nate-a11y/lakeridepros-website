@@ -2,7 +2,8 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBlogPostBySlug, getAdjacentBlogPosts, getMediaUrl } from '@/lib/api/payload';
+import { getMediaUrl } from '@/lib/api/payload';
+import { getBlogPostBySlugLocal, getAdjacentBlogPostsLocal } from '@/lib/api/payload-local';
 import { formatDate } from '@/lib/utils';
 import { serializeLexical } from '@/lib/serializeLexical';
 import type { User } from '@/src/payload-types';
@@ -40,7 +41,7 @@ interface BlogPostPageProps {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug).catch(() => null);
+  const post = await getBlogPostBySlugLocal(slug);
 
   if (!post) {
     return {
@@ -102,17 +103,14 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug).catch(() => null);
+  const post = await getBlogPostBySlugLocal(slug);
 
   if (!post) {
     notFound();
   }
 
   // Get adjacent posts for navigation
-  const adjacentPosts = await getAdjacentBlogPosts(slug).catch(() => ({
-    previous: null,
-    next: null,
-  }));
+  const adjacentPosts = await getAdjacentBlogPostsLocal(slug);
 
   // Article Schema for SEO
   const articleSchema = {

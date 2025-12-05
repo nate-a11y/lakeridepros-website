@@ -15,13 +15,13 @@ import WhyChooseUs from '@/components/WhyChooseUs';
 import ServiceAreasMap from '@/components/ServiceAreasMap';
 import FAQAccordion from '@/components/FAQAccordion';
 import {
-  getServicesLocal as getServices,
-  getRandomTestimonialsLocal as getRandomTestimonials,
-  getPartnersLocal as getPartners,
-  getBlogPostsLocal as getLatestBlogPosts,
-  getFeaturedVehiclesLocal as getRandomVehicles,
+  getServices,
+  getRandomVehicles,
+  getLatestBlogPosts,
+  getRandomTestimonials,
+  getPartners,
   getMediaUrl,
-} from '@/lib/api/payload-local';
+} from '@/lib/api/payload';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 

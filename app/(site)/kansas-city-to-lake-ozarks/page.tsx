@@ -4,7 +4,7 @@ import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
 import TestimonialsCarousel from '@/components/TestimonialsCarousel'
-import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/payload-local'
+import { getRandomTestimonials } from '@/lib/api/payload'
 
 export const metadata: Metadata = {
   title: 'Kansas City to Lake of the Ozarks Transportation | MCI Airport Shuttle | Lake Ride Pros',

@@ -29,10 +29,11 @@ const dirname = path.dirname(filename)
 const isMigration = process.argv.includes('migrate') || process.env.PAYLOAD_MIGRATING === 'true'
 
 // Detect if we're in a build environment (CI/Vercel build phase)
-// Vercel sets CI=true and VERCEL=1 during builds
+// CI=true is set during Vercel builds (NOT at runtime)
+// NEXT_PHASE=phase-production-build is set during Next.js build
+// NOTE: VERCEL=1 is set at BOTH build and runtime, so don't use it here
 const isBuild = !!(
   process.env.CI === 'true' ||
-  process.env.VERCEL === '1' ||
   process.env.NEXT_PHASE === 'phase-production-build'
 )
 

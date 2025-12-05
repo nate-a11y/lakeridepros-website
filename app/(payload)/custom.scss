@@ -109,6 +109,33 @@
     background-color: var(--theme-error-50);
     border-left: 3px solid var(--theme-error-500);
   }
+
+  // ==========================================================================
+  // 6. HIDE DEFAULT UPLOAD BUTTON ON MEDIA COLLECTION
+  // ==========================================================================
+  // We have custom bulk upload functionality, so hide the OOTB "Create New" button
+
+  // Hide the default "Create New" button on Media list view
+  // The custom MediaListHeader provides the bulk upload button instead
+  [data-collection-slug="media"] {
+    // Hide the default create button in the list header
+    .collection-list__header {
+      .btn--style-primary[href*="/create"],
+      a[href$="/media/create"] {
+        display: none !important;
+      }
+    }
+  }
+
+  // Also target by URL path for broader compatibility
+  body[data-route*="collections/media"]:not([data-route*="media/"]) {
+    .list-controls__buttons,
+    .eyebrow-actions {
+      a[href*="create"] {
+        display: none !important;
+      }
+    }
+  }
 }
 
 // ============================================================================

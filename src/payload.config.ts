@@ -78,14 +78,15 @@ function getPoolConfig() {
       options: '-c statement_timeout=90000',
     }
   } else {
-    // Serverless runtime: balanced for performance
+    // Serverless runtime: aggressive settings to prevent connection exhaustion
+    // Each serverless instance should use minimal connections since many instances may run concurrently
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 3,
+      max: 1, // Single connection per serverless instance - prevents pool exhaustion
       min: 0,
-      idleTimeoutMillis: 120000,
-      connectionTimeoutMillis: 120000,
+      idleTimeoutMillis: 10000, // Release idle connections after 10 seconds
+      connectionTimeoutMillis: 30000, // 30 second connection timeout
       allowExitOnIdle: true,
       options: '-c statement_timeout=60000',
     }

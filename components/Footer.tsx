@@ -74,7 +74,7 @@ export default async function Footer() {
     popularServiceSlugs = fallbackServiceSlugs;
   }
 
-  // Fetch services dynamically from CMS (using local Payload to avoid HTTP during build)
+  // Fetch services dynamically from CMS (using local Payload - required for build-time static generation)
   let dynamicServices: Array<{ name: string; href: string }> = [];
   try {
     const servicesResponse = await getServicesLocal();

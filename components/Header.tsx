@@ -3,7 +3,7 @@ import { getPopularServicesLocal } from '@/lib/analytics-server';
 import HeaderClient from './HeaderClient';
 
 export default async function Header() {
-  // Fetch all services dynamically from CMS (using local Payload to avoid HTTP during build)
+  // Fetch all services dynamically from CMS (using local Payload - required for build-time static generation)
   let services: Array<{ name: string; slug: string }> = [];
   try {
     const servicesResponse = await getServicesLocal();

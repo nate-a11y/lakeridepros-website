@@ -77,11 +77,11 @@ export default async function Footer() {
   // Fetch services dynamically from CMS (using local Payload to avoid HTTP during build)
   let dynamicServices: Array<{ name: string; href: string }> = [];
   try {
-    const servicesData = await getServicesLocal();
+    const servicesResponse = await getServicesLocal();
     // Filter to only popular services and maintain order
     dynamicServices = popularServiceSlugs
       .map(slug => {
-        const service = servicesData.find(s => s.slug === slug);
+        const service = servicesResponse.docs.find(s => s.slug === slug);
         return service ? { name: service.title, href: `/services/${service.slug}` } : null;
       })
       .filter((s): s is { name: string; href: string } => s !== null);

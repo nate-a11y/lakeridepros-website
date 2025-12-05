@@ -6,8 +6,8 @@ export default async function Header() {
   // Fetch all services dynamically from CMS (using local Payload to avoid HTTP during build)
   let services: Array<{ name: string; slug: string }> = [];
   try {
-    const servicesData = await getServicesLocal();
-    services = servicesData.map((service) => ({
+    const servicesResponse = await getServicesLocal();
+    services = servicesResponse.docs.map((service) => ({
       name: service.title,
       slug: service.slug,
     }));

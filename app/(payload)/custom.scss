@@ -115,26 +115,12 @@
   // ==========================================================================
   // We have custom bulk upload functionality, so hide the OOTB "Create New" button
 
-  // Hide the default "Create New" button on Media list view
-  // The custom MediaListHeader provides the bulk upload button instead
-  [data-collection-slug="media"] {
-    // Hide the default create button in the list header
-    .collection-list__header {
-      .btn--style-primary[href*="/create"],
-      a[href$="/media/create"] {
-        display: none !important;
-      }
-    }
-  }
-
-  // Also target by URL path for broader compatibility
-  body[data-route*="collections/media"]:not([data-route*="media/"]) {
-    .list-controls__buttons,
-    .eyebrow-actions {
-      a[href*="create"] {
-        display: none !important;
-      }
-    }
+  // Target the "Create New" link/button that goes to /admin/collections/media/create
+  // Using multiple selectors for robustness across Payload versions
+  a[href="/admin/collections/media/create"],
+  a[href$="/media/create"],
+  a[href*="collections/media/create"] {
+    display: none !important;
   }
 }
 

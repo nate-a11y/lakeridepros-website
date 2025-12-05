@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const description = post.excerpt
     ? post.excerpt.substring(0, 155)
     : post.title.substring(0, 155);
-  const imageUrl = post.featuredImage
+  const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
     ? getMediaUrl(post.featuredImage.url)
     : 'https://www.lakeridepros.com/og-image.jpg';
 

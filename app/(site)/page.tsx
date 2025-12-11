@@ -14,6 +14,7 @@ import HowItWorks from '@/components/HowItWorks';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import ServiceAreasMap from '@/components/ServiceAreasMap';
 import FAQAccordion from '@/components/FAQAccordion';
+import MemberLogosSection from '@/components/MemberLogosSection';
 import {
   getServices,
   getRandomVehicles,
@@ -230,6 +231,9 @@ export default async function HomePage() {
 
       {/* Service Areas Section */}
       <ServiceAreasMap />
+
+      {/* Proud Members Of Section */}
+      <MemberLogosSection />
 
       {/* FAQ Section */}
       <FAQAccordion />

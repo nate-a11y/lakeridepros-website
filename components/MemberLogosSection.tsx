@@ -70,14 +70,14 @@ export default async function MemberLogosSection() {
           {logos.map((logo, index) => (
             <div
               key={`member-logo-${index}`}
-              className="flex items-center justify-center p-4 bg-white dark:bg-dark-bg-primary rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="flex items-center justify-center p-6 bg-white dark:bg-dark-bg-primary rounded-lg shadow-sm hover:shadow-md transition-shadow"
             >
               <Image
                 src={logo.url}
                 alt={logo.name}
-                width={160}
-                height={80}
-                className="h-16 md:h-20 w-auto object-contain"
+                width={240}
+                height={120}
+                className="h-20 md:h-28 lg:h-32 w-auto object-contain"
               />
             </div>
           ))}

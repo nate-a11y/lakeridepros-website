@@ -19,44 +19,44 @@ export async function GET() {
   }
 
   try {
-    // Fetch pages and their Instagram business accounts
-    const response = await fetch(
-      `https://graph.facebook.com/v21.0/me/accounts?fields=id,name,instagram_business_account{id,username}&access_token=${accessToken}`
+    // First, try to get the page info directly (works if token is a Page Access Token)
+    const pageResponse = await fetch(
+      `https://graph.facebook.com/v21.0/me?fields=id,name,instagram_business_account{id,username}&access_token=${accessToken}`
     )
 
-    if (!response.ok) {
-      const error = await response.json()
+    if (!pageResponse.ok) {
+      const error = await pageResponse.json()
       return NextResponse.json(
         { error: 'Facebook API error', details: error },
-        { status: response.status }
+        { status: pageResponse.status }
       )
     }
 
-    const data = await response.json()
+    const pageData = await pageResponse.json()
 
-    // Format the response for easy reading
-    const accounts = data.data.map((page: {
-      id: string
-      name: string
-      instagram_business_account?: {
-        id: string
-        username: string
+    // Check if this is a page token (has instagram_business_account field available)
+    if (pageData.id) {
+      const result = {
+        facebookPageId: pageData.id,
+        facebookPageName: pageData.name || 'Unknown',
+        instagramAccountId: pageData.instagram_business_account?.id || null,
+        instagramUsername: pageData.instagram_business_account?.username || null,
       }
-    }) => ({
-      facebookPageId: page.id,
-      facebookPageName: page.name,
-      instagramAccountId: page.instagram_business_account?.id || null,
-      instagramUsername: page.instagram_business_account?.username || null,
-    }))
+
+      return NextResponse.json({
+        message: 'Add these to your .env file:',
+        account: result,
+        envExample: `
+# Add to .env and Vercel
+FACEBOOK_PAGE_ID=${result.facebookPageId}
+INSTAGRAM_ACCOUNT_ID=${result.instagramAccountId || 'NOT_CONNECTED - Make sure Instagram is linked to your Facebook Page'}
+        `.trim(),
+      })
+    }
 
     return NextResponse.json({
-      message: 'Add these to your .env file:',
-      accounts,
-      envExample: accounts[0] ? `
-# Add to .env
-FACEBOOK_PAGE_ID=${accounts[0].facebookPageId}
-INSTAGRAM_ACCOUNT_ID=${accounts[0].instagramAccountId || 'NOT_CONNECTED'}
-      `.trim() : 'No pages found',
+      error: 'Could not determine page info from token',
+      data: pageData,
     })
   } catch (error) {
     console.error('Error fetching accounts:', error)

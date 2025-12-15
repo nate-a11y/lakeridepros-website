@@ -13,7 +13,7 @@ export const Partners: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'category', 'active', 'publish_date', 'featured', 'order'],
+    defaultColumns: ['name', 'isPremierPartner', 'isReferralPartner', 'isWeddingPartner', 'active', 'featured', 'order'],
   },
   hooks: {
     afterChange: [createRevalidationHook('partners')],
@@ -36,10 +36,51 @@ export const Partners: CollectionConfig = {
         description: 'URL-friendly identifier (e.g., "example-venue") - Required for detail pages to work',
       },
     },
+    // Partner Type Checkboxes - allows a partner to appear in multiple sections
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'isPremierPartner',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Show on Local Premier Partners page (also shows on Referral Partners)',
+            width: '33%',
+          },
+        },
+        {
+          name: 'isReferralPartner',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Show on Trusted Referral Partners page',
+            width: '33%',
+          },
+        },
+        {
+          name: 'isWeddingPartner',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Show on Wedding Partners page',
+            width: '33%',
+          },
+        },
+      ],
+    },
+    {
+      name: 'isPromotion',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'This is a promotional partner',
+      },
+    },
+    // Legacy category field - kept for backward compatibility during migration
     {
       name: 'category',
       type: 'select',
-      required: true,
       options: [
         { label: 'Wedding Partners', value: 'wedding' },
         { label: 'Local Premier Partners', value: 'local-premier' },
@@ -47,7 +88,8 @@ export const Partners: CollectionConfig = {
         { label: 'Promotions', value: 'promotions' },
       ],
       admin: {
-        description: 'Partner category/type',
+        description: '(Legacy) This field is being phased out - use the checkboxes above instead',
+        condition: () => false, // Hide from admin UI
       },
     },
     {
@@ -71,7 +113,43 @@ export const Partners: CollectionConfig = {
         { label: 'Shopping', value: 'shopping' },
       ],
       admin: {
-        description: 'Subcategory for organizing partners (mainly for Trusted Referral Partners)',
+        description: 'Subcategory for organizing Referral Partners',
+      },
+    },
+    // Wedding-specific fields
+    {
+      name: 'weddingCategory',
+      type: 'select',
+      options: [
+        { label: 'Venues & Destinations', value: 'venues-destinations' },
+        { label: 'Photography & Videography', value: 'photography-videography' },
+        { label: 'Catering/Culinary', value: 'catering-culinary' },
+        { label: 'Floral & Decor', value: 'floral-decor' },
+        { label: 'Planning & Coordination', value: 'planning-coordination' },
+        { label: 'Bridal Beauty & Style', value: 'bridal-beauty-style' },
+        { label: 'Transportation', value: 'transportation' },
+        { label: 'Hotels & Lodging', value: 'hotels-lodging' },
+        { label: 'Other Services', value: 'other-services' },
+      ],
+      admin: {
+        description: 'Wedding category for organizing wedding partners',
+        condition: (data) => data?.isWeddingPartner === true,
+      },
+    },
+    {
+      name: 'weddingDescription',
+      type: 'textarea',
+      admin: {
+        description: 'Wedding-specific description (optional - if different from main description)',
+        condition: (data) => data?.isWeddingPartner === true,
+      },
+    },
+    {
+      name: 'weddingBlurb',
+      type: 'textarea',
+      admin: {
+        description: 'Wedding-specific short blurb (optional - if different from main blurb)',
+        condition: (data) => data?.isWeddingPartner === true,
       },
     },
     {

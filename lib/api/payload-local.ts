@@ -68,6 +68,9 @@ export async function getServiceBySlugLocal(slug: string): Promise<Service | nul
   }
 }
 
+// Partner type for filtering
+export type PartnerType = 'premier' | 'referral' | 'wedding' | 'promotion';
+
 export async function getPartnersLocal(category?: string, featured = false): Promise<Partner[]> {
   try {
     const payload = await getPayloadClient()
@@ -75,12 +78,6 @@ export async function getPartnersLocal(category?: string, featured = false): Pro
       active: {
         equals: true,
       },
-    }
-
-    if (category) {
-      whereClause.category = {
-        equals: category,
-      }
     }
 
     if (featured) {
@@ -97,7 +94,86 @@ export async function getPartnersLocal(category?: string, featured = false): Pro
       limit: 1000,
     })
 
-    return result.docs as unknown as Partner[]
+    let partners = result.docs as unknown as Partner[]
+
+    // Filter by partner type using new checkbox fields
+    // Also support legacy category field for backward compatibility
+    if (category) {
+      partners = partners.filter(p => {
+        // Check new checkbox fields first
+        if (category === 'local-premier') {
+          return p.isPremierPartner === true || p.category === 'local-premier'
+        }
+        if (category === 'trusted-referral') {
+          // Referral partners include: those with isReferralPartner checked OR Premier Partners (they get dual exposure)
+          return p.isReferralPartner === true || p.isPremierPartner === true ||
+                 p.category === 'trusted-referral' || p.category === 'local-premier'
+        }
+        if (category === 'wedding') {
+          return p.isWeddingPartner === true || p.category === 'wedding'
+        }
+        if (category === 'promotions') {
+          return p.isPromotion === true || p.category === 'promotions'
+        }
+        // Fallback to legacy category
+        return p.category === category
+      })
+    }
+
+    return partners
+  } catch (error) {
+    console.error('[Payload Local] Error fetching partners:', error)
+    return []
+  }
+}
+
+// Get partners by specific type using new checkbox fields
+export async function getPartnersByTypeLocal(type: PartnerType, featured = false): Promise<Partner[]> {
+  try {
+    const payload = await getPayloadClient()
+    const whereClause: Record<string, unknown> = {
+      active: {
+        equals: true,
+      },
+    }
+
+    if (featured) {
+      whereClause.featured = {
+        equals: true,
+      }
+    }
+
+    const result = await payload.find({
+      collection: 'partners',
+      where: whereClause,
+      sort: 'order',
+      depth: 2,
+      limit: 1000,
+    })
+
+    let partners = result.docs as unknown as Partner[]
+
+    // Filter by partner type using new checkbox fields
+    switch (type) {
+      case 'premier':
+        partners = partners.filter(p => p.isPremierPartner === true || p.category === 'local-premier')
+        break
+      case 'referral':
+        // Referral includes Premier partners (they get dual exposure)
+        partners = partners.filter(p =>
+          p.isReferralPartner === true || p.isPremierPartner === true ||
+          p.category === 'trusted-referral' || p.category === 'local-premier'
+        )
+        break
+      case 'wedding':
+        partners = partners.filter(p => p.isWeddingPartner === true || p.category === 'wedding')
+        break
+      case 'promotion':
+        partners = partners.filter(p => p.isPromotion === true || p.category === 'promotions')
+        break
+    }
+
+    return partners
   } catch (error) {
     console.error('[Payload Local] Error fetching partners:', error)
     return []

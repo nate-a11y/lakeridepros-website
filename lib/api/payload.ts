@@ -447,7 +447,10 @@ export async function getVehicleRelatedTestimonials(count = 3, minRating = 5): P
   return shuffled.slice(0, count);
 }
 
-// Partners API
+// Partner type for filtering
+export type PartnerType = 'premier' | 'referral' | 'wedding' | 'promotion';
+
+// Partners API - Now uses checkbox fields instead of single category
 export async function getPartners(category?: string, featured = false): Promise<Partner[]> {
   try {
     const params: Record<string, unknown> = {
@@ -459,9 +462,6 @@ export async function getPartners(category?: string, featured = false): Promise<
       active: { equals: true }, // Always filter by active status
     };
 
-    if (category) {
-      whereConditions.category = { equals: category };
-    }
     if (featured) {
       whereConditions.featured = { equals: true };
     }
@@ -472,12 +472,33 @@ export async function getPartners(category?: string, featured = false): Promise<
 
     let partners = response.docs || [];
 
-    // WORKAROUND: Payload API is not respecting the where clause for Partners collection
-    // Filter manually in application code until the API issue is resolved
-    partners = partners.filter(p => p.active === true); // Always filter by active
+    // Always filter by active
+    partners = partners.filter(p => p.active === true);
+
+    // Filter by partner type using new checkbox fields
+    // Also support legacy category field for backward compatibility
     if (category) {
-      partners = partners.filter(p => p.category === category);
+      partners = partners.filter(p => {
+        // Check new checkbox fields first
+        if (category === 'local-premier') {
+          return p.isPremierPartner === true || p.category === 'local-premier';
+        }
+        if (category === 'trusted-referral') {
+          // Referral partners include: those with isReferralPartner checked OR Premier Partners (they get dual exposure)
+          return p.isReferralPartner === true || p.isPremierPartner === true ||
+                 p.category === 'trusted-referral' || p.category === 'local-premier';
+        }
+        if (category === 'wedding') {
+          return p.isWeddingPartner === true || p.category === 'wedding';
+        }
+        if (category === 'promotions') {
+          return p.isPromotion === true || p.category === 'promotions';
+        }
+        // Fallback to legacy category
+        return p.category === category;
+      });
     }
+
     if (featured) {
       partners = partners.filter(p => p.featured === true);
     }
@@ -485,6 +506,62 @@ export async function getPartners(category?: string, featured = false): Promise<
     return partners;
   } catch (_error) {
     // Return empty array if Partners collection doesn't exist yet (during initial deployment)
+    console.warn('Partners collection not found, returning empty array');
+    return [];
+  }
+}
+
+// Get partners by specific type using new checkbox fields
+export async function getPartnersByType(type: PartnerType, featured = false): Promise<Partner[]> {
+  try {
+    const params: Record<string, unknown> = {
+      sort: 'order',
+      depth: 2,
+      limit: 1000,
+    };
+    const whereConditions: Record<string, unknown> = {
+      active: { equals: true },
+    };
+
+    if (featured) {
+      whereConditions.featured = { equals: true };
+    }
+
+    params.where = JSON.stringify(whereConditions);
+
+    const response = await fetchFromPayload<ApiResponse<Partner>>('/partners', { params });
+
+    let partners = response.docs || [];
+
+    // Always filter by active
+    partners = partners.filter(p => p.active === true);
+
+    // Filter by partner type using new checkbox fields
+    switch (type) {
+      case 'premier':
+        partners = partners.filter(p => p.isPremierPartner === true || p.category === 'local-premier');
+        break;
+      case 'referral':
+        // Referral includes Premier partners (they get dual exposure)
+        partners = partners.filter(p =>
+          p.isReferralPartner === true || p.isPremierPartner === true ||
+          p.category === 'trusted-referral' || p.category === 'local-premier'
+        );
+        break;
+      case 'wedding':
+        partners = partners.filter(p => p.isWeddingPartner === true || p.category === 'wedding');
+        break;
+      case 'promotion':
+        partners = partners.filter(p => p.isPromotion === true || p.category === 'promotions');
+        break;
+    }
+
+    if (featured) {
+      partners = partners.filter(p => p.featured === true);
+    }
+
+    return partners;
+  } catch (_error) {
     console.warn('Partners collection not found, returning empty array');
     return [];
   }

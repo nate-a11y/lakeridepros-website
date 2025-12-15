@@ -45,16 +45,9 @@ const subcategoryLabels: Record<string, string> = {
 }
 
 export default async function TrustedReferralPartnersPage() {
-  // Fetch trusted referral partners, local premier partners, and wedding partners
-  // Local Premier Partners get dual exposure - shown here AND on their own page
-  const [trustedPartners, localPremierPartners, weddingPartners] = await Promise.all([
-    getPartners('trusted-referral'),
-    getPartners('local-premier'),
-    getPartners('wedding'),
-  ])
-
-  // Combine trusted and local premier partners - they'll be grouped by subcategory
-  const allReferralPartners = [...trustedPartners, ...localPremierPartners]
+  // Fetch all referral partners (includes Premier Partners who get dual exposure)
+  // The getPartners('trusted-referral') already includes Premier Partners
+  const allReferralPartners = await getPartners('trusted-referral')
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -71,7 +64,6 @@ export default async function TrustedReferralPartnersPage() {
       {/* Client Component with Filters and Partner Display */}
       <TrustedReferralPartnersClient
         trustedPartners={allReferralPartners}
-        weddingPartners={weddingPartners}
         subcategoryLabels={subcategoryLabels}
       />
 

@@ -10,13 +10,12 @@ import PartnerFilters from './PartnerFilters'
 
 interface TrustedReferralPartnersClientProps {
   trustedPartners: Partner[]
-  weddingPartners: Partner[]
+  weddingPartners?: Partner[] // Optional for backward compatibility
   subcategoryLabels: Record<string, string>
 }
 
 export default function TrustedReferralPartnersClient({
   trustedPartners,
-  weddingPartners,
   subcategoryLabels,
 }: TrustedReferralPartnersClientProps) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -46,16 +45,6 @@ export default function TrustedReferralPartnersClient({
       return matchesSearch && matchesSubcategory
     })
   }, [trustedPartners, searchTerm, subcategoryFilter])
-
-  // Filter wedding partners by search
-  const filteredWeddingPartners = useMemo(() => {
-    return weddingPartners.filter((partner) => {
-      return (
-        partner.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        partner.description?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    })
-  }, [weddingPartners, searchTerm])
 
   // Group filtered trusted partners by subcategory
   const partnersBySubcategory = useMemo(() => {
@@ -190,24 +179,6 @@ export default function TrustedReferralPartnersClient({
         </div>
       </section>
 
-      {/* Wedding Partners Section */}
-      {filteredWeddingPartners.length > 0 && (
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Wedding Partners Header */}
-            <h2 className="text-3xl font-bold text-lrp-black dark:text-white mb-8 pb-4 border-b-4 border-lrp-green">
-              Wedding Partners
-            </h2>
-
-            {/* Wedding Partners Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredWeddingPartners.map((partner) => (
-                <PartnerCard key={partner.id} partner={partner} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
     </>
   )
 }

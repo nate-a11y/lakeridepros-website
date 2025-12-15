@@ -14,12 +14,18 @@ interface BlogPost {
   slug: string
   excerpt: string
   publishedDate: string
-  published: boolean
+  published?: boolean
   socialShared?: boolean
   featuredImage?: {
     url?: string
     alt?: string
   } | number | null
+}
+
+// Type guard to ensure post has required fields
+function isValidBlogPost(post: unknown): post is BlogPost {
+  const p = post as Record<string, unknown>
+  return !!(p.id && p.title && p.slug && p.excerpt)
 }
 
 /**
@@ -187,7 +193,8 @@ export const postBlogToSocial = inngest.createFunction(
         sort: 'publishedDate',
       })
 
-      return result.docs as BlogPost[]
+      // Filter to only valid posts with required fields
+      return result.docs.filter(isValidBlogPost)
     })
 
     if (postsToShare.length === 0) {
@@ -212,7 +219,7 @@ export const postBlogToSocial = inngest.createFunction(
 
         // Post to Facebook
         try {
-          const fbResult = await postToFacebook(post)
+          const fbResult = await postToFacebook(post as BlogPost)
           if (fbResult) {
             facebookSuccess = true
             results.facebook.success++
@@ -224,7 +231,7 @@ export const postBlogToSocial = inngest.createFunction(
 
         // Post to Instagram
         try {
-          const igResult = await postToInstagram(post)
+          const igResult = await postToInstagram(post as BlogPost)
           if (igResult) {
             instagramSuccess = true
             results.instagram.success++
@@ -279,12 +286,11 @@ export const sharePostNow = inngest.createFunction(
         collection: 'blog-posts',
         id: postId,
       })
-      return result as BlogPost
+      if (!isValidBlogPost(result)) {
+        throw new Error(`Post ${postId} is missing required fields`)
+      }
+      return result
     })
-
-    if (!post) {
-      throw new Error(`Post ${postId} not found`)
-    }
 
     const results = {
       facebook: null as { id: string } | null,

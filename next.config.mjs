@@ -2,8 +2,9 @@ import { withPayload } from '@payloadcms/next/withPayload'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Disable React Compiler (moved from experimental in Next.js 16)
+  reactCompiler: false,
   experimental: {
-    reactCompiler: false,
     serverActions: {
       bodySizeLimit: '10mb', // Allow larger file uploads (default is 1mb)
     },

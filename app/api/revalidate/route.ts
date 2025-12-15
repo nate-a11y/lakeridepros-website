@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
 
     // Revalidate all tags
     for (const tag of tagsToRevalidate) {
-      revalidateTag(tag);
+      revalidateTag(tag, 'default');
       revalidatedTags.push(tag);
       console.log(`[Revalidation] Revalidated tag: ${tag}`);
     }

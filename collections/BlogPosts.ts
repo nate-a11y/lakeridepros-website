@@ -84,5 +84,14 @@ export const BlogPosts: CollectionConfig = {
       type: 'checkbox',
       defaultValue: false,
     },
+    {
+      name: 'socialShared',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Has this post been shared to social media?',
+        position: 'sidebar',
+      },
+    },
   ],
 }

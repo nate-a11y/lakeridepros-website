@@ -245,10 +245,10 @@ export const postBlogToSocial = inngest.createFunction(
         if (facebookSuccess || instagramSuccess) {
           await payload.update({
             collection: 'blog-posts',
-            id: post.id,
+            id: post.id as number,
             data: {
               socialShared: true,
-            } as Partial<BlogPost>,
+            },
             overrideAccess: true,
           })
           results.processed++
@@ -312,10 +312,10 @@ export const sharePostNow = inngest.createFunction(
       const payload = await getPayload({ config })
       await payload.update({
         collection: 'blog-posts',
-        id: postId,
+        id: postId as number,
         data: {
           socialShared: true,
-        } as Partial<BlogPost>,
+        },
         overrideAccess: true,
       })
     })

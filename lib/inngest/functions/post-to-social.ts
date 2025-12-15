@@ -299,12 +299,12 @@ export const sharePostNow = inngest.createFunction(
 
     // Post to Facebook
     await step.run('post-to-facebook', async () => {
-      results.facebook = await postToFacebook(post)
+      results.facebook = await postToFacebook(post as BlogPost)
     })
 
     // Post to Instagram
     await step.run('post-to-instagram', async () => {
-      results.instagram = await postToInstagram(post)
+      results.instagram = await postToInstagram(post as BlogPost)
     })
 
     // Mark as shared

@@ -34,11 +34,24 @@ export const Partners: CollectionConfig = {
       unique: true,
       admin: {
         description: 'URL-friendly identifier (e.g., "example-venue") - Required for detail pages to work',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
-    // Partner Type Checkboxes - allows a partner to appear in multiple sections
+    // Promotion checkbox - shown first, mutually exclusive with partner types
+    {
+      name: 'isPromotion',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'This is a promotion (simplified entry - no logo/contact info required)',
+      },
+    },
+    // Partner Type Checkboxes - only show when NOT a promotion
     {
       type: 'row',
+      admin: {
+        condition: (data) => data?.isPromotion !== true,
+      },
       fields: [
         {
           name: 'isPremierPartner',
@@ -69,12 +82,60 @@ export const Partners: CollectionConfig = {
         },
       ],
     },
+    // Promotion-specific fields - only show when isPromotion is checked
     {
-      name: 'isPromotion',
-      type: 'checkbox',
-      defaultValue: false,
+      name: 'promotionCategory',
+      type: 'select',
+      options: [
+        { label: 'Food & Dining', value: 'food-dining' },
+        { label: 'Entertainment', value: 'entertainment' },
+        { label: 'Shopping & Retail', value: 'shopping-retail' },
+        { label: 'Services', value: 'services' },
+        { label: 'Events', value: 'events' },
+        { label: 'Travel & Lodging', value: 'travel-lodging' },
+        { label: 'Other', value: 'other' },
+      ],
       admin: {
-        description: 'This is a promotional partner',
+        description: 'Type of promotion',
+        condition: (data) => data?.isPromotion === true,
+      },
+    },
+    {
+      type: 'row',
+      admin: {
+        condition: (data) => data?.isPromotion === true,
+      },
+      fields: [
+        {
+          name: 'promotionStartDate',
+          type: 'date',
+          admin: {
+            description: 'When the promotion starts',
+            width: '50%',
+            date: {
+              pickerAppearance: 'dayOnly',
+            },
+          },
+        },
+        {
+          name: 'promotionEndDate',
+          type: 'date',
+          admin: {
+            description: 'When the promotion ends',
+            width: '50%',
+            date: {
+              pickerAppearance: 'dayOnly',
+            },
+          },
+        },
+      ],
+    },
+    {
+      name: 'promotionDetails',
+      type: 'textarea',
+      admin: {
+        description: 'Details of the promotion',
+        condition: (data) => data?.isPromotion === true,
       },
     },
     // Legacy category field - kept for backward compatibility during migration
@@ -114,9 +175,10 @@ export const Partners: CollectionConfig = {
       ],
       admin: {
         description: 'Subcategory for organizing Referral Partners',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
-    // Wedding-specific fields
+    // Wedding-specific fields - only show when wedding partner AND not a promotion
     {
       name: 'weddingCategory',
       type: 'select',
@@ -133,7 +195,7 @@ export const Partners: CollectionConfig = {
       ],
       admin: {
         description: 'Wedding category for organizing wedding partners',
-        condition: (data) => data?.isWeddingPartner === true,
+        condition: (data) => data?.isWeddingPartner === true && data?.isPromotion !== true,
       },
     },
     {
@@ -141,7 +203,7 @@ export const Partners: CollectionConfig = {
       type: 'textarea',
       admin: {
         description: 'Wedding-specific description (optional - if different from main description)',
-        condition: (data) => data?.isWeddingPartner === true,
+        condition: (data) => data?.isWeddingPartner === true && data?.isPromotion !== true,
       },
     },
     {
@@ -149,16 +211,17 @@ export const Partners: CollectionConfig = {
       type: 'textarea',
       admin: {
         description: 'Wedding-specific short blurb (optional - if different from main blurb)',
-        condition: (data) => data?.isWeddingPartner === true,
+        condition: (data) => data?.isWeddingPartner === true && data?.isPromotion !== true,
       },
     },
+    // Partner-specific fields - hide when it's a promotion
     {
       name: 'logo',
       type: 'upload',
       relationTo: 'media',
-      required: true,
       admin: {
-        description: 'Partner logo image',
+        description: 'Partner logo image (required for partners, optional for promotions)',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -166,6 +229,7 @@ export const Partners: CollectionConfig = {
       type: 'textarea',
       admin: {
         description: 'Brief description of the partner',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -173,6 +237,7 @@ export const Partners: CollectionConfig = {
       type: 'text',
       admin: {
         description: 'Partner website URL',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -180,6 +245,7 @@ export const Partners: CollectionConfig = {
       type: 'text',
       admin: {
         description: 'Contact phone number',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -187,6 +253,7 @@ export const Partners: CollectionConfig = {
       type: 'email',
       admin: {
         description: 'Contact email',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -194,6 +261,7 @@ export const Partners: CollectionConfig = {
       type: 'textarea',
       admin: {
         description: 'Business address',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -202,6 +270,7 @@ export const Partners: CollectionConfig = {
       defaultValue: false,
       admin: {
         description: 'Show on homepage or featured sections',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -217,6 +286,7 @@ export const Partners: CollectionConfig = {
       type: 'textarea',
       admin: {
         description: 'Short 1-2 sentence description for quick summaries',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -233,6 +303,7 @@ export const Partners: CollectionConfig = {
         components: {
           Field: '@/components/admin/BulkUploadForArray#BulkUploadForArray',
         },
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {
@@ -248,6 +319,7 @@ export const Partners: CollectionConfig = {
       ],
       admin: {
         description: 'Additional images (max 5MB per image, MMS support)',
+        condition: (data) => data?.isPromotion !== true,
       },
     },
     {

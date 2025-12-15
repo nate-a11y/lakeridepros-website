@@ -476,23 +476,29 @@ export async function getPartners(category?: string, featured = false): Promise<
     partners = partners.filter(p => p.active === true);
 
     // Filter by partner type using new checkbox fields
-    // Also support legacy category field for backward compatibility
+    // Legacy category field is only used if NO checkboxes have been set (old records)
     if (category) {
       partners = partners.filter(p => {
-        // Check new checkbox fields first
+        // Check if any checkbox has been explicitly set (new system)
+        const hasCheckboxSet = p.isPremierPartner === true || p.isReferralPartner === true ||
+                               p.isWeddingPartner === true || p.isPromotion === true;
+
         if (category === 'local-premier') {
-          return p.isPremierPartner === true || p.category === 'local-premier';
+          // If checkboxes are in use, only check checkbox. Otherwise fall back to legacy.
+          return hasCheckboxSet ? p.isPremierPartner === true : p.category === 'local-premier';
         }
         if (category === 'trusted-referral') {
           // Referral partners include: those with isReferralPartner checked OR Premier Partners (they get dual exposure)
-          return p.isReferralPartner === true || p.isPremierPartner === true ||
-                 p.category === 'trusted-referral' || p.category === 'local-premier';
+          if (hasCheckboxSet) {
+            return p.isReferralPartner === true || p.isPremierPartner === true;
+          }
+          return p.category === 'trusted-referral' || p.category === 'local-premier';
         }
         if (category === 'wedding') {
-          return p.isWeddingPartner === true || p.category === 'wedding';
+          return hasCheckboxSet ? p.isWeddingPartner === true : p.category === 'wedding';
         }
         if (category === 'promotions') {
-          return p.isPromotion === true || p.category === 'promotions';
+          return hasCheckboxSet ? p.isPromotion === true : p.category === 'promotions';
         }
         // Fallback to legacy category
         return p.category === category;
@@ -537,24 +543,27 @@ export async function getPartnersByType(type: PartnerType, featured = false): Pr
     partners = partners.filter(p => p.active === true);
 
     // Filter by partner type using new checkbox fields
-    switch (type) {
-      case 'premier':
-        partners = partners.filter(p => p.isPremierPartner === true || p.category === 'local-premier');
-        break;
-      case 'referral':
-        // Referral includes Premier partners (they get dual exposure)
-        partners = partners.filter(p =>
-          p.isReferralPartner === true || p.isPremierPartner === true ||
-          p.category === 'trusted-referral' || p.category === 'local-premier'
-        );
-        break;
-      case 'wedding':
-        partners = partners.filter(p => p.isWeddingPartner === true || p.category === 'wedding');
-        break;
-      case 'promotion':
-        partners = partners.filter(p => p.isPromotion === true || p.category === 'promotions');
-        break;
-    }
+    // Legacy category field is only used if NO checkboxes have been set (old records)
+    partners = partners.filter(p => {
+      const hasCheckboxSet = p.isPremierPartner === true || p.isReferralPartner === true ||
+                             p.isWeddingPartner === true || p.isPromotion === true;
+
+      switch (type) {
+        case 'premier':
+          return hasCheckboxSet ? p.isPremierPartner === true : p.category === 'local-premier';
+        case 'referral':
+          if (hasCheckboxSet) {
+            return p.isReferralPartner === true || p.isPremierPartner === true;
+          }
+          return p.category === 'trusted-referral' || p.category === 'local-premier';
+        case 'wedding':
+          return hasCheckboxSet ? p.isWeddingPartner === true : p.category === 'wedding';
+        case 'promotion':
+          return hasCheckboxSet ? p.isPromotion === true : p.category === 'promotions';
+        default:
+          return false;
+      }
+    });
 
     if (featured) {
       partners = partners.filter(p => p.featured === true);

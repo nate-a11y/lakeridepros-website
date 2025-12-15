@@ -32,7 +32,7 @@
     "@payloadcms/plugin-cloud-storage": "3.68.5",
     "@payloadcms/richtext-lexical": "3.68.5",
     "@payloadcms/ui": "3.68.5",
-    "@supabase/supabase-js": "2.87.3",
+    "@supabase/supabase-js": "^2.38.4",
     "@vercel/analytics": "^1.5.0",
     "clsx": "^2.1.1",
     "focus-trap-react": "^11.0.4",

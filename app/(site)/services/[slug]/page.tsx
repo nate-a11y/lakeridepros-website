@@ -10,6 +10,7 @@ import { DynamicIcon } from '@/lib/iconMapper';
 import { getFAQsForService, generateFAQSchema } from '@/lib/serviceFAQs';
 import ServiceFAQ from '@/components/ServiceFAQ';
 import ServiceViewTracker from '@/components/ServiceViewTracker';
+import QuoteCTA from '@/components/QuoteCTA';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -275,31 +276,35 @@ export default async function ServiceDetailPage({ params }: Props) {
 
               {/* Pricing */}
               {service.pricing && (
-                <div className="bg-neutral-50 dark:bg-dark-bg-tertiary rounded-lg p-6">
-                  <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
-                    Pricing Information
-                  </h3>
-                  {service.pricing.basePrice && (
-                    <p className="text-3xl font-bold text-primary dark:text-primary-light mb-2">
-                      ${service.pricing.basePrice}
-                      {service.pricing.pricingType === 'hourly' && (
-                        <span className="text-lg font-normal text-lrp-text-secondary dark:text-dark-text-secondary">
-                          /hour
-                        </span>
-                      )}
-                    </p>
-                  )}
-                  {service.pricing.pricingType && (
-                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mb-2 capitalize">
-                      {service.pricing.pricingType} rate
-                    </p>
-                  )}
-                  {service.pricing.notes && (
-                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-4">
-                      {service.pricing.notes}
-                    </p>
-                  )}
-                </div>
+                service.pricing.pricingType === 'custom' ? (
+                  <QuoteCTA notes={service.pricing.notes || undefined} />
+                ) : (
+                  <div className="bg-neutral-50 dark:bg-dark-bg-tertiary rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
+                      Pricing Information
+                    </h3>
+                    {service.pricing.basePrice && (
+                      <p className="text-3xl font-bold text-primary dark:text-primary-light mb-2">
+                        ${service.pricing.basePrice}
+                        {service.pricing.pricingType === 'hourly' && (
+                          <span className="text-lg font-normal text-lrp-text-secondary dark:text-dark-text-secondary">
+                            /hour
+                          </span>
+                        )}
+                      </p>
+                    )}
+                    {service.pricing.pricingType && (
+                      <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mb-2 capitalize">
+                        {service.pricing.pricingType} rate
+                      </p>
+                    )}
+                    {service.pricing.notes && (
+                      <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-4">
+                        {service.pricing.notes}
+                      </p>
+                    )}
+                  </div>
+                )
               )}
             </div>
           </div>

@@ -140,14 +140,14 @@ function getPoolConfig() {
       options: '-c statement_timeout=90000',
     }
   } else {
-    // Serverless runtime: conservative settings for Supabase pooler
-    // Each Vercel function instance maintains its own pool - keep low to avoid exhaustion
+    // Serverless runtime: balanced settings for Supabase pooler
+    // The pooler (port 6543) handles connection multiplexing
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
-      max: 2, // Minimal connections per instance to prevent pool exhaustion
+      max: 5, // Allow parallel queries within a single request
       min: 0,
-      idleTimeoutMillis: 5000, // Release idle connections quickly (5 seconds)
+      idleTimeoutMillis: 10000, // Release idle connections after 10 seconds
       connectionTimeoutMillis: 30000, // 30 second connection timeout
       allowExitOnIdle: true,
       options: '-c statement_timeout=60000',

@@ -217,15 +217,64 @@ const config = buildConfig({
       },
     }),
     // SEO plugin - adds meta fields with live Google preview
+    // Uses AI generation if OPENAI_API_KEY is configured, otherwise falls back to templates
     seoPlugin({
       collections: ['blog-posts', 'services', 'pages', 'vehicles'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `${doc?.title || 'Lake Ride Pros'} | Lake of the Ozarks`,
-      generateDescription: ({ doc, collectionSlug }) => {
+      generateTitle: async ({ doc, collectionSlug }) => {
+        // Try AI generation first
+        try {
+          const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
+          if (baseURL && process.env.OPENAI_API_KEY) {
+            const res = await fetch(`${baseURL}/api/seo/generate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                title: doc?.title,
+                excerpt: doc?.excerpt,
+                description: doc?.description,
+                collectionSlug,
+                type: 'title',
+              }),
+            })
+            if (res.ok) {
+              const { generated } = await res.json()
+              if (generated) return generated
+            }
+          }
+        } catch {
+          // Fall through to template
+        }
+        // Fallback template
+        return `${doc?.title || 'Lake Ride Pros'} | Lake of the Ozarks`
+      },
+      generateDescription: async ({ doc, collectionSlug }) => {
+        // Try AI generation first
+        try {
+          const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
+          if (baseURL && process.env.OPENAI_API_KEY) {
+            const res = await fetch(`${baseURL}/api/seo/generate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                title: doc?.title,
+                excerpt: doc?.excerpt,
+                description: doc?.description,
+                collectionSlug,
+                type: 'description',
+              }),
+            })
+            if (res.ok) {
+              const { generated } = await res.json()
+              if (generated) return generated
+            }
+          }
+        } catch {
+          // Fall through to template
+        }
+        // Fallback template
         const base = doc?.excerpt || doc?.description || ''
-        // If description is already good length, use it
         if (base.length >= 100) return base.slice(0, 150)
-        // Otherwise, enhance with context based on collection
         const suffix = collectionSlug === 'blog-posts'
           ? ' Lake Ride Pros offers premium transportation at Lake of the Ozarks. Book now!'
           : collectionSlug === 'services'

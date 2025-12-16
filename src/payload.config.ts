@@ -220,8 +220,21 @@ const config = buildConfig({
     seoPlugin({
       collections: ['blog-posts', 'services', 'pages', 'vehicles'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `${doc?.title || 'Lake Ride Pros'} | Lake Ride Pros`,
-      generateDescription: ({ doc }) => doc?.excerpt || doc?.description || '',
+      generateTitle: ({ doc }) => `${doc?.title || 'Lake Ride Pros'} | Lake of the Ozarks`,
+      generateDescription: ({ doc, collectionSlug }) => {
+        const base = doc?.excerpt || doc?.description || ''
+        // If description is already good length, use it
+        if (base.length >= 100) return base.slice(0, 150)
+        // Otherwise, enhance with context based on collection
+        const suffix = collectionSlug === 'blog-posts'
+          ? ' Lake Ride Pros offers premium transportation at Lake of the Ozarks. Book now!'
+          : collectionSlug === 'services'
+          ? ' Professional chauffeur service at Lake of the Ozarks. Reserve your ride today.'
+          : collectionSlug === 'vehicles'
+          ? ' Experience luxury transportation at Lake of the Ozarks with Lake Ride Pros.'
+          : ' Lake Ride Pros - Premier transportation service at Lake of the Ozarks.'
+        return (base + suffix).slice(0, 150)
+      },
       generateURL: ({ doc, collectionSlug }) => {
         const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com'
         if (collectionSlug === 'blog-posts') return `${baseURL}/blog/${doc?.slug}`

@@ -252,6 +252,13 @@ const config = buildConfig({
           group: 'Settings',
         },
       },
+      beforeSync: ({ originalDoc, searchDoc }) => {
+        // Extract title from different collection document structures
+        return {
+          ...searchDoc,
+          title: originalDoc?.title || originalDoc?.name || originalDoc?.businessName || 'Untitled',
+        }
+      },
     }),
   ],
 })

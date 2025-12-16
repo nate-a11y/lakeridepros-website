@@ -219,7 +219,7 @@ const config = buildConfig({
     // SEO plugin - adds meta fields with live Google preview
     // Uses AI generation if OPENAI_API_KEY is configured, otherwise falls back to templates
     seoPlugin({
-      collections: ['blog-posts', 'services', 'pages', 'vehicles'],
+      collections: ['blog-posts', 'services', 'pages', 'vehicles', 'partners'],
       uploadsCollection: 'media',
       generateTitle: async ({ doc, collectionSlug }) => {
         // Try AI generation first
@@ -281,6 +281,8 @@ const config = buildConfig({
           ? ' Professional chauffeur service at Lake of the Ozarks. Reserve your ride today.'
           : collectionSlug === 'vehicles'
           ? ' Experience luxury transportation at Lake of the Ozarks with Lake Ride Pros.'
+          : collectionSlug === 'partners'
+          ? ' Trusted partner of Lake Ride Pros at Lake of the Ozarks. Learn more!'
           : ' Lake Ride Pros - Premier transportation service at Lake of the Ozarks.'
         return (base + suffix).slice(0, 150)
       },
@@ -289,6 +291,7 @@ const config = buildConfig({
         if (collectionSlug === 'blog-posts') return `${baseURL}/blog/${doc?.slug}`
         if (collectionSlug === 'services') return `${baseURL}/services/${doc?.slug}`
         if (collectionSlug === 'vehicles') return `${baseURL}/fleet/${doc?.slug}`
+        if (collectionSlug === 'partners') return `${baseURL}/trusted-referral-partners#${doc?.slug || doc?.businessName?.toLowerCase().replace(/\s+/g, '-')}`
         if (collectionSlug === 'pages') return `${baseURL}/${doc?.slug}`
         return baseURL
       },

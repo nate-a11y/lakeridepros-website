@@ -6,6 +6,9 @@ import { resendAdapter } from '@payloadcms/email-resend'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { searchPlugin } from '@payloadcms/plugin-search'
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
+import { sentryPlugin } from '@payloadcms/plugin-sentry'
+import { auditLogPlugin } from '@ghosthaise/payload-audit-log'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -260,6 +263,26 @@ const config = buildConfig({
         }
       },
     }),
+    // Form Builder plugin - create forms from admin UI
+    formBuilderPlugin({
+      formOverrides: {
+        admin: {
+          group: 'Forms',
+        },
+      },
+      formSubmissionOverrides: {
+        admin: {
+          group: 'Forms',
+        },
+      },
+      redirectRelationships: ['pages'],
+    }),
+    // Audit Log plugin - track who changed what and when
+    auditLogPlugin({
+      collections: ['blog-posts', 'services', 'pages', 'vehicles', 'partners', 'products', 'gift-cards', 'orders', 'testimonials'],
+    }),
+    // Sentry plugin - error tracking (only if SENTRY_DSN is configured)
+    ...(process.env.SENTRY_DSN ? [sentryPlugin({ enabled: true })] : []),
   ],
 })
 

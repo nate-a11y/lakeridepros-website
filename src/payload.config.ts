@@ -141,8 +141,7 @@ function getPoolConfig() {
     }
   } else {
     // Serverless runtime: balanced settings for Supabase pooler
-    // The pooler (port 6543) handles connection multiplexing, so we can use more connections
-    // per instance without exhausting the underlying Postgres connections
+    // The pooler (port 6543) handles connection multiplexing
     return {
       connectionString: getPostgresConnectionString(),
       ssl: { rejectUnauthorized: false },
@@ -218,11 +217,73 @@ const config = buildConfig({
       },
     }),
     // SEO plugin - adds meta fields with live Google preview
+    // Uses AI generation if OPENAI_API_KEY is configured, otherwise falls back to templates
     seoPlugin({
       collections: ['blog-posts', 'services', 'pages', 'vehicles'],
       uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `${doc?.title || 'Lake Ride Pros'} | Lake Ride Pros`,
-      generateDescription: ({ doc }) => doc?.excerpt || doc?.description || '',
+      generateTitle: async ({ doc, collectionSlug }) => {
+        // Try AI generation first
+        try {
+          const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
+          if (baseURL && process.env.OPENAI_API_KEY) {
+            const res = await fetch(`${baseURL}/api/seo/generate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                title: doc?.title,
+                excerpt: doc?.excerpt,
+                description: doc?.description,
+                collectionSlug,
+                type: 'title',
+              }),
+            })
+            if (res.ok) {
+              const { generated } = await res.json()
+              if (generated) return generated
+            }
+          }
+        } catch {
+          // Fall through to template
+        }
+        // Fallback template
+        return `${doc?.title || 'Lake Ride Pros'} | Lake of the Ozarks`
+      },
+      generateDescription: async ({ doc, collectionSlug }) => {
+        // Try AI generation first
+        try {
+          const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
+          if (baseURL && process.env.OPENAI_API_KEY) {
+            const res = await fetch(`${baseURL}/api/seo/generate`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                title: doc?.title,
+                excerpt: doc?.excerpt,
+                description: doc?.description,
+                collectionSlug,
+                type: 'description',
+              }),
+            })
+            if (res.ok) {
+              const { generated } = await res.json()
+              if (generated) return generated
+            }
+          }
+        } catch {
+          // Fall through to template
+        }
+        // Fallback template
+        const base = doc?.excerpt || doc?.description || ''
+        if (base.length >= 100) return base.slice(0, 150)
+        const suffix = collectionSlug === 'blog-posts'
+          ? ' Lake Ride Pros offers premium transportation at Lake of the Ozarks. Book now!'
+          : collectionSlug === 'services'
+          ? ' Professional chauffeur service at Lake of the Ozarks. Reserve your ride today.'
+          : collectionSlug === 'vehicles'
+          ? ' Experience luxury transportation at Lake of the Ozarks with Lake Ride Pros.'
+          : ' Lake Ride Pros - Premier transportation service at Lake of the Ozarks.'
+        return (base + suffix).slice(0, 150)
+      },
       generateURL: ({ doc, collectionSlug }) => {
         const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com'
         if (collectionSlug === 'blog-posts') return `${baseURL}/blog/${doc?.slug}`

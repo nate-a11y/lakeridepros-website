@@ -282,9 +282,8 @@ const config = buildConfig({
       collections: ['blog-posts', 'services', 'pages', 'vehicles', 'partners', 'products', 'gift-cards', 'orders', 'testimonials'],
     }),
     // Sentry plugin - error tracking (only if SENTRY_DSN is configured)
-    ...(process.env.SENTRY_DSN ? [sentryPlugin({
-      dsn: process.env.SENTRY_DSN,
-    })] : []),
+    // Note: Sentry plugin reads SENTRY_DSN from environment automatically
+    ...(process.env.SENTRY_DSN ? [sentryPlugin()] : []),
   ],
 })
 

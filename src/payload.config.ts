@@ -3,6 +3,9 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import { resendAdapter } from '@payloadcms/email-resend'
+import { seoPlugin } from '@payloadcms/plugin-seo'
+import { redirectsPlugin } from '@payloadcms/plugin-redirects'
+import { searchPlugin } from '@payloadcms/plugin-search'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -208,6 +211,45 @@ const config = buildConfig({
         media: {
           adapter: supabaseAdapter,
           disableLocalStorage: true,
+        },
+      },
+    }),
+    // SEO plugin - adds meta fields with live Google preview
+    seoPlugin({
+      collections: ['blog-posts', 'services', 'pages', 'vehicles'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => `${doc?.title || 'Lake Ride Pros'} | Lake Ride Pros`,
+      generateDescription: ({ doc }) => doc?.excerpt || doc?.description || '',
+      generateURL: ({ doc, collectionSlug }) => {
+        const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || 'https://www.lakeridepros.com'
+        if (collectionSlug === 'blog-posts') return `${baseURL}/blog/${doc?.slug}`
+        if (collectionSlug === 'services') return `${baseURL}/services/${doc?.slug}`
+        if (collectionSlug === 'vehicles') return `${baseURL}/fleet/${doc?.slug}`
+        if (collectionSlug === 'pages') return `${baseURL}/${doc?.slug}`
+        return baseURL
+      },
+    }),
+    // Redirects plugin - manage redirects from admin UI
+    redirectsPlugin({
+      collections: ['blog-posts', 'services', 'pages', 'vehicles'],
+      overrides: {
+        admin: {
+          group: 'Settings',
+        },
+      },
+    }),
+    // Search plugin - full-text search across collections
+    searchPlugin({
+      collections: ['blog-posts', 'services', 'vehicles', 'partners'],
+      defaultPriorities: {
+        'blog-posts': 10,
+        'services': 20,
+        'vehicles': 15,
+        'partners': 5,
+      },
+      searchOverrides: {
+        admin: {
+          group: 'Settings',
         },
       },
     }),

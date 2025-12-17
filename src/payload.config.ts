@@ -6,7 +6,7 @@ import { resendAdapter } from '@payloadcms/email-resend'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { searchPlugin } from '@payloadcms/plugin-search'
-// import { formBuilderPlugin } from '@payloadcms/plugin-form-builder' // DISABLED - requires migration
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { sentryPlugin } from '@payloadcms/plugin-sentry'
 import { auditLogPlugin } from '@ghosthaise/payload-audit-log'
 import sharp from 'sharp'
@@ -327,21 +327,20 @@ const config = buildConfig({
         }
       },
     }),
-    // Form Builder plugin - DISABLED: Requires proper migration to set up tables
-    // Uncomment when ready to run: npx payload migrate:create && npx payload migrate
-    // formBuilderPlugin({
-    //   formOverrides: {
-    //     admin: {
-    //       group: 'Forms',
-    //     },
-    //   },
-    //   formSubmissionOverrides: {
-    //     admin: {
-    //       group: 'Forms',
-    //     },
-    //   },
-    //   redirectRelationships: ['pages'],
-    // }),
+    // Form Builder plugin - create forms from admin UI
+    formBuilderPlugin({
+      formOverrides: {
+        admin: {
+          group: 'Forms',
+        },
+      },
+      formSubmissionOverrides: {
+        admin: {
+          group: 'Forms',
+        },
+      },
+      redirectRelationships: ['pages'],
+    }),
     // Audit Log plugin - track who changed what and when
     auditLogPlugin({
       collections: ['blog-posts', 'services', 'pages', 'vehicles', 'partners', 'products', 'gift-cards', 'orders', 'testimonials'],

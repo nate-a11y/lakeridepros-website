@@ -245,12 +245,12 @@ export default async function PartnerDetailPage({ params }: Props) {
                   if (!imageUrl) return null;
 
                   return (
-                    <div key={imageItem.id || index} className="relative aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                    <div key={imageItem.id || index} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                       <Image
                         src={imageUrl}
                         alt={`${partner.name} - Image ${index + 1}`}
                         fill
-                        className="object-cover"
+                        className="object-contain p-2"
                       />
                     </div>
                   );

@@ -6,19 +6,6 @@ import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/payload-local';
 import type { Media } from '@/src/payload-types';
 
-// Wedding category labels mapping
-const weddingCategoryLabels: Record<string, string> = {
-  'venues-destinations': 'Venues & Destinations',
-  'photography-videography': 'Photography & Videography',
-  'catering-culinary': 'Catering/Culinary',
-  'floral-decor': 'Floral & Decor',
-  'planning-coordination': 'Planning & Coordination',
-  'bridal-beauty-style': 'Bridal Beauty & Style',
-  'transportation': 'Transportation',
-  'hotels-lodging': 'Hotels & Lodging',
-  'other-services': 'Other Services',
-};
-
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -32,36 +19,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!partner) {
     return {
-      title: 'Wedding Partner Not Found | Lake Ride Pros',
+      title: 'Premier Partner Not Found | Lake Ride Pros',
     };
   }
 
-  // Use wedding-specific content if available
-  const weddingBlurb = partner.weddingBlurb || partner.blurb;
-  const weddingDescription = partner.weddingDescription || partner.description;
-  const description = weddingBlurb || weddingDescription || '';
-
+  const description = partner.blurb || partner.description || '';
   const partnerLogo = typeof partner.logo === 'object' ? partner.logo : null;
   const imageUrl = partnerLogo?.url
     ? getMediaUrl(partnerLogo.url)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
-  const title = `${partner.name} | Lake Ride Pros Wedding Partner`;
+  const title = `${partner.name} | Lake Ride Pros Local Premier Partner`;
 
   const metaDescription = description
     ? description.slice(0, 160)
-    : `${partner.name} - Lake Ride Pros trusted wedding partner at Lake of the Ozarks`;
+    : `${partner.name} - Lake Ride Pros local premier partner at Lake of the Ozarks`;
 
   return {
     title,
     description: metaDescription,
     alternates: {
-      canonical: `https://www.lakeridepros.com/wedding-partners/${slug}`,
+      canonical: `https://www.lakeridepros.com/local-premier-partners/${slug}`,
     },
     openGraph: {
       title,
       description: metaDescription,
-      url: `https://www.lakeridepros.com/wedding-partners/${slug}`,
+      url: `https://www.lakeridepros.com/local-premier-partners/${slug}`,
       siteName: 'Lake Ride Pros',
       images: [
         {
@@ -83,7 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function WeddingPartnerDetailPage({ params }: Props) {
+export default async function PremierPartnerDetailPage({ params }: Props) {
   const { slug } = await params;
   const partner = await getPartnerBySlugLocal(slug);
 
@@ -93,15 +76,6 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
 
   const logoObj = typeof partner.logo === 'object' ? partner.logo : null;
   const logoUrl = logoObj?.url ? getMediaUrl(logoObj.url) : null;
-
-  // Use wedding-specific content if available
-  const displayBlurb = partner.weddingBlurb || partner.blurb;
-  const displayDescription = partner.weddingDescription || partner.description;
-
-  // Get wedding category label
-  const weddingCategoryLabel = partner.weddingCategory
-    ? weddingCategoryLabels[partner.weddingCategory] || partner.weddingCategory
-    : 'Wedding Partner';
 
   return (
     <div className="min-h-screen bg-lrp-white dark:bg-dark-bg-primary">
@@ -118,8 +92,8 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
               <li>
                 <div className="flex items-center">
                   <span className="mx-2 text-gray-400 dark:text-gray-600">/</span>
-                  <Link href="/wedding-partners" className="text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green dark:hover:text-lrp-green">
-                    Wedding Partners
+                  <Link href="/local-premier-partners" className="text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green dark:hover:text-lrp-green">
+                    Local Premier Partners
                   </Link>
                 </div>
               </li>
@@ -161,13 +135,13 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
                   {partner.name}
                 </h1>
                 <p className="text-sm text-lrp-green font-medium mb-4">
-                  {weddingCategoryLabel}
+                  Local Premier Partner
                 </p>
 
-                {/* Blurb - use wedding-specific if available */}
-                {displayBlurb && (
+                {/* Blurb */}
+                {partner.blurb && (
                   <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
-                    {displayBlurb}
+                    {partner.blurb}
                   </p>
                 )}
 
@@ -214,12 +188,12 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Description Section - use wedding-specific if available */}
-          {displayDescription && (
+          {/* Description Section */}
+          {partner.description && (
             <div className="p-8 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-4">About</h2>
               <p className="text-lrp-text-secondary dark:text-dark-text-secondary whitespace-pre-wrap leading-relaxed">
-                {displayDescription}
+                {partner.description}
               </p>
             </div>
           )}
@@ -254,11 +228,11 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
         {/* Back Button */}
         <div className="mt-8">
           <Link
-            href="/wedding-partners"
+            href="/local-premier-partners"
             className="inline-flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark font-medium"
           >
             <span>←</span>
-            <span>Back to Wedding Partners</span>
+            <span>Back to Local Premier Partners</span>
           </Link>
         </div>
       </div>

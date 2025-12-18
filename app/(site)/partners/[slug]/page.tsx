@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
@@ -13,6 +13,27 @@ type Props = {
 // Force dynamic rendering to avoid build-time database queries
 export const dynamic = 'force-dynamic';
 
+// Helper to determine redirect URL based on partner type
+function getRedirectUrl(partner: { isWeddingPartner?: boolean | null; isPremierPartner?: boolean | null; category?: string | null }, slug: string): string | null {
+  // Redirect wedding partners to dedicated page
+  if (partner.isWeddingPartner) {
+    return `/wedding-partners/${slug}`;
+  }
+  // Redirect premier partners to dedicated page
+  if (partner.isPremierPartner) {
+    return `/local-premier-partners/${slug}`;
+  }
+  // Check legacy category field
+  if (partner.category === 'wedding') {
+    return `/wedding-partners/${slug}`;
+  }
+  if (partner.category === 'local-premier') {
+    return `/local-premier-partners/${slug}`;
+  }
+  // No redirect needed for referral partners - they stay on /partners/[slug]
+  return null;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const partner = await getPartnerBySlugLocal(slug);
@@ -22,6 +43,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: 'Partner Not Found | Lake Ride Pros',
     };
   }
+
+  // Determine canonical URL based on partner type
+  const redirectUrl = getRedirectUrl(partner, slug);
+  const canonicalPath = redirectUrl || `/partners/${slug}`;
 
   const description = partner.blurb || partner.description || '';
   const partnerLogo = typeof partner.logo === 'object' ? partner.logo : null;
@@ -39,12 +64,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description: metaDescription,
     alternates: {
-      canonical: `https://www.lakeridepros.com/partners/${slug}`,
+      canonical: `https://www.lakeridepros.com${canonicalPath}`,
     },
     openGraph: {
       title,
       description: metaDescription,
-      url: `https://www.lakeridepros.com/partners/${slug}`,
+      url: `https://www.lakeridepros.com${canonicalPath}`,
       siteName: 'Lake Ride Pros',
       images: [
         {
@@ -74,43 +99,18 @@ export default async function PartnerDetailPage({ params }: Props) {
     notFound();
   }
 
+  // Redirect to dedicated pages for wedding and premier partners
+  const redirectUrl = getRedirectUrl(partner, slug);
+  if (redirectUrl) {
+    redirect(redirectUrl);
+  }
+
   const logoObj = typeof partner.logo === 'object' ? partner.logo : null;
   const logoUrl = logoObj?.url ? getMediaUrl(logoObj.url) : null;
 
-  // Determine category label and back link based on checkbox flags (new system)
-  // Priority: Premier > Referral > Wedding > Promotion (for partners with multiple flags)
-  let categoryLabel = 'Partner';
-  let backLink = '/';
-
-  if (partner.isPremierPartner) {
-    categoryLabel = 'Local Premier Partners';
-    backLink = '/local-premier-partners';
-  } else if (partner.isReferralPartner) {
-    categoryLabel = 'Trusted Referral Partners';
-    backLink = '/trusted-referral-partners';
-  } else if (partner.isWeddingPartner) {
-    categoryLabel = 'Wedding Partners';
-    backLink = '/wedding-partners';
-  } else if (partner.isPromotion) {
-    categoryLabel = 'Promotions';
-    backLink = '/promotions';
-  } else if (partner.category) {
-    // Fallback to legacy category field for old records
-    const categoryLabels: { [key: string]: string } = {
-      'wedding': 'Wedding Partners',
-      'local-premier': 'Local Premier Partners',
-      'trusted-referral': 'Trusted Referral Partners',
-      'promotions': 'Promotions',
-    };
-    const categoryLinks: { [key: string]: string } = {
-      'wedding': '/wedding-partners',
-      'local-premier': '/local-premier-partners',
-      'trusted-referral': '/trusted-referral-partners',
-      'promotions': '/promotions',
-    };
-    categoryLabel = categoryLabels[partner.category] || partner.category;
-    backLink = categoryLinks[partner.category] || '/';
-  }
+  // After redirects, this page only serves referral partners and promotions
+  const categoryLabel = partner.isPromotion ? 'Promotions' : 'Trusted Referral Partners';
+  const backLink = partner.isPromotion ? '/promotions' : '/trusted-referral-partners';
 
   return (
     <div className="min-h-screen bg-lrp-white dark:bg-dark-bg-primary">
@@ -151,13 +151,13 @@ export default async function PartnerDetailPage({ params }: Props) {
             <div className="flex flex-col md:flex-row gap-8 items-start">
               {/* Logo */}
               {logoUrl && (
-                <div className="flex-shrink-0">
-                  <div className="w-48 h-48 bg-gray-50 dark:bg-dark-bg-primary border-2 border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center p-4">
+                <div className="flex-shrink-0 w-full md:w-auto">
+                  <div className="w-full h-72 md:w-72 md:h-72 bg-gray-50 dark:bg-dark-bg-primary border-2 border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center p-6">
                     <Image
                       src={logoUrl}
                       alt={partner.name}
-                      width={180}
-                      height={180}
+                      width={270}
+                      height={270}
                       className="max-w-full max-h-full object-contain"
                     />
                   </div>

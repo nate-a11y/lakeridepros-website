@@ -77,23 +77,40 @@ export default async function PartnerDetailPage({ params }: Props) {
   const logoObj = typeof partner.logo === 'object' ? partner.logo : null;
   const logoUrl = logoObj?.url ? getMediaUrl(logoObj.url) : null;
 
-  // Get category label
-  const categoryLabels: { [key: string]: string } = {
-    'wedding': 'Wedding Partners',
-    'local-premier': 'Local Premier Partners',
-    'trusted-referral': 'Trusted Referral Partners',
-    'promotions': 'Promotions',
-  };
-  const categoryLabel = categoryLabels[partner.category] || partner.category;
+  // Determine category label and back link based on checkbox flags (new system)
+  // Priority: Premier > Referral > Wedding > Promotion (for partners with multiple flags)
+  let categoryLabel = 'Partner';
+  let backLink = '/';
 
-  // Get back link based on category
-  const categoryLinks: { [key: string]: string } = {
-    'wedding': '/wedding-partners',
-    'local-premier': '/local-premier-partners',
-    'trusted-referral': '/trusted-referral-partners',
-    'promotions': '/promotions',
-  };
-  const backLink = categoryLinks[partner.category] || '/';
+  if (partner.isPremierPartner) {
+    categoryLabel = 'Local Premier Partners';
+    backLink = '/local-premier-partners';
+  } else if (partner.isReferralPartner) {
+    categoryLabel = 'Trusted Referral Partners';
+    backLink = '/trusted-referral-partners';
+  } else if (partner.isWeddingPartner) {
+    categoryLabel = 'Wedding Partners';
+    backLink = '/wedding-partners';
+  } else if (partner.isPromotion) {
+    categoryLabel = 'Promotions';
+    backLink = '/promotions';
+  } else if (partner.category) {
+    // Fallback to legacy category field for old records
+    const categoryLabels: { [key: string]: string } = {
+      'wedding': 'Wedding Partners',
+      'local-premier': 'Local Premier Partners',
+      'trusted-referral': 'Trusted Referral Partners',
+      'promotions': 'Promotions',
+    };
+    const categoryLinks: { [key: string]: string } = {
+      'wedding': '/wedding-partners',
+      'local-premier': '/local-premier-partners',
+      'trusted-referral': '/trusted-referral-partners',
+      'promotions': '/promotions',
+    };
+    categoryLabel = categoryLabels[partner.category] || partner.category;
+    backLink = categoryLinks[partner.category] || '/';
+  }
 
   return (
     <div className="min-h-screen bg-lrp-white dark:bg-dark-bg-primary">

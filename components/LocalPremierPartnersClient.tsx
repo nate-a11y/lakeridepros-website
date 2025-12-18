@@ -105,7 +105,7 @@ export default function LocalPremierPartnersClient({ partners }: LocalPremierPar
                     {/* Learn More Button */}
                     {partner.slug && (
                       <Link
-                        href={`/partners/${partner.slug}`}
+                        href={`/local-premier-partners/${partner.slug}`}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-lrp-green hover:bg-lrp-green-dark text-white rounded-md font-medium transition-colors text-sm"
                       >
                         <span>Learn More About {partner.name}</span>

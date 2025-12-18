@@ -151,13 +151,13 @@ export default async function PartnerDetailPage({ params }: Props) {
             <div className="flex flex-col md:flex-row gap-8 items-start">
               {/* Logo */}
               {logoUrl && (
-                <div className="flex-shrink-0">
-                  <div className="w-48 h-48 bg-gray-50 dark:bg-dark-bg-primary border-2 border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center p-4">
+                <div className="flex-shrink-0 w-full md:w-auto">
+                  <div className="w-full h-72 md:w-72 md:h-72 bg-gray-50 dark:bg-dark-bg-primary border-2 border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center p-6">
                     <Image
                       src={logoUrl}
                       alt={partner.name}
-                      width={180}
-                      height={180}
+                      width={270}
+                      height={270}
                       className="max-w-full max-h-full object-contain"
                     />
                   </div>

@@ -150,7 +150,7 @@ export const Partners: CollectionConfig = {
       ],
       admin: {
         description: '(Legacy) This field is being phased out - use the checkboxes above instead',
-        condition: () => false, // Hide from admin UI
+        hidden: true, // Completely hide from admin UI including table columns
       },
     },
     {

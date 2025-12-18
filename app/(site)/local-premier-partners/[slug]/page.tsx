@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/payload-local';
 import type { Media } from '@/src/payload-types';
+import ImageGallery from '@/components/ImageGallery';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -199,30 +200,23 @@ export default async function PremierPartnerDetailPage({ params }: Props) {
           )}
 
           {/* Images Gallery */}
-          {partner.images && Array.isArray(partner.images) && partner.images.length > 0 && (
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-6">Gallery</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {partner.images.map((imageItem, index: number) => {
-                  const imageObj = typeof imageItem.image === 'object' ? imageItem.image as Media : null;
-                  const imageUrl = imageObj?.url ? getMediaUrl(imageObj.url) : null;
+          {partner.images && Array.isArray(partner.images) && partner.images.length > 0 && (() => {
+            const galleryImages = partner.images
+              .map((imageItem, index: number) => {
+                const imageObj = typeof imageItem.image === 'object' ? imageItem.image as Media : null;
+                const imageUrl = imageObj?.url ? getMediaUrl(imageObj.url) : null;
+                if (!imageUrl) return null;
+                return { url: imageUrl, alt: `${partner.name} - Image ${index + 1}` };
+              })
+              .filter((img): img is { url: string; alt: string } => img !== null);
 
-                  if (!imageUrl) return null;
-
-                  return (
-                    <div key={imageItem.id || index} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                      <Image
-                        src={imageUrl}
-                        alt={`${partner.name} - Image ${index + 1}`}
-                        fill
-                        className="object-contain p-2"
-                      />
-                    </div>
-                  );
-                })}
+            return galleryImages.length > 0 ? (
+              <div className="p-8">
+                <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-6">Gallery</h2>
+                <ImageGallery images={galleryImages} partnerName={partner.name} />
               </div>
-            </div>
-          )}
+            ) : null;
+          })()}
         </div>
 
         {/* Back Button */}

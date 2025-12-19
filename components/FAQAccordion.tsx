@@ -104,7 +104,7 @@ export default function FAQAccordion() {
                 <div
                   className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
                     openIndex === index
-                      ? 'bg-primary text-white rotate-180'
+                      ? 'bg-primary text-lrp-black rotate-180'
                       : 'bg-neutral-100 dark:bg-dark-bg-secondary text-neutral-600 dark:text-neutral-400'
                   }`}
                 >
@@ -140,7 +140,7 @@ export default function FAQAccordion() {
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-primary-dark hover:bg-primary text-white font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="inline-flex items-center gap-2 bg-primary-dark hover:bg-primary text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               Contact Us
             </Link>

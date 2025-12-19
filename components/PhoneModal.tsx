@@ -113,7 +113,7 @@ export function PhoneModal() {
             {/* Call Button */}
             <a
               href={`tel:${PHONE_NUMBER}`}
-              className="flex items-center justify-center gap-3 w-full p-4 bg-primary hover:bg-primary-dark text-white rounded-lg transition-colors font-semibold"
+              className="flex items-center justify-center gap-3 w-full p-4 bg-primary hover:bg-primary-dark text-lrp-black rounded-lg transition-colors font-semibold"
               onClick={closeModal}
             >
               <Phone className="w-5 h-5" />
@@ -123,7 +123,7 @@ export function PhoneModal() {
             {/* Text Button */}
             <a
               href={`sms:${PHONE_NUMBER}`}
-              className="flex items-center justify-center gap-3 w-full p-4 bg-gray-100 hover:bg-gray-200 dark:bg-dark-bg-tertiary dark:hover:bg-dark-bg-primary text-gray-800 dark:text-white rounded-lg transition-colors font-semibold"
+              className="flex items-center justify-center gap-3 w-full p-4 bg-gray-100 hover:bg-gray-200 dark:bg-dark-bg-tertiary dark:hover:bg-dark-bg-primary text-gray-800 dark:text-lrp-black rounded-lg transition-colors font-semibold"
               onClick={closeModal}
             >
               <MessageSquare className="w-5 h-5" />

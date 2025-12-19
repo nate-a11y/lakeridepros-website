@@ -171,7 +171,7 @@ export default function RescueSquadPage() {
 
               <Link
                 href="/book"
-                className="block w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-lg font-bold text-lg transition-all text-center"
+                className="block w-full bg-primary hover:bg-primary-dark text-lrp-black py-4 rounded-lg font-bold text-lg transition-all text-center"
               >
                 Check Availability
               </Link>
@@ -219,7 +219,7 @@ export default function RescueSquadPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black font-bold">
                   1
                 </div>
                 <div>
@@ -231,7 +231,7 @@ export default function RescueSquadPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black font-bold">
                   2
                 </div>
                 <div>
@@ -243,7 +243,7 @@ export default function RescueSquadPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black font-bold">
                   3
                 </div>
                 <div>
@@ -255,7 +255,7 @@ export default function RescueSquadPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black font-bold">
                   4
                 </div>
                 <div>

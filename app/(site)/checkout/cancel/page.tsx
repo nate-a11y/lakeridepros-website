@@ -41,7 +41,7 @@ export default function CheckoutCancelPage() {
           </Link>
           <Link
             href="/shop"
-            className="inline-flex items-center justify-center gap-2 border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-white px-8 py-4 rounded-lg font-bold transition-all"
+            className="inline-flex items-center justify-center gap-2 border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-lrp-black px-8 py-4 rounded-lg font-bold transition-all"
           >
             Continue Shopping
           </Link>

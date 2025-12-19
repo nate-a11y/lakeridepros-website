@@ -68,7 +68,7 @@ export default function ServicesShowcase({
                   )}
                   {/* Icon badge */}
                   {service.icon && (
-                    <div className="absolute top-4 left-4 flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-white shadow-lg">
+                    <div className="absolute top-4 left-4 flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-lrp-black shadow-lg">
                       <DynamicIcon name={service.icon} size={20} />
                     </div>
                   )}

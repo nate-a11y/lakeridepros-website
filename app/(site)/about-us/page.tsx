@@ -121,7 +121,7 @@ export default function AboutUsPage() {
 
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-6">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-lrp-black text-3xl font-bold mx-auto mb-6">
                   🛡️
                 </div>
                 <h3 className="text-2xl font-bold text-primary mb-4">
@@ -134,7 +134,7 @@ export default function AboutUsPage() {
               </div>
 
               <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-6">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-lrp-black text-3xl font-bold mx-auto mb-6">
                   ⭐
                 </div>
                 <h3 className="text-2xl font-bold text-primary mb-4">
@@ -147,7 +147,7 @@ export default function AboutUsPage() {
               </div>
 
               <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-6">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-lrp-black text-3xl font-bold mx-auto mb-6">
                   🤝
                 </div>
                 <h3 className="text-2xl font-bold text-primary mb-4">
@@ -223,7 +223,7 @@ export default function AboutUsPage() {
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
                     ✓
                   </div>
                 </div>
@@ -240,7 +240,7 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
                     ✓
                   </div>
                 </div>
@@ -257,7 +257,7 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
                     ✓
                   </div>
                 </div>
@@ -274,7 +274,7 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
                     ✓
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
                     ✓
                   </div>
                 </div>
@@ -308,7 +308,7 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
                     ✓
                   </div>
                 </div>
@@ -396,13 +396,13 @@ export default function AboutUsPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/book"
-              className="bg-primary hover:bg-primary-dark text-white px-10 py-4 rounded-lg font-bold text-lg transition-all"
+              className="bg-primary hover:bg-primary-dark text-lrp-black px-10 py-4 rounded-lg font-bold text-lg transition-all"
             >
               Book Your Ride
             </Link>
             <Link
               href="/contact"
-              className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-10 py-4 rounded-lg font-bold text-lg transition-all"
+              className="border-2 border-primary text-primary hover:bg-primary hover:text-lrp-black px-10 py-4 rounded-lg font-bold text-lg transition-all"
             >
               Contact Us
             </Link>

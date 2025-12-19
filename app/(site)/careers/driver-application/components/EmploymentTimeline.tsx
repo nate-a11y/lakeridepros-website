@@ -166,7 +166,7 @@ export default function EmploymentTimeline({ employments, requiredYears = 3 }: E
                       <p className="font-semibold text-neutral-900 dark:text-white">{emp.name}</p>
                       <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">{emp.position}</p>
                       {emp.subject_to_fmcsr && (
-                        <span className="inline-block mt-1 px-2 py-0.5 bg-primary text-white text-xs rounded">
+                        <span className="inline-block mt-1 px-2 py-0.5 bg-primary text-lrp-black text-xs rounded">
                           CMV Driver
                         </span>
                       )}

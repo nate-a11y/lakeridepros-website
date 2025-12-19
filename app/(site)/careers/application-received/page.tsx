@@ -147,7 +147,7 @@ function ApplicationReceivedContent() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/careers/application-status"
-              className="px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primary-dark transition-colors"
+              className="px-6 py-3 bg-primary text-lrp-black font-medium rounded-md hover:bg-primary-dark transition-colors"
             >
               Track Application Status
             </Link>

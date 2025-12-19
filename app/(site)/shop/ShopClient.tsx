@@ -186,7 +186,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)]"
+                className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)]"
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value} className="bg-dark-bg-secondary">
@@ -213,7 +213,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 id="page-size"
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
-                className="appearance-none pl-3 pr-8 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white text-sm font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green"
+                className="appearance-none pl-3 pr-8 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black text-sm font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green"
               >
                 <option value={20}>20</option>
                 <option value={40}>40</option>
@@ -281,14 +281,14 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 <button
                   onClick={() => setCurrentPage(1)}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  className="px-4 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
                 >
                   First
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  className="p-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
                   aria-label="Previous page"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -316,7 +316,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                         className={`px-4 py-2 rounded-lg border-2 font-semibold transition-all ${
                           currentPage === pageNum
                             ? 'border-lrp-green bg-lrp-green text-white'
-                            : 'border-dark-border bg-dark-bg-secondary text-white hover:border-lrp-green'
+                            : 'border-dark-border bg-dark-bg-secondary text-lrp-black hover:border-lrp-green'
                         }`}
                       >
                         {pageNum}
@@ -328,7 +328,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 <button
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  className="p-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
                   aria-label="Next page"
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -336,7 +336,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 <button
                   onClick={() => setCurrentPage(totalPages)}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  className="px-4 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
                 >
                   Last
                 </button>

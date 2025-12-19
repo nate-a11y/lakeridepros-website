@@ -21,7 +21,7 @@ export default function QuoteCTA({ notes }: QuoteCTAProps) {
         </p>
         <button
           onClick={() => setIsBookingOpen(true)}
-          className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-semibold transition-all hover:shadow-lg inline-flex items-center gap-2"
+          className="bg-primary hover:bg-primary-dark text-lrp-black px-8 py-3 rounded-lg font-semibold transition-all hover:shadow-lg inline-flex items-center gap-2"
         >
           Quote Now
         </button>

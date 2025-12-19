@@ -38,7 +38,7 @@ export default function PartnerFilters({
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search partners..."
             aria-label="Search partners by name or description"
-            className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white placeholder-lrp-text-secondary dark:placeholder-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-lrp-green focus:border-transparent"
+            className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-lrp-black placeholder-lrp-text-secondary dark:placeholder-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-lrp-green focus:border-transparent"
           />
           {searchTerm && (
             <button
@@ -61,7 +61,7 @@ export default function PartnerFilters({
               id="category-filter"
               value={subcategoryFilter || 'all'}
               onChange={(e) => onSubcategoryFilterChange(e.target.value)}
-              className="appearance-none w-full py-3 pl-4 pr-10 border border-gray-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white focus:outline-none focus:ring-2 focus:ring-lrp-green focus:border-transparent cursor-pointer"
+              className="appearance-none w-full py-3 pl-4 pr-10 border border-gray-300 dark:border-dark-border rounded-lg bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-lrp-black focus:outline-none focus:ring-2 focus:ring-lrp-green focus:border-transparent cursor-pointer"
               aria-label="Filter partners by category"
             >
               <option value="all">All Categories</option>

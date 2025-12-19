@@ -155,7 +155,7 @@ export default async function OurDriversPage() {
                           {driver.phone && (
                             <a
                               href={`tel:${driver.phone}`}
-                              className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-white rounded-lg text-sm font-medium transition-colors"
+                              className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-lrp-black text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-lrp-black rounded-lg text-sm font-medium transition-colors"
                               title={driver.phone}
                             >
                               <Phone className="w-4 h-4" />
@@ -165,7 +165,7 @@ export default async function OurDriversPage() {
                           {driver.email && (
                             <a
                               href={`mailto:${driver.email}`}
-                              className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-white text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-white rounded-lg text-sm font-medium transition-colors"
+                              className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-lrp-black text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-lrp-black rounded-lg text-sm font-medium transition-colors"
                               title={driver.email}
                             >
                               <Mail className="w-4 h-4" />
@@ -200,7 +200,7 @@ export default async function OurDriversPage() {
           </p>
           <Link
             href="/careers"
-            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-primary hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-lrp-black bg-primary hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           >
             View Career Opportunities
           </Link>

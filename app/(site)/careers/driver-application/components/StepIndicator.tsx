@@ -65,9 +65,9 @@ export default function StepIndicator({ currentStep, onStepClick }: StepIndicato
                     transition-all duration-200 focus:outline-none
                     ${
                       step.number < currentStep
-                        ? 'bg-primary text-white hover:bg-primary-dark cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2'
+                        ? 'bg-primary text-lrp-black hover:bg-primary-dark cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2'
                         : step.number === currentStep
-                        ? 'bg-primary text-white ring-4 ring-primary/30 dark:ring-primary/40'
+                        ? 'bg-primary text-lrp-black ring-4 ring-primary/30 dark:ring-primary/40'
                         : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 cursor-not-allowed'
                     }
                   `}

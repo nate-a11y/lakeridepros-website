@@ -200,7 +200,7 @@ export default function GiftCardsPage() {
                       onClick={() => setCardType('digital')}
                       className={`py-4 px-4 rounded-lg border-2 font-semibold transition-colors ${
                         cardType === 'digital'
-                          ? 'border-primary bg-primary text-white'
+                          ? 'border-primary bg-primary text-lrp-black'
                           : 'border-neutral-300 text-neutral-700 hover:border-primary'
                       }`}
                     >
@@ -214,7 +214,7 @@ export default function GiftCardsPage() {
                       onClick={() => setCardType('physical')}
                       className={`py-4 px-4 rounded-lg border-2 font-semibold transition-colors ${
                         cardType === 'physical'
-                          ? 'border-primary bg-primary text-white'
+                          ? 'border-primary bg-primary text-lrp-black'
                           : 'border-neutral-300 text-neutral-700 hover:border-primary'
                       }`}
                     >
@@ -247,7 +247,7 @@ export default function GiftCardsPage() {
                           onClick={() => setSelectedAmount(amount.value)}
                           className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors relative ${
                             selectedAmount === amount.value
-                              ? 'border-primary bg-primary text-white'
+                              ? 'border-primary bg-primary text-lrp-black'
                               : 'border-neutral-300 text-neutral-700 hover:border-primary'
                           } ${hasBonus ? 'pb-6' : ''}`}
                         >
@@ -303,7 +303,7 @@ export default function GiftCardsPage() {
                         onClick={() => setDeliveryMethod('immediate')}
                         className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors ${
                           deliveryMethod === 'immediate'
-                            ? 'border-primary bg-primary text-white'
+                            ? 'border-primary bg-primary text-lrp-black'
                             : 'border-neutral-300 text-neutral-700 hover:border-primary'
                         }`}
                       >
@@ -317,7 +317,7 @@ export default function GiftCardsPage() {
                         onClick={() => setDeliveryMethod('scheduled')}
                         className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors ${
                           deliveryMethod === 'scheduled'
-                            ? 'border-primary bg-primary text-white'
+                            ? 'border-primary bg-primary text-lrp-black'
                             : 'border-neutral-300 text-neutral-700 hover:border-primary'
                         }`}
                       >
@@ -650,7 +650,7 @@ export default function GiftCardsPage() {
                   <button
                     type="submit"
                     disabled={checkoutLoading || finalAmount < 10 || finalAmount > 1000}
-                    className="w-full bg-secondary hover:bg-secondary-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-secondary hover:bg-secondary-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-lrp-black font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
                     {checkoutLoading ? (
                       <>

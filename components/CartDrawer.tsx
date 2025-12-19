@@ -160,7 +160,7 @@ export default function CartDrawer() {
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
               Shipping and taxes calculated at checkout
             </p>
-            <button className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            <button className="w-full bg-primary hover:bg-primary-dark text-lrp-black font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
               Checkout
             </button>
             <Link

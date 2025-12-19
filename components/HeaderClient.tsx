@@ -236,7 +236,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   </button>
 
                   {item.dropdownType === 'services' && servicesDropdownOpen && (
-                    <div className="absolute top-full left-0 pt-0 w-[600px] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border p-6 z-50">
+                    <div role="menu" aria-label="Services submenu" className="absolute top-full left-0 pt-0 w-[600px] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border p-6 z-50">
                       <div className="grid grid-cols-2 gap-6">
                         {/* Featured Services Column */}
                         <div>
@@ -246,6 +246,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                               <Link
                                 key={service.name}
                                 href={service.href}
+                                role="menuitem"
                                 className="block px-3 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors rounded-md"
                               >
                                 {service.name}
@@ -260,6 +261,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                           <div className="space-y-1 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
                             <Link
                               href="/services"
+                              role="menuitem"
                               className="block px-3 py-2 text-sm font-semibold text-primary hover:bg-lrp-green/10 transition-colors rounded-md"
                             >
                               View All Services →
@@ -268,6 +270,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                               <Link
                                 key={service.name}
                                 href={service.href}
+                                role="menuitem"
                                 className="block px-3 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors rounded-md"
                               >
                                 {service.name}
@@ -280,11 +283,12 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   )}
 
                   {item.dropdownType === 'partners' && partnersDropdownOpen && (
-                    <div className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                    <div role="menu" aria-label="Partners submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}
                           href={dropdownItem.href}
+                          role="menuitem"
                           className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
                         >
                           {dropdownItem.name}
@@ -294,11 +298,12 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   )}
 
                   {item.dropdownType === 'shop' && shopDropdownOpen && (
-                    <div className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                    <div role="menu" aria-label="Shop submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}
                           href={dropdownItem.href}
+                          role="menuitem"
                           className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
                         >
                           {dropdownItem.name}
@@ -308,11 +313,12 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   )}
 
                   {item.dropdownType === 'insiders' && insidersDropdownOpen && (
-                    <div className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                    <div role="menu" aria-label="Insiders submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}
                           href={dropdownItem.href}
+                          role="menuitem"
                           className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
                         >
                           {dropdownItem.name}
@@ -335,7 +341,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
             {/* Quote Now Button */}
             <button
               onClick={() => setIsBookingOpen(true)}
-              className="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-lg font-semibold transition-all hover:shadow-lg"
+              className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-2.5 rounded-lg font-semibold transition-all hover:shadow-lg"
             >
               Quote Now
             </button>
@@ -371,6 +377,8 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
               {/* Animated Dropdown */}
               {socialDropdownOpen && (
               <div
+                role="menu"
+                aria-label="Social media links"
                 className="absolute top-full right-0 pt-0 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50 min-w-[160px]"
               >
                 {socialLinks.map((social) => {
@@ -381,8 +389,9 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      role="menuitem"
                       className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-lrp-green/10 hover:text-primary dark:hover:text-primary transition-colors"
-                      aria-label={`Follow Lake Ride Pros on ${social.name}`}
+                      aria-label={`Follow Lake Ride Pros on ${social.name} (opens in new tab)`}
                     >
                       <Icon className="w-4 h-4" />
                       <span>{social.name}</span>
@@ -473,7 +482,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   setIsBookingOpen(true)
                   setMobileMenuOpen(false)
                 }}
-                className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-semibold text-center transition-all"
+                className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-3 rounded-lg font-semibold text-center transition-all"
               >
                 Quote Now
               </button>

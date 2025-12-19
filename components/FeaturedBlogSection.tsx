@@ -98,7 +98,7 @@ export default function FeaturedBlogSection({
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
               <div className="flex items-center gap-3 mb-4">
                 {featuredPost.categories && featuredPost.categories.length > 0 && (
-                  <span className="bg-primary-dark text-white text-xs font-semibold px-3 py-1 rounded-full">
+                  <span className="bg-primary-dark text-lrp-black text-xs font-semibold px-3 py-1 rounded-full">
                     {getCategoryLabel(featuredPost.categories[0])}
                   </span>
                 )}

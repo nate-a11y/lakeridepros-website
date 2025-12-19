@@ -116,7 +116,7 @@ export default function ServicesShowcase({
         <div className="text-center mt-10">
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 bg-primary-dark hover:bg-primary text-white font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="inline-flex items-center gap-2 bg-primary-dark hover:bg-primary text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
             View All Services
             <ChevronRight className="w-5 h-5" />

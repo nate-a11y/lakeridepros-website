@@ -341,7 +341,7 @@ export default async function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/90 hover:text-lrp-green-light transition-colors"
-                  aria-label={`Follow Lake Ride Pros on ${social.name}`}
+                  aria-label={`Follow Lake Ride Pros on ${social.name} (opens in new tab)`}
                 >
                   <Icon className="w-6 h-6" />
                 </a>

@@ -54,7 +54,7 @@ export default function FeaturedVehiclesSection({
             <div className="text-center mt-12">
               <Link
                 href="/fleet"
-                className="inline-block bg-primary-dark hover:bg-primary text-white font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-bg-secondary"
+                className="inline-block bg-primary-dark hover:bg-primary text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-bg-secondary"
                 aria-label="View our full fleet of vehicles"
               >
                 View Full Fleet
@@ -93,7 +93,7 @@ export default function FeaturedVehiclesSection({
             </p>
             <Link
               href="/fleet"
-              className="inline-block bg-primary-dark hover:bg-primary text-white font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-bg-secondary"
+              className="inline-block bg-primary-dark hover:bg-primary text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-dark-bg-secondary"
               aria-label="Browse our complete fleet"
             >
               Browse Full Fleet

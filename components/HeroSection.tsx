@@ -29,7 +29,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => setIsBookingOpen(true)}
-                className="bg-primary hover:bg-primary-dark text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg hover:shadow-xl"
+                className="bg-primary hover:bg-primary-dark text-lrp-black font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg hover:shadow-xl"
               >
                 Book Your Ride
               </button>

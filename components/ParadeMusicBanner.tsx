@@ -172,7 +172,7 @@ export default function ParadeMusicBanner() {
                 href={bookmarkUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-dark text-white font-semibold text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-colors min-h-0"
+                className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-dark text-lrp-black font-semibold text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full transition-colors min-h-0"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

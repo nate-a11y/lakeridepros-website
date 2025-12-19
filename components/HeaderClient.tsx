@@ -341,7 +341,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
             {/* Quote Now Button */}
             <button
               onClick={() => setIsBookingOpen(true)}
-              className="bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-lg font-semibold transition-all hover:shadow-lg"
+              className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-2.5 rounded-lg font-semibold transition-all hover:shadow-lg"
             >
               Quote Now
             </button>
@@ -482,7 +482,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   setIsBookingOpen(true)
                   setMobileMenuOpen(false)
                 }}
-                className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-semibold text-center transition-all"
+                className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-3 rounded-lg font-semibold text-center transition-all"
               >
                 Quote Now
               </button>

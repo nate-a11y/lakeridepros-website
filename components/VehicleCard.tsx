@@ -61,7 +61,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
         )}
         {vehicle.featured && (
           <div
-            className="absolute top-4 right-4 bg-secondary dark:bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold shadow-md"
+            className="absolute top-4 right-4 bg-secondary dark:bg-primary text-lrp-black px-3 py-1 rounded-full text-sm font-semibold shadow-md"
             aria-label="Featured vehicle"
           >
             Featured

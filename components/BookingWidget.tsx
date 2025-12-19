@@ -58,13 +58,13 @@ export default function BookingWidget({ className = '', serviceSlug }: BookingWi
           </p>
           <div className="space-y-3">
             <PhoneLink
-              className="block w-full bg-primary-dark hover:bg-primary text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+              className="block w-full bg-primary-dark hover:bg-primary text-lrp-black font-semibold py-3 px-6 rounded-lg transition-colors"
             >
               Call/Text: (573) 206-9499
             </PhoneLink>
             <a
               href="mailto:contactus@lakeridepros.com"
-              className="block w-full bg-secondary-dark dark:bg-primary-dark hover:bg-secondary dark:hover:bg-primary text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+              className="block w-full bg-secondary-dark dark:bg-primary-dark hover:bg-secondary dark:hover:bg-primary text-lrp-black font-semibold py-3 px-6 rounded-lg transition-colors"
             >
               ✉️ Email: contactus@lakeridepros.com
             </a>

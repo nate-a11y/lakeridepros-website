@@ -22,9 +22,9 @@ export default function HeroSection() {
             </h1>
             <p className="text-center text-xl mt-6 mb-8 text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
               Missouri's premier transportation service. Safe rides, good times. Perfect for{' '}
-              <span className="font-bold text-lrp-black dark:text-white">weddings</span>,{' '}
-              <span className="font-bold text-lrp-black dark:text-white">wine tours</span>,{' '}
-              <span className="font-bold text-lrp-black dark:text-white">bachelor parties</span>, and special events.
+              <strong className="font-bold text-lrp-black dark:text-white">weddings</strong>,{' '}
+              <strong className="font-bold text-lrp-black dark:text-white">wine tours</strong>,{' '}
+              <strong className="font-bold text-lrp-black dark:text-white">bachelor parties</strong>, and special events.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button

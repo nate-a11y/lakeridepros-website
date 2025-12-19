@@ -382,7 +382,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-lrp-green/10 hover:text-primary dark:hover:text-primary transition-colors"
-                      aria-label={`Follow Lake Ride Pros on ${social.name}`}
+                      aria-label={`Follow Lake Ride Pros on ${social.name} (opens in new tab)`}
                     >
                       <Icon className="w-4 h-4" />
                       <span>{social.name}</span>

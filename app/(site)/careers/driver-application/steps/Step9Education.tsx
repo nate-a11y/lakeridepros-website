@@ -66,13 +66,13 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {fields.length === 0 && (
-          <div className="text-center py-8 text-lrp-text-secondary dark:text-dark-text-secondary border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg">
+          <div className="text-center py-8 text-lrp-text-secondary dark:text-dark-text-secondary border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg">
             No education records yet. Click below to add your education history.
           </div>
         )}
 
         {fields.map((field, index) => (
-          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
+          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Education {index + 1}</h3>
               <button
@@ -95,7 +95,7 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                     {...register(`education.${index}.school_name`)}
                     id={`education-school-name-${index}`}
                     type="text"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                     placeholder="e.g., Lincoln High School"
                   />
                   {errors.education?.[index]?.school_name && (
@@ -111,7 +111,7 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                     {...register(`education.${index}.location`)}
                     id={`education-location-${index}`}
                     type="text"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                     placeholder="e.g., Springfield, MO"
                   />
                   {errors.education?.[index]?.location && (
@@ -129,7 +129,7 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                     {...register(`education.${index}.course_of_study`)}
                     id={`education-course-${index}`}
                     type="text"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                     placeholder="e.g., Business Administration"
                   />
                 </div>
@@ -144,7 +144,7 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                     type="number"
                     min={0}
                     max={20}
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                     placeholder="e.g., 4"
                   />
                 </div>
@@ -156,7 +156,7 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                     {...register(`education.${index}.graduated`)}
                     type="checkbox"
                     id={`graduated-${index}`}
-                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded"
                   />
                   <label htmlFor={`graduated-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                     Graduated/Completed
@@ -172,7 +172,7 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
                   {...register(`education.${index}.details`)}
                   id={`education-details-${index}`}
                   rows={2}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                   placeholder="Certifications, honors, relevant coursework, etc."
                 />
               </div>
@@ -183,14 +183,14 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
         <button
           type="button"
           onClick={() => append({ school_name: '', location: '', course_of_study: '', years_completed: 0, graduated: false, details: '' })}
-          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg text-lrp-text-secondary dark:text-dark-text-secondary hover:border-primary hover:text-primary flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg text-lrp-text-secondary dark:text-dark-text-secondary hover:border-primary hover:text-primary flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Education Record
         </button>
 
         {/* Other Qualifications */}
-        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
+        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
           <label htmlFor="other-qualifications" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
             Other Qualifications, Certifications, or Training
           </label>
@@ -198,7 +198,7 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
             {...register('other_qualifications')}
             id="other-qualifications"
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary"
             placeholder="List any other relevant qualifications such as CDL training, defensive driving courses, safety certifications, etc."
           />
           <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-1">
@@ -210,13 +210,13 @@ export default function Step9Education({ onNext, onPrevious }: Step9EducationPro
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark"
+            className="px-6 py-3 bg-primary text-lrp-black font-semibold rounded-lg transition-colors hover:bg-primary-dark"
           >
             Continue
           </button>

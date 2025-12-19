@@ -69,7 +69,7 @@ export default function BlogPostsGrid({
           <button
             onClick={loadMore}
             disabled={isLoading}
-            className="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="bg-primary hover:bg-primary-dark text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             aria-label={isLoading ? 'Loading more blog posts' : 'Load more blog posts'}
           >
             {isLoading ? 'Loading...' : 'Load More'}

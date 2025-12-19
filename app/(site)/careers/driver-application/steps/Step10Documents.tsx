@@ -188,7 +188,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               id="license-front-upload"
               onDrop={(e) => handleDrop(e, 'front')}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
               onClick={() => frontInputRef.current?.click()}
               onKeyDown={(e) => e.key === 'Enter' && frontInputRef.current?.click()}
               role="button"
@@ -222,7 +222,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               />
             </div>
           ) : (
-            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
+            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {frontPreview.endsWith('.pdf') ? (
@@ -262,7 +262,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               id="license-back-upload"
               onDrop={(e) => handleDrop(e, 'back')}
               onDragOver={(e) => e.preventDefault()}
-              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
+              className="border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-8 text-center hover:border-primary transition-colors cursor-pointer"
               onClick={() => backInputRef.current?.click()}
               onKeyDown={(e) => e.key === 'Enter' && backInputRef.current?.click()}
               role="button"
@@ -296,7 +296,7 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
               />
             </div>
           ) : (
-            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
+            <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-4 bg-neutral-50 dark:hover:bg-dark-bg-secondary">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {backPreview.endsWith('.pdf') ? (
@@ -336,14 +336,14 @@ export default function Step10Documents({ onNext, onPrevious }: Step10DocumentsP
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
           >
             Previous
           </button>
           <button
             type="submit"
             disabled={uploading.front || uploading.back}
-            className="px-6 py-3 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-primary text-lrp-black font-semibold rounded-lg transition-colors hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Continue to Review
           </button>

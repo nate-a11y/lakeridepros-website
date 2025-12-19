@@ -148,7 +148,7 @@ export default function ApplicationStatusPage() {
                   <div
                     className={`w-16 h-16 rounded-full flex items-center justify-center border-4 transition-all duration-300 ${
                       isActive
-                        ? 'bg-primary border-primary text-white'
+                        ? 'bg-primary border-primary text-lrp-black'
                         : 'bg-white dark:bg-dark-bg-primary border-neutral-300 dark:border-dark-border text-neutral-400 dark:text-neutral-500'
                     } ${isCurrent ? 'ring-4 ring-primary/30 scale-110' : ''}`}
                   >
@@ -204,7 +204,7 @@ export default function ApplicationStatusPage() {
                 type="text"
                 id="applicationId"
                 placeholder="e.g., 123e4567-e89b-12d3-a456-426614174000"
-                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors ${
+                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors ${
                   errors.applicationId ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border'
                 }`}
               />
@@ -225,7 +225,7 @@ export default function ApplicationStatusPage() {
                 type="email"
                 id="email"
                 placeholder="your@email.com"
-                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors ${
+                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors ${
                   errors.email ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border'
                 }`}
               />
@@ -246,7 +246,7 @@ export default function ApplicationStatusPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-primary text-white font-medium rounded-md hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
+              className="w-full py-3 bg-primary text-lrp-black font-medium rounded-md hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
             >
               {isLoading ? (
                 <>

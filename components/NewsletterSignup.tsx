@@ -61,12 +61,12 @@ export default function NewsletterSignup() {
               required
               disabled={status === 'loading'}
               aria-label="Email address for newsletter signup"
-              className="flex-1 px-4 py-3 rounded-lg border-0 bg-white dark:bg-dark-bg-secondary dark:text-white dark:placeholder-neutral-400 focus:ring-2 focus:ring-secondary dark:focus:ring-primary focus:outline-none disabled:opacity-50 transition-colors"
+              className="flex-1 px-4 py-3 rounded-lg border-0 bg-white dark:bg-dark-bg-secondary dark:text-lrp-black dark:placeholder-neutral-400 focus:ring-2 focus:ring-secondary dark:focus:ring-primary focus:outline-none disabled:opacity-50 transition-colors"
             />
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="bg-secondary-dark dark:bg-primary-dark hover:bg-secondary dark:hover:bg-primary text-white font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-secondary-dark dark:bg-primary-dark hover:bg-secondary dark:hover:bg-primary text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
             </button>

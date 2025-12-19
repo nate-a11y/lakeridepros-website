@@ -147,7 +147,7 @@ export default async function Footer() {
   };
 
   return (
-    <footer className="bg-primary-dark dark:bg-dark-bg-primary text-white transition-colors">
+    <footer className="bg-primary-dark dark:bg-dark-bg-primary text-lrp-black transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-8 items-start">
           {/* Column 1 - Quick Links */}

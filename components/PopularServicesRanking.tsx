@@ -60,13 +60,13 @@ export default function PopularServicesRanking({
 
               <div className="relative bg-neutral-50 dark:bg-dark-bg-secondary rounded-xl p-6 hover:bg-white dark:hover:bg-dark-bg-tertiary transition-all duration-300 h-full flex flex-col">
                 {/* Rank Badge */}
-                <div className="absolute -top-3 -left-3 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                <div className="absolute -top-3 -left-3 w-8 h-8 bg-primary text-lrp-black rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
                   {index + 1}
                 </div>
 
                 {/* Icon */}
                 {service.icon && (
-                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light mb-4 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light mb-4 group-hover:bg-primary group-hover:text-lrp-black transition-all duration-300">
                     <DynamicIcon name={service.icon} size={24} />
                   </div>
                 )}

@@ -186,7 +186,7 @@ export default function FeaturedBlogSection({
                       )}
                       {post.categories && post.categories.length > 0 && (
                         <div className="absolute top-3 left-3">
-                          <span className="bg-primary/90 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 rounded">
+                          <span className="bg-primary/90 backdrop-blur-sm text-lrp-black text-xs font-semibold px-2 py-1 rounded">
                             {getCategoryLabel(post.categories[0])}
                           </span>
                         </div>
@@ -237,7 +237,7 @@ export default function FeaturedBlogSection({
         <div className="text-center mt-10">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 bg-primary-dark hover:bg-primary text-white font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="inline-flex items-center gap-2 bg-primary-dark hover:bg-primary text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             aria-label="View all blog articles"
           >
             View All Articles

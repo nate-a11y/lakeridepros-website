@@ -103,7 +103,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {fields.map((field, index) => (
-          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
+          <div key={field.id} className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Employment {index + 1}</h3>
               {fields.length > 1 && (
@@ -128,7 +128,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     {...register(`employment_history.${index}.name`)}
                     id={`employment-name-${index}`}
                     type="text"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                   />
                 </div>
 
@@ -140,7 +140,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     {...register(`employment_history.${index}.phone`)}
                     id={`employment-phone-${index}`}
                     type="tel"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                   />
                 </div>
               </div>
@@ -153,7 +153,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                   {...register(`employment_history.${index}.address`)}
                   id={`employment-address-${index}`}
                   type="text"
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                 />
               </div>
 
@@ -166,7 +166,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     {...register(`employment_history.${index}.position`)}
                     id={`employment-position-${index}`}
                     type="text"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                   />
                 </div>
 
@@ -179,7 +179,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     id={`employment-salary-${index}`}
                     type="text"
                     placeholder="e.g., $50,000/year or $25/hour"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                   />
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     {...register(`employment_history.${index}.from_date`)}
                     id={`employment-from-date-${index}`}
                     type="date"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                   />
                 </div>
 
@@ -201,7 +201,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     {...register(`employment_history.${index}.to_date`)}
                     id={`employment-to-date-${index}`}
                     type="date"
-                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                    className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                   />
                   <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-1">Leave blank if current position</p>
                 </div>
@@ -215,7 +215,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                   {...register(`employment_history.${index}.reason_leaving`)}
                   id={`employment-reason-leaving-${index}`}
                   type="text"
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
                 />
               </div>
 
@@ -225,7 +225,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     {...register(`employment_history.${index}.subject_to_fmcsr`)}
                     type="checkbox"
                     id={`fmcsr-${index}`}
-                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded"
                   />
                   <label htmlFor={`fmcsr-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                     Position subject to Federal Motor Carrier Safety Regulations (FMCSR)
@@ -237,7 +237,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
                     {...register(`employment_history.${index}.subject_to_dot_testing`)}
                     type="checkbox"
                     id={`dot-${index}`}
-                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
+                    className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded"
                   />
                   <label htmlFor={`dot-${index}`} className="ml-2 text-sm text-neutral-900 dark:text-white">
                     Position subject to DOT drug and alcohol testing
@@ -265,7 +265,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
         <button
           type="button"
           onClick={() => append({ name: '', phone: '', address: '', position: '', from_date: '', to_date: '', reason_leaving: '', salary: '', subject_to_fmcsr: false, subject_to_dot_testing: false, gap_explanation: '' })}
-          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg text-lrp-text-secondary dark:text-dark-text-secondary hover:border-primary hover:text-primary flex items-center justify-center gap-2"
+          className="w-full py-3 border-2 border-dashed border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg text-lrp-text-secondary dark:text-dark-text-secondary hover:border-primary hover:text-primary flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Add Another Employment Record
@@ -275,13 +275,13 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
           >
             Previous
           </button>
           <button
             type="submit"
-            className="px-6 py-3 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark"
+            className="px-6 py-3 bg-primary text-lrp-black font-semibold rounded-lg transition-colors hover:bg-primary-dark"
           >
             Continue
           </button>

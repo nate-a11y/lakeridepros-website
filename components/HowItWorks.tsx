@@ -81,7 +81,7 @@ export default function HowItWorks() {
                     </div>
 
                     {/* Step number badge */}
-                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold shadow-md">
+                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary text-lrp-black rounded-full flex items-center justify-center text-sm font-bold shadow-md">
                       {step.number}
                     </div>
                   </div>

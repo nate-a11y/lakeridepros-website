@@ -63,13 +63,13 @@ export default function BookPage() {
           </p>
           <nav aria-label="Contact options" className="flex flex-col sm:flex-row gap-4 justify-center">
             <PhoneLink
-              className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
+              className="bg-primary hover:bg-primary-dark text-lrp-black px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
             >
               (573) 206-9499
             </PhoneLink>
             <a
               href="mailto:contactus@lakeridepros.com"
-              className="bg-white dark:bg-dark-bg-tertiary border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
+              className="bg-white dark:bg-dark-bg-tertiary border-2 border-primary text-primary hover:bg-primary hover:text-lrp-black px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
               aria-label="Email Lake Ride Pros at contactus@lakeridepros.com"
             >
               <span aria-hidden="true">✉️</span> Email Us

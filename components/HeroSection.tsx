@@ -35,7 +35,7 @@ export default function HeroSection() {
               </button>
               <Link
                 href="/fleet"
-                className="bg-white dark:bg-dark-bg-secondary hover:bg-primary-light dark:hover:bg-primary border-2 border-primary text-primary dark:text-primary-light hover:text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-md"
+                className="bg-white dark:bg-dark-bg-secondary hover:bg-primary-light dark:hover:bg-primary border-2 border-primary text-primary dark:text-primary-light hover:text-lrp-black font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-md"
               >
                 View Our Fleet
               </Link>

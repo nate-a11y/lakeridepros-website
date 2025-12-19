@@ -165,7 +165,7 @@ export default async function DriverDetailPage({ params }: Props) {
                       {driver.phone && (
                         <a
                           href={`tel:${driver.phone}`}
-                          className="flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-primary-dark text-white rounded-lg font-medium transition-colors"
+                          className="flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-primary-dark text-lrp-black rounded-lg font-medium transition-colors"
                         >
                           <Phone className="w-5 h-5" />
                           <span>{driver.phone}</span>
@@ -174,7 +174,7 @@ export default async function DriverDetailPage({ params }: Props) {
                       {driver.email && (
                         <a
                           href={`mailto:${driver.email}`}
-                          className="flex items-center justify-center gap-2 px-5 py-3 bg-primary/10 hover:bg-primary hover:text-white text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-white rounded-lg font-medium transition-colors"
+                          className="flex items-center justify-center gap-2 px-5 py-3 bg-primary/10 hover:bg-primary hover:text-lrp-black text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-lrp-black rounded-lg font-medium transition-colors"
                         >
                           <Mail className="w-5 h-5" />
                           <span>Send Email</span>
@@ -201,13 +201,13 @@ export default async function DriverDetailPage({ params }: Props) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/book"
-              className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-white bg-primary hover:bg-primary-dark transition-colors"
+              className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-lrp-black bg-primary hover:bg-primary-dark transition-colors"
             >
               Book Now
             </Link>
             <Link
               href="/our-drivers"
-              className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-primary dark:text-primary-light border-2 border-primary hover:bg-primary hover:text-white transition-colors"
+              className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-primary dark:text-primary-light border-2 border-primary hover:bg-primary hover:text-lrp-black transition-colors"
             >
               Meet the Team
             </Link>

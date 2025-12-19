@@ -59,10 +59,11 @@ export default function TermsOfServicePage() {
                 href="https://customer.moovs.app/lake-ride-pros/terms-and-conditions"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-lrp-green hover:bg-lrp-green-dark text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                className="inline-flex items-center gap-2 bg-lrp-green hover:bg-lrp-green-dark text-lrp-black px-6 py-3 rounded-lg font-semibold transition-all"
+                aria-label="View Full Terms and Conditions (opens in new tab)"
               >
                 View Full Terms & Conditions
-                <ExternalLink className="w-5 h-5" />
+                <ExternalLink className="w-5 h-5" aria-hidden="true" />
               </a>
             </div>
           </div>

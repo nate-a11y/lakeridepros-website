@@ -68,7 +68,7 @@ export default async function FleetPage() {
             </p>
             <Link
               href="/contact"
-              className="inline-block mt-6 bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-semibold transition-all"
+              className="inline-block mt-6 bg-primary hover:bg-primary-dark text-lrp-black px-8 py-3 rounded-lg font-semibold transition-all"
             >
               Contact Us
             </Link>
@@ -116,7 +116,7 @@ export default async function FleetPage() {
                       </h2>
 
                       <div className="flex items-center gap-4 mb-4 flex-wrap">
-                        <span className="bg-primary text-white px-4 py-2 rounded-lg font-semibold">
+                        <span className="bg-primary text-lrp-black px-4 py-2 rounded-lg font-semibold">
                           {vehicle.capacity} passenger{vehicle.capacity !== 1 ? 's' : ''}
                         </span>
                         {vehicle.pricing?.pointToPointMinimum ? (
@@ -174,14 +174,14 @@ export default async function FleetPage() {
                       <div className="flex flex-col sm:flex-row gap-4">
                         <Link
                           href={`/fleet/${vehicle.slug}`}
-                          className="bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-lg font-semibold transition-all text-center"
+                          className="bg-primary hover:bg-primary-dark text-lrp-black px-8 py-3 rounded-lg font-semibold transition-all text-center"
                           aria-label={`View details about ${vehicle.name}`}
                         >
                           View Details
                         </Link>
                         <Link
                           href="/book"
-                          className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-semibold transition-all text-center"
+                          className="border-2 border-primary text-primary hover:bg-primary hover:text-lrp-black px-8 py-3 rounded-lg font-semibold transition-all text-center"
                         >
                           Check Availability
                         </Link>

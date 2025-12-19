@@ -212,7 +212,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               type="text"
               id="first_name"
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.first_name ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.first_name ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             />
             {errors.first_name && (
@@ -228,7 +228,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               {...register('middle_name')}
               type="text"
               id="middle_name"
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md focus:ring-2 focus:ring-primary focus:ring-primary focus:border-primary focus:border-primary"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md focus:ring-2 focus:ring-primary focus:ring-primary focus:border-primary focus:border-primary"
             />
           </div>
 
@@ -241,7 +241,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               type="text"
               id="last_name"
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.last_name ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.last_name ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             />
             {errors.last_name && (
@@ -261,7 +261,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               type="date"
               id="date_of_birth"
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.date_of_birth ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.date_of_birth ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             />
             {errors.date_of_birth && (
@@ -282,7 +282,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               onBlur={handleSSNBlur}
               onFocus={handleSSNFocus}
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.ssn ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.ssn ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             />
             {errors.ssn && (
@@ -305,7 +305,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               type="email"
               id="email"
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.email ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.email ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             />
             {errors.email && (
@@ -323,7 +323,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               id="phone"
               placeholder="(555) 123-4567"
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.phone ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.phone ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             />
             {errors.phone && (
@@ -342,7 +342,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
             type="text"
             id="address_street"
             className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-              errors.address_street ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+              errors.address_street ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
             }`}
           />
           {errors.address_street && (
@@ -360,7 +360,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               type="text"
               id="address_city"
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.address_city ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.address_city ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             />
             {errors.address_city && (
@@ -376,7 +376,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               {...register('address_state')}
               id="address_state"
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.address_state ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.address_state ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             >
               <option value="">Select State</option>
@@ -401,7 +401,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               id="address_zip"
               placeholder="12345"
               className={`w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary ${
-                errors.address_zip ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
+                errors.address_zip ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
               }`}
             />
             {errors.address_zip && (
@@ -417,7 +417,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
               {...register('legal_right_to_work')}
               type="checkbox"
               id="legal_right_to_work"
-              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
+              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded"
             />
             <label htmlFor="legal_right_to_work" className="ml-3 text-sm text-neutral-900 dark:text-white">
               I certify that I have the legal right to work in the United States *
@@ -436,7 +436,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
             className={`px-6 py-3 font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
               isEncrypting
                 ? 'bg-neutral-400 dark:bg-neutral-600 cursor-not-allowed text-white'
-                : 'bg-primary text-white hover:bg-primary-dark'
+                : 'bg-primary text-lrp-black hover:bg-primary-dark'
             }`}
             aria-label={isEncrypting ? 'Processing personal information' : 'Continue to residence history step'}
           >

@@ -189,10 +189,11 @@ export default async function PartnerDetailPage({ params }: Props) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark transition-colors"
+                      aria-label={`Visit ${partner.name} website (opens in new tab)`}
                     >
-                      <Globe className="w-5 h-5" />
+                      <Globe className="w-5 h-5" aria-hidden="true" />
                       <span>Visit Website</span>
-                      <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="w-4 h-4" aria-hidden="true" />
                     </a>
                   )}
                   {partner.phone && (

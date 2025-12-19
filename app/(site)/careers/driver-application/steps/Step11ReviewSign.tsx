@@ -169,7 +169,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
       {/* Application Summary */}
       <div className="space-y-4 mb-8">
         {/* Personal Information */}
-        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
+        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
           <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
@@ -191,7 +191,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
         </div>
 
         {/* License Information */}
-        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
+        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
           <h3 className="text-lg font-semibold mb-4">Current License</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
@@ -211,7 +211,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
         {/* Residence History */}
         {applicationData.residences && applicationData.residences.length > 0 && (
-          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
+          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
             <h3 className="text-lg font-semibold mb-4">Residence History</h3>
             <div className="space-y-2 text-sm">
               {applicationData.residences.map((res, idx) => (
@@ -226,7 +226,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
         {/* Employment History */}
         {applicationData.employment_history && applicationData.employment_history.length > 0 && (
-          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
+          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
             <h3 className="text-lg font-semibold mb-4">Employment History</h3>
             <div className="space-y-3 text-sm">
               {applicationData.employment_history.map((emp, idx) => (
@@ -243,7 +243,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
         {/* Driving Experience */}
         {applicationData.driving_experience && applicationData.driving_experience.length > 0 && (
-          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
+          <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
             <h3 className="text-lg font-semibold mb-4">Driving Experience</h3>
             <div className="space-y-2 text-sm">
               {applicationData.driving_experience.map((exp, idx) => (
@@ -256,7 +256,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
         )}
 
         {/* Safety History */}
-        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
+        <div className="border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-lg p-6 bg-white dark:bg-dark-bg-secondary">
           <h3 className="text-lg font-semibold mb-4">Safety History</h3>
           <div className="text-sm space-y-2">
             <div>
@@ -296,7 +296,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
             <button
               type="button"
               onClick={handleDownloadPDF}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-lg transition-colors hover:bg-primary-dark transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-lrp-black font-semibold rounded-lg transition-colors hover:bg-primary-dark transition-colors"
             >
               <Download className="w-5 h-5" />
               Download PDF Preview
@@ -320,7 +320,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
               {...register('certify')}
               type="checkbox"
               id="certify"
-              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
+              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded"
             />
             <label htmlFor="certify" className="ml-3 text-sm text-neutral-900 dark:text-white">
               I certify that all information provided in this application is true and correct *
@@ -338,7 +338,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
               {...register('certification_name_printed')}
               id="certification-name"
               type="text"
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
             />
             {errors.certification_name_printed && (
               <p className="text-red-600 text-sm mt-1">{errors.certification_name_printed.message}</p>
@@ -349,7 +349,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
             <label htmlFor="certification-signature" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
               Signature *
             </label>
-            <div id="certification-signature" className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
+            <div id="certification-signature" className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
               <SignatureCanvas
                 ref={signatureRef}
                 canvasProps={{
@@ -398,7 +398,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
             type="button"
             onClick={onPrevious}
             disabled={isSubmitting}
-            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary disabled:opacity-50"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary disabled:opacity-50"
           >
             Previous
           </button>

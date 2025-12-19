@@ -102,8 +102,9 @@ export default function TrustedReferralPartnersClient({
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-lrp-green-dark hover:text-lrp-green transition-colors"
+              aria-label={`Visit ${partner.name} website (opens in new tab)`}
             >
-              <ExternalLink className="w-4 h-4 flex-shrink-0" />
+              <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               <span className="truncate">Visit Website</span>
             </a>
           )}
@@ -122,7 +123,7 @@ export default function TrustedReferralPartnersClient({
         {partner.slug && (
           <Link
             href={`/partners/${partner.slug}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-lrp-green hover:bg-lrp-green-dark text-white rounded-md font-medium transition-colors text-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-lrp-green hover:bg-lrp-green-dark text-lrp-black rounded-md font-medium transition-colors text-sm"
           >
             <span>Learn More About {partner.name}</span>
             <ArrowRight className="w-4 h-4" />

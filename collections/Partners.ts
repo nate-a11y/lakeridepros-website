@@ -142,6 +142,7 @@ export const Partners: CollectionConfig = {
     {
       name: 'category',
       type: 'select',
+      required: false, // Explicitly allow null - this field is deprecated
       options: [
         { label: 'Wedding Partners', value: 'wedding' },
         { label: 'Local Premier Partners', value: 'local-premier' },

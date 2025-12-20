@@ -39,20 +39,6 @@ export const Pages: CollectionConfig = {
       relationTo: 'media',
     },
     {
-      name: 'metaTitle',
-      type: 'text',
-      admin: {
-        description: 'SEO meta title',
-      },
-    },
-    {
-      name: 'metaDescription',
-      type: 'textarea',
-      admin: {
-        description: 'SEO meta description',
-      },
-    },
-    {
       name: 'published',
       type: 'checkbox',
       defaultValue: false,

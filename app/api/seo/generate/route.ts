@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
- * AI-powered SEO content generator using OpenAI
+ * AI-powered SEO content generator using Claude API
  *
  * POST /api/seo/generate
  * Body: { title, excerpt, description, collectionSlug, type: 'title' | 'description' }
  */
 export async function POST(request: NextRequest) {
-  const apiKey = process.env.OPENAI_API_KEY
+  const apiKey = process.env.ANTHROPIC_API_KEY
 
   if (!apiKey) {
     return NextResponse.json(
-      { error: 'OpenAI API key not configured' },
+      { error: 'Anthropic API key not configured' },
       { status: 500 }
     )
   }
@@ -39,36 +39,36 @@ Content: ${content}
 
 Return ONLY the description text, no quotes or explanation.`
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 100,
+        system: systemPrompt,
         messages: [
-          { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
-        max_tokens: 100,
-        temperature: 0.7,
       }),
     })
 
     if (!response.ok) {
       const error = await response.text()
-      console.error('[SEO Generate] OpenAI error:', error)
-      return NextResponse.json({ error: 'OpenAI API error' }, { status: 500 })
+      console.error('[SEO Generate] Claude API error:', error)
+      return NextResponse.json({ error: 'Claude API error' }, { status: 500 })
     }
 
     const data = await response.json()
-    const generated = data.choices?.[0]?.message?.content?.trim() || ''
+    const generated = data.content?.[0]?.text?.trim() || ''
 
     return NextResponse.json({
       generated,
       type,
-      model: 'gpt-4o-mini'
+      model: 'claude-sonnet-4-20250514'
     })
   } catch (error) {
     console.error('[SEO Generate] Error:', error)

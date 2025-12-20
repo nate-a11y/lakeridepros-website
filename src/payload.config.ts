@@ -217,7 +217,7 @@ const config = buildConfig({
       },
     }),
     // SEO plugin - adds meta fields with live Google preview
-    // Uses AI generation if OPENAI_API_KEY is configured, otherwise falls back to templates
+    // Uses AI generation if ANTHROPIC_API_KEY is configured, otherwise falls back to templates
     seoPlugin({
       collections: ['blog-posts', 'services', 'pages', 'vehicles', 'partners'],
       uploadsCollection: 'media',
@@ -225,7 +225,7 @@ const config = buildConfig({
         // Try AI generation first
         try {
           const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
-          if (baseURL && process.env.OPENAI_API_KEY) {
+          if (baseURL && process.env.ANTHROPIC_API_KEY) {
             const res = await fetch(`${baseURL}/api/seo/generate`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -252,7 +252,7 @@ const config = buildConfig({
         // Try AI generation first
         try {
           const baseURL = process.env.NEXT_PUBLIC_SERVER_URL || ''
-          if (baseURL && process.env.OPENAI_API_KEY) {
+          if (baseURL && process.env.ANTHROPIC_API_KEY) {
             const res = await fetch(`${baseURL}/api/seo/generate`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },

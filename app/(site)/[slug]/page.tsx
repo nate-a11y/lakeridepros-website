@@ -33,12 +33,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  // SEO plugin adds meta as a group field with title, description, image
+  const meta = page.meta as { title?: string; description?: string } | undefined;
+
   return {
-    title: (page.metaTitle as string) || page.title,
-    description: (page.metaDescription as string) || '',
+    title: meta?.title || page.title,
+    description: meta?.description || '',
     openGraph: {
-      title: (page.metaTitle as string) || page.title,
-      description: (page.metaDescription as string) || '',
+      title: meta?.title || page.title,
+      description: meta?.description || '',
       type: 'website',
     },
   };

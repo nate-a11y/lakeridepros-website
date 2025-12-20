@@ -72,14 +72,6 @@ export const BlogPosts: CollectionConfig = {
       ],
     },
     {
-      name: 'metaTitle',
-      type: 'text',
-    },
-    {
-      name: 'metaDescription',
-      type: 'textarea',
-    },
-    {
       name: 'published',
       type: 'checkbox',
       defaultValue: false,

@@ -562,40 +562,55 @@ body[data-page="booking"] [class*="moovs-fab"] {
   display: none !important;
 }
 
-/* Force Moovs FAB to match Lake Ride Pros green branding */
-/* Target specific Moovs FAB selectors only */
+/* Force Moovs buttons to match Lake Ride Pros branding with accessible contrast */
+/* Target both FAB and widget buttons */
 #moovs-fab-button,
+#moovs-widget-button,
 [id*="moovs-fab"],
-[class*="moovs-fab"] {
-  background-color: #4cbb17 !important;
-  background: #4cbb17 !important;
+[class*="moovs-fab"],
+.moovs-widget-button {
+  background-color: #1a5c1f !important;
+  background: #1a5c1f !important;
+  color: #ffffff !important;
 }
 
 /* Only target buttons within the Moovs FAB container, not all fixed positioned divs */
 #moovs-fab-button > *,
+#moovs-widget-button > *,
 [id*="moovs-fab"] > button,
-[class*="moovs-fab"] > button {
-  background-color: #4cbb17 !important;
-  background: #4cbb17 !important;
+[class*="moovs-fab"] > button,
+.moovs-widget-button > * {
+  background-color: #1a5c1f !important;
+  background: #1a5c1f !important;
+  color: #ffffff !important;
 }
 
 #moovs-fab-button:hover,
+#moovs-widget-button:hover,
 [id*="moovs-fab"]:hover,
-[class*="moovs-fab"]:hover {
-  background-color: #60e421 !important;
-  background: #60e421 !important;
-  box-shadow: 0 0 20px rgba(76, 187, 23, 0.4) !important;
+[class*="moovs-fab"]:hover,
+.moovs-widget-button:hover {
+  background-color: #237a28 !important;
+  background: #237a28 !important;
+  box-shadow: 0 0 20px rgba(26, 92, 31, 0.4) !important;
 }
 
 /* Override any inline styles Moovs might use */
 #moovs-fab-button[style],
+#moovs-widget-button[style],
+.moovs-widget-button[style],
 [id*="moovs"][style] {
-  background-color: #4cbb17 !important;
+  background-color: #1a5c1f !important;
+  color: #ffffff !important;
 }
 
-/* If Moovs FAB has SVG or text, ensure it's visible on green */
+/* If Moovs buttons have SVG or text, ensure it's visible on green */
 #moovs-fab-button svg,
 #moovs-fab-button span,
+#moovs-widget-button svg,
+#moovs-widget-button span,
+.moovs-widget-button svg,
+.moovs-widget-button span,
 [id*="moovs-fab"] svg,
 [id*="moovs-fab"] span {
   color: white !important;

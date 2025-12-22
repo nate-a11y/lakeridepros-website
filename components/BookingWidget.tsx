@@ -76,7 +76,8 @@ export default function BookingWidget({ className = '', serviceSlug }: BookingWi
 
   return (
     <div className={`booking-widget-container ${className}`}>
-      <div ref={containerRef} />
+      {/* Fixed height container prevents layout shift when iframe loads */}
+      <div ref={containerRef} style={{ minHeight: '600px' }} />
     </div>
   );
 }

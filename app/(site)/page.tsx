@@ -14,7 +14,7 @@ import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schema
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
 // Lazy load below-fold components to reduce initial main thread work
-const SpotifyEmbed = nextDynamic(() => import('@/components/SpotifyEmbed'), { ssr: false });
+const SpotifyEmbed = nextDynamic(() => import('@/components/SpotifyEmbed'));
 const ServicesShowcase = nextDynamic(() => import('@/components/ServicesShowcase'));
 const FeaturedVehiclesSection = nextDynamic(() => import('@/components/FeaturedVehiclesSection'));
 const FeaturedBlogSection = nextDynamic(() => import('@/components/FeaturedBlogSection'));

@@ -156,7 +156,7 @@ export default async function HomePage() {
       />
 
       {/* Services Overview Section */}
-      <ServicesShowcase services={services} />
+      <ServicesShowcase services={services.slice(0, 6)} />
 
       {/* Featured Vehicles Section */}
       <FeaturedVehiclesSection vehicles={vehicles} />

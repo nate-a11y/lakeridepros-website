@@ -1,19 +1,7 @@
 import type { Metadata } from 'next';
+import nextDynamic from 'next/dynamic';
 import HeroSection from '@/components/HeroSection';
 import BookingWidget from '@/components/BookingWidget';
-import SpotifyEmbed from '@/components/SpotifyEmbed';
-import ServicesShowcase from '@/components/ServicesShowcase';
-import FeaturedVehiclesSection from '@/components/FeaturedVehiclesSection';
-import FeaturedBlogSection from '@/components/FeaturedBlogSection';
-import NewsletterSignup from '@/components/NewsletterSignup';
-import TestimonialsCarousel from '@/components/TestimonialsCarousel';
-import PopularServicesRanking from '@/components/PopularServicesRanking';
-import HowItWorks from '@/components/HowItWorks';
-import WhyChooseUs from '@/components/WhyChooseUs';
-import ServiceAreasMap from '@/components/ServiceAreasMap';
-import FAQAccordion from '@/components/FAQAccordion';
-import MemberLogosSection from '@/components/MemberLogosSection';
-import PartnersCarousel from '@/components/PartnersCarousel';
 import {
   getServices,
   getRandomVehicles,
@@ -24,6 +12,21 @@ import {
 import { getLatestBlogPostsLocal } from '@/lib/api/payload-local';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
+
+// Lazy load below-fold components to reduce initial main thread work
+const SpotifyEmbed = nextDynamic(() => import('@/components/SpotifyEmbed'));
+const ServicesShowcase = nextDynamic(() => import('@/components/ServicesShowcase'));
+const FeaturedVehiclesSection = nextDynamic(() => import('@/components/FeaturedVehiclesSection'));
+const FeaturedBlogSection = nextDynamic(() => import('@/components/FeaturedBlogSection'));
+const TestimonialsCarousel = nextDynamic(() => import('@/components/TestimonialsCarousel'));
+const PartnersCarousel = nextDynamic(() => import('@/components/PartnersCarousel'));
+const PopularServicesRanking = nextDynamic(() => import('@/components/PopularServicesRanking'));
+const HowItWorks = nextDynamic(() => import('@/components/HowItWorks'));
+const WhyChooseUs = nextDynamic(() => import('@/components/WhyChooseUs'));
+const ServiceAreasMap = nextDynamic(() => import('@/components/ServiceAreasMap')); // Keep SSR for local SEO keywords
+const MemberLogosSection = nextDynamic(() => import('@/components/MemberLogosSection'));
+const FAQAccordion = nextDynamic(() => import('@/components/FAQAccordion'));
+const NewsletterSignup = nextDynamic(() => import('@/components/NewsletterSignup'));
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),

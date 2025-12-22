@@ -1,17 +1,10 @@
-# Modern browsers that support ES6+ features
-# This reduces polyfills and legacy JavaScript transpilation
-# Targets browsers with >0.5% market share and last 2 versions
+# Target only modern browsers that support ES2020+ features natively
+# This eliminates polyfills for Array.at, flat, flatMap, Object.fromEntries, etc.
 
->0.5%
-last 2 versions
+# Browsers that support ES modules (all modern browsers)
+defaults and supports es6-module
+
+# Exclude problematic/legacy browsers
 not dead
 not ie 11
 not op_mini all
-
-# Explicitly support modern features to reduce polyfills:
-# - Array.prototype.at, flat, flatMap
-# - Object.fromEntries, hasOwn
-# - String.prototype.trimStart, trimEnd
-
-# Target browsers released in the last 2 years
-since 2023

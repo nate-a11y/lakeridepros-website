@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
+import nextDynamic from 'next/dynamic';
 import HeroSection from '@/components/HeroSection';
 import BookingWidget from '@/components/BookingWidget';
 import {
@@ -14,19 +14,19 @@ import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schema
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
 // Lazy load below-fold components to reduce initial main thread work
-const SpotifyEmbed = dynamic(() => import('@/components/SpotifyEmbed'), { ssr: false });
-const ServicesShowcase = dynamic(() => import('@/components/ServicesShowcase'));
-const FeaturedVehiclesSection = dynamic(() => import('@/components/FeaturedVehiclesSection'));
-const FeaturedBlogSection = dynamic(() => import('@/components/FeaturedBlogSection'));
-const TestimonialsCarousel = dynamic(() => import('@/components/TestimonialsCarousel'));
-const PartnersCarousel = dynamic(() => import('@/components/PartnersCarousel'));
-const PopularServicesRanking = dynamic(() => import('@/components/PopularServicesRanking'));
-const HowItWorks = dynamic(() => import('@/components/HowItWorks'));
-const WhyChooseUs = dynamic(() => import('@/components/WhyChooseUs'));
-const ServiceAreasMap = dynamic(() => import('@/components/ServiceAreasMap')); // Keep SSR for local SEO keywords
-const MemberLogosSection = dynamic(() => import('@/components/MemberLogosSection'));
-const FAQAccordion = dynamic(() => import('@/components/FAQAccordion'));
-const NewsletterSignup = dynamic(() => import('@/components/NewsletterSignup'));
+const SpotifyEmbed = nextDynamic(() => import('@/components/SpotifyEmbed'), { ssr: false });
+const ServicesShowcase = nextDynamic(() => import('@/components/ServicesShowcase'));
+const FeaturedVehiclesSection = nextDynamic(() => import('@/components/FeaturedVehiclesSection'));
+const FeaturedBlogSection = nextDynamic(() => import('@/components/FeaturedBlogSection'));
+const TestimonialsCarousel = nextDynamic(() => import('@/components/TestimonialsCarousel'));
+const PartnersCarousel = nextDynamic(() => import('@/components/PartnersCarousel'));
+const PopularServicesRanking = nextDynamic(() => import('@/components/PopularServicesRanking'));
+const HowItWorks = nextDynamic(() => import('@/components/HowItWorks'));
+const WhyChooseUs = nextDynamic(() => import('@/components/WhyChooseUs'));
+const ServiceAreasMap = nextDynamic(() => import('@/components/ServiceAreasMap')); // Keep SSR for local SEO keywords
+const MemberLogosSection = nextDynamic(() => import('@/components/MemberLogosSection'));
+const FAQAccordion = nextDynamic(() => import('@/components/FAQAccordion'));
+const NewsletterSignup = nextDynamic(() => import('@/components/NewsletterSignup'));
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),

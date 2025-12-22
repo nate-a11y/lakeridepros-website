@@ -46,9 +46,9 @@ export default function BookingWidget({ className = '', serviceSlug }: BookingWi
   if (!moovsEmbedUrl) {
     return (
       <div className={`bg-neutral-100 dark:bg-dark-bg-tertiary rounded-lg p-8 text-center transition-colors ${className}`}>
-        <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
+        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
           Book Your Luxury Ride
-        </h3>
+        </h2>
         <p className="text-neutral-600 dark:text-neutral-300 mb-6">
           Experience premium transportation at Lake of the Ozarks
         </p>

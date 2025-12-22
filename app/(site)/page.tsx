@@ -1,6 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import Image from 'next/image';
 import HeroSection from '@/components/HeroSection';
 import BookingWidget from '@/components/BookingWidget';
 import SpotifyEmbed from '@/components/SpotifyEmbed';
@@ -15,6 +13,7 @@ import WhyChooseUs from '@/components/WhyChooseUs';
 import ServiceAreasMap from '@/components/ServiceAreasMap';
 import FAQAccordion from '@/components/FAQAccordion';
 import MemberLogosSection from '@/components/MemberLogosSection';
+import PartnersCarousel from '@/components/PartnersCarousel';
 import {
   getServices,
   getRandomVehicles,
@@ -82,9 +81,9 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // Fetch data with error handling - use HTTP API calls for consistent media URLs
-  const [servicesData, allServicesData, vehicles, blogPosts, testimonials, partners, popularServicesData] = await Promise.all([
-    getServices({ limit: 6 }).catch(() => ({ docs: [] })), // For "Our Services" section
-    getServices({ limit: 100 }).catch(() => ({ docs: [] })), // For filtering popular services
+  // Optimized: Reduced limits to minimize HTML payload size
+  const [servicesData, vehicles, blogPosts, testimonials, partnersData, popularServicesData] = await Promise.all([
+    getServices({ limit: 30 }).catch(() => ({ docs: [] })), // For services section + popular filtering
     getRandomVehicles(3).catch(() => []),
     getLatestBlogPostsLocal(10).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
@@ -92,8 +91,7 @@ export default async function HomePage() {
     getPopularServicesLocal(5).catch(() => []),
   ]);
 
-  const services = servicesData.docs || []; // For "Our Services" section display
-  const allServices = allServicesData.docs || []; // For filtering popular services
+  const services = servicesData.docs || [];
 
   // Use analytics-based popular services, fallback to hardcoded list (same as header)
   const fallbackServiceSlugs = [
@@ -108,12 +106,21 @@ export default async function HomePage() {
     ? popularServicesData.map(s => s.slug)
     : fallbackServiceSlugs;
 
-  // Filter and sort services by popularity (same logic as header)
-  // Use allServices to ensure we have all services available for filtering
-  const popularServices = allServices
+  // Filter and sort services by popularity
+  const popularServices = services
     .filter(s => popularServiceSlugs.includes(s.slug))
     .sort((a, b) => popularServiceSlugs.indexOf(a.slug) - popularServiceSlugs.indexOf(b.slug))
     .slice(0, 4); // Show top 4 on home page
+
+  // Transform partners to minimal data for client component (reduces HTML payload)
+  const partners = partnersData.slice(0, 12).map(p => ({
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    website: p.website,
+    blurb: p.blurb,
+    logoUrl: getMediaUrl(p.logo?.url),
+  }));
 
   return (
     <>
@@ -165,60 +172,8 @@ export default async function HomePage() {
         includeSchema={true}
       />
 
-      {/* Partner Logos Section */}
-      {partners.length > 0 && (
-        <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-center text-neutral-900 dark:text-white mb-8">
-              Trusted by Leading Organizations
-            </h2>
-          </div>
-          <div className="relative overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing" style={{ scrollBehavior: 'smooth' }}>
-            <div className="flex animate-scroll-left">
-              {[...partners, ...partners].map((partner, index) => {
-                const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
-                const partnerContent = (
-                  <div className="flex flex-col items-center space-y-3 p-6 bg-white dark:bg-dark-bg-secondary border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-md hover:shadow-xl transition-all w-80">
-                    <Image
-                      src={getMediaUrl(partner.logo.url)}
-                      alt={partner.name}
-                      width={200}
-                      height={100}
-                      className="h-24 w-auto object-contain transition-all"
-                    />
-                    <div className="text-center">
-                      <h3 className="font-semibold text-neutral-900 dark:text-white text-lg mb-1">
-                        {partner.name}
-                      </h3>
-                      {partner.blurb && (
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
-                          {partner.blurb}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                );
-
-                return partnerLink ? (
-                  <Link
-                    key={`partner-${partner.id}-${index}`}
-                    href={partnerLink}
-                    className="flex-shrink-0 mx-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-xl hover:scale-105 transition-transform cursor-pointer"
-                    aria-label={`View ${partner.name} partner page`}
-                    {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  >
-                    {partnerContent}
-                  </Link>
-                ) : (
-                  <div key={`partner-${partner.id}-${index}`} className="flex-shrink-0 mx-4 flex items-center justify-center">
-                    {partnerContent}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Partner Logos Section - Client component handles infinite scroll */}
+      {partners.length > 0 && <PartnersCarousel partners={partners} />}
 
       {/* Most Requested Services Section */}
       <PopularServicesRanking services={popularServices} />

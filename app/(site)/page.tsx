@@ -23,7 +23,7 @@ const PartnersCarousel = dynamic(() => import('@/components/PartnersCarousel'));
 const PopularServicesRanking = dynamic(() => import('@/components/PopularServicesRanking'));
 const HowItWorks = dynamic(() => import('@/components/HowItWorks'));
 const WhyChooseUs = dynamic(() => import('@/components/WhyChooseUs'));
-const ServiceAreasMap = dynamic(() => import('@/components/ServiceAreasMap'), { ssr: false });
+const ServiceAreasMap = dynamic(() => import('@/components/ServiceAreasMap')); // Keep SSR for local SEO keywords
 const MemberLogosSection = dynamic(() => import('@/components/MemberLogosSection'));
 const FAQAccordion = dynamic(() => import('@/components/FAQAccordion'));
 const NewsletterSignup = dynamic(() => import('@/components/NewsletterSignup'));

@@ -126,7 +126,7 @@ export default async function DriverDetailPage({ params }: Props) {
                     {displayName}
                   </h2>
                   {driver.assignment_number && (
-                    <span className="inline-flex items-center px-2.5 py-1 text-sm font-bold bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded">
+                    <span className="inline-flex items-center px-2.5 py-1 text-sm font-bold bg-neutral-800 text-white rounded">
                       {driver.assignment_number}
                     </span>
                   )}

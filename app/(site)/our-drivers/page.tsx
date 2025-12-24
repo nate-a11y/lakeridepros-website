@@ -129,7 +129,7 @@ export default async function OurDriversPage() {
                           </h3>
                         </Link>
                         {driver.assignment_number && (
-                          <span className="inline-flex items-center px-2 py-0.5 text-xs font-bold bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-900 rounded">
+                          <span className="inline-flex items-center px-2 py-0.5 text-xs font-bold bg-[#1f2937] text-white dark:bg-[#f5f5f5] dark:text-[#1f2937] rounded">
                             {driver.assignment_number}
                           </span>
                         )}

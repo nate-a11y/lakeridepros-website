@@ -122,11 +122,18 @@ export default async function OurDriversPage() {
 
                     {/* Driver Info */}
                     <div className="p-6">
-                      <Link href={`/our-drivers/${driver.id}`}>
-                        <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-1 group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
-                          {isOwner ? driver.name : displayName}
-                        </h3>
-                      </Link>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Link href={`/our-drivers/${driver.id}`}>
+                          <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
+                            {isOwner ? driver.name : displayName}
+                          </h3>
+                        </Link>
+                        {driver.assignment_number && (
+                          <span className="inline-flex items-center px-2 py-0.5 text-xs font-bold bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded">
+                            {driver.assignment_number}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-sm font-medium text-primary dark:text-primary-light mb-2">
                         {roleLabel}
                       </p>

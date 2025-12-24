@@ -78,9 +78,16 @@ export default async function DriverDetailPage({ params }: Props) {
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Team</span>
           </Link>
-          <h1 className="font-boardson text-4xl sm:text-5xl font-bold">
-            {displayName}
-          </h1>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="font-boardson text-4xl sm:text-5xl font-bold">
+              {displayName}
+            </h1>
+            {driver.assignment_number && (
+              <span className="inline-flex items-center px-3 py-1 text-sm font-bold bg-white/20 text-white rounded-lg border border-white/30">
+                {driver.assignment_number}
+              </span>
+            )}
+          </div>
           <p className="text-xl text-white/90 mt-2">{roleLabel}</p>
         </div>
       </section>
@@ -114,9 +121,16 @@ export default async function DriverDetailPage({ params }: Props) {
 
               {/* Info */}
               <div className="p-8 md:p-10">
-                <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">
-                  {displayName}
-                </h2>
+                <div className="flex items-center gap-3 mb-2 flex-wrap">
+                  <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
+                    {displayName}
+                  </h2>
+                  {driver.assignment_number && (
+                    <span className="inline-flex items-center px-2.5 py-1 text-sm font-bold bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded">
+                      {driver.assignment_number}
+                    </span>
+                  )}
+                </div>
                 <p className="text-lg font-medium text-primary dark:text-primary-light mb-4">
                   {roleLabel}
                 </p>

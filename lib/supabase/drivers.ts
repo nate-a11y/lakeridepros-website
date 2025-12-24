@@ -29,6 +29,8 @@ export interface Driver {
   created_at: string
   updated_at: string
   image_id: number | null
+  // Unique driver assignment number (e.g., LRP1, LRP2) - like a badge number
+  assignment_number: string | null
   // Joined media data
   media: DriverMedia | null
 }
@@ -51,6 +53,7 @@ interface DriverRow {
   created_at: string
   updated_at: string
   image_id: number | null
+  assignment_number: string | null
   media: {
     id: number
     url: string
@@ -88,6 +91,7 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
         created_at,
         updated_at,
         image_id,
+        assignment_number,
         media:image_id (
           id,
           url,
@@ -123,6 +127,7 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
       created_at: driver.created_at,
       updated_at: driver.updated_at,
       image_id: driver.image_id,
+      assignment_number: driver.assignment_number,
       media: driver.media,
     }))
 
@@ -211,6 +216,7 @@ export async function getDriverById(id: string): Promise<Driver | null> {
         created_at,
         updated_at,
         image_id,
+        assignment_number,
         media:image_id (
           id,
           url,
@@ -246,6 +252,7 @@ export async function getDriverById(id: string): Promise<Driver | null> {
       created_at: row.created_at,
       updated_at: row.updated_at,
       image_id: row.image_id,
+      assignment_number: row.assignment_number,
       media: row.media,
     }
   } catch (error) {

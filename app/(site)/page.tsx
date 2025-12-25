@@ -123,6 +123,8 @@ export default async function HomePage() {
     website: p.website,
     blurb: p.blurb,
     logoUrl: getMediaUrl(p.logo?.url),
+    isPremierPartner: p.isPremierPartner,
+    isWeddingPartner: p.isWeddingPartner,
   }));
 
   return (

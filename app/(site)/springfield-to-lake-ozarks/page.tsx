@@ -366,9 +366,9 @@ export default async function SpringfieldToLakeOzarksPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Airport Shuttle", href: "/airport-shuttle", description: "Direct airport transfers from SGF, MCI, and STL" },
-          { title: "Wedding Transportation", href: "/wedding-transportation", description: "Guest shuttles for destination Lake weddings" },
-          { title: "Group Event Transportation", href: "/group-event-transportation", description: "Large group shuttle service for weekend trips" }
+          { title: "Airport Shuttle", href: "/services/airport-shuttle", description: "Direct airport transfers from SGF, MCI, and STL" },
+          { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Guest shuttles for destination Lake weddings" },
+          { title: "Group Event Transportation", href: "/services/group-event-transportation", description: "Large group shuttle service for weekend trips" }
         ]} />
 
         {/* CTA Section */}

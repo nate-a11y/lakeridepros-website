@@ -158,7 +158,7 @@ function ApplicationReceivedContent() {
               Return to Home
             </Link>
             <Link
-              href="/careers"
+              href="/careers/driver-application"
               className="px-6 py-3 border border-neutral-300 dark:border-dark-border text-neutral-900 dark:text-white font-medium rounded-md hover:bg-neutral-50 dark:hover:bg-dark-bg-tertiary transition-colors"
             >
               View Other Positions

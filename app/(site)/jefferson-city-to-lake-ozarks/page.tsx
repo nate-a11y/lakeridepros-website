@@ -287,7 +287,7 @@ export default async function JeffersonCityToLakeOzarksPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/concert-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/concert-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Concerts & Events</h3>
@@ -365,9 +365,9 @@ export default async function JeffersonCityToLakeOzarksPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Corporate Transportation", href: "/corporate-transportation", description: "Executive service for government and corporate groups" },
-          { title: "Group Event Transportation", href: "/group-event-transportation", description: "Large group shuttle service for any event" },
-          { title: "Wedding Transportation", href: "/wedding-transportation", description: "Luxury wedding shuttles for Lake venues" }
+          { title: "Corporate Transportation", href: "/services/corporate-transportation", description: "Executive service for government and corporate groups" },
+          { title: "Group Event Transportation", href: "/services/group-event-transportation", description: "Large group shuttle service for any event" },
+          { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Luxury wedding shuttles for Lake venues" }
         ]} />
 
         {/* CTA Section */}

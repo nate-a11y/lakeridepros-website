@@ -16,7 +16,7 @@ interface PayloadDoc {
 }
 
 interface PartnerDoc {
-  slug: string;
+  slug?: string | null;
   updatedAt?: string;
   isWeddingPartner?: boolean | null;
   isPremierPartner?: boolean | null;
@@ -184,6 +184,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const partnerSitemapEntries: MetadataRoute.Sitemap = [];
 
   allPartners.forEach((partner: PartnerDoc) => {
+    // Skip partners without a slug
+    if (!partner.slug) return;
+
     const hasCheckboxSet =
       partner.isPremierPartner === true ||
       partner.isReferralPartner === true ||

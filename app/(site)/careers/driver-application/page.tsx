@@ -39,6 +39,7 @@ function DriverApplicationForm() {
     return (
       <div className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary transition-colors flex items-center justify-center">
         <div className="text-center">
+          <h1 className="sr-only">Driver Employment Application</h1>
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4" aria-label="Loading"></div>
           <p className="text-lrp-text-secondary dark:text-dark-text-secondary">Loading application...</p>
         </div>
@@ -166,6 +167,7 @@ export default function DriverApplicationPage() {
     <Suspense fallback={
       <div className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary transition-colors flex items-center justify-center">
         <div className="text-center">
+          <h1 className="sr-only">Driver Employment Application</h1>
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4" aria-label="Loading"></div>
           <p className="text-lrp-text-secondary dark:text-dark-text-secondary">Loading application...</p>
         </div>

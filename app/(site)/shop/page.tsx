@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import ShopClient from './ShopClient'
 
 export const metadata: Metadata = {
@@ -28,7 +29,14 @@ export const metadata: Metadata = {
 // Force dynamic rendering so Payload CMS is available at request time
 export const dynamic = 'force-dynamic'
 
-async function getProducts() {
+interface Product {
+  id: string | number
+  name: string
+  slug: string
+  status?: string
+}
+
+async function getProducts(): Promise<Product[]> {
   try {
     const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
     // Fetch all products (no limit) for client-side pagination
@@ -51,5 +59,23 @@ async function getProducts() {
 export default async function ShopPage() {
   const products = await getProducts()
 
-  return <ShopClient initialProducts={products} />
+  return (
+    <>
+      <ShopClient initialProducts={products} />
+      {/* Server-side rendered product links for SEO crawlers */}
+      {/* Hidden visually but accessible to search engines */}
+      <nav aria-label="All products" className="sr-only">
+        <h2>All Products</h2>
+        <ul>
+          {products.map((product) => (
+            <li key={product.id}>
+              <Link href={`/shop/products/${product.slug}`}>
+                {product.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </>
+  )
 }

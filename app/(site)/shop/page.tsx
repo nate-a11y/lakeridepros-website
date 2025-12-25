@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ShopClient from './ShopClient'
+import type { Product } from '@/src/payload-types'
 
 export const metadata: Metadata = {
   title: 'Shop Lake Ride Pros Merchandise | T-Shirts, Hats & More',
@@ -28,13 +29,6 @@ export const metadata: Metadata = {
 
 // Force dynamic rendering so Payload CMS is available at request time
 export const dynamic = 'force-dynamic'
-
-interface Product {
-  id: string | number
-  name: string
-  slug: string
-  status?: string
-}
 
 async function getProducts(): Promise<Product[]> {
   try {

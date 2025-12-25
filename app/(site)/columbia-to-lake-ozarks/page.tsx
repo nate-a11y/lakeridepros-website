@@ -365,9 +365,9 @@ export default async function ColumbiaToLakeOzarksPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Bachelor Party Transportation", href: "/bachelor-party-transportation", description: "Party bus and shuttle service for Lake weekends" },
-          { title: "Group Event Transportation", href: "/group-event-transportation", description: "Large group shuttle service for family trips" },
-          { title: "Nightlife Transportation", href: "/nightlife-transportation", description: "Bar hopping and party transportation at the Lake" }
+          { title: "Bachelor Party Transportation", href: "/services/bachelor-party-transportation", description: "Party bus and shuttle service for Lake weekends" },
+          { title: "Group Event Transportation", href: "/services/group-event-transportation", description: "Large group shuttle service for family trips" },
+          { title: "Nightlife Transportation", href: "/services/nightlife-transportation", description: "Bar hopping and party transportation at the Lake" }
         ]} />
 
         {/* CTA Section */}

@@ -5,7 +5,9 @@ import {
   getVehiclesLocal,
   getProductsLocal,
   getPagesLocal,
+  getPartnersLocal,
 } from '@/lib/api/payload-local';
+import { getDriversForWebsite } from '@/lib/supabase/drivers';
 
 interface PayloadDoc {
   slug: string;
@@ -13,21 +15,44 @@ interface PayloadDoc {
   publishedDate?: string;
 }
 
+interface PartnerDoc {
+  slug?: string | null;
+  updatedAt?: string;
+  isWeddingPartner?: boolean | null;
+  isPremierPartner?: boolean | null;
+  isReferralPartner?: boolean | null;
+  isPromotion?: boolean | null;
+  category?: string | null;
+}
+
+interface DriverDoc {
+  id: string;
+  updated_at: string;
+}
+
 async function getPayloadData() {
   try {
     // Fetch all dynamic content using local Payload queries (no HTTP)
-    const [servicesResponse, blogPostsResponse, vehicles, products, pages] = await Promise.all([
+    const [servicesResponse, blogPostsResponse, vehicles, products, pages, allPartners] = await Promise.all([
       getServicesLocal(),
       getBlogPostsLocal({ limit: 100 }),
       getVehiclesLocal(),
       getProductsLocal(),
       getPagesLocal(),
+      getPartnersLocal(), // Fetch all active partners
     ]);
 
-    return { services: servicesResponse.docs, blogPosts: blogPostsResponse.docs, vehicles, products, pages };
+    return {
+      services: servicesResponse.docs,
+      blogPosts: blogPostsResponse.docs,
+      vehicles,
+      products,
+      pages,
+      allPartners,
+    };
   } catch (error) {
     console.error('Error fetching Payload data for sitemap:', error);
-    return { services: [], blogPosts: [], vehicles: [], products: [], pages: [] };
+    return { services: [], blogPosts: [], vehicles: [], products: [], pages: [], allPartners: [] };
   }
 }
 
@@ -67,6 +92,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/transportation-osage-beach', priority: 0.9, changeFrequency: 'monthly' as const },
     { url: '/transportation-camdenton', priority: 0.9, changeFrequency: 'monthly' as const },
     { url: '/transportation-lake-ozark', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/transportation-sunrise-beach', priority: 0.9, changeFrequency: 'monthly' as const },
+    { url: '/transportation-laurie', priority: 0.9, changeFrequency: 'monthly' as const },
 
     // City-to-Lake landing pages (capturing nearby city searches)
     { url: '/columbia-to-lake-ozarks', priority: 0.8, changeFrequency: 'monthly' as const },
@@ -78,6 +105,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Specialty landing pages
     { url: '/bagnell-dam-strip-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/lake-ozarks-airport-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+
+    // Career pages
+    { url: '/careers/driver-application', priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/careers/application-status', priority: 0.5, changeFrequency: 'monthly' as const },
+
+    // Team page
+    { url: '/our-drivers', priority: 0.7, changeFrequency: 'weekly' as const },
+
+    // Insider membership pages
+    { url: '/insider-membership-benefits', priority: 0.6, changeFrequency: 'monthly' as const },
+    { url: '/insider-terms-and-conditions', priority: 0.5, changeFrequency: 'yearly' as const },
+
+    // Shopping cart (important for e-commerce)
+    { url: '/cart', priority: 0.5, changeFrequency: 'daily' as const },
 
     // Legal pages
     { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },
@@ -92,8 +133,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route.priority,
   }));
 
-  // Fetch dynamic content from Payload CMS
-  const { services, blogPosts, vehicles, products, pages } = await getPayloadData();
+  // Fetch dynamic content from Payload CMS and Supabase
+  const [payloadData, drivers] = await Promise.all([
+    getPayloadData(),
+    getDriversForWebsite(),
+  ]);
+  const { services, blogPosts, vehicles, products, pages, allPartners } = payloadData;
 
   // Dynamic service pages
   const serviceSitemapEntries = services.map((service: PayloadDoc) => ({
@@ -135,6 +180,58 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  // Partner pages - categorize by type for correct URL paths
+  const partnerSitemapEntries: MetadataRoute.Sitemap = [];
+
+  allPartners.forEach((partner: PartnerDoc) => {
+    // Skip partners without a slug
+    if (!partner.slug) return;
+
+    const hasCheckboxSet =
+      partner.isPremierPartner === true ||
+      partner.isReferralPartner === true ||
+      partner.isWeddingPartner === true ||
+      partner.isPromotion === true;
+
+    let urlPath: string;
+
+    // Determine the correct URL path based on partner type
+    if (hasCheckboxSet) {
+      if (partner.isWeddingPartner) {
+        urlPath = `/wedding-partners/${partner.slug}`;
+      } else if (partner.isPremierPartner) {
+        urlPath = `/local-premier-partners/${partner.slug}`;
+      } else {
+        // Referral partners and promotions go to /partners/
+        urlPath = `/partners/${partner.slug}`;
+      }
+    } else {
+      // Legacy category field fallback
+      if (partner.category === 'wedding') {
+        urlPath = `/wedding-partners/${partner.slug}`;
+      } else if (partner.category === 'local-premier') {
+        urlPath = `/local-premier-partners/${partner.slug}`;
+      } else {
+        urlPath = `/partners/${partner.slug}`;
+      }
+    }
+
+    partnerSitemapEntries.push({
+      url: `${baseUrl}${urlPath}`,
+      lastModified: new Date(partner.updatedAt || currentDate),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    });
+  });
+
+  // Driver profile pages
+  const driverSitemapEntries = drivers.map((driver: DriverDoc) => ({
+    url: `${baseUrl}/our-drivers/${driver.id}`,
+    lastModified: new Date(driver.updated_at || currentDate),
+    changeFrequency: 'weekly' as const,
+    priority: 0.5,
+  }));
+
   return [
     ...staticSitemapEntries,
     ...serviceSitemapEntries,
@@ -142,5 +239,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...vehicleSitemapEntries,
     ...productSitemapEntries,
     ...pageSitemapEntries,
+    ...partnerSitemapEntries,
+    ...driverSitemapEntries,
   ];
 }

@@ -200,7 +200,7 @@ export default async function CamdentonTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/wine-tour-shuttle" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/wine-tour-shuttle" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Wine Tour Shuttles</h3>
@@ -218,7 +218,7 @@ export default async function CamdentonTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/golf-outing-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/golf-outing-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Golf Outings</h3>
@@ -358,9 +358,9 @@ export default async function CamdentonTransportationPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Old Kinderhook Transportation", href: "/old-kinderhook-transportation", description: "Golf course wedding and tournament transportation" },
-          { title: "Wine Tour Shuttle", href: "/wine-tour-shuttle", description: "Designated driver for Lake Ozarks winery tours" },
-          { title: "Wedding Transportation", href: "/wedding-transportation", description: "Full-service wedding shuttles for all Lake venues" }
+          { title: "Golf Outing Transportation", href: "/services/golf-outing-transportation", description: "Golf course wedding and tournament transportation" },
+          { title: "Wine Tour Shuttle", href: "/services/wine-tour-shuttle", description: "Designated driver for Lake Ozarks winery tours" },
+          { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Full-service wedding shuttles for all Lake venues" }
         ]} />
 
         {/* CTA Section */}

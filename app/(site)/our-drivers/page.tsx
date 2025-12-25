@@ -206,7 +206,7 @@ export default async function OurDriversPage() {
             Are you a professional driver looking for a great opportunity? We&apos;re always looking for talented individuals to join our team.
           </p>
           <Link
-            href="/careers"
+            href="/careers/driver-application"
             className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-lrp-black bg-primary hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           >
             View Career Opportunities

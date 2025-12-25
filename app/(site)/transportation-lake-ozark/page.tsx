@@ -358,9 +358,9 @@ export default async function LakeOzarkTransportationPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Corporate Transportation", href: "/corporate-transportation", description: "Executive transportation for Lodge of Four Seasons events" },
-          { title: "Wedding Transportation", href: "/wedding-transportation", description: "Luxury wedding shuttles for waterfront venues" },
-          { title: "Airport Shuttle", href: "/airport-shuttle", description: "Direct transfers from MCI, STL, and SGF airports" }
+          { title: "Corporate Transportation", href: "/services/corporate-transportation", description: "Executive transportation for Lodge of Four Seasons events" },
+          { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Luxury wedding shuttles for waterfront venues" },
+          { title: "Airport Shuttle", href: "/services/airport-shuttle", description: "Direct transfers from MCI, STL, and SGF airports" }
         ]} />
 
         {/* CTA Section */}

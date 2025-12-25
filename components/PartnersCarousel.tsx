@@ -11,6 +11,8 @@ interface PartnerData {
   website?: string;
   blurb?: string;
   logoUrl: string;
+  isPremierPartner?: boolean | null;
+  isWeddingPartner?: boolean | null;
 }
 
 interface PartnersCarouselProps {
@@ -53,7 +55,14 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
         >
           {/* Render partners twice for seamless infinite scroll */}
           {[...partners, ...partners].map((partner, index) => {
-            const partnerLink = partner.slug ? `/partners/${partner.slug}` : partner.website;
+            // Determine the correct URL path based on partner type
+            const getPartnerUrl = (): string | undefined => {
+              if (!partner.slug) return partner.website;
+              if (partner.isPremierPartner) return `/local-premier-partners/${partner.slug}`;
+              if (partner.isWeddingPartner) return `/wedding-partners/${partner.slug}`;
+              return `/partners/${partner.slug}`;
+            };
+            const partnerLink = getPartnerUrl();
             const partnerContent = (
               <div className="flex flex-col items-center space-y-3 p-6 bg-white dark:bg-dark-bg-secondary border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-md hover:shadow-xl transition-all w-80">
                 <Image
@@ -82,7 +91,7 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
                 href={partnerLink}
                 className="flex-shrink-0 mx-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-xl hover:scale-105 transition-transform cursor-pointer"
                 aria-label={`View ${partner.name} partner page`}
-                {...(!partner.slug && partner.website ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                {...(!partner.slug ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               >
                 {partnerContent}
               </Link>

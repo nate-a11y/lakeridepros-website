@@ -125,6 +125,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },
     { url: '/terms-of-service', priority: 0.5, changeFrequency: 'yearly' as const },
     { url: '/accessibility', priority: 0.5, changeFrequency: 'yearly' as const },
+    { url: '/return-policy', priority: 0.5, changeFrequency: 'yearly' as const },
   ];
 
   const staticSitemapEntries = staticRoutes.map((route) => ({

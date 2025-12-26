@@ -143,6 +143,7 @@ export default async function Footer() {
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
       { name: 'Terms of Service', href: '/terms-of-service' },
+      { name: 'Return Policy', href: '/return-policy' },
       { name: 'Accessibility', href: '/accessibility' },
     ],
   };

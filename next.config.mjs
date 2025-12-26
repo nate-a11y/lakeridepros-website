@@ -70,7 +70,7 @@ const nextConfig = {
       },
       {
         source: '/what-our-customers-say',
-        destination: '/',
+        destination: '/testimonials',
         permanent: true,
       },
 

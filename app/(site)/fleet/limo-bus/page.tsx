@@ -8,7 +8,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Luxury Limo Bus - Lake Ride Pros',
     description: '14-passenger luxury limo bus with premium sound system, LED lighting, and leather seating.',
-    images: ['/limo-bus-og.jpg'],
+    url: 'https://www.lakeridepros.com/fleet/limo-bus',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: 'https://www.lakeridepros.com/limo-bus-og.jpg', width: 1200, height: 630, alt: 'Luxury Limo Bus' }],
+    type: 'website',
   },
   alternates: {
     canonical: 'https://www.lakeridepros.com/fleet/limo-bus',

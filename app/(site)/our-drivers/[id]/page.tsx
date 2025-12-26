@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const displayName = formatDriverDisplayName(driver);
   const roleLabel = getDriverRoleLabel(driver.role);
+  const imageUrl = getDriverImageUrl(driver);
 
   return {
     title: `${displayName} - ${roleLabel} | Lake Ride Pros`,
@@ -41,6 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: driver.bio || `${roleLabel} at Lake Ride Pros`,
       url: `https://www.lakeridepros.com/our-drivers/${id}`,
       siteName: 'Lake Ride Pros',
+      images: [{ url: imageUrl || 'https://www.lakeridepros.com/og-image.jpg', width: 1200, height: 630, alt: displayName }],
       type: 'profile',
     },
   };

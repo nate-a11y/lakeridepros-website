@@ -8,7 +8,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Luxury Sprinter Van - Lake Ride Pros',
     description: 'Luxury sprinter van service with leather seating, privacy glass, and climate control.',
-    images: ['/sprinter-van-og.jpg'],
+    url: 'https://www.lakeridepros.com/fleet/sprinter-van',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: 'https://www.lakeridepros.com/sprinter-van-og.jpg', width: 1200, height: 630, alt: 'Luxury Sprinter Van' }],
+    type: 'website',
   },
   alternates: {
     canonical: 'https://www.lakeridepros.com/fleet/sprinter-van',

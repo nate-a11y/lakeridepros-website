@@ -8,7 +8,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Rescue Squad Specialty Vehicle - Lake Ride Pros',
     description: 'Unique rescue squad specialty vehicle for memorable parties and one-of-a-kind events.',
-    images: ['/rescue-squad-og.jpg'],
+    url: 'https://www.lakeridepros.com/fleet/rescue-squad',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: 'https://www.lakeridepros.com/rescue-squad-og.jpg', width: 1200, height: 630, alt: 'Rescue Squad Vehicle' }],
+    type: 'website',
   },
   alternates: {
     canonical: 'https://www.lakeridepros.com/fleet/rescue-squad',

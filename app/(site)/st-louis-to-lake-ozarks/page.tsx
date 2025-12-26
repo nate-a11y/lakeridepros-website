@@ -280,7 +280,7 @@ export default async function StLouisToLakeOzarksPage() {
               St. Louis to Lake Ozarks Transportation Services
             </h2>
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-              <Link href="/services/airport-shuttle" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/airport-transfers" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Airport Shuttle</h3>
@@ -298,7 +298,7 @@ export default async function StLouisToLakeOzarksPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/corporate-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/corporate-executive-travel" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Corporate Transportation</h3>
@@ -325,7 +325,7 @@ export default async function StLouisToLakeOzarksPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/private-aviation-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/private-aviation-transfers" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Private Aviation</h3>
@@ -466,7 +466,7 @@ export default async function StLouisToLakeOzarksPage() {
         {/* Related Services */}
         <RelatedServices services={[
           { title: "Kansas City to Lake Ozarks", href: "/kansas-city-to-lake-ozarks", description: "Professional shuttle from MCI Airport to Lake of the Ozarks" },
-          { title: "Airport Shuttle Service", href: "/services/airport-shuttle", description: "All major Missouri airports to Lake destinations" },
+          { title: "Airport Shuttle Service", href: "/services/airport-transfers", description: "All major Missouri airports to Lake destinations" },
           { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Guest shuttles for destination weddings at the Lake" }
         ]} />
 

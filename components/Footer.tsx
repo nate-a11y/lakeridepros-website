@@ -136,6 +136,7 @@ export default async function Footer() {
     ],
     company: [
       { name: 'About Us', href: '/about-us' },
+      { name: 'Testimonials', href: '/testimonials' },
       { name: 'Blog', href: '/blog' },
       { name: 'Contact', href: '/contact' },
     ],

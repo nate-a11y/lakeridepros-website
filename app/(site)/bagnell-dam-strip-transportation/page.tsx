@@ -268,7 +268,7 @@ export default async function BagnellDamStripTransportationPage() {
               Bagnell Dam Strip Transportation Options
             </h2>
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-              <Link href="/services/nightlife-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/party-bus-nightlife" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Bar Hopping Party Bus</h3>
@@ -277,7 +277,7 @@ export default async function BagnellDamStripTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/bachelor-bachelorette-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/bachelor-party-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Bachelor/Bachelorette Parties</h3>
@@ -286,7 +286,7 @@ export default async function BagnellDamStripTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/birthday-celebration-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/special-events-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Birthday Celebrations</h3>
@@ -488,8 +488,8 @@ export default async function BagnellDamStripTransportationPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Nightlife Transportation", href: "/services/nightlife-transportation", description: "Professional party bus service for Lake Ozarks nightlife" },
-          { title: "Bachelor/Bachelorette Parties", href: "/services/bachelor-bachelorette-transportation", description: "Celebration transportation throughout Lake of the Ozarks" },
+          { title: "Nightlife Transportation", href: "/services/party-bus-nightlife", description: "Professional party bus service for Lake Ozarks nightlife" },
+          { title: "Bachelor/Bachelorette Parties", href: "/services/bachelor-party-transportation", description: "Celebration transportation throughout Lake of the Ozarks" },
           { title: "Osage Beach Transportation", href: "/transportation-osage-beach", description: "Full-service transportation throughout Osage Beach and the Lake" }
         ]} />
 

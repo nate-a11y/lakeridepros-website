@@ -73,6 +73,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/gift-cards', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/gift-card-balance', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/shop', priority: 0.7, changeFrequency: 'weekly' as const },
+    { url: '/testimonials', priority: 0.8, changeFrequency: 'weekly' as const },
 
     // All service pages are now CMS-driven and included via serviceSitemapEntries below
 
@@ -196,21 +197,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let urlPath: string;
 
     // Determine the correct URL path based on partner type
+    // Priority: premier > wedding > referral (matches component logic)
     if (hasCheckboxSet) {
-      if (partner.isWeddingPartner) {
-        urlPath = `/wedding-partners/${partner.slug}`;
-      } else if (partner.isPremierPartner) {
+      if (partner.isPremierPartner) {
         urlPath = `/local-premier-partners/${partner.slug}`;
+      } else if (partner.isWeddingPartner) {
+        urlPath = `/wedding-partners/${partner.slug}`;
       } else {
         // Referral partners and promotions go to /partners/
         urlPath = `/partners/${partner.slug}`;
       }
     } else {
       // Legacy category field fallback
-      if (partner.category === 'wedding') {
-        urlPath = `/wedding-partners/${partner.slug}`;
-      } else if (partner.category === 'local-premier') {
+      if (partner.category === 'local-premier') {
         urlPath = `/local-premier-partners/${partner.slug}`;
+      } else if (partner.category === 'wedding') {
+        urlPath = `/wedding-partners/${partner.slug}`;
       } else {
         urlPath = `/partners/${partner.slug}`;
       }

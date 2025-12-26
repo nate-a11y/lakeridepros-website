@@ -70,7 +70,7 @@ const nextConfig = {
       },
       {
         source: '/what-our-customers-say',
-        destination: '/',
+        destination: '/testimonials',
         permanent: true,
       },
 
@@ -211,15 +211,10 @@ const nextConfig = {
         permanent: true,
       },
 
-      // Root-level service URLs → /services/* format
+      // Root-level service URLs → /services/* format (legacy URL support)
       {
         source: '/airport-shuttle',
-        destination: '/services/airport-shuttle',
-        permanent: true,
-      },
-      {
-        source: '/bachelor-party-transportation',
-        destination: '/services/bachelor-bachelorette-transportation',
+        destination: '/services/airport-transfers',
         permanent: true,
       },
       {
@@ -229,7 +224,7 @@ const nextConfig = {
       },
       {
         source: '/corporate-transportation',
-        destination: '/services/corporate-transportation',
+        destination: '/services/corporate-executive-travel',
         permanent: true,
       },
       {
@@ -244,7 +239,7 @@ const nextConfig = {
       },
       {
         source: '/nightlife-transportation',
-        destination: '/services/nightlife-transportation',
+        destination: '/services/party-bus-nightlife',
         permanent: true,
       },
       {
@@ -258,8 +253,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/bachelor-party-transportation',
+        destination: '/services/bachelor-party-transportation',
+        permanent: true,
+      },
+      {
         source: '/old-kinderhook-transportation',
-        destination: '/services',
+        destination: '/services/old-kinderhook-transportation',
         permanent: true,
       },
 
@@ -270,35 +270,35 @@ const nextConfig = {
         permanent: true,
       },
 
-      // Service pages with missing CMS content → main services page
+      // Legacy service slugs that no longer exist in CMS → redirect to closest match or services page
       {
         source: '/services/airport-shuttle',
-        destination: '/lake-ozarks-airport-transportation',
+        destination: '/services/airport-transfers',
         permanent: true,
       },
       {
         source: '/services/bachelor-bachelorette-transportation',
-        destination: '/services',
+        destination: '/services/bachelor-party-transportation',
         permanent: true,
       },
       {
         source: '/services/birthday-celebration-transportation',
-        destination: '/services',
+        destination: '/services/special-events-transportation',
         permanent: true,
       },
       {
         source: '/services/corporate-transportation',
-        destination: '/services',
+        destination: '/services/corporate-executive-travel',
         permanent: true,
       },
       {
         source: '/services/nightlife-transportation',
-        destination: '/services',
+        destination: '/services/party-bus-nightlife',
         permanent: true,
       },
       {
         source: '/services/private-aviation-transportation',
-        destination: '/services',
+        destination: '/services/private-aviation-transfers',
         permanent: true,
       },
     ];

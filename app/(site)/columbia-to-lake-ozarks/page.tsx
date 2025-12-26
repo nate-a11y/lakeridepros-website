@@ -287,7 +287,7 @@ export default async function ColumbiaToLakeOzarksPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/nightlife-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/party-bus-nightlife" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Weekend Party Trips</h3>
@@ -367,7 +367,7 @@ export default async function ColumbiaToLakeOzarksPage() {
         <RelatedServices services={[
           { title: "Bachelor Party Transportation", href: "/services/bachelor-party-transportation", description: "Party bus and shuttle service for Lake weekends" },
           { title: "Group Event Transportation", href: "/services/group-event-transportation", description: "Large group shuttle service for family trips" },
-          { title: "Nightlife Transportation", href: "/services/nightlife-transportation", description: "Bar hopping and party transportation at the Lake" }
+          { title: "Nightlife Transportation", href: "/services/party-bus-nightlife", description: "Bar hopping and party transportation at the Lake" }
         ]} />
 
         {/* CTA Section */}

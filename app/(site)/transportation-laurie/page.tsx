@@ -242,7 +242,7 @@ export default async function LaurieTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/airport-shuttle" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/airport-transfers" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Airport Shuttle</h3>

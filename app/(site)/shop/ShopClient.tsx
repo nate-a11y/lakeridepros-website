@@ -144,7 +144,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-14 pr-12 py-4 rounded-xl bg-lrp-black/80 backdrop-blur-md text-white placeholder:text-neutral-500 border-2 border-transparent focus:border-lrp-green focus:outline-none focus:scale-[1.02] focus:shadow-[0_8px_24px_rgba(76,187,23,0.3)] transition-all duration-200"
+                className="w-full pl-14 pr-12 py-4 rounded-xl bg-lrp-black/80 backdrop-blur-md text-white placeholder:text-white/60 border-2 border-transparent focus:border-lrp-green focus:outline-none focus:scale-[1.02] focus:shadow-[0_8px_24px_rgba(76,187,23,0.3)] transition-all duration-200"
               />
               {searchQuery && (
                 <button

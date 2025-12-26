@@ -209,14 +209,14 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 const variant = product.variants?.find((v: ProductVariant) => v.size === e.target.value)
                 if (variant) setSelectedVariant(variant)
               }}
-              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-lrp-black font-semibold focus:outline-none focus:border-lrp-green transition-all"
+              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold focus:outline-none focus:border-lrp-green transition-all dark:[color-scheme:dark]"
             >
               {sizes.map((size: string) => {
                 const variant = product.variants?.find((v: ProductVariant) => v.size === size)
                 const inStock = variant?.inStock
 
                 return (
-                  <option key={size} value={size} disabled={!inStock}>
+                  <option key={size} value={size} disabled={!inStock} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">
                     {size.toUpperCase()} {!inStock ? '(Out of Stock)' : ''}
                   </option>
                 )
@@ -274,7 +274,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 const variant = product.variants?.find((v: ProductVariant) => v.sku === e.target.value)
                 if (variant) setSelectedVariant(variant)
               }}
-              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-lrp-black font-semibold focus:outline-none focus:border-lrp-green transition-all"
+              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold focus:outline-none focus:border-lrp-green transition-all dark:[color-scheme:dark]"
             >
               {product.variants?.map((variant: ProductVariant, index: number) => {
                 const inStock = variant.inStock
@@ -283,7 +283,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
                   : ''
 
                 return (
-                  <option key={variant.sku || index} value={variant.sku} disabled={!inStock}>
+                  <option key={variant.sku || index} value={variant.sku} disabled={!inStock} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">
                     {variant.name}{priceDisplay} {!inStock ? '(Out of Stock)' : ''}
                   </option>
                 )
@@ -336,7 +336,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
               onChange={(e) => setPersonalizationText(e.target.value)}
               maxLength={product.personalization.maxLength || 100}
               placeholder={product.personalization.instructions || 'Enter your personalization text'}
-              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-lrp-black focus:outline-none focus:border-lrp-green transition-all"
+              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus:outline-none focus:border-lrp-green transition-all"
             />
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
               {personalizationText.length}/{product.personalization.maxLength || 100} characters
@@ -354,7 +354,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               aria-label="Decrease quantity"
               disabled={quantity <= 1}
-              className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl dark:text-lrp-black disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl text-neutral-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               −
             </button>
@@ -364,7 +364,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
             <button
               onClick={() => setQuantity(quantity + 1)}
               aria-label="Increase quantity"
-              className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl dark:text-lrp-black"
+              className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl text-neutral-900 dark:text-white"
             >
               +
             </button>

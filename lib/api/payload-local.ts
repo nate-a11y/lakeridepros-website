@@ -412,24 +412,24 @@ export async function getPagesLocal(): Promise<unknown[]> {
 export async function getTestimonialsLocal(minRating = 5): Promise<Testimonial[]> {
   try {
     const payload = await getPayloadClient()
+    // Fetch all testimonials - filter by rating in JS to handle string/number type issues
     const result = await payload.find({
       collection: 'testimonials',
-      where: {
-        rating: {
-          greater_than_equal: minRating,
-        },
-      },
       sort: 'order',
       depth: 2,
-      limit: 500,
-      pagination: false,
+      limit: 0, // 0 = no limit in Payload
     })
 
-    // Filter out testimonials with placeholder content
+    // Filter by rating and exclude placeholder content
     const placeholderTexts = ['No comment provided', 'No content provided', '']
     const validTestimonials = (result.docs as unknown as Testimonial[]).filter(testimonial => {
       const content = testimonial.content?.trim() || ''
-      return content.length > 0 && !placeholderTexts.includes(content)
+      const rating = Number(testimonial.rating) || 0
+      return (
+        rating >= minRating &&
+        content.length > 0 &&
+        !placeholderTexts.includes(content)
+      )
     })
 
     return validTestimonials

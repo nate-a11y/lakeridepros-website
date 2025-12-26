@@ -421,7 +421,8 @@ export async function getTestimonialsLocal(minRating = 5): Promise<Testimonial[]
       },
       sort: 'order',
       depth: 2,
-      limit: 100,
+      limit: 500,
+      pagination: false,
     })
 
     // Filter out testimonials with placeholder content

@@ -43,28 +43,32 @@ const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: 'Lake Ride Pros - Kansas City to Lake of the Ozarks Shuttle',
+  image: 'https://www.lakeridepros.com/og-image.jpg',
+  '@id': 'https://www.lakeridepros.com/kansas-city-to-lake-ozarks',
   url: 'https://www.lakeridepros.com/kansas-city-to-lake-ozarks',
   telephone: '+1-573-206-9499',
   email: 'contactus@lakeridepros.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Lake of the Ozarks',
+    addressRegion: 'MO',
+    addressCountry: 'US'
+  },
   areaServed: [
     {
       '@type': 'City',
       name: 'Kansas City',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Kansas City',
-        addressRegion: 'MO',
-        addressCountry: 'US'
+      containedInPlace: {
+        '@type': 'State',
+        name: 'Missouri'
       }
     },
     {
       '@type': 'City',
       name: 'Lake of the Ozarks',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Lake of the Ozarks',
-        addressRegion: 'MO',
-        addressCountry: 'US'
+      containedInPlace: {
+        '@type': 'State',
+        name: 'Missouri'
       }
     }
   ],

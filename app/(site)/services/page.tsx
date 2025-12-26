@@ -83,6 +83,7 @@ export default async function ServicesPage() {
     '@type': 'LocalBusiness',
     '@id': 'https://www.lakeridepros.com/#organization',
     name: 'Lake Ride Pros',
+    image: 'https://www.lakeridepros.com/og-image.jpg',
     url: 'https://www.lakeridepros.com',
     logo: 'https://www.lakeridepros.com/logo.png',
     description: 'Premium transportation services at Lake of the Ozarks',
@@ -93,15 +94,16 @@ export default async function ServicesPage() {
       addressRegion: 'MO',
       addressCountry: 'US',
     },
-    areaServed: {
-      '@type': 'GeoCircle',
-      geoMidpoint: {
-        '@type': 'GeoCoordinates',
-        latitude: 38.1515,
-        longitude: -92.6379,
-      },
-      geoRadius: '50000',
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 38.1515,
+      longitude: -92.6379,
     },
+    areaServed: {
+      '@type': 'State',
+      name: 'Missouri',
+    },
+    priceRange: '$$-$$$',
   };
 
   return (

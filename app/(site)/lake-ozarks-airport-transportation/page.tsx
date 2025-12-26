@@ -43,17 +43,23 @@ const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: 'Lake Ride Pros - Lake of the Ozarks Airport Transportation',
+  image: 'https://www.lakeridepros.com/og-image.jpg',
+  '@id': 'https://www.lakeridepros.com/lake-ozarks-airport-transportation',
   url: 'https://www.lakeridepros.com/lake-ozarks-airport-transportation',
   telephone: '+1-573-206-9499',
   email: 'contactus@lakeridepros.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Lake of the Ozarks',
+    addressRegion: 'MO',
+    addressCountry: 'US'
+  },
   areaServed: {
     '@type': 'City',
     name: 'Lake of the Ozarks',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Lake of the Ozarks',
-      addressRegion: 'MO',
-      addressCountry: 'US'
+    containedInPlace: {
+      '@type': 'State',
+      name: 'Missouri'
     }
   },
   geo: {

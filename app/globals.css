@@ -444,29 +444,6 @@ body:has([data-main-app]) {
   min-height: 100vh;
   background-color: var(--background);
   color: var(--foreground);
-}
-
-/* Prevent white gaps on dark mode */
-.dark html:has([data-main-app]),
-.dark body:has([data-main-app]) {
-  background-color: #0a0a0a;
-}
-
-/* High contrast light mode backgrounds */
-.high-contrast-light html:has([data-main-app]),
-.high-contrast-light body:has([data-main-app]) {
-  background-color: #ffffff;
-}
-
-/* High contrast dark mode backgrounds */
-.high-contrast-dark html:has([data-main-app]),
-.high-contrast-dark body:has([data-main-app]) {
-  background-color: #000000;
-}
-
-body:has([data-main-app]) {
-  background: var(--background);
-  color: var(--foreground);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
@@ -497,153 +474,53 @@ input[type="checkbox"].h-4 {
      Use these instead of manual light/dark variants
      =========================== */
 
-  /* Text colors - automatically switch for light/dark mode */
+  /* Text colors - use CSS variables for automatic theme switching */
   .text-body {
-    color: #374151; /* neutral-700 */
-  }
-  .dark .text-body {
-    color: #d1d5db; /* neutral-300 */
-  }
-  .high-contrast-light .text-body {
-    color: #000000;
-  }
-  .high-contrast-dark .text-body {
-    color: #ffffff;
+    color: var(--neutral-700);
   }
 
   .text-body-secondary {
-    color: #4b5563; /* neutral-600 */
-  }
-  .dark .text-body-secondary {
-    color: #9ca3af; /* neutral-400 */
-  }
-  .high-contrast-light .text-body-secondary {
-    color: #000000;
-  }
-  .high-contrast-dark .text-body-secondary {
-    color: #ffffff;
+    color: var(--neutral-600);
   }
 
   .text-heading {
-    color: #111827; /* neutral-900 */
-  }
-  .dark .text-heading {
-    color: #ffffff;
-  }
-  .high-contrast-light .text-heading {
-    color: #000000;
-  }
-  .high-contrast-dark .text-heading {
-    color: #ffffff;
+    color: var(--neutral-900);
   }
 
   .text-heading-secondary {
-    color: #1f2937; /* neutral-800 */
-  }
-  .dark .text-heading-secondary {
-    color: #e5e7eb; /* neutral-200 */
-  }
-  .high-contrast-light .text-heading-secondary {
-    color: #000000;
-  }
-  .high-contrast-dark .text-heading-secondary {
-    color: #ffffff;
+    color: var(--neutral-800);
   }
 
   .text-muted {
-    color: #6b7280; /* neutral-500 */
-  }
-  .dark .text-muted {
-    color: #9ca3af; /* neutral-400 */
-  }
-  .high-contrast-light .text-muted {
-    color: #000000;
-  }
-  .high-contrast-dark .text-muted {
-    color: #ffffff;
+    color: var(--neutral-500);
   }
 
-  /* Background colors - automatically switch for light/dark mode */
+  /* Background colors - use CSS variables for automatic theme switching */
   .bg-page {
-    background-color: #ffffff;
-  }
-  .dark .bg-page {
-    background-color: var(--dark-bg-primary);
-  }
-  .high-contrast-light .bg-page {
-    background-color: #ffffff;
-  }
-  .high-contrast-dark .bg-page {
-    background-color: #000000;
+    background-color: var(--background);
   }
 
   .bg-section {
-    background-color: #f9fafb; /* neutral-50 */
-  }
-  .dark .bg-section {
-    background-color: var(--dark-bg-secondary);
-  }
-  .high-contrast-light .bg-section {
-    background-color: #f0f0f0;
-  }
-  .high-contrast-dark .bg-section {
-    background-color: #1a1a1a;
+    background-color: var(--neutral-50);
   }
 
   .bg-section-alt {
-    background-color: #ffffff;
-  }
-  .dark .bg-section-alt {
-    background-color: var(--dark-bg-primary);
-  }
-  .high-contrast-light .bg-section-alt {
-    background-color: #ffffff;
-  }
-  .high-contrast-dark .bg-section-alt {
-    background-color: #000000;
+    background-color: var(--background);
   }
 
   .bg-card {
-    background-color: #ffffff;
-  }
-  .dark .bg-card {
-    background-color: var(--dark-bg-secondary);
-  }
-  .high-contrast-light .bg-card {
-    background-color: #ffffff;
-    border: 2px solid #000000;
-  }
-  .high-contrast-dark .bg-card {
-    background-color: #000000;
-    border: 2px solid #ffffff;
+    background-color: var(--background);
+    border: 1px solid var(--dark-border);
   }
 
   /* Border colors */
   .border-themed {
-    border-color: #e5e7eb; /* neutral-200 */
-  }
-  .dark .border-themed {
     border-color: var(--dark-border);
-  }
-  .high-contrast-light .border-themed {
-    border-color: #000000;
-  }
-  .high-contrast-dark .border-themed {
-    border-color: #ffffff;
   }
 
   /* Prose/content styling for terms pages, blog posts, etc */
   .prose-themed {
-    color: #374151;
-  }
-  .dark .prose-themed {
-    color: #d1d5db;
-  }
-  .high-contrast-light .prose-themed {
-    color: #000000;
-  }
-  .high-contrast-dark .prose-themed {
-    color: #ffffff;
+    color: var(--neutral-700);
   }
 
   .prose-themed h1,
@@ -652,65 +529,18 @@ input[type="checkbox"].h-4 {
   .prose-themed h4,
   .prose-themed h5,
   .prose-themed h6 {
-    color: #111827;
-  }
-  .dark .prose-themed h1,
-  .dark .prose-themed h2,
-  .dark .prose-themed h3,
-  .dark .prose-themed h4,
-  .dark .prose-themed h5,
-  .dark .prose-themed h6 {
-    color: #ffffff;
-  }
-  .high-contrast-light .prose-themed h1,
-  .high-contrast-light .prose-themed h2,
-  .high-contrast-light .prose-themed h3,
-  .high-contrast-light .prose-themed h4,
-  .high-contrast-light .prose-themed h5,
-  .high-contrast-light .prose-themed h6 {
-    color: #000000;
-  }
-  .high-contrast-dark .prose-themed h1,
-  .high-contrast-dark .prose-themed h2,
-  .high-contrast-dark .prose-themed h3,
-  .high-contrast-dark .prose-themed h4,
-  .high-contrast-dark .prose-themed h5,
-  .high-contrast-dark .prose-themed h6 {
-    color: #ffffff;
+    color: var(--neutral-900);
   }
 
   .prose-themed strong {
-    color: #1f2937;
-  }
-  .dark .prose-themed strong {
-    color: #f3f4f6;
-  }
-  .high-contrast-light .prose-themed strong {
-    color: #000000;
-  }
-  .high-contrast-dark .prose-themed strong {
-    color: #ffffff;
+    color: var(--neutral-800);
   }
 
   .prose-themed a {
-    color: var(--primary);
+    color: var(--link);
   }
   .prose-themed a:hover {
-    color: var(--primary-dark);
-  }
-  .high-contrast-light .prose-themed a {
-    color: #00008b;
-    text-decoration: underline;
-  }
-  .high-contrast-light .prose-themed a:hover {
-    color: #000066;
-  }
-  .high-contrast-dark .prose-themed a {
-    color: #66b3ff;
-    text-decoration: underline;
-  }
-  .high-contrast-dark .prose-themed a:hover {
-    color: #99ccff;
+    color: var(--link-hover);
   }
 
   /* Screen reader only class */
@@ -896,9 +726,9 @@ body.modal-open [style*="position: fixed"][style*="bottom"][style*="right"]:not(
    =========================== */
 
 /* Visible focus indicators for keyboard navigation */
-/* Only apply to main app to avoid overriding Payload's focus styles */
+/* Uses CSS variable --focus-ring which changes per theme */
 [data-main-app] *:focus-visible {
-  outline: 3px solid #4cbb17;
+  outline: var(--focus-ring-width, 3px) solid var(--focus-ring);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -906,35 +736,8 @@ body.modal-open [style*="position: fixed"][style*="bottom"][style*="right"]:not(
 /* Enhanced focus for buttons and links */
 [data-main-app] button:focus-visible,
 [data-main-app] a:focus-visible {
-  outline: 3px solid #4cbb17;
+  outline: var(--focus-ring-width, 3px) solid var(--focus-ring);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(76, 187, 23, 0.2);
-}
-
-/* High contrast light mode focus - black outline */
-.high-contrast-light [data-main-app] *:focus-visible {
-  outline: 4px solid #000000;
-  outline-offset: 2px;
-}
-
-.high-contrast-light [data-main-app] button:focus-visible,
-.high-contrast-light [data-main-app] a:focus-visible {
-  outline: 4px solid #000000;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.3);
-}
-
-/* High contrast dark mode focus - yellow outline for visibility */
-.high-contrast-dark [data-main-app] *:focus-visible {
-  outline: 4px solid #ffff00;
-  outline-offset: 2px;
-}
-
-.high-contrast-dark [data-main-app] button:focus-visible,
-.high-contrast-dark [data-main-app] a:focus-visible {
-  outline: 4px solid #ffff00;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 6px rgba(255, 255, 0, 0.3);
 }
 
 /* Skip to main content link */
@@ -1014,55 +817,28 @@ body.modal-open [style*="position: fixed"][style*="bottom"][style*="right"]:not(
    Applied when user selects high contrast themes
    =========================== */
 
-/* High contrast light mode global styles */
-.high-contrast-light [data-main-app] button,
-.high-contrast-light [data-main-app] a {
-  border: 2px solid #000000;
-}
-
-.high-contrast-light [data-main-app] a {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
+/* High contrast skip link */
 .high-contrast-light [data-main-app] .skip-link {
   background: #000000;
   color: #ffffff;
-  border: 3px solid #000000;
-}
-
-/* High contrast dark mode global styles */
-.high-contrast-dark [data-main-app] button,
-.high-contrast-dark [data-main-app] a {
-  border: 2px solid #ffffff;
-}
-
-.high-contrast-dark [data-main-app] a {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .high-contrast-dark [data-main-app] .skip-link {
   background: #ffff00;
   color: #000000;
-  border: 3px solid #ffff00;
 }
 
-/* High contrast input styles */
+/* High contrast input styles - ensure visible borders */
 .high-contrast-light [data-main-app] input,
 .high-contrast-light [data-main-app] textarea,
 .high-contrast-light [data-main-app] select {
   border: 2px solid #000000;
-  background: #ffffff;
-  color: #000000;
 }
 
 .high-contrast-dark [data-main-app] input,
 .high-contrast-dark [data-main-app] textarea,
 .high-contrast-dark [data-main-app] select {
   border: 2px solid #ffffff;
-  background: #000000;
-  color: #ffffff;
 }
 
 /* High contrast placeholder text */

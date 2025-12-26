@@ -132,19 +132,30 @@ export default function ThemeToggle() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="p-3 rounded-lg bg-neutral-100 dark:bg-dark-bg-tertiary hover:bg-primary hover:text-lrp-black dark:hover:bg-primary transition-all duration-200 high-contrast:bg-white high-contrast:border-2 high-contrast:border-black high-contrast-dark:bg-black high-contrast-dark:border-2 high-contrast-dark:border-white"
+        className="p-3 rounded-lg border border-transparent bg-neutral-100 dark:bg-dark-bg-tertiary hover:bg-primary hover:text-lrp-black dark:hover:bg-primary transition-all duration-200"
+        style={{
+          backgroundColor: 'var(--neutral-100)',
+          borderColor: 'var(--dark-border)',
+        }}
         aria-label="Select theme"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
-        <span className="h-5 w-5 text-neutral-700 dark:text-neutral-300 high-contrast:text-black high-contrast-dark:text-white flex items-center justify-center">
+        <span
+          className="h-5 w-5 flex items-center justify-center"
+          style={{ color: 'var(--foreground)' }}
+        >
           {currentTheme.icon}
         </span>
       </button>
 
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg bg-white dark:bg-dark-bg-secondary border border-neutral-200 dark:border-dark-border high-contrast:bg-white high-contrast:border-2 high-contrast:border-black high-contrast-dark:bg-black high-contrast-dark:border-2 high-contrast-dark:border-white z-50"
+          className="absolute right-0 mt-2 w-56 rounded-lg shadow-lg border z-50"
+          style={{
+            backgroundColor: 'var(--background)',
+            borderColor: 'var(--dark-border)',
+          }}
           role="listbox"
           aria-label="Theme options"
         >
@@ -153,11 +164,12 @@ export default function ThemeToggle() {
               <button
                 key={option.value}
                 onClick={() => handleThemeSelect(option.value)}
-                className={`w-full px-4 py-3 flex items-center gap-3 text-left hover:bg-neutral-100 dark:hover:bg-dark-bg-tertiary high-contrast:hover:bg-yellow-300 high-contrast:hover:text-black high-contrast-dark:hover:bg-yellow-300 high-contrast-dark:hover:text-black transition-colors ${
-                  theme === option.value
-                    ? 'bg-primary/10 text-primary dark:bg-primary/20 high-contrast:bg-black high-contrast:text-white high-contrast-dark:bg-white high-contrast-dark:text-black font-semibold'
-                    : 'text-neutral-700 dark:text-neutral-300 high-contrast:text-black high-contrast-dark:text-white'
-                }`}
+                className="w-full px-4 py-3 flex items-center gap-3 text-left transition-colors"
+                style={{
+                  backgroundColor: theme === option.value ? 'var(--primary-alpha-20)' : 'transparent',
+                  color: theme === option.value ? 'var(--primary)' : 'var(--foreground)',
+                  fontWeight: theme === option.value ? 600 : 400,
+                }}
                 role="option"
                 aria-selected={theme === option.value}
               >
@@ -165,7 +177,8 @@ export default function ThemeToggle() {
                 <span className="text-sm">{option.label}</span>
                 {theme === option.value && (
                   <svg
-                    className="ml-auto h-4 w-4 text-primary high-contrast:text-white high-contrast-dark:text-black"
+                    className="ml-auto h-4 w-4"
+                    style={{ color: 'var(--primary)' }}
                     fill="none"
                     strokeWidth="2"
                     viewBox="0 0 24 24"

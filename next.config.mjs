@@ -115,6 +115,19 @@ const nextConfig = {
         permanent: true,
       },
 
+      // Old event/misc pages
+      {
+        source: '/events-1',
+        destination: '/services/group-event-transportation',
+        permanent: true,
+      },
+      // Old UUID-based URLs (likely old driver profiles)
+      {
+        source: '/25484956-256c-4ca3-bcb1-05c6bb284472',
+        destination: '/our-drivers',
+        permanent: true,
+      },
+
       // Old service pages → Services or relevant pages
       {
         source: '/airport-transportation-solutions',

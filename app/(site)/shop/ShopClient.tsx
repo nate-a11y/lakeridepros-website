@@ -186,10 +186,10 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)]"
+                className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)] dark:[color-scheme:dark]"
               >
                 {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-white dark:bg-dark-bg-secondary">
+                  <option key={option.value} value={option.value} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">
                     {option.name}
                   </option>
                 ))}
@@ -213,12 +213,12 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 id="page-size"
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
-                className="appearance-none pl-3 pr-8 py-2 rounded-lg border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white text-sm font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green"
+                className="appearance-none pl-3 pr-8 py-2 rounded-lg border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white text-sm font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green dark:[color-scheme:dark]"
               >
-                <option value={20}>20</option>
-                <option value={40}>40</option>
-                <option value={60}>60</option>
-                <option value={100}>100</option>
+                <option value={20} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">20</option>
+                <option value={40} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">40</option>
+                <option value={60} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">60</option>
+                <option value={100} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">100</option>
               </select>
             </div>
           </div>

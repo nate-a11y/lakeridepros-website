@@ -30,9 +30,14 @@ export const localBusinessSchema = {
     { "@type": "City", "name": "Camdenton" },
     { "@type": "City", "name": "Lake Ozark" },
     { "@type": "State", "name": "Missouri" }
-  ]
-  // Note: aggregateRating removed until real reviews are collected
-  // Add back when you have actual customer reviews
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "177",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
 }
 
 export const organizationSchema = {
@@ -43,7 +48,7 @@ export const organizationSchema = {
   "logo": "https://www.lakeridepros.com/logo.png",
   "description": "Premier luxury transportation service at Lake of the Ozarks, Missouri",
   "foundingDate": "2022",
-  "founders": [
+  "founder": [
     { "@type": "Person", "name": "Jim Brentlinger" },
     { "@type": "Person", "name": "Nate Bulock" },
     { "@type": "Person", "name": "Michael Brandt" }

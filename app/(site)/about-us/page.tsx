@@ -34,7 +34,7 @@ export default function AboutUsPage() {
     "logo": "https://www.lakeridepros.com/logo.png",
     "description": "Premier luxury transportation service at Lake of the Ozarks, Missouri. Specializing in limo buses, sprinter vans, and shuttle services.",
     "foundingDate": "2022",
-    "founders": [
+    "founder": [
       {
         "@type": "Person",
         "name": "Jim Brentlinger"

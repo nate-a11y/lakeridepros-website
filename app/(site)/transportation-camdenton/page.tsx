@@ -42,17 +42,23 @@ const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: 'Lake Ride Pros - Camdenton Transportation',
+  image: 'https://www.lakeridepros.com/og-image.jpg',
+  '@id': 'https://www.lakeridepros.com/transportation-camdenton',
   url: 'https://www.lakeridepros.com/transportation-camdenton',
   telephone: '+1-573-206-9499',
   email: 'contactus@lakeridepros.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Lake of the Ozarks',
+    addressRegion: 'MO',
+    addressCountry: 'US'
+  },
   areaServed: {
     '@type': 'City',
     name: 'Camdenton',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Camdenton',
-      addressRegion: 'MO',
-      addressCountry: 'US'
+    containedInPlace: {
+      '@type': 'State',
+      name: 'Missouri'
     }
   },
   geo: {

@@ -8,7 +8,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Shuttle Bus Service - Lake Ride Pros',
     description: '37-passenger shuttle bus for weddings, corporate events, and large groups.',
-    images: ['/shuttle-bus-og.jpg'],
+    url: 'https://www.lakeridepros.com/fleet/shuttle-bus',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: 'https://www.lakeridepros.com/shuttle-bus-og.jpg', width: 1200, height: 630, alt: 'Shuttle Bus' }],
+    type: 'website',
   },
   alternates: {
     canonical: 'https://www.lakeridepros.com/fleet/shuttle-bus',

@@ -42,18 +42,23 @@ const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
   name: 'Lake Ride Pros - Sunrise Beach Transportation',
+  image: 'https://www.lakeridepros.com/og-image.jpg',
+  '@id': 'https://www.lakeridepros.com/transportation-sunrise-beach',
   url: 'https://www.lakeridepros.com/transportation-sunrise-beach',
   telephone: '+1-573-206-9499',
   email: 'contactus@lakeridepros.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Lake of the Ozarks',
+    addressRegion: 'MO',
+    addressCountry: 'US'
+  },
   areaServed: {
     '@type': 'City',
     name: 'Sunrise Beach',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Sunrise Beach',
-      addressRegion: 'MO',
-      postalCode: '65079',
-      addressCountry: 'US'
+    containedInPlace: {
+      '@type': 'State',
+      name: 'Missouri'
     }
   },
   geo: {

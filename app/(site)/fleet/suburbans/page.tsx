@@ -8,7 +8,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Luxury SUV Service - Lake Ride Pros',
     description: 'Luxury Suburban SUV service for small groups and airport transfers at Lake of the Ozarks.',
-    images: ['/suburbans-og.jpg'],
+    url: 'https://www.lakeridepros.com/fleet/suburbans',
+    siteName: 'Lake Ride Pros',
+    images: [{ url: 'https://www.lakeridepros.com/suburbans-og.jpg', width: 1200, height: 630, alt: 'Luxury Suburban SUV' }],
+    type: 'website',
   },
   alternates: {
     canonical: 'https://www.lakeridepros.com/fleet/suburbans',

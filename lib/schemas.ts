@@ -44,7 +44,7 @@ export const localBusinessSchema = {
     "https://youtube.com/@lakeridepros",
     "https://www.tiktok.com/@lakeridepros"
   ],
-  "paymentAccepted": ["Cash", "Credit Card", "Debit Card"],
+  "paymentAccepted": ["Cash", "Credit Card", "Debit Card", "Venmo"],
   "currenciesAccepted": "USD",
   "aggregateRating": {
     "@type": "AggregateRating",

@@ -261,7 +261,7 @@ export default async function SpringfieldToLakeOzarksPage() {
               Popular Lake Trips from Springfield
             </h2>
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-              <Link href="/services/airport-shuttle" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/airport-transfers" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">SGF Airport Transfers</h3>
@@ -366,7 +366,7 @@ export default async function SpringfieldToLakeOzarksPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Airport Shuttle", href: "/services/airport-shuttle", description: "Direct airport transfers from SGF, MCI, and STL" },
+          { title: "Airport Shuttle", href: "/services/airport-transfers", description: "Direct airport transfers from SGF, MCI, and STL" },
           { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Guest shuttles for destination Lake weddings" },
           { title: "Group Event Transportation", href: "/services/group-event-transportation", description: "Large group shuttle service for weekend trips" }
         ]} />

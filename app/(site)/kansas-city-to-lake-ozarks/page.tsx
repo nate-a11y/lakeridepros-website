@@ -280,7 +280,7 @@ export default async function KansasCityToLakeOzarksPage() {
               Kansas City to Lake Ozarks Transportation Services
             </h2>
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-              <Link href="/services/airport-shuttle" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/airport-transfers" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Airport Shuttle</h3>
@@ -289,7 +289,7 @@ export default async function KansasCityToLakeOzarksPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/bachelor-bachelorette-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/bachelor-party-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Bachelor/Bachelorette Parties</h3>
@@ -307,7 +307,7 @@ export default async function KansasCityToLakeOzarksPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/corporate-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/corporate-executive-travel" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Corporate Transportation</h3>
@@ -466,8 +466,8 @@ export default async function KansasCityToLakeOzarksPage() {
         {/* Related Services */}
         <RelatedServices services={[
           { title: "St. Louis to Lake Ozarks", href: "/st-louis-to-lake-ozarks", description: "Professional shuttle from STL Airport to Lake of the Ozarks" },
-          { title: "Airport Shuttle Service", href: "/services/airport-shuttle", description: "All major Missouri airports to Lake destinations" },
-          { title: "Bachelor/Bachelorette Parties", href: "/services/bachelor-bachelorette-transportation", description: "Party bus and shuttle service for Lake Ozarks celebrations" }
+          { title: "Airport Shuttle Service", href: "/services/airport-transfers", description: "All major Missouri airports to Lake destinations" },
+          { title: "Bachelor/Bachelorette Parties", href: "/services/bachelor-party-transportation", description: "Party bus and shuttle service for Lake Ozarks celebrations" }
         ]} />
 
         {/* CTA Section */}

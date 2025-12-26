@@ -217,7 +217,7 @@ export default async function OsageBeachTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/airport-shuttle" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/airport-transfers" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Airport Shuttle</h3>
@@ -226,7 +226,7 @@ export default async function OsageBeachTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/nightlife-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/party-bus-nightlife" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Nightlife & Bar Hopping</h3>
@@ -235,7 +235,7 @@ export default async function OsageBeachTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/corporate-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/corporate-executive-travel" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Corporate Transportation</h3>
@@ -377,7 +377,7 @@ export default async function OsageBeachTransportationPage() {
         <RelatedServices services={[
           { title: "Tan-Tar-A Transportation", href: "/services/tan-tar-a-transportation", description: "Dedicated shuttle service for Tan-Tar-A Resort events" },
           { title: "Margaritaville Transportation", href: "/services/margaritaville-transportation", description: "Resort guest and event transportation for Margaritaville" },
-          { title: "Nightlife Transportation", href: "/services/nightlife-transportation", description: "Bagnell Dam Strip bar hopping and party bus rentals" }
+          { title: "Nightlife Transportation", href: "/services/party-bus-nightlife", description: "Bagnell Dam Strip bar hopping and party bus rentals" }
         ]} />
 
         {/* CTA Section */}

@@ -200,7 +200,7 @@ export default async function LakeOzarkTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/corporate-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/corporate-executive-travel" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Corporate Events</h3>
@@ -209,7 +209,7 @@ export default async function LakeOzarkTransportationPage() {
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </div>
               </Link>
-              <Link href="/services/airport-shuttle" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/airport-transfers" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Airport Transfers</h3>
@@ -358,9 +358,9 @@ export default async function LakeOzarkTransportationPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Corporate Transportation", href: "/services/corporate-transportation", description: "Executive transportation for Lodge of Four Seasons events" },
+          { title: "Corporate Transportation", href: "/services/corporate-executive-travel", description: "Executive transportation for Lodge of Four Seasons events" },
           { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Luxury wedding shuttles for waterfront venues" },
-          { title: "Airport Shuttle", href: "/services/airport-shuttle", description: "Direct transfers from MCI, STL, and SGF airports" }
+          { title: "Airport Shuttle", href: "/services/airport-transfers", description: "Direct transfers from MCI, STL, and SGF airports" }
         ]} />
 
         {/* CTA Section */}

@@ -260,7 +260,7 @@ export default async function JeffersonCityToLakeOzarksPage() {
               Popular Lake Trips from Jefferson City
             </h2>
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-              <Link href="/services/corporate-transportation" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
+              <Link href="/services/corporate-executive-travel" className="group block bg-white dark:bg-dark-bg-primary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-lg mb-2">Corporate & Government Retreats</h3>
@@ -365,7 +365,7 @@ export default async function JeffersonCityToLakeOzarksPage() {
 
         {/* Related Services */}
         <RelatedServices services={[
-          { title: "Corporate Transportation", href: "/services/corporate-transportation", description: "Executive service for government and corporate groups" },
+          { title: "Corporate Transportation", href: "/services/corporate-executive-travel", description: "Executive service for government and corporate groups" },
           { title: "Group Event Transportation", href: "/services/group-event-transportation", description: "Large group shuttle service for any event" },
           { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Luxury wedding shuttles for Lake venues" }
         ]} />

@@ -28,6 +28,10 @@
 /* Tailwind v4 dark mode configuration */
 @variant dark (&:where(.dark, .dark *));
 
+/* High contrast mode variants for accessibility */
+@variant high-contrast (&:where(.high-contrast-light, .high-contrast-light *));
+@variant high-contrast-dark (&:where(.high-contrast-dark, .high-contrast-dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #060606;
@@ -290,6 +294,144 @@
   --neutral-900: #ffffff;  /* Pure white */
 }
 
+/* ===========================
+   HIGH CONTRAST LIGHT MODE
+   Maximum contrast for accessibility (WCAG AAA)
+   =========================== */
+.high-contrast-light {
+  --background: #ffffff;
+  --foreground: #000000;
+
+  /* Pure black/white for maximum contrast */
+  --primary: #006400;  /* Dark green for better contrast */
+  --primary-dark: #004d00;
+  --primary-light: #008000;
+  --secondary: #006400;
+  --secondary-dark: #004d00;
+  --secondary-light: #008000;
+
+  /* Brand colors adjusted for high contrast */
+  --lrp-green: #006400;
+  --lrp-green-light: #008000;
+  --lrp-green-dark: #004d00;
+  --lrp-green-text: #004d00;
+  --lrp-black: #000000;
+  --lrp-gray: #666666;
+
+  /* High contrast text colors */
+  --lrp-text-secondary: #000000;
+  --lrp-text-muted: #000000;
+
+  /* Neutral colors - maximum contrast */
+  --neutral-50: #f0f0f0;
+  --neutral-100: #e0e0e0;
+  --neutral-200: #c0c0c0;
+  --neutral-300: #808080;
+  --neutral-400: #606060;
+  --neutral-500: #404040;
+  --neutral-600: #202020;
+  --neutral-700: #000000;
+  --neutral-800: #000000;
+  --neutral-900: #000000;
+
+  /* Dark mode colors (used in some components) */
+  --dark-bg-primary: #ffffff;
+  --dark-bg-secondary: #f0f0f0;
+  --dark-bg-tertiary: #e0e0e0;
+  --dark-border: #000000;
+  --dark-text-primary: #000000;
+  --dark-text-secondary: #000000;
+  --dark-text-muted: #000000;
+
+  /* High contrast focus ring */
+  --focus-ring: #000000;
+  --focus-ring-width: 4px;
+
+  /* State colors - high contrast */
+  --error: #b30000;
+  --error-light: #ffcccc;
+  --success: #006400;
+  --success-light: #ccffcc;
+  --warning: #805500;
+  --warning-light: #ffe6b3;
+  --info: #00008b;
+  --info-light: #ccccff;
+
+  /* Link colors */
+  --link: #00008b;
+  --link-hover: #000066;
+  --link-visited: #4b0082;
+}
+
+/* ===========================
+   HIGH CONTRAST DARK MODE
+   Maximum contrast dark theme (WCAG AAA)
+   =========================== */
+.high-contrast-dark {
+  --background: #000000;
+  --foreground: #ffffff;
+
+  /* Bright colors on pure black */
+  --primary: #00ff00;  /* Bright green for visibility */
+  --primary-dark: #00cc00;
+  --primary-light: #33ff33;
+  --secondary: #00ff00;
+  --secondary-dark: #00cc00;
+  --secondary-light: #33ff33;
+
+  /* Brand colors adjusted for high contrast dark */
+  --lrp-green: #00ff00;
+  --lrp-green-light: #33ff33;
+  --lrp-green-dark: #00cc00;
+  --lrp-green-text: #00ff00;
+  --lrp-black: #000000;
+  --lrp-gray: #808080;
+
+  /* High contrast text colors */
+  --lrp-text-secondary: #ffffff;
+  --lrp-text-muted: #ffffff;
+
+  /* Neutral colors - maximum contrast on black */
+  --neutral-50: #1a1a1a;
+  --neutral-100: #333333;
+  --neutral-200: #4d4d4d;
+  --neutral-300: #b3b3b3;
+  --neutral-400: #cccccc;
+  --neutral-500: #e6e6e6;
+  --neutral-600: #f2f2f2;
+  --neutral-700: #ffffff;
+  --neutral-800: #ffffff;
+  --neutral-900: #ffffff;
+
+  /* Dark mode colors */
+  --dark-bg-primary: #000000;
+  --dark-bg-secondary: #1a1a1a;
+  --dark-bg-tertiary: #333333;
+  --dark-border: #ffffff;
+  --dark-text-primary: #ffffff;
+  --dark-text-secondary: #ffffff;
+  --dark-text-muted: #e6e6e6;
+
+  /* High contrast focus ring */
+  --focus-ring: #ffff00;
+  --focus-ring-width: 4px;
+
+  /* State colors - high contrast dark */
+  --error: #ff6666;
+  --error-light: #4d0000;
+  --success: #00ff00;
+  --success-light: #004d00;
+  --warning: #ffcc00;
+  --warning-light: #4d3d00;
+  --info: #66b3ff;
+  --info-light: #003366;
+
+  /* Link colors - bright for visibility */
+  --link: #66b3ff;
+  --link-hover: #99ccff;
+  --link-visited: #cc99ff;
+}
+
 /* Ensure body and html take full height and use proper backgrounds */
 /* Only apply to main app, not Payload admin */
 html:has([data-main-app]) {
@@ -308,6 +450,18 @@ body:has([data-main-app]) {
 .dark html:has([data-main-app]),
 .dark body:has([data-main-app]) {
   background-color: #0a0a0a;
+}
+
+/* High contrast light mode backgrounds */
+.high-contrast-light html:has([data-main-app]),
+.high-contrast-light body:has([data-main-app]) {
+  background-color: #ffffff;
+}
+
+/* High contrast dark mode backgrounds */
+.high-contrast-dark html:has([data-main-app]),
+.high-contrast-dark body:has([data-main-app]) {
+  background-color: #000000;
 }
 
 body:has([data-main-app]) {
@@ -350,6 +504,12 @@ input[type="checkbox"].h-4 {
   .dark .text-body {
     color: #d1d5db; /* neutral-300 */
   }
+  .high-contrast-light .text-body {
+    color: #000000;
+  }
+  .high-contrast-dark .text-body {
+    color: #ffffff;
+  }
 
   .text-body-secondary {
     color: #4b5563; /* neutral-600 */
@@ -357,11 +517,23 @@ input[type="checkbox"].h-4 {
   .dark .text-body-secondary {
     color: #9ca3af; /* neutral-400 */
   }
+  .high-contrast-light .text-body-secondary {
+    color: #000000;
+  }
+  .high-contrast-dark .text-body-secondary {
+    color: #ffffff;
+  }
 
   .text-heading {
     color: #111827; /* neutral-900 */
   }
   .dark .text-heading {
+    color: #ffffff;
+  }
+  .high-contrast-light .text-heading {
+    color: #000000;
+  }
+  .high-contrast-dark .text-heading {
     color: #ffffff;
   }
 
@@ -371,12 +543,24 @@ input[type="checkbox"].h-4 {
   .dark .text-heading-secondary {
     color: #e5e7eb; /* neutral-200 */
   }
+  .high-contrast-light .text-heading-secondary {
+    color: #000000;
+  }
+  .high-contrast-dark .text-heading-secondary {
+    color: #ffffff;
+  }
 
   .text-muted {
     color: #6b7280; /* neutral-500 */
   }
   .dark .text-muted {
     color: #9ca3af; /* neutral-400 */
+  }
+  .high-contrast-light .text-muted {
+    color: #000000;
+  }
+  .high-contrast-dark .text-muted {
+    color: #ffffff;
   }
 
   /* Background colors - automatically switch for light/dark mode */
@@ -386,12 +570,24 @@ input[type="checkbox"].h-4 {
   .dark .bg-page {
     background-color: var(--dark-bg-primary);
   }
+  .high-contrast-light .bg-page {
+    background-color: #ffffff;
+  }
+  .high-contrast-dark .bg-page {
+    background-color: #000000;
+  }
 
   .bg-section {
     background-color: #f9fafb; /* neutral-50 */
   }
   .dark .bg-section {
     background-color: var(--dark-bg-secondary);
+  }
+  .high-contrast-light .bg-section {
+    background-color: #f0f0f0;
+  }
+  .high-contrast-dark .bg-section {
+    background-color: #1a1a1a;
   }
 
   .bg-section-alt {
@@ -400,12 +596,26 @@ input[type="checkbox"].h-4 {
   .dark .bg-section-alt {
     background-color: var(--dark-bg-primary);
   }
+  .high-contrast-light .bg-section-alt {
+    background-color: #ffffff;
+  }
+  .high-contrast-dark .bg-section-alt {
+    background-color: #000000;
+  }
 
   .bg-card {
     background-color: #ffffff;
   }
   .dark .bg-card {
     background-color: var(--dark-bg-secondary);
+  }
+  .high-contrast-light .bg-card {
+    background-color: #ffffff;
+    border: 2px solid #000000;
+  }
+  .high-contrast-dark .bg-card {
+    background-color: #000000;
+    border: 2px solid #ffffff;
   }
 
   /* Border colors */
@@ -415,6 +625,12 @@ input[type="checkbox"].h-4 {
   .dark .border-themed {
     border-color: var(--dark-border);
   }
+  .high-contrast-light .border-themed {
+    border-color: #000000;
+  }
+  .high-contrast-dark .border-themed {
+    border-color: #ffffff;
+  }
 
   /* Prose/content styling for terms pages, blog posts, etc */
   .prose-themed {
@@ -422,6 +638,12 @@ input[type="checkbox"].h-4 {
   }
   .dark .prose-themed {
     color: #d1d5db;
+  }
+  .high-contrast-light .prose-themed {
+    color: #000000;
+  }
+  .high-contrast-dark .prose-themed {
+    color: #ffffff;
   }
 
   .prose-themed h1,
@@ -440,6 +662,22 @@ input[type="checkbox"].h-4 {
   .dark .prose-themed h6 {
     color: #ffffff;
   }
+  .high-contrast-light .prose-themed h1,
+  .high-contrast-light .prose-themed h2,
+  .high-contrast-light .prose-themed h3,
+  .high-contrast-light .prose-themed h4,
+  .high-contrast-light .prose-themed h5,
+  .high-contrast-light .prose-themed h6 {
+    color: #000000;
+  }
+  .high-contrast-dark .prose-themed h1,
+  .high-contrast-dark .prose-themed h2,
+  .high-contrast-dark .prose-themed h3,
+  .high-contrast-dark .prose-themed h4,
+  .high-contrast-dark .prose-themed h5,
+  .high-contrast-dark .prose-themed h6 {
+    color: #ffffff;
+  }
 
   .prose-themed strong {
     color: #1f2937;
@@ -447,12 +685,32 @@ input[type="checkbox"].h-4 {
   .dark .prose-themed strong {
     color: #f3f4f6;
   }
+  .high-contrast-light .prose-themed strong {
+    color: #000000;
+  }
+  .high-contrast-dark .prose-themed strong {
+    color: #ffffff;
+  }
 
   .prose-themed a {
     color: var(--primary);
   }
   .prose-themed a:hover {
     color: var(--primary-dark);
+  }
+  .high-contrast-light .prose-themed a {
+    color: #00008b;
+    text-decoration: underline;
+  }
+  .high-contrast-light .prose-themed a:hover {
+    color: #000066;
+  }
+  .high-contrast-dark .prose-themed a {
+    color: #66b3ff;
+    text-decoration: underline;
+  }
+  .high-contrast-dark .prose-themed a:hover {
+    color: #99ccff;
   }
 
   /* Screen reader only class */
@@ -653,6 +911,32 @@ body.modal-open [style*="position: fixed"][style*="bottom"][style*="right"]:not(
   box-shadow: 0 0 0 4px rgba(76, 187, 23, 0.2);
 }
 
+/* High contrast light mode focus - black outline */
+.high-contrast-light [data-main-app] *:focus-visible {
+  outline: 4px solid #000000;
+  outline-offset: 2px;
+}
+
+.high-contrast-light [data-main-app] button:focus-visible,
+.high-contrast-light [data-main-app] a:focus-visible {
+  outline: 4px solid #000000;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+/* High contrast dark mode focus - yellow outline for visibility */
+.high-contrast-dark [data-main-app] *:focus-visible {
+  outline: 4px solid #ffff00;
+  outline-offset: 2px;
+}
+
+.high-contrast-dark [data-main-app] button:focus-visible,
+.high-contrast-dark [data-main-app] a:focus-visible {
+  outline: 4px solid #ffff00;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(255, 255, 0, 0.3);
+}
+
 /* Skip to main content link */
 .skip-link {
   position: absolute;
@@ -723,6 +1007,71 @@ body.modal-open [style*="position: fixed"][style*="bottom"][style*="right"]:not(
   .skip-link {
     border: 3px solid white;
   }
+}
+
+/* ===========================
+   HIGH CONTRAST MODE STYLES
+   Applied when user selects high contrast themes
+   =========================== */
+
+/* High contrast light mode global styles */
+.high-contrast-light [data-main-app] button,
+.high-contrast-light [data-main-app] a {
+  border: 2px solid #000000;
+}
+
+.high-contrast-light [data-main-app] a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.high-contrast-light [data-main-app] .skip-link {
+  background: #000000;
+  color: #ffffff;
+  border: 3px solid #000000;
+}
+
+/* High contrast dark mode global styles */
+.high-contrast-dark [data-main-app] button,
+.high-contrast-dark [data-main-app] a {
+  border: 2px solid #ffffff;
+}
+
+.high-contrast-dark [data-main-app] a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.high-contrast-dark [data-main-app] .skip-link {
+  background: #ffff00;
+  color: #000000;
+  border: 3px solid #ffff00;
+}
+
+/* High contrast input styles */
+.high-contrast-light [data-main-app] input,
+.high-contrast-light [data-main-app] textarea,
+.high-contrast-light [data-main-app] select {
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #000000;
+}
+
+.high-contrast-dark [data-main-app] input,
+.high-contrast-dark [data-main-app] textarea,
+.high-contrast-dark [data-main-app] select {
+  border: 2px solid #ffffff;
+  background: #000000;
+  color: #ffffff;
+}
+
+/* High contrast placeholder text */
+.high-contrast-light ::placeholder {
+  color: #404040;
+}
+
+.high-contrast-dark ::placeholder {
+  color: #cccccc;
 }
 
 /* Ensure proper spacing for text readability */

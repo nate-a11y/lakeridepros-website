@@ -19,6 +19,7 @@ export default function SiteLayout({
         defaultTheme="dark"
         enableSystem={true}
         disableTransitionOnChange={false}
+        themes={['light', 'dark', 'high-contrast-light', 'high-contrast-dark']}
       >
         <CartProvider>
           <a href="#main-content" className="skip-link">

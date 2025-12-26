@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import Turnstile from '@/components/Turnstile';
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
@@ -12,7 +14,28 @@ export default function NewsletterSignup() {
     setStatus('loading');
     setMessage('');
 
+    // Verify Turnstile token
+    if (!turnstileToken) {
+      setStatus('error');
+      setMessage('Please complete the security check.');
+      return;
+    }
+
     try {
+      // Verify Turnstile token first
+      const verifyResponse = await fetch('/api/verify-turnstile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: turnstileToken }),
+      });
+
+      if (!verifyResponse.ok) {
+        setStatus('error');
+        setMessage('Security verification failed. Please try again.');
+        setTurnstileToken(null);
+        return;
+      }
+
       const response = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -25,6 +48,7 @@ export default function NewsletterSignup() {
         setStatus('success');
         setMessage(data.message || 'Thanks for subscribing!');
         setEmail('');
+        setTurnstileToken(null);
       } else {
         setStatus('error');
         setMessage(data.error || 'Something went wrong. Please try again.');
@@ -70,6 +94,15 @@ export default function NewsletterSignup() {
             >
               {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
             </button>
+          </div>
+
+          {/* Cloudflare Turnstile */}
+          <div className="flex justify-center mt-4">
+            <Turnstile
+              onSuccess={(token) => setTurnstileToken(token)}
+              onError={() => setTurnstileToken(null)}
+              onExpire={() => setTurnstileToken(null)}
+            />
           </div>
 
           {message && (

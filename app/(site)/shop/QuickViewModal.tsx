@@ -233,8 +233,8 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                             isSelected
                               ? 'border-lrp-green bg-lrp-green text-white'
                               : inStock
-                              ? 'border-neutral-300 dark:border-dark-border hover:border-lrp-green'
-                              : 'border-neutral-200 dark:border-dark-border opacity-50 cursor-not-allowed'
+                              ? 'border-neutral-300 dark:border-dark-border hover:border-lrp-green text-neutral-900 dark:text-white'
+                              : 'border-neutral-200 dark:border-dark-border opacity-50 cursor-not-allowed text-neutral-500 dark:text-neutral-400'
                           }`}
                         >
                           {size.toUpperCase()}
@@ -254,16 +254,16 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                 <div id="quickview-quantity" className="flex items-center gap-3" role="group" aria-label="Quantity selector">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:border-lrp-green flex items-center justify-center font-bold transition-colors"
+                    className="w-10 h-10 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:border-lrp-green flex items-center justify-center font-bold transition-colors text-neutral-900 dark:text-white"
                   >
                     −
                   </button>
-                  <span className="text-lg font-semibold w-12 text-center">
+                  <span className="text-lg font-semibold w-12 text-center text-neutral-900 dark:text-white">
                     {quantity}
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:border-lrp-green flex items-center justify-center font-bold transition-colors"
+                    className="w-10 h-10 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:border-lrp-green flex items-center justify-center font-bold transition-colors text-neutral-900 dark:text-white"
                   >
                     +
                   </button>

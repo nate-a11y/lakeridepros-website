@@ -127,6 +127,12 @@ const nextConfig = {
         destination: '/our-drivers',
         permanent: true,
       },
+      // Partner page redirects
+      {
+        source: '/referral-partners',
+        destination: '/trusted-referral-partners',
+        permanent: true,
+      },
 
       // Old service pages → Services or relevant pages
       {

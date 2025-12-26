@@ -15,6 +15,7 @@ import { downloadApplicationPDF } from '@/lib/pdf-generator'
 import SignatureCanvas from 'react-signature-canvas'
 import { CheckCircle2, Download, FileText } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Turnstile from '@/components/Turnstile'
 
 const certificationSchema = z.object({
   certification_name_printed: z.string().min(1, 'Printed name is required'),
@@ -39,6 +40,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
 
   // Anti-bot protection
   const [honeypot, setHoneypot] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const formLoadTime = useRef<number>(0)
 
   // Track when the form was loaded
@@ -78,6 +80,12 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
       return
     }
 
+    // Verify Turnstile token
+    if (!turnstileToken) {
+      setSubmitError('Please complete the security check.')
+      return
+    }
+
     // Validate signature
     if (signatureRef.current?.isEmpty()) {
       setSignatureError('Signature is required to submit application')
@@ -93,6 +101,19 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
     setSubmitError(null)
 
     try {
+      // Verify Turnstile token first
+      const verifyResponse = await fetch('/api/verify-turnstile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: turnstileToken }),
+      })
+
+      if (!verifyResponse.ok) {
+        setSubmitError('Security verification failed. Please try again.')
+        setTurnstileToken(null)
+        setIsSubmitting(false)
+        return
+      }
       // Get signature as base64
       const signatureData = signatureRef.current?.toDataURL()
 
@@ -390,6 +411,15 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
             onChange={(e) => setHoneypot(e.target.value)}
             tabIndex={-1}
             autoComplete="off"
+          />
+        </div>
+
+        {/* Cloudflare Turnstile */}
+        <div className="flex justify-center">
+          <Turnstile
+            onSuccess={(token) => setTurnstileToken(token)}
+            onError={() => setTurnstileToken(null)}
+            onExpire={() => setTurnstileToken(null)}
           />
         </div>
 

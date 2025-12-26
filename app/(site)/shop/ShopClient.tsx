@@ -112,7 +112,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-lrp-black dark:bg-lrp-black">
+    <div className="min-h-screen bg-neutral-50 dark:bg-lrp-black">
       {/* Hero Section - Premium Design */}
       <section className="relative bg-gradient-to-br from-lrp-green via-lrp-green to-lrp-green-dark py-16 md:py-20 overflow-hidden">
         {/* Subtle geometric background pattern */}
@@ -161,7 +161,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       </section>
 
       {/* Filters & Sorting Bar - Premium Pills */}
-      <section className="border-b border-dark-border sticky top-0 bg-lrp-black z-30 shadow-lg backdrop-blur-sm">
+      <section className="border-b border-neutral-200 dark:border-dark-border sticky top-0 bg-white dark:bg-lrp-black z-30 shadow-lg backdrop-blur-sm">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             {/* Premium Category Filter Pills */}
@@ -186,34 +186,34 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)]"
+                className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)]"
               >
                 {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value} className="bg-dark-bg-secondary">
+                  <option key={option.value} value={option.value} className="bg-white dark:bg-dark-bg-secondary">
                     {option.name}
                   </option>
                 ))}
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 dark:text-neutral-400 pointer-events-none" />
             </div>
           </div>
 
           {/* Results Count & Page Size Selector */}
           <div className="mt-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <div className="text-sm text-neutral-400" suppressHydrationWarning>
+            <div className="text-sm text-neutral-600 dark:text-neutral-400" suppressHydrationWarning>
               Showing {((currentPage - 1) * pageSize) + 1}-{Math.min(currentPage * pageSize, totalProducts)} of {totalProducts} {totalProducts === 1 ? 'product' : 'products'}
               {searchQuery && <span className="text-lrp-green"> matching "{searchQuery}"</span>}
             </div>
 
             <div className="flex items-center gap-2">
-              <label htmlFor="page-size" className="text-sm text-neutral-400 whitespace-nowrap">
+              <label htmlFor="page-size" className="text-sm text-neutral-600 dark:text-neutral-400 whitespace-nowrap">
                 Show:
               </label>
               <select
                 id="page-size"
                 value={pageSize}
                 onChange={(e) => setPageSize(Number(e.target.value))}
-                className="appearance-none pl-3 pr-8 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black text-sm font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green"
+                className="appearance-none pl-3 pr-8 py-2 rounded-lg border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white text-sm font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green"
               >
                 <option value={20}>20</option>
                 <option value={40}>40</option>
@@ -230,13 +230,13 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
         <div className="container mx-auto px-4">
           {filteredAndSortedProducts.length === 0 ? (
             <div className="text-center py-20">
-              <div className="w-24 h-24 bg-dark-bg-secondary rounded-full flex items-center justify-center mx-auto mb-6 border border-dark-border">
+              <div className="w-24 h-24 bg-neutral-100 dark:bg-dark-bg-secondary rounded-full flex items-center justify-center mx-auto mb-6 border border-neutral-200 dark:border-dark-border">
                 <Search className="w-12 h-12 text-neutral-400" />
               </div>
-              <h2 className="font-boardson text-4xl font-bold text-white mb-4">
+              <h2 className="font-boardson text-4xl font-bold text-neutral-900 dark:text-white mb-4">
                 No Products Found
               </h2>
-              <p className="text-neutral-400 mb-8 max-w-md mx-auto text-lg">
+              <p className="text-neutral-600 dark:text-neutral-400 mb-8 max-w-md mx-auto text-lg">
                 {searchQuery
                   ? `No products match "${searchQuery}". Try a different search term.`
                   : 'No products available in this category. Check back soon!'}
@@ -272,7 +272,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
           {totalPages > 1 && (
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mt-12">
               {/* Page Info */}
-              <div className="text-sm text-neutral-400">
+              <div className="text-sm text-neutral-600 dark:text-neutral-400">
                 Page {currentPage} of {totalPages}
               </div>
 
@@ -281,14 +281,14 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 <button
                   onClick={() => setCurrentPage(1)}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  className="px-4 py-2 rounded-lg border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
                 >
                   First
                 </button>
                 <button
                   onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="p-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  className="p-2 rounded-lg border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
                   aria-label="Previous page"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -316,7 +316,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                         className={`px-4 py-2 rounded-lg border-2 font-semibold transition-all ${
                           currentPage === pageNum
                             ? 'border-lrp-green bg-lrp-green text-white'
-                            : 'border-dark-border bg-dark-bg-secondary text-lrp-black hover:border-lrp-green'
+                            : 'border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white hover:border-lrp-green'
                         }`}
                       >
                         {pageNum}
@@ -328,7 +328,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 <button
                   onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="p-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  className="p-2 rounded-lg border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
                   aria-label="Next page"
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -336,7 +336,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 <button
                   onClick={() => setCurrentPage(totalPages)}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 rounded-lg border-2 border-dark-border bg-dark-bg-secondary text-lrp-black font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
+                  className="px-4 py-2 rounded-lg border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:border-lrp-green transition-all"
                 >
                   Last
                 </button>
@@ -423,7 +423,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
 
   return (
     <div
-      className="group bg-dark-bg-secondary rounded-2xl border border-lrp-green/10 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(76,187,23,0.2)] hover:border-lrp-green/30 flex flex-col h-full relative"
+      className="group bg-white dark:bg-dark-bg-secondary rounded-2xl border border-neutral-200 dark:border-lrp-green/10 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(76,187,23,0.2)] hover:border-lrp-green/30 flex flex-col h-full relative"
       style={{ animationDelay: `${index * 50}ms` }}
     >
       {/* Premium Wishlist Heart */}
@@ -446,7 +446,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
 
       <Link href={`/shop/products/${product.slug}`} className="flex-1 flex flex-col w-full">
         {/* Premium Image / Branded Placeholder */}
-        <div className="relative aspect-square bg-dark-bg-tertiary overflow-hidden w-full">
+        <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-tertiary overflow-hidden w-full">
           {image?.url ? (
             <Image
               src={getMediaUrl(image.url)}
@@ -466,7 +466,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">
               {/* Branded "No Image" Placeholder */}
-              <div className="absolute inset-0 bg-gradient-radial from-dark-bg-secondary to-lrp-black"></div>
+              <div className="absolute inset-0 bg-gradient-radial from-neutral-100 dark:from-dark-bg-secondary to-neutral-200 dark:to-lrp-black"></div>
               <div className="relative z-10 flex flex-col items-center">
                 <ShoppingBag className="w-20 h-20 text-lrp-green/20 mb-3" />
                 <span className="text-sm text-neutral-500 font-medium tracking-wide">No Image</span>
@@ -511,13 +511,13 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
         <div className="p-6 flex flex-col flex-grow">
           {/* Category Tag - Premium Style */}
           {product.categories && product.categories.length > 0 && (
-            <p className="text-xs text-neutral-400 uppercase mb-2 font-semibold tracking-wider">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 uppercase mb-2 font-semibold tracking-wider">
               {product.categories[0].replace('-', ' ')}
             </p>
           )}
 
           {/* Title - Premium Typography */}
-          <h3 className="font-semibold text-base text-white mb-3 group-hover:text-lrp-green-light transition-colors line-clamp-2 min-h-[3rem]">
+          <h3 className="font-semibold text-base text-neutral-900 dark:text-white mb-3 group-hover:text-lrp-green transition-colors line-clamp-2 min-h-[3rem]">
             {typeof truncatedTitle === 'string' ? truncatedTitle : 'Product'}
           </h3>
 
@@ -546,7 +546,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
                 .map((size: string) => (
                   <span
                     key={size}
-                    className="text-[10px] border border-lrp-green/30 px-2.5 py-1 rounded text-neutral-400 font-semibold tracking-wide"
+                    className="text-[10px] border border-neutral-300 dark:border-lrp-green/30 px-2.5 py-1 rounded text-neutral-500 dark:text-neutral-400 font-semibold tracking-wide"
                   >
                     {size.toUpperCase()}
                   </span>

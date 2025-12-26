@@ -438,7 +438,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div id="mobile-menu" className="lg:hidden pb-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
+          <div id="mobile-menu" className="lg:hidden max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom, 0px))' }}>
             <nav aria-label="Mobile navigation" className="flex flex-col space-y-2">
               {navigation.map((item) => (
                 <div key={item.name}>

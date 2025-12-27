@@ -26,7 +26,8 @@
 }
 
 /* Tailwind v4 dark mode configuration */
-@variant dark (&:where(.dark, .dark *));
+/* Include high-contrast-dark so dark: classes also work in high contrast dark mode */
+@variant dark (&:where(.dark, .dark *, .high-contrast-dark, .high-contrast-dark *));
 
 /* High contrast mode variants for accessibility */
 @variant high-contrast (&:where(.high-contrast-light, .high-contrast-light *));

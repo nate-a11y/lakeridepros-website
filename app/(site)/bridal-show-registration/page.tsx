@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, FormEvent, useEffect, useRef } from 'react';
+import Turnstile from '@/components/Turnstile';
 
 export default function BridalShowRegistrationPage() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ export default function BridalShowRegistrationPage() {
     transportation_needs: '',
   });
   const [honeypot, setHoneypot] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const formLoadTime = useRef<number>(0);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -39,7 +41,28 @@ export default function BridalShowRegistrationPage() {
       return;
     }
 
+    // Verify Turnstile token
+    if (!turnstileToken) {
+      setStatus('error');
+      setMessage('Please complete the security check.');
+      return;
+    }
+
     try {
+      // Verify Turnstile token first
+      const verifyResponse = await fetch('/api/verify-turnstile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: turnstileToken }),
+      });
+
+      if (!verifyResponse.ok) {
+        setStatus('error');
+        setMessage('Security verification failed. Please try again.');
+        setTurnstileToken(null);
+        return;
+      }
+
       const response = await fetch('/api/bridal-show-registration', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -56,6 +79,7 @@ export default function BridalShowRegistrationPage() {
         setStatus('success');
         setMessage('Thank you for registering! You have been entered to win our giveaway. Good luck!');
         setFormData({ name: '', email: '', phone: '', transportation_needs: '' });
+        setTurnstileToken(null);
       } else {
         setStatus('error');
         setMessage(data.error || 'Something went wrong. Please try again.');
@@ -191,6 +215,15 @@ export default function BridalShowRegistrationPage() {
                   onChange={(e) => setHoneypot(e.target.value)}
                   tabIndex={-1}
                   autoComplete="off"
+                />
+              </div>
+
+              {/* Cloudflare Turnstile */}
+              <div className="flex justify-center">
+                <Turnstile
+                  onSuccess={(token) => setTurnstileToken(token)}
+                  onError={() => setTurnstileToken(null)}
+                  onExpire={() => setTurnstileToken(null)}
                 />
               </div>
 

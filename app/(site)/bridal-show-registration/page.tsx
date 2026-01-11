@@ -140,7 +140,7 @@ export default function BridalShowRegistrationPage() {
                   required
                   aria-required="true"
                   placeholder="Your full name"
-                  className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-lrp-black bg-white dark:bg-dark-bg-primary transition-colors"
+                  className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                 />
               </div>
 
@@ -160,7 +160,7 @@ export default function BridalShowRegistrationPage() {
                   required
                   aria-required="true"
                   placeholder="your.email@example.com"
-                  className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-lrp-black bg-white dark:bg-dark-bg-primary transition-colors"
+                  className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                 />
               </div>
 
@@ -180,7 +180,7 @@ export default function BridalShowRegistrationPage() {
                   required
                   aria-required="true"
                   placeholder="(555) 123-4567"
-                  className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-lrp-black bg-white dark:bg-dark-bg-primary transition-colors"
+                  className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                 />
               </div>
 
@@ -200,7 +200,7 @@ export default function BridalShowRegistrationPage() {
                   aria-required="true"
                   rows={4}
                   placeholder="Tell us about your wedding transportation needs - wedding date, number of guests, pickup/dropoff locations, etc."
-                  className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-lrp-black bg-white dark:bg-dark-bg-primary transition-colors resize-vertical"
+                  className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors resize-vertical"
                 />
               </div>
 

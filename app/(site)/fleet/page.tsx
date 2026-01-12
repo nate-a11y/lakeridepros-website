@@ -28,6 +28,22 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
+// Pricing tier display configuration
+const TIER_CONFIG: Record<string, { label: string; className: string }> = {
+  flex: {
+    label: 'Flex',
+    className: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+  },
+  elite: {
+    label: 'Elite',
+    className: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
+  },
+  'lrp-black': {
+    label: 'LRP Black',
+    className: 'bg-neutral-900 text-white border border-neutral-600',
+  },
+};
+
 export default async function FleetPage() {
   // Fetch vehicles from Payload CMS
   const vehiclesData = await getVehicles().catch(() => ({ docs: [] }));
@@ -111,9 +127,27 @@ export default async function FleetPage() {
 
                     {/* Vehicle Info */}
                     <div className="p-8">
-                      <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
+                      <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-3">
                         {vehicle.name}
                       </h2>
+
+                      {/* Pricing Tier Badges */}
+                      {vehicle.pricingTiers && vehicle.pricingTiers.length > 0 && (
+                        <div className="flex items-center gap-2 mb-3 flex-wrap">
+                          {vehicle.pricingTiers.map((tier: string) => {
+                            const config = TIER_CONFIG[tier];
+                            if (!config) return null;
+                            return (
+                              <span
+                                key={tier}
+                                className={`px-3 py-1 rounded-full text-xs font-semibold ${config.className}`}
+                              >
+                                {config.label}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      )}
 
                       <div className="flex items-center gap-4 mb-4 flex-wrap">
                         <span className="bg-primary text-lrp-black px-4 py-2 rounded-lg font-semibold">

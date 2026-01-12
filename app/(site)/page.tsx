@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import nextDynamic from 'next/dynamic';
 import HeroSection from '@/components/HeroSection';
+import NewRatesBanner from '@/components/NewRatesBanner';
 import BookingWidget from '@/components/BookingWidget';
 import {
   getServices,
@@ -142,6 +143,9 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+
+      {/* New Year New Rates Hero Banner */}
+      <NewRatesBanner />
 
       {/* Hero Section with Booking Modal */}
       <HeroSection />

@@ -67,19 +67,14 @@ export default function NewRatesBanner() {
         {/* Service Tiers Image */}
         <div className="relative w-full max-w-5xl mx-auto">
           <Image
-            src="/service-tiers-banner.png"
-            alt="Lake Ride Pros Service Tiers - FLEX, LRP BLACK, and Elite - Uniquely Designed, Professionally Delivered"
+            src="/466df96c-5190-47a6-b16c-9c50fc5ee9b1.jpg"
+            alt="Lake Ride Pros three service tiers: FLEX for flexible scheduling, LRP BLACK for premium executive service, and Elite for luxury experiences. Uniquely Designed. Professionally Delivered. Award-winning transportation at Lake of the Ozarks."
             width={1920}
             height={1080}
             className="w-full h-auto"
             priority
           />
         </div>
-
-        {/* Tagline at bottom */}
-        <p className="text-center text-white/60 italic text-lg mt-6">
-          It's More than a Ride, It's Memories Made.
-        </p>
       </div>
     </section>
   )

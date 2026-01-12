@@ -32,15 +32,15 @@ export const dynamic = 'force-dynamic';
 const TIER_CONFIG: Record<string, { label: string; className: string }> = {
   flex: {
     label: 'Flex',
-    className: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
+    className: 'bg-blue-600 text-white',
   },
   elite: {
     label: 'Elite',
-    className: 'bg-purple-500/20 text-purple-300 border border-purple-500/30',
+    className: 'bg-purple-600 text-white',
   },
   'lrp-black': {
     label: 'LRP Black',
-    className: 'bg-neutral-900 text-white border border-neutral-600',
+    className: 'bg-gradient-to-r from-neutral-800 to-neutral-700 text-white border border-amber-500',
   },
 };
 

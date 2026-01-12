@@ -144,7 +144,7 @@ export default function PricingPage() {
         </section>
 
         {/* Stop the Clock Feature */}
-        <section className="py-16 bg-gradient-to-br from-lrp-green to-lrp-green/80">
+        <section id="stop-the-clock" className="py-16 bg-gradient-to-br from-lrp-green to-lrp-green/80 scroll-mt-20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <Clock className="w-16 h-16 text-white mx-auto mb-6" />

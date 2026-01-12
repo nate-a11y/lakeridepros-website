@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { X, Sparkles } from 'lucide-react'
+import { X, Sparkles, Clock, ChevronDown, CheckCircle } from 'lucide-react'
 
 export default function NewRatesBanner() {
   const [isDismissed, setIsDismissed] = useState(false)
+  const [showStopTheClock, setShowStopTheClock] = useState(false)
 
   if (isDismissed) return null
 
@@ -48,7 +49,7 @@ export default function NewRatesBanner() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link
               href="/pricing"
               className="inline-flex items-center justify-center bg-lrp-green hover:bg-lrp-green-light text-black font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg hover:shadow-xl hover:shadow-lrp-green/20"
@@ -61,6 +62,77 @@ export default function NewRatesBanner() {
             >
               Get a Quote
             </Link>
+          </div>
+
+          {/* Stop the Clock Accordion */}
+          <div className="max-w-2xl mx-auto mb-10">
+            <button
+              onClick={() => setShowStopTheClock(!showStopTheClock)}
+              className="w-full flex items-center justify-center gap-3 bg-white/10 hover:bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl px-6 py-4 transition-all group"
+              aria-expanded={showStopTheClock}
+            >
+              <Clock className="w-5 h-5 text-lrp-green" />
+              <span className="text-white font-semibold">Introducing "Stop the Clock"</span>
+              <span className="text-white/70 text-sm hidden sm:inline">— Save on hourly rentals</span>
+              <ChevronDown className={`w-5 h-5 text-white/70 transition-transform duration-300 ${showStopTheClock ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* Expandable Content */}
+            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${showStopTheClock ? 'max-h-[600px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+                <p className="text-white/90 text-center mb-6">
+                  Pause the meter when you don't need the vehicle during hourly reservations
+                </p>
+
+                <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                  <div className="bg-white/10 rounded-lg p-4">
+                    <h4 className="text-white font-bold mb-2">How It Works</h4>
+                    <ul className="space-y-2 text-sm text-white/80">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                        <span>Available after 2 hours into reservation</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                        <span>Pause for up to 4 hours</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                        <span>Must be pre-planned at booking</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-white/10 rounded-lg p-4">
+                    <h4 className="text-white font-bold mb-2">Pricing</h4>
+                    <div className="space-y-2">
+                      <div>
+                        <span className="text-2xl font-bold text-lrp-green">$200</span>
+                        <span className="text-white/70 text-sm ml-2">first 4 hours paused</span>
+                      </div>
+                      <div>
+                        <span className="text-xl font-bold text-lrp-green">$50</span>
+                        <span className="text-white/70 text-sm ml-2">/hr after 4 hours</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-white/60 text-sm text-center mb-4">
+                  Perfect for dinners, wedding ceremonies, or any event where you don't need the vehicle
+                </p>
+
+                <div className="text-center">
+                  <Link
+                    href="/pricing#stop-the-clock"
+                    className="inline-flex items-center gap-2 text-lrp-green hover:text-lrp-green-light font-semibold transition-colors"
+                  >
+                    Learn more on our pricing page
+                    <ChevronDown className="w-4 h-4 rotate-[-90deg]" />
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

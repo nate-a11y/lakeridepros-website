@@ -31,7 +31,7 @@ export default function NewRatesBanner() {
           {/* Sparkle accent */}
           <div className="flex items-center justify-center gap-2 mb-4">
             <Sparkles className="w-5 h-5 text-lrp-green" />
-            <span className="text-lrp-green font-semibold text-sm uppercase tracking-wider">2025 Update</span>
+            <span className="text-lrp-green font-semibold text-sm uppercase tracking-wider">2026 Update</span>
             <Sparkles className="w-5 h-5 text-lrp-green" />
           </div>
 

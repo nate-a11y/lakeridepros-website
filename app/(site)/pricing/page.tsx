@@ -286,7 +286,7 @@ export default function PricingPage() {
                 </div>
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="text-xl font-bold text-blue-600 dark:text-blue-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">Book 24+ hrs ahead</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">Book 48+ hrs ahead</p>
                 </div>
               </div>
 
@@ -344,7 +344,7 @@ export default function PricingPage() {
                 </div>
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="text-xl font-bold text-purple-600 dark:text-purple-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                  <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 font-medium">Book 24+ hrs ahead</p>
+                  <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 font-medium">Book 48+ hrs ahead</p>
                 </div>
               </div>
 
@@ -384,7 +384,7 @@ export default function PricingPage() {
                 <div>
                   <CheckCircle className="w-8 h-8 mx-auto mb-2" />
                   <p className="font-semibold">10% Discount</p>
-                  <p className="text-sm text-white/80">Book 24+ hours ahead</p>
+                  <p className="text-sm text-white/80">Book 48+ hours ahead</p>
                 </div>
                 <div>
                   <CheckCircle className="w-8 h-8 mx-auto mb-2" />
@@ -495,7 +495,7 @@ export default function PricingPage() {
                 <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Flex Reserve</h4>
                 <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-4 passengers</p>
                 <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">$72<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-blue-600 dark:text-blue-400 mb-4 font-medium">Book 24+ hrs ahead</p>
+                <p className="text-sm text-blue-600 dark:text-blue-400 mb-4 font-medium">Book 48+ hrs ahead</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -542,7 +542,7 @@ export default function PricingPage() {
                 <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Elite Reserve</h4>
                 <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-7 passengers</p>
                 <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">$90<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-purple-600 dark:text-purple-400 mb-4 font-medium">Book 24+ hrs ahead</p>
+                <p className="text-sm text-purple-600 dark:text-purple-400 mb-4 font-medium">Book 48+ hrs ahead</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />

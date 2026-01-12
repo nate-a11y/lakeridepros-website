@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Vehicle } from '@/src/payload-types';
 import { getMediaUrl } from '@/lib/api/payload';
+import { TierBadges } from './TierBadge';
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -77,6 +78,8 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
             {vehicle.type}
           </span>
         </div>
+        {/* Pricing Tier Badges */}
+        <TierBadges tiers={vehicle.pricingTiers} size="sm" className="mb-3" />
         {vehicle.description && (
           <p className="text-neutral-600 dark:text-neutral-300 text-sm line-clamp-2 mb-4">
             {vehicle.description}

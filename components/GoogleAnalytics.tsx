@@ -1,15 +1,11 @@
 'use client'
 
 import Script from 'next/script'
-import { useState, useEffect } from 'react'
+import { useHasMounted } from '@/hooks/useHasMounted'
 
 export function GoogleAnalytics() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useHasMounted()
   const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // Prevent hydration mismatch by not rendering until after mount
   // The env var check can differ between server and client, causing React Error #418

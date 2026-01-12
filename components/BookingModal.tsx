@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import FocusTrap from 'focus-trap-react'
 import { useMoovsFAB } from '@/hooks/useMoovsFAB'
+import { useHasMounted } from '@/hooks/useHasMounted'
 
 interface BookingModalProps {
   isOpen: boolean
@@ -10,14 +11,10 @@ interface BookingModalProps {
 }
 
 export function BookingModal({ isOpen, onClose }: BookingModalProps) {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useHasMounted()
 
   // Hide Moovs FAB when modal is open
   useMoovsFAB(isOpen)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined') return

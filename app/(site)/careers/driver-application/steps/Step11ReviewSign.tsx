@@ -43,9 +43,9 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const formLoadTime = useRef<number>(0)
 
-  // Track when the form was loaded
+  // Track when the form was loaded using performance.now() for relative timing
   useEffect(() => {
-    formLoadTime.current = Date.now()
+    formLoadTime.current = performance.now()
   }, [])
 
   const { register, handleSubmit, formState: { errors } } = useForm<CertificationFormData>({
@@ -66,6 +66,14 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
     downloadApplicationPDF(applicationData, filename)
   }
 
+  // Calculate time since load - used in submit handler
+  // This is intentionally impure (time-based) for anti-bot protection
+  const getTimeSinceLoad = () => {
+    if (!formLoadTime.current) return 10000 // Default to valid time if not set
+    // eslint-disable-next-line react-hooks/purity -- Intentional: anti-bot timing check
+    return performance.now() - formLoadTime.current
+  }
+
   const onSubmit = async (data: CertificationFormData) => {
     // Anti-bot validation: Check if honeypot field is filled
     if (honeypot) {
@@ -74,7 +82,7 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
     }
 
     // Anti-bot validation: Check if form was submitted too quickly (less than 3 seconds)
-    const timeSinceLoad = Date.now() - formLoadTime.current
+    const timeSinceLoad = getTimeSinceLoad()
     if (timeSinceLoad < 3000) {
       setSubmitError('Please take your time to review the application before submitting.')
       return

@@ -2,17 +2,17 @@
 
 import { ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useCart } from '@/lib/store/cart'
+import { useHasMounted } from '@/hooks/useHasMounted'
 
 export default function CartIcon() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useHasMounted()
   const itemCount = useCart((state) => state.getItemCount())
 
   useEffect(() => {
     // Rehydrate the cart store from localStorage after mount
     useCart.persist.rehydrate()
-    setMounted(true)
   }, [])
 
   return (

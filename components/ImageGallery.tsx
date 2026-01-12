@@ -96,6 +96,10 @@ export default function ImageGallery({ images, partnerName }: ImageGalleryProps)
           <div
             className="absolute inset-0 bg-black/90 backdrop-blur-sm"
             onClick={closeLightbox}
+            onKeyDown={(e) => e.key === 'Escape' && closeLightbox()}
+            role="button"
+            tabIndex={0}
+            aria-label="Close lightbox"
           />
 
           {/* Close button */}

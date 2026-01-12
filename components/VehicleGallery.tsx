@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
 import type { Media } from '@/src/payload-types';
@@ -26,24 +26,25 @@ export default function VehicleGallery({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const thumbnailContainerRef = useRef<HTMLDivElement>(null);
 
-  // Combine featured image with gallery images
-  const allImages: VehicleImage[] = [];
-
-  if (featuredImage) {
-    allImages.push({ image: featuredImage, alt: `${vehicleName} - Featured` });
-  }
-
-  images.forEach((img) => {
-    // Only add if it's not the same as featured image
-    if (!featuredImage || img.image.id !== featuredImage.id) {
-      allImages.push(img);
+  // Combine featured image with gallery images - memoized for stable reference
+  const allImages = useMemo(() => {
+    const result: VehicleImage[] = [];
+    if (featuredImage) {
+      result.push({ image: featuredImage, alt: `${vehicleName} - Featured` });
     }
-  });
+    images.forEach((img) => {
+      if (!featuredImage || img.image.id !== featuredImage.id) {
+        result.push(img);
+      }
+    });
+    return result;
+  }, [images, featuredImage, vehicleName]);
 
+  const imageCount = allImages.length;
   const currentImage = allImages[currentIndex];
 
   const goToSlide = useCallback((index: number) => {
-    if (index < 0 || index >= allImages.length) return;
+    if (index < 0 || index >= imageCount) return;
     setIsTransitioning(true);
     setCurrentIndex(index);
     setTimeout(() => setIsTransitioning(false), 300);
@@ -55,15 +56,15 @@ export default function VehicleGallery({
         thumbnail.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       }
     }
-  }, [allImages.length]);
+  }, [imageCount]);
 
   const nextSlide = useCallback(() => {
-    goToSlide((currentIndex + 1) % allImages.length);
-  }, [currentIndex, allImages.length, goToSlide]);
+    setCurrentIndex((prev) => (prev + 1) % imageCount);
+  }, [imageCount]);
 
   const prevSlide = useCallback(() => {
-    goToSlide((currentIndex - 1 + allImages.length) % allImages.length);
-  }, [currentIndex, allImages.length, goToSlide]);
+    setCurrentIndex((prev) => (prev - 1 + imageCount) % imageCount);
+  }, [imageCount]);
 
   // Keyboard navigation
   useEffect(() => {

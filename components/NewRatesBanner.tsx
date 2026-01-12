@@ -1,39 +1,39 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { X, Sparkles, Clock, ChevronDown, CheckCircle } from 'lucide-react'
+import { useHasMounted } from '@/hooks/useHasMounted'
+
+// Check expiration and dismissal status - runs only on client
+function getInitialDismissedState(): boolean {
+  if (typeof window === 'undefined') return true
+
+  // Check if popup has expired (after Feb 15, 2026)
+  const expirationDate = new Date('2026-02-16T00:00:00')
+  const now = new Date()
+  if (now >= expirationDate) return true
+
+  // Check if user has already dismissed this popup
+  return localStorage.getItem('newRates2026Dismissed') === 'true'
+}
 
 export default function NewRatesBanner() {
-  const [isMounted, setIsMounted] = useState(false)
-  const [isDismissed, setIsDismissed] = useState(true)
+  const isMounted = useHasMounted()
   const [showStopTheClock, setShowStopTheClock] = useState(false)
   const [dontShowAgain, setDontShowAgain] = useState(false)
+  const [manuallyDismissed, setManuallyDismissed] = useState(false)
 
-  useEffect(() => {
-    // Check if popup has expired (after Feb 15, 2026)
-    const expirationDate = new Date('2026-02-16T00:00:00')
-    const now = new Date()
-
-    if (now >= expirationDate) {
-      setIsDismissed(true)
-      setIsMounted(true)
-      return
-    }
-
-    // Check if user has already dismissed this popup
-    const dismissed = localStorage.getItem('newRates2026Dismissed')
-    if (dismissed === 'true') {
-      setIsDismissed(true)
-    } else {
-      setIsDismissed(false)
-    }
-    setIsMounted(true)
-  }, [])
+  // Compute dismissed state on client
+  const isDismissed = useMemo(() => {
+    if (!isMounted) return true
+    if (manuallyDismissed) return true
+    return getInitialDismissedState()
+  }, [isMounted, manuallyDismissed])
 
   const handleDismiss = () => {
-    setIsDismissed(true)
+    setManuallyDismissed(true)
     if (dontShowAgain) {
       localStorage.setItem('newRates2026Dismissed', 'true')
     }

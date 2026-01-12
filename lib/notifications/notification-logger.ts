@@ -28,13 +28,20 @@ export interface NotificationLogEntry {
 export async function logNotification(entry: NotificationLogEntry): Promise<void> {
   try {
     const supabase = getSupabase()
-    const { error } = (await supabase
+    const { error } = await supabase
       .from('notification_log')
-      // @ts-ignore - Supabase types not generated
       .insert({
-        ...entry,
+        application_id: entry.application_id,
+        notification_type: entry.notification_type,
+        template_name: entry.template_name,
+        recipient: entry.recipient,
+        subject: entry.subject,
+        status: entry.status,
+        error_message: entry.error_message,
+        metadata: entry.metadata,
+        external_id: entry.external_id,
         sent_at: entry.status === 'sent' ? new Date().toISOString() : null
-      } as any)) as { error: any }
+      })
 
     if (error) {
       console.error('Failed to log notification:', error)
@@ -68,11 +75,10 @@ export async function updateNotificationStatus(
       updateData.error_message = errorMessage
     }
 
-    const { error } = (await supabase
+    const { error } = await supabase
       .from('notification_log')
-      // @ts-ignore - Supabase types not generated
-      .update(updateData as any)
-      .eq('external_id', externalId)) as { error: any }
+      .update(updateData)
+      .eq('external_id', externalId)
 
     if (error) {
       console.error('Failed to update notification status:', error)
@@ -101,7 +107,18 @@ export async function getNotificationHistory(
       return []
     }
 
-    return data || []
+    // Map database rows to NotificationLogEntry interface
+    return (data || []).map(row => ({
+      application_id: row.application_id ?? undefined,
+      notification_type: row.notification_type,
+      template_name: row.template_name,
+      recipient: row.recipient,
+      subject: row.subject ?? undefined,
+      status: row.status,
+      error_message: row.error_message ?? undefined,
+      metadata: row.metadata ?? undefined,
+      external_id: row.external_id ?? undefined,
+    }))
   } catch (error) {
     console.error('Unexpected error getting notification history:', error)
     return []

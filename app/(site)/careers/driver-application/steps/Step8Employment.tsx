@@ -6,8 +6,8 @@
  * Detects employment gaps > 1 month
  */
 
-import React, { useEffect, useState } from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import React, { useMemo } from 'react'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
@@ -39,9 +39,8 @@ interface Step8EmploymentProps {
 
 export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentProps) {
   const { applicationData, updateApplicationData } = useApplication()
-  const [gaps, setGaps] = useState<Array<{ index: number; months: number }>>([])
 
-  const { register, control, handleSubmit, watch } = useForm<EmploymentHistoryFormData>({
+  const { register, control, handleSubmit } = useForm<EmploymentHistoryFormData>({
     resolver: zodResolver(employmentHistorySchema),
     defaultValues: {
       employment_history: applicationData.employment_history && applicationData.employment_history.length > 0
@@ -55,10 +54,10 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
     name: 'employment_history'
   })
 
-  const employmentData = watch('employment_history')
+  const employmentData = useWatch({ control, name: 'employment_history' })
 
-  // Detect employment gaps
-  useEffect(() => {
+  // Detect employment gaps (derived from employmentData)
+  const gaps = useMemo(() => {
     const sorted = [...employmentData]
       .filter(e => e.from_date)
       .sort((a, b) => new Date(b.to_date || new Date()).getTime() - new Date(a.to_date || new Date()).getTime())
@@ -81,7 +80,7 @@ export default function Step8Employment({ onNext, onPrevious }: Step8EmploymentP
       }
     }
 
-    setGaps(detectedGaps)
+    return detectedGaps
   }, [employmentData])
 
   const onSubmit = (data: EmploymentHistoryFormData) => {

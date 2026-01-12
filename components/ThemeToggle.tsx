@@ -1,7 +1,8 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useHasMounted } from '@/hooks/useHasMounted';
 
 type ThemeOption = {
   value: string;
@@ -83,15 +84,11 @@ const themeOptions: ThemeOption[] = [
 ];
 
 export default function ThemeToggle() {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHasMounted();
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -128,7 +125,7 @@ export default function ThemeToggle() {
   const currentTheme = themeOptions.find((t) => t.value === theme) || themeOptions[0];
 
   return (
-    <div className="relative" ref={dropdownRef} onKeyDown={handleKeyDown}>
+    <div className="relative" ref={dropdownRef} onKeyDown={handleKeyDown} role="presentation">
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}

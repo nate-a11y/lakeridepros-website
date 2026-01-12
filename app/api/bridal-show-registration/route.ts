@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: 'Registration successful! You have been entered to win.',
-        id: data.id
+        id: data?.id
       },
       { status: 200 }
     );

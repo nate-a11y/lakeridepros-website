@@ -1,7 +1,32 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useSyncExternalStore } from 'react';
 import type { Product } from '@/src/payload-types';
+
+const CART_STORAGE_KEY = 'lakeridepros_cart';
+
+// useSyncExternalStore-based hook for loading initial cart from localStorage
+function useInitialCart(): CartItem[] {
+  const getSnapshot = () => {
+    if (typeof window === 'undefined') return '[]';
+    return localStorage.getItem(CART_STORAGE_KEY) || '[]';
+  };
+
+  const getServerSnapshot = () => '[]';
+
+  const subscribe = (callback: () => void) => {
+    window.addEventListener('storage', callback);
+    return () => window.removeEventListener('storage', callback);
+  };
+
+  const cartString = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+
+  try {
+    return JSON.parse(cartString);
+  } catch {
+    return [];
+  }
+}
 
 // Extract ProductVariant type from Product's variants array
 type ProductVariant = NonNullable<Product['variants']>[number];
@@ -33,8 +58,6 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const CART_STORAGE_KEY = 'lakeridepros_cart';
-
 function calculateCartTotals(items: CartItem[]): { subtotal: number; total: number } {
   const subtotal = items.reduce((sum, item) => {
     const price = item.variant?.price || item.product.price;
@@ -48,23 +71,9 @@ function calculateCartTotals(items: CartItem[]): { subtotal: number; total: numb
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const initialCart = useInitialCart();
+  const [items, setItems] = useState<CartItem[]>(initialCart);
   const [isOpen, setIsOpen] = useState(false);
-
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-    if (savedCart) {
-      try {
-        const parsed = JSON.parse(savedCart);
-        setItems(parsed);
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
-      }
-    }
-  }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {

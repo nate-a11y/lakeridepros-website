@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
@@ -42,7 +42,7 @@ interface Step2ResidenceHistoryProps {
 export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2ResidenceHistoryProps) {
   const { applicationData, updateApplicationData } = useApplication()
 
-  const { register, control, handleSubmit, formState: { errors }, watch } = useForm<ResidenceFormData>({
+  const { register, control, handleSubmit, formState: { errors } } = useForm<ResidenceFormData>({
     resolver: zodResolver(residenceSchema),
     defaultValues: {
       residences: applicationData.residences && applicationData.residences.length > 0
@@ -55,6 +55,8 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
     control,
     name: 'residences'
   })
+
+  const watchedResidences = useWatch({ control, name: 'residences' })
 
   const onSubmit = (data: ResidenceFormData) => {
     updateApplicationData({ residences: data.residences })
@@ -155,13 +157,13 @@ export default function Step2ResidenceHistory({ onNext, onPrevious }: Step2Resid
 
                 <div>
                   <label htmlFor={`residence-to-date-${index}`} className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
-                    To Date {watch(`residences.${index}.is_current`) ? '(Current)' : '*'}
+                    To Date {watchedResidences?.[index]?.is_current ? '(Current)' : '*'}
                   </label>
                   <input
                     {...register(`residences.${index}.to_date`)}
                     id={`residence-to-date-${index}`}
                     type="date"
-                    disabled={watch(`residences.${index}.is_current`)}
+                    disabled={watchedResidences?.[index]?.is_current}
                     className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors rounded-md disabled:bg-neutral-100 dark:disabled:bg-dark-bg-tertiary"
                   />
                 </div>

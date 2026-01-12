@@ -5,8 +5,8 @@
  * Complies with 49 CFR 391.23 - Previous Driving Record Authorization
  */
 
-import React, { useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useRef, useState, useCallback } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
@@ -46,7 +46,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
   const signatureRef = useRef<SignatureCanvas>(null)
   const [signatureError, setSignatureError] = useState<string | null>(null)
 
-  const { register, handleSubmit, formState: { errors }, watch } = useForm<LicenseVerificationFormData>({
+  const { register, handleSubmit, formState: { errors }, control } = useForm<LicenseVerificationFormData>({
     resolver: zodResolver(licenseVerificationSchema),
     defaultValues: {
       current_license_number: applicationData.current_license_number || '',
@@ -60,14 +60,14 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
     }
   })
 
-  const hasAccidents = watch('accidents_past_3_years')
+  const hasAccidents = useWatch({ control, name: 'accidents_past_3_years' })
 
   const clearSignature = () => {
     signatureRef.current?.clear()
     setSignatureError(null)
   }
 
-  const onSubmit = (data: LicenseVerificationFormData) => {
+  const onSubmit = useCallback((data: LicenseVerificationFormData) => {
     // Validate signature
     if (signatureRef.current?.isEmpty()) {
       setSignatureError('Signature is required for license verification authorization')
@@ -90,7 +90,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
       license_verification_signature_date: new Date().toISOString()
     })
     onNext()
-  }
+  }, [updateApplicationData, onNext])
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -99,6 +99,8 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
         Provide information about your current driver's license (49 CFR 391.21(b)(3)).
       </p>
 
+      {/* Ref access in onSubmit is safe - it only runs during form submission, not render */}
+      {/* eslint-disable-next-line react-hooks/refs */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

@@ -30,7 +30,8 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
     // Handle seamless loop animation
     const handleAnimationIteration = () => {
       container.style.animation = 'none';
-      container.offsetHeight; // Trigger reflow
+      // Trigger reflow by reading layout property
+      void container.offsetHeight;
       container.style.animation = '';
     };
 

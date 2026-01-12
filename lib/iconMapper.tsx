@@ -106,8 +106,11 @@ interface IconProps {
   fallback?: LucideIcon;
 }
 
+// DynamicIcon intentionally looks up components at runtime based on name prop
+// This is a dynamic icon system for CMS-driven content
+/* eslint-disable react-hooks/static-components */
 export function DynamicIcon({ name, className = '', size = 24, fallback }: IconProps) {
-  const IconComponent = getIcon(name) || fallback || Star;
-
+  const IconComponent = getIcon(name) ?? fallback ?? Star;
   return <IconComponent className={className} size={size} />;
 }
+/* eslint-enable react-hooks/static-components */

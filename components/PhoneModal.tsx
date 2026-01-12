@@ -1,20 +1,17 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import FocusTrap from 'focus-trap-react'
 import { usePhoneModal } from '@/lib/store/phoneModal'
 import { Phone, MessageSquare } from 'lucide-react'
+import { useHasMounted } from '@/hooks/useHasMounted'
 
 const PHONE_NUMBER = '5732069499'
 const PHONE_DISPLAY = '(573) 206-9499'
 
 export function PhoneModal() {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useHasMounted()
   const { isOpen, closeModal } = usePhoneModal()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     if (typeof window === 'undefined') return

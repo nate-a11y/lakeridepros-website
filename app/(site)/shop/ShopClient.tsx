@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingBag, Star, Search, X, Heart, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -20,6 +20,22 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   const [wishlist, setWishlist] = useState<Set<string | number>>(new Set())
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
+
+  // Filter setters that also reset page to 1
+  const updateCategory = useCallback((category: string) => {
+    setSelectedCategory(category)
+    setCurrentPage(1)
+  }, [])
+
+  const updateSearchQuery = useCallback((query: string) => {
+    setSearchQuery(query)
+    setCurrentPage(1)
+  }, [])
+
+  const updateSortBy = useCallback((sort: string) => {
+    setSortBy(sort)
+    setCurrentPage(1)
+  }, [])
 
   const categories = [
     { name: 'All Products', value: 'all' },
@@ -94,11 +110,6 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     }
   }, [initialProducts, selectedCategory, searchQuery, sortBy, currentPage, pageSize])
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [selectedCategory, searchQuery, sortBy])
-
   const toggleWishlist = (productId: string | number) => {
     setWishlist(prev => {
       const newSet = new Set(prev)
@@ -143,12 +154,12 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                 type="text"
                 placeholder="Search products..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => updateSearchQuery(e.target.value)}
                 className="w-full pl-14 pr-12 py-4 rounded-xl bg-lrp-black/80 backdrop-blur-md text-white placeholder:text-white/60 border-2 border-transparent focus:border-lrp-green focus:outline-none focus:scale-[1.02] focus:shadow-[0_8px_24px_rgba(76,187,23,0.3)] transition-all duration-200"
               />
               {searchQuery && (
                 <button
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => updateSearchQuery('')}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full focus:outline-none focus:ring-2 focus:ring-primary"
                   aria-label="Clear search"
                 >
@@ -169,7 +180,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
               {categories.map((category) => (
                 <button
                   key={category.value}
-                  onClick={() => setSelectedCategory(category.value)}
+                  onClick={() => updateCategory(category.value)}
                   className={`px-6 py-3 rounded-full font-semibold whitespace-nowrap transition-all duration-200 ${
                     selectedCategory === category.value
                       ? 'bg-lrp-green text-white shadow-[0_4px_16px_rgba(76,187,23,0.4)] scale-105'
@@ -185,7 +196,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
             <div className="relative w-full sm:w-auto">
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
+                onChange={(e) => updateSortBy(e.target.value)}
                 className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)] dark:[color-scheme:dark]"
               >
                 {sortOptions.map((option) => (
@@ -244,8 +255,8 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
               {(searchQuery || selectedCategory !== 'all') && (
                 <button
                   onClick={() => {
-                    setSearchQuery('')
-                    setSelectedCategory('all')
+                    updateSearchQuery('')
+                    updateCategory('all')
                   }}
                   className="inline-block bg-lrp-green hover:bg-lrp-green-dark text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-[0_8px_24px_rgba(76,187,23,0.4)] hover:scale-105"
                 >

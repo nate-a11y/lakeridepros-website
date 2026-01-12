@@ -4,6 +4,7 @@ import Link from 'next/link';
 import BookingWidget from '@/components/BookingWidget';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import VehicleGallery from '@/components/VehicleGallery';
+import { TierBadges } from '@/components/TierBadge';
 import { getVehicleBySlug, getVehicleRelatedTestimonials } from '@/lib/api/payload';
 
 export const dynamic = 'force-dynamic';
@@ -110,6 +111,8 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
           </Link>
           <h1 className="text-4xl font-bold">{vehicle.name}</h1>
           <p className="text-xl text-white/90 mt-2 capitalize">{vehicle.type}</p>
+          {/* Pricing Tier Badges */}
+          <TierBadges tiers={vehicle.pricingTiers} className="mt-3" />
         </div>
       </section>
 

@@ -225,86 +225,176 @@ export default function PricingPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
               Point to Point Rates
             </h2>
-            <p className="text-center text-gray-600 dark:text-lrp-gray mb-4 max-w-2xl mx-auto">
+            <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
               Per-mile pricing for sedans and SUVs. Flat rates for larger vehicles.
-            </p>
-            <p className="text-center text-sm text-lrp-green font-semibold mb-12 max-w-2xl mx-auto">
-              Book 24+ hours in advance and save 10% on Flex and Elite tiers!
             </p>
 
             {/* Per-Mile Tiers */}
             <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Sedans & SUVs (Per Mile)</h3>
-            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+            <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto mb-12">
               {/* Flex */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-blue-500">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-6 h-6 text-blue-500" />
+                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">FLEX</span>
+                </div>
                 <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Flex</h4>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-4 passengers</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
-                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$2.25/mi</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">$2.25/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
-                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$1.85/mi</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">$1.85/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
-                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$5</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">$5</span>
                   </div>
                 </div>
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-lrp-green-dark dark:text-lrp-green">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                  <div className="text-xl font-bold text-blue-600 dark:text-blue-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                </div>
+              </div>
+
+              {/* Flex Reserve */}
+              <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/20 dark:to-dark-bg-primary p-6 rounded-lg border-2 border-blue-600 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                  SAVE 10%
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="w-6 h-6 text-blue-600" />
+                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">RESERVE</span>
+                </div>
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Flex Reserve</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-4 passengers</p>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">$2.03/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">$1.67/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">$5</span>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="text-xl font-bold text-blue-600 dark:text-blue-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">Book 48+ hrs ahead</p>
                 </div>
               </div>
 
               {/* Elite */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-purple-600">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-6 h-6 text-purple-600" />
+                  <span className="bg-purple-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">ELITE</span>
+                </div>
                 <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Elite</h4>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-7 passengers</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
-                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$2.50/mi</span>
+                    <span className="font-bold text-purple-600 dark:text-purple-400">$2.50/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
-                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$2.15/mi</span>
+                    <span className="font-bold text-purple-600 dark:text-purple-400">$2.15/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
-                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$5</span>
+                    <span className="font-bold text-purple-600 dark:text-purple-400">$5</span>
                   </div>
                 </div>
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-lrp-green-dark dark:text-lrp-green">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                  <div className="text-xl font-bold text-purple-600 dark:text-purple-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                </div>
+              </div>
+
+              {/* Elite Reserve */}
+              <div className="bg-gradient-to-b from-purple-50 to-white dark:from-purple-900/20 dark:to-dark-bg-primary p-6 rounded-lg border-2 border-purple-600 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                  SAVE 10%
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="w-6 h-6 text-purple-600" />
+                  <span className="bg-purple-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">RESERVE</span>
+                </div>
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Elite Reserve</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-7 passengers</p>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
+                    <span className="font-bold text-purple-600 dark:text-purple-400">$2.25/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
+                    <span className="font-bold text-purple-600 dark:text-purple-400">$1.94/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
+                    <span className="font-bold text-purple-600 dark:text-purple-400">$5</span>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="text-xl font-bold text-purple-600 dark:text-purple-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                  <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 font-medium">Book 48+ hrs ahead</p>
                 </div>
               </div>
 
               {/* LRP Black */}
-              <div className="bg-lrp-black p-6 rounded-lg border-2 border-lrp-green text-white">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
+              <div className="bg-lrp-black p-6 rounded-lg border-2 border-amber-400 text-white">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-6 h-6 text-amber-400" />
+                  <span className="bg-black text-amber-400 border border-amber-400 text-xs font-bold px-2 py-0.5 rounded-full">LRP BLACK</span>
+                </div>
                 <h4 className="font-bold text-lg mb-1">LRP Black</h4>
                 <p className="text-sm text-white/70 mb-4">1-6 passengers (Suburban)</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-white/70">First 50 miles</span>
-                    <span className="font-bold text-lrp-green">$2.90/mi</span>
+                    <span className="font-bold text-amber-400">$2.90/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-white/70">After 50 miles</span>
-                    <span className="font-bold text-lrp-green">$2.60/mi</span>
+                    <span className="font-bold text-amber-400">$2.60/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-white/70">Booking fee</span>
-                    <span className="font-bold text-lrp-green">$10</span>
+                    <span className="font-bold text-amber-400">$10</span>
                   </div>
                 </div>
                 <div className="pt-4 border-t border-white/20">
-                  <div className="text-xl font-bold text-lrp-green">$25 <span className="text-sm font-normal text-white/70">minimum</span></div>
+                  <div className="text-xl font-bold text-amber-400">$25 <span className="text-sm font-normal text-white/70">minimum</span></div>
                   <p className="text-xs text-white/70 mt-2">Select beverages included. 24hr advance booking required.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Reserve Benefits Callout */}
+            <div className="max-w-4xl mx-auto mb-12 p-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-white">
+              <h3 className="text-xl font-bold mb-4 text-center">Why Book Reserve?</h3>
+              <div className="grid md:grid-cols-3 gap-4 text-center">
+                <div>
+                  <CheckCircle className="w-8 h-8 mx-auto mb-2" />
+                  <p className="font-semibold">10% Discount</p>
+                  <p className="text-sm text-white/80">Book 48+ hours ahead</p>
+                </div>
+                <div>
+                  <CheckCircle className="w-8 h-8 mx-auto mb-2" />
+                  <p className="font-semibold">No Surge Pricing</p>
+                  <p className="text-sm text-white/80">Same rate, every time</p>
+                </div>
+                <div>
+                  <CheckCircle className="w-8 h-8 mx-auto mb-2" />
+                  <p className="font-semibold">All Year Round</p>
+                  <p className="text-sm text-white/80">Peak season included</p>
                 </div>
               </div>
             </div>
@@ -370,71 +460,118 @@ export default function PricingPage() {
 
             {/* Sedans & SUVs - Flat Hourly */}
             <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Sedans & SUVs (Flat Rate)</h3>
-            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+            <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto mb-12">
               {/* Flex */}
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <Users className="w-10 h-10 text-lrp-green mb-4" />
+              <div className="bg-white dark:bg-dark-bg-secondary p-6 rounded-lg border-2 border-blue-500">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-6 h-6 text-blue-500" />
+                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">FLEX</span>
+                </div>
                 <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Flex</h4>
                 <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-4 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$80<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">$80<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700 dark:text-lrp-gray">Flat rate all hours</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700 dark:text-lrp-gray">Sedans & small SUVs</span>
                   </li>
+                </ul>
+              </div>
+
+              {/* Flex Reserve */}
+              <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/20 dark:to-dark-bg-secondary p-6 rounded-lg border-2 border-blue-600 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                  SAVE 10%
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="w-6 h-6 text-blue-600" />
+                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">RESERVE</span>
+                </div>
+                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Flex Reserve</h4>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-4 passengers</p>
+                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">$72<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <p className="text-sm text-blue-600 dark:text-blue-400 mb-4 font-medium">Book 48+ hrs ahead</p>
+                <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Perfect for small groups</span>
+                    <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">No surge pricing ever</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">Same rate year-round</span>
                   </li>
                 </ul>
               </div>
 
               {/* Elite */}
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <Users className="w-10 h-10 text-lrp-green mb-4" />
+              <div className="bg-white dark:bg-dark-bg-secondary p-6 rounded-lg border-2 border-purple-600">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-6 h-6 text-purple-600" />
+                  <span className="bg-purple-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">ELITE</span>
+                </div>
                 <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Elite</h4>
                 <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-7 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$100<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">$100<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700 dark:text-lrp-gray">Flat rate all hours</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700 dark:text-lrp-gray">Larger SUVs</span>
                   </li>
+                </ul>
+              </div>
+
+              {/* Elite Reserve */}
+              <div className="bg-gradient-to-b from-purple-50 to-white dark:from-purple-900/20 dark:to-dark-bg-secondary p-6 rounded-lg border-2 border-purple-600 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                  SAVE 10%
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="w-6 h-6 text-purple-600" />
+                  <span className="bg-purple-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">RESERVE</span>
+                </div>
+                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Elite Reserve</h4>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-7 passengers</p>
+                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">$90<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <p className="text-sm text-purple-600 dark:text-purple-400 mb-4 font-medium">Book 48+ hrs ahead</p>
+                <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">More space & comfort</span>
+                    <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">No surge pricing ever</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">Same rate year-round</span>
                   </li>
                 </ul>
               </div>
 
               {/* LRP Black */}
-              <div className="bg-lrp-black p-8 rounded-lg text-white">
-                <Users className="w-10 h-10 text-lrp-green mb-4" />
+              <div className="bg-lrp-black p-6 rounded-lg text-white border-2 border-amber-400">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-6 h-6 text-amber-400" />
+                  <span className="bg-black text-amber-400 border border-amber-400 text-xs font-bold px-2 py-0.5 rounded-full">LRP BLACK</span>
+                </div>
                 <h4 className="text-xl font-bold mb-2">LRP Black</h4>
                 <p className="text-white/70 text-sm mb-4">1-6 passengers (Suburban)</p>
-                <div className="text-3xl font-bold text-lrp-green mb-2">$140<span className="text-lg text-white/70">/hour</span></div>
+                <div className="text-3xl font-bold text-amber-400 mb-2">$140<span className="text-lg text-white/70">/hour</span></div>
                 <p className="text-sm text-white/70 mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">Flat rate all hours</span>
+                    <CheckCircle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-white/90">Beverages included</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">Select beverages included</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
                     <span className="text-white/90">24hr advance required</span>
                   </li>
                 </ul>

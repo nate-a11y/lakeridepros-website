@@ -31,6 +31,8 @@ export interface Driver {
   image_id: number | null
   // Unique driver assignment number (e.g., LRP1, LRP2) - like a badge number
   assignment_number: string | null
+  // Employee type: 'driver' (full compliance tracking) or 'non_driver' (payroll-only)
+  employee_type: 'driver' | 'non_driver'
   // Joined media data
   media: DriverMedia | null
 }
@@ -54,6 +56,7 @@ interface DriverRow {
   updated_at: string
   image_id: number | null
   assignment_number: string | null
+  employee_type: 'driver' | 'non_driver'
   media: {
     id: number
     url: string
@@ -64,7 +67,7 @@ interface DriverRow {
 
 /**
  * Fetch all drivers that should be displayed on the website
- * Filters by: active = true AND display_on_website = true
+ * Filters by: active = true AND display_on_website = true AND employee_type = 'driver'
  * Orders by: priority ASC (lower priority number = shown first)
  */
 export async function getDriversForWebsite(): Promise<Driver[]> {
@@ -72,6 +75,7 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
     const supabase = getSupabaseServerClient()
 
     // Query drivers with joined media data
+    // Only show actual drivers (not non_driver employees like office staff)
     const { data, error } = await supabase
       .from('drivers')
       .select(`
@@ -92,6 +96,7 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
         updated_at,
         image_id,
         assignment_number,
+        employee_type,
         media:image_id (
           id,
           url,
@@ -101,6 +106,7 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
       `)
       .eq('active', true)
       .eq('display_on_website', true)
+      .eq('employee_type', 'driver')
       .order('priority', { ascending: true, nullsFirst: false })
 
     if (error) {
@@ -128,6 +134,7 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
       updated_at: driver.updated_at,
       image_id: driver.image_id,
       assignment_number: driver.assignment_number,
+      employee_type: driver.employee_type,
       media: driver.media,
     }))
 
@@ -191,7 +198,7 @@ export function getDriverRoleLabel(role: Driver['role']): string {
 
 /**
  * Fetch a single driver by ID
- * Only returns if active = true AND display_on_website = true
+ * Only returns if active = true AND display_on_website = true AND employee_type = 'driver'
  */
 export async function getDriverById(id: string): Promise<Driver | null> {
   try {
@@ -217,6 +224,7 @@ export async function getDriverById(id: string): Promise<Driver | null> {
         updated_at,
         image_id,
         assignment_number,
+        employee_type,
         media:image_id (
           id,
           url,
@@ -227,6 +235,7 @@ export async function getDriverById(id: string): Promise<Driver | null> {
       .eq('id', id)
       .eq('active', true)
       .eq('display_on_website', true)
+      .eq('employee_type', 'driver')
       .single()
 
     if (error || !data) {
@@ -253,6 +262,7 @@ export async function getDriverById(id: string): Promise<Driver | null> {
       updated_at: row.updated_at,
       image_id: row.image_id,
       assignment_number: row.assignment_number,
+      employee_type: row.employee_type,
       media: row.media,
     }
   } catch (error) {

@@ -68,7 +68,7 @@ export default function NewRatesBanner() {
         <div className="relative w-full max-w-5xl mx-auto">
           <Image
             src="/466df96c-5190-47a6-b16c-9c50fc5ee9b1.jpg"
-            alt="Lake Ride Pros three service tiers: FLEX for flexible scheduling, LRP BLACK for premium executive service, and Elite for luxury experiences. Uniquely Designed. Professionally Delivered. Award-winning transportation at Lake of the Ozarks."
+            alt="Lake Ride Pros three service tiers: FLEX for vehicles up to 4 passengers, Elite for vehicles up to 7 passengers, and LRP BLACK Suburban service with select beverages included. Award-winning transportation at Lake of the Ozarks."
             width={1920}
             height={1080}
             className="w-full h-auto"

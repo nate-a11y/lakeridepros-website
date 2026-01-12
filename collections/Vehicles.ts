@@ -5,7 +5,7 @@ export const Vehicles: CollectionConfig = {
   slug: 'vehicles',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'type', 'capacity', 'available', 'featured', 'order'],
+    defaultColumns: ['name', 'type', 'capacity', 'pricingTiers', 'available', 'featured', 'order'],
   },
   access: {
     // Allow public read access to available vehicles
@@ -161,6 +161,19 @@ export const Vehicles: CollectionConfig = {
           },
         },
       ],
+    },
+    {
+      name: 'pricingTiers',
+      type: 'select',
+      hasMany: true,
+      options: [
+        { label: 'Flex (up to 4 pax)', value: 'flex' },
+        { label: 'Elite (up to 7 pax)', value: 'elite' },
+        { label: 'LRP Black (24hr advance, beverages)', value: 'lrp-black' },
+      ],
+      admin: {
+        description: 'Which pricing tier(s) does this vehicle fall under? Leave empty for hourly-only vehicles.',
+      },
     },
     {
       name: 'available',

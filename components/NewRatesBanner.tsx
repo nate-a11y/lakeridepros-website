@@ -6,7 +6,8 @@ import Link from 'next/link'
 import { X, Sparkles, Clock, ChevronDown, CheckCircle } from 'lucide-react'
 
 export default function NewRatesBanner() {
-  const [isDismissed, setIsDismissed] = useState(true) // Start hidden until we check
+  const [isMounted, setIsMounted] = useState(false)
+  const [isDismissed, setIsDismissed] = useState(true)
   const [showStopTheClock, setShowStopTheClock] = useState(false)
   const [dontShowAgain, setDontShowAgain] = useState(false)
 
@@ -17,6 +18,7 @@ export default function NewRatesBanner() {
 
     if (now >= expirationDate) {
       setIsDismissed(true)
+      setIsMounted(true)
       return
     }
 
@@ -27,6 +29,7 @@ export default function NewRatesBanner() {
     } else {
       setIsDismissed(false)
     }
+    setIsMounted(true)
   }, [])
 
   const handleDismiss = () => {
@@ -36,7 +39,8 @@ export default function NewRatesBanner() {
     }
   }
 
-  if (isDismissed) return null
+  // Don't render until mounted to avoid hydration mismatch
+  if (!isMounted || isDismissed) return null
 
   return (
     <>

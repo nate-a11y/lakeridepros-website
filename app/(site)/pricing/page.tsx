@@ -143,80 +143,79 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* Stop the Clock Feature */}
-        <section id="stop-the-clock" className="py-16 bg-gradient-to-br from-lrp-green to-lrp-green/80 scroll-mt-20">
+        {/* Stop the Clock Feature - Compact Accordion */}
+        <section id="stop-the-clock" className="py-8 bg-gradient-to-br from-lrp-green to-lrp-green/80 scroll-mt-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <Clock className="w-16 h-16 text-white mx-auto mb-6" />
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Introducing "Stop the Clock" ⏱️
-              </h2>
-              <p className="text-white/90 text-xl mb-8">
-                Our exclusive feature for hourly reservations — enjoy your event without paying for idle time
-              </p>
-
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-2 border-white/20">
-                  <h3 className="text-xl font-bold text-white mb-3">How It Works</h3>
-                  <ul className="space-y-3 text-left text-white/90">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                      <span>Available after 2 hours into your reservation</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                      <span>Pause the clock for up to 4 hours</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                      <span>Must be pre-planned at booking time</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                      <span>Service resumes when you're ready</span>
-                    </li>
-                  </ul>
+            <details className="max-w-3xl mx-auto bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 group">
+              <summary className="flex items-center justify-between gap-4 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                <div className="flex items-center gap-4">
+                  <Clock className="w-10 h-10 text-white flex-shrink-0" />
+                  <div className="text-left">
+                    <h2 className="text-xl md:text-2xl font-bold text-white">
+                      "Stop the Clock" — Save on Hourly Rentals
+                    </h2>
+                    <p className="text-white/80 text-sm mt-1">
+                      Pause the meter during your event. <span className="font-semibold text-white">$200</span> for up to 4 hours.
+                    </p>
+                  </div>
                 </div>
+                <div className="flex items-center gap-2 text-white/80 flex-shrink-0">
+                  <span className="text-sm hidden sm:inline">Learn more</span>
+                  <svg className="w-5 h-5 transition-transform duration-300 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </summary>
 
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-2 border-white/20">
-                  <h3 className="text-xl font-bold text-white mb-3">Pricing</h3>
-                  <div className="space-y-4 text-left">
-                    <div>
-                      <div className="text-3xl font-bold text-white mb-1">$200</div>
-                      <p className="text-white/90 text-sm">First up to 4 hours paused</p>
+              <div className="px-6 pb-6 pt-2 border-t border-white/20">
+                <div className="grid md:grid-cols-2 gap-4 mb-4">
+                  <div className="bg-white/10 rounded-lg p-4">
+                    <h3 className="font-bold text-white mb-2">How It Works</h3>
+                    <ul className="space-y-2 text-sm text-white/90">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
+                        <span>Available after 2 hours into your reservation</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
+                        <span>Pause for up to 4 hours</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
+                        <span>Must be pre-planned at booking</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-white/10 rounded-lg p-4">
+                    <h3 className="font-bold text-white mb-2">Pricing</h3>
+                    <div className="space-y-2">
+                      <div>
+                        <span className="text-2xl font-bold text-white">$200</span>
+                        <span className="text-white/80 text-sm ml-2">first 4 hours paused</span>
+                      </div>
+                      <div>
+                        <span className="text-xl font-bold text-white">$50</span>
+                        <span className="text-white/80 text-sm ml-1">/hr after 4 hours</span>
+                      </div>
                     </div>
-                    <div>
-                      <div className="text-2xl font-bold text-white mb-1">$50<span className="text-lg">/hour</span></div>
-                      <p className="text-white/90 text-sm">Each additional hour beyond 4</p>
-                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-2 border-white/20">
-                <h3 className="text-xl font-bold text-white mb-4">Perfect For</h3>
-                <div className="grid md:grid-cols-3 gap-4 text-white/90">
-                  <div>
-                    <p className="font-semibold text-white mb-1">Private Dinners</p>
-                    <p className="text-sm">Enjoy dinner without paying for idle vehicle time</p>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white mb-1">Wedding Events</p>
-                    <p className="text-sm">Pause during ceremony or cocktail hour</p>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white mb-1">Corporate Functions</p>
-                    <p className="text-sm">Attend meetings while saving on hourly rates</p>
+                <div className="bg-white/10 rounded-lg p-4 mb-4">
+                  <h3 className="font-bold text-white mb-2">Perfect For</h3>
+                  <div className="grid sm:grid-cols-3 gap-3 text-sm text-white/90">
+                    <div><span className="font-semibold text-white">Private Dinners</span> — don't pay for idle time</div>
+                    <div><span className="font-semibold text-white">Weddings</span> — pause during ceremony</div>
+                    <div><span className="font-semibold text-white">Corporate</span> — attend meetings, save money</div>
                   </div>
                 </div>
-              </div>
 
-              <div className="mt-8 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                <p className="text-white/90 text-sm">
-                  <strong className="text-white">Example:</strong> Book a 6-hour reservation. Use the vehicle for 3 hours, "Stop the Clock" during a 2-hour private dinner ($200), then resume service for your return trip. You only pay for 4 hours of active service + $200 pause fee, instead of the full 6 hours.
+                <p className="text-white/70 text-xs">
+                  <strong className="text-white/90">Example:</strong> Book 6 hours, use 3, pause for a 2-hour dinner ($200), then finish your trip. Pay for 4 active hours + $200 instead of 6 hours.
                 </p>
               </div>
-            </div>
+            </details>
           </div>
         </section>
 

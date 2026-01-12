@@ -67,7 +67,7 @@ interface DriverRow {
 
 /**
  * Fetch all drivers that should be displayed on the website
- * Filters by: active = true AND display_on_website = true AND employee_type = 'driver'
+ * Filters by: active = true AND display_on_website = true
  * Orders by: priority ASC (lower priority number = shown first)
  */
 export async function getDriversForWebsite(): Promise<Driver[]> {
@@ -75,7 +75,6 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
     const supabase = getSupabaseServerClient()
 
     // Query drivers with joined media data
-    // Only show actual drivers (not non_driver employees like office staff)
     const { data, error } = await supabase
       .from('drivers')
       .select(`
@@ -106,7 +105,6 @@ export async function getDriversForWebsite(): Promise<Driver[]> {
       `)
       .eq('active', true)
       .eq('display_on_website', true)
-      .eq('employee_type', 'driver')
       .order('priority', { ascending: true, nullsFirst: false })
 
     if (error) {
@@ -198,7 +196,7 @@ export function getDriverRoleLabel(role: Driver['role']): string {
 
 /**
  * Fetch a single driver by ID
- * Only returns if active = true AND display_on_website = true AND employee_type = 'driver'
+ * Only returns if active = true AND display_on_website = true
  */
 export async function getDriverById(id: string): Promise<Driver | null> {
   try {
@@ -235,7 +233,6 @@ export async function getDriverById(id: string): Promise<Driver | null> {
       .eq('id', id)
       .eq('active', true)
       .eq('display_on_website', true)
-      .eq('employee_type', 'driver')
       .single()
 
     if (error || !data) {

@@ -45,7 +45,7 @@ const faqSchema = {
       name: 'How much does Lake of the Ozarks transportation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates at Lake of the Ozarks vary by service type. Hourly rentals: Executive Sprinter $175/hr (tiered), Party Bus $130/hr (tiered), Executive Coach $275/hr flat. Airport shuttles and wedding packages are custom quoted based on distance, vehicle type, and guest count. All prices subject to 3% credit card processing fee. Contact us at (573) 206-9499 for exact quote.'
+        text: 'Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban) at $2.90/mile. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $140/hr, Limo Bus $130/hr (tiered), Luxury Sprinter $175/hr (tiered), Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers. Contact us at (573) 206-9499 for exact quote.'
       }
     },
     {
@@ -220,46 +220,138 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* Point to Point Rates */}
+        {/* Point to Point Rates - Per Mile */}
         <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
               Point to Point Rates
             </h2>
-            <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
-              One-way transportation with minimum fares by vehicle type
+            <p className="text-center text-gray-600 dark:text-lrp-gray mb-4 max-w-2xl mx-auto">
+              Per-mile pricing for sedans and SUVs. Flat rates for larger vehicles.
             </p>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <p className="text-center text-sm text-lrp-green font-semibold mb-12 max-w-2xl mx-auto">
+              Book 24+ hours in advance and save 10% on Flex and Elite tiers!
+            </p>
+
+            {/* Per-Mile Tiers */}
+            <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Sedans & SUVs (Per Mile)</h3>
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+              {/* Flex */}
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">SUVs</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$15 <span className="text-sm text-gray-600 dark:text-lrp-gray font-normal">minimum</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray">Up to 6 passengers</p>
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Flex</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-4 passengers</p>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
+                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$2.25/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
+                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$1.85/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
+                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$5</span>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="text-xl font-bold text-lrp-green-dark dark:text-lrp-green">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                </div>
               </div>
 
+              {/* Elite */}
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Party Bus</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$100 <span className="text-sm text-gray-600 dark:text-lrp-gray font-normal">minimum</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray">Up to 14 passengers</p>
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Elite</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-7 passengers</p>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
+                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$2.50/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
+                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$2.15/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
+                    <span className="font-bold text-lrp-green-dark dark:text-lrp-green">$5</span>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="text-xl font-bold text-lrp-green-dark dark:text-lrp-green">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                </div>
               </div>
 
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+              {/* LRP Black */}
+              <div className="bg-lrp-black p-6 rounded-lg border-2 border-lrp-green text-white">
                 <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Executive Sprinter</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$200 <span className="text-sm text-gray-600 dark:text-lrp-gray font-normal">minimum</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray">Up to 13 passengers</p>
-              </div>
-
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Executive Coach</h3>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$550 <span className="text-sm text-gray-600 dark:text-lrp-gray font-normal">minimum</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray">Up to 37 passengers</p>
+                <h4 className="font-bold text-lg mb-1">LRP Black</h4>
+                <p className="text-sm text-white/70 mb-4">1-6 passengers (Suburban)</p>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-white/70">First 50 miles</span>
+                    <span className="font-bold text-lrp-green">$2.90/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-white/70">After 50 miles</span>
+                    <span className="font-bold text-lrp-green">$2.60/mi</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-white/70">Booking fee</span>
+                    <span className="font-bold text-lrp-green">$10</span>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-white/20">
+                  <div className="text-xl font-bold text-lrp-green">$25 <span className="text-sm font-normal text-white/70">minimum</span></div>
+                  <p className="text-xs text-white/70 mt-2">Select beverages included. 24hr advance booking required.</p>
+                </div>
               </div>
             </div>
+
+            {/* Flat Rate Vehicles */}
+            <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Larger Vehicles (Flat Rate)</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {/* Limo Bus */}
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <Users className="w-8 h-8 text-lrp-green mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Limo Bus</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-14 passengers</p>
+                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$90 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                <p className="text-xs text-gray-600 dark:text-lrp-gray">$80 base + $10 booking fee</p>
+              </div>
+
+              {/* Rescue Squad */}
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <Users className="w-8 h-8 text-lrp-green mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Rescue Squad</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-14 passengers</p>
+                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$90 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                <p className="text-xs text-gray-600 dark:text-lrp-gray">$80 base + $10 booking fee</p>
+              </div>
+
+              {/* Luxury Sprinter */}
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <Users className="w-8 h-8 text-lrp-green mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Luxury Sprinter</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-13 passengers</p>
+                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$175 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                <p className="text-xs text-gray-600 dark:text-lrp-gray">$175 base + $10 booking fee</p>
+              </div>
+
+              {/* Luxury Shuttle */}
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
+                <Users className="w-8 h-8 text-lrp-green mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Luxury Shuttle</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-37 passengers</p>
+                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$275 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                <p className="text-xs text-gray-600 dark:text-lrp-gray">$400 base + $20 booking fee</p>
+              </div>
+            </div>
+
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
-              Final pricing based on distance, time of day, and route. <Link href="/book" className="text-lrp-green hover:underline">Get a quote</Link> for exact pricing.
+              All prices include professional driver, fuel, and insurance. <Link href="/book" className="text-lrp-green hover:underline">Get a quote</Link> for exact pricing.
             </p>
           </div>
         </section>
@@ -276,36 +368,91 @@ export default function PricingPage() {
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
               <strong>Add "Stop the Clock"</strong> to any hourly reservation and pause your meter when you don't need the vehicle
             </p>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+
+            {/* Sedans & SUVs - Flat Hourly */}
+            <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Sedans & SUVs (Flat Rate)</h3>
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+              {/* Flex */}
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">SUVs</h3>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">Up to 6 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$120<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Flex</h4>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-4 passengers</p>
+                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$80<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">First 3 hrs: $120/hr</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">Flat rate all hours</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">After: $100/hr</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">Sedans & small SUVs</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Comfortable & versatile</span>
+                    <span className="text-gray-700 dark:text-lrp-gray">Perfect for small groups</span>
                   </li>
                 </ul>
               </div>
 
+              {/* Elite */}
+              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
+                <Users className="w-10 h-10 text-lrp-green mb-4" />
+                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Elite</h4>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-7 passengers</p>
+                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$100<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-hour minimum</p>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">Flat rate all hours</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">Larger SUVs</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">More space & comfort</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* LRP Black */}
+              <div className="bg-lrp-black p-8 rounded-lg text-white">
+                <Users className="w-10 h-10 text-lrp-green mb-4" />
+                <h4 className="text-xl font-bold mb-2">LRP Black</h4>
+                <p className="text-white/70 text-sm mb-4">1-6 passengers (Suburban)</p>
+                <div className="text-3xl font-bold text-lrp-green mb-2">$140<span className="text-lg text-white/70">/hour</span></div>
+                <p className="text-sm text-white/70 mb-4">1-hour minimum</p>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-white/90">Flat rate all hours</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-white/90">Select beverages included</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-white/90">24hr advance required</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Larger Vehicles - Tiered Hourly */}
+            <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Larger Vehicles (Tiered Rates)</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+              {/* Limo Bus */}
               <div className="bg-lrp-green p-8 rounded-lg text-white relative">
                 <div className="absolute top-4 right-4 bg-white text-lrp-green text-xs font-bold px-3 py-1 rounded-full">
                   MOST POPULAR
                 </div>
                 <Users className="w-10 h-10 text-white mb-4" />
-                <h3 className="text-xl font-bold mb-2">Party Bus</h3>
-                <p className="text-white/90 text-sm mb-4">Up to 14 passengers</p>
+                <h4 className="text-xl font-bold mb-2">Limo Bus</h4>
+                <p className="text-white/90 text-sm mb-4">1-14 passengers</p>
                 <div className="text-3xl font-bold mb-2">$130<span className="text-lg text-white/80">/hour</span></div>
                 <p className="text-sm text-white/80 mb-4">3-hour minimum (4 hours weekends)</p>
                 <ul className="space-y-2 text-sm">
@@ -324,10 +471,34 @@ export default function PricingPage() {
                 </ul>
               </div>
 
+              {/* Rescue Squad */}
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Executive Sprinter</h3>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">Up to 13 passengers</p>
+                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Rescue Squad</h4>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-14 passengers</p>
+                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$130<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum (4 hours weekends)</p>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">First 3-4 hrs: $130/hr</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">After: $110/hr</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-lrp-gray">Unique party vehicle</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Luxury Sprinter */}
+              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
+                <Users className="w-10 h-10 text-lrp-green mb-4" />
+                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Luxury Sprinter</h4>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-13 passengers</p>
                 <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$175<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum (4 hours weekends)</p>
                 <ul className="space-y-2 text-sm">
@@ -346,10 +517,11 @@ export default function PricingPage() {
                 </ul>
               </div>
 
+              {/* Luxury Shuttle */}
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Executive Coach</h3>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">Up to 37 passengers</p>
+                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Luxury Shuttle</h4>
+                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-37 passengers</p>
                 <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$275<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">2-hour minimum</p>
                 <ul className="space-y-2 text-sm">
@@ -369,7 +541,7 @@ export default function PricingPage() {
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
-              <strong>Note:</strong> Weekend rates (Fri-Sun) have 4-hour minimums for Sprinter & Party Bus. Weekday minimums are 3 hours. All prices subject to 3% credit card processing fee.
+              <strong>Note:</strong> Weekend rates (Fri-Sun) have 4-hour minimums for Limo Bus, Rescue Squad & Sprinter. Weekday minimums are 3 hours. All prices subject to 3% credit card processing fee.
             </p>
           </div>
         </section>
@@ -634,7 +806,7 @@ export default function PricingPage() {
                   How much does Lake of the Ozarks transportation cost?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Transportation rates at Lake of the Ozarks vary by service type. Airport shuttles from MCI start at $220, STL at $250. Hourly rentals for Sprinter vans start at $120/hour, limo buses at $150/hour. Wedding packages start at $600. Contact us at (573) 206-9499 for a custom quote.
+                  Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile with a $15 minimum, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban with beverages) at $2.90/mile. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $140/hr, Limo Bus $130/hr, Luxury Sprinter $175/hr, Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers! Contact us at (573) 206-9499 for a custom quote.
                 </p>
               </details>
 

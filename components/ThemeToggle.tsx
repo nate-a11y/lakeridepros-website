@@ -125,7 +125,7 @@ export default function ThemeToggle() {
   const currentTheme = themeOptions.find((t) => t.value === theme) || themeOptions[0];
 
   return (
-    <div className="relative" ref={dropdownRef} onKeyDown={handleKeyDown}>
+    <div className="relative" ref={dropdownRef} onKeyDown={handleKeyDown} role="presentation">
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}

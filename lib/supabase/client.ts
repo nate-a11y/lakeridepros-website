@@ -3,12 +3,13 @@
  * Uses singleton pattern to ensure only one client is created
  */
 
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import type { Database } from './database.types'
 
 // Server-side client (with service role key)
-let serverClient: ReturnType<typeof createClient> | null = null
+let serverClient: SupabaseClient<Database> | null = null
 
-export function getSupabaseServerClient() {
+export function getSupabaseServerClient(): SupabaseClient<Database> {
   if (!serverClient) {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -17,7 +18,7 @@ export function getSupabaseServerClient() {
       throw new Error('Missing Supabase server environment variables')
     }
 
-    serverClient = createClient(url, key, {
+    serverClient = createClient<Database>(url, key, {
       auth: {
         autoRefreshToken: false,
         persistSession: false
@@ -29,9 +30,9 @@ export function getSupabaseServerClient() {
 }
 
 // Client-side client (with anon key)
-let browserClient: ReturnType<typeof createClient> | null = null
+let browserClient: SupabaseClient<Database> | null = null
 
-export function getSupabaseBrowserClient() {
+export function getSupabaseBrowserClient(): SupabaseClient<Database> {
   if (typeof window === 'undefined') {
     throw new Error('Browser client can only be used in the browser')
   }
@@ -44,7 +45,7 @@ export function getSupabaseBrowserClient() {
       throw new Error('Missing Supabase browser environment variables')
     }
 
-    browserClient = createClient(url, key)
+    browserClient = createClient<Database>(url, key)
   }
 
   return browserClient

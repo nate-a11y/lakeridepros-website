@@ -11,16 +11,6 @@ interface BridalShowFormData {
   _timestamp?: number;
 }
 
-// Type for bridal_show_registrations table (not in generated Supabase types)
-interface BridalShowRegistration {
-  id?: string;
-  name: string;
-  email: string;
-  phone: string;
-  transportation_needs: string;
-  created_at: string;
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body: BridalShowFormData = await request.json();
@@ -66,7 +56,6 @@ export async function POST(request: NextRequest) {
     const supabase = getSupabaseServerClient();
 
     // Check for duplicate email submissions
-    // @ts-expect-error - bridal_show_registrations table not in Supabase generated types
     const { data: existingEntry } = await supabase
       .from('bridal_show_registrations')
       .select('id')
@@ -81,18 +70,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert the registration
-    const registrationData: BridalShowRegistration = {
-      name: validationResult.data.name,
-      email: validationResult.data.email.toLowerCase(),
-      phone: validationResult.data.phone,
-      transportation_needs: validationResult.data.transportation_needs,
-      created_at: new Date().toISOString(),
-    };
-
-    // @ts-expect-error - bridal_show_registrations table not in Supabase generated types
     const { data, error } = await supabase
       .from('bridal_show_registrations')
-      .insert(registrationData)
+      .insert({
+        name: validationResult.data.name,
+        email: validationResult.data.email.toLowerCase(),
+        phone: validationResult.data.phone,
+        transportation_needs: validationResult.data.transportation_needs,
+        created_at: new Date().toISOString(),
+      })
       .select()
       .single();
 
@@ -107,7 +93,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: 'Registration successful! You have been entered to win.',
-        id: (data as BridalShowRegistration).id
+        id: data?.id
       },
       { status: 200 }
     );
@@ -138,7 +124,6 @@ export async function GET(request: NextRequest) {
 
     const supabase = getSupabaseServerClient();
 
-    // @ts-expect-error - bridal_show_registrations table not in Supabase generated types
     const { data, error } = await supabase
       .from('bridal_show_registrations')
       .select('*')

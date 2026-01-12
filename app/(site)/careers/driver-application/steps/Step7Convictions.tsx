@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
@@ -37,7 +37,7 @@ interface Step7ConvictionsProps {
 export default function Step7Convictions({ onNext, onPrevious }: Step7ConvictionsProps) {
   const { applicationData, updateApplicationData } = useApplication()
 
-  const { register, control, handleSubmit, watch } = useForm<ConvictionsFormData>({
+  const { register, control, handleSubmit } = useForm<ConvictionsFormData>({
     resolver: zodResolver(convictionsSchema),
     defaultValues: {
       has_convictions: (applicationData.traffic_convictions && applicationData.traffic_convictions.length > 0) || false,
@@ -50,7 +50,7 @@ export default function Step7Convictions({ onNext, onPrevious }: Step7Conviction
     name: 'traffic_convictions'
   })
 
-  const hasConvictions = watch('has_convictions')
+  const hasConvictions = useWatch({ control, name: 'has_convictions' })
 
   const onSubmit = (data: ConvictionsFormData) => {
     updateApplicationData({ traffic_convictions: data.has_convictions ? data.traffic_convictions : [] })

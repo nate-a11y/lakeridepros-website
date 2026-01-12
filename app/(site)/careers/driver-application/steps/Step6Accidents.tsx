@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
@@ -36,7 +36,7 @@ interface Step6AccidentsProps {
 export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsProps) {
   const { applicationData, updateApplicationData } = useApplication()
 
-  const { register, control, handleSubmit, watch } = useForm<AccidentsFormData>({
+  const { register, control, handleSubmit } = useForm<AccidentsFormData>({
     resolver: zodResolver(accidentsSchema),
     defaultValues: {
       has_accidents: (applicationData.accidents && applicationData.accidents.length > 0) || false,
@@ -49,7 +49,7 @@ export default function Step6Accidents({ onNext, onPrevious }: Step6AccidentsPro
     name: 'accidents'
   })
 
-  const hasAccidents = watch('has_accidents')
+  const hasAccidents = useWatch({ control, name: 'has_accidents' })
 
   const onSubmit = (data: AccidentsFormData) => {
     updateApplicationData({ accidents: data.has_accidents ? data.accidents : [] })

@@ -36,11 +36,11 @@ const TIER_CONFIG: Record<string, { label: string; className: string }> = {
   },
   elite: {
     label: 'Elite',
-    className: 'bg-purple-600 text-white',
+    className: 'bg-purple-700 text-white',
   },
   'lrp-black': {
     label: 'LRP Black',
-    className: 'bg-gradient-to-r from-neutral-800 to-neutral-700 text-white border border-amber-500',
+    className: 'bg-black text-amber-400 border border-amber-400',
   },
 };
 

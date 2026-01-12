@@ -8,6 +8,7 @@ import { X, Sparkles, Clock, ChevronDown, CheckCircle } from 'lucide-react'
 export default function NewRatesBanner() {
   const [isDismissed, setIsDismissed] = useState(true) // Start hidden until we check
   const [showStopTheClock, setShowStopTheClock] = useState(false)
+  const [dontShowAgain, setDontShowAgain] = useState(false)
 
   useEffect(() => {
     // Check if popup has expired (after Feb 15, 2026)
@@ -30,7 +31,9 @@ export default function NewRatesBanner() {
 
   const handleDismiss = () => {
     setIsDismissed(true)
-    localStorage.setItem('newRates2026Dismissed', 'true')
+    if (dontShowAgain) {
+      localStorage.setItem('newRates2026Dismissed', 'true')
+    }
   }
 
   if (isDismissed) return null
@@ -184,13 +187,26 @@ export default function NewRatesBanner() {
             />
           </div>
 
-          {/* Skip link */}
-          <button
-            onClick={handleDismiss}
-            className="mt-4 text-white/50 hover:text-white/70 text-sm transition-colors mx-auto block"
-          >
-            Maybe later
-          </button>
+          {/* Don't show again checkbox and skip link */}
+          <div className="mt-4 flex flex-col items-center gap-3">
+            <label className="flex items-center gap-2 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={dontShowAgain}
+                onChange={(e) => setDontShowAgain(e.target.checked)}
+                className="w-4 h-4 rounded border-white/30 bg-white/10 text-lrp-green focus:ring-lrp-green focus:ring-offset-0 cursor-pointer"
+              />
+              <span className="text-white/60 group-hover:text-white/80 text-sm transition-colors">
+                Don't show this again
+              </span>
+            </label>
+            <button
+              onClick={handleDismiss}
+              className="text-white/50 hover:text-white/70 text-sm transition-colors"
+            >
+              Maybe later
+            </button>
+          </div>
         </div>
       </div>
     </>

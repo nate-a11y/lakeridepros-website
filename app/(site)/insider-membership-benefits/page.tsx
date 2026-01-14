@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import Link from 'next/link'
+import { ChargebeePricingTable } from '@/components/ChargebeePricingTable'
 
 export const metadata: Metadata = {
   title: 'Insider Membership Benefits - Lake Ride Pros',
@@ -125,11 +125,10 @@ export default function InsiderMembershipBenefitsPage() {
           <h2 className="text-3xl font-bold text-heading text-center mb-8">
             Choose Your Membership
           </h2>
-          <div
-            id="pricify-hosted-pricing-page"
-            data-pricify-site="01JH3A1YVSSYZYY4TNPCTMCVB7"
-            data-pricify-pricingpage="01JH3A1ZZA7XFPWXCVXEBH0RR4"
-            data-pricify-viewport-defaultheight="556px"
+          <ChargebeePricingTable
+            site="01JH3A1YVSSYZYY4TNPCTMCVB7"
+            pricingTableId="01JH3A1ZZA7XFPWXCVXEBH0RR4"
+            defaultHeight="556px"
           />
         </div>
       </section>
@@ -412,12 +411,6 @@ export default function InsiderMembershipBenefitsPage() {
         </div>
       </section>
 
-      {/* Chargebee Pricify Script */}
-      <Script
-        src="https://js.chargebee.com/atomicpricing/pricify.js"
-        data-pricify-auto-bootstrap="true"
-        strategy="lazyOnload"
-      />
     </>
   )
 }

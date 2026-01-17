@@ -93,6 +93,8 @@
   },
   "overrides": {
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "esbuild": "^0.25.0",
+    "undici": "^7.18.2"
   }
 }

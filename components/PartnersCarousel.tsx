@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -22,22 +22,24 @@ interface PartnersCarouselProps {
 export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Clone partners on client side for infinite scroll effect
+  // Memoized handler to prevent recreation on each render
+  const handleAnimationIteration = useCallback(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    container.style.animation = 'none';
+    // Trigger reflow by reading layout property
+    void container.offsetHeight;
+    container.style.animation = '';
+  }, []);
+
+  // Set up animation iteration listener
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
-    // Handle seamless loop animation
-    const handleAnimationIteration = () => {
-      container.style.animation = 'none';
-      // Trigger reflow by reading layout property
-      void container.offsetHeight;
-      container.style.animation = '';
-    };
-
     container.addEventListener('animationiteration', handleAnimationIteration);
     return () => container.removeEventListener('animationiteration', handleAnimationIteration);
-  }, []);
+  }, [handleAnimationIteration]);
 
   if (!partners.length) return null;
 

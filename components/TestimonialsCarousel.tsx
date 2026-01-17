@@ -31,13 +31,18 @@ export default function TestimonialsCarousel({
     setTimeout(() => setIsTransitioning(false), 500);
   }, []);
 
+  // Use functional updates to avoid dependency on currentIndex
   const nextSlide = useCallback(() => {
-    goToSlide((currentIndex + 1) % testimonials.length);
-  }, [currentIndex, testimonials.length, goToSlide]);
+    setIsTransitioning(true);
+    setCurrentIndex(prev => (prev + 1) % testimonials.length);
+    setTimeout(() => setIsTransitioning(false), 500);
+  }, [testimonials.length]);
 
   const prevSlide = useCallback(() => {
-    goToSlide((currentIndex - 1 + testimonials.length) % testimonials.length);
-  }, [currentIndex, testimonials.length, goToSlide]);
+    setIsTransitioning(true);
+    setCurrentIndex(prev => (prev - 1 + testimonials.length) % testimonials.length);
+    setTimeout(() => setIsTransitioning(false), 500);
+  }, [testimonials.length]);
 
   useEffect(() => {
     if (!isAutoPlaying || testimonials.length <= 1) return;
@@ -169,6 +174,7 @@ export default function TestimonialsCarousel({
                       width={64}
                       height={64}
                       className="h-16 w-16 rounded-full mb-4 object-cover ring-4 ring-primary/20"
+                      loading="lazy"
                     />
                   )}
                   <p className="font-semibold text-lg text-neutral-900 dark:text-white">

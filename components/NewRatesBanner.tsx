@@ -187,7 +187,7 @@ export default function NewRatesBanner() {
               width={1920}
               height={1080}
               className="w-full h-auto rounded-lg"
-              priority
+              loading="lazy"
             />
           </div>
 

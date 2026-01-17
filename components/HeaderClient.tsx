@@ -2,11 +2,22 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { ChevronDown, Facebook, Instagram, Twitter, Youtube, AtSign } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { BookingModal } from './BookingModal';
 import CartIcon from '@/components/cart/CartIcon';
+
+type DropdownType = 'services' | 'partners' | 'shop' | 'insiders' | 'social';
+type DropdownState = Record<DropdownType, boolean>;
+
+const initialDropdownState: DropdownState = {
+  services: false,
+  partners: false,
+  shop: false,
+  insiders: false,
+  social: false,
+};
 
 // TikTok icon component (not available in lucide-react)
 function TikTokIcon({ className }: { className?: string }) {
@@ -63,48 +74,59 @@ interface HeaderClientProps {
 export default function HeaderClient({ services, popularServiceSlugs = [] }: HeaderClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
-  const [partnersDropdownOpen, setPartnersDropdownOpen] = useState(false);
-  const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
-  const [insidersDropdownOpen, setInsidersDropdownOpen] = useState(false);
-  const [socialDropdownOpen, setSocialDropdownOpen] = useState(false);
+  const [dropdowns, setDropdowns] = useState<DropdownState>(initialDropdownState);
 
-  // Build service dropdown items dynamically from CMS
-  const serviceDropdownItems = [
+  // Memoized dropdown handlers to prevent recreation on every render
+  const openDropdown = useCallback((type: DropdownType) => {
+    setDropdowns(prev => ({ ...prev, [type]: true }));
+  }, []);
+
+  const closeDropdown = useCallback((type: DropdownType) => {
+    setDropdowns(prev => ({ ...prev, [type]: false }));
+  }, []);
+
+  const toggleDropdown = useCallback((type: DropdownType) => {
+    setDropdowns(prev => ({ ...prev, [type]: !prev[type] }));
+  }, []);
+
+  // Memoize service dropdown items to avoid recreation on every render
+  const serviceDropdownItems = useMemo(() => [
     { name: 'All Services', href: '/services' },
     ...services.map((service) => ({
       name: service.name,
       href: `/services/${service.slug}`,
     })),
-  ];
+  ], [services]);
 
   // Use analytics-based popular services, fallback to hardcoded list
-  const fallbackServiceSlugs = [
+  const fallbackServiceSlugs = useMemo(() => [
     'wedding-transportation',
     'airport-shuttle',
     'nightlife-transportation',
     'corporate-transportation',
     'private-aviation-transportation',
-  ];
+  ], []);
 
   // Use analytics data if available, otherwise use fallback
-  const featuredServiceSlugs = popularServiceSlugs.length > 0
-    ? popularServiceSlugs
-    : fallbackServiceSlugs;
+  const featuredServiceSlugs = useMemo(() =>
+    popularServiceSlugs.length > 0 ? popularServiceSlugs : fallbackServiceSlugs,
+    [popularServiceSlugs, fallbackServiceSlugs]
+  );
 
-  const featuredServices = services
+  const featuredServices = useMemo(() => services
     .filter(s => featuredServiceSlugs.includes(s.slug))
-    // Maintain the order from analytics/fallback
-    .sort((a, b) => {
-      return featuredServiceSlugs.indexOf(a.slug) - featuredServiceSlugs.indexOf(b.slug);
-    })
-    .map(s => ({ name: s.name, href: `/services/${s.slug}` }));
+    .sort((a, b) => featuredServiceSlugs.indexOf(a.slug) - featuredServiceSlugs.indexOf(b.slug))
+    .map(s => ({ name: s.name, href: `/services/${s.slug}` })),
+    [services, featuredServiceSlugs]
+  );
 
-  const otherServices = services
+  const otherServices = useMemo(() => services
     .filter(s => !featuredServiceSlugs.includes(s.slug))
-    .map(s => ({ name: s.name, href: `/services/${s.slug}` }));
+    .map(s => ({ name: s.name, href: `/services/${s.slug}` })),
+    [services, featuredServiceSlugs]
+  );
 
-  const navigation = [
+  const navigation = useMemo(() => [
     { name: 'Home', href: '/' },
     {
       name: 'Services',
@@ -149,7 +171,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
       ]
     },
     { name: 'Contact', href: '/contact' },
-  ];
+  ], [serviceDropdownItems]);
 
   return (
     <header className="bg-white dark:bg-dark-bg-secondary border-b border-neutral-200 dark:border-dark-border sticky top-0 z-50 transition-colors">
@@ -178,56 +200,27 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   key={item.name}
                   className="relative"
                   role="none"
-                  onMouseEnter={() => {
-                    if (item.dropdownType === 'services') setServicesDropdownOpen(true);
-                    if (item.dropdownType === 'partners') setPartnersDropdownOpen(true);
-                    if (item.dropdownType === 'shop') setShopDropdownOpen(true);
-                    if (item.dropdownType === 'insiders') setInsidersDropdownOpen(true);
-                  }}
-                  onMouseLeave={() => {
-                    if (item.dropdownType === 'services') setServicesDropdownOpen(false);
-                    if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
-                    if (item.dropdownType === 'shop') setShopDropdownOpen(false);
-                    if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
-                  }}
-                  onFocus={() => {
-                    if (item.dropdownType === 'services') setServicesDropdownOpen(true);
-                    if (item.dropdownType === 'partners') setPartnersDropdownOpen(true);
-                    if (item.dropdownType === 'shop') setShopDropdownOpen(true);
-                    if (item.dropdownType === 'insiders') setInsidersDropdownOpen(true);
-                  }}
+                  onMouseEnter={() => openDropdown(item.dropdownType as DropdownType)}
+                  onMouseLeave={() => closeDropdown(item.dropdownType as DropdownType)}
+                  onFocus={() => openDropdown(item.dropdownType as DropdownType)}
                   onBlur={(e) => {
                     // Only close if focus moves outside the dropdown container
                     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                      if (item.dropdownType === 'services') setServicesDropdownOpen(false);
-                      if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
-                      if (item.dropdownType === 'shop') setShopDropdownOpen(false);
-                      if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
+                      closeDropdown(item.dropdownType as DropdownType);
                     }
                   }}
                 >
                   <button
                     className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md px-1 -mx-1"
-                    aria-expanded={
-                      item.dropdownType === 'services' ? servicesDropdownOpen :
-                      item.dropdownType === 'partners' ? partnersDropdownOpen :
-                      item.dropdownType === 'shop' ? shopDropdownOpen :
-                      item.dropdownType === 'insiders' ? insidersDropdownOpen : false
-                    }
+                    aria-expanded={dropdowns[item.dropdownType as DropdownType]}
                     aria-haspopup="true"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        if (item.dropdownType === 'services') setServicesDropdownOpen(!servicesDropdownOpen);
-                        if (item.dropdownType === 'partners') setPartnersDropdownOpen(!partnersDropdownOpen);
-                        if (item.dropdownType === 'shop') setShopDropdownOpen(!shopDropdownOpen);
-                        if (item.dropdownType === 'insiders') setInsidersDropdownOpen(!insidersDropdownOpen);
+                        toggleDropdown(item.dropdownType as DropdownType);
                       }
                       if (e.key === 'Escape') {
-                        if (item.dropdownType === 'services') setServicesDropdownOpen(false);
-                        if (item.dropdownType === 'partners') setPartnersDropdownOpen(false);
-                        if (item.dropdownType === 'shop') setShopDropdownOpen(false);
-                        if (item.dropdownType === 'insiders') setInsidersDropdownOpen(false);
+                        closeDropdown(item.dropdownType as DropdownType);
                       }
                     }}
                   >
@@ -235,7 +228,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                     <ChevronDown className="w-4 h-4" aria-hidden="true" />
                   </button>
 
-                  {item.dropdownType === 'services' && servicesDropdownOpen && (
+                  {item.dropdownType === 'services' && dropdowns.services && (
                     <div role="menu" aria-label="Services submenu" className="absolute top-full left-0 pt-0 w-[600px] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border p-6 z-50">
                       <div className="grid grid-cols-2 gap-6">
                         {/* Featured Services Column */}
@@ -282,7 +275,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                     </div>
                   )}
 
-                  {item.dropdownType === 'partners' && partnersDropdownOpen && (
+                  {item.dropdownType === 'partners' && dropdowns.partners && (
                     <div role="menu" aria-label="Partners submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
@@ -297,7 +290,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                     </div>
                   )}
 
-                  {item.dropdownType === 'shop' && shopDropdownOpen && (
+                  {item.dropdownType === 'shop' && dropdowns.shop && (
                     <div role="menu" aria-label="Shop submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
@@ -312,7 +305,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                     </div>
                   )}
 
-                  {item.dropdownType === 'insiders' && insidersDropdownOpen && (
+                  {item.dropdownType === 'insiders' && dropdowns.insiders && (
                     <div role="menu" aria-label="Insiders submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
@@ -352,27 +345,27 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
             {/* Social Media Dropdown - hidden on mobile */}
             <div
               className="hidden md:block relative"
-              onMouseEnter={() => setSocialDropdownOpen(true)}
-              onMouseLeave={() => setSocialDropdownOpen(false)}
-              onFocus={() => setSocialDropdownOpen(true)}
+              onMouseEnter={() => openDropdown('social')}
+              onMouseLeave={() => closeDropdown('social')}
+              onFocus={() => openDropdown('social')}
               onBlur={(e) => {
                 if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                  setSocialDropdownOpen(false);
+                  closeDropdown('social');
                 }
               }}
             >
               <button
                 className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-neutral-100 dark:hover:bg-dark-bg-tertiary"
-                aria-expanded={socialDropdownOpen}
+                aria-expanded={dropdowns.social}
                 aria-haspopup="true"
                 aria-label="Social media links"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    setSocialDropdownOpen(!socialDropdownOpen);
+                    toggleDropdown('social');
                   }
                   if (e.key === 'Escape') {
-                    setSocialDropdownOpen(false);
+                    closeDropdown('social');
                   }
                 }}
               >
@@ -380,7 +373,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
               </button>
 
               {/* Animated Dropdown */}
-              {socialDropdownOpen && (
+              {dropdowns.social && (
               <div
                 role="menu"
                 aria-label="Social media links"

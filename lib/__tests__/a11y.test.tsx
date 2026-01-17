@@ -1,13 +1,25 @@
 /**
  * Component-Level Accessibility Tests
  *
- * Uses vitest-axe to run axe-core against rendered components.
+ * Uses axe-core to run accessibility checks against rendered components.
  * This catches accessibility issues during unit testing.
  */
 
 import { describe, it, expect } from 'vitest'
 import { render } from '@testing-library/react'
-import { axe } from 'vitest-axe'
+import { axe, AxeResults } from 'vitest-axe'
+
+// Helper to check for violations
+function expectNoViolations(results: AxeResults) {
+  const violations = results.violations
+  if (violations.length > 0) {
+    const messages = violations.map(v =>
+      `${v.impact}: ${v.id} - ${v.description}\n  ${v.nodes.map(n => n.html).join('\n  ')}`
+    ).join('\n\n')
+    throw new Error(`Accessibility violations found:\n\n${messages}`)
+  }
+  expect(violations).toHaveLength(0)
+}
 
 // Example: Testing a button component structure
 describe('Accessibility - Component Patterns', () => {
@@ -21,7 +33,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('buttons without icons should use text content', async () => {
@@ -30,7 +42,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('form inputs should have associated labels', async () => {
@@ -49,7 +61,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('images should have alt text', async () => {
@@ -58,7 +70,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('decorative images can have empty alt', async () => {
@@ -67,7 +79,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('links should have discernible text', async () => {
@@ -76,7 +88,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('dialogs should have proper ARIA attributes', async () => {
@@ -94,7 +106,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('accordions should use proper ARIA patterns', async () => {
@@ -118,7 +130,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('navigation should use nav landmark', async () => {
@@ -131,7 +143,7 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 
   it('headings should be in logical order', async () => {
@@ -148,6 +160,6 @@ describe('Accessibility - Component Patterns', () => {
     )
 
     const results = await axe(container)
-    expect(results).toHaveNoViolations()
+    expectNoViolations(results)
   })
 })

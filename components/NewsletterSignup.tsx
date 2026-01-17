@@ -79,11 +79,13 @@ export default function NewsletterSignup() {
             <input
               id="newsletter-email"
               type="email"
+              name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
+              placeholder="Enter your email..."
               required
               disabled={status === 'loading'}
+              autoComplete="email"
               aria-label="Email address for newsletter signup"
               className="flex-1 px-4 py-3 rounded-lg border-0 bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 focus:ring-2 focus:ring-secondary dark:focus:ring-primary focus:outline-none disabled:opacity-50 transition-colors"
             />

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useHasMounted } from '@/hooks/useHasMounted';
 
 type ThemeOption = {
@@ -86,15 +86,18 @@ const themeOptions: ThemeOption[] = [
 export default function ThemeToggle() {
   const mounted = useHasMounted();
   const [isOpen, setIsOpen] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
   const { theme, setTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
+        setFocusedIndex(-1);
       }
     };
 
@@ -102,17 +105,53 @@ export default function ThemeToggle() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Reset focused index when dropdown opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      const currentIndex = themeOptions.findIndex(t => t.value === theme);
+      setFocusedIndex(currentIndex >= 0 ? currentIndex : 0);
+    } else {
+      setFocusedIndex(-1);
+    }
+  }, [isOpen, theme]);
+
+  // Focus the option when focusedIndex changes
+  useEffect(() => {
+    if (isOpen && focusedIndex >= 0 && optionRefs.current[focusedIndex]) {
+      optionRefs.current[focusedIndex]?.focus();
+    }
+  }, [focusedIndex, isOpen]);
+
   // Handle keyboard navigation
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       setIsOpen(false);
+      setFocusedIndex(-1);
       buttonRef.current?.focus();
+    } else if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      setFocusedIndex(prev => (prev + 1) % themeOptions.length);
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      setFocusedIndex(prev => (prev - 1 + themeOptions.length) % themeOptions.length);
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      setFocusedIndex(0);
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      setFocusedIndex(themeOptions.length - 1);
+    } else if (event.key === 'Enter' || event.key === ' ') {
+      if (focusedIndex >= 0) {
+        event.preventDefault();
+        handleThemeSelect(themeOptions[focusedIndex].value);
+      }
     }
-  };
+  }, [focusedIndex]);
 
   const handleThemeSelect = (value: string) => {
     setTheme(value);
     setIsOpen(false);
+    setFocusedIndex(-1);
     buttonRef.current?.focus();
   };
 
@@ -155,13 +194,16 @@ export default function ThemeToggle() {
           }}
           role="listbox"
           aria-label="Theme options"
+          aria-activedescendant={focusedIndex >= 0 ? `theme-option-${themeOptions[focusedIndex].value}` : undefined}
         >
           <div className="py-1">
-            {themeOptions.map((option) => (
+            {themeOptions.map((option, index) => (
               <button
                 key={option.value}
+                id={`theme-option-${option.value}`}
+                ref={(el) => { optionRefs.current[index] = el; }}
                 onClick={() => handleThemeSelect(option.value)}
-                className="w-full px-4 py-3 flex items-center gap-3 text-left transition-colors"
+                className="w-full px-4 py-3 flex items-center gap-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
                 style={{
                   backgroundColor: theme === option.value ? 'var(--primary-alpha-20)' : 'transparent',
                   color: theme === option.value ? 'var(--primary)' : 'var(--foreground)',
@@ -169,6 +211,7 @@ export default function ThemeToggle() {
                 }}
                 role="option"
                 aria-selected={theme === option.value}
+                tabIndex={focusedIndex === index ? 0 : -1}
               >
                 <span className="flex-shrink-0">{option.icon}</span>
                 <span className="text-sm">{option.label}</span>

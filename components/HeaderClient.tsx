@@ -341,7 +341,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
             {/* Quote Now Button */}
             <button
               onClick={() => setIsBookingOpen(true)}
-              className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-2.5 rounded-lg font-semibold transition-all hover:shadow-lg"
+              className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-2.5 rounded-lg font-semibold transition-colors hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Quote Now
             </button>
@@ -350,11 +350,16 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
           {/* Right side buttons */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Social Media Dropdown - hidden on mobile */}
-            {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
             <div
               className="hidden md:block relative"
               onMouseEnter={() => setSocialDropdownOpen(true)}
               onMouseLeave={() => setSocialDropdownOpen(false)}
+              onFocus={() => setSocialDropdownOpen(true)}
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setSocialDropdownOpen(false);
+                }
+              }}
             >
               <button
                 className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-neutral-100 dark:hover:bg-dark-bg-tertiary"
@@ -482,7 +487,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   setIsBookingOpen(true)
                   setMobileMenuOpen(false)
                 }}
-                className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-3 rounded-lg font-semibold text-center transition-all"
+                className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-3 rounded-lg font-semibold text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 Quote Now
               </button>

@@ -25,14 +25,6 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
   const { addItem } = useCart()
 
-  // Debug: Log variants data to console
-  if (typeof window !== 'undefined' && product.variants) {
-    console.log('Product:', product.name)
-    console.log('Total variants:', product.variants.length)
-    console.log('Variants data:', product.variants)
-    console.log('First variant:', product.variants[0])
-  }
-
   const handleAddToCart = () => {
     if (!selectedVariant) return
 
@@ -62,12 +54,6 @@ export default function ProductActions({ product }: ProductActionsProps) {
   // Group variants by size and color (filter out empty values)
   const sizes = Array.from(new Set((product.variants || []).map((v) => v.size || '').filter((s) => s)))
   const colors = Array.from(new Set((product.variants || []).map((v) => v.color || '').filter((c) => c)))
-
-  // Debug: Log processed sizes/colors
-  if (typeof window !== 'undefined') {
-    console.log('Sizes found:', sizes)
-    console.log('Colors found:', colors)
-  }
 
   return (
     <div className="flex flex-col lg:flex-row gap-12">

@@ -189,6 +189,7 @@ export default function VehicleGallery({
                   fill
                   className="object-cover"
                   sizes="96px"
+                  loading="lazy"
                 />
               </button>
             ))}

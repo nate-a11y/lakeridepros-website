@@ -34,12 +34,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           onDeactivate: onClose,
         }}
       >
-        <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-dark-bg-primary shadow-2xl z-50 flex flex-col">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="cart-drawer-title"
+          className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-dark-bg-primary shadow-2xl z-50 flex flex-col"
+        >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b dark:border-dark-border">
           <div className="flex items-center gap-3">
             <ShoppingCart className="w-6 h-6 text-lrp-green" aria-hidden="true" />
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
+            <h2 id="cart-drawer-title" className="text-2xl font-bold text-neutral-900 dark:text-white">
               Cart ({items.length})
             </h2>
           </div>
@@ -97,18 +102,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                          className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
-                          aria-label="Decrease quantity"
+                          className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-white"
+                          aria-label={`Decrease quantity of ${item.productName}`}
                         >
                           −
                         </button>
-                        <span className="w-8 text-center font-semibold">
+                        <span className="w-8 text-center font-semibold text-neutral-900 dark:text-white" aria-live="polite" aria-atomic="true">
                           {item.quantity}
                         </span>
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                          className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary"
-                          aria-label="Increase quantity"
+                          className="w-10 h-10 rounded border border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-white"
+                          aria-label={`Increase quantity of ${item.productName}`}
                         >
                           +
                         </button>
@@ -162,7 +167,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </Link>
               <button
                 onClick={onClose}
-                className="block w-full border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-lrp-black text-center py-3 rounded-lg font-semibold transition-all"
+                className="block w-full border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-white text-center py-3 rounded-lg font-semibold transition-colors"
               >
                 Continue Shopping
               </button>

@@ -86,23 +86,26 @@ export default function FAQAccordion() {
         </div>
 
         <div className="space-y-3">
-          {faqItems.map((item, index) => (
+          {faqItems.map((item, index) => {
+            // Use stable key based on question text
+            const itemKey = item.question.slice(0, 50).replace(/\s+/g, '-').toLowerCase();
+            return (
             <div
-              key={index}
-              className="bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md"
+              key={itemKey}
+              className="bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-sm overflow-hidden transition-shadow duration-300 hover:shadow-md"
             >
               <button
-                id={`faq-question-${index}`}
+                id={`faq-question-${itemKey}`}
                 onClick={() => toggleItem(index)}
                 className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
                 aria-expanded={openIndex === index}
-                aria-controls={`faq-answer-${index}`}
+                aria-controls={`faq-answer-${itemKey}`}
               >
                 <span className="font-semibold text-lg text-neutral-900 dark:text-white pr-4">
                   {item.question}
                 </span>
                 <div
-                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-[transform,background-color,color] duration-300 ${
                     openIndex === index
                       ? 'bg-primary text-lrp-black rotate-180'
                       : 'bg-neutral-100 dark:bg-dark-bg-secondary text-neutral-600 dark:text-neutral-400'
@@ -113,11 +116,11 @@ export default function FAQAccordion() {
               </button>
 
               <div
-                id={`faq-answer-${index}`}
+                id={`faq-answer-${itemKey}`}
                 role="region"
-                aria-labelledby={`faq-question-${index}`}
+                aria-labelledby={`faq-question-${itemKey}`}
                 hidden={openIndex !== index}
-                className={`overflow-hidden transition-all duration-300 ease-in-out motion-reduce:transition-none ${
+                className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out motion-reduce:transition-none ${
                   openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 }`}
               >
@@ -126,7 +129,7 @@ export default function FAQAccordion() {
                 </div>
               </div>
             </div>
-          ))}
+          )})}
         </div>
 
         <div className="text-center mt-12">

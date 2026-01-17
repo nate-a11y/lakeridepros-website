@@ -1,14 +1,14 @@
 'use client'
 
 import { usePhoneModal } from '@/lib/store/phoneModal'
-import { ReactNode } from 'react'
+import { ReactNode, memo } from 'react'
 
 interface PhoneLinkProps {
   children: ReactNode
   className?: string
 }
 
-export function PhoneLink({ children, className }: PhoneLinkProps) {
+export const PhoneLink = memo(function PhoneLink({ children, className }: PhoneLinkProps) {
   const { openModal } = usePhoneModal()
 
   return (
@@ -21,4 +21,4 @@ export function PhoneLink({ children, className }: PhoneLinkProps) {
       {children}
     </button>
   )
-}
+})

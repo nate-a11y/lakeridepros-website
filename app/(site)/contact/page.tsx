@@ -241,6 +241,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         required
                         aria-required="true"
+                        autoComplete="name"
                         className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                       />
                     </div>
@@ -259,6 +260,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         required
                         aria-required="true"
+                        autoComplete="email"
                         className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                       />
                     </div>
@@ -278,6 +280,7 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
+                        autoComplete="tel"
                         className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
                       />
                     </div>

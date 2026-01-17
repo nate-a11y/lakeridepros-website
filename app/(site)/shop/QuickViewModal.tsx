@@ -156,7 +156,9 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                       <button
                         key={index}
                         onClick={() => setSelectedImage(index)}
-                        className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                        aria-label={`View image ${index + 1} of ${Math.min(product.images?.length || 1, 4)}`}
+                        aria-pressed={selectedImage === index}
+                        className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${
                           selectedImage === index
                             ? 'border-lrp-green'
                             : 'border-neutral-200 dark:border-dark-border hover:border-lrp-green/50'
@@ -254,15 +256,18 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                 <div id="quickview-quantity" className="flex items-center gap-3" role="group" aria-label="Quantity selector">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:border-lrp-green flex items-center justify-center font-bold transition-colors text-neutral-900 dark:text-white"
+                    aria-label="Decrease quantity"
+                    disabled={quantity <= 1}
+                    className="w-10 h-10 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:border-lrp-green flex items-center justify-center font-bold transition-colors text-neutral-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     −
                   </button>
-                  <span className="text-lg font-semibold w-12 text-center text-neutral-900 dark:text-white">
+                  <span className="text-lg font-semibold w-12 text-center text-neutral-900 dark:text-white" aria-live="polite">
                     {quantity}
                   </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
+                    aria-label="Increase quantity"
                     className="w-10 h-10 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:border-lrp-green flex items-center justify-center font-bold transition-colors text-neutral-900 dark:text-white"
                   >
                     +

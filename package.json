@@ -22,6 +22,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
+    "test:a11y": "playwright test e2e/accessibility.spec.ts",
+    "test:a11y:full": "playwright test e2e/accessibility.spec.ts --grep 'full audit' --no-deps",
     "test:all": "npm run test && npm run test:e2e"
   },
   "dependencies": {
@@ -65,6 +67,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@eslint/eslintrc": "^3.3.1",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4",
@@ -85,7 +88,8 @@
     "msw": "^2.12.2",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.0.10"
+    "vitest": "^4.0.10",
+    "vitest-axe": "^0.1.0"
   },
   "overrides": {
     "react": "19.2.3",

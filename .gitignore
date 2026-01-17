@@ -143,3 +143,4 @@ payload-types.ts
 media/
 *.backup_*
 *.original.png
+playwright-report/

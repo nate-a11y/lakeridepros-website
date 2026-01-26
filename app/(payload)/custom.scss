@@ -122,6 +122,38 @@
   a[href*="collections/media/create"] {
     display: none !important;
   }
+
+  // ==========================================================================
+  // 7. FIX IMAGE PREVIEW DRAWER BLACK SCREEN
+  // ==========================================================================
+  // Payload uses drawers for image/file previews. Ensure images are visible
+  // and not obscured by overly aggressive dark theme styling.
+
+  .drawer {
+    // Use Payload's elevation instead of pure black for better image visibility
+    background: var(--theme-elevation-100);
+  }
+
+  // File/Upload preview areas need proper background for image visibility
+  .file-details,
+  .upload,
+  [class*="file-details"],
+  [class*="upload__"] {
+    // Ensure images show against a neutral background
+    img {
+      display: block !important;
+      max-width: 100%;
+      height: auto;
+      background: var(--theme-elevation-50);
+    }
+  }
+
+  // Preview wrap should not have conflicting backgrounds
+  .upload__previewWrap,
+  .file-details__preview,
+  [class*="preview-wrap"] {
+    background: transparent;
+  }
 }
 
 // ============================================================================

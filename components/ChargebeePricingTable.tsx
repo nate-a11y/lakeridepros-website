@@ -4,15 +4,20 @@ import { useEffect, useRef } from 'react'
 import Script from 'next/script'
 
 interface ChargebeePricingTableProps {
+  /** Chargebee site name (e.g., "lakeridepros") - used for Chargebee.init() */
   site: string
+  /** Pricing table site ID (e.g., "01JH3A1YVSSYZYY4TNPCTMCVB7") - used for data-pricing-table-site */
+  pricingTableSite: string
+  /** Pricing table ID (e.g., "01JH3A1ZZA7XFPWXCVXEBH0RR4") */
   pricingTableId: string
   defaultHeight?: string
 }
 
 export function ChargebeePricingTable({
   site,
+  pricingTableSite,
   pricingTableId,
-  defaultHeight = '556px',
+  defaultHeight = '612px',
 }: ChargebeePricingTableProps) {
   const initialized = useRef(false)
 
@@ -41,9 +46,9 @@ export function ChargebeePricingTable({
     <>
       <div
         id="chargebee-pricing-table"
-        data-cb-site={site}
+        data-pricing-table-site={pricingTableSite}
         data-pricing-table-id={pricingTableId}
-        style={{ minHeight: defaultHeight }}
+        data-pricing-table-viewport-default-height={defaultHeight}
       />
       <Script
         src="https://js.chargebee.com/v2/chargebee.js"

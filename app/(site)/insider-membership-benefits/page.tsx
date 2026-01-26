@@ -126,9 +126,10 @@ export default function InsiderMembershipBenefitsPage() {
             Choose Your Membership
           </h2>
           <ChargebeePricingTable
-            site="01JH3A1YVSSYZYY4TNPCTMCVB7"
+            site="lakeridepros"
+            pricingTableSite="01JH3A1YVSSYZYY4TNPCTMCVB7"
             pricingTableId="01JH3A1ZZA7XFPWXCVXEBH0RR4"
-            defaultHeight="556px"
+            defaultHeight="611.703125px"
           />
         </div>
       </section>

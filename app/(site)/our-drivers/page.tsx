@@ -66,6 +66,29 @@ export default async function OurDriversPage() {
         </div>
       </section>
 
+      {/* Certification Banner */}
+      <section className="bg-white dark:bg-dark-bg-primary border-b border-neutral-200 dark:border-neutral-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+            <Image
+              src="https://dhwnlzborisjihhauchp.supabase.co/storage/v1/object/public/media/1769395379565-1000010589.webp"
+              alt="First Aid, CPR, AED, and Stop the Bleed Certified"
+              width={64}
+              height={64}
+              className="object-contain"
+            />
+            <div className="text-center sm:text-left">
+              <p className="font-bold text-neutral-900 dark:text-white">
+                All Drivers Certified in First Aid, CPR, AED & Stop the Bleed
+              </p>
+              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
+                Your safety is our training—every driver is emergency response certified.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Team Grid Section */}
       <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

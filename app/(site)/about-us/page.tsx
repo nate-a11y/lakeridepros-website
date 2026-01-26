@@ -159,6 +159,30 @@ export default function AboutUsPage() {
                 </p>
               </div>
             </div>
+
+            {/* Driver Certifications */}
+            <div className="mt-12 max-w-4xl mx-auto">
+              <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="flex-shrink-0">
+                    <img
+                      src="https://dhwnlzborisjihhauchp.supabase.co/storage/v1/object/public/media/1769395379565-1000010589.webp"
+                      alt="First Aid, CPR, AED, and Stop the Bleed Certified"
+                      className="w-32 h-32 object-contain"
+                    />
+                  </div>
+                  <div className="text-center md:text-left">
+                    <h3 className="text-2xl font-bold text-primary mb-2">
+                      All Drivers Certified
+                    </h3>
+                    <p className="text-neutral-700 dark:text-neutral-300">
+                      Every Lake Ride Pros driver is certified in <strong>First Aid</strong>, <strong>CPR</strong>, <strong>AED</strong>, and <strong>Stop the Bleed</strong>.
+                      Your safety isn't just our priority—it's our training.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 

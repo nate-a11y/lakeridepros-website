@@ -1,6 +1,6 @@
 'use client';
 
-import { ShieldCheck, MapPin, Award, ClipboardCheck } from 'lucide-react';
+import { ShieldCheck, MapPin, Award, ClipboardCheck, HeartPulse } from 'lucide-react';
 
 interface Reason {
   title: string;
@@ -34,6 +34,12 @@ const reasons: Reason[] = [
     icon: <Award className="w-8 h-8" />,
     accentColor: 'from-amber-500 to-orange-600',
   },
+  {
+    title: 'Emergency Certified',
+    description: "Every driver is certified in First Aid, CPR, AED, and Stop the Bleed. Your safety isn't just our priority—it's our training.",
+    icon: <HeartPulse className="w-8 h-8" />,
+    accentColor: 'from-red-500 to-rose-600',
+  },
 ];
 
 export default function WhyChooseUs() {
@@ -55,7 +61,7 @@ export default function WhyChooseUs() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {reasons.map((reason, index) => (
             <div
               key={reason.title}

@@ -298,7 +298,6 @@ td,
 
 .modal,
 .popup,
-.drawer,
 [class*="modal"],
 [class*="popup"] {
   background: var(--lrp-black) !important;
@@ -308,6 +307,41 @@ td,
 .modal-header,
 .popup-header {
   border-bottom: 1px solid var(--primary-alpha-30) !important;
+}
+
+/* ============================================
+   DRAWER STYLING - FIX IMAGE PREVIEW BLACK SCREEN
+   ============================================ */
+/* Drawers need a dark background but NOT on image preview areas */
+.drawer {
+  background: var(--dark-bg-secondary) !important;
+}
+
+/* Ensure drawer content areas have proper background */
+.drawer__content,
+.drawer__content-children {
+  background: var(--dark-bg-secondary) !important;
+}
+
+/* Image/file preview areas in drawers should have neutral background */
+.file-details__preview,
+.upload__previewWrap,
+.thumbnail,
+[class*="preview-wrap"],
+[class*="file-preview"] {
+  background: transparent !important;
+}
+
+/* Ensure images in drawer previews are visible */
+.drawer img,
+.file-details img,
+.upload__image,
+[class*="preview"] img {
+  max-width: 100%;
+  height: auto;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 /* ============================================

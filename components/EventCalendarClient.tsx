@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Calendar, MapPin, Search, Phone } from 'lucide-react'
 import { Event, Venue } from '@/lib/api/payload'
 import { getMediaUrl } from '@/lib/utils'
@@ -189,9 +190,12 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
                                   </div>
                                   {/* Event Details */}
                                   <div>
-                                    <h3 className="font-bold text-lrp-black dark:text-white">
+                                    <Link
+                                      href={`/events/${event.slug}`}
+                                      className="font-bold text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors"
+                                    >
                                       {event.name}
-                                    </h3>
+                                    </Link>
                                     {event.time && (
                                       <p className="text-sm text-gray-500 dark:text-gray-400">
                                         {event.time}

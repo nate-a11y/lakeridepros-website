@@ -698,6 +698,7 @@ export async function getUpcomingEvents(limit = 50): Promise<Event[]> {
       depth: 2,
       limit,
     },
+    cache: 'no-store', // Disable caching for real-time event updates
   });
 
   // Filter manually as backup

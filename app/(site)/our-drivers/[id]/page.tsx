@@ -8,7 +8,6 @@ import {
   getDriverImageUrl,
   getDriverRoleLabel,
   formatDriverDisplayName,
-  getDriversForWebsite,
 } from '@/lib/supabase/drivers';
 
 interface Props {
@@ -48,12 +47,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// Use dynamic rendering with ISR - regenerate every hour
+// This avoids static generation at build time while still caching
 export const dynamic = 'force-dynamic';
-
-export async function generateStaticParams() {
-  const drivers = await getDriversForWebsite();
-  return drivers.map((driver) => ({ id: driver.id }));
-}
+export const revalidate = 3600;
 
 export default async function DriverDetailPage({ params }: Props) {
   const { id } = await params;

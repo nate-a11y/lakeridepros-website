@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "npm run lint:colors && payload generate:importmap && payload generate:types && next build --webpack",
+    "build": "payload generate:importmap && payload generate:types && next build --webpack",
+    "prebuild:full": "npm run lint:colors",
+    "build:full": "npm run prebuild:full && npm run build",
     "start": "next start",
     "lint": "eslint",
     "lint:colors": "node scripts/audit-colors.js",

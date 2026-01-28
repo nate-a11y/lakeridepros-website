@@ -213,6 +213,8 @@ export function VariantSelector({
   // Determine display mode based on variant structure
   const hasColors = colorOptions.length > 0
   const hasSizes = sizeOptions.length > 0
+  // Only show generic variants if NO color AND NO size fields are populated
+  // This prevents showing variants twice (once in color/size selectors, once in generic)
   const hasOnlyGenericVariants = !hasColors && !hasSizes && variants.length > 1
 
   // Check if current size is available in selected color
@@ -342,8 +344,8 @@ export function VariantSelector({
         </div>
       )}
 
-      {/* Generic Variant Selection (no color/size structure) */}
-      {hasOnlyGenericVariants && (
+      {/* Generic Variant Selection - ONLY when no color AND no size fields exist */}
+      {hasOnlyGenericVariants && !hasColors && !hasSizes && (
         <div>
           <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
             Select Option

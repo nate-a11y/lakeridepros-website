@@ -478,7 +478,7 @@ async function processProduct(
       seenUrls.add(normalizedUrl)
       return true
     })
-    .slice(0, 5)
+    .slice(0, 10)
 
   for (let i = 0; i < imagesToProcess.length; i++) {
     const image = imagesToProcess[i]

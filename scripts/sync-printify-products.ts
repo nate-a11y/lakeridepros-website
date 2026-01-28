@@ -391,7 +391,7 @@ async function syncProducts() {
           seenUrls.add(normalizedUrl)
           return true
         })
-        .slice(0, 5)
+        .slice(0, 10)
 
       for (const [index, image] of imagesToProcess.entries()) {
         try {

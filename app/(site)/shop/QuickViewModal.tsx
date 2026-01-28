@@ -76,13 +76,38 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
     setSelectedVariant(variant)
   }, [])
 
-  // Get all images including featured
-  const allImages = [
-    ...(typeof product.featuredImage === 'object' && product.featuredImage
-      ? [{ image: product.featuredImage }]
-      : []),
-    ...(product.images || []),
-  ]
+  // Get all images including featured - robust handling for multiple data structures
+  const allImages: Array<{ image: { url?: string | null; alt?: string | null } | null }> = []
+
+  // Add featured image if it exists
+  if (product.featuredImage && typeof product.featuredImage === 'object') {
+    const featuredImg = product.featuredImage as { url?: string | null; alt?: string | null }
+    if (featuredImg.url) {
+      allImages.push({ image: featuredImg })
+    }
+  }
+
+  // Add gallery images with robust handling for different structures
+  if (product.images && Array.isArray(product.images)) {
+    for (const imgItem of product.images) {
+      if (!imgItem) continue
+
+      // Handle nested structure: images[].image
+      if ('image' in imgItem && imgItem.image && typeof imgItem.image === 'object') {
+        const nestedImg = imgItem.image as { url?: string | null; alt?: string | null }
+        if (nestedImg.url) {
+          allImages.push({ image: nestedImg })
+        }
+      }
+      // Handle flat structure: images[] might be the Media object directly
+      else if (typeof imgItem === 'object' && 'url' in imgItem) {
+        const flatImg = imgItem as unknown as { url?: string | null; alt?: string | null }
+        if (flatImg.url) {
+          allImages.push({ image: flatImg })
+        }
+      }
+    }
+  }
 
   const currentPrice = selectedVariant?.price || product.price
 

@@ -150,6 +150,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
       ]
     },
     { name: 'Blog', href: '/blog' },
+    { name: 'Events', href: '/events' },
     {
       name: 'Shop',
       href: '/shop',

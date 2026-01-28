@@ -1,0 +1,100 @@
+import type { CollectionConfig } from 'payload'
+import { createRevalidationHook } from '../lib/revalidation'
+
+export const Venues: CollectionConfig = {
+  slug: 'venues',
+  access: {
+    // Allow public read access for frontend
+    read: () => true,
+    // Require authentication for write operations
+    create: ({ req: { user } }) => !!user,
+    update: ({ req: { user } }) => !!user,
+    delete: ({ req: { user } }) => !!user,
+  },
+  admin: {
+    useAsTitle: 'name',
+    defaultColumns: ['name', 'shortName', 'active', 'order'],
+    group: 'Events',
+  },
+  hooks: {
+    afterChange: [createRevalidationHook('venues')],
+  },
+  fields: [
+    {
+      name: 'name',
+      type: 'text',
+      required: true,
+      admin: {
+        description: 'Full venue name (e.g., "Ozarks Amphitheater")',
+      },
+    },
+    {
+      name: 'shortName',
+      type: 'text',
+      admin: {
+        description: 'Short name for display in tight spaces (e.g., "OAMP")',
+      },
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        description: 'URL-friendly identifier (e.g., "ozarks-amphitheater")',
+      },
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      admin: {
+        description: 'Brief description of the venue',
+      },
+    },
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Venue logo or image',
+      },
+    },
+    {
+      name: 'address',
+      type: 'textarea',
+      admin: {
+        description: 'Venue address',
+      },
+    },
+    {
+      name: 'website',
+      type: 'text',
+      admin: {
+        description: 'Venue website URL',
+      },
+    },
+    {
+      name: 'phone',
+      type: 'text',
+      admin: {
+        description: 'Venue contact phone',
+      },
+    },
+    {
+      name: 'active',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description: 'Show this venue on the website',
+      },
+    },
+    {
+      name: 'order',
+      type: 'number',
+      defaultValue: 0,
+      admin: {
+        description: 'Display order (lower numbers appear first)',
+      },
+    },
+  ],
+}

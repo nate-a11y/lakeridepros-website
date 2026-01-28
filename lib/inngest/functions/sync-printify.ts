@@ -197,6 +197,7 @@ interface OptionLookup {
   title: string
   type: 'color' | 'size' | 'surface' | string
   optionName: string
+  colorHex?: string // Hex color value from Printify (e.g., "#000000")
 }
 
 /**
@@ -213,6 +214,8 @@ function buildOptionLookup(options: PrintifyOption[]): Map<number, OptionLookup>
         title: value.title,
         type: option.type,
         optionName: option.name,
+        // Extract hex color from Printify's colors array (first value)
+        colorHex: value.colors?.[0] || undefined,
       })
     }
   }
@@ -221,14 +224,15 @@ function buildOptionLookup(options: PrintifyOption[]): Map<number, OptionLookup>
 }
 
 /**
- * Extract size and color values from a variant's option IDs
+ * Extract size, color, and hex color values from a variant's option IDs
  */
 function extractVariantOptions(
   variantOptionIds: number[],
   optionLookup: Map<number, OptionLookup>
-): { size: string; color: string } {
+): { size: string; color: string; colorHex: string } {
   let size = ''
   let color = ''
+  let colorHex = ''
 
   for (const optionId of variantOptionIds) {
     const option = optionLookup.get(optionId)
@@ -239,14 +243,16 @@ function extractVariantOptions(
       size = option.title
     } else if (option.type === 'color') {
       color = option.title
+      colorHex = option.colorHex || ''
     } else if (option.type === 'surface') {
       // Surface types (like "Transparent" or "White" for stickers)
       // can be treated as color/material
       color = option.title
+      colorHex = option.colorHex || ''
     }
   }
 
-  return { size, color }
+  return { size, color, colorHex }
 }
 
 // Retry helper function with exponential backoff
@@ -492,11 +498,11 @@ async function processProduct(
   // Build option lookup from product-level options
   const optionLookup = buildOptionLookup(printifyProduct.options || [])
 
-  // Map variants with proper size/color extraction
+  // Map variants with proper size/color/hex extraction
   const variants = printifyProduct.variants
     .filter((v: PrintifyVariant) => v.is_enabled && v.is_available)
     .map((variant: PrintifyVariant) => {
-      const { size, color } = extractVariantOptions(variant.options, optionLookup)
+      const { size, color, colorHex } = extractVariantOptions(variant.options, optionLookup)
 
       return {
         name: variant.title,
@@ -505,6 +511,7 @@ async function processProduct(
         inStock: variant.is_available,
         size,
         color,
+        colorHex,
         printifyVariantId: variant.id.toString(),
       }
     })

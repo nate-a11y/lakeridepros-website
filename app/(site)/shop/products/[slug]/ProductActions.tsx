@@ -1,20 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Image from 'next/image'
-import { ShoppingCart, Check } from 'lucide-react'
+import { ShoppingCart, Check, Package, Truck, Shield } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
-import { getMediaUrl } from '@/lib/utils'
+import { getMediaUrl, cn } from '@/lib/utils'
+import { VariantSelector } from '@/components/shop'
 import type { Product } from '@/src/payload-types'
 
 interface ProductActionsProps {
   product: Product
 }
 
-export default function ProductActions({ product }: ProductActionsProps) {
-  type ProductVariant = NonNullable<Product['variants']>[number];
-  type ProductImage = NonNullable<Product['images']>[number];
+type ProductVariant = NonNullable<Product['variants']>[number]
+type ProductImage = NonNullable<Product['images']>[number]
 
+export default function ProductActions({ product }: ProductActionsProps) {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
     product.variants && product.variants.length > 0 ? product.variants[0] : null
   )
@@ -25,11 +26,10 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
   const { addItem } = useCart()
 
-  const handleAddToCart = () => {
+  const handleAddToCart = useCallback(() => {
     if (!selectedVariant) return
 
     const finalPrice = selectedVariant.price || product.price
-
     const featuredImage = typeof product.featuredImage === 'object' ? product.featuredImage : null
 
     addItem({
@@ -49,87 +49,115 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
     setAddedToCart(true)
     setTimeout(() => setAddedToCart(false), 3000)
-  }
+  }, [selectedVariant, product, quantity, personalizationText, addItem])
 
-  // Group variants by size and color (filter out empty values)
-  const sizes = Array.from(new Set((product.variants || []).map((v) => v.size || '').filter((s) => s)))
-  const colors = Array.from(new Set((product.variants || []).map((v) => v.color || '').filter((c) => c)))
+  const handleVariantChange = useCallback((variant: ProductVariant) => {
+    setSelectedVariant(variant)
+  }, [])
+
+  // Get all images including featured
+  const allImages = [
+    ...(typeof product.featuredImage === 'object' && product.featuredImage
+      ? [{ image: product.featuredImage }]
+      : []),
+    ...(product.images || []),
+  ]
+
+  const currentPrice = selectedVariant?.price || product.price
 
   return (
-    <div className="flex flex-col lg:flex-row gap-12">
-      {/* Image Gallery (Client-side for interactivity) */}
-      <div className="lg:w-1/2 w-full">
+    <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+      {/* Image Gallery */}
+      <div className="lg:w-1/2 w-full space-y-4">
         {/* Main Image */}
-        <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden mb-4 w-full">
+        <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-2xl overflow-hidden relative group">
           {(() => {
-            const imageItem = product.images?.[selectedImage];
-            const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null;
+            const imageItem = allImages[selectedImage]
+            const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null
             return imageObj?.url ? (
               <Image
                 src={getMediaUrl(imageObj.url)}
                 alt={imageObj.alt || product.name}
-                width={600}
-                height={600}
-                className="w-full h-full object-cover"
+                width={800}
+                height={800}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 priority
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <ShoppingCart className="w-32 h-32 text-neutral-300 dark:text-neutral-500" />
+                <Package className="w-32 h-32 text-neutral-300 dark:text-neutral-600" />
               </div>
-            );
+            )
           })()}
         </div>
 
         {/* Thumbnail Gallery */}
-        {product.images && product.images.length > 1 && (
-          <div className="grid grid-cols-4 gap-4">
-            {product.images.map((img: ProductImage, index: number) => {
-              const imageObj = typeof img.image === 'object' ? img.image : null;
+        {allImages.length > 1 && (
+          <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
+            {allImages.map((img: ProductImage, index: number) => {
+              const imageObj = typeof img.image === 'object' ? img.image : null
               return imageObj?.url ? (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  aria-label={`View image ${index + 1} of ${product.images?.length || 1}`}
+                  aria-label={`View image ${index + 1} of ${allImages.length}`}
                   aria-pressed={selectedImage === index}
-                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                  className={cn(
+                    'flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 snap-start',
                     selectedImage === index
-                      ? 'border-lrp-green'
-                      : 'border-neutral-300 dark:border-dark-border hover:border-lrp-green'
-                  }`}
+                      ? 'border-lrp-green ring-2 ring-lrp-green/20'
+                      : 'border-neutral-200 dark:border-dark-border hover:border-lrp-green/50'
+                  )}
                 >
                   <Image
                     src={getMediaUrl(imageObj.url)}
-                    alt={imageObj.alt || product.name}
-                    width={150}
-                    height={150}
+                    alt={imageObj.alt || `${product.name} thumbnail ${index + 1}`}
+                    width={80}
+                    height={80}
                     className="w-full h-full object-cover"
                   />
                 </button>
-              ) : null;
+              ) : null
             })}
           </div>
         )}
       </div>
 
       {/* Product Info */}
-      <div className="lg:w-1/2">
-        <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
-          {typeof product.name === 'string' ? product.name : 'Product'}
-        </h1>
+      <div className="lg:w-1/2 space-y-6">
+        {/* Title */}
+        <div>
+          <h1 className="text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-white leading-tight">
+            {product.name}
+          </h1>
+
+          {/* Categories */}
+          {product.categories && product.categories.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-3">
+              {product.categories.map((cat) => (
+                <span
+                  key={cat}
+                  className="px-3 py-1 text-xs font-medium rounded-full bg-lrp-green/10 text-lrp-green-dark dark:text-lrp-green-light"
+                >
+                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-3 mb-6">
-          <span className="text-4xl font-bold text-lrp-green-dark dark:text-lrp-green-light">
-            ${(selectedVariant?.price || product.price).toFixed(2)}
+        <div className="flex items-baseline gap-3">
+          <span className="text-3xl lg:text-4xl font-bold text-lrp-green-dark dark:text-lrp-green-light">
+            ${currentPrice.toFixed(2)}
           </span>
-          {product.compareAtPrice && product.compareAtPrice > product.price && (
+          {product.compareAtPrice && product.compareAtPrice > currentPrice && (
             <>
-              <span className="text-2xl text-neutral-500 dark:text-neutral-400 line-through">
+              <span className="text-xl text-neutral-400 dark:text-neutral-500 line-through">
                 ${product.compareAtPrice.toFixed(2)}
               </span>
-              <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                Save ${(product.compareAtPrice - product.price).toFixed(2)}
+              <span className="bg-red-500 text-white px-2.5 py-1 rounded-full text-xs font-bold">
+                Save ${(product.compareAtPrice - currentPrice).toFixed(2)}
               </span>
             </>
           )}
@@ -137,183 +165,34 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
         {/* Description */}
         <div
-          className="text-neutral-700 dark:text-neutral-300 mb-8 leading-relaxed prose prose-sm max-w-none"
+          className="text-neutral-600 dark:text-neutral-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{
             __html: typeof product.description === 'string'
               ? product.description
               : product.description?.root?.children?.[0]?.children?.[0]?.text
                 ? product.description.root.children[0].children[0].text
-                : product.shortDescription || 'High-quality Lake Ride Pros merchandise'
+                : product.shortDescription || ''
           }}
         />
 
-        {/* Variant Selection - Improved UI */}
-        {sizes.length > 0 && sizes.length <= 8 ? (
-          // Show size buttons if 8 or fewer sizes
-          <div className="mb-6">
-            <label htmlFor="product-size-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
-              Select Size:
-            </label>
-            <div id="product-size-selection" className="grid grid-cols-4 gap-3" role="group" aria-label="Size options">
-              {sizes.map((size: string) => {
-                const variant = product.variants?.find((v: ProductVariant) => v.size === size)
-                const isSelected = selectedVariant?.size === size
-                const inStock = variant?.inStock
-
-                return (
-                  <button
-                    key={size}
-                    onClick={() => inStock && setSelectedVariant(variant)}
-                    disabled={!inStock}
-                    aria-label={`Select size ${size.toUpperCase()}${!inStock ? ', out of stock' : ''}`}
-                    aria-pressed={isSelected}
-                    className={`py-3 px-4 rounded-lg border-2 font-semibold transition-all ${
-                      isSelected
-                        ? 'border-lrp-green bg-lrp-green text-white'
-                        : inStock
-                        ? 'border-neutral-300 dark:border-dark-border hover:border-lrp-green dark:text-white'
-                        : 'border-neutral-200 dark:border-dark-border opacity-50 cursor-not-allowed'
-                    }`}
-                  >
-                    {size.toUpperCase()}
-                    {!inStock && <span className="block text-xs">Out</span>}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        ) : sizes.length > 8 ? (
-          // Show dropdown if more than 8 sizes
-          <div className="mb-6">
-            <label htmlFor="product-size-dropdown" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
-              Select Size:
-            </label>
-            <select
-              id="product-size-dropdown"
-              value={selectedVariant?.size || ''}
-              onChange={(e) => {
-                const variant = product.variants?.find((v: ProductVariant) => v.size === e.target.value)
-                if (variant) setSelectedVariant(variant)
-              }}
-              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold focus:outline-none focus:border-lrp-green transition-all dark:[color-scheme:dark]"
-            >
-              {sizes.map((size: string) => {
-                const variant = product.variants?.find((v: ProductVariant) => v.size === size)
-                const inStock = variant?.inStock
-
-                return (
-                  <option key={size} value={size} disabled={!inStock} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">
-                    {size.toUpperCase()} {!inStock ? '(Out of Stock)' : ''}
-                  </option>
-                )
-              })}
-            </select>
-          </div>
-        ) : product.variants && product.variants.length > 1 && product.variants.length <= 5 ? (
-          // Show buttons if 5 or fewer general variants
-          <div className="mb-6">
-            <label htmlFor="product-option-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
-              Select Option:
-            </label>
-            <div id="product-option-selection" className="flex flex-col gap-2" role="group" aria-label="Product options">
-              {product.variants?.map((variant: ProductVariant, index: number) => {
-                const isSelected = selectedVariant?.sku === variant.sku
-                const inStock = variant.inStock
-
-                return (
-                  <button
-                    key={variant.sku || index}
-                    onClick={() => inStock && setSelectedVariant(variant)}
-                    disabled={!inStock}
-                    aria-label={`Select option ${variant.name}${variant.price && variant.price !== product.price ? `, $${variant.price.toFixed(2)}` : ''}${!inStock ? ', out of stock' : ''}`}
-                    aria-pressed={isSelected}
-                    className={`py-3 px-4 rounded-lg border-2 font-semibold transition-all text-left ${
-                      isSelected
-                        ? 'border-lrp-green bg-lrp-green text-white'
-                        : inStock
-                        ? 'border-neutral-300 dark:border-dark-border hover:border-lrp-green dark:text-white'
-                        : 'border-neutral-200 dark:border-dark-border opacity-50 cursor-not-allowed'
-                    }`}
-                  >
-                    <div className="flex justify-between items-center">
-                      <span>{variant.name}</span>
-                      {variant.price && variant.price !== product.price && (
-                        <span className="text-sm">${variant.price.toFixed(2)}</span>
-                      )}
-                    </div>
-                    {!inStock && <span className="block text-xs mt-1">Out of Stock</span>}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        ) : product.variants && product.variants.length > 5 ? (
-          // Show dropdown if more than 5 general variants
-          <div className="mb-6">
-            <label htmlFor="product-option-dropdown" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
-              Select Option:
-            </label>
-            <select
-              id="product-option-dropdown"
-              value={selectedVariant?.sku || ''}
-              onChange={(e) => {
-                const variant = product.variants?.find((v: ProductVariant) => v.sku === e.target.value)
-                if (variant) setSelectedVariant(variant)
-              }}
-              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold focus:outline-none focus:border-lrp-green transition-all dark:[color-scheme:dark]"
-            >
-              {product.variants?.map((variant: ProductVariant, index: number) => {
-                const inStock = variant.inStock
-                const priceDisplay = variant.price && variant.price !== product.price
-                  ? ` - $${variant.price.toFixed(2)}`
-                  : ''
-
-                return (
-                  <option key={variant.sku || index} value={variant.sku} disabled={!inStock} className="bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white">
-                    {variant.name}{priceDisplay} {!inStock ? '(Out of Stock)' : ''}
-                  </option>
-                )
-              })}
-            </select>
-          </div>
-        ) : null}
-
-        {/* Color Selection */}
-        {colors.length > 1 && (
-          <div className="mb-6">
-            <label htmlFor="product-color-selection" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
-              Select Color:
-            </label>
-            <div id="product-color-selection" className="flex gap-3" role="group" aria-label="Color options">
-              {colors.map((color: string) => {
-                const variant = product.variants?.find((v: ProductVariant) => v.color === color)
-                const isSelected = selectedVariant?.color === color
-
-                return (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedVariant(variant)}
-                    aria-label={`Select color ${color}`}
-                    aria-pressed={isSelected}
-                    className={`py-2 px-6 rounded-lg border-2 font-semibold transition-all ${
-                      isSelected
-                        ? 'border-lrp-green bg-lrp-green text-white'
-                        : 'border-neutral-300 dark:border-dark-border hover:border-lrp-green dark:text-white'
-                    }`}
-                  >
-                    {color}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+        {/* Variant Selection */}
+        {product.variants && product.variants.length > 0 && (
+          <VariantSelector
+            variants={product.variants}
+            selectedVariant={selectedVariant}
+            onVariantChange={handleVariantChange}
+            basePrice={product.price}
+          />
         )}
 
         {/* Personalization */}
         {product.personalization?.enabled && (
-          <div className="mb-6">
-            <label htmlFor="product-personalization" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
-              {product.personalization.instructions || 'Personalize your item'}:
+          <div className="space-y-2">
+            <label
+              htmlFor="product-personalization"
+              className="block text-sm font-semibold text-neutral-900 dark:text-white"
+            >
+              {product.personalization.instructions || 'Add Personalization'}
             </label>
             <input
               id="product-personalization"
@@ -321,36 +200,41 @@ export default function ProductActions({ product }: ProductActionsProps) {
               value={personalizationText}
               onChange={(e) => setPersonalizationText(e.target.value)}
               maxLength={product.personalization.maxLength || 100}
-              placeholder={product.personalization.instructions || 'Enter your personalization text'}
-              className="w-full px-4 py-3 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus:outline-none focus:border-lrp-green transition-all"
+              placeholder="Enter your text here..."
+              className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:border-lrp-green transition-all"
             />
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">
               {personalizationText.length}/{product.personalization.maxLength || 100} characters
             </p>
           </div>
         )}
 
         {/* Quantity */}
-        <div className="mb-8">
-          <label htmlFor="product-quantity" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
-            Quantity:
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-neutral-900 dark:text-white">
+            Quantity
           </label>
-          <div id="product-quantity" className="flex items-center gap-4" role="group" aria-label="Quantity selector">
+          <div className="flex items-center gap-1" role="group" aria-label="Quantity selector">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               aria-label="Decrease quantity"
               disabled={quantity <= 1}
-              className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl text-neutral-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-12 h-12 rounded-xl border-2 border-neutral-200 dark:border-dark-border hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary font-bold text-xl text-neutral-900 dark:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all"
             >
               −
             </button>
-            <span className="text-2xl font-bold w-16 text-center dark:text-white" aria-live="polite">
-              {quantity}
-            </span>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+              min="1"
+              aria-label="Quantity"
+              className="w-16 h-12 text-center text-xl font-bold border-2 border-neutral-200 dark:border-dark-border rounded-xl bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white focus:outline-none focus:border-lrp-green transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            />
             <button
               onClick={() => setQuantity(quantity + 1)}
               aria-label="Increase quantity"
-              className="w-12 h-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary font-bold text-xl text-neutral-900 dark:text-white"
+              className="w-12 h-12 rounded-xl border-2 border-neutral-200 dark:border-dark-border hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary font-bold text-xl text-neutral-900 dark:text-white transition-all"
             >
               +
             </button>
@@ -361,33 +245,56 @@ export default function ProductActions({ product }: ProductActionsProps) {
         <button
           onClick={handleAddToCart}
           disabled={!selectedVariant || !selectedVariant.inStock || addedToCart}
-          className="w-full bg-lrp-green hover:bg-lrp-green-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-white py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-3 mb-4"
+          className={cn(
+            'w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3',
+            addedToCart
+              ? 'bg-green-500 text-white'
+              : selectedVariant?.inStock
+                ? 'bg-lrp-green hover:bg-lrp-green-dark text-white shadow-lg shadow-lrp-green/25 hover:shadow-xl hover:shadow-lrp-green/30 hover:-translate-y-0.5'
+                : 'bg-neutral-300 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 cursor-not-allowed'
+          )}
         >
           {addedToCart ? (
             <>
               <Check className="w-6 h-6" />
               Added to Cart!
             </>
-          ) : (
+          ) : selectedVariant?.inStock ? (
             <>
               <ShoppingCart className="w-6 h-6" />
               Add to Cart
             </>
+          ) : (
+            'Out of Stock'
           )}
         </button>
 
-        {/* Product Details */}
-        <div className="border-t dark:border-dark-border pt-6 space-y-4">
-          <h3 className="font-bold text-lg text-neutral-900 dark:text-white">
-            Product Details:
-          </h3>
-          <ul className="space-y-2 text-neutral-700 dark:text-neutral-300">
-            <li>• High-quality materials</li>
-            <li>• Comfortable fit</li>
-            <li>• Official Lake Ride Pros merchandise</li>
-            <li>• Shipped from USA</li>
-            <li>• 7-14 day delivery</li>
-          </ul>
+        {/* Trust Badges */}
+        <div className="grid grid-cols-3 gap-4 pt-4 border-t dark:border-dark-border">
+          <div className="flex flex-col items-center text-center gap-2">
+            <div className="w-10 h-10 rounded-full bg-lrp-green/10 flex items-center justify-center">
+              <Truck className="w-5 h-5 text-lrp-green" />
+            </div>
+            <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+              Free Shipping $50+
+            </span>
+          </div>
+          <div className="flex flex-col items-center text-center gap-2">
+            <div className="w-10 h-10 rounded-full bg-lrp-green/10 flex items-center justify-center">
+              <Package className="w-5 h-5 text-lrp-green" />
+            </div>
+            <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+              Ships in 7-14 Days
+            </span>
+          </div>
+          <div className="flex flex-col items-center text-center gap-2">
+            <div className="w-10 h-10 rounded-full bg-lrp-green/10 flex items-center justify-center">
+              <Shield className="w-5 h-5 text-lrp-green" />
+            </div>
+            <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400">
+              Quality Guaranteed
+            </span>
+          </div>
         </div>
       </div>
     </div>

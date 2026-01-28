@@ -13,7 +13,6 @@ interface ProductActionsProps {
 }
 
 type ProductVariant = NonNullable<Product['variants']>[number]
-type ProductImage = NonNullable<Product['images']>[number]
 
 export default function ProductActions({ product }: ProductActionsProps) {
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(
@@ -119,8 +118,8 @@ export default function ProductActions({ product }: ProductActionsProps) {
         {/* Thumbnail Gallery */}
         {allImages.length > 1 && (
           <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
-            {allImages.map((img: ProductImage, index: number) => {
-              const imageObj = typeof img.image === 'object' ? img.image : null
+            {allImages.map((img, index) => {
+              const imageObj = img.image
               return imageObj?.url ? (
                 <button
                   key={index}

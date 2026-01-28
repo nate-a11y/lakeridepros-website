@@ -108,6 +108,7 @@ export default async function Footer() {
       { name: 'Pricing', href: '/pricing' },
       { name: 'Gift Cards', href: '/gift-cards' },
       { name: 'Check Gift Card Balance', href: '/gift-card-balance' },
+      { name: 'Shop', href: '/shop' },
     ],
     services: dynamicServices,
     serviceAreas: [

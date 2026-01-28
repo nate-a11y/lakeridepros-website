@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Calendar, MapPin, Search, Phone } from 'lucide-react'
+import { Calendar, MapPin, Search } from 'lucide-react'
 import { Event, Venue } from '@/lib/api/payload'
 import { getMediaUrl } from '@/lib/utils'
 import RideAvailabilityBadge from './RideAvailabilityBadge'
@@ -252,13 +252,15 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
 
           {/* Contact CTA */}
           <div className="mt-8 text-center">
-            <a
-              href="tel:573-206-9499"
-              className="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-semibold text-lg transition-colors"
+            <Link
+              href="/book"
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-black font-bold px-8 py-3 rounded-lg transition-colors text-lg"
             >
-              <Phone className="w-5 h-5" />
-              Call (573) 206-9499 to Reserve Your Ride
-            </a>
+              Book Your Ride Online
+            </Link>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3">
+              Or call <a href="tel:573-206-9499" className="text-primary hover:text-primary-dark">(573) 206-9499</a>
+            </p>
           </div>
         </div>
       </section>

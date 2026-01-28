@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getEventBySlug, getUpcomingEvents } from '@/lib/api/payload'
 import { getMediaUrl } from '@/lib/utils'
-import { Calendar, Clock, MapPin, Phone, ArrowLeft } from 'lucide-react'
+import { Calendar, Clock, MapPin, ArrowLeft } from 'lucide-react'
 import RideAvailabilityBadge from '@/components/RideAvailabilityBadge'
 
 interface Props {
@@ -124,13 +124,15 @@ export default async function EventDetailPage({ params }: Props) {
                 <p className="text-gray-300 text-lg mb-6">{event.description}</p>
               )}
 
-              <a
-                href="tel:573-206-9499"
+              <Link
+                href="/book"
                 className="inline-flex items-center bg-primary hover:bg-primary-dark text-black font-bold px-8 py-4 rounded-lg transition-colors text-lg"
               >
-                <Phone className="w-5 h-5 mr-2" />
-                Call to Reserve: (573) 206-9499
-              </a>
+                Book Your Ride Online
+              </Link>
+              <p className="text-gray-400 text-sm mt-3">
+                Or call <a href="tel:573-206-9499" className="text-primary hover:text-primary-dark">(573) 206-9499</a>
+              </p>
             </div>
 
             {/* Event Image */}
@@ -259,23 +261,17 @@ export default async function EventDetailPage({ params }: Props) {
             Ready to Book Your Ride?
           </h2>
           <p className="text-black/80 text-lg mb-8">
-            Call us now to reserve your transportation to {event.name}.
+            Reserve your transportation to {event.name} in just a few clicks.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:573-206-9499"
-              className="inline-flex items-center justify-center bg-black text-white hover:bg-gray-800 px-10 py-4 rounded-lg font-bold text-lg transition-all"
-            >
-              <Phone className="w-5 h-5 mr-2" />
-              (573) 206-9499
-            </a>
-            <Link
-              href="/book"
-              className="inline-block bg-white text-black hover:bg-gray-100 px-10 py-4 rounded-lg font-bold text-lg transition-all"
-            >
-              Book Online
-            </Link>
-          </div>
+          <Link
+            href="/book"
+            className="inline-block bg-black text-white hover:bg-gray-800 px-12 py-4 rounded-lg font-bold text-lg transition-all"
+          >
+            Book Online Now
+          </Link>
+          <p className="text-black/70 text-sm mt-4">
+            Prefer to talk? Call <a href="tel:573-206-9499" className="font-semibold hover:underline">(573) 206-9499</a>
+          </p>
         </div>
       </section>
     </div>

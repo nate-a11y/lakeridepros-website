@@ -200,6 +200,13 @@ export const Products: CollectionConfig = {
           },
         },
         {
+          name: 'colorHex',
+          type: 'text',
+          admin: {
+            description: 'Hex color code from Printify (e.g., "#000000")',
+          },
+        },
+        {
           name: 'printifyVariantId',
           type: 'text',
           admin: {

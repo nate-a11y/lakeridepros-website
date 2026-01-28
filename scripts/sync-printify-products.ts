@@ -6,39 +6,235 @@ const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
 const PRINTIFY_SHOP_ID = process.env.PRINTIFY_SHOP_ID
 
+// ============================================================================
+// Printify API Types (matching actual API response structure)
+// ============================================================================
+
+interface PrintifyImage {
+  src: string
+  position: string
+  is_default: boolean
+  variant_ids: number[]
+}
+
+/** Individual option value (e.g., a specific color or size) */
+interface PrintifyOptionValue {
+  id: number
+  title: string
+  colors?: string[] // Only present for color options
+}
+
+/** Product-level option definition (e.g., "Colors", "Sizes", "Phone Models") */
+interface PrintifyOption {
+  name: string
+  type: 'color' | 'size' | 'surface' | string
+  values: PrintifyOptionValue[]
+  display_in_preview?: boolean
+}
+
+/** Variant - options is an array of numeric IDs referencing PrintifyOptionValue.id */
+interface PrintifyVariant {
+  id: number
+  sku: string
+  cost: number
+  price: number
+  title: string
+  grams: number
+  is_enabled: boolean
+  is_default: boolean
+  is_available: boolean
+  options: number[] // Array of option value IDs (not objects!)
+  quantity?: number
+}
+
+interface PrintifyPersonalization {
+  instructions: string
+  buyer_response_limit?: number
+}
+
+interface PrintifySalesChannelProperties {
+  personalisation?: PrintifyPersonalization[]
+  [key: string]: unknown
+}
+
 interface PrintifyProduct {
   id: string
   title: string
   description: string
   tags: string[]
-  images: Array<{
-    src: string
-    position: string
-    is_default: boolean
-    variant_ids: number[]
-  }>
-  variants: Array<{
-    id: number
-    sku: string
-    cost: number
-    price: number
-    title: string
-    grams: number
-    is_enabled: boolean
-    is_default: boolean
-    is_available: boolean
-    options: Array<{ [key: string]: string }>
-  }>
-  options: Array<{
-    name: string
-    type: string
-    values: Array<{ id: number; title: string }>
-  }>
+  images: PrintifyImage[]
+  options: PrintifyOption[]
+  variants: PrintifyVariant[]
   blueprint_id: number
   print_provider_id: number
-  print_areas: Record<string, unknown>[]
-  sales_channel_properties: Record<string, unknown>[]
+  visible: boolean
+  sales_channel_properties?: PrintifySalesChannelProperties
 }
+
+// ============================================================================
+// Category Mapping - Maps Printify tags to our store categories
+// ============================================================================
+
+type StoreCategory = 'apparel' | 'accessories' | 'drinkware' | 'home'
+
+const TAG_TO_CATEGORY: Record<string, StoreCategory> = {
+  // Apparel
+  "Men's Clothing": 'apparel',
+  "Women's Clothing": 'apparel',
+  'Hoodies': 'apparel',
+  'T-shirts': 'apparel',
+  'Sweatshirts': 'apparel',
+  'Tank Tops': 'apparel',
+  'Long Sleeves': 'apparel',
+  'Tops': 'apparel',
+  'Crop Hoodie': 'apparel',
+  'Crop tops': 'apparel',
+  'Polo': 'apparel',
+  'Polo shirt': 'apparel',
+  'Sportswear': 'apparel',
+  'Premium Apparel': 'apparel',
+
+  // Accessories
+  'Accessories': 'accessories',
+  'Phone Cases': 'accessories',
+  'iPhone Cases': 'accessories',
+  'Hats': 'accessories',
+  'Car Accessories': 'accessories',
+  'Stickers': 'accessories',
+  'Magnets & Stickers': 'accessories',
+  'Travel Accessories': 'accessories',
+  'Shoes': 'accessories',
+  'footwear': 'accessories',
+
+  // Drinkware
+  'Coffee Mugs': 'drinkware',
+  'Mugs': 'drinkware',
+  'Tumblers': 'drinkware',
+  'Bottles & Tumblers': 'drinkware',
+  'Glassware': 'drinkware',
+  'Drink': 'drinkware',
+  'Drinks': 'drinkware',
+  'Beverage': 'drinkware',
+
+  // Home & Living
+  'Home & Living': 'home',
+  'Home Decor': 'home',
+  'Blankets': 'home',
+  'Towels': 'home',
+  'Towel': 'home',
+  'Art & Wall Decor': 'home',
+  'Canvas': 'home',
+  'Poster': 'home',
+  'Posters': 'home',
+  'Decor': 'home',
+  'Bedding': 'home',
+  'Bed': 'home',
+  'Kitchen': 'home',
+  'Ornaments': 'home',
+  'ornament': 'home',
+  'Seasonal Decorations': 'home',
+}
+
+/**
+ * Determine categories from Printify tags
+ */
+function categorizeFromTags(tags: string[], title: string): StoreCategory[] {
+  const categories = new Set<StoreCategory>()
+
+  for (const tag of tags) {
+    const category = TAG_TO_CATEGORY[tag]
+    if (category) {
+      categories.add(category)
+    }
+  }
+
+  if (categories.size === 0) {
+    const titleLower = title.toLowerCase()
+
+    if (titleLower.includes('shirt') || titleLower.includes('hoodie') ||
+        titleLower.includes('sweatshirt') || titleLower.includes('tee') ||
+        titleLower.includes('tank') || titleLower.includes('polo')) {
+      categories.add('apparel')
+    }
+    if (titleLower.includes('mug') || titleLower.includes('cup') ||
+        titleLower.includes('tumbler') || titleLower.includes('bottle') ||
+        titleLower.includes('glass')) {
+      categories.add('drinkware')
+    }
+    if (titleLower.includes('hat') || titleLower.includes('cap') ||
+        titleLower.includes('bag') || titleLower.includes('phone') ||
+        titleLower.includes('sticker') || titleLower.includes('case') ||
+        titleLower.includes('flip flop')) {
+      categories.add('accessories')
+    }
+    if (titleLower.includes('blanket') || titleLower.includes('towel') ||
+        titleLower.includes('canvas') || titleLower.includes('poster') ||
+        titleLower.includes('ornament') || titleLower.includes('decor')) {
+      categories.add('home')
+    }
+  }
+
+  if (categories.size === 0) {
+    categories.add('apparel')
+  }
+
+  return Array.from(categories)
+}
+
+// ============================================================================
+// Option Value Mapping
+// ============================================================================
+
+interface OptionLookup {
+  id: number
+  title: string
+  type: string
+  optionName: string
+}
+
+function buildOptionLookup(options: PrintifyOption[]): Map<number, OptionLookup> {
+  const lookup = new Map<number, OptionLookup>()
+
+  for (const option of options) {
+    for (const value of option.values) {
+      lookup.set(value.id, {
+        id: value.id,
+        title: value.title,
+        type: option.type,
+        optionName: option.name,
+      })
+    }
+  }
+
+  return lookup
+}
+
+function extractVariantOptions(
+  variantOptionIds: number[],
+  optionLookup: Map<number, OptionLookup>
+): { size: string; color: string } {
+  let size = ''
+  let color = ''
+
+  for (const optionId of variantOptionIds) {
+    const option = optionLookup.get(optionId)
+    if (!option) continue
+
+    if (option.type === 'size') {
+      size = option.title
+    } else if (option.type === 'color') {
+      color = option.title
+    } else if (option.type === 'surface') {
+      color = option.title
+    }
+  }
+
+  return { size, color }
+}
+
+// ============================================================================
+// Image handling
+// ============================================================================
 
 async function downloadImage(url: string): Promise<Buffer> {
   const response = await fetch(url, {
@@ -64,10 +260,6 @@ async function uploadImageToPayload(
   imageBuffer: Buffer,
   filename: string
 ): Promise<Media> {
-  // Create a File-like object for Payload
-  const blob = new Blob([imageBuffer])
-  const _file = new File([blob], filename, { type: 'image/png' })
-
   const media = await payload.create({
     collection: 'media',
     data: {
@@ -82,7 +274,7 @@ async function uploadImageToPayload(
     overrideAccess: true,
   })
 
-  return media
+  return media as unknown as Media
 }
 
 function slugify(text: string): string {
@@ -92,7 +284,13 @@ function slugify(text: string): string {
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .trim()
+    .substring(0, 100)
+    .replace(/-+$/, '')
 }
+
+// ============================================================================
+// Main sync function
+// ============================================================================
 
 async function syncProducts() {
   if (!PRINTIFY_TOKEN || !PRINTIFY_SHOP_ID) {
@@ -102,7 +300,6 @@ async function syncProducts() {
 
   console.log('🚀 Starting Printify product sync...')
 
-  // Initialize Payload
   const payload = await getPayload({ config })
 
   // Fetch all products from Printify with pagination
@@ -110,7 +307,7 @@ async function syncProducts() {
   let allProducts: PrintifyProduct[] = []
   let currentPage = 1
   let hasMorePages = true
-  const limit = 50 // Max allowed by Printify API
+  const limit = 50
 
   while (hasMorePages) {
     const response = await fetch(
@@ -133,13 +330,17 @@ async function syncProducts() {
     allProducts = allProducts.concat(products)
     console.log(`  📄 Fetched page ${current_page} of ${last_page} (${products.length} products)`)
 
-    // Check if there are more pages to fetch
     hasMorePages = current_page < last_page
     currentPage++
   }
 
-  const printifyProducts = allProducts
-  console.log(`✅ Found ${printifyProducts.length} total products in Printify`)
+  // Filter to only visible products
+  const printifyProducts = allProducts.filter(p => p.visible === true)
+  console.log(`✅ Found ${allProducts.length} total products, ${printifyProducts.length} visible`)
+
+  let created = 0
+  let updated = 0
+  let failed = 0
 
   for (const printifyProduct of printifyProducts) {
     try {
@@ -165,23 +366,33 @@ async function syncProducts() {
         console.log('  📷 Uploading featured image...')
         const imageBuffer = await downloadImage(defaultImage.src)
         const media = await uploadImageToPayload(
-          payload,
+          payload as unknown as PayloadInstance,
           imageBuffer,
           `${slug}-featured.png`
         )
         featuredImageId = media.id as number
       }
 
-      // Upload additional images
+      // Upload additional images (deduplicated)
       const additionalImages: Array<{ image: number }> = []
-      for (const [index, image] of printifyProduct.images.slice(0, 5).entries()) {
-        if (image === defaultImage) continue
+      const seenUrls = new Set(defaultImage ? [defaultImage.src.split('?')[0].toLowerCase()] : [])
 
+      const imagesToProcess = printifyProduct.images
+        .filter((img) => {
+          if (img.is_default) return false
+          const normalizedUrl = img.src.split('?')[0].toLowerCase()
+          if (seenUrls.has(normalizedUrl)) return false
+          seenUrls.add(normalizedUrl)
+          return true
+        })
+        .slice(0, 5)
+
+      for (const [index, image] of imagesToProcess.entries()) {
         try {
           console.log(`  📷 Uploading image ${index + 1}...`)
           const imageBuffer = await downloadImage(image.src)
           const media = await uploadImageToPayload(
-            payload,
+            payload as unknown as PayloadInstance,
             imageBuffer,
             `${slug}-${index + 1}.png`
           )
@@ -191,18 +402,18 @@ async function syncProducts() {
         }
       }
 
-      // Map variants
+      // Build option lookup and map variants
+      const optionLookup = buildOptionLookup(printifyProduct.options || [])
+
       const variants = printifyProduct.variants
         .filter((v) => v.is_enabled && v.is_available)
         .map((variant) => {
-          // Extract size and color from options
-          const size = variant.options.find((opt) => opt.size)?.size || ''
-          const color = variant.options.find((opt) => opt.color)?.color || ''
+          const { size, color } = extractVariantOptions(variant.options, optionLookup)
 
           return {
             name: variant.title,
             sku: variant.sku,
-            price: variant.price / 100, // Convert cents to dollars
+            price: variant.price / 100,
             inStock: variant.is_available,
             size,
             color,
@@ -210,26 +421,27 @@ async function syncProducts() {
           }
         })
 
-      // Determine base price (use cheapest variant)
       const basePrice =
         variants.length > 0
           ? Math.min(...variants.map((v) => v.price))
           : printifyProduct.variants[0]?.price / 100 || 0
 
-      // Determine category based on tags or title
-      const categories: string[] = []
-      const titleLower = printifyProduct.title.toLowerCase()
-      if (titleLower.includes('shirt') || titleLower.includes('hoodie') || titleLower.includes('apparel')) {
-        categories.push('apparel')
+      // Determine categories from tags
+      const categories = categorizeFromTags(printifyProduct.tags || [], printifyProduct.title)
+
+      // Extract personalization
+      const personalization = {
+        enabled: false,
+        instructions: '',
+        maxLength: 0,
       }
-      if (titleLower.includes('mug') || titleLower.includes('cup') || titleLower.includes('bottle')) {
-        categories.push('drinkware')
-      }
-      if (titleLower.includes('hat') || titleLower.includes('cap') || titleLower.includes('bag')) {
-        categories.push('accessories')
-      }
-      if (categories.length === 0) {
-        categories.push('apparel') // Default
+
+      if (printifyProduct.sales_channel_properties?.personalisation &&
+          printifyProduct.sales_channel_properties.personalisation.length > 0) {
+        const firstPersonalization = printifyProduct.sales_channel_properties.personalisation[0]
+        personalization.enabled = true
+        personalization.instructions = firstPersonalization.instructions || ''
+        personalization.maxLength = firstPersonalization.buyer_response_limit || 100
       }
 
       const productData = {
@@ -242,7 +454,8 @@ async function syncProducts() {
                 children: [
                   {
                     type: 'paragraph',
-                    children: [{ type: 'text', text: printifyProduct.description }],
+                    children: [{ type: 'text', text: printifyProduct.description, version: 1 }],
+                    version: 1,
                   },
                 ],
                 direction: 'ltr',
@@ -257,7 +470,8 @@ async function syncProducts() {
                 children: [
                   {
                     type: 'paragraph',
-                    children: [{ type: 'text', text: printifyProduct.title }],
+                    children: [{ type: 'text', text: printifyProduct.title, version: 1 }],
+                    version: 1,
                   },
                 ],
                 direction: 'ltr',
@@ -277,23 +491,23 @@ async function syncProducts() {
         printifyProductId: printifyProduct.id,
         printifyBlueprintId: printifyProduct.blueprint_id.toString(),
         printifyPrintProviderId: printifyProduct.print_provider_id.toString(),
+        personalization,
         status: 'active',
         metaTitle: printifyProduct.title,
         metaDescription: printifyProduct.description?.substring(0, 160) || printifyProduct.title,
       }
 
       if (existing.docs.length > 0) {
-        // Update existing product
         console.log('  ♻️  Updating existing product...')
         await payload.update({
           collection: 'products',
-          id: existing.docs[0].id,
+          id: existing.docs[0].id as string | number,
           data: productData,
           overrideAccess: true,
         })
         console.log(`  ✅ Updated: ${printifyProduct.title}`)
+        updated++
       } else {
-        // Create new product
         console.log('  ➕ Creating new product...')
         await payload.create({
           collection: 'products',
@@ -301,13 +515,18 @@ async function syncProducts() {
           overrideAccess: true,
         })
         console.log(`  ✅ Created: ${printifyProduct.title}`)
+        created++
       }
     } catch (error) {
       console.error(`  ❌ Error processing ${printifyProduct.title}:`, error)
+      failed++
     }
   }
 
   console.log('\n🎉 Printify product sync complete!')
+  console.log(`   Created: ${created}`)
+  console.log(`   Updated: ${updated}`)
+  console.log(`   Failed: ${failed}`)
   process.exit(0)
 }
 

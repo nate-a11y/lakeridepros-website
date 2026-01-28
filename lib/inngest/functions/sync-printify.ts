@@ -9,6 +9,10 @@ const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
 const PRINTIFY_SHOP_ID = process.env.PRINTIFY_SHOP_ID
 
+// ============================================================================
+// Printify API Types (matching actual API response structure)
+// ============================================================================
+
 interface PrintifyImage {
   src: string
   position: string
@@ -16,12 +20,22 @@ interface PrintifyImage {
   variant_ids: number[]
 }
 
-interface PrintifyVariantOption {
-  size?: string
-  color?: string
-  [key: string]: string | undefined
+/** Individual option value (e.g., a specific color or size) */
+interface PrintifyOptionValue {
+  id: number
+  title: string
+  colors?: string[] // Only present for color options
 }
 
+/** Product-level option definition (e.g., "Colors", "Sizes", "Phone Models") */
+interface PrintifyOption {
+  name: string
+  type: 'color' | 'size' | 'surface' | string
+  values: PrintifyOptionValue[]
+  display_in_preview?: boolean
+}
+
+/** Variant - options is an array of numeric IDs referencing PrintifyOptionValue.id */
 interface PrintifyVariant {
   id: number
   sku: string
@@ -32,7 +46,8 @@ interface PrintifyVariant {
   is_enabled: boolean
   is_default: boolean
   is_available: boolean
-  options: PrintifyVariantOption[]
+  options: number[] // Array of option value IDs (not objects!)
+  quantity?: number
 }
 
 interface PrintifyPersonalization {
@@ -51,12 +66,187 @@ interface PrintifyProduct {
   description: string
   tags: string[]
   images: PrintifyImage[]
+  options: PrintifyOption[] // Product-level options defining available sizes/colors
   variants: PrintifyVariant[]
   blueprint_id: number
   print_provider_id: number
   visible: boolean
   sales_channel_properties?: PrintifySalesChannelProperties
-  [key: string]: unknown
+}
+
+// ============================================================================
+// Category Mapping - Maps Printify tags to our store categories
+// ============================================================================
+
+type StoreCategory = 'apparel' | 'accessories' | 'drinkware' | 'home'
+
+const TAG_TO_CATEGORY: Record<string, StoreCategory> = {
+  // Apparel
+  "Men's Clothing": 'apparel',
+  "Women's Clothing": 'apparel',
+  'Hoodies': 'apparel',
+  'T-shirts': 'apparel',
+  'Sweatshirts': 'apparel',
+  'Tank Tops': 'apparel',
+  'Long Sleeves': 'apparel',
+  'Tops': 'apparel',
+  'Crop Hoodie': 'apparel',
+  'Crop tops': 'apparel',
+  'Polo': 'apparel',
+  'Polo shirt': 'apparel',
+  'Sportswear': 'apparel',
+  'Premium Apparel': 'apparel',
+
+  // Accessories
+  'Accessories': 'accessories',
+  'Phone Cases': 'accessories',
+  'iPhone Cases': 'accessories',
+  'Hats': 'accessories',
+  'Car Accessories': 'accessories',
+  'Stickers': 'accessories',
+  'Magnets & Stickers': 'accessories',
+  'Travel Accessories': 'accessories',
+  'Shoes': 'accessories',
+  'footwear': 'accessories',
+
+  // Drinkware
+  'Coffee Mugs': 'drinkware',
+  'Mugs': 'drinkware',
+  'Tumblers': 'drinkware',
+  'Bottles & Tumblers': 'drinkware',
+  'Glassware': 'drinkware',
+  'Drink': 'drinkware',
+  'Drinks': 'drinkware',
+  'Beverage': 'drinkware',
+
+  // Home & Living
+  'Home & Living': 'home',
+  'Home Decor': 'home',
+  'Blankets': 'home',
+  'Towels': 'home',
+  'Towel': 'home',
+  'Art & Wall Decor': 'home',
+  'Canvas': 'home',
+  'Poster': 'home',
+  'Posters': 'home',
+  'Decor': 'home',
+  'Bedding': 'home',
+  'Bed': 'home',
+  'Kitchen': 'home',
+  'Ornaments': 'home',
+  'ornament': 'home',
+  'Seasonal Decorations': 'home',
+}
+
+/**
+ * Determine categories from Printify tags
+ * Returns unique categories based on tag matching
+ */
+function categorizeFromTags(tags: string[], title: string): StoreCategory[] {
+  const categories = new Set<StoreCategory>()
+
+  // First, try to match tags
+  for (const tag of tags) {
+    const category = TAG_TO_CATEGORY[tag]
+    if (category) {
+      categories.add(category)
+    }
+  }
+
+  // If no category found from tags, try title-based fallback
+  if (categories.size === 0) {
+    const titleLower = title.toLowerCase()
+
+    if (titleLower.includes('shirt') || titleLower.includes('hoodie') ||
+        titleLower.includes('sweatshirt') || titleLower.includes('tee') ||
+        titleLower.includes('tank') || titleLower.includes('polo')) {
+      categories.add('apparel')
+    }
+    if (titleLower.includes('mug') || titleLower.includes('cup') ||
+        titleLower.includes('tumbler') || titleLower.includes('bottle') ||
+        titleLower.includes('glass')) {
+      categories.add('drinkware')
+    }
+    if (titleLower.includes('hat') || titleLower.includes('cap') ||
+        titleLower.includes('bag') || titleLower.includes('phone') ||
+        titleLower.includes('sticker') || titleLower.includes('case') ||
+        titleLower.includes('flip flop')) {
+      categories.add('accessories')
+    }
+    if (titleLower.includes('blanket') || titleLower.includes('towel') ||
+        titleLower.includes('canvas') || titleLower.includes('poster') ||
+        titleLower.includes('ornament') || titleLower.includes('decor')) {
+      categories.add('home')
+    }
+  }
+
+  // Default to apparel if still nothing matched
+  if (categories.size === 0) {
+    categories.add('apparel')
+  }
+
+  return Array.from(categories)
+}
+
+// ============================================================================
+// Option Value Mapping - Extract size/color from variant option IDs
+// ============================================================================
+
+interface OptionLookup {
+  id: number
+  title: string
+  type: 'color' | 'size' | 'surface' | string
+  optionName: string
+}
+
+/**
+ * Build a lookup map from option value ID to its details
+ * This allows us to convert variant option IDs to actual size/color values
+ */
+function buildOptionLookup(options: PrintifyOption[]): Map<number, OptionLookup> {
+  const lookup = new Map<number, OptionLookup>()
+
+  for (const option of options) {
+    for (const value of option.values) {
+      lookup.set(value.id, {
+        id: value.id,
+        title: value.title,
+        type: option.type,
+        optionName: option.name,
+      })
+    }
+  }
+
+  return lookup
+}
+
+/**
+ * Extract size and color values from a variant's option IDs
+ */
+function extractVariantOptions(
+  variantOptionIds: number[],
+  optionLookup: Map<number, OptionLookup>
+): { size: string; color: string } {
+  let size = ''
+  let color = ''
+
+  for (const optionId of variantOptionIds) {
+    const option = optionLookup.get(optionId)
+    if (!option) continue
+
+    // Use the type field to determine if this is a size or color
+    if (option.type === 'size') {
+      size = option.title
+    } else if (option.type === 'color') {
+      color = option.title
+    } else if (option.type === 'surface') {
+      // Surface types (like "Transparent" or "White" for stickers)
+      // can be treated as color/material
+      color = option.title
+    }
+  }
+
+  return { size, color }
 }
 
 // Retry helper function with exponential backoff
@@ -299,12 +489,14 @@ async function processProduct(
     }
   }
 
-  // Map variants
+  // Build option lookup from product-level options
+  const optionLookup = buildOptionLookup(printifyProduct.options || [])
+
+  // Map variants with proper size/color extraction
   const variants = printifyProduct.variants
     .filter((v: PrintifyVariant) => v.is_enabled && v.is_available)
     .map((variant: PrintifyVariant) => {
-      const size = variant.options.find((opt: PrintifyVariantOption) => opt.size)?.size || ''
-      const color = variant.options.find((opt: PrintifyVariantOption) => opt.color)?.color || ''
+      const { size, color } = extractVariantOptions(variant.options, optionLookup)
 
       return {
         name: variant.title,
@@ -322,21 +514,8 @@ async function processProduct(
       ? Math.min(...variants.map((v: { price: number }) => v.price))
       : printifyProduct.variants[0]?.price / 100 || 0
 
-  // Determine category
-  const categories: ("apparel" | "accessories" | "drinkware" | "home")[] = []
-  const titleLower = printifyProduct.title.toLowerCase()
-  if (titleLower.includes('shirt') || titleLower.includes('hoodie') || titleLower.includes('apparel')) {
-    categories.push('apparel')
-  }
-  if (titleLower.includes('mug') || titleLower.includes('cup') || titleLower.includes('bottle')) {
-    categories.push('drinkware')
-  }
-  if (titleLower.includes('hat') || titleLower.includes('cap') || titleLower.includes('bag')) {
-    categories.push('accessories')
-  }
-  if (categories.length === 0) {
-    categories.push('apparel')
-  }
+  // Determine categories from tags (with title fallback)
+  const categories = categorizeFromTags(printifyProduct.tags || [], printifyProduct.title)
 
   // Extract personalization settings from sales_channel_properties
   const personalization = {

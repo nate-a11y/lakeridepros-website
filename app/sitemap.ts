@@ -9,6 +9,10 @@ import {
 } from '@/lib/api/payload-local';
 import { getDriversForWebsite } from '@/lib/supabase/drivers';
 
+// Regenerate sitemap every hour instead of at build time
+// This significantly reduces build time by deferring these queries
+export const revalidate = 3600;
+
 interface PayloadDoc {
   slug: string;
   updatedAt?: string;

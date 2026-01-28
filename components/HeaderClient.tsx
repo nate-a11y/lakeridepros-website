@@ -8,13 +8,12 @@ import ThemeToggle from './ThemeToggle';
 import { BookingModal } from './BookingModal';
 import CartIcon from '@/components/cart/CartIcon';
 
-type DropdownType = 'services' | 'partners' | 'shop' | 'insiders' | 'social';
+type DropdownType = 'services' | 'partners' | 'insiders' | 'social';
 type DropdownState = Record<DropdownType, boolean>;
 
 const initialDropdownState: DropdownState = {
   services: false,
   partners: false,
-  shop: false,
   insiders: false,
   social: false,
 };
@@ -150,16 +149,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
       ]
     },
     { name: 'Blog', href: '/blog' },
-    {
-      name: 'Shop',
-      href: '/shop',
-      hasDropdown: true,
-      dropdownType: 'shop',
-      dropdownItems: [
-        { name: 'Merch Store', href: '/shop' },
-        { name: 'Gift Cards', href: '/gift-cards' },
-      ]
-    },
+    { name: 'Gift Cards', href: '/gift-cards' },
     {
       name: 'Insiders',
       href: '/insider-membership-benefits',
@@ -277,21 +267,6 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
 
                   {item.dropdownType === 'partners' && dropdowns.partners && (
                     <div role="menu" aria-label="Partners submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
-                      {item.dropdownItems?.map((dropdownItem) => (
-                        <Link
-                          key={dropdownItem.name}
-                          href={dropdownItem.href}
-                          role="menuitem"
-                          className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
-                        >
-                          {dropdownItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-
-                  {item.dropdownType === 'shop' && dropdowns.shop && (
-                    <div role="menu" aria-label="Shop submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}

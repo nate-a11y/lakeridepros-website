@@ -1,15 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
-import { Montserrat } from 'next/font/google';
+import "@fontsource/montserrat/400.css";
+import "@fontsource/montserrat/600.css";
+import "@fontsource/montserrat/800.css";
 import "./globals.css";
-
-const montserrat = Montserrat({
-  weight: ['400', '600', '800'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-montserrat',
-});
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -57,12 +52,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={montserrat.variable}>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
-      <body className={`${montserrat.className} antialiased`}>
+      <body className="antialiased">
         <GoogleAnalytics />
         {children}
         <Analytics />

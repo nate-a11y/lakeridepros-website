@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Google Fonts Montserrat - Loaded via <link> in layout.tsx for better performance */
+/* Montserrat font loaded via @fontsource packages for Turbopack compatibility */
 
 /* Tell Tailwind v4 where to find class names */
 @source "../components/**/*.tsx";

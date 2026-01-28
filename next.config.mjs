@@ -4,6 +4,8 @@ import { withPayload } from '@payloadcms/next/withPayload'
 const nextConfig = {
   // Disable React Compiler (moved from experimental in Next.js 16)
   reactCompiler: false,
+  // External packages that use Node.js APIs not compatible with Turbopack bundling
+  serverExternalPackages: ['jspdf', 'jspdf-autotable', 'fflate'],
   experimental: {
     serverActions: {
       bodySizeLimit: '10mb', // Allow larger file uploads (default is 1mb)
@@ -50,15 +52,7 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (webpackConfig) => {
-    webpackConfig.resolve.extensionAlias = {
-      '.cjs': ['.cts', '.cjs'],
-      '.js': ['.ts', '.tsx', '.js', '.jsx'],
-      '.mjs': ['.mts', '.mjs'],
-    }
-
-    return webpackConfig
-  },
+  // Note: webpack config removed - Turbopack handles TypeScript natively in Next.js 16.2+
   // Redirects for SEO
   async redirects() {
     return [

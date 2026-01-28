@@ -31,14 +31,11 @@
   // ==========================================================================
   // 2. FIX DOUBLE CHECKBOX BUG (Screenshot 1)
   // ==========================================================================
-  
+
   // Remove any custom checkbox overlays that create the double-checkbox effect
+  // Note: Using simpler selector for Turbopack CSS parser compatibility
   input[type="checkbox"] {
-    // Kill any non-Payload pseudo-elements
-    &::before:not([class*="payload"]),
-    &::after:not([class*="payload"]) {
-      display: none !important;
-    }
+    appearance: auto;
   }
   
   // ==========================================================================

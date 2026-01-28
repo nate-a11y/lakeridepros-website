@@ -74,11 +74,17 @@ const nextConfig = {
         permanent: true,
       },
 
-      // Old merch store → New shop
+      // Old merch store → Home (shop temporarily disabled)
       {
         source: '/merch-store/:path*',
-        destination: '/shop',
-        permanent: true,
+        destination: '/',
+        permanent: false,
+      },
+      // Shop temporarily redirects to home
+      {
+        source: '/shop/:path*',
+        destination: '/',
+        permanent: false,
       },
 
       // Old blog → New blog
@@ -226,8 +232,8 @@ const nextConfig = {
       },
       {
         source: '/merch-store-promo',
-        destination: '/shop',
-        permanent: true,
+        destination: '/',
+        permanent: false,
       },
 
       // Root-level service URLs → /services/* format (legacy URL support)

@@ -26,6 +26,8 @@ import { Products } from '../collections/Products'
 import { GiftCards } from '../collections/GiftCards'
 import { Orders } from '../collections/Orders'
 import { Partners } from '../collections/Partners'
+import { Venues } from '../collections/Venues'
+import { Events } from '../collections/Events'
 import { supabaseAdapter } from '../lib/supabase-adapter'
 
 const filename = fileURLToPath(import.meta.url)
@@ -172,7 +174,7 @@ const config = buildConfig({
       beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
     },
   },
-  collections: [BlogPosts, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, Testimonials, Users, Vehicles],
+  collections: [BlogPosts, Events, GiftCards, Media, Orders, Pages, Partners, Products, Services, ServiceAnalytics, Testimonials, Users, Vehicles, Venues],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

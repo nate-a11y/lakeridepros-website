@@ -609,3 +609,137 @@ export function getMediaUrl(url: string): string {
 
   return `${mediaBaseUrl}${url}`;
 }
+
+// Venue type for the events calendar
+export interface Venue {
+  id: string;
+  name: string;
+  shortName?: string;
+  slug: string;
+  description?: string;
+  image?: { url: string; alt?: string } | string;
+  address?: string;
+  website?: string;
+  phone?: string;
+  active: boolean;
+  order: number;
+}
+
+// Event type for the events calendar
+export interface Event {
+  id: string;
+  name: string;
+  slug: string;
+  venue: Venue | string;
+  date: string;
+  time?: string;
+  description?: string;
+  image?: { url: string; alt?: string } | string;
+  rideAvailability?: {
+    rideType: 'flex' | 'elite' | 'lrp-black' | 'limo-bus' | 'rescue-squad' | 'luxury-sprinter' | 'luxury-shuttle';
+    status: 'available' | 'limited' | 'reserved';
+    notes?: string;
+  }[];
+  featured: boolean;
+  active: boolean;
+  order: number;
+}
+
+// Venues API
+export async function getVenues(params?: PaginationParams & FilterParams): Promise<ApiResponse<Venue>> {
+  const baseParams = {
+    where: JSON.stringify({ active: { equals: true } }),
+    sort: 'order',
+    depth: 2,
+    ...params,
+  };
+  return fetchFromPayload<ApiResponse<Venue>>('/venues', { params: baseParams as Record<string, unknown> });
+}
+
+export async function getVenueBySlug(slug: string): Promise<Venue | null> {
+  const response = await fetchFromPayload<ApiResponse<Venue>>('/venues', {
+    params: {
+      where: JSON.stringify({ slug: { equals: slug }, active: { equals: true } }),
+      depth: 2,
+    },
+  });
+
+  const venues = response.docs || [];
+  const matchingVenue = venues.find(venue => venue.slug === slug && venue.active);
+
+  return matchingVenue || null;
+}
+
+// Events API
+export async function getEvents(params?: PaginationParams & FilterParams): Promise<ApiResponse<Event>> {
+  const baseParams = {
+    where: JSON.stringify({ active: { equals: true } }),
+    sort: 'date',
+    depth: 2,
+    limit: 100,
+    ...params,
+  };
+  return fetchFromPayload<ApiResponse<Event>>('/events', { params: baseParams as Record<string, unknown> });
+}
+
+export async function getUpcomingEvents(limit = 50): Promise<Event[]> {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const response = await fetchFromPayload<ApiResponse<Event>>('/events', {
+    params: {
+      where: JSON.stringify({
+        and: [
+          { active: { equals: true } },
+          { date: { greater_than_equal: today.toISOString() } },
+        ],
+      }),
+      sort: 'date',
+      depth: 2,
+      limit,
+    },
+  });
+
+  // Filter manually as backup
+  const events = (response.docs || []).filter(event => {
+    const eventDate = new Date(event.date);
+    return event.active && eventDate >= today;
+  });
+
+  return events;
+}
+
+export async function getEventsByVenue(venueId: string): Promise<Event[]> {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const response = await fetchFromPayload<ApiResponse<Event>>('/events', {
+    params: {
+      where: JSON.stringify({
+        and: [
+          { active: { equals: true } },
+          { venue: { equals: venueId } },
+          { date: { greater_than_equal: today.toISOString() } },
+        ],
+      }),
+      sort: 'date',
+      depth: 2,
+    },
+  });
+
+  return response.docs || [];
+}
+
+export async function getEventBySlug(slug: string): Promise<Event | null> {
+  const response = await fetchFromPayload<ApiResponse<Event>>('/events', {
+    params: {
+      where: JSON.stringify({ slug: { equals: slug }, active: { equals: true } }),
+      depth: 2,
+    },
+  });
+
+  const events = response.docs || [];
+  const matchingEvent = events.find(event => event.slug === slug && event.active);
+
+  return matchingEvent || null;
+}

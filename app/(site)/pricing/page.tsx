@@ -45,7 +45,7 @@ const faqSchema = {
       name: 'How much does Lake of the Ozarks transportation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban) at $2.90/mile. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $140/hr, Limo Bus $130/hr (tiered), Luxury Sprinter $175/hr (tiered), Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers. Contact us at (573) 206-9499 for exact quote.'
+        text: 'Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban) at $2.90/mile. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr (tiered), Luxury Sprinter $175/hr (tiered), Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers. Contact us at (573) 206-9499 for exact quote.'
       }
     },
     {
@@ -286,7 +286,7 @@ export default function PricingPage() {
                 </div>
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="text-xl font-bold text-blue-600 dark:text-blue-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">Book 48+ hrs ahead</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">Book 24+ hrs ahead</p>
                 </div>
               </div>
 
@@ -344,7 +344,7 @@ export default function PricingPage() {
                 </div>
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div className="text-xl font-bold text-purple-600 dark:text-purple-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                  <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 font-medium">Book 48+ hrs ahead</p>
+                  <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 font-medium">Book 24+ hrs ahead</p>
                 </div>
               </div>
 
@@ -384,7 +384,7 @@ export default function PricingPage() {
                 <div>
                   <CheckCircle className="w-8 h-8 mx-auto mb-2" />
                   <p className="font-semibold">10% Discount</p>
-                  <p className="text-sm text-white/80">Book 48+ hours ahead</p>
+                  <p className="text-sm text-white/80">Book 24+ hours ahead</p>
                 </div>
                 <div>
                   <CheckCircle className="w-8 h-8 mx-auto mb-2" />
@@ -563,7 +563,7 @@ export default function PricingPage() {
                 </div>
                 <h4 className="text-xl font-bold mb-2">LRP Black</h4>
                 <p className="text-white/70 text-sm mb-4">1-6 passengers (Suburban)</p>
-                <div className="text-3xl font-bold text-amber-400 mb-2">$140<span className="text-lg text-white/70">/hour</span></div>
+                <div className="text-3xl font-bold text-amber-400 mb-2">$120<span className="text-lg text-white/70">/hour</span></div>
                 <p className="text-sm text-white/70 mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
@@ -942,7 +942,7 @@ export default function PricingPage() {
                   How much does Lake of the Ozarks transportation cost?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile with a $15 minimum, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban with beverages) at $2.90/mile. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $140/hr, Limo Bus $130/hr, Luxury Sprinter $175/hr, Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers! Contact us at (573) 206-9499 for a custom quote.
+                  Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile with a $15 minimum, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban with beverages) at $2.90/mile. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr, Luxury Sprinter $175/hr, Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers! Contact us at (573) 206-9499 for a custom quote.
                 </p>
               </details>
 

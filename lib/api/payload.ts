@@ -735,11 +735,16 @@ export async function getEventsByVenue(venueId: string): Promise<Event[]> {
 }
 
 export async function getEventBySlug(slug: string): Promise<Event | null> {
+  // Fetch all active events and filter manually — the Payload REST API
+  // where clause for slug matching is unreliable (same pattern used by
+  // getServiceBySlug, getVehicleBySlug, getBlogPostBySlug in this codebase).
   const response = await fetchFromPayload<ApiResponse<Event>>('/events', {
     params: {
-      where: JSON.stringify({ slug: { equals: slug }, active: { equals: true } }),
+      where: JSON.stringify({ active: { equals: true } }),
       depth: 2,
+      limit: 100,
     },
+    cache: 'no-store',
   });
 
   const events = response.docs || [];

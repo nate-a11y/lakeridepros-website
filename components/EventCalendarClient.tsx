@@ -194,7 +194,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
                                   {/* Event Details */}
                                   <div>
                                     <Link
-                                      href={`/events/${event.slug}`}
+                                      href={`/events/${encodeURIComponent(event.slug)}`}
                                       className="font-bold text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors"
                                     >
                                       {event.name}

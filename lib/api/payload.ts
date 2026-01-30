@@ -738,17 +738,23 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
   // Fetch all active events and filter manually — the Payload REST API
   // where clause for slug matching is unreliable (same pattern used by
   // getServiceBySlug, getVehicleBySlug, getBlogPostBySlug in this codebase).
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
   const response = await fetchFromPayload<ApiResponse<Event>>('/events', {
     params: {
       where: JSON.stringify({ active: { equals: true } }),
       depth: 2,
-      limit: 100,
+      limit: 1000,
     },
     cache: 'no-store',
   });
 
   const events = response.docs || [];
-  const matchingEvent = events.find(event => event.slug === slug && event.active);
+  const matchingEvent = events.find(event => {
+    const eventDateStr = event.date.split('T')[0];
+    return event.slug === slug && event.active && eventDateStr >= todayStr;
+  });
 
   return matchingEvent || null;
 }

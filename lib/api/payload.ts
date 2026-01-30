@@ -683,15 +683,17 @@ export async function getEvents(params?: PaginationParams & FilterParams): Promi
 }
 
 export async function getUpcomingEvents(limit = 50): Promise<Event[]> {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Use today's date as YYYY-MM-DD string for reliable comparison
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const todayUTC = `${todayStr}T00:00:00.000Z`;
 
   const response = await fetchFromPayload<ApiResponse<Event>>('/events', {
     params: {
       where: JSON.stringify({
         and: [
           { active: { equals: true } },
-          { date: { greater_than_equal: today.toISOString() } },
+          { date: { greater_than_equal: todayUTC } },
         ],
       }),
       sort: 'date',
@@ -701,18 +703,19 @@ export async function getUpcomingEvents(limit = 50): Promise<Event[]> {
     cache: 'no-store', // Disable caching for real-time event updates
   });
 
-  // Filter manually as backup
+  // Filter manually as backup — compare date strings (YYYY-MM-DD) to avoid timezone issues
   const events = (response.docs || []).filter(event => {
-    const eventDate = new Date(event.date);
-    return event.active && eventDate >= today;
+    const eventDateStr = event.date.split('T')[0];
+    return event.active && eventDateStr >= todayStr;
   });
 
   return events;
 }
 
 export async function getEventsByVenue(venueId: string): Promise<Event[]> {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const todayUTC = `${todayStr}T00:00:00.000Z`;
 
   const response = await fetchFromPayload<ApiResponse<Event>>('/events', {
     params: {
@@ -720,7 +723,7 @@ export async function getEventsByVenue(venueId: string): Promise<Event[]> {
         and: [
           { active: { equals: true } },
           { venue: { equals: venueId } },
-          { date: { greater_than_equal: today.toISOString() } },
+          { date: { greater_than_equal: todayUTC } },
         ],
       }),
       sort: 'date',

@@ -17,6 +17,21 @@ export const Events: CollectionConfig = {
     group: 'Events',
   },
   hooks: {
+    beforeChange: [
+      ({ data }) => {
+        // Normalize date to noon UTC to prevent timezone-related off-by-one errors.
+        // When a user picks "July 5th" at 7:30 PM CDT, Payload may store it as
+        // 2026-07-06T00:30:00.000Z (past midnight UTC), causing the wrong date to display.
+        // By extracting the YYYY-MM-DD portion and setting noon UTC, the date is safe
+        // regardless of the user's timezone.
+        if (data?.date) {
+          const isoStr = typeof data.date === 'string' ? data.date : new Date(data.date).toISOString()
+          const datePart = isoStr.includes('T') ? isoStr.split('T')[0] : isoStr.split(' ')[0]
+          data.date = `${datePart}T12:00:00.000Z`
+        }
+        return data
+      },
+    ],
     afterChange: [createRevalidationHook('events')],
   },
   fields: [

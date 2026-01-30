@@ -19,23 +19,6 @@ export const Events: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data }) => {
-        // Auto-generate slug from name if not provided, and always sanitize it.
-        // Strips &, special characters, and collapses hyphens for clean URLs.
-        if (data?.name && !data.slug) {
-          data.slug = data.name
-            .toLowerCase()
-            .replace(/&/g, 'and')
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '')
-        } else if (data?.slug) {
-          data.slug = data.slug
-            .toLowerCase()
-            .replace(/&/g, 'and')
-            .replace(/[^a-z0-9-]+/g, '-')
-            .replace(/-{2,}/g, '-')
-            .replace(/^-+|-+$/g, '')
-        }
-
         // Normalize date to noon UTC to prevent timezone-related off-by-one errors.
         if (data?.date) {
           const isoStr = typeof data.date === 'string' ? data.date : new Date(data.date).toISOString()

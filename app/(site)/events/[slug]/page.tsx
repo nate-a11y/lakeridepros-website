@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getEventBySlug } from '@/lib/api/payload'
+import { getEventBySlug, getUpcomingEvents } from '@/lib/api/payload'
 import { getMediaUrl } from '@/lib/utils'
 import { Calendar, Clock, MapPin, ArrowLeft } from 'lucide-react'
 import RideAvailabilityBadge from '@/components/RideAvailabilityBadge'
@@ -49,6 +49,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: 'en_US',
       type: 'website',
     },
+  }
+}
+
+export async function generateStaticParams() {
+  try {
+    const events = await getUpcomingEvents(100)
+    return events.map((event) => ({
+      slug: event.slug,
+    }))
+  } catch {
+    return []
   }
 }
 

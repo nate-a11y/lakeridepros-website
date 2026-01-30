@@ -34,7 +34,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
         event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.description?.toLowerCase().includes(searchTerm.toLowerCase())
 
-      const venueId = typeof event.venue === 'object' ? event.venue?.id : event.venue
+      const venueId = typeof event.venue === 'object' ? String(event.venue?.id) : String(event.venue)
       const matchesVenue = !venueFilter || venueId === venueFilter
 
       return matchesSearch && matchesVenue
@@ -59,11 +59,12 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
   }, [filteredEvents])
 
   const formatDate = (dateString: string) => {
+    // Parse as UTC to avoid timezone shifting (API returns "2026-05-09T00:00:00.000Z")
     const date = new Date(dateString)
     return {
-      month: date.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
-      day: date.getDate(),
-      full: date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }),
+      month: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }).toUpperCase(),
+      day: date.getUTCDate(),
+      full: date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }),
     }
   }
 

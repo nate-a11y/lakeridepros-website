@@ -71,11 +71,13 @@ export default async function EventDetailPage({ params }: Props) {
 
   const venue = typeof event.venue === 'object' ? event.venue : null
   const eventDate = new Date(event.date)
+  // Use UTC to avoid timezone shifting (API returns "2026-05-09T00:00:00.000Z")
   const formattedDate = eventDate.toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
   })
 
   return (

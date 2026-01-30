@@ -59,11 +59,13 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
   }, [filteredEvents])
 
   const formatDate = (dateString: string) => {
-    // Parse as UTC to avoid timezone shifting (API returns "2026-05-09T00:00:00.000Z")
-    const date = new Date(dateString)
+    // Extract YYYY-MM-DD from the ISO string to avoid any timezone shifting.
+    // This is safe regardless of whether the stored date is midnight UTC, noon UTC, etc.
+    const [year, month, day] = dateString.split('T')[0].split('-').map(Number)
+    const date = new Date(Date.UTC(year, month - 1, day, 12, 0, 0))
     return {
       month: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }).toUpperCase(),
-      day: date.getUTCDate(),
+      day,
       full: date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }),
     }
   }

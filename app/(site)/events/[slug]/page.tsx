@@ -70,8 +70,10 @@ export default async function EventDetailPage({ params }: Props) {
   }
 
   const venue = typeof event.venue === 'object' ? event.venue : null
-  const eventDate = new Date(event.date)
-  // Use UTC to avoid timezone shifting (API returns "2026-05-09T00:00:00.000Z")
+  // Extract YYYY-MM-DD from the ISO string to avoid any timezone shifting.
+  // This is safe regardless of whether the stored date is midnight UTC, noon UTC, etc.
+  const [year, month, day] = event.date.split('T')[0].split('-').map(Number)
+  const eventDate = new Date(Date.UTC(year, month - 1, day, 12, 0, 0))
   const formattedDate = eventDate.toLocaleDateString('en-US', {
     weekday: 'long',
     year: 'numeric',

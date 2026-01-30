@@ -19,11 +19,24 @@ export const Events: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data }) => {
+        // Auto-generate slug from name if not provided, and always sanitize it.
+        // Strips &, special characters, and collapses hyphens for clean URLs.
+        if (data?.name && !data.slug) {
+          data.slug = data.name
+            .toLowerCase()
+            .replace(/&/g, 'and')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
+        } else if (data?.slug) {
+          data.slug = data.slug
+            .toLowerCase()
+            .replace(/&/g, 'and')
+            .replace(/[^a-z0-9-]+/g, '-')
+            .replace(/-{2,}/g, '-')
+            .replace(/^-+|-+$/g, '')
+        }
+
         // Normalize date to noon UTC to prevent timezone-related off-by-one errors.
-        // When a user picks "July 5th" at 7:30 PM CDT, Payload may store it as
-        // 2026-07-06T00:30:00.000Z (past midnight UTC), causing the wrong date to display.
-        // By extracting the YYYY-MM-DD portion and setting noon UTC, the date is safe
-        // regardless of the user's timezone.
         if (data?.date) {
           const isoStr = typeof data.date === 'string' ? data.date : new Date(data.date).toISOString()
           const datePart = isoStr.includes('T') ? isoStr.split('T')[0] : isoStr.split(' ')[0]

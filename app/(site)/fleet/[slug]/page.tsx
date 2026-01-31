@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { redirect, RedirectType } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import BookingWidget from '@/components/BookingWidget';
 import TestimonialsSection from '@/components/TestimonialsSection';
@@ -56,7 +56,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   const vehicle = await getVehicleBySlug(slug).catch(() => null);
 
   if (!vehicle) {
-    redirect('/fleet', RedirectType.permanent);
+    permanentRedirect('/fleet');
   }
 
   // Fetch vehicle-related testimonials (only 5-star reviews with vehicle keywords)

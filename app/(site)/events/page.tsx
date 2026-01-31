@@ -39,10 +39,10 @@ export default async function EventsPage() {
       <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-center">
-            2026 Concert Series
+            Upcoming Event Availability
           </h1>
           <p className="text-xl text-white/90 max-w-3xl mx-auto text-center mb-6">
-            Check ride availability for upcoming concerts and events at Lake of the Ozarks venues.
+            Check ride availability for upcoming events at Lake of the Ozarks venues.
           </p>
           <div className="flex justify-center">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
@@ -77,7 +77,7 @@ export default async function EventsPage() {
             </span>
             <span className="flex items-center">
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-black font-bold mr-2 text-xs">4</span>
-              Call Lake Ride Pros
+              Book with Lake Ride Pros
             </span>
             <span className="flex items-center">
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-black font-bold mr-2 text-xs">5</span>

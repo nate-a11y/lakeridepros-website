@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { redirect, RedirectType } from 'next/navigation'
 import Link from 'next/link'
 import ProductActions from './ProductActions'
 import { Metadata } from 'next'
@@ -114,7 +114,7 @@ export default async function ProductPage(props: ProductPageProps) {
   const product = await getProduct(params.slug)
 
   if (!product) {
-    redirect('/shop')
+    redirect('/shop', RedirectType.permanent)
   }
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';

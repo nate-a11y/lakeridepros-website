@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
@@ -91,7 +91,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const service = await getServiceBySlugLocal(slug);
 
   if (!service) {
-    redirect('/services');
+    redirect('/services', RedirectType.permanent);
   }
 
   // Fetch testimonials (only 5-star reviews)

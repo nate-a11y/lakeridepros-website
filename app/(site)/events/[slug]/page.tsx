@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { redirect, RedirectType } from 'next/navigation'
+import { permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getEventBySlug, getUpcomingEvents } from '@/lib/api/payload'
@@ -70,7 +70,7 @@ export default async function EventDetailPage({ params }: Props) {
   const event = await getEventBySlug(slug)
 
   if (!event) {
-    redirect('/events', RedirectType.permanent)
+    permanentRedirect('/events')
   }
 
   const venue = typeof event.venue === 'object' ? event.venue : null

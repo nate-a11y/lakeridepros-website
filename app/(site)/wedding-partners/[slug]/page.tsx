@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { redirect, RedirectType } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
@@ -89,7 +89,7 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
   const partner = await getPartnerBySlugLocal(slug);
 
   if (!partner) {
-    redirect('/wedding-partners', RedirectType.permanent);
+    permanentRedirect('/wedding-partners');
   }
 
   const logoObj = typeof partner.logo === 'object' ? partner.logo : null;

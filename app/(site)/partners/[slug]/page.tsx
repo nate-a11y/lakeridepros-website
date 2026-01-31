@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { redirect, RedirectType } from 'next/navigation';
+import { redirect, permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
@@ -97,7 +97,7 @@ export default async function PartnerDetailPage({ params }: Props) {
   const partner = await getPartnerBySlugLocal(slug);
 
   if (!partner) {
-    redirect('/partners', RedirectType.permanent);
+    permanentRedirect('/partners');
   }
 
   // Redirect to dedicated pages for wedding and premier partners

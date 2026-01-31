@@ -33,14 +33,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const venue = typeof event.venue === 'object' ? event.venue : null
-  const venueName = venue?.name || 'Lake of the Ozarks'
+  const venueName = venue?.name || 'Missouri'
 
   return {
-    title: `${event.name} at ${venueName} | Lake Ride Pros`,
-    description: event.description || `Book your ride to ${event.name} at ${venueName}. Check availability and reserve your transportation with Lake Ride Pros.`,
+    title: `${event.name} at ${venueName} — Ride Availability | Lake Ride Pros`,
+    description: event.description || `Book your ride to ${event.name} at ${venueName}, Missouri. Check availability and reserve your transportation with Lake Ride Pros.`,
     openGraph: {
-      title: `${event.name} | Lake Ride Pros`,
-      description: event.description || `Book your ride to ${event.name} at ${venueName}.`,
+      title: `${event.name} at ${venueName} | Lake Ride Pros`,
+      description: event.description || `Book your ride to ${event.name} at ${venueName}, Missouri.`,
       url: `https://www.lakeridepros.com/events/${event.slug}`,
       siteName: 'Lake Ride Pros',
       images: event.image && typeof event.image === 'object'

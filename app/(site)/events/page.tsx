@@ -3,21 +3,21 @@ import Link from 'next/link'
 import EventCalendarClient from '@/components/EventCalendarClient'
 
 export const metadata = {
-  title: 'Concert & Event Ride Availability | Lake Ride Pros',
-  description: 'Check ride availability for upcoming concerts and events at Lake of the Ozarks. Book your transportation to OAMP, Shady Gators, Encore, and more.',
+  title: 'Upcoming Event Ride Availability in Missouri | Lake Ride Pros',
+  description: 'Check ride availability for upcoming concerts and events across Missouri — Lake of the Ozarks, Kansas City, Sedalia, and more. Book transportation to OAMP, Lazy Gators, Encore, T-Mobile Center, Missouri State Fair, and other top venues.',
   openGraph: {
-    title: 'Concert & Event Ride Availability | Lake Ride Pros',
-    description: 'Check ride availability for upcoming concerts and events at Lake of the Ozarks. Book your transportation to OAMP, Shady Gators, Encore, and more.',
+    title: 'Upcoming Event Ride Availability in Missouri | Lake Ride Pros',
+    description: 'Check ride availability for upcoming concerts and events across Missouri — Lake of the Ozarks, Kansas City, Sedalia, and more. Book transportation to OAMP, Lazy Gators, Encore, T-Mobile Center, and other top venues.',
     url: 'https://www.lakeridepros.com/events',
     siteName: 'Lake Ride Pros',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Event Calendar' }],
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Event Ride Availability' }],
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Concert & Event Ride Availability | Lake Ride Pros',
-    description: 'Check ride availability for upcoming concerts and events at Lake of the Ozarks.',
+    title: 'Upcoming Event Ride Availability in Missouri | Lake Ride Pros',
+    description: 'Check ride availability for upcoming concerts and events across Missouri — Lake of the Ozarks, Kansas City, Sedalia, and more.',
     images: ['/og-image.jpg'],
   },
 }
@@ -42,7 +42,7 @@ export default async function EventsPage() {
             Upcoming Event Availability
           </h1>
           <p className="text-xl text-white/90 max-w-3xl mx-auto text-center mb-6">
-            Check ride availability for upcoming events at Lake of the Ozarks venues.
+            Check ride availability for upcoming events at venues across Missouri.
           </p>
           <div className="flex justify-center">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
@@ -65,7 +65,7 @@ export default async function EventsPage() {
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <span className="flex items-center">
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-black font-bold mr-2 text-xs">1</span>
-              Pick your concert
+              Pick your event
             </span>
             <span className="flex items-center">
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-black font-bold mr-2 text-xs">2</span>
@@ -97,22 +97,17 @@ export default async function EventsPage() {
             Ready to Book Your Ride?
           </h2>
           <p className="text-white/90 text-lg mb-8">
-            Call us to reserve your transportation for any upcoming concert or event.
+            Reserve your ride to any upcoming event across Missouri.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:573-206-9499"
-              className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
-            >
-              (573) 206-9499
-            </a>
-            <Link
-              href="/book"
-              className="inline-block bg-lrp-black text-white hover:bg-gray-800 px-10 py-4 rounded-lg font-bold text-lg transition-all"
-            >
-              Book Online
-            </Link>
-          </div>
+          <Link
+            href="/book"
+            className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
+          >
+            Book Your Ride Online
+          </Link>
+          <p className="text-white/80 text-sm mt-4">
+            Or call <a href="tel:573-206-9499" className="font-semibold text-white hover:underline">(573) 206-9499</a>
+          </p>
         </div>
       </section>
     </div>

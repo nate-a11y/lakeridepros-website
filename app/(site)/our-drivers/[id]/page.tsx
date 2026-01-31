@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Phone, Mail, ArrowLeft } from 'lucide-react';
@@ -57,7 +57,7 @@ export default async function DriverDetailPage({ params }: Props) {
   const driver = await getDriverById(id);
 
   if (!driver) {
-    notFound();
+    redirect('/our-drivers', RedirectType.permanent);
   }
 
   const imageUrl = getDriverImageUrl(driver);

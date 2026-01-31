@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getMediaUrl } from '@/lib/api/payload';
@@ -106,7 +106,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const post = await getBlogPostBySlugLocal(slug);
 
   if (!post) {
-    notFound();
+    redirect('/blog', RedirectType.permanent);
   }
 
   // Get adjacent posts for navigation

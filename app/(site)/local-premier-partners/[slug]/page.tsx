@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
@@ -72,7 +72,7 @@ export default async function PremierPartnerDetailPage({ params }: Props) {
   const partner = await getPartnerBySlugLocal(slug);
 
   if (!partner) {
-    notFound();
+    redirect('/local-premier-partners', RedirectType.permanent);
   }
 
   const logoObj = typeof partner.logo === 'object' ? partner.logo : null;

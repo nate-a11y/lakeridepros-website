@@ -56,8 +56,30 @@ export const Venues: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       admin: {
-        description: 'Venue logo or image',
+        description: 'Primary venue photo or logo',
       },
+    },
+    {
+      name: 'gallery',
+      type: 'array',
+      admin: {
+        description: 'Additional venue photos — exterior, interior, parking, etc.',
+      },
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+        {
+          name: 'caption',
+          type: 'text',
+          admin: {
+            description: 'Optional photo caption',
+          },
+        },
+      ],
     },
     {
       name: 'address',

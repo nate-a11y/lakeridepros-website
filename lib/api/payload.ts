@@ -618,6 +618,11 @@ export interface Venue {
   slug: string;
   description?: string;
   image?: { url: string; alt?: string } | string;
+  gallery?: Array<{
+    image: { url: string; alt?: string } | string;
+    caption?: string;
+    id?: string;
+  }>;
   address?: string;
   website?: string;
   phone?: string;

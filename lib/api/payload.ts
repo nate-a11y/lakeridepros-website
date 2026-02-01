@@ -79,7 +79,7 @@ async function fetchFromPayload<T>(
   }
 
   const queryString = queryParams.toString();
-  const apiUrl = getPayloadApiUrl();
+  const apiUrl = getPayloadApiUrl().replace(/\/+$/, '');
   const url = `${apiUrl}/api${endpoint}${queryString ? `?${queryString}` : ''}`;
 
   const headers: HeadersInit = {

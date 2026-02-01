@@ -1,11 +1,9 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar, MapPin, Search } from 'lucide-react'
 import { Event, Venue } from '@/lib/api/payload'
-import { getMediaUrl } from '@/lib/utils'
 import RideAvailabilityBadge from './RideAvailabilityBadge'
 
 interface EventCalendarClientProps {
@@ -125,26 +123,19 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
                 <div key={venue.id} className="bg-white dark:bg-dark-bg-secondary rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                   {/* Venue Header */}
                   <div className="bg-lrp-black text-white p-6">
-                    <div className="flex items-center gap-4">
-                      {venue.image && typeof venue.image === 'object' && (
-                        <div className="relative w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0">
-                          <Image
-                            src={getMediaUrl(venue.image.url)}
-                            alt={venue.image.alt || venue.name}
-                            fill
-                            className="object-contain p-2"
-                          />
-                        </div>
+                    <div>
+                      <Link
+                        href={`/events/venues/${venue.slug}`}
+                        className="text-2xl font-bold hover:text-primary transition-colors"
+                      >
+                        {venue.name}
+                      </Link>
+                      {venue.address && (
+                        <p className="text-gray-300 text-sm flex items-center gap-1 mt-1">
+                          <MapPin className="w-4 h-4" />
+                          {venue.address}
+                        </p>
                       )}
-                      <div>
-                        <h2 className="text-2xl font-bold">{venue.name}</h2>
-                        {venue.address && (
-                          <p className="text-gray-300 text-sm flex items-center gap-1 mt-1">
-                            <MapPin className="w-4 h-4" />
-                            {venue.address}
-                          </p>
-                        )}
-                      </div>
                     </div>
                   </div>
 

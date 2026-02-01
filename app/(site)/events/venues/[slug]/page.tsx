@@ -92,19 +92,20 @@ export default async function VenueDetailPage({ params }: Props) {
       {/* Venue Hero */}
       <section className="bg-gradient-to-r from-lrp-black to-gray-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center gap-8">
+          <div className="flex flex-col md:flex-row items-start gap-8">
             {venue.image && typeof venue.image === 'object' && (
-              <div className="relative w-32 h-32 bg-white rounded-xl overflow-hidden flex-shrink-0 shadow-lg">
+              <div className="relative w-full md:w-80 h-64 md:h-72 bg-white rounded-2xl overflow-hidden flex-shrink-0 shadow-xl">
                 <Image
                   src={getMediaUrl(venue.image.url)}
                   alt={venue.image.alt || venue.name}
                   fill
-                  className="object-contain p-3"
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 320px"
                   priority
                 />
               </div>
             )}
-            <div className="text-center md:text-left">
+            <div className="flex-1 text-center md:text-left">
               <h1 className="text-4xl sm:text-5xl font-bold mb-3">{venue.name}</h1>
               {venue.address && (
                 <p className="flex items-center justify-center md:justify-start text-gray-300 text-lg mb-2">
@@ -134,13 +135,46 @@ export default async function VenueDetailPage({ params }: Props) {
                   </a>
                 )}
               </div>
+              {venue.description && (
+                <p className="text-gray-300 text-lg mt-6 max-w-3xl">{venue.description}</p>
+              )}
             </div>
           </div>
-          {venue.description && (
-            <p className="text-gray-300 text-lg mt-8 max-w-3xl">{venue.description}</p>
-          )}
         </div>
       </section>
+
+      {/* Photo Gallery */}
+      {venue.gallery && venue.gallery.length > 0 && (
+        <section className="py-10 border-b border-gray-200 dark:border-gray-700">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-6">
+              Venue Photos
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {venue.gallery.map((item, index) => {
+                const img = typeof item.image === 'object' ? item.image : null
+                if (!img) return null
+                return (
+                  <div key={item.id || index} className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md group">
+                    <Image
+                      src={getMediaUrl(img.url)}
+                      alt={item.caption || img.alt || `${venue.name} photo ${index + 1}`}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                    {item.caption && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
+                        <p className="text-white text-sm">{item.caption}</p>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Additional Venue Info */}
       {venue.additionalInfo && renderRichText(venue.additionalInfo) && (

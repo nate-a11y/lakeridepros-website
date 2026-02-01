@@ -618,11 +618,7 @@ export interface Venue {
   slug: string;
   description?: string;
   image?: { url: string; alt?: string } | string;
-  gallery?: Array<{
-    image: { url: string; alt?: string } | string;
-    caption?: string;
-    id?: string;
-  }>;
+  // gallery field temporarily removed — requires venues_gallery table
   address?: string;
   website?: string;
   phone?: string;

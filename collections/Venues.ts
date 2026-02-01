@@ -89,6 +89,13 @@ export const Venues: CollectionConfig = {
       },
     },
     {
+      name: 'additionalInfo',
+      type: 'richText',
+      admin: {
+        description: 'Additional venue details — parking, group rates, tips, etc.',
+      },
+    },
+    {
       name: 'order',
       type: 'number',
       defaultValue: 0,

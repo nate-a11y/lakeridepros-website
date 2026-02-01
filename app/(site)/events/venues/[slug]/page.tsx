@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getVenueBySlug, getUpcomingEvents } from '@/lib/api/payload'
 import { getMediaUrl } from '@/lib/utils'
+import { renderRichText } from '@/lib/renderRichText'
 import { MapPin, Globe, Phone, ArrowLeft, Calendar, Clock } from 'lucide-react'
 import RideAvailabilityBadge from '@/components/RideAvailabilityBadge'
 
@@ -140,6 +141,21 @@ export default async function VenueDetailPage({ params }: Props) {
           )}
         </div>
       </section>
+
+      {/* Additional Venue Info */}
+      {venue.additionalInfo && renderRichText(venue.additionalInfo) && (
+        <section className="py-10 border-b border-gray-200 dark:border-gray-700">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-4">
+              Venue Details
+            </h2>
+            <div
+              dangerouslySetInnerHTML={{ __html: renderRichText(venue.additionalInfo) }}
+              className="prose-themed text-lg max-w-none"
+            />
+          </div>
+        </section>
+      )}
 
       {/* Upcoming Events */}
       <section className="py-12">

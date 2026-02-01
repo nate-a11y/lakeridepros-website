@@ -651,6 +651,7 @@ export async function getVenues(params?: PaginationParams & FilterParams): Promi
     where: JSON.stringify({ active: { equals: true } }),
     sort: 'order',
     depth: 2,
+    limit: 1000,
     ...params,
   };
   return fetchFromPayload<ApiResponse<Venue>>('/venues', { params: baseParams as Record<string, unknown> });

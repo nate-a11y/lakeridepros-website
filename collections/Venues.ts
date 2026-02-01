@@ -59,8 +59,28 @@ export const Venues: CollectionConfig = {
         description: 'Primary venue photo or logo',
       },
     },
-    // NOTE: gallery array field temporarily removed — requires venues_gallery
-    // table in database before re-enabling. See SQL migration notes.
+    {
+      name: 'gallery',
+      type: 'array',
+      admin: {
+        description: 'Additional venue photos — exterior, interior, parking, etc.',
+      },
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+        {
+          name: 'caption',
+          type: 'text',
+          admin: {
+            description: 'Optional photo caption',
+          },
+        },
+      ],
+    },
     {
       name: 'address',
       type: 'textarea',

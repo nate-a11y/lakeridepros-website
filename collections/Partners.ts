@@ -316,6 +316,9 @@ export const Partners: CollectionConfig = {
           type: 'upload',
           relationTo: 'media',
           required: true,
+          admin: {
+            allowCreate: false,
+          },
         },
       ],
       admin: {

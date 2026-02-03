@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, Component, type ReactNode } from 'react'
+import { useField } from '@payloadcms/ui'
 import { BulkUploadModal } from './BulkUploadModal'
 
 interface UploadedFile {
@@ -8,24 +9,73 @@ interface UploadedFile {
   id: string
 }
 
+interface ImageItem {
+  image: string
+  id?: string
+}
+
 /**
- * UI component that adds bulk upload capability to an array field
- * Place this as a UI field before the images array in your collection
- *
- * After uploading, images are added to Media collection.
- * User can then add them to the array using the + Add button below.
+ * Error boundary prevents the bulk upload component from crashing the
+ * entire admin page. If the component throws (e.g. missing form context),
+ * a graceful fallback is shown instead of Payload's "Failed to load".
  */
-export function BulkUploadForArray() {
+class BulkUploadErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: ReactNode }) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  componentDidCatch(error: Error) {
+    console.error('[BulkUploadForArray] Component error:', error)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="mb-4 p-4 border border-yellow-200 dark:border-yellow-800 rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
+          <p className="text-sm text-yellow-800 dark:text-yellow-200">
+            Bulk upload temporarily unavailable. Use the &quot;+ Add Image&quot; button below to add images individually.
+          </p>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
+/**
+ * Inner component that uses Payload's useField hook to access the sibling
+ * 'images' array field. After bulk uploading, images are automatically
+ * added to the array — no manual "+ Add Image" step needed.
+ */
+function BulkUploadForArrayInner() {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [recentUploads, setRecentUploads] = useState<UploadedFile[]>([])
+  const [addedCount, setAddedCount] = useState(0)
+
+  // Access the sibling 'images' array field so we can auto-add uploaded images
+  const { value: imagesValue, setValue: setImagesValue } = useField<ImageItem[]>({ path: 'images' })
 
   const handleUploadComplete = useCallback((uploadedFiles: UploadedFile[]) => {
-    setRecentUploads(uploadedFiles)
-    setIsModalOpen(false)
-  }, [])
+    // Create new array items for each uploaded file
+    const newItems: ImageItem[] = uploadedFiles.map(file => ({
+      image: file.id,
+    }))
 
-  const handleClearRecent = useCallback(() => {
-    setRecentUploads([])
+    // Append to existing images array
+    setImagesValue([...(imagesValue || []), ...newItems])
+    setAddedCount(uploadedFiles.length)
+    setIsModalOpen(false)
+  }, [imagesValue, setImagesValue])
+
+  const handleDismiss = useCallback(() => {
+    setAddedCount(0)
   }, [])
 
   return (
@@ -54,39 +104,24 @@ export function BulkUploadForArray() {
           </button>
         </div>
 
-        {/* Show recently uploaded files with instructions */}
-        {recentUploads.length > 0 && (
+        {/* Success message after images are added to the gallery */}
+        {addedCount > 0 && (
           <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-green-700 dark:text-green-300">
-                {recentUploads.length} image{recentUploads.length !== 1 ? 's' : ''} uploaded to Media
+                {addedCount} image{addedCount !== 1 ? 's' : ''} uploaded and added to the gallery
               </p>
               <button
                 type="button"
-                onClick={handleClearRecent}
+                onClick={handleDismiss}
                 className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
               >
                 Dismiss
               </button>
             </div>
-            <p className="text-xs text-blue-600 dark:text-blue-400 mb-2">
-              Click &quot;+ Add Image&quot; below, then select your uploaded images
+            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+              Remember to save the document to keep these changes
             </p>
-            <div className="flex flex-wrap gap-1">
-              {recentUploads.slice(0, 5).map((file) => (
-                <span
-                  key={file.id}
-                  className="inline-flex items-center px-2 py-1 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded"
-                >
-                  {file.name}
-                </span>
-              ))}
-              {recentUploads.length > 5 && (
-                <span className="inline-flex items-center px-2 py-1 text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded">
-                  +{recentUploads.length - 5} more
-                </span>
-              )}
-            </div>
           </div>
         )}
       </div>
@@ -97,6 +132,22 @@ export function BulkUploadForArray() {
         onUploadComplete={handleUploadComplete}
       />
     </>
+  )
+}
+
+/**
+ * UI component that adds bulk upload capability to an array field.
+ * Place this as a UI field before the 'images' array in your collection.
+ *
+ * Uploads images to the Media collection, then automatically adds them
+ * to the sibling 'images' array field. Wrapped in an error boundary so
+ * a failure here never breaks the admin page.
+ */
+export function BulkUploadForArray() {
+  return (
+    <BulkUploadErrorBoundary>
+      <BulkUploadForArrayInner />
+    </BulkUploadErrorBoundary>
   )
 }
 

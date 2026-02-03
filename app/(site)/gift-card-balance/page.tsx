@@ -102,7 +102,7 @@ export default function GiftCardBalancePage() {
                     value={giftCardCode}
                     onChange={(e) => setGiftCardCode(e.target.value)}
                     placeholder="Enter your gift card code (e.g., LRP-XXXX-XXXX)"
-                    className="w-full px-4 py-4 pr-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-lrp-black focus:border-lrp-green focus:ring-2 focus:ring-lrp-green/20 outline-none transition-all text-lg"
+                    className="w-full px-4 py-4 pr-12 rounded-lg border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-lrp-black dark:text-white focus:border-lrp-green focus:ring-2 focus:ring-lrp-green/20 outline-none transition-all text-lg"
                     required
                     minLength={8}
                     aria-describedby="code-help"

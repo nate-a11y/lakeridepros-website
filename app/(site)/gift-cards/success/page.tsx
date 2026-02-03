@@ -140,7 +140,7 @@ function GiftCardSuccessContent() {
           </Link>
           <Link
             href="/gift-cards"
-            className="flex-1 border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-lrp-black text-center py-4 rounded-lg font-bold transition-all"
+            className="flex-1 border-2 border-neutral-300 dark:border-dark-border hover:bg-neutral-100 dark:hover:bg-dark-bg-secondary text-neutral-900 dark:text-white text-center py-4 rounded-lg font-bold transition-all"
           >
             Buy Another Gift Card
           </Link>

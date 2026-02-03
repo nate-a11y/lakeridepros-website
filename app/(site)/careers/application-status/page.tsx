@@ -204,7 +204,7 @@ export default function ApplicationStatusPage() {
                 type="text"
                 id="applicationId"
                 placeholder="e.g., 123e4567-e89b-12d3-a456-426614174000"
-                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors ${
+                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors ${
                   errors.applicationId ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border'
                 }`}
               />
@@ -225,7 +225,7 @@ export default function ApplicationStatusPage() {
                 type="email"
                 id="email"
                 placeholder="your@email.com"
-                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors ${
+                className={`w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors ${
                   errors.email ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border'
                 }`}
               />

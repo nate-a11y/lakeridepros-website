@@ -112,7 +112,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
               id="license-number"
               type="text"
               className={`w-full px-3 py-2 border rounded-md ${
-                errors.current_license_number ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
+                errors.current_license_number ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.current_license_number && (
@@ -127,7 +127,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
             <select
               {...register('current_license_state')}
               id="license-state"
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
             >
               {US_STATES.map(state => (
                 <option key={state} value={state}>{state}</option>
@@ -147,7 +147,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
               type="text"
               placeholder="e.g., Class A, Class B, CDL"
               className={`w-full px-3 py-2 border rounded-md ${
-                errors.current_license_class ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
+                errors.current_license_class ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.current_license_class && (
@@ -164,7 +164,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
               id="license-expiration"
               type="date"
               className={`w-full px-3 py-2 border rounded-md ${
-                errors.current_license_expiration ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors'
+                errors.current_license_expiration ? 'border-red-500' : 'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors'
               }`}
             />
             {errors.current_license_expiration && (
@@ -181,7 +181,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
                 {...register('license_revoked_past_3_years')}
                 type="checkbox"
                 id="revoked"
-                className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded"
+                className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
               />
               <label htmlFor="revoked" className="ml-2 text-sm text-neutral-900 dark:text-white">
                 Has your license been revoked, suspended, or denied in the past 3 years?
@@ -195,7 +195,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
                 {...register('accidents_past_3_years')}
                 type="checkbox"
                 id="accidents"
-                className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded"
+                className="h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
               />
               <label htmlFor="accidents" className="ml-2 text-sm text-neutral-900 dark:text-white">
                 Have you been involved in any accidents in the past 3 years?
@@ -212,7 +212,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
                 {...register('accidents_explanation')}
                 id="accidents-explanation"
                 rows={3}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md"
                 placeholder="Provide details about the accident(s)"
               />
             </div>
@@ -234,7 +234,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
               {...register('authorize_license_record_check')}
               type="checkbox"
               id="authorize"
-              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded"
+              className="mt-1 h-4 w-4 text-primary focus:ring-primary focus:ring-primary border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded"
             />
             <label htmlFor="authorize" className="ml-3 text-sm text-neutral-900 dark:text-white">
               I authorize the investigation of my previous driving record *
@@ -249,7 +249,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
             <label htmlFor="license-verification-signature" className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
               Signature *
             </label>
-            <div id="license-verification-signature" className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
+            <div id="license-verification-signature" className="border-2 border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  rounded-md bg-white dark:bg-dark-bg-secondary">
               <SignatureCanvas
                 ref={signatureRef}
                 canvasProps={{
@@ -279,7 +279,7 @@ export default function Step3LicenseVerification({ onNext, onPrevious }: Step3Li
           <button
             type="button"
             onClick={onPrevious}
-            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-lrp-black transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
+            className="px-6 py-3 border border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white transition-colors  font-semibold rounded-lg transition-colors hover:bg-neutral-50 dark:hover:bg-dark-bg-secondary"
           >
             Previous
           </button>

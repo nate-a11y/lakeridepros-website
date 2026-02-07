@@ -3,7 +3,7 @@ import { permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
-import { getServiceBySlugLocal, getMediaUrl, getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/payload-local';
+import { getServiceBySlugLocal, getMediaUrl, getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity';
 import BookingWidget from '@/components/BookingWidget';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import { DynamicIcon } from '@/lib/iconMapper';

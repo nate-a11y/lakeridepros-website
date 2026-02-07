@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
-import type { Media } from '@/src/payload-types';
+import type { Media } from '@/types/sanity';
 
 interface VehicleImage {
   image: Media;

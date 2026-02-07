@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, Quote } from 'lucide-react'
-import { getTestimonialsLocal } from '@/lib/api/payload-local'
-import { getMediaUrl } from '@/lib/api/payload'
-import type { Testimonial } from '@/src/payload-types'
+import { getTestimonialsLocal, getMediaUrl } from '@/lib/api/sanity'
+import type { Testimonial } from '@/types/sanity'
 
 export const metadata: Metadata = {
   title: 'Customer Reviews & Testimonials | Lake Ride Pros',

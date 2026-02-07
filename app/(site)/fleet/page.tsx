@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getVehicles, getMediaUrl } from '@/lib/api/payload';
+import { getVehicles, getMediaUrl } from '@/lib/api/sanity';
 
 export const metadata: Metadata = {
   title: 'Our Fleet - Luxury Vehicles | Lake Ride Pros',

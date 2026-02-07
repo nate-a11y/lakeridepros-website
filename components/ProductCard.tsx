@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Product } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload';
+import type { Product } from '@/types/sanity';
+import { getMediaUrl } from '@/lib/api/sanity';
 import { formatPrice } from '@/lib/utils';
 
 interface ProductCardProps {

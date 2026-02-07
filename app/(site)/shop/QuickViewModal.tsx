@@ -8,7 +8,7 @@ import { X, ShoppingCart, Check, ExternalLink, Package } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl, cn } from '@/lib/utils'
 import { VariantSelector } from '@/components/shop'
-import type { Product } from '@/src/payload-types'
+import type { Product } from '@/types/sanity'
 
 interface QuickViewProduct extends Omit<Product, 'id'> {
   id: string | number

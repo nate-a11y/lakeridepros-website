@@ -6,7 +6,7 @@ import { ShoppingCart, Check, Package, Truck, Shield } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl, cn } from '@/lib/utils'
 import { VariantSelector } from '@/components/shop'
-import type { Product } from '@/src/payload-types'
+import type { Product } from '@/types/sanity'
 
 interface ProductActionsProps {
   product: Product

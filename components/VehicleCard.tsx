@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Vehicle } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload';
+import type { Vehicle } from '@/types/sanity';
+import { getMediaUrl } from '@/lib/api/sanity';
 import { TierBadges } from './TierBadge';
 
 interface VehicleCardProps {

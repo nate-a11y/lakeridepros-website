@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ShopClient from './ShopClient'
-import type { Product } from '@/src/payload-types'
+import type { Product } from '@/types/sanity'
 
 export const metadata: Metadata = {
   title: 'Shop Lake Ride Pros Merchandise | T-Shirts, Hats & More',

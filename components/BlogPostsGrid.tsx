@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import BlogPostCard from '@/components/BlogPostCard';
-import type { BlogPost } from '@/src/payload-types';
+import type { BlogPost } from '@/types/sanity';
 
 interface BlogPostsGridProps {
   initialPosts: BlogPost[];

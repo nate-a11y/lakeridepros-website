@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Calendar, MapPin, Search } from 'lucide-react'
-import { Event, Venue } from '@/lib/api/payload'
+import { Event, Venue } from '@/lib/api/sanity'
 import RideAvailabilityBadge from './RideAvailabilityBadge'
 
 interface EventCalendarClientProps {

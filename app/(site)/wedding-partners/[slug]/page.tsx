@@ -3,8 +3,8 @@ import { permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
-import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/payload-local';
-import type { Media } from '@/src/payload-types';
+import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/sanity';
+import type { Media } from '@/types/sanity';
 import ImageGallery from '@/components/ImageGallery';
 
 // Wedding category labels mapping

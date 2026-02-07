@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ShoppingBag, Star, Search, X, Heart, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import QuickViewModal from './QuickViewModal'
 import { getMediaUrl } from '@/lib/utils'
-import type { Product, Media } from '@/src/payload-types'
+import type { Product, Media } from '@/types/sanity'
 
 interface ShopClientProps {
   initialProducts: Product[]

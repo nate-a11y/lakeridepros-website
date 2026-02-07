@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getServicesLocal } from '@/lib/api/payload-local';
+import { getServicesLocal } from '@/lib/api/sanity';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 

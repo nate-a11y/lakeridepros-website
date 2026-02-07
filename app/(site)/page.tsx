@@ -9,8 +9,8 @@ import {
   getRandomTestimonials,
   getPartners,
   getMediaUrl,
-} from '@/lib/api/payload';
-import { getLatestBlogPostsLocal } from '@/lib/api/payload-local';
+  getLatestBlogPostsLocal,
+} from '@/lib/api/sanity';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 

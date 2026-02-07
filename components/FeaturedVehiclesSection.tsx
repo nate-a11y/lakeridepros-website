@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { Vehicle } from '@/src/payload-types';
+import type { Vehicle } from '@/types/sanity';
 import VehicleCard from './VehicleCard';
 
 interface FeaturedVehiclesSectionProps {

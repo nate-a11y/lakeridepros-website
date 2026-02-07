@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Service } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload';
+import type { Service } from '@/types/sanity';
+import { getMediaUrl } from '@/lib/api/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { ChevronRight } from 'lucide-react';
 import { BookingModal } from './BookingModal';

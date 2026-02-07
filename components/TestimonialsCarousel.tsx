@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { getMediaUrl } from '@/lib/api/payload';
-import type { Testimonial } from '@/src/payload-types';
+import { getMediaUrl } from '@/lib/api/sanity';
+import type { Testimonial } from '@/types/sanity';
 import { ChevronLeft, ChevronRight, Quote, Pause, Play } from 'lucide-react';
 
 interface TestimonialsCarouselProps {

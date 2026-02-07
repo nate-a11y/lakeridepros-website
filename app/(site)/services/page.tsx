@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import BookingWidget from '@/components/BookingWidget';
-import { getServices, getMediaUrl } from '@/lib/api/payload';
+import { getServices, getMediaUrl } from '@/lib/api/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { ChevronRight } from 'lucide-react';
 

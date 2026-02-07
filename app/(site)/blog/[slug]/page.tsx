@@ -2,11 +2,9 @@ import { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getMediaUrl } from '@/lib/api/payload';
-import { getBlogPostBySlugLocal, getAdjacentBlogPostsLocal } from '@/lib/api/payload-local';
+import { getMediaUrl, getBlogPostBySlugLocal, getAdjacentBlogPostsLocal } from '@/lib/api/sanity';
 import { formatDate } from '@/lib/utils';
-import { serializeLexical } from '@/lib/serializeLexical';
-import type { User } from '@/src/payload-types';
+import { RichText } from '@/lib/sanity/serialize-portable-text';
 import BlogPostNavigation from '@/components/BlogPostNavigation';
 
 export const dynamic = 'force-dynamic';
@@ -23,15 +21,15 @@ const getCategoryLabel = (categoryValue: string): string => {
 };
 
 // Helper function to get author name from either ID, string, or object
-const getAuthorName = (author: User | string | number | null | undefined): string => {
+const getAuthorName = (author: { name?: string } | string | number | null | undefined): string => {
   if (!author || typeof author === 'number') {
     return 'Lake Ride Pros';
   }
   if (typeof author === 'string') {
-    // If it's just an email, return "Lake Ride Pros" as fallback
+    // If it's just an email or ID, return "Lake Ride Pros" as fallback
     return 'Lake Ride Pros';
   }
-  // If it's a User object, return the name or fallback
+  // If it's a User object (Sanity reference), return the name or fallback
   return author.name || 'Lake Ride Pros';
 };
 
@@ -238,8 +236,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 // Legacy HTML content from older posts
                 <div dangerouslySetInnerHTML={{ __html: post.content }} />
               ) : (
-                // New Lexical rich text content
-                serializeLexical(post.content)
+                // Sanity Portable Text content
+                <RichText content={post.content} />
               )
             ) : post.excerpt ? (
               <p>{post.excerpt}</p>

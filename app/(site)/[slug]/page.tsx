@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getPageBySlug, getMediaUrl } from '@/lib/api/payload';
+import { getPageBySlug, getMediaUrl } from '@/lib/api/sanity';
 import Image from 'next/image';
-import type { Page, Media } from '@/src/payload-types';
+import type { Page, Media } from '@/types/sanity';
 
 interface LexicalNode {
   type: string;

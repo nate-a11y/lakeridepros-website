@@ -4,7 +4,7 @@ import { useState, useMemo, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ExternalLink, Phone, ArrowRight } from 'lucide-react'
-import { Partner } from '@/src/payload-types'
+import { Partner } from '@/types/sanity'
 import { getMediaUrl } from '@/lib/utils'
 import PartnerFilters from './PartnerFilters'
 

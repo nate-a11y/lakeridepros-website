@@ -1,4 +1,4 @@
-import { getUpcomingEvents, getVenues } from '@/lib/api/payload'
+import { getUpcomingEvents, getVenues } from '@/lib/api/sanity'
 import Link from 'next/link'
 import EventCalendarClient from '@/components/EventCalendarClient'
 

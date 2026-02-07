@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useSyncExternalStore } from 'react';
-import type { Product } from '@/src/payload-types';
+import type { Product } from '@/types/sanity';
 
 const CART_STORAGE_KEY = 'lakeridepros_cart';
 

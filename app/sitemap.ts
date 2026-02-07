@@ -6,7 +6,7 @@ import {
   getProductsLocal,
   getPagesLocal,
   getPartnersLocal,
-} from '@/lib/api/payload-local';
+} from '@/lib/api/sanity';
 import { getDriversForWebsite } from '@/lib/supabase/drivers';
 
 // Regenerate sitemap every hour instead of at build time

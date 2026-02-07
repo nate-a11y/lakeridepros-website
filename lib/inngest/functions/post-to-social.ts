@@ -1,7 +1,7 @@
 import { inngest } from '../client'
 import { getPayload } from 'payload'
 import config from '@/src/payload.config'
-import { getMediaUrl } from '@/lib/api/payload-local'
+import { getMediaUrl } from '@/lib/api/sanity'
 
 const META_PAGE_ACCESS_TOKEN = process.env.META_PAGE_ACCESS_TOKEN
 const FACEBOOK_PAGE_ID = process.env.FACEBOOK_PAGE_ID

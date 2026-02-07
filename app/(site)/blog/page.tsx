@@ -2,8 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import BlogPostsGrid from '@/components/BlogPostsGrid';
-import { getBlogPostsLocal } from '@/lib/api/payload-local';
-import { getMediaUrl } from '@/lib/api/payload';
+import { getBlogPostsLocal, getMediaUrl } from '@/lib/api/sanity';
 import { formatDate } from '@/lib/utils';
 import { FileText, ArrowRight } from 'lucide-react';
 

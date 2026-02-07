@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import type { Service } from '@/src/payload-types';
+import type { Service } from '@/types/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { TrendingUp, ChevronRight } from 'lucide-react';
 import { BookingModal } from './BookingModal';

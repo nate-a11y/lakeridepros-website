@@ -4,7 +4,7 @@ import { useCart } from '@/contexts/CartContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatPrice } from '@/lib/utils';
-import { getMediaUrl } from '@/lib/api/payload';
+import { getMediaUrl } from '@/lib/api/sanity';
 
 export default function CartDrawer() {
   const { cart, isOpen, closeCart, removeFromCart, updateQuantity } = useCart();

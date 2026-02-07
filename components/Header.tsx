@@ -1,4 +1,4 @@
-import { getServicesLocal } from '@/lib/api/payload-local';
+import { getServicesLocal } from '@/lib/api/sanity';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 import HeaderClient from './HeaderClient';
 

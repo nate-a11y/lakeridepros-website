@@ -1,4 +1,5 @@
-import { withPayload } from '@payloadcms/next/withPayload'
+// Payload CMS wrapper removed — migrating to Sanity CMS
+// import { withPayload } from '@payloadcms/next/withPayload'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -20,6 +21,12 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60,
     remotePatterns: [
+      // Sanity CDN for images
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+      // Keep Supabase for legacy/migration period
       {
         protocol: 'https',
         hostname: '*.supabase.co',
@@ -332,7 +339,9 @@ const nextConfig = {
   },
 }
 
-export default withPayload(nextConfig, {
-  configPath: './src/payload.config.ts',
-  generateLayouts: false
-})
+// Payload CMS wrapper removed — migrating to Sanity CMS
+// export default withPayload(nextConfig, {
+//   configPath: './src/payload.config.ts',
+//   generateLayouts: false
+// })
+export default nextConfig

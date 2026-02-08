@@ -159,7 +159,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
     },
     { name: 'Events', href: '/events' },
     {
-      name: 'About',
+      name: 'Learn More',
       href: '/about-us',
       hasDropdown: true,
       dropdownType: 'about',
@@ -313,7 +313,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
 
                   {item.dropdownType === 'about' && dropdowns.about && (
                     <div className="absolute top-full left-0 pt-2 z-50">
-                    <div role="menu" aria-label="About submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
+                    <div role="menu" aria-label="Learn More submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}

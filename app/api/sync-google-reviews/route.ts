@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPayload } from 'payload';
-import config from '@payload-config';
+import { writeClient } from '@/sanity/lib/client';
+import { groq } from 'next-sanity';
 import { transformGoogleReviewToTestimonial } from '@/lib/google-reviews';
 
 /**
@@ -13,28 +13,18 @@ import { transformGoogleReviewToTestimonial } from '@/lib/google-reviews';
  */
 export async function POST(req: NextRequest) {
   try {
-    const payload = await getPayload({ config });
-
-    // Verify admin authentication using Payload session
-    const { user } = await payload.auth({ headers: req.headers });
-
-    if (!user) {
+    // TODO: Payload's payload.auth() is not available with Sanity.
+    // Using admin secret header for authentication instead.
+    const adminSecret = req.headers.get('x-admin-secret')
+    if (adminSecret !== process.env.ADMIN_API_SECRET) {
       return NextResponse.json(
-        { error: 'Unauthorized - Please log in to the admin panel' },
+        { error: 'Unauthorized - Please provide valid admin credentials' },
         { status: 401 }
       );
     }
 
-    // Optional: Check if user has admin role (if your Users collection has roles)
-    // if (!user.roles?.includes('admin')) {
-    //   return NextResponse.json(
-    //     { error: 'Forbidden - Admin access required' },
-    //     { status: 403 }
-    //   );
-    // }
-
     // Fetch reviews from Supabase Edge Function (which calls Outscraper)
-    console.log('🔄 Starting Google reviews sync via Outscraper...');
+    console.log('Starting Google reviews sync via Outscraper...');
 
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -46,15 +36,12 @@ export async function POST(req: NextRequest) {
     // Get the last sync timestamp to only fetch new/updated reviews
     let lastSyncTimestamp: string | undefined
     try {
-      const lastSynced = await payload.find({
-        collection: 'testimonials',
-        where: { source: { equals: 'google' } },
-        sort: '-syncedAt',
-        limit: 1,
-      })
-      if (lastSynced.docs[0]?.syncedAt) {
-        lastSyncTimestamp = lastSynced.docs[0].syncedAt
-        console.log(`📅 Last sync: ${new Date(lastSyncTimestamp).toLocaleString()} - fetching only new reviews`)
+      const lastSynced = await writeClient.fetch(
+        groq`*[_type == "testimonial" && source == "google"] | order(syncedAt desc) [0] { syncedAt }`
+      )
+      if (lastSynced?.syncedAt) {
+        lastSyncTimestamp = lastSynced.syncedAt
+        console.log(`Last sync: ${new Date(lastSyncTimestamp).toLocaleString()} - fetching only new reviews`)
       }
     } catch (error) {
       console.warn('Could not determine last sync time, fetching all reviews:', error)
@@ -70,7 +57,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         placeId: process.env.GOOGLE_PLACE_ID || 'ChIJJ8GI2fuCGWIRW8RfPECoxN4',
-        lastSyncTimestamp, // Pass the last sync time to only fetch newer reviews
+        lastSyncTimestamp,
       }),
     });
 
@@ -99,7 +86,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    console.log(`📥 Fetched ${googleReviews.length} reviews from ${metadata?.businessName || 'Google'}`);
+    console.log(`Fetched ${googleReviews.length} reviews from ${metadata?.businessName || 'Google'}`);
 
     let created = 0;
     let updated = 0;
@@ -109,43 +96,34 @@ export async function POST(req: NextRequest) {
     for (const googleReview of googleReviews) {
       try {
         // Check if review already exists by externalId
-        const existing = await payload.find({
-          collection: 'testimonials',
-          where: {
-            externalId: {
-              equals: googleReview.reviewId,
-            },
-          },
-          limit: 1,
-        });
+        const existing = await writeClient.fetch(
+          groq`*[_type == "testimonial" && externalId == $externalId][0]`,
+          { externalId: googleReview.reviewId }
+        );
 
         const testimonialData = transformGoogleReviewToTestimonial(googleReview);
 
-        if (existing.docs.length > 0) {
+        if (existing) {
           // Update existing review
-          await payload.update({
-            collection: 'testimonials',
-            id: existing.docs[0].id,
-            data: {
-              ...testimonialData,
-              // Preserve manual overrides
-              featured: existing.docs[0].featured, // Don't override featured status
-              order: existing.docs[0].order, // Don't override order
-            },
-          });
+          await writeClient.patch(existing._id).set({
+            ...testimonialData,
+            // Preserve manual overrides
+            featured: existing.featured, // Don't override featured status
+            order: existing.order, // Don't override order
+          }).commit();
           updated++;
-          console.log(`✅ Updated: ${testimonialData.name}`);
+          console.log(`Updated: ${testimonialData.name}`);
         } else {
           // Create new testimonial
-          await payload.create({
-            collection: 'testimonials',
-            data: testimonialData,
+          await writeClient.create({
+            _type: 'testimonial',
+            ...testimonialData,
           });
           created++;
-          console.log(`✨ Created: ${testimonialData.name}`);
+          console.log(`Created: ${testimonialData.name}`);
         }
       } catch (error) {
-        console.error(`❌ Error processing review ${googleReview.reviewId}:`, error);
+        console.error(`Error processing review ${googleReview.reviewId}:`, error);
         skipped++;
       }
     }
@@ -157,7 +135,7 @@ export async function POST(req: NextRequest) {
       skipped,
     };
 
-    console.log('✅ Sync completed:', stats);
+    console.log('Sync completed:', stats);
 
     return NextResponse.json({
       success: true,
@@ -167,7 +145,7 @@ export async function POST(req: NextRequest) {
     });
 
   } catch (error) {
-    console.error('❌ Error syncing Google reviews:', error);
+    console.error('Error syncing Google reviews:', error);
     return NextResponse.json(
       {
         error: 'Failed to sync Google reviews',
@@ -185,30 +163,22 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(_req: NextRequest) {
   try {
-    const payload = await getPayload({ config });
-
     let lastSync;
     let totalGoogleReviews = 0;
 
     // Try to get testimonials from Google source
-    // This might fail if the schema hasn't been updated yet
     try {
-      const googleTestimonials = await payload.find({
-        collection: 'testimonials',
-        where: {
-          source: {
-            equals: 'google',
-          },
-        },
-        sort: '-syncedAt',
-        limit: 1,
-      });
+      const result = await writeClient.fetch(
+        groq`{
+          "lastSynced": *[_type == "testimonial" && source == "google"] | order(syncedAt desc) [0] { syncedAt },
+          "total": count(*[_type == "testimonial" && source == "google"])
+        }`
+      );
 
-      lastSync = googleTestimonials.docs[0]?.syncedAt;
-      totalGoogleReviews = googleTestimonials.totalDocs;
+      lastSync = result.lastSynced?.syncedAt;
+      totalGoogleReviews = result.total;
     } catch (queryError) {
-      console.warn('Schema not yet updated - Google sync fields not available:', queryError);
-      // Continue with default values (lastSync undefined, totalGoogleReviews 0)
+      console.warn('Could not query Google testimonials:', queryError);
     }
 
     // Check if Outscraper is configured

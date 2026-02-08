@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@/src/payload.config'
+import { writeClient } from '@/sanity/lib/client'
+import { groq } from 'next-sanity'
 
 interface TrackEventRequest {
   serviceSlug: string
@@ -11,6 +11,7 @@ interface DailyStat {
   date: string
   views: number
   bookings: number
+  _key: string
 }
 
 export async function POST(request: NextRequest) {
@@ -33,87 +34,70 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const payload = await getPayload({ config })
-
     // Find the service by slug
-    const servicesResponse = await payload.find({
-      collection: 'services',
-      where: {
-        slug: {
-          equals: serviceSlug,
-        },
-      },
-      limit: 1,
-    })
+    const service = await writeClient.fetch(
+      groq`*[_type == "service" && slug.current == $slug][0] { _id }`,
+      { slug: serviceSlug }
+    )
 
-    if (!servicesResponse.docs.length) {
+    if (!service) {
       return NextResponse.json(
         { error: 'Service not found' },
         { status: 404 }
       )
     }
 
-    const service = servicesResponse.docs[0]
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const todayStr = today.toISOString()
 
     // Find or create analytics record for this service
-    const analyticsResponse = await payload.find({
-      collection: 'service-analytics',
-      where: {
-        service: {
-          equals: service.id,
-        },
-      },
-      limit: 1,
-    })
-
-    let analytics = analyticsResponse.docs[0]
+    let analytics = await writeClient.fetch(
+      groq`*[_type == "serviceAnalytics" && service._ref == $serviceId][0]`,
+      { serviceId: service._id }
+    )
 
     if (!analytics) {
       // Create new analytics record
-      analytics = await payload.create({
-        collection: 'service-analytics',
-        data: {
-          service: service.id,
-          views: eventType === 'view' ? 1 : 0,
-          bookings: eventType === 'booking' ? 1 : 0,
-          viewsLast30Days: eventType === 'view' ? 1 : 0,
-          bookingsLast30Days: eventType === 'booking' ? 1 : 0,
-          popularityScore: eventType === 'booking' ? 10 : 1,
-          lastViewedAt: eventType === 'view' ? now.toISOString() : undefined,
-          lastBookedAt: eventType === 'booking' ? now.toISOString() : undefined,
-          dailyStats: [
-            {
-              date: today.toISOString(),
-              views: eventType === 'view' ? 1 : 0,
-              bookings: eventType === 'booking' ? 1 : 0,
-            },
-          ],
-        },
+      analytics = await writeClient.create({
+        _type: 'serviceAnalytics',
+        service: { _type: 'reference', _ref: service._id },
+        views: eventType === 'view' ? 1 : 0,
+        bookings: eventType === 'booking' ? 1 : 0,
+        viewsLast30Days: eventType === 'view' ? 1 : 0,
+        bookingsLast30Days: eventType === 'booking' ? 1 : 0,
+        popularityScore: eventType === 'booking' ? 10 : 1,
+        lastViewedAt: eventType === 'view' ? now.toISOString() : undefined,
+        lastBookedAt: eventType === 'booking' ? now.toISOString() : undefined,
+        dailyStats: [
+          {
+            _key: crypto.randomUUID().slice(0, 8),
+            date: todayStr,
+            views: eventType === 'view' ? 1 : 0,
+            bookings: eventType === 'booking' ? 1 : 0,
+          },
+        ],
       })
     } else {
       // Update existing analytics record
-      const dailyStats = Array.isArray(analytics.dailyStats) ? [...analytics.dailyStats] : []
+      const dailyStats: DailyStat[] = Array.isArray(analytics.dailyStats) ? [...analytics.dailyStats] : []
 
       // Find today's stats
       const todayStats = dailyStats.find((stat) => {
-        const typedStat = stat as DailyStat
-        const statDate = new Date(typedStat.date)
+        const statDate = new Date(stat.date)
         return statDate.toDateString() === today.toDateString()
-      }) as DailyStat | undefined
+      })
 
       if (todayStats) {
-        // Update today's stats
         if (eventType === 'view') {
           todayStats.views = (todayStats.views || 0) + 1
         } else {
           todayStats.bookings = (todayStats.bookings || 0) + 1
         }
       } else {
-        // Add new day
         dailyStats.push({
-          date: today.toISOString(),
+          _key: crypto.randomUUID().slice(0, 8),
+          date: todayStr,
           views: eventType === 'view' ? 1 : 0,
           bookings: eventType === 'booking' ? 1 : 0,
         })
@@ -121,43 +105,27 @@ export async function POST(request: NextRequest) {
 
       // Keep only last 30 days
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
-      const recentStats = dailyStats.filter((stat) => {
-        const typedStat = stat as DailyStat
-        return new Date(typedStat.date) >= thirtyDaysAgo
-      })
+      const recentStats = dailyStats
+        .filter((stat) => new Date(stat.date) >= thirtyDaysAgo)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 30)
 
-      // Sort by date descending and limit to 30 entries
-      recentStats.sort((a, b) => {
-        const typedA = a as DailyStat
-        const typedB = b as DailyStat
-        return new Date(typedB.date).getTime() - new Date(typedA.date).getTime()
-      })
-      const limitedStats = recentStats.slice(0, 30)
+      const viewsLast30Days = recentStats.reduce((sum, stat) => sum + (stat.views || 0), 0)
+      const bookingsLast30Days = recentStats.reduce((sum, stat) => sum + (stat.bookings || 0), 0)
 
-      // Calculate last 30 days totals
-      const viewsLast30Days = limitedStats.reduce((sum: number, stat) => {
-        const typedStat = stat as DailyStat
-        return sum + (typedStat.views || 0)
-      }, 0)
-      const bookingsLast30Days = limitedStats.reduce((sum: number, stat) => {
-        const typedStat = stat as DailyStat
-        return sum + (typedStat.bookings || 0)
-      }, 0)
-
-      // Update analytics
-      analytics = await payload.update({
-        collection: 'service-analytics',
-        id: analytics.id,
-        data: {
+      analytics = await writeClient
+        .patch(analytics._id)
+        .set({
           views: (analytics.views || 0) + (eventType === 'view' ? 1 : 0),
           bookings: (analytics.bookings || 0) + (eventType === 'booking' ? 1 : 0),
           viewsLast30Days,
           bookingsLast30Days,
+          popularityScore: (bookingsLast30Days * 10) + viewsLast30Days,
           lastViewedAt: eventType === 'view' ? now.toISOString() : analytics.lastViewedAt,
           lastBookedAt: eventType === 'booking' ? now.toISOString() : analytics.lastBookedAt,
-          dailyStats: limitedStats,
-        },
-      })
+          dailyStats: recentStats,
+        })
+        .commit()
     }
 
     return NextResponse.json(

@@ -1,17 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@/src/payload.config'
+
+// TODO: This route generates presigned URLs for Supabase storage uploads.
+// In Sanity, uploads should go through the Sanity asset pipeline instead:
+//   import { writeClient } from '@/sanity/lib/client'
+//   const asset = await writeClient.assets.upload('image', fileBuffer, { filename })
+// Consider migrating this route to use Sanity assets directly.
 
 const bucket = 'media'
 
 export async function POST(req: NextRequest) {
   try {
-    // Verify user is authenticated
-    const payload = await getPayload({ config })
-    const { user } = await payload.auth({ headers: req.headers })
-
-    if (!user) {
+    // Verify admin authentication via secret header
+    const adminSecret = req.headers.get('x-admin-secret')
+    if (adminSecret !== process.env.ADMIN_API_SECRET) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 

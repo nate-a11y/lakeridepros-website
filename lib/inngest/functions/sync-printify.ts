@@ -1,9 +1,9 @@
 import { inngest } from '../client'
-import { getPayload } from 'payload'
-import type { Payload } from 'payload'
-import config from '@/src/payload.config'
+import { writeClient } from '@/sanity/lib/client'
+import { groq } from 'next-sanity'
 import { revalidatePaths } from '@/lib/revalidation'
 import { createHash } from 'crypto'
+import crypto from 'crypto'
 
 const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
@@ -332,22 +332,17 @@ function sanitizeFilename(filename: string): string {
   return `${truncated}-${hash}.webp`
 }
 
-async function findExistingMedia(payload: Payload, filename: string) {
+async function findExistingMedia(filename: string) {
   const sanitizedFilename = sanitizeFilename(filename)
 
   try {
-    const existing = await payload.find({
-      collection: 'media',
-      where: {
-        filename: {
-          equals: sanitizedFilename,
-        },
-      },
-      limit: 1,
-    })
+    const existing = await writeClient.fetch(
+      groq`*[_type == "sanity.imageAsset" && originalFilename == $filename][0]`,
+      { filename: sanitizedFilename }
+    )
 
-    if (existing.docs.length > 0) {
-      return existing.docs[0]
+    if (existing) {
+      return existing
     }
 
     return null
@@ -356,41 +351,31 @@ async function findExistingMedia(payload: Payload, filename: string) {
   }
 }
 
-async function uploadImageToPayload(payload: Payload, imageBuffer: Buffer, filename: string) {
+async function uploadImageToSanity(imageBuffer: Buffer, filename: string) {
   const sanitizedFilename = sanitizeFilename(filename)
 
-  const media = await payload.create({
-    collection: 'media',
-    data: {
-      alt: filename.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '),
-    },
-    file: {
-      data: imageBuffer,
-      name: sanitizedFilename,
-      mimetype: 'image/png',
-      size: imageBuffer.length,
-    },
-    overrideAccess: true,
+  const asset = await writeClient.assets.upload('image', imageBuffer, {
+    filename: sanitizedFilename,
+    contentType: 'image/png',
   })
 
-  return media
+  return asset
 }
 
 async function getOrUploadImage(
-  payload: Payload,
   imageUrl: string,
   filename: string
-): Promise<{ media: Awaited<ReturnType<typeof uploadImageToPayload>>; reused: boolean }> {
+): Promise<{ asset: Awaited<ReturnType<typeof uploadImageToSanity>>; reused: boolean }> {
   const sanitizedFilename = sanitizeFilename(filename)
 
-  const existingMedia = await findExistingMedia(payload, sanitizedFilename)
-  if (existingMedia) {
-    return { media: existingMedia, reused: true }
+  const existingAsset = await findExistingMedia(sanitizedFilename)
+  if (existingAsset) {
+    return { asset: existingAsset, reused: true }
   }
 
   const imageBuffer = await downloadImage(imageUrl)
-  const media = await uploadImageToPayload(payload, imageBuffer, filename)
-  return { media, reused: false }
+  const asset = await uploadImageToSanity(imageBuffer, filename)
+  return { asset, reused: false }
 }
 
 function slugify(text: string): string {
@@ -404,22 +389,17 @@ function slugify(text: string): string {
   return slug.substring(0, 100).replace(/-+$/, '')
 }
 
-async function ensureUniqueSlug(payload: Payload, baseSlug: string, existingProductId?: string | number): Promise<string> {
+async function ensureUniqueSlug(baseSlug: string, existingProductId?: string): Promise<string> {
   let slug = baseSlug
   let counter = 1
 
   while (true) {
-    const existing = await payload.find({
-      collection: 'products',
-      where: {
-        slug: {
-          equals: slug,
-        },
-      },
-      limit: 1,
-    })
+    const existing = await writeClient.fetch(
+      groq`*[_type == "product" && slug.current == $slug][0]{ _id }`,
+      { slug }
+    )
 
-    if (existing.docs.length === 0 || (existingProductId && existing.docs[0].id === existingProductId)) {
+    if (!existing || (existingProductId && existing._id === existingProductId)) {
       return slug
     }
 
@@ -430,35 +410,33 @@ async function ensureUniqueSlug(payload: Payload, baseSlug: string, existingProd
 
 // Process a single product
 async function processProduct(
-  payload: Payload,
   printifyProduct: PrintifyProduct
 ): Promise<{ created: boolean; updated: boolean; imagesReused: number; imagesUploaded: number }> {
   const result = { created: false, updated: false, imagesReused: 0, imagesUploaded: 0 }
 
   // Check if product already exists
-  const existing = await payload.find({
-    collection: 'products',
-    where: {
-      printifyProductId: {
-        equals: printifyProduct.id,
-      },
-    },
-  })
+  const existing = await writeClient.fetch(
+    groq`*[_type == "product" && printifyProductId == $id][0]`,
+    { id: printifyProduct.id }
+  )
 
   const baseSlug = slugify(printifyProduct.title)
-  const existingProductId = existing.docs.length > 0 ? existing.docs[0].id : undefined
-  const slug = await ensureUniqueSlug(payload, baseSlug, existingProductId)
+  const existingProductId = existing ? existing._id : undefined
+  const slug = await ensureUniqueSlug(baseSlug, existingProductId)
 
-  // Process images
-  let featuredImageId: number | null = null
-  const additionalImages: Array<{ image: number }> = []
+  // Process images - in Sanity, images are stored as asset references
+  let featuredImage: { _type: 'image'; asset: { _type: 'reference'; _ref: string } } | null = null
+  const additionalImages: Array<{ _type: 'image'; _key: string; asset: { _type: 'reference'; _ref: string } }> = []
 
   const defaultImage =
     printifyProduct.images.find((img: PrintifyImage) => img.is_default) || printifyProduct.images[0]
 
   if (defaultImage) {
-    const { media, reused } = await getOrUploadImage(payload, defaultImage.src, `${slug}-featured.webp`)
-    featuredImageId = media.id as number
+    const { asset, reused } = await getOrUploadImage(defaultImage.src, `${slug}-featured.webp`)
+    featuredImage = {
+      _type: 'image',
+      asset: { _type: 'reference', _ref: asset._id },
+    }
     if (reused) {
       result.imagesReused++
     } else {
@@ -483,8 +461,12 @@ async function processProduct(
   for (let i = 0; i < imagesToProcess.length; i++) {
     const image = imagesToProcess[i]
     try {
-      const { media, reused } = await getOrUploadImage(payload, image.src, `${slug}-${i + 1}.webp`)
-      additionalImages.push({ image: media.id as number })
+      const { asset, reused } = await getOrUploadImage(image.src, `${slug}-${i + 1}.webp`)
+      additionalImages.push({
+        _type: 'image',
+        _key: crypto.randomUUID().slice(0, 8),
+        asset: { _type: 'reference', _ref: asset._id },
+      })
       if (reused) {
         result.imagesReused++
       } else {
@@ -505,6 +487,7 @@ async function processProduct(
       const { size, color, colorHex } = extractVariantOptions(variant.options, optionLookup)
 
       return {
+        _key: crypto.randomUUID().slice(0, 8),
         name: variant.title,
         sku: variant.sku,
         price: variant.price / 100,
@@ -541,31 +524,30 @@ async function processProduct(
 
   const productData = {
     name: printifyProduct.title,
-    slug,
-    description: {
-      root: {
-        type: 'root',
+    slug: { _type: 'slug', current: slug },
+    description: [
+      {
+        _type: 'block',
+        _key: crypto.randomUUID().slice(0, 8),
+        style: 'normal',
         children: [
           {
-            type: 'paragraph',
-            children: [
-              { type: 'text', text: printifyProduct.description || printifyProduct.title, version: 1 },
-            ],
-            version: 1,
+            _type: 'span',
+            _key: crypto.randomUUID().slice(0, 8),
+            text: printifyProduct.description || printifyProduct.title,
           },
         ],
-        direction: 'ltr' as const,
-        format: '' as const,
-        indent: 0,
-        version: 1,
       },
-    },
+    ],
     shortDescription: printifyProduct.description?.substring(0, 200) || printifyProduct.title,
-    featuredImage: featuredImageId,
+    featuredImage,
     images: additionalImages,
     price: basePrice,
     categories,
-    tags: printifyProduct.tags.map((tag: string) => ({ tag })),
+    tags: printifyProduct.tags.map((tag: string) => ({
+      tag,
+      _key: crypto.randomUUID().slice(0, 8),
+    })),
     inStock: variants.some((v: { inStock: boolean }) => v.inStock),
     variants,
     printifyProductId: printifyProduct.id,
@@ -577,26 +559,11 @@ async function processProduct(
     metaDescription: printifyProduct.description?.substring(0, 160) || printifyProduct.title,
   }
 
-  if (existing.docs.length > 0) {
-    await payload.update({
-      collection: 'products',
-      id: existing.docs[0].id,
-      data: productData,
-      overrideAccess: true,
-      context: {
-        skipRevalidation: true,
-      },
-    })
+  if (existing) {
+    await writeClient.patch(existing._id).set(productData).commit()
     result.updated = true
   } else {
-    await payload.create({
-      collection: 'products',
-      data: productData,
-      overrideAccess: true,
-      context: {
-        skipRevalidation: true,
-      },
-    })
+    await writeClient.create({ _type: 'product', ...productData })
     result.created = true
   }
 
@@ -690,7 +657,6 @@ export const syncPrintifyProducts = inngest.createFunction(
       const batchEnd = Math.min((batchIndex + 1) * BATCH_SIZE, allProducts.length)
 
       const batchResult = await step.run(`process-batch-${batchIndex + 1}`, async () => {
-        const payload = await getPayload({ config })
         const batchResults = {
           created: 0,
           updated: 0,
@@ -707,12 +673,12 @@ export const syncPrintifyProducts = inngest.createFunction(
             // Add delay between products to avoid rate limiting
             await new Promise(resolve => setTimeout(resolve, 500))
 
-            const result = await processProduct(payload, product)
+            const productResult = await processProduct(product)
 
-            if (result.created) batchResults.created++
-            if (result.updated) batchResults.updated++
-            batchResults.imagesReused += result.imagesReused
-            batchResults.imagesUploaded += result.imagesUploaded
+            if (productResult.created) batchResults.created++
+            if (productResult.updated) batchResults.updated++
+            batchResults.imagesReused += productResult.imagesReused
+            batchResults.imagesUploaded += productResult.imagesUploaded
           } catch (error) {
             batchResults.failed++
             const errorMessage = error instanceof Error ? error.message : 'Unknown error'
@@ -735,39 +701,24 @@ export const syncPrintifyProducts = inngest.createFunction(
 
     // Step 3: Clean up products that are no longer visible in Printify
     const cleanupResult = await step.run('cleanup-hidden-products', async () => {
-      const payload = await getPayload({ config })
-
-      // Get all products from Payload that have a printifyProductId
-      const payloadProducts = await payload.find({
-        collection: 'products',
-        where: {
-          printifyProductId: {
-            exists: true,
-          },
-        },
-        limit: 1000, // Adjust if you have more products
-      })
+      // Get all products from Sanity that have a printifyProductId
+      const sanityProducts = await writeClient.fetch(
+        groq`*[_type == "product" && defined(printifyProductId)]{ _id, printifyProductId, name }`
+      )
 
       const visiblePrintifyIds = new Set(allProducts.map(p => p.id))
       let deactivated = 0
 
-      for (const product of payloadProducts.docs) {
+      for (const product of sanityProducts) {
         // If product is not in the visible Printify products list, mark as draft
         if (!visiblePrintifyIds.has(product.printifyProductId as string)) {
-          await payload.update({
-            collection: 'products',
-            id: product.id,
-            data: {
-              status: 'draft',
-            },
-            overrideAccess: true,
-          })
+          await writeClient.patch(product._id).set({ status: 'draft' }).commit()
           deactivated++
           console.log(`[Inngest Sync] Deactivated product "${product.name}" (not visible in Printify)`)
         }
       }
 
-      return { deactivated, total: payloadProducts.docs.length }
+      return { deactivated, total: sanityProducts.length }
     })
 
     // Step 4: Revalidate paths after all changes

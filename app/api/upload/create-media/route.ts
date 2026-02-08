@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@/src/payload.config'
+import { writeClient } from '@/sanity/lib/client'
 
 /**
- * Creates a media record from a file that was already uploaded to Supabase.
- * This bypasses Payload's normal upload flow for files already in storage.
+ * Creates a media/asset record in Sanity.
+ *
+ * TODO: Sanity handles media through its asset pipeline differently from Payload/Supabase.
+ * For files already uploaded externally, we create a document referencing the URL.
+ * For new uploads, prefer using writeClient.assets.upload('image', buffer) instead.
+ * This route may need further refinement to fully align with Sanity's asset model.
  */
 export async function POST(req: NextRequest) {
   try {
-    const payload = await getPayload({ config })
-
-    // Verify user is authenticated
-    const { user } = await payload.auth({ headers: req.headers })
-
-    if (!user) {
+    // Verify admin authentication via secret header
+    const adminSecret = req.headers.get('x-admin-secret')
+    if (adminSecret !== process.env.ADMIN_API_SECRET) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -27,19 +27,18 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Create the media document directly
-    // This creates a record that points to the already-uploaded file
-    const media = await payload.create({
-      collection: 'media',
-      data: {
-        filename,
-        mimeType: mimeType || 'image/webp',
-        filesize: filesize ? parseInt(filesize) : 0,
-        width: width ? parseInt(width) : undefined,
-        height: height ? parseInt(height) : undefined,
-        url,
-        alt: alt || filename.replace(/\.[^.]+$/, ''),
-      },
+    // TODO: For Sanity, media should ideally be uploaded through the asset pipeline:
+    //   const asset = await writeClient.assets.upload('image', buffer, { filename })
+    // For now, create a media document that references the external URL.
+    const media = await writeClient.create({
+      _type: 'media',
+      filename,
+      mimeType: mimeType || 'image/webp',
+      filesize: filesize ? parseInt(filesize) : 0,
+      width: width ? parseInt(width) : undefined,
+      height: height ? parseInt(height) : undefined,
+      url,
+      alt: alt || filename.replace(/\.[^.]+$/, ''),
     })
 
     return NextResponse.json({ doc: media })

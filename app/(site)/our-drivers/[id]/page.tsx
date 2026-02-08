@@ -2,21 +2,43 @@ import { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Phone, Mail, ArrowLeft } from 'lucide-react';
-import {
-  getDriverById,
-  getDriverImageUrl,
-  getDriverRoleLabel,
-  formatDriverDisplayName,
-} from '@/lib/supabase/drivers';
+import { ArrowLeft } from 'lucide-react';
+import { getDriverProfileBySlug, getMediaUrl } from '@/lib/api/sanity';
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
+function getRoleLabel(role: string[] | undefined): string {
+  if (!role || role.length === 0) return 'Team Member';
+
+  const labels = role.map((r) => {
+    switch (r) {
+      case 'owner': return 'Owner';
+      case 'dispatcher': return 'Dispatcher';
+      case 'driver': return 'Professional Driver';
+      case 'cdl_trainer': return 'CDL Trainer';
+      case 'aesthetic_master_technician': return 'Aesthetic Master Technician';
+      case 'manager': return 'Manager';
+      case 'trainer': return 'Trainer';
+      default: return 'Team Member';
+    }
+  });
+
+  return labels.join(' & ');
+}
+
+function formatDisplayName(name: string, role: string[] | undefined): string {
+  if (role && role.includes('owner')) return name;
+  const nameParts = name.trim().split(/\s+/);
+  return nameParts.length > 1
+    ? `${nameParts[0]} ${nameParts[nameParts.length - 1].charAt(0)}.`
+    : nameParts[0];
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
-  const driver = await getDriverById(id);
+  const { id: slug } = await params;
+  const driver = await getDriverProfileBySlug(slug);
 
   if (!driver) {
     return {
@@ -24,9 +46,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const displayName = formatDriverDisplayName(driver);
-  const roleLabel = getDriverRoleLabel(driver.role);
-  const imageUrl = getDriverImageUrl(driver);
+  const displayName = formatDisplayName(driver.name, driver.role);
+  const roleLabel = getRoleLabel(driver.role);
+  const imageUrl = getMediaUrl(driver.image);
 
   return {
     title: `${displayName} - ${roleLabel} | Lake Ride Pros`,
@@ -34,12 +56,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? `Meet ${displayName}, ${roleLabel} at Lake Ride Pros. ${driver.bio.slice(0, 150)}...`
       : `Meet ${displayName}, ${roleLabel} at Lake Ride Pros - providing premium transportation services at Lake of the Ozarks.`,
     alternates: {
-      canonical: `https://www.lakeridepros.com/our-drivers/${id}`,
+      canonical: `https://www.lakeridepros.com/our-drivers/${slug}`,
     },
     openGraph: {
       title: `${displayName} - ${roleLabel} | Lake Ride Pros`,
       description: driver.bio || `${roleLabel} at Lake Ride Pros`,
-      url: `https://www.lakeridepros.com/our-drivers/${id}`,
+      url: `https://www.lakeridepros.com/our-drivers/${slug}`,
       siteName: 'Lake Ride Pros',
       images: [{ url: imageUrl || 'https://www.lakeridepros.com/og-image.jpg', width: 1200, height: 630, alt: displayName }],
       type: 'profile',
@@ -48,22 +70,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // Use dynamic rendering with ISR - regenerate every hour
-// This avoids static generation at build time while still caching
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
 export default async function DriverDetailPage({ params }: Props) {
-  const { id } = await params;
-  const driver = await getDriverById(id);
+  const { id: slug } = await params;
+  const driver = await getDriverProfileBySlug(slug);
 
   if (!driver) {
     permanentRedirect('/our-drivers');
   }
 
-  const imageUrl = getDriverImageUrl(driver);
-  const roleLabel = getDriverRoleLabel(driver.role);
-  const displayName = formatDriverDisplayName(driver);
-  const isOwner = driver.role && driver.role.includes('owner');
+  const imageUrl = getMediaUrl(driver.image);
+  const roleLabel = getRoleLabel(driver.role);
+  const displayName = formatDisplayName(driver.name, driver.role);
 
   return (
     <>
@@ -81,9 +101,9 @@ export default async function DriverDetailPage({ params }: Props) {
             <h1 className="font-boardson text-4xl sm:text-5xl font-bold">
               {displayName}
             </h1>
-            {driver.assignment_number && (
+            {driver.assignmentNumber && (
               <span className="inline-flex items-center px-3 py-1 text-sm font-bold bg-white/20 text-white rounded-lg border border-white/30">
-                {driver.assignment_number}
+                {driver.assignmentNumber}
               </span>
             )}
           </div>
@@ -101,7 +121,7 @@ export default async function DriverDetailPage({ params }: Props) {
                 {imageUrl ? (
                   <Image
                     src={imageUrl}
-                    alt={driver.media?.alt || `${displayName} - ${roleLabel}`}
+                    alt={`${displayName} - ${roleLabel}`}
                     fill
                     className="object-contain"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -124,9 +144,9 @@ export default async function DriverDetailPage({ params }: Props) {
                   <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
                     {displayName}
                   </h2>
-                  {driver.assignment_number && (
+                  {driver.assignmentNumber && (
                     <span className="inline-flex items-center px-2.5 py-1 text-sm font-bold bg-[#1f2937] text-white dark:bg-[#f5f5f5] dark:text-[#1f2937] rounded">
-                      {driver.assignment_number}
+                      {driver.assignmentNumber}
                     </span>
                   )}
                 </div>
@@ -165,35 +185,6 @@ export default async function DriverDetailPage({ params }: Props) {
                     <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed whitespace-pre-line">
                       {driver.bio}
                     </p>
-                  </div>
-                )}
-
-                {/* Contact Info for Owners */}
-                {isOwner && (driver.phone || driver.email) && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-3">
-                      Contact
-                    </h3>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      {driver.phone && (
-                        <a
-                          href={`tel:${driver.phone}`}
-                          className="flex items-center justify-center gap-2 px-5 py-3 bg-primary hover:bg-primary-dark text-lrp-black rounded-lg font-medium transition-colors"
-                        >
-                          <Phone className="w-5 h-5" />
-                          <span>{driver.phone}</span>
-                        </a>
-                      )}
-                      {driver.email && (
-                        <a
-                          href={`mailto:${driver.email}`}
-                          className="flex items-center justify-center gap-2 px-5 py-3 bg-primary/10 hover:bg-primary hover:text-lrp-black text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-lrp-black rounded-lg font-medium transition-colors"
-                        >
-                          <Mail className="w-5 h-5" />
-                          <span>Send Email</span>
-                        </a>
-                      )}
-                    </div>
                   </div>
                 )}
               </div>

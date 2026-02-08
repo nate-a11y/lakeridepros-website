@@ -674,6 +674,60 @@ export const eventBySlugQuery = groq`
 `
 
 // ---------------------------------------------------------------------------
+// Driver Profiles
+// ---------------------------------------------------------------------------
+
+/** All active, display-ready driver profiles sorted by display order. */
+export const driverProfilesQuery = groq`
+  *[_type == "driverProfile" && displayOnWebsite == true && active == true] | order(order asc) {
+    _id,
+    _type,
+    name,
+    slug,
+    bio,
+    image {
+      ...,
+      asset-> {
+        _id,
+        url,
+        metadata
+      }
+    },
+    displayOnWebsite,
+    active,
+    role,
+    vehicles,
+    assignmentNumber,
+    order
+  }
+`
+
+/** Single driver profile by slug. */
+export const driverProfileBySlugQuery = groq`
+  *[_type == "driverProfile" && slug.current == $slug && displayOnWebsite == true && active == true][0] {
+    _id,
+    _type,
+    name,
+    slug,
+    bio,
+    image {
+      ...,
+      asset-> {
+        _id,
+        url,
+        metadata
+      }
+    },
+    displayOnWebsite,
+    active,
+    role,
+    vehicles,
+    assignmentNumber,
+    order
+  }
+`
+
+// ---------------------------------------------------------------------------
 // Service Analytics
 // ---------------------------------------------------------------------------
 
@@ -752,6 +806,33 @@ export const scheduledGiftCardsQuery = groq`
     deliveryMethod,
     scheduledDeliveryDate,
     deliveryStatus
+  }
+`
+
+// ---------------------------------------------------------------------------
+// Orders
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Member Logos
+// ---------------------------------------------------------------------------
+
+/** All active member logos sorted by display order. */
+export const memberLogosQuery = groq`
+  *[_type == "memberLogo" && active == true] | order(order asc) {
+    _id,
+    _type,
+    name,
+    logo {
+      ...,
+      asset-> {
+        _id,
+        url,
+        metadata
+      }
+    },
+    order,
+    active
   }
 `
 

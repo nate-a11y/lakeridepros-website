@@ -11,6 +11,8 @@ import page from './page'
 import event from './event'
 import venue from './venue'
 import serviceAnalytics from './serviceAnalytics'
+import driverProfile from './driverProfile'
+import memberLogo from './memberLogo'
 
 export const schemaTypes = [
   blogPost,
@@ -26,4 +28,6 @@ export const schemaTypes = [
   event,
   venue,
   serviceAnalytics,
+  driverProfile,
+  memberLogo,
 ]

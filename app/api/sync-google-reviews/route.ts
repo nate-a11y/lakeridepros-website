@@ -4,25 +4,10 @@ import { groq } from 'next-sanity';
 import { transformGoogleReviewToTestimonial } from '@/lib/google-reviews';
 
 /**
- * Sync Google Business Profile reviews to Testimonials CMS
- * Uses Supabase Edge Function + Outscraper API (no Google API access required!)
- *
- * POST /api/sync-google-reviews
- *
- * Protected: Requires admin authentication
+ * Shared sync logic — fetches Google reviews via Outscraper and upserts into Sanity
  */
-export async function POST(req: NextRequest) {
+async function runSync() {
   try {
-    // Authenticate via admin secret header
-    const adminSecret = req.headers.get('x-admin-secret')
-    if (adminSecret !== process.env.ADMIN_API_SECRET) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please provide valid admin credentials' },
-        { status: 401 }
-      );
-    }
-
-    // Fetch reviews from Supabase Edge Function (which calls Outscraper)
     console.log('Starting Google reviews sync via Outscraper...');
 
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -39,8 +24,8 @@ export async function POST(req: NextRequest) {
         groq`*[_type == "testimonial" && source == "google"] | order(syncedAt desc) [0] { syncedAt }`
       )
       if (lastSynced?.syncedAt) {
-        lastSyncTimestamp = lastSynced.syncedAt
-        console.log(`Last sync: ${new Date(lastSynced.syncedAt as string).toLocaleString()} - fetching only new reviews`)
+        lastSyncTimestamp = lastSynced.syncedAt as string
+        console.log(`Last sync: ${new Date(lastSyncTimestamp).toLocaleString()} - fetching only new reviews`)
       }
     } catch (error) {
       console.warn('Could not determine last sync time, fetching all reviews:', error)
@@ -74,13 +59,8 @@ export async function POST(req: NextRequest) {
     if (!googleReviews || googleReviews.length === 0) {
       return NextResponse.json({
         success: true,
-        message: 'No reviews found from Google Business Profile',
-        stats: {
-          fetched: 0,
-          created: 0,
-          updated: 0,
-          skipped: 0,
-        },
+        message: 'No new reviews found from Google Business Profile',
+        stats: { fetched: 0, created: 0, updated: 0, skipped: 0 },
         metadata: metadata || null,
       });
     }
@@ -91,10 +71,8 @@ export async function POST(req: NextRequest) {
     let updated = 0;
     let skipped = 0;
 
-    // Process each review
     for (const googleReview of googleReviews) {
       try {
-        // Check if review already exists by externalId
         const existing = await writeClient.fetch(
           groq`*[_type == "testimonial" && externalId == $externalId][0]`,
           { externalId: googleReview.reviewId }
@@ -103,17 +81,14 @@ export async function POST(req: NextRequest) {
         const testimonialData = transformGoogleReviewToTestimonial(googleReview);
 
         if (existing) {
-          // Update existing review
           await writeClient.patch(existing._id).set({
             ...testimonialData,
-            // Preserve manual overrides
-            featured: existing.featured, // Don't override featured status
-            order: existing.order, // Don't override order
+            featured: existing.featured,
+            order: existing.order,
           }).commit();
           updated++;
           console.log(`Updated: ${testimonialData.name}`);
         } else {
-          // Create new testimonial
           await writeClient.create({
             _type: 'testimonial',
             ...testimonialData,
@@ -127,13 +102,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const stats = {
-      fetched: googleReviews.length,
-      created,
-      updated,
-      skipped,
-    };
-
+    const stats = { fetched: googleReviews.length, created, updated, skipped };
     console.log('Sync completed:', stats);
 
     return NextResponse.json({
@@ -156,16 +125,42 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * Get sync status and last sync time
+ * Manual sync trigger
+ *
+ * POST /api/sync-google-reviews
+ * Headers: x-admin-secret
+ */
+export async function POST(req: NextRequest) {
+  const adminSecret = req.headers.get('x-admin-secret')
+  if (adminSecret !== process.env.ADMIN_API_SECRET) {
+    return NextResponse.json(
+      { error: 'Unauthorized - Please provide valid admin credentials' },
+      { status: 401 }
+    );
+  }
+
+  return runSync()
+}
+
+/**
+ * Cron-triggered sync or status check
  *
  * GET /api/sync-google-reviews
+ *
+ * With Authorization: Bearer <CRON_SECRET> → runs the sync (Vercel cron)
+ * Without auth → returns sync status
  */
-export async function GET(_req: NextRequest) {
+export async function GET(req: NextRequest) {
+  const authHeader = req.headers.get('authorization')
+  if (authHeader === `Bearer ${process.env.CRON_SECRET}`) {
+    return runSync()
+  }
+
+  // Return sync status
   try {
     let lastSync;
     let totalGoogleReviews = 0;
 
-    // Try to get testimonials from Google source
     try {
       const result = await writeClient.fetch(
         groq`{
@@ -180,7 +175,6 @@ export async function GET(_req: NextRequest) {
       console.warn('Could not query Google testimonials:', queryError);
     }
 
-    // Check if Outscraper is configured
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const placeId = process.env.GOOGLE_PLACE_ID;
 

@@ -152,7 +152,7 @@ export async function getTokensFromCode(code: string) {
 }
 
 /**
- * Transform Google review to Payload CMS testimonial format
+ * Transform Google review to Sanity testimonial format
  */
 export function transformGoogleReviewToTestimonial(review: GoogleReview) {
   return {

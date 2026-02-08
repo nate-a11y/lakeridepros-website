@@ -14,19 +14,13 @@ const SANITY_API_URL = `https://${SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01`
 const SYNCED_FIELDS = ['name', 'bio', 'active', 'display_on_website', 'role', 'vehicles', 'assignment_number'] as const
 
 /**
- * Sanity → Supabase: Called when a driverProfile is updated in Sanity Studio.
- * Updates only the display fields in Supabase.
+ * Sanity → Supabase: Called when a driverProfile is created or updated in Sanity Studio.
+ * Updates or inserts only the display fields in Supabase.
  */
 export async function syncDriverProfileToSupabase(sanityDoc: Record<string, unknown>) {
   // Skip if this change came FROM Supabase (prevents infinite loop)
   if (sanityDoc.lastSyncSource === 'supabase') {
     console.log('[Driver Sync] Skipping Sanity→Supabase: change originated from Supabase')
-    return
-  }
-
-  const supabaseId = sanityDoc.supabaseId as string | undefined
-  if (!supabaseId) {
-    console.log('[Driver Sync] No supabaseId on profile, skipping sync')
     return
   }
 
@@ -36,65 +30,133 @@ export async function syncDriverProfileToSupabase(sanityDoc: Record<string, unkn
   }
 
   // Map Sanity field names → Supabase column names
-  const updateData: Record<string, unknown> = {}
-  if (sanityDoc.name !== undefined) updateData.name = sanityDoc.name
-  if (sanityDoc.bio !== undefined) updateData.bio = sanityDoc.bio
-  if (sanityDoc.active !== undefined) updateData.active = sanityDoc.active
-  if (sanityDoc.displayOnWebsite !== undefined) updateData.display_on_website = sanityDoc.displayOnWebsite
-  if (sanityDoc.role !== undefined) updateData.role = sanityDoc.role
-  if (sanityDoc.vehicles !== undefined) updateData.vehicles = sanityDoc.vehicles
-  if (sanityDoc.assignmentNumber !== undefined) updateData.assignment_number = sanityDoc.assignmentNumber
+  const displayData: Record<string, unknown> = {}
+  if (sanityDoc.name !== undefined) displayData.name = sanityDoc.name
+  if (sanityDoc.bio !== undefined) displayData.bio = sanityDoc.bio
+  if (sanityDoc.active !== undefined) displayData.active = sanityDoc.active
+  if (sanityDoc.displayOnWebsite !== undefined) displayData.display_on_website = sanityDoc.displayOnWebsite
+  if (sanityDoc.role !== undefined) displayData.role = sanityDoc.role
+  if (sanityDoc.vehicles !== undefined) displayData.vehicles = sanityDoc.vehicles
+  if (sanityDoc.assignmentNumber !== undefined) displayData.assignment_number = sanityDoc.assignmentNumber
 
-  if (Object.keys(updateData).length === 0) {
-    console.log('[Driver Sync] No display fields changed, skipping')
-    return
+  const supabaseId = sanityDoc.supabaseId as string | undefined
+
+  if (supabaseId) {
+    // UPDATE existing Supabase driver
+    if (Object.keys(displayData).length === 0) {
+      console.log('[Driver Sync] No display fields changed, skipping')
+      return
+    }
+
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/drivers?id=eq.${supabaseId}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_SERVICE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify(displayData),
+    })
+
+    if (!res.ok) {
+      const text = await res.text()
+      console.error(`[Driver Sync] Sanity→Supabase update failed: ${res.status} ${text}`)
+      return
+    }
+
+    console.log(`[Driver Sync] Sanity→Supabase: Updated driver ${supabaseId}`, Object.keys(displayData))
+  } else {
+    // INSERT new Supabase driver (created in Sanity first)
+    if (!displayData.name) {
+      console.log('[Driver Sync] Cannot create Supabase driver without a name')
+      return
+    }
+
+    // Set defaults for required Supabase fields
+    const insertData = {
+      ...displayData,
+      display_on_website: displayData.display_on_website ?? true,
+      active: displayData.active ?? true,
+      role: displayData.role || ['driver'],
+    }
+
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/drivers`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_SERVICE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation',
+      },
+      body: JSON.stringify(insertData),
+    })
+
+    if (!res.ok) {
+      const text = await res.text()
+      console.error(`[Driver Sync] Sanity→Supabase insert failed: ${res.status} ${text}`)
+      return
+    }
+
+    const [newDriver] = await res.json()
+    const newSupabaseId = newDriver?.id
+
+    console.log(`[Driver Sync] Sanity→Supabase: Created new driver ${newSupabaseId}`)
+
+    // Link the Sanity profile back to the new Supabase record
+    if (newSupabaseId && sanityDoc._id) {
+      await fetch(`${SANITY_API_URL}/data/mutate/${SANITY_DATASET}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SANITY_WRITE_TOKEN}`,
+        },
+        body: JSON.stringify({
+          mutations: [{
+            patch: {
+              id: sanityDoc._id as string,
+              set: {
+                supabaseId: newSupabaseId,
+                lastSyncSource: 'sanity',
+                lastSyncedAt: new Date().toISOString(),
+              },
+            },
+          }],
+        }),
+      })
+      console.log(`[Driver Sync] Linked Sanity profile ${sanityDoc._id} → Supabase ${newSupabaseId}`)
+      return
+    }
   }
-
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/drivers?id=eq.${supabaseId}`, {
-    method: 'PATCH',
-    headers: {
-      'apikey': SUPABASE_SERVICE_KEY,
-      'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal',
-    },
-    body: JSON.stringify(updateData),
-  })
-
-  if (!res.ok) {
-    const text = await res.text()
-    console.error(`[Driver Sync] Sanity→Supabase failed: ${res.status} ${text}`)
-    return
-  }
-
-  console.log(`[Driver Sync] Sanity→Supabase: Updated driver ${supabaseId}`, Object.keys(updateData))
 
   // Update Sanity to mark sync source (prevents loop on next webhook)
-  await fetch(`${SANITY_API_URL}/data/mutate/${SANITY_DATASET}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${SANITY_WRITE_TOKEN}`,
-    },
-    body: JSON.stringify({
-      mutations: [{
-        patch: {
-          id: sanityDoc._id as string,
-          set: {
-            lastSyncSource: 'sanity',
-            lastSyncedAt: new Date().toISOString(),
+  if (sanityDoc._id) {
+    await fetch(`${SANITY_API_URL}/data/mutate/${SANITY_DATASET}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SANITY_WRITE_TOKEN}`,
+      },
+      body: JSON.stringify({
+        mutations: [{
+          patch: {
+            id: sanityDoc._id as string,
+            set: {
+              lastSyncSource: 'sanity',
+              lastSyncedAt: new Date().toISOString(),
+            },
           },
-        },
-      }],
-    }),
-  })
+        }],
+      }),
+    })
+  }
 }
 
 /**
- * Supabase → Sanity: Called when a driver's display fields are updated in Supabase.
- * Updates the corresponding Sanity driverProfile.
+ * Supabase → Sanity: Called when a driver is inserted, updated, or deleted in Supabase.
+ * Creates, updates, or deletes the corresponding Sanity driverProfile.
  */
-export async function syncSupabaseDriverToSanity(supabaseDriver: Record<string, unknown>) {
+export async function syncSupabaseDriverToSanity(supabaseDriver: Record<string, unknown>, eventType: 'INSERT' | 'UPDATE' | 'DELETE' = 'UPDATE') {
   const driverId = supabaseDriver.id as string
   if (!driverId) {
     console.error('[Driver Sync] Missing driver id')
@@ -106,7 +168,7 @@ export async function syncSupabaseDriverToSanity(supabaseDriver: Record<string, 
     return
   }
 
-  // Find the Sanity profile by supabaseId
+  // Find existing Sanity profile by supabaseId
   const query = encodeURIComponent(`*[_type=="driverProfile" && supabaseId=="${driverId}"][0]{_id, lastSyncSource}`)
   const queryRes = await fetch(`${SANITY_API_URL}/data/query/${SANITY_DATASET}?query=${query}`, {
     headers: { Authorization: `Bearer ${SANITY_WRITE_TOKEN}` },
@@ -114,14 +176,78 @@ export async function syncSupabaseDriverToSanity(supabaseDriver: Record<string, 
   const queryData = await queryRes.json()
   const existingProfile = queryData.result
 
-  if (!existingProfile) {
-    console.log(`[Driver Sync] No Sanity profile found for Supabase driver ${driverId}, skipping`)
+  // Handle DELETE
+  if (eventType === 'DELETE') {
+    if (existingProfile) {
+      await fetch(`${SANITY_API_URL}/data/mutate/${SANITY_DATASET}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SANITY_WRITE_TOKEN}`,
+        },
+        body: JSON.stringify({
+          mutations: [{ delete: { id: existingProfile._id } }],
+        }),
+      })
+      console.log(`[Driver Sync] Supabase→Sanity: Deleted profile ${existingProfile._id} for driver ${driverId}`)
+    }
     return
+  }
+
+  // Handle INSERT — create new Sanity profile
+  if (eventType === 'INSERT' && !existingProfile) {
+    const name = supabaseDriver.name as string
+    if (!name) {
+      console.log('[Driver Sync] Cannot create Sanity profile without a name')
+      return
+    }
+
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    const newDoc: Record<string, unknown> = {
+      _id: `driverProfile-${driverId}`,
+      _type: 'driverProfile',
+      name,
+      slug: { _type: 'slug', current: slug },
+      supabaseId: driverId,
+      displayOnWebsite: supabaseDriver.display_on_website ?? true,
+      active: supabaseDriver.active ?? true,
+      lastSyncSource: 'supabase',
+      lastSyncedAt: new Date().toISOString(),
+    }
+    if (supabaseDriver.bio) newDoc.bio = supabaseDriver.bio
+    if (supabaseDriver.role) newDoc.role = supabaseDriver.role
+    if (supabaseDriver.vehicles) newDoc.vehicles = supabaseDriver.vehicles
+    if (supabaseDriver.assignment_number) newDoc.assignmentNumber = supabaseDriver.assignment_number
+
+    const mutRes = await fetch(`${SANITY_API_URL}/data/mutate/${SANITY_DATASET}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SANITY_WRITE_TOKEN}`,
+      },
+      body: JSON.stringify({
+        mutations: [{ createOrReplace: newDoc }],
+      }),
+    })
+
+    if (!mutRes.ok) {
+      const text = await mutRes.text()
+      console.error(`[Driver Sync] Supabase→Sanity insert failed: ${mutRes.status} ${text}`)
+      return
+    }
+
+    console.log(`[Driver Sync] Supabase→Sanity: Created profile driverProfile-${driverId} for "${name}"`)
+    return
+  }
+
+  // Handle UPDATE
+  if (!existingProfile) {
+    // Profile doesn't exist yet — treat as INSERT
+    return syncSupabaseDriverToSanity(supabaseDriver, 'INSERT')
   }
 
   // Skip if the last change came from Sanity (prevents infinite loop)
   if (existingProfile.lastSyncSource === 'sanity') {
-    // Reset the flag and skip — this update was triggered by our own Sanity→Supabase sync
     await fetch(`${SANITY_API_URL}/data/mutate/${SANITY_DATASET}`, {
       method: 'POST',
       headers: {

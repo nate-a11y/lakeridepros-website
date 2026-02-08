@@ -11,7 +11,7 @@ import { syncSupabaseDriverToSanity } from '@/lib/sync/driver-sync'
  *   URL: https://yourdomain.com/api/sync-driver-profile
  *   Method: POST
  *   Headers: { "x-sync-secret": "<DRIVER_SYNC_SECRET>" }
- *   Events: UPDATE
+ *   Events: INSERT, UPDATE, DELETE
  *   Table: drivers
  */
 export async function POST(request: NextRequest) {
@@ -34,30 +34,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid table' }, { status: 400 })
     }
 
-    if (type !== 'UPDATE') {
-      return NextResponse.json({ message: 'Ignored non-UPDATE event' }, { status: 200 })
+    if (!['INSERT', 'UPDATE', 'DELETE'].includes(type)) {
+      return NextResponse.json({ message: `Ignored ${type} event` }, { status: 200 })
     }
 
-    if (!record) {
+    // DELETE uses old_record since record is null
+    const driverRecord = type === 'DELETE' ? payload.old_record : record
+
+    if (!driverRecord) {
       return NextResponse.json({ error: 'Missing record' }, { status: 400 })
     }
 
-    // Only sync if display-relevant fields changed
-    const oldRecord = payload.old_record || {}
-    const displayFields = ['name', 'bio', 'active', 'display_on_website', 'role', 'vehicles', 'assignment_number']
-    const hasDisplayFieldChange = displayFields.some(
-      field => JSON.stringify(record[field]) !== JSON.stringify(oldRecord[field])
-    )
+    // For UPDATEs, only sync if display-relevant fields changed
+    if (type === 'UPDATE') {
+      const oldRecord = payload.old_record || {}
+      const displayFields = ['name', 'bio', 'active', 'display_on_website', 'role', 'vehicles', 'assignment_number']
+      const hasDisplayFieldChange = displayFields.some(
+        field => JSON.stringify(record[field]) !== JSON.stringify(oldRecord[field])
+      )
 
-    if (!hasDisplayFieldChange) {
-      return NextResponse.json({ message: 'No display field changes, skipping sync' }, { status: 200 })
+      if (!hasDisplayFieldChange) {
+        return NextResponse.json({ message: 'No display field changes, skipping sync' }, { status: 200 })
+      }
     }
 
-    await syncSupabaseDriverToSanity(record)
+    await syncSupabaseDriverToSanity(driverRecord, type as 'INSERT' | 'UPDATE' | 'DELETE')
 
     return NextResponse.json({
       success: true,
-      message: `Synced driver ${record.id} to Sanity`,
+      message: `${type}: Synced driver ${driverRecord.id} to Sanity`,
       timestamp: new Date().toISOString(),
     })
   } catch (err) {

@@ -3,8 +3,8 @@ import { permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
-import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/payload-local';
-import type { Media } from '@/src/payload-types';
+import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/sanity';
+import type { Media } from '@/types/sanity';
 import ImageGallery from '@/components/ImageGallery';
 
 // Wedding category labels mapping
@@ -43,8 +43,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = weddingBlurb || weddingDescription || '';
 
   const partnerLogo = typeof partner.logo === 'object' ? partner.logo : null;
-  const imageUrl = partnerLogo?.url
-    ? getMediaUrl(partnerLogo.url)
+  const imageUrl = partnerLogo
+    ? getMediaUrl(partnerLogo)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   const title = `${partner.name} | Lake Ride Pros Wedding Partner`;
@@ -93,7 +93,7 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
   }
 
   const logoObj = typeof partner.logo === 'object' ? partner.logo : null;
-  const logoUrl = logoObj?.url ? getMediaUrl(logoObj.url) : null;
+  const logoUrl = logoObj ? getMediaUrl(logoObj) : null;
 
   // Use wedding-specific content if available
   const displayBlurb = partner.weddingBlurb || partner.blurb;
@@ -230,8 +230,7 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
           {partner.images && Array.isArray(partner.images) && partner.images.length > 0 && (() => {
             const galleryImages = partner.images
               .map((imageItem, index: number) => {
-                const imageObj = typeof imageItem.image === 'object' ? imageItem.image as Media : null;
-                const imageUrl = imageObj?.url ? getMediaUrl(imageObj.url) : null;
+                const imageUrl = typeof imageItem === 'object' ? getMediaUrl(imageItem) : null;
                 if (!imageUrl) return null;
                 return { url: imageUrl, alt: `${partner.name} - Image ${index + 1}` };
               })

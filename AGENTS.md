@@ -7,25 +7,24 @@ Lake Ride Pros is a premium luxury transportation service website built with:
 - **Next.js 16** (App Router)
 - **React 19**
 - **TypeScript 5**
-- **Payload CMS 3.70** (headless CMS)
+- **Sanity CMS** (headless CMS)
 - **Tailwind CSS 4** + SCSS
 - **Zustand** (state management)
-- **PostgreSQL** via Supabase
 
 ## Architecture
 
 ```
 app/                    # Next.js App Router pages
 ├── (site)/             # Public website routes
-├── (payload)/          # CMS admin panel
+├── (sanity)/           # Sanity Studio admin
 └── api/                # API routes
 
-collections/            # Payload CMS collections
+sanity/                 # Sanity CMS schemas and config
 components/             # React components
 contexts/               # React contexts
 hooks/                  # Custom React hooks
 lib/                    # Utilities and services
-├── api/                # API clients
+├── api/                # API clients (sanity.ts)
 ├── store/              # Zustand stores
 ├── supabase/           # Database queries
 ├── inngest/            # Background jobs
@@ -43,12 +42,13 @@ scripts/                # Build and utility scripts
 - **Printify** - Print-on-demand products
 - **Google Reviews** - Review sync
 - **Moovs** - Booking system
+- **Sanity CMS** - Content management
 
 ## Development Commands
 
 ```bash
 npm run dev              # Start development server
-npm run build            # Full build with linting
+npm run build            # Production build
 npm run test             # Run unit tests (Vitest)
 npm run test:e2e         # Run E2E tests (Playwright)
 npm run lint             # ESLint
@@ -88,17 +88,10 @@ This project enforces WCAG 2.1 AA compliance:
 - SCSS for complex custom styling
 - Follow existing color system (see `scripts/audit-colors.js`)
 
-## Skills Available
-
-See `.claude/skills/` for specialized agent skills:
-
-- **react-best-practices** - React/Next.js performance optimization
-- **web-design-guidelines** - UI accessibility and UX review
-
 ## Important Files
 
 - `next.config.mjs` - Next.js configuration
-- `src/payload.config.ts` - Payload CMS configuration
+- `sanity/sanity.config.ts` - Sanity CMS configuration
 - `eslint.config.mjs` - ESLint with a11y rules
 - `vitest.config.ts` - Test configuration
 - `vercel.json` - Deployment configuration

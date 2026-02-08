@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Service } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload';
+import type { Service } from '@/types/sanity';
+import { getMediaUrl } from '@/lib/api/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { ChevronRight } from 'lucide-react';
 import { BookingModal } from './BookingModal';
@@ -50,7 +50,7 @@ export default function ServicesShowcase({
           {/* All Services as Cards */}
           {services.map((service) => (
             <div
-              key={service.id}
+              key={service._id}
               className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
               style={{ width: '100%' }}
             >
@@ -59,7 +59,7 @@ export default function ServicesShowcase({
                 <div style={{ display: 'block', position: 'relative', height: '12rem', width: '100%', overflow: 'hidden' }}>
                   {service.image && typeof service.image === 'object' && (
                     <Image
-                      src={getMediaUrl(service.image.url)}
+                      src={getMediaUrl(service.image)}
                       alt={service.image.alt || service.title}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

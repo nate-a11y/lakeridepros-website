@@ -4,7 +4,7 @@ import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
 import TestimonialsCarousel from '@/components/TestimonialsCarousel'
-import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/payload-local'
+import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
   title: 'Lake of the Ozarks Airport Transportation | Grand Glaize Airport Shuttle | Lake Ride Pros',

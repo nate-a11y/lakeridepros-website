@@ -8,14 +8,10 @@ import { X, ShoppingCart, Check, ExternalLink, Package } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl, cn } from '@/lib/utils'
 import { VariantSelector } from '@/components/shop'
-import type { Product } from '@/src/payload-types'
-
-interface QuickViewProduct extends Omit<Product, 'id'> {
-  id: string | number
-}
+import type { Product } from '@/types/sanity'
 
 interface QuickViewModalProps {
-  product: QuickViewProduct
+  product: Product
   onClose: () => void
 }
 
@@ -50,17 +46,17 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
     const finalPrice = selectedVariant.price || product.price
 
     addItem({
-      productId: String(product.id),
+      productId: product._id,
       productName: product.name,
-      productSlug: product.slug,
+      productSlug: typeof product.slug === 'string' ? product.slug : product.slug.current,
       variantId: selectedVariant.sku,
       variantName: selectedVariant.name,
       size: selectedVariant.size,
       color: selectedVariant.color,
       price: finalPrice,
       quantity,
-      image: typeof product.featuredImage === 'object' && product.featuredImage?.url
-        ? getMediaUrl(product.featuredImage.url)
+      image: typeof product.featuredImage === 'object' && product.featuredImage
+        ? getMediaUrl(product.featuredImage)
         : '',
       imageAlt: typeof product.featuredImage === 'object' ? product.featuredImage?.alt : product.name,
     })
@@ -77,14 +73,11 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   }, [])
 
   // Get all images including featured - robust handling for multiple data structures
-  const allImages: Array<{ image: { url?: string | null; alt?: string | null } | null }> = []
+  const allImages: Array<{ image: Record<string, any> | null }> = []
 
   // Add featured image if it exists
   if (product.featuredImage && typeof product.featuredImage === 'object') {
-    const featuredImg = product.featuredImage as { url?: string | null; alt?: string | null }
-    if (featuredImg.url) {
-      allImages.push({ image: featuredImg })
-    }
+    allImages.push({ image: product.featuredImage as Record<string, any> })
   }
 
   // Add gallery images with robust handling for different structures
@@ -94,17 +87,11 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
       // Handle nested structure: images[].image
       if ('image' in imgItem && imgItem.image && typeof imgItem.image === 'object') {
-        const nestedImg = imgItem.image as { url?: string | null; alt?: string | null }
-        if (nestedImg.url) {
-          allImages.push({ image: nestedImg })
-        }
+        allImages.push({ image: imgItem.image as Record<string, any> })
       }
-      // Handle flat structure: images[] might be the Media object directly
-      else if (typeof imgItem === 'object' && 'url' in imgItem) {
-        const flatImg = imgItem as unknown as { url?: string | null; alt?: string | null }
-        if (flatImg.url) {
-          allImages.push({ image: flatImg })
-        }
+      // Handle flat structure: images[] might be the SanityImage object directly
+      else if (typeof imgItem === 'object' && ('_type' in imgItem || 'asset' in imgItem)) {
+        allImages.push({ image: imgItem as unknown as Record<string, any> })
       }
     }
   }
@@ -152,9 +139,9 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   {(() => {
                     const imageItem = allImages[selectedImage]
                     const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null
-                    return imageObj?.url ? (
+                    return imageObj ? (
                       <Image
-                        src={getMediaUrl(imageObj.url)}
+                        src={getMediaUrl(imageObj)}
                         alt={imageObj.alt || product.name}
                         fill
                         className="object-cover"
@@ -187,7 +174,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                   <div className="flex gap-2 overflow-x-auto pb-1">
                     {allImages.slice(0, 5).map((img, index: number) => {
                       const imgObj = typeof img.image === 'object' ? img.image : null
-                      return imgObj?.url ? (
+                      return imgObj ? (
                         <button
                           key={index}
                           onClick={() => setSelectedImage(index)}
@@ -201,7 +188,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                           )}
                         >
                           <Image
-                            src={getMediaUrl(imgObj.url)}
+                            src={getMediaUrl(imgObj)}
                             alt={imgObj.alt || 'Product image'}
                             width={64}
                             height={64}

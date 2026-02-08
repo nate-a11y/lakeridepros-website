@@ -4,7 +4,7 @@ import Link from 'next/link'
 import RelatedServices from '@/components/RelatedServices'
 import { PhoneLink } from '@/components/PhoneLink'
 import TestimonialsCarousel from '@/components/TestimonialsCarousel'
-import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/payload-local'
+import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
   title: 'Transportation in Camdenton MO | Lake Ride Pros',

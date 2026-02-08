@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { BlogPost } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload';
+import type { BlogPost } from '@/types/sanity';
+import { getMediaUrl } from '@/lib/api/sanity';
 
 interface BlogPostNavigationProps {
   previous: BlogPost | null;
@@ -42,7 +42,7 @@ export default function BlogPostNavigation({ previous, next }: BlogPostNavigatio
                   {previous.featuredImage && typeof previous.featuredImage === 'object' && (
                     <div className="relative w-20 h-20 rounded overflow-hidden flex-shrink-0">
                       <Image
-                        src={getMediaUrl(previous.featuredImage.url)}
+                        src={getMediaUrl(previous.featuredImage)}
                         alt={previous.featuredImage.alt || previous.title}
                         fill
                         className="object-cover"
@@ -99,7 +99,7 @@ export default function BlogPostNavigation({ previous, next }: BlogPostNavigatio
                   {next.featuredImage && typeof next.featuredImage === 'object' && (
                     <div className="relative w-20 h-20 rounded overflow-hidden flex-shrink-0">
                       <Image
-                        src={getMediaUrl(next.featuredImage.url)}
+                        src={getMediaUrl(next.featuredImage)}
                         alt={next.featuredImage.alt || next.title}
                         fill
                         className="object-cover"

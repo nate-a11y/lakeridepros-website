@@ -1,53 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@/src/payload.config'
-
-interface ServiceAnalytics {
-  service: {
-    title: string
-    slug: string
-  } | string
-  popularityScore: number
-  views: number
-  bookings: number
-}
+import { writeClient } from '@/sanity/lib/client'
+import { groq } from 'next-sanity'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '5', 10)
 
-    const payload = await getPayload({ config })
-
-    // Fetch analytics sorted by popularity score
-    const analyticsResponse = await payload.find({
-      collection: 'service-analytics',
-      sort: '-popularityScore', // Sort by popularity descending
-      limit,
-      depth: 2, // Include related service data
-    })
+    // Fetch analytics sorted by popularity score, with related service data
+    const analyticsResults = await writeClient.fetch(
+      groq`*[_type == "serviceAnalytics"] | order(popularityScore desc) [0...$limit] {
+        popularityScore,
+        views,
+        bookings,
+        "service": service->{ title, "slug": slug.current }
+      }`,
+      { limit }
+    )
 
     // Map to service info
-    const popularServices = analyticsResponse.docs
-      .map((analytics) => {
-        const typedAnalytics = analytics as unknown as ServiceAnalytics
-        if (!typedAnalytics.service || typeof typedAnalytics.service === 'string') {
-          return null
-        }
-        return {
-          name: typedAnalytics.service.title,
-          slug: typedAnalytics.service.slug,
-          popularityScore: typedAnalytics.popularityScore,
-          views: typedAnalytics.views,
-          bookings: typedAnalytics.bookings,
-        }
-      })
-      .filter((service): service is NonNullable<typeof service> => service !== null)
+    const popularServices = analyticsResults
+      .filter((analytics: any) => analytics.service)
+      .map((analytics: any) => ({
+        name: analytics.service.title,
+        slug: analytics.service.slug,
+        popularityScore: analytics.popularityScore,
+        views: analytics.views,
+        bookings: analytics.bookings,
+      }))
 
     return NextResponse.json(
       {
         services: popularServices,
-        total: analyticsResponse.totalDocs,
+        total: analyticsResults.length,
       },
       {
         status: 200,

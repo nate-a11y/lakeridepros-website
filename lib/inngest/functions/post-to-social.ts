@@ -1,7 +1,7 @@
 import { inngest } from '../client'
-import { getPayload } from 'payload'
-import config from '@/src/payload.config'
-import { getMediaUrl } from '@/lib/api/payload-local'
+import { writeClient } from '@/sanity/lib/client'
+import { groq } from 'next-sanity'
+import { getMediaUrl } from '@/lib/api/sanity'
 
 const META_PAGE_ACCESS_TOKEN = process.env.META_PAGE_ACCESS_TOKEN
 const FACEBOOK_PAGE_ID = process.env.FACEBOOK_PAGE_ID
@@ -9,7 +9,7 @@ const INSTAGRAM_ACCOUNT_ID = process.env.INSTAGRAM_ACCOUNT_ID
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.lakeridepros.com'
 
 interface BlogPost {
-  id: string | number
+  _id: string
   title: string
   slug: string
   excerpt: string
@@ -19,13 +19,13 @@ interface BlogPost {
   featuredImage?: {
     url?: string
     alt?: string
-  } | number | null
+  } | null
 }
 
 // Type guard to ensure post has required fields
 function isValidBlogPost(post: unknown): post is BlogPost {
   const p = post as Record<string, unknown>
-  return !!(p.id && p.title && p.slug && p.excerpt)
+  return !!(p._id && p.title && p.slug && p.excerpt)
 }
 
 /**
@@ -85,12 +85,12 @@ async function postToInstagram(post: BlogPost): Promise<{ id: string } | null> {
 
   // Instagram requires an image
   const imageObj = typeof post.featuredImage === 'object' ? post.featuredImage : null
-  if (!imageObj?.url) {
+  if (!imageObj) {
     console.log('[Social] No featured image for Instagram post, skipping')
     return null
   }
 
-  const imageUrl = getMediaUrl(imageObj.url)
+  const imageUrl = getMediaUrl(imageObj)
   const postUrl = `${SITE_URL}/blog/${post.slug}`
 
   // Instagram caption (max 2200 chars, but shorter is better)
@@ -167,34 +167,24 @@ export const postBlogToSocial = inngest.createFunction(
   async ({ step }) => {
     // Step 1: Find blog posts that need to be shared
     const postsToShare = await step.run('find-posts-to-share', async () => {
-      const payload = await getPayload({ config })
+      const now = new Date().toISOString()
 
-      const now = new Date()
+      // Find posts that are published, in the past, and not yet shared
+      const results = await writeClient.fetch(
+        groq`*[_type == "blogPost" && published == true && publishedDate <= $now && (socialShared != true)] | order(publishedDate asc) [0...5] {
+          _id,
+          title,
+          "slug": slug.current,
+          excerpt,
+          publishedDate,
+          published,
+          socialShared,
+          "featuredImage": featuredImage { "url": asset->url, alt }
+        }`,
+        { now }
+      )
 
-      // Find posts that are:
-      // - published = true
-      // - publishedDate <= now (in the past or now)
-      // - socialShared = false or doesn't exist
-      const result = await payload.find({
-        collection: 'blog-posts',
-        where: {
-          and: [
-            { published: { equals: true } },
-            { publishedDate: { less_than_equal: now.toISOString() } },
-            {
-              or: [
-                { socialShared: { equals: false } },
-                { socialShared: { exists: false } },
-              ],
-            },
-          ],
-        },
-        limit: 5, // Process up to 5 posts per run
-        sort: 'publishedDate',
-      })
-
-      // Filter to only valid posts with required fields
-      return result.docs.filter(isValidBlogPost)
+      return (results || []).filter(isValidBlogPost)
     })
 
     if (postsToShare.length === 0) {
@@ -211,9 +201,7 @@ export const postBlogToSocial = inngest.createFunction(
 
     // Step 2: Process each post
     for (const post of postsToShare) {
-      await step.run(`share-post-${post.id}`, async () => {
-        const payload = await getPayload({ config })
-
+      await step.run(`share-post-${post._id}`, async () => {
         let facebookSuccess = false
         let instagramSuccess = false
 
@@ -243,14 +231,9 @@ export const postBlogToSocial = inngest.createFunction(
 
         // Mark as shared if at least one platform succeeded
         if (facebookSuccess || instagramSuccess) {
-          await payload.update({
-            collection: 'blog-posts',
-            id: post.id as number,
-            data: {
-              socialShared: true,
-            },
-            overrideAccess: true,
-          })
+          await writeClient.patch(post._id).set({
+            socialShared: true,
+          }).commit()
           results.processed++
           console.log(`[Social] Marked "${post.title}" as shared`)
         }
@@ -281,11 +264,19 @@ export const sharePostNow = inngest.createFunction(
     const { postId } = event.data
 
     const post = await step.run('fetch-post', async () => {
-      const payload = await getPayload({ config })
-      const result = await payload.findByID({
-        collection: 'blog-posts',
-        id: postId,
-      })
+      const result = await writeClient.fetch(
+        groq`*[_type == "blogPost" && _id == $postId][0] {
+          _id,
+          title,
+          "slug": slug.current,
+          excerpt,
+          publishedDate,
+          published,
+          socialShared,
+          "featuredImage": featuredImage { "url": asset->url, alt }
+        }`,
+        { postId }
+      )
       if (!isValidBlogPost(result)) {
         throw new Error(`Post ${postId} is missing required fields`)
       }
@@ -309,15 +300,9 @@ export const sharePostNow = inngest.createFunction(
 
     // Mark as shared
     await step.run('mark-as-shared', async () => {
-      const payload = await getPayload({ config })
-      await payload.update({
-        collection: 'blog-posts',
-        id: postId as number,
-        data: {
-          socialShared: true,
-        },
-        overrideAccess: true,
-      })
+      await writeClient.patch(postId).set({
+        socialShared: true,
+      }).commit()
     })
 
     return {

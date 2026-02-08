@@ -2,17 +2,16 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { POST } from '../route'
 import { NextRequest } from 'next/server'
 
-// Mock Payload
-vi.mock('payload', () => ({
-  getPayload: vi.fn().mockResolvedValue({
-    find: vi.fn(),
-  }),
-  buildConfig: vi.fn((config) => config),
+const mockFetch = vi.fn()
+
+vi.mock('@/sanity/lib/client', () => ({
+  writeClient: {
+    fetch: mockFetch,
+  },
 }))
 
-// Mock payload config
-vi.mock('@payload-config', () => ({
-  default: {},
+vi.mock('next-sanity', () => ({
+  groq: (strings: TemplateStringsArray, ...values: any[]) => String.raw(strings, ...values),
 }))
 
 describe('Gift Card Balance Check API', () => {
@@ -44,71 +43,45 @@ describe('Gift Card Balance Check API', () => {
     })
 
     it('normalizes code to uppercase', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({
-        docs: [{
-          code: 'GC-TEST123',
-          currentBalance: 100,
-          initialAmount: 100,
-          status: 'active',
-          createdAt: '2024-01-01',
-        }],
+      mockFetch.mockResolvedValue({
+        code: 'GC-TEST123',
+        currentBalance: 100,
+        initialAmount: 100,
+        status: 'active',
+        _createdAt: '2024-01-01',
       })
 
       const request = createMockRequest({ code: 'gc-test123' })
       await POST(request)
 
-      expect(findMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: {
-            code: {
-              equals: 'GC-TEST123',
-            },
-          },
-        })
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.any(String),
+        { code: 'GC-TEST123' }
       )
     })
 
     it('trims whitespace from code', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({
-        docs: [{
-          code: 'GC-TEST123',
-          currentBalance: 100,
-          initialAmount: 100,
-          status: 'active',
-          createdAt: '2024-01-01',
-        }],
+      mockFetch.mockResolvedValue({
+        code: 'GC-TEST123',
+        currentBalance: 100,
+        initialAmount: 100,
+        status: 'active',
+        _createdAt: '2024-01-01',
       })
 
       const request = createMockRequest({ code: '  GC-TEST123  ' })
       await POST(request)
 
-      expect(findMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: {
-            code: {
-              equals: 'GC-TEST123',
-            },
-          },
-        })
+      expect(mockFetch).toHaveBeenCalledWith(
+        expect.any(String),
+        { code: 'GC-TEST123' }
       )
     })
   })
 
   describe('Gift Card Lookup', () => {
     it('returns 404 when gift card not found', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({ docs: [] })
+      mockFetch.mockResolvedValue(null)
 
       const request = createMockRequest({ code: 'GC-NOTFOUND' })
       const response = await POST(request)
@@ -119,18 +92,12 @@ describe('Gift Card Balance Check API', () => {
     })
 
     it('returns 400 when gift card is inactive', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({
-        docs: [{
-          code: 'GC-INACTIVE',
-          currentBalance: 0,
-          initialAmount: 100,
-          status: 'used',
-          createdAt: '2024-01-01',
-        }],
+      mockFetch.mockResolvedValue({
+        code: 'GC-INACTIVE',
+        currentBalance: 0,
+        initialAmount: 100,
+        status: 'used',
+        _createdAt: '2024-01-01',
       })
 
       const request = createMockRequest({ code: 'GC-INACTIVE' })
@@ -142,18 +109,12 @@ describe('Gift Card Balance Check API', () => {
     })
 
     it('returns balance for valid active gift card', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({
-        docs: [{
-          code: 'GC-VALID123',
-          currentBalance: 75.50,
-          initialAmount: 100,
-          status: 'active',
-          createdAt: '2024-01-15T12:00:00Z',
-        }],
+      mockFetch.mockResolvedValue({
+        code: 'GC-VALID123',
+        currentBalance: 75.50,
+        initialAmount: 100,
+        status: 'active',
+        _createdAt: '2024-01-15T12:00:00Z',
       })
 
       const request = createMockRequest({ code: 'GC-VALID123' })
@@ -172,18 +133,12 @@ describe('Gift Card Balance Check API', () => {
     })
 
     it('handles gift card with zero balance', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({
-        docs: [{
-          code: 'GC-EMPTY',
-          currentBalance: 0,
-          initialAmount: 50,
-          status: 'active',
-          createdAt: '2024-01-01',
-        }],
+      mockFetch.mockResolvedValue({
+        code: 'GC-EMPTY',
+        currentBalance: 0,
+        initialAmount: 50,
+        status: 'active',
+        _createdAt: '2024-01-01',
       })
 
       const request = createMockRequest({ code: 'GC-EMPTY' })
@@ -195,17 +150,11 @@ describe('Gift Card Balance Check API', () => {
     })
 
     it('handles gift card without initialAmount', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({
-        docs: [{
-          code: 'GC-TEST',
-          currentBalance: 100,
-          status: 'active',
-          createdAt: '2024-01-01',
-        }],
+      mockFetch.mockResolvedValue({
+        code: 'GC-TEST',
+        currentBalance: 100,
+        status: 'active',
+        _createdAt: '2024-01-01',
       })
 
       const request = createMockRequest({ code: 'GC-TEST' })
@@ -219,11 +168,7 @@ describe('Gift Card Balance Check API', () => {
 
   describe('Error Handling', () => {
     it('returns 500 on database errors', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockRejectedValue(new Error('Database connection failed'))
+      mockFetch.mockRejectedValue(new Error('Database connection failed'))
 
       const request = createMockRequest({ code: 'GC-TEST' })
       const response = await POST(request)
@@ -245,47 +190,19 @@ describe('Gift Card Balance Check API', () => {
   })
 
   describe('Security', () => {
-    it('uses overrideAccess for public balance checks', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({
-        docs: [{
-          code: 'GC-TEST',
-          currentBalance: 100,
-          initialAmount: 100,
-          status: 'active',
-          createdAt: '2024-01-01',
-        }],
-      })
-
-      const request = createMockRequest({ code: 'GC-TEST' })
-      await POST(request)
-
-      expect(findMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          overrideAccess: true,
-        })
-      )
-    })
-
     it('only returns public gift card information', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const findMock = mockPayload.find as ReturnType<typeof vi.fn>
-
-      findMock.mockResolvedValue({
-        docs: [{
-          id: 'secret-id',
-          code: 'GC-TEST',
-          currentBalance: 100,
-          initialAmount: 100,
-          status: 'active',
-          createdAt: '2024-01-01',
-          purchaserEmail: 'secret@example.com',
-          stripePaymentIntentId: 'pi_secret',
-        }],
+      mockFetch.mockResolvedValue({
+        _id: 'secret-id',
+        _type: 'giftCard',
+        _createdAt: '2024-01-01',
+        _updatedAt: '2024-01-02',
+        _rev: 'abc123',
+        code: 'GC-TEST',
+        currentBalance: 100,
+        initialAmount: 100,
+        status: 'active',
+        purchaserEmail: 'secret@example.com',
+        stripePaymentIntentId: 'pi_secret',
       })
 
       const request = createMockRequest({ code: 'GC-TEST' })
@@ -293,7 +210,10 @@ describe('Gift Card Balance Check API', () => {
       const json = await response.json()
 
       // Should NOT include sensitive fields
-      expect(json).not.toHaveProperty('id')
+      expect(json).not.toHaveProperty('_id')
+      expect(json).not.toHaveProperty('_type')
+      expect(json).not.toHaveProperty('_rev')
+      expect(json).not.toHaveProperty('_updatedAt')
       expect(json).not.toHaveProperty('purchaserEmail')
       expect(json).not.toHaveProperty('stripePaymentIntentId')
 

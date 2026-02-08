@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { getMediaUrl } from '@/lib/api/payload';
-import type { Testimonial } from '@/src/payload-types';
+import { getMediaUrl } from '@/lib/api/sanity';
+import type { Testimonial } from '@/types/sanity';
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[];
@@ -95,7 +95,7 @@ export default function TestimonialsSection({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayedTestimonials.map((testimonial) => (
               <div
-                key={testimonial.id}
+                key={testimonial._id}
                 className="bg-white dark:bg-dark-bg-tertiary p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
               >
                 {/* Star Rating */}
@@ -128,7 +128,7 @@ export default function TestimonialsSection({
                 <div className="flex items-center mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
                   {testimonial.image && typeof testimonial.image === 'object' && (
                     <Image
-                      src={getMediaUrl(testimonial.image.url)}
+                      src={getMediaUrl(testimonial.image)}
                       alt={testimonial.name}
                       width={48}
                       height={48}

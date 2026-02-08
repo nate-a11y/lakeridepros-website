@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@/src/payload.config'
+import { writeClient } from '@/sanity/lib/client'
+import { groq } from 'next-sanity'
 
 const CRON_SECRET = process.env.GIFT_CARD_CRON_SECRET || 'change-me-in-production'
 
@@ -14,47 +14,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const payload = await getPayload({ config })
-
     // Find all scheduled gift cards that are ready to be sent
     const now = new Date()
-    const giftCards = await payload.find({
-      collection: 'gift-cards',
-      where: {
-        and: [
-          {
-            type: {
-              equals: 'digital',
-            },
-          },
-          {
-            deliveryMethod: {
-              equals: 'scheduled',
-            },
-          },
-          {
-            deliveryStatus: {
-              equals: 'pending',
-            },
-          },
-          {
-            scheduledDeliveryDate: {
-              less_than_equal: now.toISOString(),
-            },
-          },
-        ],
-      },
-      limit: 100,
-    })
+    const giftCards = await writeClient.fetch(
+      groq`*[_type == "giftCard" && type == "digital" && deliveryMethod == "scheduled" && deliveryStatus == "pending" && scheduledDeliveryDate <= $now][0...100]`,
+      { now: now.toISOString() }
+    )
 
     const results = {
-      total: giftCards.docs.length,
+      total: giftCards.length,
       sent: 0,
       failed: 0,
       errors: [] as string[],
     }
 
-    for (const giftCard of giftCards.docs) {
+    for (const giftCard of giftCards) {
       try {
         // Send the gift card email
         const sendToEmail = giftCard.recipientEmail || giftCard.purchaserEmail
@@ -75,14 +49,10 @@ export async function POST(request: NextRequest) {
         })
 
         // Update gift card status to sent
-        await payload.update({
-          collection: 'gift-cards',
-          id: giftCard.id,
-          data: {
-            deliveryStatus: 'sent',
-            sentDate: new Date().toISOString(),
-          },
-        })
+        await writeClient.patch(giftCard._id).set({
+          deliveryStatus: 'sent',
+          sentDate: new Date().toISOString(),
+        }).commit()
 
         results.sent++
         console.log(`Sent scheduled gift card: ${giftCard.code}`)

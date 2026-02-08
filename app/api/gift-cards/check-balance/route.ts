@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from 'payload'
-import config from '@payload-config'
+import { writeClient } from '@/sanity/lib/client'
+import { groq } from 'next-sanity'
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,29 +16,19 @@ export async function POST(request: NextRequest) {
     // Normalize the code (uppercase, trim)
     const normalizedCode = code.trim().toUpperCase()
 
-    // Use Payload Local API to query gift cards
-    const payload = await getPayload({ config })
-
-    const result = await payload.find({
-      collection: 'gift-cards',
-      where: {
-        code: {
-          equals: normalizedCode,
-        },
-      },
-      overrideAccess: true, // Allow public balance checks
-      limit: 1,
-    })
+    // Query gift card from Sanity
+    const giftCard = await writeClient.fetch(
+      groq`*[_type == "giftCard" && code == $code][0]`,
+      { code: normalizedCode }
+    )
 
     // Check if gift card exists
-    if (!result.docs || result.docs.length === 0) {
+    if (!giftCard) {
       return NextResponse.json(
         { error: 'Gift card not found. Please check your code and try again.' },
         { status: 404 }
       )
     }
-
-    const giftCard = result.docs[0]
 
     // Check if gift card is active
     if (giftCard.status !== 'active') {
@@ -53,7 +43,7 @@ export async function POST(request: NextRequest) {
       code: giftCard.code,
       balance: giftCard.currentBalance || 0,
       originalAmount: giftCard.initialAmount || giftCard.currentBalance,
-      purchasedDate: giftCard.createdAt,
+      purchasedDate: giftCard._createdAt,
       expirationDate: 'Never', // Gift cards never expire
       status: giftCard.status,
     })

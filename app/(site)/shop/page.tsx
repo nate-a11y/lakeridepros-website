@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ShopClient from './ShopClient'
-import type { Product } from '@/src/payload-types'
+import type { Product } from '@/types/sanity'
 
 export const metadata: Metadata = {
   title: 'Shop Lake Ride Pros Merchandise | T-Shirts, Hats & More',
@@ -62,7 +62,7 @@ export default async function ShopPage() {
         <h2>All Products</h2>
         <ul>
           {products.map((product) => (
-            <li key={product.id}>
+            <li key={product._id}>
               <Link href={`/shop/products/${product.slug}`}>
                 {product.name}
               </Link>

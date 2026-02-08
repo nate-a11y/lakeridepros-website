@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
-import type { Media } from '@/src/payload-types';
+import type { Media } from '@/types/sanity';
 
 interface VehicleImage {
   image: Media;
@@ -33,7 +33,7 @@ export default function VehicleGallery({
       result.push({ image: featuredImage, alt: `${vehicleName} - Featured` });
     }
     images.forEach((img) => {
-      if (!featuredImage || img.image.id !== featuredImage.id) {
+      if (!featuredImage || img.image._id !== featuredImage._id) {
         result.push(img);
       }
     });

@@ -6,27 +6,32 @@ import {
   getProductsLocal,
   getPagesLocal,
   getPartnersLocal,
-} from '@/lib/api/payload-local';
+} from '@/lib/api/sanity';
 import { getDriversForWebsite } from '@/lib/supabase/drivers';
 
 // Regenerate sitemap every hour instead of at build time
 // This significantly reduces build time by deferring these queries
 export const revalidate = 3600;
 
-interface PayloadDoc {
-  slug: string;
+// Normalized docs have slug flattened to string by normalizeDoc()
+interface SitemapDoc {
+  slug: string | { current: string };
   updatedAt?: string;
+  _updatedAt?: string;
   publishedDate?: string;
+  [key: string]: unknown;
 }
 
 interface PartnerDoc {
-  slug?: string | null;
+  slug?: string | { current: string } | null;
   updatedAt?: string;
+  _updatedAt?: string;
   isWeddingPartner?: boolean | null;
   isPremierPartner?: boolean | null;
   isReferralPartner?: boolean | null;
   isPromotion?: boolean | null;
   category?: string | null;
+  [key: string]: unknown;
 }
 
 interface DriverDoc {
@@ -34,7 +39,7 @@ interface DriverDoc {
   updated_at: string;
 }
 
-async function getPayloadData() {
+async function getSanityData() {
   try {
     // Fetch all dynamic content using local Payload queries (no HTTP)
     const [servicesResponse, blogPostsResponse, vehicles, products, pages, allPartners] = await Promise.all([
@@ -141,13 +146,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Fetch dynamic content from Payload CMS and Supabase
   const [payloadData, drivers] = await Promise.all([
-    getPayloadData(),
+    getSanityData(),
     getDriversForWebsite(),
   ]);
   const { services, blogPosts, vehicles, products, pages, allPartners } = payloadData;
 
   // Dynamic service pages
-  const serviceSitemapEntries = services.map((service: PayloadDoc) => ({
+  const serviceSitemapEntries = services.map((service: SitemapDoc) => ({
     url: `${baseUrl}/services/${service.slug}`,
     lastModified: new Date(service.updatedAt || currentDate),
     changeFrequency: 'monthly' as const,
@@ -155,7 +160,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Blog posts
-  const blogSitemapEntries = blogPosts.map((post: PayloadDoc) => ({
+  const blogSitemapEntries = blogPosts.map((post: SitemapDoc) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.updatedAt || post.publishedDate || currentDate),
     changeFrequency: 'weekly' as const,
@@ -163,7 +168,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Vehicles
-  const vehicleSitemapEntries = vehicles.map((vehicle: PayloadDoc) => ({
+  const vehicleSitemapEntries = vehicles.map((vehicle: SitemapDoc) => ({
     url: `${baseUrl}/fleet/${vehicle.slug}`,
     lastModified: new Date(vehicle.updatedAt || currentDate),
     changeFrequency: 'monthly' as const,
@@ -171,7 +176,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Products
-  const productSitemapEntries = products.map((product: PayloadDoc) => ({
+  const productSitemapEntries = products.map((product: SitemapDoc) => ({
     url: `${baseUrl}/shop/products/${product.slug}`,
     lastModified: new Date(product.updatedAt || currentDate),
     changeFrequency: 'weekly' as const,
@@ -179,7 +184,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Custom pages
-  const pageSitemapEntries = pages.map((page: PayloadDoc) => ({
+  const pageSitemapEntries = pages.map((page: SitemapDoc) => ({
     url: `${baseUrl}/${page.slug}`,
     lastModified: new Date(page.updatedAt || currentDate),
     changeFrequency: 'monthly' as const,

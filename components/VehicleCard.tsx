@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Vehicle } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload';
+import type { Vehicle } from '@/types/sanity';
+import { getMediaUrl } from '@/lib/api/sanity';
 import { TierBadges } from './TierBadge';
 
 interface VehicleCardProps {
@@ -15,9 +15,9 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const [imageError, setImageError] = useState(false);
 
   const imageUrl = vehicle.featuredImage && typeof vehicle.featuredImage === 'object'
-    ? getMediaUrl(vehicle.featuredImage.url)
+    ? getMediaUrl(vehicle.featuredImage)
     : vehicle.images?.[0]?.image && typeof vehicle.images[0].image === 'object'
-    ? getMediaUrl(vehicle.images[0].image.url)
+    ? getMediaUrl(vehicle.images[0].image)
     : '/placeholder-vehicle.jpg';
 
   // Generate descriptive alt text

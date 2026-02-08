@@ -2,11 +2,9 @@ import { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getMediaUrl } from '@/lib/api/payload';
-import { getBlogPostBySlugLocal, getAdjacentBlogPostsLocal } from '@/lib/api/payload-local';
+import { getMediaUrl, getBlogPostBySlugLocal, getAdjacentBlogPostsLocal } from '@/lib/api/sanity';
 import { formatDate } from '@/lib/utils';
-import { serializeLexical } from '@/lib/serializeLexical';
-import type { User } from '@/src/payload-types';
+import { RichText } from '@/lib/sanity/serialize-portable-text';
 import BlogPostNavigation from '@/components/BlogPostNavigation';
 
 export const dynamic = 'force-dynamic';
@@ -23,15 +21,15 @@ const getCategoryLabel = (categoryValue: string): string => {
 };
 
 // Helper function to get author name from either ID, string, or object
-const getAuthorName = (author: User | string | number | null | undefined): string => {
+const getAuthorName = (author: { name?: string } | string | number | null | undefined): string => {
   if (!author || typeof author === 'number') {
     return 'Lake Ride Pros';
   }
   if (typeof author === 'string') {
-    // If it's just an email, return "Lake Ride Pros" as fallback
+    // If it's just an email or ID, return "Lake Ride Pros" as fallback
     return 'Lake Ride Pros';
   }
-  // If it's a User object, return the name or fallback
+  // If it's a User object (Sanity reference), return the name or fallback
   return author.name || 'Lake Ride Pros';
 };
 
@@ -53,7 +51,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     ? post.excerpt.substring(0, 155)
     : post.title.substring(0, 155);
   const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
-    ? getMediaUrl(post.featuredImage.url)
+    ? getMediaUrl(post.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   return {
@@ -79,7 +77,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       locale: 'en_US',
       type: 'article',
       publishedTime: post.publishedDate,
-      modifiedTime: post.updatedAt,
+      modifiedTime: post._updatedAt,
       authors: [getAuthorName(post.author)],
     },
     twitter: {
@@ -119,7 +117,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     headline: post.title,
     description: post.excerpt || post.title,
     image: post.featuredImage && typeof post.featuredImage === 'object'
-      ? getMediaUrl(post.featuredImage.url)
+      ? getMediaUrl(post.featuredImage)
       : 'https://www.lakeridepros.com/og-image.jpg',
     author: {
       '@type': typeof post.author === 'string' || !post.author ? 'Organization' : 'Person',
@@ -195,7 +193,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {post.featuredImage && typeof post.featuredImage === 'object' && (
             <div className="relative h-96 rounded-lg overflow-hidden mb-8">
               <Image
-                src={getMediaUrl(post.featuredImage.url)}
+                src={getMediaUrl(post.featuredImage)}
                 alt={post.featuredImage.alt || post.title}
                 fill
                 className="object-cover"
@@ -238,8 +236,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 // Legacy HTML content from older posts
                 <div dangerouslySetInnerHTML={{ __html: post.content }} />
               ) : (
-                // New Lexical rich text content
-                serializeLexical(post.content)
+                // Sanity Portable Text content
+                <RichText content={post.content} />
               )
             ) : post.excerpt ? (
               <p>{post.excerpt}</p>

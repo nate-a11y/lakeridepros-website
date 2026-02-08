@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { sendOrderConfirmation, sendOwnerOrderNotification, sendOwnerGiftCardNotification } from '@/lib/email'
-import { getPayload } from 'payload'
-import config from '@payload-config'
-import type { Order, GiftCard } from '@/src/payload-types'
+import { writeClient } from '@/sanity/lib/client'
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -104,9 +102,6 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
     const amountShipping = (fullSession.total_details?.amount_shipping || 0)
     const amountTax = (fullSession.total_details?.amount_tax || 0)
 
-    // Create order in Payload CMS using Local API
-    const payload = await getPayload({ config })
-
     // Generate order number
     const timestamp = Date.now().toString(36).toUpperCase()
     const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase()
@@ -131,16 +126,14 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
       shipping: amountShipping / 100,
       tax: amountTax / 100,
       total: amountTotal / 100,
-      status: 'processing' as const,
+      status: 'processing',
     }
 
-    // Use Local API with overrideAccess to bypass admin-only restriction
-    const order = await payload.create({
-      collection: 'orders',
-      data: orderData,
-      draft: false,
-      overrideAccess: true, // Bypass access control - safe because Stripe signature verified
-    }) as Order
+    // Create order in Sanity CMS
+    const order = await writeClient.create({
+      _type: 'order',
+      ...orderData,
+    }) as any
 
     console.log('Order created:', order.orderNumber)
 
@@ -166,7 +159,7 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
 }
 
 interface OrderData {
-  id: string | number
+  _id: string
   orderNumber: string
   total: number
   items: CartItem[]
@@ -204,7 +197,7 @@ async function sendToPrintify(order: OrderData, cartItems: CartItem[], shippingA
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        orderId: order.id,
+        orderId: order._id,
         orderNumber: order.orderNumber,
         cartItems,
         shippingAddress,
@@ -216,16 +209,10 @@ async function sendToPrintify(order: OrderData, cartItems: CartItem[], shippingA
       const printifyOrder = await response.json()
       console.log('Printify order created:', printifyOrder.id)
 
-      // Update order with Printify order ID using Local API
-      const payload = await getPayload({ config })
-      await payload.update({
-        collection: 'orders',
-        id: order.id,
-        data: {
-          printifyOrderId: printifyOrder.id,
-        },
-        overrideAccess: true, // Bypass access control
-      })
+      // Update order with Printify order ID in Sanity
+      await writeClient.patch(order._id).set({
+        printifyOrderId: printifyOrder.id,
+      }).commit()
     }
 
   } catch (error) {
@@ -268,18 +255,15 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
 
     console.log('Gift card promotion info:', { isPromotion, purchaseAmount, bonusAmount, giftCardValue })
 
-    // Create gift card in Payload CMS using Local API
-    const payload = await getPayload({ config })
-
     // Generate gift card code
     const timestamp = Date.now().toString(36).toUpperCase()
     const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase()
     const code = `GC-${timestamp}-${randomPart}`
 
     // Use giftCardValue (includes bonus) for the balance
-    const giftCardData: Partial<GiftCard> = {
+    const giftCardData: Record<string, any> = {
       code,
-      type: cardType as 'digital' | 'physical',
+      type: cardType,
       initialAmount: giftCardValue, // Total value including bonus
       currentBalance: giftCardValue, // Total value including bonus
       purchaserName,
@@ -294,7 +278,7 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
 
     // Add delivery info for digital cards
     if (cardType === 'digital') {
-      giftCardData.deliveryMethod = deliveryMethod as 'immediate' | 'scheduled'
+      giftCardData.deliveryMethod = deliveryMethod
       giftCardData.deliveryStatus = deliveryMethod === 'scheduled' ? 'pending' : 'sent'
       if (scheduledDeliveryDate) {
         giftCardData.scheduledDeliveryDate = scheduledDeliveryDate
@@ -315,13 +299,11 @@ async function handleGiftCardPurchase(session: Stripe.Checkout.Session) {
       giftCardData.fulfillmentStatus = 'pending'
     }
 
-    // Use Local API with overrideAccess to bypass admin-only restriction
-    const giftCard = await payload.create({
-      collection: 'gift-cards',
-      data: giftCardData as unknown as Omit<GiftCard, 'id' | 'createdAt' | 'updatedAt'>,
-      draft: false,
-      overrideAccess: true, // Bypass access control - safe because Stripe signature verified
-    }) as GiftCard
+    // Create gift card in Sanity CMS
+    const giftCard = await writeClient.create({
+      _type: 'giftCard',
+      ...giftCardData,
+    }) as any
 
     console.log('Gift card created:', cardType === 'digital' ? giftCard.code : 'pending fulfillment')
 

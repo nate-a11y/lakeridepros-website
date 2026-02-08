@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { getMediaUrl } from '@/lib/api/payload';
-import type { Testimonial } from '@/src/payload-types';
+import { getMediaUrl } from '@/lib/api/sanity';
+import type { Testimonial } from '@/types/sanity';
 import { ChevronLeft, ChevronRight, Quote, Pause, Play } from 'lucide-react';
 
 interface TestimonialsCarouselProps {
@@ -169,7 +169,7 @@ export default function TestimonialsCarousel({
                 <div className="flex flex-col items-center">
                   {currentTestimonial.image && typeof currentTestimonial.image === 'object' && (
                     <Image
-                      src={getMediaUrl(currentTestimonial.image.url)}
+                      src={getMediaUrl(currentTestimonial.image)}
                       alt={currentTestimonial.name}
                       width={64}
                       height={64}

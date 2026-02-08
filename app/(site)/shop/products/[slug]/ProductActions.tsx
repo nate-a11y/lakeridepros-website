@@ -6,7 +6,7 @@ import { ShoppingCart, Check, Package, Truck, Shield } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl, cn } from '@/lib/utils'
 import { VariantSelector } from '@/components/shop'
-import type { Product } from '@/src/payload-types'
+import type { Product } from '@/types/sanity'
 
 interface ProductActionsProps {
   product: Product
@@ -32,16 +32,16 @@ export default function ProductActions({ product }: ProductActionsProps) {
     const featuredImage = typeof product.featuredImage === 'object' ? product.featuredImage : null
 
     addItem({
-      productId: String(product.id),
+      productId: product._id,
       productName: product.name,
-      productSlug: product.slug,
+      productSlug: typeof product.slug === 'string' ? product.slug : product.slug.current,
       variantId: selectedVariant.sku,
       variantName: selectedVariant.name,
       size: selectedVariant.size,
       color: selectedVariant.color,
       price: finalPrice,
       quantity,
-      image: featuredImage?.url ? getMediaUrl(featuredImage.url) : '',
+      image: featuredImage ? getMediaUrl(featuredImage) : '',
       imageAlt: featuredImage?.alt || product.name,
       personalization: personalizationText || undefined,
     })
@@ -55,14 +55,11 @@ export default function ProductActions({ product }: ProductActionsProps) {
   }, [])
 
   // Get all images including featured - robust handling for multiple data structures
-  const allImages: Array<{ image: { url?: string | null; alt?: string | null } | null }> = []
+  const allImages: Array<{ image: Record<string, any> | null }> = []
 
   // Add featured image if it exists
   if (product.featuredImage && typeof product.featuredImage === 'object') {
-    const featuredImg = product.featuredImage as { url?: string | null; alt?: string | null }
-    if (featuredImg.url) {
-      allImages.push({ image: featuredImg })
-    }
+    allImages.push({ image: product.featuredImage as Record<string, any> })
   }
 
   // Add gallery images with robust handling for different structures
@@ -72,17 +69,11 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
       // Handle nested structure: images[].image
       if ('image' in imgItem && imgItem.image && typeof imgItem.image === 'object') {
-        const nestedImg = imgItem.image as { url?: string | null; alt?: string | null }
-        if (nestedImg.url) {
-          allImages.push({ image: nestedImg })
-        }
+        allImages.push({ image: imgItem.image as Record<string, any> })
       }
-      // Handle flat structure: images[] might be the Media object directly
-      else if (typeof imgItem === 'object' && 'url' in imgItem) {
-        const flatImg = imgItem as unknown as { url?: string | null; alt?: string | null }
-        if (flatImg.url) {
-          allImages.push({ image: flatImg })
-        }
+      // Handle flat structure: images[] might be the SanityImage object directly
+      else if (typeof imgItem === 'object' && ('_type' in imgItem || 'asset' in imgItem)) {
+        allImages.push({ image: imgItem as unknown as Record<string, any> })
       }
     }
   }
@@ -98,9 +89,9 @@ export default function ProductActions({ product }: ProductActionsProps) {
           {(() => {
             const imageItem = allImages[selectedImage]
             const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null
-            return imageObj?.url ? (
+            return imageObj ? (
               <Image
-                src={getMediaUrl(imageObj.url)}
+                src={getMediaUrl(imageObj)}
                 alt={imageObj.alt || product.name}
                 width={800}
                 height={800}
@@ -120,7 +111,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
           <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
             {allImages.map((img, index) => {
               const imageObj = img.image
-              return imageObj?.url ? (
+              return imageObj ? (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
@@ -134,7 +125,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
                   )}
                 >
                   <Image
-                    src={getMediaUrl(imageObj.url)}
+                    src={getMediaUrl(imageObj)}
                     alt={imageObj.alt || `${product.name} thumbnail ${index + 1}`}
                     width={80}
                     height={80}
@@ -188,16 +179,21 @@ export default function ProductActions({ product }: ProductActionsProps) {
         </div>
 
         {/* Description */}
-        <div
-          className="text-neutral-600 dark:text-neutral-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none"
-          dangerouslySetInnerHTML={{
-            __html: typeof product.description === 'string'
+        <div className="text-neutral-600 dark:text-neutral-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none">
+          {product.shortDescription || (
+            Array.isArray(product.description)
               ? product.description
-              : product.description?.root?.children?.[0]?.children?.[0]?.text
-                ? product.description.root.children[0].children[0].text
-                : product.shortDescription || ''
-          }}
-        />
+                  .filter((block: Record<string, unknown>) => block._type === 'block')
+                  .map((block: Record<string, unknown>) =>
+                    Array.isArray(block.children)
+                      ? block.children.map((child: Record<string, unknown>) => child.text || '').join('')
+                      : ''
+                  )
+                  .join(' ')
+                  .slice(0, 300)
+              : ''
+          )}
+        </div>
 
         {/* Variant Selection */}
         {product.variants && product.variants.length > 0 && (

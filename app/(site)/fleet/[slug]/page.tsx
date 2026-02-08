@@ -5,7 +5,7 @@ import BookingWidget from '@/components/BookingWidget';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import VehicleGallery from '@/components/VehicleGallery';
 import { TierBadges } from '@/components/TierBadge';
-import { getVehicleBySlug, getVehicleRelatedTestimonials } from '@/lib/api/payload';
+import { getVehicleBySlug, getVehicleRelatedTestimonials } from '@/lib/api/sanity';
 
 export const dynamic = 'force-dynamic';
 

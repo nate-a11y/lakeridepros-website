@@ -1,4 +1,4 @@
-import { getPartners } from '@/lib/api/payload'
+import { getPartners } from '@/lib/api/sanity'
 import Link from 'next/link'
 import LocalPremierPartnersClient from '@/components/LocalPremierPartnersClient'
 

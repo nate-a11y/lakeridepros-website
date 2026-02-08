@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import type { BlogPost } from '@/src/payload-types';
-import { getMediaUrl } from '@/lib/api/payload';
+import type { BlogPost } from '@/types/sanity';
+import { getMediaUrl } from '@/lib/api/sanity';
 import { formatDate } from '@/lib/utils';
 import { FileText } from 'lucide-react';
 
@@ -22,7 +22,7 @@ const getCategoryLabel = (categoryValue: string): string => {
 
 export default function BlogPostCard({ post }: BlogPostCardProps) {
   const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
-    ? getMediaUrl(post.featuredImage.url)
+    ? getMediaUrl(post.featuredImage)
     : null;
 
   return (

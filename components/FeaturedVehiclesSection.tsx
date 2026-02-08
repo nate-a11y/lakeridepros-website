@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { Vehicle } from '@/src/payload-types';
+import type { Vehicle } from '@/types/sanity';
 import VehicleCard from './VehicleCard';
 
 interface FeaturedVehiclesSectionProps {
@@ -46,7 +46,7 @@ export default function FeaturedVehiclesSection({
               aria-label="Featured vehicles"
             >
               {vehicles.map((vehicle) => (
-                <div key={vehicle.id} role="listitem">
+                <div key={vehicle._id} role="listitem">
                   <VehicleCard vehicle={vehicle} />
                 </div>
               ))}

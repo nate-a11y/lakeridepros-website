@@ -9,8 +9,8 @@ import {
   getRandomTestimonials,
   getPartners,
   getMediaUrl,
-} from '@/lib/api/payload';
-import { getLatestBlogPostsLocal } from '@/lib/api/payload-local';
+  getLatestBlogPostsLocal,
+} from '@/lib/api/sanity';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
@@ -118,12 +118,12 @@ export default async function HomePage() {
 
   // Transform partners to minimal data for client component (reduces HTML payload)
   const partners = partnersData.slice(0, 12).map(p => ({
-    id: p.id,
+    _id: p._id,
     name: p.name,
     slug: p.slug,
     website: p.website,
     blurb: p.blurb,
-    logoUrl: getMediaUrl(p.logo?.url),
+    logoUrl: getMediaUrl(p.logo),
     isPremierPartner: p.isPremierPartner,
     isWeddingPartner: p.isWeddingPartner,
   }));

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getEventBySlug, getUpcomingEvents } from '@/lib/api/payload'
+import { getEventBySlug, getUpcomingEvents } from '@/lib/api/sanity'
 import { getMediaUrl } from '@/lib/utils'
 import { Calendar, Clock, MapPin, ArrowLeft } from 'lucide-react'
 import RideAvailabilityBadge from '@/components/RideAvailabilityBadge'
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://www.lakeridepros.com/events/${event.slug}`,
       siteName: 'Lake Ride Pros',
       images: event.image && typeof event.image === 'object'
-        ? [{ url: getMediaUrl(event.image.url), width: 1200, height: 630, alt: event.name }]
+        ? [{ url: getMediaUrl(event.image), width: 1200, height: 630, alt: event.name }]
         : [{ url: '/og-image.jpg', width: 1200, height: 630, alt: event.name }],
       locale: 'en_US',
       type: 'website',
@@ -147,7 +147,7 @@ export default async function EventDetailPage({ params }: Props) {
             {event.image && typeof event.image === 'object' && (
               <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl">
                 <Image
-                  src={getMediaUrl(event.image.url)}
+                  src={getMediaUrl(event.image)}
                   alt={event.image.alt || event.name}
                   fill
                   className="object-cover"
@@ -167,7 +167,7 @@ export default async function EventDetailPage({ params }: Props) {
               {venue.image && typeof venue.image === 'object' && (
                 <div className="relative w-20 h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 shadow">
                   <Image
-                    src={getMediaUrl(venue.image.url)}
+                    src={getMediaUrl(venue.image)}
                     alt={venue.image.alt || venue.name}
                     fill
                     className="object-contain p-2"

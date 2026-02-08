@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getVehicles, getMediaUrl } from '@/lib/api/payload';
+import { getVehicles, getMediaUrl } from '@/lib/api/sanity';
 
 export const metadata: Metadata = {
   title: 'Our Fleet - Luxury Vehicles | Lake Ride Pros',
@@ -94,9 +94,9 @@ export default async function FleetPage() {
             {vehicles.map((vehicle) => {
               // Get the featured image or first image from images array
               const imageUrl = vehicle.featuredImage
-                ? getMediaUrl(vehicle.featuredImage.url)
+                ? getMediaUrl(vehicle.featuredImage)
                 : vehicle.images?.[0]?.image
-                ? getMediaUrl(vehicle.images[0].image.url)
+                ? getMediaUrl(vehicle.images[0].image)
                 : null;
 
               const imageAlt = vehicle.featuredImage?.alt ||

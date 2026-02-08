@@ -29,22 +29,21 @@ vi.mock('@/lib/email', () => ({
   sendOwnerGiftCardNotification: vi.fn().mockResolvedValue(true),
 }))
 
-vi.mock('payload', () => ({
-  getPayload: vi.fn().mockResolvedValue({
-    create: vi.fn().mockResolvedValue({
-      id: 'test-id',
-      orderNumber: 'ORD-123456',
-      total: 100.00,
-      code: 'GC-ABC123',
-    }),
-    update: vi.fn().mockResolvedValue({}),
-  }),
-  buildConfig: vi.fn((config) => config),
-}))
+const mockCreate = vi.fn().mockResolvedValue({
+  _id: 'test-id',
+  orderNumber: 'ORD-123456',
+  total: 100.00,
+  code: 'GC-ABC123',
+})
+const mockCommit = vi.fn().mockResolvedValue({})
+const mockSet = vi.fn().mockReturnValue({ commit: mockCommit })
+const mockPatch = vi.fn().mockReturnValue({ set: mockSet })
 
-// Mock payload config
-vi.mock('@payload-config', () => ({
-  default: {},
+vi.mock('@/sanity/lib/client', () => ({
+  writeClient: {
+    create: mockCreate,
+    patch: mockPatch,
+  },
 }))
 
 // Mock fetch for internal API calls
@@ -492,10 +491,6 @@ describe('Stripe Webhook Handler', () => {
     })
 
     it('updates order with Printify ID on success', async () => {
-      const { getPayload } = await import('payload')
-      const mockPayload = await getPayload({ config: {} as never })
-      const updateMock = mockPayload.update as ReturnType<typeof vi.fn>
-
       const cartItems = [
         {
           productId: 'prod_123',
@@ -570,7 +565,7 @@ describe('Stripe Webhook Handler', () => {
       const response = await POST(request)
 
       expect(response.status).toBe(200)
-      expect(updateMock).toHaveBeenCalled()
+      expect(mockPatch).toHaveBeenCalled()
     })
   })
 

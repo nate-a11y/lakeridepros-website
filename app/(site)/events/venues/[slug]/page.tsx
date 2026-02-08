@@ -2,9 +2,9 @@ import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { getVenueBySlug, getUpcomingEvents } from '@/lib/api/payload'
+import { getVenueBySlug, getUpcomingEvents } from '@/lib/api/sanity'
 import { getMediaUrl } from '@/lib/utils'
-import { renderRichText } from '@/lib/renderRichText'
+import { renderPortableTextToHtml } from '@/lib/sanity/render-rich-text'
 import { MapPin, Globe, Phone, ArrowLeft, Calendar, Clock } from 'lucide-react'
 import RideAvailabilityBadge from '@/components/RideAvailabilityBadge'
 
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://www.lakeridepros.com/events/venues/${venue.slug}`,
       siteName: 'Lake Ride Pros',
       images: venue.image && typeof venue.image === 'object'
-        ? [{ url: getMediaUrl(venue.image.url), width: 1200, height: 630, alt: venue.name }]
+        ? [{ url: getMediaUrl(venue.image), width: 1200, height: 630, alt: venue.name }]
         : [{ url: '/og-image.jpg', width: 1200, height: 630, alt: venue.name }],
       locale: 'en_US',
       type: 'website',
@@ -60,8 +60,8 @@ export default async function VenueDetailPage({ params }: Props) {
   // Get upcoming events and filter to this venue
   const allEvents = await getUpcomingEvents(1000)
   const venueEvents = allEvents.filter(event => {
-    const eventVenueId = typeof event.venue === 'object' ? String(event.venue?.id) : String(event.venue)
-    return eventVenueId === String(venue.id)
+    const eventVenueId = typeof event.venue === 'object' ? String(event.venue?._id) : String(event.venue)
+    return eventVenueId === String(venue._id)
   })
 
   const formatDate = (dateString: string) => {
@@ -96,7 +96,7 @@ export default async function VenueDetailPage({ params }: Props) {
             {venue.image && typeof venue.image === 'object' && (
               <div className="relative w-full md:w-80 h-64 md:h-72 bg-white rounded-2xl overflow-hidden flex-shrink-0 shadow-xl">
                 <Image
-                  src={getMediaUrl(venue.image.url)}
+                  src={getMediaUrl(venue.image)}
                   alt={venue.image.alt || venue.name}
                   fill
                   className="object-cover"
@@ -157,7 +157,7 @@ export default async function VenueDetailPage({ params }: Props) {
                 return (
                   <div key={item.id || index} className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md group">
                     <Image
-                      src={getMediaUrl(img.url)}
+                      src={getMediaUrl(img)}
                       alt={item.caption || img.alt || `${venue.name} photo ${index + 1}`}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -177,14 +177,14 @@ export default async function VenueDetailPage({ params }: Props) {
       )}
 
       {/* Additional Venue Info */}
-      {venue.additionalInfo && renderRichText(venue.additionalInfo) && (
+      {venue.additionalInfo && renderPortableTextToHtml(venue.additionalInfo) && (
         <section className="py-10 border-b border-gray-200 dark:border-gray-700">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-4">
               Venue Details
             </h2>
             <div
-              dangerouslySetInnerHTML={{ __html: renderRichText(venue.additionalInfo) }}
+              dangerouslySetInnerHTML={{ __html: renderPortableTextToHtml(venue.additionalInfo) }}
               className="prose-themed text-lg max-w-none"
             />
           </div>
@@ -211,7 +211,7 @@ export default async function VenueDetailPage({ params }: Props) {
                 const dateInfo = formatDate(event.date)
                 return (
                   <div
-                    key={event.id}
+                    key={event._id}
                     className="bg-white dark:bg-dark-bg-secondary rounded-xl shadow border border-gray-200 dark:border-gray-700 overflow-hidden"
                   >
                     <div className="flex flex-col sm:flex-row">

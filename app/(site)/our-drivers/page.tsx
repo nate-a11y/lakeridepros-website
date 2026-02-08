@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Phone, Mail } from 'lucide-react';
-import { getDriversForWebsite, getDriverImageUrl, getDriverRoleLabel } from '@/lib/supabase/drivers';
+import { getDriverProfiles, getMediaUrl } from '@/lib/api/sanity';
 
 export const metadata: Metadata = {
   title: 'Our Team | Lake Ride Pros',
@@ -49,8 +48,27 @@ export const metadata: Metadata = {
 // Force dynamic rendering to always fetch fresh data
 export const dynamic = 'force-dynamic';
 
+function getRoleLabel(role: string[] | undefined): string {
+  if (!role || role.length === 0) return 'Team Member';
+
+  const labels = role.map((r) => {
+    switch (r) {
+      case 'owner': return 'Owner';
+      case 'dispatcher': return 'Dispatcher';
+      case 'driver': return 'Professional Driver';
+      case 'cdl_trainer': return 'CDL Trainer';
+      case 'aesthetic_master_technician': return 'Aesthetic Master Technician';
+      case 'manager': return 'Manager';
+      case 'trainer': return 'Trainer';
+      default: return 'Team Member';
+    }
+  });
+
+  return labels.join(' & ');
+}
+
 export default async function OurDriversPage() {
-  const drivers = await getDriversForWebsite();
+  const drivers = await getDriverProfiles();
 
   return (
     <>
@@ -104,30 +122,34 @@ export default async function OurDriversPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {drivers.map((driver) => {
-                const imageUrl = getDriverImageUrl(driver);
-                const roleLabel = getDriverRoleLabel(driver.role);
+                const imageUrl = getMediaUrl(driver.image);
+                const roleLabel = getRoleLabel(driver.role);
                 const isOwner = driver.role && driver.role.includes('owner');
 
                 // Format name as "First L."
                 const nameParts = driver.name.trim().split(/\s+/);
-                const displayName = nameParts.length > 1
-                  ? `${nameParts[0]} ${nameParts[nameParts.length - 1].charAt(0)}.`
-                  : nameParts[0];
+                const displayName = isOwner
+                  ? driver.name
+                  : nameParts.length > 1
+                    ? `${nameParts[0]} ${nameParts[nameParts.length - 1].charAt(0)}.`
+                    : nameParts[0];
+
+                const driverSlug = driver.slug;
 
                 return (
                   <div
-                    key={driver.id}
+                    key={driver._id}
                     className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] hover:shadow-xl group"
                   >
                     {/* Driver Image - Clickable */}
                     <Link
-                      href={`/our-drivers/${driver.id}`}
+                      href={`/our-drivers/${driverSlug}`}
                       className="block relative w-full aspect-square bg-gradient-to-br from-primary/10 to-primary/5"
                     >
                       {imageUrl ? (
                         <Image
                           src={imageUrl}
-                          alt={driver.media?.alt || `${displayName} - ${roleLabel}`}
+                          alt={`${displayName} - ${roleLabel}`}
                           fill
                           className="object-contain"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
@@ -146,14 +168,14 @@ export default async function OurDriversPage() {
                     {/* Driver Info */}
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-1">
-                        <Link href={`/our-drivers/${driver.id}`}>
+                        <Link href={`/our-drivers/${driverSlug}`}>
                           <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
-                            {isOwner ? driver.name : displayName}
+                            {displayName}
                           </h3>
                         </Link>
-                        {driver.assignment_number && (
+                        {driver.assignmentNumber && (
                           <span className="inline-flex items-center px-2 py-0.5 text-xs font-bold bg-[#1f2937] text-white dark:bg-[#f5f5f5] dark:text-[#1f2937] rounded">
-                            {driver.assignment_number}
+                            {driver.assignmentNumber}
                           </span>
                         )}
                       </div>
@@ -180,32 +202,8 @@ export default async function OurDriversPage() {
                           {driver.bio}
                         </p>
                       )}
-                      {isOwner && (driver.phone || driver.email) && (
-                        <div className="mt-4 flex gap-2">
-                          {driver.phone && (
-                            <a
-                              href={`tel:${driver.phone}`}
-                              className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-lrp-black text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-lrp-black rounded-lg text-sm font-medium transition-colors"
-                              title={driver.phone}
-                            >
-                              <Phone className="w-4 h-4" />
-                              <span>Call</span>
-                            </a>
-                          )}
-                          {driver.email && (
-                            <a
-                              href={`mailto:${driver.email}`}
-                              className="flex items-center justify-center gap-1.5 flex-1 px-3 py-2 bg-primary/10 hover:bg-primary hover:text-lrp-black text-primary dark:bg-primary/20 dark:text-primary-light dark:hover:bg-primary dark:hover:text-lrp-black rounded-lg text-sm font-medium transition-colors"
-                              title={driver.email}
-                            >
-                              <Mail className="w-4 h-4" />
-                              <span>Email</span>
-                            </a>
-                          )}
-                        </div>
-                      )}
                       <Link
-                        href={`/our-drivers/${driver.id}`}
+                        href={`/our-drivers/${driverSlug}`}
                         className="mt-3 text-sm font-medium text-primary dark:text-primary-light opacity-0 group-hover:opacity-100 transition-opacity inline-block"
                       >
                         View Profile →

@@ -244,6 +244,31 @@ export interface GiftCard extends SanityDocument {
   [key: string]: unknown
 }
 
+export interface SanityMemberLogo extends SanityDocument {
+  name: string
+  logo: SanityImage
+  order: number
+  active: boolean
+  [key: string]: unknown
+}
+
+export interface SanityDriverProfile extends SanityDocument {
+  name: string
+  slug: SanitySlug
+  bio?: string
+  image?: SanityImage
+  displayOnWebsite: boolean
+  active: boolean
+  role?: string[]
+  vehicles?: string[]
+  assignmentNumber?: string
+  order: number
+  supabaseId?: string
+  lastSyncSource?: 'sanity' | 'supabase'
+  lastSyncedAt?: string
+  [key: string]: unknown
+}
+
 // Re-export User for compatibility
 export interface User extends SanityDocument {
   name: string

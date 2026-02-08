@@ -1,56 +1,5 @@
 import Image from 'next/image';
-import { getSupabaseServerClient } from '@/lib/supabase/client';
-
-interface MemberLogo {
-  name: string;
-  url: string;
-}
-
-async function getMemberLogos(): Promise<MemberLogo[]> {
-  try {
-    const supabase = getSupabaseServerClient();
-
-    // List all files in the 'membersof' bucket
-    const { data: files, error } = await supabase.storage
-      .from('membersof')
-      .list('', {
-        limit: 100,
-        sortBy: { column: 'name', order: 'asc' },
-      });
-
-    if (error) {
-      console.error('Error fetching member logos:', error);
-      return [];
-    }
-
-    if (!files || files.length === 0) {
-      return [];
-    }
-
-    // Filter out any folders (items without metadata) and non-image files
-    const imageFiles = files.filter(file => {
-      const ext = file.name.toLowerCase().split('.').pop();
-      return file.id && ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext || '');
-    });
-
-    // Generate public URLs for each image
-    const logos: MemberLogo[] = imageFiles.map(file => {
-      const { data } = supabase.storage
-        .from('membersof')
-        .getPublicUrl(file.name);
-
-      return {
-        name: file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' '), // Clean filename for alt text
-        url: data.publicUrl,
-      };
-    });
-
-    return logos;
-  } catch (error) {
-    console.error('Error in getMemberLogos:', error);
-    return [];
-  }
-}
+import { getMemberLogos, getMediaUrl } from '@/lib/api/sanity';
 
 export default async function MemberLogosSection() {
   const logos = await getMemberLogos();
@@ -67,20 +16,25 @@ export default async function MemberLogosSection() {
           Proud Members Of
         </h2>
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-          {logos.map((logo, index) => (
-            <div
-              key={`member-logo-${index}`}
-              className="flex items-center justify-center p-6 bg-white dark:bg-dark-bg-primary rounded-lg shadow-sm hover:shadow-md transition-shadow"
-            >
-              <Image
-                src={logo.url}
-                alt={logo.name}
-                width={240}
-                height={120}
-                className="h-20 md:h-28 lg:h-32 w-auto object-contain"
-              />
-            </div>
-          ))}
+          {logos.map((logo) => {
+            const imageUrl = getMediaUrl(logo.logo);
+            if (!imageUrl) return null;
+
+            return (
+              <div
+                key={logo._id}
+                className="flex items-center justify-center p-6 bg-white dark:bg-dark-bg-primary rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              >
+                <Image
+                  src={imageUrl}
+                  alt={logo.name}
+                  width={240}
+                  height={120}
+                  className="h-20 md:h-28 lg:h-32 w-auto object-contain"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import { revalidatePath, updateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { parseBody } from 'next-sanity/webhook'
+import { syncDriverProfileToSupabase } from '@/lib/sync/driver-sync'
 
 /**
  * Sanity Webhook Handler
@@ -11,7 +12,7 @@ import { parseBody } from 'next-sanity/webhook'
  *   Secret: SANITY_WEBHOOK_SECRET env var
  *   Trigger on: Create, Update, Delete
  *   Filter: All document types (or specific ones)
- *   Projection: {_type, "slug": slug.current}
+ *   Projection: {_type, _id, "slug": slug.current, supabaseId, lastSyncSource, name, bio, displayOnWebsite, active, role, vehicles, assignmentNumber, order}
  */
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
@@ -20,6 +21,17 @@ export async function POST(request: NextRequest) {
     const { isValidSignature, body } = await parseBody<{
       _type: string
       slug?: string
+      _id?: string
+      supabaseId?: string
+      lastSyncSource?: string
+      name?: string
+      bio?: string
+      displayOnWebsite?: boolean
+      active?: boolean
+      role?: string[]
+      vehicles?: string[]
+      assignmentNumber?: string
+      order?: number
     }>(request, process.env.SANITY_WEBHOOK_SECRET)
 
     if (!isValidSignature) {
@@ -124,6 +136,24 @@ export async function POST(request: NextRequest) {
         if (slug) {
           revalidatePath(`/events/venues/${slug}`)
           revalidatedPaths.push(`/events/venues/${slug}`)
+        }
+        break
+
+      case 'driverProfile':
+        updateTag('drivers')
+        revalidatedTags.push('drivers')
+        revalidatePath('/our-drivers')
+        revalidatedPaths.push('/our-drivers')
+        if (slug) {
+          revalidatePath(`/our-drivers/${slug}`)
+          revalidatedPaths.push(`/our-drivers/${slug}`)
+        }
+        // Bi-directional sync: push display field changes to Supabase
+        // (only if the change originated from Sanity, not from Supabase)
+        try {
+          await syncDriverProfileToSupabase(body as Record<string, unknown>)
+        } catch (syncErr) {
+          console.error('[Sanity Webhook] Driver sync to Supabase failed:', syncErr)
         }
         break
 

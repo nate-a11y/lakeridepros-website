@@ -32,6 +32,9 @@ import {
   upcomingEventsQuery,
   eventsByVenueQuery,
   eventBySlugQuery,
+  driverProfilesQuery,
+  driverProfileBySlugQuery,
+  memberLogosQuery,
 } from '@/sanity/lib/queries'
 import { urlFor } from '@/sanity/lib/image'
 
@@ -46,6 +49,8 @@ import type {
   Product,
   Testimonial,
   Partner,
+  SanityDriverProfile,
+  SanityMemberLogo,
 } from '@/types/sanity'
 
 export interface Venue {
@@ -861,6 +866,32 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
 }
 
 // ============================================================================
+// DRIVER PROFILES
+// ============================================================================
+
+/** Get all active, display-ready driver profiles sorted by display order. */
+export async function getDriverProfiles(): Promise<SanityDriverProfile[]> {
+  try {
+    const raw: any[] = await client.fetch(driverProfilesQuery, {}, { next: { revalidate: 60 } })
+    return normalizeDocs(raw)
+  } catch (error) {
+    console.error('[Sanity] Error fetching driver profiles:', error)
+    return []
+  }
+}
+
+/** Get a single active, display-ready driver profile by slug. */
+export async function getDriverProfileBySlug(slug: string): Promise<SanityDriverProfile | null> {
+  try {
+    const raw = await client.fetch(driverProfileBySlugQuery, { slug }, { next: { revalidate: 60 } })
+    return raw ? normalizeDoc<SanityDriverProfile>(raw) : null
+  } catch (error) {
+    console.error(`[Sanity] Error fetching driver profile ${slug}:`, error)
+    return null
+  }
+}
+
+// ============================================================================
 // MEDIA HELPERS
 // ============================================================================
 
@@ -909,4 +940,19 @@ export function getMediaUrl(source: any): string {
   }
 
   return ''
+}
+
+// ============================================================================
+// MEMBER LOGOS
+// ============================================================================
+
+/** Get all active member logos sorted by display order. */
+export async function getMemberLogos(): Promise<SanityMemberLogo[]> {
+  try {
+    const raw: any[] = await client.fetch(memberLogosQuery, {}, { next: { revalidate: 60 } })
+    return normalizeDocs(raw)
+  } catch (error) {
+    console.error('[Sanity] Error fetching member logos:', error)
+    return []
+  }
 }

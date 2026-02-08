@@ -27,12 +27,16 @@ export interface SanityImage {
   crop?: { top: number; bottom: number; left: number; right: number }
   alt?: string
   caption?: string
+  /** Resolved image URL (present after asset expansion or normalization) */
+  url?: string
 }
 
-// Sanity slug
-interface SanitySlug {
-  _type: 'slug'
-  current: string
+// Sanity slug (may be flattened to string by normalizeDoc)
+export type SanitySlug = { _type: 'slug'; current: string } | string
+
+/** Safely extract the slug string from a SanitySlug (handles both flattened and object forms) */
+export function resolveSlug(slug: SanitySlug): string {
+  return typeof slug === 'string' ? slug : slug.current
 }
 
 // Portable Text block (simplified, compatible with @portabletext/react)

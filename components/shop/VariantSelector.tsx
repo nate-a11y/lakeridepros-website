@@ -7,12 +7,15 @@ import { cn } from '@/lib/utils'
 interface Variant {
   name: string
   sku: string
-  price?: number | null
-  inStock?: boolean | null
-  size?: string | null
-  color?: string | null
-  colorHex?: string | null
-  printifyVariantId?: string | null
+  price?: number | null | undefined
+  compareAtPrice?: number
+  inStock?: boolean | null | undefined
+  stockQuantity?: number
+  size?: string | null | undefined
+  color?: string | null | undefined
+  colorHex?: string | null | undefined
+  printifyVariantId?: string | null | undefined
+  _key?: string
 }
 
 interface VariantSelectorProps {
@@ -235,9 +238,9 @@ export function VariantSelector({
       {hasColors && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <label className="text-sm font-semibold text-neutral-900 dark:text-white">
+            <span className="text-sm font-semibold text-neutral-900 dark:text-white">
               Color
-            </label>
+            </span>
             {selectedColor && (
               <span className="text-sm text-neutral-600 dark:text-neutral-400">
                 {selectedColor}
@@ -276,9 +279,9 @@ export function VariantSelector({
       {hasSizes && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <label className="text-sm font-semibold text-neutral-900 dark:text-white">
+            <span className="text-sm font-semibold text-neutral-900 dark:text-white">
               Size
-            </label>
+            </span>
             {selectedSize && (
               <span className="text-sm text-neutral-600 dark:text-neutral-400">
                 {selectedSize}
@@ -347,9 +350,9 @@ export function VariantSelector({
       {/* Generic Variant Selection - ONLY when no color AND no size fields exist */}
       {hasOnlyGenericVariants && !hasColors && !hasSizes && (
         <div>
-          <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
+          <span className="block text-sm font-semibold text-neutral-900 dark:text-white mb-3">
             Select Option
-          </label>
+          </span>
 
           {variants.length <= 6 ? (
             // Card-style buttons for few variants

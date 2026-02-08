@@ -22,7 +22,7 @@ export async function generateMetadata(props: ProductPageProps): Promise<Metadat
   }
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';
-  const description = product.shortDescription || (typeof product.description === 'string' ? product.description.substring(0, 155) : productName);
+  const description = product.shortDescription || productName;
   const imageUrl = product.featuredImage
     ? getMediaUrl(product.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';

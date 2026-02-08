@@ -2,43 +2,53 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeClient } from '@/sanity/lib/client'
 
 /**
- * Creates a media/asset record in Sanity.
+ * Create a media reference in Sanity.
+ * For files already uploaded to Sanity (via /api/upload/presigned-url),
+ * or for registering external URLs as media records.
  *
- * TODO: Sanity handles media through its asset pipeline differently from Payload/Supabase.
- * For files already uploaded externally, we create a document referencing the URL.
- * For new uploads, prefer using writeClient.assets.upload('image', buffer) instead.
- * This route may need further refinement to fully align with Sanity's asset model.
+ * POST /api/upload/create-media
+ * Headers: x-admin-secret
+ * Body: { assetId?, url?, filename, alt? }
  */
 export async function POST(req: NextRequest) {
   try {
-    // Verify admin authentication via secret header
     const adminSecret = req.headers.get('x-admin-secret')
     if (adminSecret !== process.env.ADMIN_API_SECRET) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const body = await req.json()
-    const { filename, mimeType, filesize, width, height, url, alt } = body
+    const { assetId, url, filename, alt } = body
 
-    if (!filename || !url) {
+    if (!assetId && !url) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Either assetId or url is required' },
         { status: 400 }
       )
     }
 
-    // TODO: For Sanity, media should ideally be uploaded through the asset pipeline:
-    //   const asset = await writeClient.assets.upload('image', buffer, { filename })
-    // For now, create a media document that references the external URL.
+    if (assetId) {
+      // Reference an existing Sanity asset
+      const media = await writeClient.create({
+        _type: 'media',
+        image: {
+          _type: 'image',
+          asset: {
+            _type: 'reference',
+            _ref: assetId,
+          },
+        },
+        alt: alt || filename?.replace(/\.[^.]+$/, '') || 'Uploaded image',
+      })
+      return NextResponse.json({ doc: media })
+    }
+
+    // External URL reference
     const media = await writeClient.create({
       _type: 'media',
-      filename,
-      mimeType: mimeType || 'image/webp',
-      filesize: filesize ? parseInt(filesize) : 0,
-      width: width ? parseInt(width) : undefined,
-      height: height ? parseInt(height) : undefined,
+      filename: filename || 'external-media',
       url,
-      alt: alt || filename.replace(/\.[^.]+$/, ''),
+      alt: alt || filename?.replace(/\.[^.]+$/, '') || 'External image',
     })
 
     return NextResponse.json({ doc: media })

@@ -346,6 +346,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
             {/* Social Media Dropdown - hidden on mobile */}
             <div
               className="hidden md:block relative"
+              role="presentation"
               onMouseEnter={() => openDropdown('social')}
               onMouseLeave={() => closeDropdown('social')}
               onFocus={() => openDropdown('social')}

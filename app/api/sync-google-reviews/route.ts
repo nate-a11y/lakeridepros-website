@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       )
       if (lastSynced?.syncedAt) {
         lastSyncTimestamp = lastSynced.syncedAt
-        console.log(`Last sync: ${new Date(lastSyncTimestamp).toLocaleString()} - fetching only new reviews`)
+        console.log(`Last sync: ${new Date(lastSynced.syncedAt as string).toLocaleString()} - fetching only new reviews`)
       }
     } catch (error) {
       console.warn('Could not determine last sync time, fetching all reviews:', error)

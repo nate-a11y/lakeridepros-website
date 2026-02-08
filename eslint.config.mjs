@@ -34,18 +34,18 @@ const eslintConfig = defineConfig([
       "jsx-a11y/scope": "error",
       "jsx-a11y/tabindex-no-positive": "error",
 
-      // Accessibility - warnings for gradual fixes
-      "jsx-a11y/click-events-have-key-events": "warn",
-      "jsx-a11y/interactive-supports-focus": "warn",
-      "jsx-a11y/label-has-associated-control": "warn",
-      "jsx-a11y/media-has-caption": "warn",
-      "jsx-a11y/mouse-events-have-key-events": "warn",
-      "jsx-a11y/no-autofocus": "warn",
-      "jsx-a11y/no-interactive-element-to-noninteractive-role": "warn",
-      "jsx-a11y/no-noninteractive-element-interactions": "warn",
-      "jsx-a11y/no-noninteractive-element-to-interactive-role": "warn",
-      "jsx-a11y/no-noninteractive-tabindex": "warn",
-      "jsx-a11y/no-static-element-interactions": "warn",
+      // Accessibility - upgraded to errors (WCAG 2.1 AA)
+      "jsx-a11y/click-events-have-key-events": "error",
+      "jsx-a11y/interactive-supports-focus": "error",
+      "jsx-a11y/label-has-associated-control": "error",
+      "jsx-a11y/media-has-caption": "error",
+      "jsx-a11y/mouse-events-have-key-events": "error",
+      "jsx-a11y/no-autofocus": "error",
+      "jsx-a11y/no-interactive-element-to-noninteractive-role": "error",
+      "jsx-a11y/no-noninteractive-element-interactions": "error",
+      "jsx-a11y/no-noninteractive-element-to-interactive-role": "error",
+      "jsx-a11y/no-noninteractive-tabindex": "error",
+      "jsx-a11y/no-static-element-interactions": "error",
 
       // Codebase-specific overrides
       "react/no-unescaped-entities": "off",

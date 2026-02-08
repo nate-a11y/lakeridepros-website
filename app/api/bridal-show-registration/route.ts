@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase/client';
 import { bridalShowRegistrationSchema } from '@/lib/validation/bridal-show';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 interface BridalShowFormData {
   name: string;
@@ -13,6 +14,18 @@ interface BridalShowFormData {
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = getClientIp(request);
+    const { success } = rateLimit(`bridal-show:${ip}`, { limit: 5, windowMs: 60000 });
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        {
+          status: 429,
+          headers: { 'Retry-After': '60' },
+        }
+      );
+    }
+
     const body: BridalShowFormData = await request.json();
 
     // Anti-bot validation: Check honeypot field

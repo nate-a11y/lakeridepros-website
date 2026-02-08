@@ -1,76 +1,48 @@
-import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
+import { writeClient } from '@/sanity/lib/client'
 
-// TODO: This route generates presigned URLs for Supabase storage uploads.
-// In Sanity, uploads should go through the Sanity asset pipeline instead:
-//   import { writeClient } from '@/sanity/lib/client'
-//   const asset = await writeClient.assets.upload('image', fileBuffer, { filename })
-// Consider migrating this route to use Sanity assets directly.
-
-const bucket = 'media'
-
+/**
+ * Upload a file directly to Sanity's asset pipeline.
+ * Accepts multipart form data with a 'file' field.
+ *
+ * POST /api/upload/presigned-url
+ * Headers: x-admin-secret
+ * Body: FormData with 'file' field
+ */
 export async function POST(req: NextRequest) {
   try {
-    // Verify admin authentication via secret header
     const adminSecret = req.headers.get('x-admin-secret')
     if (adminSecret !== process.env.ADMIN_API_SECRET) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { filename, contentType } = await req.json()
+    const formData = await req.formData()
+    const file = formData.get('file') as File | null
 
-    if (!filename || !contentType) {
+    if (!file) {
       return NextResponse.json(
-        { error: 'Missing filename or contentType' },
+        { error: 'No file provided' },
         { status: 400 }
       )
     }
 
-    // Create Supabase client
-    const url = process.env.SUPABASE_URL?.trim()
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
+    const buffer = Buffer.from(await file.arrayBuffer())
+    const assetType = file.type.startsWith('image/') ? 'image' : 'file'
 
-    if (!url || !key) {
-      return NextResponse.json(
-        { error: 'Supabase not configured' },
-        { status: 500 }
-      )
-    }
-
-    const supabase = createClient(url, key)
-
-    // Generate unique filename to avoid collisions
-    const timestamp = Date.now()
-    const uniqueFilename = `${timestamp}-${filename}`
-
-    // Create signed upload URL (valid for 1 hour)
-    const { data, error } = await supabase.storage
-      .from(bucket)
-      .createSignedUploadUrl(uniqueFilename)
-
-    if (error) {
-      console.error('[Presigned URL] Error:', error)
-      return NextResponse.json(
-        { error: 'Failed to create upload URL' },
-        { status: 500 }
-      )
-    }
-
-    // Get the public URL for the file
-    const { data: publicUrlData } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(uniqueFilename)
+    const asset = await writeClient.assets.upload(assetType, buffer, {
+      filename: file.name,
+      contentType: file.type,
+    })
 
     return NextResponse.json({
-      signedUrl: data.signedUrl,
-      token: data.token,
-      path: uniqueFilename,
-      publicUrl: publicUrlData.publicUrl,
+      asset,
+      url: asset.url,
+      assetId: asset._id,
     })
   } catch (error) {
-    console.error('[Presigned URL] Error:', error)
+    console.error('[Upload] Error:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to upload file' },
       { status: 500 }
     )
   }

@@ -176,7 +176,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Products
-  const productSitemapEntries = products.map((product: SitemapDoc) => ({
+  const productSitemapEntries = (products as SitemapDoc[]).map((product: SitemapDoc) => ({
     url: `${baseUrl}/shop/products/${product.slug}`,
     lastModified: new Date(product.updatedAt || currentDate),
     changeFrequency: 'weekly' as const,
@@ -184,7 +184,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Custom pages
-  const pageSitemapEntries = pages.map((page: SitemapDoc) => ({
+  const pageSitemapEntries = (pages as SitemapDoc[]).map((page: SitemapDoc) => ({
     url: `${baseUrl}/${page.slug}`,
     lastModified: new Date(page.updatedAt || currentDate),
     changeFrequency: 'monthly' as const,

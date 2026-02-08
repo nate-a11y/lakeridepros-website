@@ -140,7 +140,7 @@ export default async function ServicesPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service) => (
                 <div
-                  key={service.id}
+                  key={service._id}
                   className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                   style={{ width: '100%' }}
                 >

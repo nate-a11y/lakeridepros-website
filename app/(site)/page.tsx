@@ -11,6 +11,7 @@ import {
   getMediaUrl,
   getLatestBlogPostsLocal,
 } from '@/lib/api/sanity';
+import { resolveSlug } from '@/types/sanity';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
@@ -112,15 +113,15 @@ export default async function HomePage() {
 
   // Filter and sort services by popularity
   const popularServices = services
-    .filter(s => popularServiceSlugs.includes(s.slug))
-    .sort((a, b) => popularServiceSlugs.indexOf(a.slug) - popularServiceSlugs.indexOf(b.slug))
+    .filter(s => popularServiceSlugs.includes(resolveSlug(s.slug)))
+    .sort((a, b) => popularServiceSlugs.indexOf(resolveSlug(a.slug)) - popularServiceSlugs.indexOf(resolveSlug(b.slug)))
     .slice(0, 4); // Show top 4 on home page
 
   // Transform partners to minimal data for client component (reduces HTML payload)
   const partners = partnersData.slice(0, 12).map(p => ({
     _id: p._id,
     name: p.name,
-    slug: p.slug,
+    slug: resolveSlug(p.slug),
     website: p.website,
     blurb: p.blurb,
     logoUrl: getMediaUrl(p.logo),

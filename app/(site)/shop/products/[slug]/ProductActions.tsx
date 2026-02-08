@@ -200,7 +200,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
           <VariantSelector
             variants={product.variants}
             selectedVariant={selectedVariant}
-            onVariantChange={handleVariantChange}
+            onVariantChange={(v) => handleVariantChange(v as ProductVariant)}
             basePrice={product.price}
           />
         )}
@@ -231,7 +231,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
         {/* Quantity */}
         <div className="space-y-2">
-          <label className="block text-sm font-semibold text-neutral-900 dark:text-white">
+          <label htmlFor="product-quantity" className="block text-sm font-semibold text-neutral-900 dark:text-white">
             Quantity
           </label>
           <div className="flex items-center gap-1" role="group" aria-label="Quantity selector">
@@ -244,6 +244,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
               −
             </button>
             <input
+              id="product-quantity"
               type="number"
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}

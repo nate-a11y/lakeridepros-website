@@ -58,7 +58,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       image: typeof product.featuredImage === 'object' && product.featuredImage
         ? getMediaUrl(product.featuredImage)
         : '',
-      imageAlt: typeof product.featuredImage === 'object' ? product.featuredImage?.alt : product.name,
+      imageAlt: (typeof product.featuredImage === 'object' ? product.featuredImage?.alt : undefined) || product.name,
     })
 
     setAddedToCart(true)
@@ -255,7 +255,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
                     <VariantSelector
                       variants={product.variants}
                       selectedVariant={selectedVariant}
-                      onVariantChange={handleVariantChange}
+                      onVariantChange={(v) => handleVariantChange(v as ProductVariant)}
                       basePrice={product.price}
                     />
                   </div>
@@ -263,9 +263,9 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
                 {/* Quantity */}
                 <div className="mb-6">
-                  <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+                  <span className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
                     Quantity
-                  </label>
+                  </span>
                   <div className="flex items-center gap-1" role="group" aria-label="Quantity selector">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}

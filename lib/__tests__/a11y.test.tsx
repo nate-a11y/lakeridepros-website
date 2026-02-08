@@ -7,14 +7,14 @@
 
 import { describe, it, expect } from 'vitest'
 import { render } from '@testing-library/react'
-import { axe, AxeResults } from 'vitest-axe'
+import { axe } from 'vitest-axe'
 
 // Helper to check for violations
-function expectNoViolations(results: AxeResults) {
+function expectNoViolations(results: Awaited<ReturnType<typeof axe>>) {
   const violations = results.violations
   if (violations.length > 0) {
-    const messages = violations.map(v =>
-      `${v.impact}: ${v.id} - ${v.description}\n  ${v.nodes.map(n => n.html).join('\n  ')}`
+    const messages = violations.map((v: { impact?: string | null; id: string; description: string; nodes: Array<{ html: string }> }) =>
+      `${v.impact || 'unknown'}: ${v.id} - ${v.description}\n  ${v.nodes.map((n: { html: string }) => n.html).join('\n  ')}`
     ).join('\n\n')
     throw new Error(`Accessibility violations found:\n\n${messages}`)
   }

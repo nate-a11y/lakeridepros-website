@@ -3,17 +3,20 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
-import type { Media } from '@/types/sanity';
+import type { SanityImage } from '@/types/sanity';
+
+/** A resolved image with a url field, compatible with both Media and expanded SanityImage */
+type GalleryImage = SanityImage & { url?: string; _id?: string; _createdAt?: string; _updatedAt?: string; _rev?: string };
 
 interface VehicleImage {
-  image: Media;
+  image: GalleryImage;
   alt?: string;
 }
 
 interface VehicleGalleryProps {
   images: VehicleImage[];
   vehicleName: string;
-  featuredImage?: Media;
+  featuredImage?: GalleryImage;
 }
 
 export default function VehicleGallery({
@@ -102,8 +105,9 @@ export default function VehicleGallery({
     return null;
   }
 
-  const getImageUrl = (media: Media) => {
-    return media.url?.startsWith('http') ? media.url : `${process.env.NEXT_PUBLIC_SERVER_URL}${media.url}`;
+  const getImageUrl = (media: GalleryImage) => {
+    const url = media.url || media.asset?.url || '';
+    return url.startsWith('http') ? url : `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`;
   };
 
   return (

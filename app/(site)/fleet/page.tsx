@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getVehicles, getMediaUrl } from '@/lib/api/sanity';
+import type { Vehicle } from '@/types/sanity';
+import { resolveSlug } from '@/types/sanity';
 
 export const metadata: Metadata = {
   title: 'Our Fleet - Luxury Vehicles | Lake Ride Pros',
@@ -46,7 +48,7 @@ const TIER_CONFIG: Record<string, { label: string; className: string }> = {
 
 export default async function FleetPage() {
   // Fetch vehicles from Payload CMS
-  const vehiclesData = await getVehicles().catch(() => ({ docs: [] }));
+  const vehiclesData = await getVehicles().catch(() => ({ docs: [] as Vehicle[] }));
   const rawVehicles = vehiclesData.docs || [];
 
   // Shuffle vehicles that share the same order value for variety on each refresh
@@ -104,7 +106,7 @@ export default async function FleetPage() {
                                `${vehicle.name} - Luxury transportation`;
 
               return (
-                <article key={vehicle.slug} className="bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden shadow-lg">
+                <article key={resolveSlug(vehicle.slug)} className="bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg overflow-hidden shadow-lg">
                   <div className="grid lg:grid-cols-2 gap-8">
                     {/* Vehicle Image */}
                     <div className="relative bg-neutral-200 dark:bg-neutral-700 aspect-video lg:aspect-auto lg:h-full">
@@ -207,7 +209,7 @@ export default async function FleetPage() {
 
                       <div className="flex flex-col sm:flex-row gap-4">
                         <Link
-                          href={`/fleet/${vehicle.slug}`}
+                          href={`/fleet/${resolveSlug(vehicle.slug)}`}
                           className="bg-primary hover:bg-primary-dark text-lrp-black px-8 py-3 rounded-lg font-semibold transition-all text-center"
                           aria-label={`View details about ${vehicle.name}`}
                         >

@@ -1,5 +1,5 @@
 {
-  "installCommand": "rm -rf node_modules && npm install --legacy-peer-deps",
+  "installCommand": "npm install --legacy-peer-deps",
   "redirects": [
     {
       "source": "/:path*",
@@ -20,7 +20,7 @@
   },
   "crons": [
     {
-      "path": "/api/gift-cards/send-scheduled?secret=9k2mP8xQ4nL6vR1wT7yE3fH5jN0bC9sA2dF4gK8mZ1qW6rY",
+      "path": "/api/gift-cards/send-scheduled",
       "schedule": "0 * * * *"
     }
   ]

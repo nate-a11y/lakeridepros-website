@@ -2,15 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeClient } from '@/sanity/lib/client'
 import { groq } from 'next-sanity'
 
-const CRON_SECRET = process.env.GIFT_CARD_CRON_SECRET || 'change-me-in-production'
-
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    // Verify secret for security
-    const { searchParams } = new URL(request.url)
-    const secret = searchParams.get('secret')
-
-    if (secret !== CRON_SECRET) {
+    const authHeader = request.headers.get('authorization')
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -30,11 +25,10 @@ export async function POST(request: NextRequest) {
 
     for (const giftCard of giftCards) {
       try {
-        // Send the gift card email
         const sendToEmail = giftCard.recipientEmail || giftCard.purchaserEmail
         const sendToName = giftCard.recipientName || giftCard.purchaserName
 
-        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/email/send-gift-card`, {
+        await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.lakeridepros.com'}/api/email/send-gift-card`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +42,6 @@ export async function POST(request: NextRequest) {
           }),
         })
 
-        // Update gift card status to sent
         await writeClient.patch(giftCard._id).set({
           deliveryStatus: 'sent',
           sentDate: new Date().toISOString(),

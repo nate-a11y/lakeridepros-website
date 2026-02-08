@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendContactNotification, sendContactConfirmation } from '@/lib/email';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 // ContactFormData type - not generated from Payload
 interface ContactFormData {
@@ -14,6 +15,18 @@ interface ContactFormData {
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = getClientIp(request);
+    const { success } = rateLimit(`contact:${ip}`, { limit: 5, windowMs: 60000 });
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        {
+          status: 429,
+          headers: { 'Retry-After': '60' },
+        }
+      );
+    }
+
     const body: ContactFormData = await request.json();
 
     // Anti-bot validation: Check honeypot field

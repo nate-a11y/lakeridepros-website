@@ -8,14 +8,14 @@ import ThemeToggle from './ThemeToggle';
 import { BookingModal } from './BookingModal';
 import CartIcon from '@/components/cart/CartIcon';
 
-type DropdownType = 'services' | 'partners' | 'shop' | 'insiders' | 'social';
+type DropdownType = 'services' | 'partners' | 'shop' | 'about' | 'social';
 type DropdownState = Record<DropdownType, boolean>;
 
 const initialDropdownState: DropdownState = {
   services: false,
   partners: false,
   shop: false,
-  insiders: false,
+  about: false,
   social: false,
 };
 
@@ -127,7 +127,6 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
   );
 
   const navigation = useMemo(() => [
-    { name: 'Home', href: '/' },
     {
       name: 'Services',
       href: '/services',
@@ -136,8 +135,6 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
       dropdownItems: serviceDropdownItems,
     },
     { name: 'Fleet', href: '/fleet' },
-    { name: 'Our Team', href: '/our-drivers' },
-    { name: 'Pricing', href: '/pricing' },
     {
       name: 'Partners',
       href: '/wedding-partners',
@@ -149,26 +146,28 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
         { name: 'Trusted Referral Partners', href: '/trusted-referral-partners' },
       ]
     },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Events', href: '/events' },
     {
-      name: 'Shop',
+      name: 'Shop & Perks',
       href: '/shop',
       hasDropdown: true,
       dropdownType: 'shop',
       dropdownItems: [
         { name: 'Merch Store', href: '/shop' },
         { name: 'Gift Cards', href: '/gift-cards' },
+        { name: 'Insider Membership', href: '/insider-membership-benefits' },
       ]
     },
     {
-      name: 'Insiders',
-      href: '/insider-membership-benefits',
+      name: 'About',
+      href: '/about-us',
       hasDropdown: true,
-      dropdownType: 'insiders',
+      dropdownType: 'about',
       dropdownItems: [
-        { name: 'Membership Benefits', href: '/insider-membership-benefits' },
-        { name: 'Terms and Conditions', href: '/insider-terms-and-conditions' },
+        { name: 'Our Team', href: '/our-drivers' },
+        { name: 'Pricing', href: '/pricing' },
+        { name: 'Blog', href: '/blog' },
+        { name: 'Events', href: '/events' },
+        { name: 'Testimonials', href: '/testimonials' },
       ]
     },
     { name: 'Contact', href: '/contact' },
@@ -230,7 +229,8 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   </button>
 
                   {item.dropdownType === 'services' && dropdowns.services && (
-                    <div role="menu" aria-label="Services submenu" className="absolute top-full left-0 pt-0 w-[600px] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border p-6 z-50">
+                    <div className="absolute top-full left-0 pt-2 z-50">
+                    <div role="menu" aria-label="Services submenu" className="w-[600px] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border p-6">
                       <div className="grid grid-cols-2 gap-6">
                         {/* Featured Services Column */}
                         <div>
@@ -274,10 +274,12 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                         </div>
                       </div>
                     </div>
+                    </div>
                   )}
 
                   {item.dropdownType === 'partners' && dropdowns.partners && (
-                    <div role="menu" aria-label="Partners submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                    <div className="absolute top-full left-0 pt-2 z-50">
+                    <div role="menu" aria-label="Partners submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}
@@ -288,11 +290,13 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                           {dropdownItem.name}
                         </Link>
                       ))}
+                    </div>
                     </div>
                   )}
 
                   {item.dropdownType === 'shop' && dropdowns.shop && (
-                    <div role="menu" aria-label="Shop submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                    <div className="absolute top-full left-0 pt-2 z-50">
+                    <div role="menu" aria-label="Shop & Perks submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}
@@ -304,10 +308,12 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                         </Link>
                       ))}
                     </div>
+                    </div>
                   )}
 
-                  {item.dropdownType === 'insiders' && dropdowns.insiders && (
-                    <div role="menu" aria-label="Insiders submenu" className="absolute top-full left-0 pt-0 w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
+                  {item.dropdownType === 'about' && dropdowns.about && (
+                    <div className="absolute top-full left-0 pt-2 z-50">
+                    <div role="menu" aria-label="About submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}
@@ -318,6 +324,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                           {dropdownItem.name}
                         </Link>
                       ))}
+                    </div>
                     </div>
                   )}
                 </div>

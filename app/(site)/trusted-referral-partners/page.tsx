@@ -22,7 +22,6 @@ export const metadata = {
   },
 }
 
-// Force dynamic rendering so Payload CMS is available at request time
 export const dynamic = 'force-dynamic'
 
 // Subcategory labels mapping

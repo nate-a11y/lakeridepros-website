@@ -130,12 +130,14 @@ describe('utils', () => {
   describe('getMediaUrl', () => {
     beforeEach(() => {
       // Reset environment variables
-      delete process.env.NEXT_PUBLIC_PAYLOAD_API_URL
+      delete process.env.NEXT_PUBLIC_SITE_URL
       delete process.env.NEXT_PUBLIC_SERVER_URL
     })
 
-    it('returns empty string for empty input', () => {
+    it('returns empty string for empty/falsy input', () => {
       expect(getMediaUrl('')).toBe('')
+      expect(getMediaUrl(null)).toBe('')
+      expect(getMediaUrl(undefined)).toBe('')
     })
 
     it('returns original URL if it starts with http', () => {
@@ -143,26 +145,18 @@ describe('utils', () => {
       expect(getMediaUrl('https://example.com/image.jpg')).toBe('https://example.com/image.jpg')
     })
 
-    it('prepends NEXT_PUBLIC_PAYLOAD_API_URL for relative URLs', () => {
-      process.env.NEXT_PUBLIC_PAYLOAD_API_URL = 'http://api.example.com'
-      expect(getMediaUrl('/media/image.jpg')).toBe('http://api.example.com/media/image.jpg')
+    it('prepends NEXT_PUBLIC_SITE_URL for relative URLs', () => {
+      process.env.NEXT_PUBLIC_SITE_URL = 'http://localhost:3000'
+      expect(getMediaUrl('/media/image.jpg')).toBe('http://localhost:3000/media/image.jpg')
     })
 
-    it('falls back to NEXT_PUBLIC_SERVER_URL if PAYLOAD_API_URL not set', () => {
+    it('falls back to NEXT_PUBLIC_SERVER_URL if SITE_URL not set', () => {
       process.env.NEXT_PUBLIC_SERVER_URL = 'http://server.example.com'
       expect(getMediaUrl('/media/image.jpg')).toBe('http://server.example.com/media/image.jpg')
     })
 
-    it('falls back to localhost if no env vars set', () => {
-      expect(getMediaUrl('/media/image.jpg')).toBe('http://localhost:3001/media/image.jpg')
-    })
-
-    it('handles URLs without leading slash', () => {
-      process.env.NEXT_PUBLIC_PAYLOAD_API_URL = 'http://api.example.com'
-      // URL concatenation without slash produces this result
-      expect(getMediaUrl('media/image.jpg')).toBe('http://api.example.commedia/image.jpg')
-      // Need slash prefix for proper URL
-      expect(getMediaUrl('/media/image.jpg')).toBe('http://api.example.com/media/image.jpg')
+    it('falls back to production URL if no env vars set', () => {
+      expect(getMediaUrl('/media/image.jpg')).toBe('https://www.lakeridepros.com/media/image.jpg')
     })
   })
 })

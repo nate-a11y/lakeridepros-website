@@ -41,7 +41,7 @@ interface DriverDoc {
 
 async function getSanityData() {
   try {
-    // Fetch all dynamic content using local Payload queries (no HTTP)
+    // Fetch all dynamic content from Sanity
     const [servicesResponse, blogPostsResponse, vehicles, products, pages, allPartners] = await Promise.all([
       getServicesLocal(),
       getBlogPostsLocal({ limit: 100 }),
@@ -60,7 +60,7 @@ async function getSanityData() {
       allPartners,
     };
   } catch (error) {
-    console.error('Error fetching Payload data for sitemap:', error);
+    console.error('Error fetching Sanity data for sitemap:', error);
     return { services: [], blogPosts: [], vehicles: [], products: [], pages: [], allPartners: [] };
   }
 }
@@ -144,12 +144,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route.priority,
   }));
 
-  // Fetch dynamic content from Payload CMS and Supabase
-  const [payloadData, drivers] = await Promise.all([
+  // Fetch dynamic content from Sanity and Supabase
+  const [sanityData, drivers] = await Promise.all([
     getSanityData(),
     getDriversForWebsite(),
   ]);
-  const { services, blogPosts, vehicles, products, pages, allPartners } = payloadData;
+  const { services, blogPosts, vehicles, products, pages, allPartners } = sanityData;
 
   // Dynamic service pages
   const serviceSitemapEntries = services.map((service: SitemapDoc) => ({

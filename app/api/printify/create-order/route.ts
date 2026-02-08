@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { client } from '@/sanity/lib/client'
 
 const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
@@ -26,18 +27,17 @@ export async function POST(request: NextRequest) {
     // Map cart items to Printify line items
     const lineItems = await Promise.all(
       cartItems.map(async (item: CartItem) => {
-        // Fetch product from Payload to get Printify IDs
-        const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
-        const productResponse = await fetch(`${payloadUrl}/api/products/${item.productId}`)
-
-        if (!productResponse.ok) {
+        // Fetch product from Sanity by ID
+        const productData = await client.fetch(
+          `*[_type == "product" && _id == $id][0]`,
+          { id: item.productId }
+        )
+        if (!productData) {
           throw new Error(`Failed to fetch product ${item.productId}`)
         }
 
-        const productData = await productResponse.json()
-
         // Find the variant in the product
-        const variant = productData.doc.variants?.find((v: { sku: string; printifyVariantId?: string }) => v.sku === item.variantId)
+        const variant = productData.variants?.find((v: { sku: string; printifyVariantId?: string }) => v.sku === item.variantId)
 
         if (!variant || !variant.printifyVariantId) {
           throw new Error(`Printify variant ID not found for SKU: ${item.variantId}`)
@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
           quantity: number
           metadata?: { personalization: string }
         } = {
-          print_provider_id: parseInt(productData.doc.printifyPrintProviderId),
-          blueprint_id: parseInt(productData.doc.printifyBlueprintId),
+          print_provider_id: parseInt(productData.printifyPrintProviderId),
+          blueprint_id: parseInt(productData.printifyBlueprintId),
           variant_id: parseInt(variant.printifyVariantId),
           quantity: item.quantity,
         }

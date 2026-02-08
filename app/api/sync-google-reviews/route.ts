@@ -13,8 +13,7 @@ import { transformGoogleReviewToTestimonial } from '@/lib/google-reviews';
  */
 export async function POST(req: NextRequest) {
   try {
-    // TODO: Payload's payload.auth() is not available with Sanity.
-    // Using admin secret header for authentication instead.
+    // Authenticate via admin secret header
     const adminSecret = req.headers.get('x-admin-secret')
     if (adminSecret !== process.env.ADMIN_API_SECRET) {
       return NextResponse.json(

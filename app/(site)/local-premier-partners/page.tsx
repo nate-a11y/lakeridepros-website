@@ -22,7 +22,6 @@ export const metadata = {
   },
 }
 
-// Force dynamic rendering so Payload CMS is available at request time
 export const dynamic = 'force-dynamic'
 
 export default async function LocalPremierPartnersPage() {

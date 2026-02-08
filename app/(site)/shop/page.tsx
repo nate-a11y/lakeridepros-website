@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import ShopClient from './ShopClient'
 import type { Product } from '@/types/sanity'
+import { getProducts } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
   title: 'Shop Lake Ride Pros Merchandise | T-Shirts, Hats & More',
@@ -27,31 +28,8 @@ export const metadata: Metadata = {
   },
 }
 
-// Force dynamic rendering so Payload CMS is available at request time
-export const dynamic = 'force-dynamic'
-
-async function getProducts(): Promise<Product[]> {
-  try {
-    const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
-    // Fetch all products (no limit) for client-side pagination
-    const res = await fetch(`${payloadUrl}/api/products?where[status][equals]=active&limit=1000&depth=2`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
-    })
-
-    if (!res.ok) {
-      throw new Error('Failed to fetch products')
-    }
-
-    const data = await res.json()
-    return data.docs || []
-  } catch (error) {
-    console.error('Error fetching products:', error)
-    return []
-  }
-}
-
 export default async function ShopPage() {
-  const products = await getProducts()
+  const { docs: products } = await getProducts()
 
   return (
     <>

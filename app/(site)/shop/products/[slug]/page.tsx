@@ -2,6 +2,8 @@ import { permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
 import ProductActions from './ProductActions'
 import { Metadata } from 'next'
+import { getProductBySlug, getMediaUrl } from '@/lib/api/sanity'
+import type { Product } from '@/types/sanity'
 
 interface ProductPageProps {
   params: Promise<{
@@ -9,51 +11,9 @@ interface ProductPageProps {
   }>
 }
 
-async function getProduct(slug: string) {
-  const payloadUrl = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001'
-
-  try {
-    const res = await fetch(
-      `${payloadUrl}/api/products?where[slug][equals]=${slug}&depth=2`,
-      {
-        // Use no-store to prevent caching failed responses
-        // If we used revalidate, a 500 error would be cached and the retry button wouldn't work
-        cache: 'no-store',
-      }
-    )
-
-    // Server errors (500, 503, etc.) should NOT be cached as 404
-    // Throw to trigger error boundary instead
-    if (!res.ok) {
-      throw new Error(`Failed to fetch product: ${res.status} ${res.statusText}`)
-    }
-
-    const data = await res.json()
-
-    // Product truly doesn't exist - safe to return null for 404
-    if (!data.docs || data.docs.length === 0) {
-      return null
-    }
-
-    return data.docs[0]
-  } catch (error) {
-    // Network errors, timeouts, JSON parse errors should NOT be cached as 404
-    // Re-throw to trigger error boundary
-    console.error('Error fetching product:', error)
-    throw error
-  }
-}
-
-function getMediaUrl(url: string): string {
-  if (!url) return '/placeholder-service.jpg';
-  if (url.startsWith('http')) return url;
-  const PAYLOAD_API_URL = process.env.NEXT_PUBLIC_PAYLOAD_API_URL || 'http://localhost:3001';
-  return `${PAYLOAD_API_URL}${url}`;
-}
-
 export async function generateMetadata(props: ProductPageProps): Promise<Metadata> {
   const params = await props.params
-  const product = await getProduct(params.slug).catch(() => null);
+  const product = await getProductBySlug(params.slug).catch(() => null);
 
   if (!product) {
     return {
@@ -70,7 +30,7 @@ export async function generateMetadata(props: ProductPageProps): Promise<Metadat
   return {
     title: `${productName} | Lake Ride Pros Merchandise`,
     description: `${description}. Shop official Lake Ride Pros gear and merchandise.`,
-    keywords: product.tags ? product.tags.join(', ') : `${productName}, Lake of the Ozarks merchandise, Lake Ride Pros shop`,
+    keywords: product.tags ? product.tags.map((t: { tag: string }) => t.tag).join(', ') : `${productName}, Lake of the Ozarks merchandise, Lake Ride Pros shop`,
     alternates: {
       canonical: `https://www.lakeridepros.com/shop/products/${params.slug}`,
     },
@@ -111,7 +71,7 @@ export async function generateMetadata(props: ProductPageProps): Promise<Metadat
 
 export default async function ProductPage(props: ProductPageProps) {
   const params = await props.params
-  const product = await getProduct(params.slug)
+  const product = await getProductBySlug(params.slug)
 
   if (!product) {
     permanentRedirect('/shop')

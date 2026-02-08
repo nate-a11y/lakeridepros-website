@@ -1,11 +1,8 @@
 /**
  * Sanity CMS Fetch Layer
  *
- * Drop-in replacement for payload.ts and payload-local.ts.
- * Since Sanity is a hosted API there is no distinction between "local" and
- * "remote" — every query goes through the Sanity client. The "Local" function
- * variants are therefore simple aliases (or thin wrappers where the original
- * had a different default behaviour).
+ * All queries go through the Sanity client. "Local" function variants are
+ * simple aliases kept for compatibility with existing imports.
  */
 
 import { groq } from 'next-sanity'
@@ -151,7 +148,7 @@ function normalizeDocs<T = any>(docs: T[]): T[] {
 }
 
 // ---------------------------------------------------------------------------
-// Fisher-Yates shuffle (same algorithm used by the Payload layer)
+// Fisher-Yates shuffle
 // ---------------------------------------------------------------------------
 
 function fisherYatesShuffle<T>(arr: T[]): T[] {
@@ -270,7 +267,7 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
 
 /**
  * Local variant — returns ALL vehicles regardless of `available` status.
- * Matches the original payload-local.ts behaviour used for sitemap generation.
+ * Returns unwrapped arrays for sitemap generation.
  */
 export const getVehiclesLocal = async (): Promise<Vehicle[]> => {
   try {
@@ -568,7 +565,7 @@ export const getRandomTestimonialsLocal = getRandomTestimonials
 export type PartnerType = 'premier' | 'referral' | 'wedding' | 'promotion'
 
 /**
- * Complex partner filtering logic — preserved exactly from the Payload layer.
+ * Complex partner filtering logic supporting both checkbox and category fields.
  *
  * Uses new checkbox fields (`isPremierPartner`, `isReferralPartner`,
  * `isWeddingPartner`, `isPromotion`) when any of them is `true`; otherwise
@@ -900,10 +897,9 @@ export async function getDriverProfileBySlug(slug: string): Promise<SanityDriver
  *
  * 1. **Sanity image references** — objects containing an `asset` field or a
  *    `_ref` string. Resolved via the Sanity image URL builder.
- * 2. **Absolute URLs** (starting with `http`) — returned as-is. Covers legacy
- *    Supabase / Payload-hosted images during migration.
- * 3. **Relative paths** — prefixed with the site's base URL (legacy Payload
- *    media that was served from the same origin).
+ * 2. **Absolute URLs** (starting with `http`) — returned as-is. Covers
+ *    Supabase storage and external images.
+ * 3. **Relative paths** — prefixed with the site's base URL.
  * 4. **Falsy / empty values** — returns an empty string.
  */
 export function getMediaUrl(source: any): string {
@@ -913,7 +909,7 @@ export function getMediaUrl(source: any): string {
   if (typeof source === 'string') {
     if (source.startsWith('http')) return source
 
-    // Relative path — prefix with base URL (legacy Payload media)
+    // Relative path — prefix with base URL
     const mediaBaseUrl =
       process.env.NEXT_PUBLIC_SITE_URL ||
       process.env.NEXT_PUBLIC_SERVER_URL ||
@@ -933,7 +929,7 @@ export function getMediaUrl(source: any): string {
       // Fall through — the source might not be a valid Sanity image ref
     }
 
-    // Legacy Payload image object with a `url` field
+    // Legacy image object with a `url` field
     if (typeof source.url === 'string') {
       return getMediaUrl(source.url)
     }

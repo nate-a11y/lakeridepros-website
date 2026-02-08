@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getPageBySlug, getMediaUrl } from '@/lib/api/sanity';
 import Image from 'next/image';
-import type { Page, Media } from '@/types/sanity';
+import type { Page, SanityImage } from '@/types/sanity';
 
 interface LexicalNode {
   type: string;
@@ -55,7 +55,7 @@ export default async function DynamicPage({ params }: PageProps) {
     notFound();
   }
 
-  const featuredImage = typeof page.featuredImage === 'object' ? page.featuredImage as Media : null;
+  const featuredImage = typeof page.featuredImage === 'object' ? page.featuredImage as SanityImage : null;
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -63,7 +63,7 @@ export default async function DynamicPage({ params }: PageProps) {
       {featuredImage && (
         <div className="relative h-[400px] w-full">
           <Image
-            src={getMediaUrl(featuredImage.url as string)}
+            src={getMediaUrl(featuredImage)}
             alt={featuredImage.alt || page.title}
             fill
             className="object-cover"

@@ -20,13 +20,11 @@ export default defineConfig({
       reporter: ['text', 'html', 'json', 'lcov'],
       exclude: [
         '**/*.config.*',
-        '**/migrations/**',
         '**/node_modules/**',
         '**/dist/**',
         '**/.next/**',
         '**/scripts/**',
         '**/supabase/**',
-        '**/src/payload-types.ts',
         '**/e2e/**',
       ],
       thresholds: {
@@ -40,7 +38,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
-      '@payload-config': path.resolve(__dirname, './src/payload.config.ts'),
     },
   },
 })

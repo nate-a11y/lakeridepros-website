@@ -20,7 +20,6 @@ Your application sends emails in these scenarios:
 - **Gift card emails** (`app/api/email/send-gift-card/route.ts`) - Digital gift cards
 - **Physical gift card confirmations** (`app/api/email/send-physical-gift-card-confirmation/route.ts`)
 - **Scheduled gift card confirmations** (`app/api/email/send-scheduled-gift-card-confirmation/route.ts`)
-- **Payload CMS emails** (`src/payload.config.ts:131`) - Password resets, etc.
 
 ## Setup Instructions
 
@@ -39,8 +38,6 @@ Create a `.env` file in your project root with:
 RESEND_API_KEY=re_your_actual_key_here
 
 # Other required variables
-PAYLOAD_SECRET=your-payload-secret-minimum-32-characters
-POSTGRES_URL=your-postgres-connection-string
 NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 
 # For email configuration
@@ -57,7 +54,6 @@ Your domain `updates.lakeridepros.com` is verified in Resend! All email FROM add
 - ✅ `app/api/email/send-gift-card/route.ts:19` - Gift card emails
 - ✅ `app/api/email/send-physical-gift-card-confirmation/route.ts:27` - Physical gift cards
 - ✅ `app/api/email/send-scheduled-gift-card-confirmation/route.ts:43` - Scheduled gift cards
-- ✅ `src/payload.config.ts:132` - Payload CMS emails
 
 ### Step 4: Test Your Configuration
 

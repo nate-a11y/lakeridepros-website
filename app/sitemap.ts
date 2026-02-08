@@ -34,7 +34,7 @@ interface DriverDoc {
   updated_at: string;
 }
 
-async function getPayloadData() {
+async function getSanityData() {
   try {
     // Fetch all dynamic content using local Payload queries (no HTTP)
     const [servicesResponse, blogPostsResponse, vehicles, products, pages, allPartners] = await Promise.all([
@@ -141,7 +141,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Fetch dynamic content from Payload CMS and Supabase
   const [payloadData, drivers] = await Promise.all([
-    getPayloadData(),
+    getSanityData(),
     getDriversForWebsite(),
   ]);
   const { services, blogPosts, vehicles, products, pages, allPartners } = payloadData;

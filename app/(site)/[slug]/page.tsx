@@ -98,7 +98,7 @@ export default async function DynamicPage({ params }: PageProps) {
 }
 
 // Simple rich text renderer
-// For a production app, you'd use @payloadcms/richtext-lexical serializer
+// Simple serializer for Lexical rich text content
 function renderRichText(content: LexicalContent | string | undefined): string {
   if (!content) return '';
 

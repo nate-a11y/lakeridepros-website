@@ -1,9 +1,8 @@
 /**
  * Sanity CMS type definitions
  *
- * These replace the auto-generated @/src/payload-types from Payload CMS.
- * Types are intentionally loose (index signature) to allow gradual tightening
- * as the migration progresses. Key fields are explicitly typed for IDE support.
+ * Types are intentionally loose (index signature) to allow gradual tightening.
+ * Key fields are explicitly typed for IDE support.
  */
 
 // Base Sanity document fields

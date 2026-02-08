@@ -14,19 +14,8 @@
     }
   ],
   "functions": {
-    "app/(payload)/admin/[[...segments]]/page.tsx": {
-      "maxDuration": 30
-    },
-    "app/(payload)/api/[...slug]/route.ts": {
-      "maxDuration": 60
-    },
     "app/api/printify/sync-products/route.ts": {
       "maxDuration": 300
-    }
-  },
-  "build": {
-    "env": {
-      "PAYLOAD_CONFIG_PATH": "./src/payload.config.ts"
     }
   },
   "crons": [

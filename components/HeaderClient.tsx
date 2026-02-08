@@ -157,6 +157,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
         { name: 'Insider Membership', href: '/insider-membership-benefits' },
       ]
     },
+    { name: 'Events', href: '/events' },
     {
       name: 'About',
       href: '/about-us',
@@ -166,7 +167,6 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
         { name: 'Our Team', href: '/our-drivers' },
         { name: 'Pricing', href: '/pricing' },
         { name: 'Blog', href: '/blog' },
-        { name: 'Events', href: '/events' },
         { name: 'Testimonials', href: '/testimonials' },
       ]
     },

@@ -33,7 +33,7 @@ export default function VehicleGallery({
       result.push({ image: featuredImage, alt: `${vehicleName} - Featured` });
     }
     images.forEach((img) => {
-      if (!featuredImage || img.image.id !== featuredImage.id) {
+      if (!featuredImage || img.image._id !== featuredImage._id) {
         result.push(img);
       }
     });

@@ -63,8 +63,8 @@ export async function generateMetadata(props: ProductPageProps): Promise<Metadat
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';
   const description = product.shortDescription || (typeof product.description === 'string' ? product.description.substring(0, 155) : productName);
-  const imageUrl = product.featuredImage?.url
-    ? getMediaUrl(product.featuredImage.url)
+  const imageUrl = product.featuredImage
+    ? getMediaUrl(product.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   return {
@@ -118,8 +118,8 @@ export default async function ProductPage(props: ProductPageProps) {
   }
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';
-  const imageUrl = product.featuredImage?.url
-    ? getMediaUrl(product.featuredImage.url)
+  const imageUrl = product.featuredImage
+    ? getMediaUrl(product.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   // Product Schema for SEO

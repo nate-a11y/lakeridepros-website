@@ -31,8 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const description = service.shortDescription || service.description || '';
   const serviceImage = typeof service.image === 'object' ? service.image : null;
-  const imageUrl = serviceImage?.url
-    ? getMediaUrl(serviceImage.url)
+  const imageUrl = serviceImage
+    ? getMediaUrl(serviceImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   // Enhanced title with location
@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description: metaDescription.slice(0, 160),
-    keywords: `${service.title}, Lake of the Ozarks transportation, luxury transportation Missouri, ${service.slug.replace(/-/g, ' ')}, professional drivers, Lake Ozarks, Osage Beach`,
+    keywords: `${service.title}, Lake of the Ozarks transportation, luxury transportation Missouri, ${slug.replace(/-/g, ' ')}, professional drivers, Lake Ozarks, Osage Beach`,
     alternates: {
       canonical: `https://www.lakeridepros.com/services/${slug}`,
     },
@@ -98,8 +98,8 @@ export default async function ServiceDetailPage({ params }: Props) {
   const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
 
   const serviceImageObj = typeof service.image === 'object' ? service.image : null;
-  const imageUrl = serviceImageObj?.url
-    ? getMediaUrl(serviceImageObj.url)
+  const imageUrl = serviceImageObj
+    ? getMediaUrl(serviceImageObj)
     : '/placeholder-service.jpg';
 
   // Structured data for SEO
@@ -121,8 +121,8 @@ export default async function ServiceDetailPage({ params }: Props) {
         addressCountry: 'US',
       },
     },
-    ...(serviceImageObj?.url && {
-      image: getMediaUrl(serviceImageObj.url),
+    ...(serviceImageObj && {
+      image: getMediaUrl(serviceImageObj),
     }),
     ...(service.pricing?.basePrice && {
       offers: {

@@ -22,7 +22,7 @@ const getCategoryLabel = (categoryValue: string): string => {
 
 export default function BlogPostCard({ post }: BlogPostCardProps) {
   const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
-    ? getMediaUrl(post.featuredImage.url)
+    ? getMediaUrl(post.featuredImage)
     : null;
 
   return (

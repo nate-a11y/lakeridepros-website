@@ -81,8 +81,8 @@ export default async function Footer() {
     // Filter to only popular services and maintain order
     dynamicServices = popularServiceSlugs
       .map(slug => {
-        const service = servicesResponse.docs.find(s => s.slug === slug);
-        return service ? { name: service.title, href: `/services/${service.slug}` } : null;
+        const service = servicesResponse.docs.find(s => String(s.slug) === slug);
+        return service ? { name: service.title, href: `/services/${String(service.slug)}` } : null;
       })
       .filter((s): s is { name: string; href: string } => s !== null);
 

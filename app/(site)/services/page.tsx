@@ -149,7 +149,7 @@ export default async function ServicesPage() {
                     <div style={{ display: 'block', position: 'relative', height: '12rem', width: '100%', overflow: 'hidden' }}>
                       {service.image && typeof service.image === 'object' && (
                         <Image
-                          src={getMediaUrl(service.image.url)}
+                          src={getMediaUrl(service.image)}
                           alt={service.image.alt || service.title}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

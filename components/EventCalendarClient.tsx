@@ -32,7 +32,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
         event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         event.description?.toLowerCase().includes(searchTerm.toLowerCase())
 
-      const venueId = typeof event.venue === 'object' ? String(event.venue?.id) : String(event.venue)
+      const venueId = typeof event.venue === 'object' ? String(event.venue?._id) : String(event.venue)
       const matchesVenue = !venueFilter || venueId === venueFilter
 
       return matchesSearch && matchesVenue
@@ -47,10 +47,10 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
       const venue = typeof event.venue === 'object' ? event.venue : null
       if (!venue) return
 
-      if (!grouped[venue.id]) {
-        grouped[venue.id] = { venue, events: [] }
+      if (!grouped[venue._id]) {
+        grouped[venue._id] = { venue, events: [] }
       }
-      grouped[venue.id].events.push(event)
+      grouped[venue._id].events.push(event)
     })
 
     return Object.values(grouped)
@@ -95,7 +95,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
               >
                 <option value="">All Venues</option>
                 {venues.map((venue) => (
-                  <option key={venue.id} value={venue.id}>
+                  <option key={venue._id} value={venue._id}>
                     {venue.shortName || venue.name}
                   </option>
                 ))}
@@ -120,7 +120,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
           ) : (
             <div className="space-y-12">
               {eventsByVenue.map(({ venue, events: venueEvents }) => (
-                <div key={venue.id} className="bg-white dark:bg-dark-bg-secondary rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                <div key={venue._id} className="bg-white dark:bg-dark-bg-secondary rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                   {/* Venue Header */}
                   <div className="bg-lrp-black text-white p-6">
                     <div>
@@ -165,7 +165,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
                           const dateInfo = formatDate(event.date)
                           return (
                             <tr
-                              key={event.id}
+                              key={event._id}
                               className={`border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-dark-bg-primary/50 transition-colors ${
                                 index % 2 === 0 ? 'bg-white dark:bg-dark-bg-secondary' : 'bg-gray-50/50 dark:bg-dark-bg-primary/30'
                               }`}

@@ -9,7 +9,7 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
-  const imageUrl = service.image && typeof service.image === 'object' ? getMediaUrl(service.image.url) : '/placeholder-service.jpg';
+  const imageUrl = service.image && typeof service.image === 'object' ? getMediaUrl(service.image) : '/placeholder-service.jpg';
 
   return (
     <Link

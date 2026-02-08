@@ -10,9 +10,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const imageUrl = product.featuredImage && typeof product.featuredImage === 'object'
-    ? getMediaUrl(product.featuredImage.url)
-    : product.images?.[0] && typeof product.images[0].image === 'object'
-    ? getMediaUrl(product.images[0].image.url)
+    ? getMediaUrl(product.featuredImage)
+    : product.images?.[0] && typeof product.images[0] === 'object'
+    ? getMediaUrl(product.images[0])
     : '/placeholder-product.jpg';
 
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;

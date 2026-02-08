@@ -2,22 +2,8 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getPageBySlug, getMediaUrl } from '@/lib/api/sanity';
 import Image from 'next/image';
+import { PortableText } from '@portabletext/react';
 import type { Page, SanityImage } from '@/types/sanity';
-
-interface LexicalNode {
-  type: string;
-  children?: Array<{
-    type?: string;
-    text?: string;
-  }>;
-  tag?: string;
-}
-
-interface LexicalContent {
-  root?: {
-    children?: LexicalNode[];
-  };
-}
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -85,46 +71,11 @@ export default async function DynamicPage({ params }: PageProps) {
           </h1>
         )}
 
-        <div className="prose prose-lg max-w-none dark:prose-invert">
-          {/* Rich Text Content */}
-          <div
-            dangerouslySetInnerHTML={{ __html: renderRichText(page.content) }}
-            className="text-lrp-text dark:text-dark-text-primary"
-          />
+        <div className="prose prose-lg max-w-none dark:prose-invert text-lrp-text dark:text-dark-text-primary">
+          {page.content && <PortableText value={page.content} />}
         </div>
       </div>
     </div>
   );
 }
 
-// Simple rich text renderer
-// Simple serializer for Lexical rich text content
-function renderRichText(content: LexicalContent | string | undefined): string {
-  if (!content) return '';
-
-  // If it's already HTML string
-  if (typeof content === 'string') {
-    return content;
-  }
-
-  // If it's Lexical JSON format, convert to HTML
-  // This is a basic implementation - for production use Payload's lexical serializer
-  if (typeof content === 'object' && content.root && content.root.children) {
-    return content.root.children
-      .map((node: LexicalNode) => {
-        if (node.type === 'paragraph') {
-          const text = node.children?.map((child) => child.text || '').join('') || '';
-          return `<p>${text}</p>`;
-        }
-        if (node.type === 'heading') {
-          const text = node.children?.map((child) => child.text || '').join('') || '';
-          const tag = `h${node.tag || '1'}`;
-          return `<${tag}>${text}</${tag}>`;
-        }
-        return '';
-      })
-      .join('');
-  }
-
-  return '';
-}

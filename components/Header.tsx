@@ -9,7 +9,7 @@ export default async function Header() {
     const servicesResponse = await getServicesLocal();
     services = servicesResponse.docs.map((service) => ({
       name: service.title,
-      slug: service.slug,
+      slug: String(service.slug),
     }));
   } catch (error) {
     console.error('Error fetching services for header:', error);

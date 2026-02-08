@@ -76,7 +76,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
       <footer className="flex items-center gap-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
         {testimonial.image && typeof testimonial.image === 'object' && (
           <Image
-            src={getMediaUrl(testimonial.image.url)}
+            src={getMediaUrl(testimonial.image)}
             alt={testimonial.name}
             width={48}
             height={48}
@@ -105,7 +105,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 
 export default async function TestimonialsPage() {
   // Fetch all testimonials with 4+ star ratings
-  const testimonials = await getTestimonialsLocal(4)
+  const testimonials = await getTestimonialsLocal(false, 4)
 
   // Calculate aggregate rating
   const ratedTestimonials = testimonials.filter(t => t.rating)
@@ -201,7 +201,7 @@ export default async function TestimonialsPage() {
             {testimonials.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
                 {testimonials.map((testimonial) => (
-                  <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+                  <TestimonialCard key={testimonial._id} testimonial={testimonial} />
                 ))}
               </div>
             ) : (

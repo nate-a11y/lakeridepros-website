@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     ? post.excerpt.substring(0, 155)
     : post.title.substring(0, 155);
   const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
-    ? getMediaUrl(post.featuredImage.url)
+    ? getMediaUrl(post.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   return {
@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       locale: 'en_US',
       type: 'article',
       publishedTime: post.publishedDate,
-      modifiedTime: post.updatedAt,
+      modifiedTime: post._updatedAt,
       authors: [getAuthorName(post.author)],
     },
     twitter: {
@@ -117,7 +117,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     headline: post.title,
     description: post.excerpt || post.title,
     image: post.featuredImage && typeof post.featuredImage === 'object'
-      ? getMediaUrl(post.featuredImage.url)
+      ? getMediaUrl(post.featuredImage)
       : 'https://www.lakeridepros.com/og-image.jpg',
     author: {
       '@type': typeof post.author === 'string' || !post.author ? 'Organization' : 'Person',
@@ -193,7 +193,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {post.featuredImage && typeof post.featuredImage === 'object' && (
             <div className="relative h-96 rounded-lg overflow-hidden mb-8">
               <Image
-                src={getMediaUrl(post.featuredImage.url)}
+                src={getMediaUrl(post.featuredImage)}
                 alt={post.featuredImage.alt || post.title}
                 fill
                 className="object-cover"

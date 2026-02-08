@@ -90,8 +90,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((currentItems) => {
       const existingItemIndex = currentItems.findIndex(
         (item) =>
-          item.product.id === product.id &&
-          (variant ? item.variant?.id === variant.id : !item.variant)
+          item.product._id === product._id &&
+          (variant ? item.variant?._key === variant._key : !item.variant)
       );
 
       if (existingItemIndex > -1) {
@@ -112,8 +112,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       currentItems.filter(
         (item) =>
           !(
-            String(item.product.id) === String(productId) &&
-            (variantId ? item.variant?.id === variantId : !item.variant)
+            String(item.product._id) === String(productId) &&
+            (variantId ? item.variant?._key === variantId : !item.variant)
           )
       )
     );
@@ -128,8 +128,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((currentItems) =>
       currentItems.map((item) => {
         if (
-          String(item.product.id) === String(productId) &&
-          (variantId ? item.variant?.id === variantId : !item.variant)
+          String(item.product._id) === String(productId) &&
+          (variantId ? item.variant?._key === variantId : !item.variant)
         ) {
           return { ...item, quantity };
         }

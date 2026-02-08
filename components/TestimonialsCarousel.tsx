@@ -169,7 +169,7 @@ export default function TestimonialsCarousel({
                 <div className="flex flex-col items-center">
                   {currentTestimonial.image && typeof currentTestimonial.image === 'object' && (
                     <Image
-                      src={getMediaUrl(currentTestimonial.image.url)}
+                      src={getMediaUrl(currentTestimonial.image)}
                       alt={currentTestimonial.name}
                       width={64}
                       height={64}

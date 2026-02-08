@@ -53,7 +53,7 @@ export default async function BlogPage() {
   const featuredPost = posts[0];
   const remainingPosts = posts.slice(1);
   const featuredImageUrl = featuredPost?.featuredImage && typeof featuredPost.featuredImage === 'object'
-    ? getMediaUrl(featuredPost.featuredImage.url)
+    ? getMediaUrl(featuredPost.featuredImage)
     : null;
 
   return (

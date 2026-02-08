@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ShoppingBag, Star, Search, X, Heart, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import QuickViewModal from './QuickViewModal'
 import { getMediaUrl } from '@/lib/utils'
-import type { Product, Media } from '@/types/sanity'
+import type { Product, SanityImage } from '@/types/sanity'
 
 interface ShopClientProps {
   initialProducts: Product[]
@@ -68,7 +68,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter((product) =>
         product.name.toLowerCase().includes(query) ||
-        (typeof product.description === 'object' && product.description?.root ?
+        (Array.isArray(product.description) ?
           JSON.stringify(product.description).toLowerCase().includes(query) : false) ||
         product.categories?.some((cat) => cat.toLowerCase().includes(query))
       )
@@ -84,7 +84,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
         sorted.sort((a, b) => b.price - a.price)
         break
       case 'newest':
-        sorted.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+        sorted.sort((a, b) => new Date(b._createdAt || 0).getTime() - new Date(a._createdAt || 0).getTime())
         break
       case 'featured':
       default:
@@ -268,11 +268,11 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredAndSortedProducts.map((product, index: number) => (
                 <ProductCard
-                  key={product.id}
+                  key={product._id}
                   product={product}
                   onQuickView={() => setQuickViewProduct(product)}
-                  isWishlisted={wishlist.has(product.id)}
-                  onToggleWishlist={() => toggleWishlist(product.id)}
+                  isWishlisted={wishlist.has(product._id)}
+                  onToggleWishlist={() => toggleWishlist(product._id)}
                   index={index}
                 />
               ))}
@@ -392,38 +392,18 @@ interface ProductCardProps {
 
 function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, index }: ProductCardProps) {
   // Use featuredImage first, then fall back to first image in gallery
-  // Handle multiple possible data structures for maximum compatibility
-  let image: Media | null = null
+  let image: SanityImage | null = null
 
-  // Try featuredImage (could be populated object or null)
   if (product.featuredImage && typeof product.featuredImage === 'object') {
-    image = product.featuredImage as Media
-  }
-
-  // Fall back to gallery image if no featured image
-  if (!image?.url && product.images && product.images.length > 0) {
-    const firstImageItem = product.images[0]
-    // Handle nested structure: images[0].image
-    if (firstImageItem && typeof firstImageItem.image === 'object') {
-      image = firstImageItem.image as Media
-    }
-    // Handle flat structure: images[0] might be the Media object directly
-    else if (firstImageItem && typeof firstImageItem === 'object' && 'url' in firstImageItem) {
-      image = firstImageItem as unknown as Media
+    image = product.featuredImage
+  } else if (product.images && product.images.length > 0) {
+    const first = product.images[0]
+    if (first && typeof first === 'object') {
+      image = first as SanityImage
     }
   }
 
-  // Debug logging for image issues
-  if (typeof window !== 'undefined' && !image?.url) {
-    console.log('Product missing image:', {
-      productId: product.id,
-      productName: product.name,
-      featuredImage: product.featuredImage,
-      firstImage: product.images?.[0],
-      hasImages: !!product.images?.length,
-      imageUrl: image?.url,
-    })
-  }
+  const imageUrl = image ? getMediaUrl(image) : null
 
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
 
@@ -458,21 +438,14 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
       <Link href={`/shop/products/${product.slug}`} className="flex-1 flex flex-col w-full">
         {/* Premium Image / Branded Placeholder */}
         <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-tertiary overflow-hidden w-full">
-          {image?.url ? (
+          {imageUrl ? (
             <Image
-              src={getMediaUrl(image.url)}
-              alt={image.alt || product.name}
+              src={imageUrl}
+              alt={image?.alt || product.name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl"
               priority={false}
-              onError={(_e) => {
-                console.error('Image failed to load:', {
-                  productName: product.name,
-                  imageUrl: getMediaUrl(image.url),
-                  originalUrl: image.url,
-                })
-              }}
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">

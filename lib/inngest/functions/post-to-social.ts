@@ -85,12 +85,12 @@ async function postToInstagram(post: BlogPost): Promise<{ id: string } | null> {
 
   // Instagram requires an image
   const imageObj = typeof post.featuredImage === 'object' ? post.featuredImage : null
-  if (!imageObj?.url) {
+  if (!imageObj) {
     console.log('[Social] No featured image for Instagram post, skipping')
     return null
   }
 
-  const imageUrl = getMediaUrl(imageObj.url)
+  const imageUrl = getMediaUrl(imageObj)
   const postUrl = `${SITE_URL}/blog/${post.slug}`
 
   // Instagram caption (max 2200 chars, but shorter is better)

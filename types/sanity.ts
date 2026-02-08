@@ -35,8 +35,8 @@ interface SanitySlug {
   current: string
 }
 
-// Portable Text block (simplified)
-type PortableTextBlock = Record<string, unknown>
+// Portable Text block (simplified, compatible with @portabletext/react)
+type PortableTextBlock = { _type: string; _key?: string } & Record<string, unknown>
 
 export interface Service extends SanityDocument {
   title: string

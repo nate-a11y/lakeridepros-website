@@ -36,30 +36,20 @@ import {
 import { urlFor } from '@/sanity/lib/image'
 
 // ---------------------------------------------------------------------------
-// Loose types — keeps every consumer happy until Sanity codegen is added
+// Types from canonical definitions
 // ---------------------------------------------------------------------------
 
-interface Service {
-  [key: string]: any
-}
-interface Vehicle {
-  [key: string]: any
-}
-interface BlogPost {
-  [key: string]: any
-}
-interface Product {
-  [key: string]: any
-}
-interface Testimonial {
-  [key: string]: any
-}
-interface Partner {
-  [key: string]: any
-}
+import type {
+  Service,
+  Vehicle,
+  BlogPost,
+  Product,
+  Testimonial,
+  Partner,
+} from '@/types/sanity'
 
 export interface Venue {
-  id: string
+  _id: string
   name: string
   shortName?: string
   slug: string
@@ -76,7 +66,7 @@ export interface Venue {
 }
 
 export interface Event {
-  id: string
+  _id: string
   name: string
   slug: string
   venue: Venue | string

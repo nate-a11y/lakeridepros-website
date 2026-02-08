@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 interface PartnerData {
-  id: string;
+  _id: string;
   name: string;
   slug?: string;
   website?: string;
@@ -90,7 +90,7 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
 
             return partnerLink ? (
               <Link
-                key={`partner-${partner.id}-${index}`}
+                key={`partner-${partner._id}-${index}`}
                 href={partnerLink}
                 className="flex-shrink-0 mx-4 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-xl hover:scale-105 transition-transform cursor-pointer"
                 aria-label={`View ${partner.name} partner page`}
@@ -99,7 +99,7 @@ export default function PartnersCarousel({ partners }: PartnersCarouselProps) {
                 {partnerContent}
               </Link>
             ) : (
-              <div key={`partner-${partner.id}-${index}`} className="flex-shrink-0 mx-4 flex items-center justify-center">
+              <div key={`partner-${partner._id}-${index}`} className="flex-shrink-0 mx-4 flex items-center justify-center">
                 {partnerContent}
               </div>
             );

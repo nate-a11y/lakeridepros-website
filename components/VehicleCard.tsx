@@ -15,9 +15,9 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const [imageError, setImageError] = useState(false);
 
   const imageUrl = vehicle.featuredImage && typeof vehicle.featuredImage === 'object'
-    ? getMediaUrl(vehicle.featuredImage.url)
+    ? getMediaUrl(vehicle.featuredImage)
     : vehicle.images?.[0]?.image && typeof vehicle.images[0].image === 'object'
-    ? getMediaUrl(vehicle.images[0].image.url)
+    ? getMediaUrl(vehicle.images[0].image)
     : '/placeholder-vehicle.jpg';
 
   // Generate descriptive alt text

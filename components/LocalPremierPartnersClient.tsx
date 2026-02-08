@@ -48,14 +48,14 @@ export default function LocalPremierPartnersClient({ partners }: LocalPremierPar
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredPartners.map((partner) => (
                 <div
-                  key={partner.id}
+                  key={partner._id}
                   className="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden border border-gray-200 dark:border-gray-700"
                 >
                   {/* Logo */}
                   {partner.logo && typeof partner.logo === 'object' && (
                     <div className="relative h-40 bg-gray-50 dark:bg-dark-bg-primary p-6 flex items-center justify-center border-b border-gray-200 dark:border-gray-700">
                       <Image
-                        src={getMediaUrl(partner.logo.url)}
+                        src={getMediaUrl(partner.logo)}
                         alt={partner.logo.alt || partner.name}
                         width={200}
                         height={120}

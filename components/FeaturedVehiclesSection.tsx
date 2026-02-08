@@ -46,7 +46,7 @@ export default function FeaturedVehiclesSection({
               aria-label="Featured vehicles"
             >
               {vehicles.map((vehicle) => (
-                <div key={vehicle.id} role="listitem">
+                <div key={vehicle._id} role="listitem">
                   <VehicleCard vehicle={vehicle} />
                 </div>
               ))}

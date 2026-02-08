@@ -7,7 +7,7 @@
  * 2. Manual revalidation via these utility functions (for API routes that mutate data)
  */
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 
 /**
  * Map of Sanity document types to their URL paths and cache tags.
@@ -84,7 +84,7 @@ export function revalidateDocument(documentType: string, slug?: string) {
 
   // Revalidate tags
   for (const tag of config.tags) {
-    revalidateTag(tag)
+    updateTag(tag)
   }
 
   // Revalidate paths
@@ -107,6 +107,6 @@ export function revalidatePaths(paths: string[]) {
  */
 export function revalidateTags(tags: string[]) {
   for (const tag of tags) {
-    revalidateTag(tag)
+    updateTag(tag)
   }
 }

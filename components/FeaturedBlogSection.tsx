@@ -49,7 +49,7 @@ export default function FeaturedBlogSection({
   };
 
   const featuredImageUrl = featuredPost.featuredImage && typeof featuredPost.featuredImage === 'object'
-    ? getMediaUrl(featuredPost.featuredImage.url)
+    ? getMediaUrl(featuredPost.featuredImage)
     : null;
 
   return (
@@ -159,12 +159,12 @@ export default function FeaturedBlogSection({
             >
               {otherPosts.map((post) => {
                 const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
-                  ? getMediaUrl(post.featuredImage.url)
+                  ? getMediaUrl(post.featuredImage)
                   : null;
 
                 return (
                   <Link
-                    key={post.id}
+                    key={post._id}
                     href={`/blog/${post.slug}`}
                     className="group flex-shrink-0 snap-start bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     style={{ display: 'flex', flexDirection: 'column', width: '320px' }}

@@ -62,7 +62,7 @@ export default async function ShopPage() {
         <h2>All Products</h2>
         <ul>
           {products.map((product) => (
-            <li key={product.id}>
+            <li key={product._id}>
               <Link href={`/shop/products/${product.slug}`}>
                 {product.name}
               </Link>

@@ -1,4 +1,4 @@
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { parseBody } from 'next-sanity/webhook'
 
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     // Map Sanity document types to paths and tags
     switch (_type) {
       case 'service':
-        revalidateTag('services')
+        updateTag('services')
         revalidatedTags.push('services')
         revalidatePath('/services')
         revalidatePath('/')
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'product':
-        revalidateTag('products')
+        updateTag('products')
         revalidatedTags.push('products')
         revalidatePath('/shop')
         revalidatePath('/')
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'vehicle':
-        revalidateTag('vehicles')
+        updateTag('vehicles')
         revalidatedTags.push('vehicles')
         revalidatePath('/fleet')
         revalidatePath('/')
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'blogPost':
-        revalidateTag('blog')
+        updateTag('blog')
         revalidatedTags.push('blog')
         revalidatePath('/blog')
         revalidatePath('/')
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'partner':
-        revalidateTag('partners')
+        updateTag('partners')
         revalidatedTags.push('partners')
         revalidatePath('/trusted-referral-partners')
         revalidatePath('/local-premier-partners')
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'testimonial':
-        revalidateTag('testimonials')
+        updateTag('testimonials')
         revalidatedTags.push('testimonials')
         revalidatePath('/')
         revalidatePath('/services')
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'event':
-        revalidateTag('events')
+        updateTag('events')
         revalidatedTags.push('events')
         revalidatePath('/events')
         revalidatedPaths.push('/events')
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'venue':
-        revalidateTag('venues')
+        updateTag('venues')
         revalidatedTags.push('venues')
         revalidatePath('/events')
         revalidatedPaths.push('/events')
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'page':
-        revalidateTag('pages')
+        updateTag('pages')
         revalidatedTags.push('pages')
         if (slug) {
           revalidatePath(`/${slug}`)
@@ -137,14 +137,14 @@ export async function POST(request: NextRequest) {
         break
 
       case 'giftCard':
-        revalidateTag('gift-cards')
+        updateTag('gift-cards')
         revalidatedTags.push('gift-cards')
         revalidatePath('/gift-cards')
         revalidatedPaths.push('/gift-cards')
         break
 
       case 'order':
-        revalidateTag('orders')
+        updateTag('orders')
         revalidatedTags.push('orders')
         break
 

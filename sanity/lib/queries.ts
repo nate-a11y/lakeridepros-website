@@ -297,13 +297,10 @@ export const productsQuery = groq`
     },
     images[] {
       ...,
-      image {
-        ...,
-        asset-> {
-          _id,
-          url,
-          metadata
-        }
+      asset-> {
+        _id,
+        url,
+        metadata
       }
     },
     price,
@@ -370,13 +367,10 @@ export const productBySlugQuery = groq`
     },
     images[] {
       ...,
-      image {
-        ...,
-        asset-> {
-          _id,
-          url,
-          metadata
-        }
+      asset-> {
+        _id,
+        url,
+        metadata
       }
     },
     price,
@@ -483,13 +477,10 @@ export const partnersQuery = groq`
     sms_template,
     images[] {
       ...,
-      image {
-        ...,
-        asset-> {
-          _id,
-          url,
-          metadata
-        }
+      asset-> {
+        _id,
+        url,
+        metadata
       }
     },
     active,

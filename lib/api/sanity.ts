@@ -694,7 +694,7 @@ export async function getPartnerBySlugLocal(slug: string): Promise<Partner | nul
         logo { ..., asset-> { _id, url, metadata } },
         description, website, phone, email, address,
         featured, order, blurb, sms_template,
-        images[] { ..., image { ..., asset-> { _id, url, metadata } } },
+        images[] { ..., asset-> { _id, url, metadata } },
         active, publish_date
       }`,
       { slug },

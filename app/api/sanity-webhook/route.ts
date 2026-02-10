@@ -1,4 +1,4 @@
-import { revalidatePath, updateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { parseBody } from 'next-sanity/webhook'
 import { syncDriverProfileToSupabase } from '@/lib/sync/driver-sync'
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     // Map Sanity document types to paths and tags
     switch (_type) {
       case 'service':
-        updateTag('services')
+        revalidateTag('services', 'default')
         revalidatedTags.push('services')
         revalidatePath('/services')
         revalidatePath('/')
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'product':
-        updateTag('products')
+        revalidateTag('products', 'default')
         revalidatedTags.push('products')
         revalidatePath('/shop')
         revalidatePath('/')
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'vehicle':
-        updateTag('vehicles')
+        revalidateTag('vehicles', 'default')
         revalidatedTags.push('vehicles')
         revalidatePath('/fleet')
         revalidatePath('/')
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'blogPost':
-        updateTag('blog')
+        revalidateTag('blog', 'default')
         revalidatedTags.push('blog')
         revalidatePath('/blog')
         revalidatePath('/')
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'partner':
-        updateTag('partners')
+        revalidateTag('partners', 'default')
         revalidatedTags.push('partners')
         revalidatePath('/trusted-referral-partners')
         revalidatePath('/local-premier-partners')
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'testimonial':
-        updateTag('testimonials')
+        revalidateTag('testimonials', 'default')
         revalidatedTags.push('testimonials')
         revalidatePath('/')
         revalidatePath('/services')
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'event':
-        updateTag('events')
+        revalidateTag('events', 'default')
         revalidatedTags.push('events')
         revalidatePath('/events')
         revalidatedPaths.push('/events')
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'venue':
-        updateTag('venues')
+        revalidateTag('venues', 'default')
         revalidatedTags.push('venues')
         revalidatePath('/events')
         revalidatedPaths.push('/events')
@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'driverProfile':
-        updateTag('drivers')
+        revalidateTag('drivers', 'default')
         revalidatedTags.push('drivers')
         revalidatePath('/our-drivers')
         revalidatedPaths.push('/our-drivers')
@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
         break
 
       case 'page':
-        updateTag('pages')
+        revalidateTag('pages', 'default')
         revalidatedTags.push('pages')
         if (slug) {
           revalidatePath(`/${slug}`)
@@ -167,14 +167,14 @@ export async function POST(request: NextRequest) {
         break
 
       case 'giftCard':
-        updateTag('gift-cards')
+        revalidateTag('gift-cards', 'default')
         revalidatedTags.push('gift-cards')
         revalidatePath('/gift-cards')
         revalidatedPaths.push('/gift-cards')
         break
 
       case 'order':
-        updateTag('orders')
+        revalidateTag('orders', 'default')
         revalidatedTags.push('orders')
         break
 

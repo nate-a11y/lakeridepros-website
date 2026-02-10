@@ -36,9 +36,11 @@ export default function VehicleGallery({
       result.push({ image: featuredImage, alt: `${vehicleName} - Featured` });
     }
     images.forEach((img) => {
-      const imgAssetId = img.image?.asset?._ref;
-      const featAssetId = featuredImage?.asset?._ref;
-      if (!featuredImage || imgAssetId !== featAssetId) {
+      const imgAsset = img.image?.asset as Record<string, unknown> | undefined;
+      const featAsset = featuredImage?.asset as Record<string, unknown> | undefined;
+      const imgAssetId = imgAsset?._id || imgAsset?._ref;
+      const featAssetId = featAsset?._id || featAsset?._ref;
+      if (!featuredImage || !imgAssetId || !featAssetId || imgAssetId !== featAssetId) {
         result.push(img);
       }
     });

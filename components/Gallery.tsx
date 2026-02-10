@@ -162,7 +162,7 @@ function GalleryCarousel({
             {images.map((img, i) => (
               <div
                 key={i}
-                className="min-w-0 flex-[0_0_100%]"
+                className="relative min-w-0 flex-[0_0_100%]"
                 style={{ aspectRatio }}
               >
                 <Image

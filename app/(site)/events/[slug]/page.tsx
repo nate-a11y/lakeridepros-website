@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams() {
   try {
-    const events = await getUpcomingEvents(100)
+    const events = await getUpcomingEvents()
     return events.map((event) => ({
       slug: event.slug,
     }))

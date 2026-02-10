@@ -798,7 +798,7 @@ export async function getEvents(
  * Includes a JS date guard to ensure events from today are included even when
  * `now()` in GROQ evaluates to a time after midnight.
  */
-export async function getUpcomingEvents(limit = 50): Promise<Event[]> {
+export async function getUpcomingEvents(): Promise<Event[]> {
   try {
     // Fetch all active events and filter for upcoming in JS.
     // This avoids the edge-case where GROQ's now() excludes today's events
@@ -815,7 +815,7 @@ export async function getUpcomingEvents(limit = 50): Promise<Event[]> {
     })
 
     // Already sorted by date from the GROQ query
-    return upcoming.slice(0, limit)
+    return upcoming
   } catch (error) {
     console.error('[Sanity] Error fetching upcoming events:', error)
     return []

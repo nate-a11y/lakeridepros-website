@@ -58,7 +58,7 @@ export default async function VenueDetailPage({ params }: Props) {
   }
 
   // Get upcoming events and filter to this venue
-  const allEvents = await getUpcomingEvents(1000)
+  const allEvents = await getUpcomingEvents()
   const venueEvents = allEvents.filter(event => {
     const eventVenueId = typeof event.venue === 'object' ? String(event.venue?._id) : String(event.venue)
     return eventVenueId === String(venue._id)

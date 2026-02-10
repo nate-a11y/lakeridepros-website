@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import Image from 'next/image'
 import { ShoppingCart, Check, Package, Truck, Shield } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl, cn } from '@/lib/utils'
 import { VariantSelector } from '@/components/shop'
+import Gallery from '@/components/Gallery'
+import type { GalleryImage } from '@/components/Gallery'
 import type { Product } from '@/types/sanity'
 
 interface ProductActionsProps {
@@ -19,7 +20,6 @@ export default function ProductActions({ product }: ProductActionsProps) {
     product.variants && product.variants.length > 0 ? product.variants[0] : null
   )
   const [quantity, setQuantity] = useState(1)
-  const [selectedImage, setSelectedImage] = useState(0)
   const [addedToCart, setAddedToCart] = useState(false)
   const [personalizationText, setPersonalizationText] = useState('')
 
@@ -54,26 +54,35 @@ export default function ProductActions({ product }: ProductActionsProps) {
     setSelectedVariant(variant)
   }, [])
 
-  // Get all images including featured - robust handling for multiple data structures
-  const allImages: Array<{ image: Record<string, any> | null }> = []
+  // Build GalleryImage[] from featuredImage + images[] with robust handling
+  const galleryImages: GalleryImage[] = []
 
-  // Add featured image if it exists
   if (product.featuredImage && typeof product.featuredImage === 'object') {
-    allImages.push({ image: product.featuredImage as Record<string, any> })
+    const url = getMediaUrl(product.featuredImage)
+    if (url) {
+      galleryImages.push({
+        src: url,
+        alt: (product.featuredImage as Record<string, any>).alt || product.name,
+      })
+    }
   }
 
-  // Add gallery images with robust handling for different structures
   if (product.images && Array.isArray(product.images)) {
     for (const imgItem of product.images) {
       if (!imgItem) continue
 
-      // Handle nested structure: images[].image
+      let imgObj: Record<string, any> | null = null
       if ('image' in imgItem && imgItem.image && typeof imgItem.image === 'object') {
-        allImages.push({ image: imgItem.image as Record<string, any> })
+        imgObj = imgItem.image as Record<string, any>
+      } else if (typeof imgItem === 'object' && ('_type' in imgItem || 'asset' in imgItem)) {
+        imgObj = imgItem as unknown as Record<string, any>
       }
-      // Handle flat structure: images[] might be the SanityImage object directly
-      else if (typeof imgItem === 'object' && ('_type' in imgItem || 'asset' in imgItem)) {
-        allImages.push({ image: imgItem as unknown as Record<string, any> })
+
+      if (imgObj) {
+        const url = getMediaUrl(imgObj)
+        if (url) {
+          galleryImages.push({ src: url, alt: imgObj.alt || product.name })
+        }
       }
     }
   }
@@ -83,57 +92,17 @@ export default function ProductActions({ product }: ProductActionsProps) {
   return (
     <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
       {/* Image Gallery */}
-      <div className="lg:w-1/2 w-full space-y-4">
-        {/* Main Image */}
-        <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-2xl overflow-hidden relative group">
-          {(() => {
-            const imageItem = allImages[selectedImage]
-            const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null
-            return imageObj ? (
-              <Image
-                src={getMediaUrl(imageObj)}
-                alt={imageObj.alt || product.name}
-                width={800}
-                height={800}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                priority
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Package className="w-32 h-32 text-neutral-300 dark:text-neutral-600" />
-              </div>
-            )
-          })()}
-        </div>
-
-        {/* Thumbnail Gallery */}
-        {allImages.length > 1 && (
-          <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
-            {allImages.map((img, index) => {
-              const imageObj = img.image
-              return imageObj ? (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  aria-label={`View image ${index + 1} of ${allImages.length}`}
-                  aria-pressed={selectedImage === index}
-                  className={cn(
-                    'flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-200 snap-start',
-                    selectedImage === index
-                      ? 'border-lrp-green ring-2 ring-lrp-green/20'
-                      : 'border-neutral-200 dark:border-dark-border hover:border-lrp-green/50'
-                  )}
-                >
-                  <Image
-                    src={getMediaUrl(imageObj)}
-                    alt={imageObj.alt || `${product.name} thumbnail ${index + 1}`}
-                    width={80}
-                    height={80}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ) : null
-            })}
+      <div className="lg:w-1/2 w-full">
+        {galleryImages.length > 0 ? (
+          <Gallery
+            images={galleryImages}
+            title={product.name}
+            mode="carousel"
+            aspectRatio="1/1"
+          />
+        ) : (
+          <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-2xl flex items-center justify-center">
+            <Package className="w-32 h-32 text-neutral-300 dark:text-neutral-600" />
           </div>
         )}
       </div>

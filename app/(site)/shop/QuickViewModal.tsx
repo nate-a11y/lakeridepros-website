@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import FocusTrap from 'focus-trap-react'
 import { X, ShoppingCart, Check, ExternalLink, Package } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
 import { getMediaUrl, cn } from '@/lib/utils'
 import { VariantSelector } from '@/components/shop'
+import Gallery from '@/components/Gallery'
+import type { GalleryImage } from '@/components/Gallery'
 import type { Product } from '@/types/sanity'
 
 interface QuickViewModalProps {
@@ -23,7 +24,6 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   )
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(0)
 
   const { addItem } = useCart()
 
@@ -72,26 +72,35 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
     setSelectedVariant(variant)
   }, [])
 
-  // Get all images including featured - robust handling for multiple data structures
-  const allImages: Array<{ image: Record<string, any> | null }> = []
+  // Build GalleryImage[] from featuredImage + images[] with robust handling
+  const galleryImages: GalleryImage[] = []
 
-  // Add featured image if it exists
   if (product.featuredImage && typeof product.featuredImage === 'object') {
-    allImages.push({ image: product.featuredImage as Record<string, any> })
+    const url = getMediaUrl(product.featuredImage)
+    if (url) {
+      galleryImages.push({
+        src: url,
+        alt: (product.featuredImage as Record<string, any>).alt || product.name,
+      })
+    }
   }
 
-  // Add gallery images with robust handling for different structures
   if (product.images && Array.isArray(product.images)) {
     for (const imgItem of product.images) {
       if (!imgItem) continue
 
-      // Handle nested structure: images[].image
+      let imgObj: Record<string, any> | null = null
       if ('image' in imgItem && imgItem.image && typeof imgItem.image === 'object') {
-        allImages.push({ image: imgItem.image as Record<string, any> })
+        imgObj = imgItem.image as Record<string, any>
+      } else if (typeof imgItem === 'object' && ('_type' in imgItem || 'asset' in imgItem)) {
+        imgObj = imgItem as unknown as Record<string, any>
       }
-      // Handle flat structure: images[] might be the SanityImage object directly
-      else if (typeof imgItem === 'object' && ('_type' in imgItem || 'asset' in imgItem)) {
-        allImages.push({ image: imgItem as unknown as Record<string, any> })
+
+      if (imgObj) {
+        const url = getMediaUrl(imgObj)
+        if (url) {
+          galleryImages.push({ src: url, alt: imgObj.alt || product.name })
+        }
       }
     }
   }
@@ -133,70 +142,33 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
             <div className="grid md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
               {/* Image Gallery */}
-              <div className="space-y-3">
-                {/* Main Image */}
-                <div className="relative aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-xl overflow-hidden">
-                  {(() => {
-                    const imageItem = allImages[selectedImage]
-                    const imageObj = imageItem && typeof imageItem.image === 'object' ? imageItem.image : null
-                    return imageObj ? (
-                      <Image
-                        src={getMediaUrl(imageObj)}
-                        alt={imageObj.alt || product.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <Package className="w-24 h-24 text-neutral-300 dark:text-neutral-600" />
-                      </div>
-                    )
-                  })()}
-
-                  {/* Badges */}
-                  <div className="absolute top-3 left-3 flex flex-col gap-2">
-                    {product.featured && (
-                      <span className="bg-lrp-green text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                        Featured
-                      </span>
-                    )}
-                    {hasDiscount && (
-                      <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                        Sale
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Thumbnail Gallery */}
-                {allImages.length > 1 && (
-                  <div className="flex gap-2 overflow-x-auto pb-1">
-                    {allImages.slice(0, 5).map((img, index: number) => {
-                      const imgObj = typeof img.image === 'object' ? img.image : null
-                      return imgObj ? (
-                        <button
-                          key={index}
-                          onClick={() => setSelectedImage(index)}
-                          aria-label={`View image ${index + 1}`}
-                          aria-pressed={selectedImage === index}
-                          className={cn(
-                            'flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all',
-                            selectedImage === index
-                              ? 'border-lrp-green ring-2 ring-lrp-green/20'
-                              : 'border-neutral-200 dark:border-dark-border hover:border-lrp-green/50'
-                          )}
-                        >
-                          <Image
-                            src={getMediaUrl(imgObj)}
-                            alt={imgObj.alt || 'Product image'}
-                            width={64}
-                            height={64}
-                            className="w-full h-full object-cover"
-                          />
-                        </button>
-                      ) : null
-                    })}
+              <div className="relative">
+                {galleryImages.length > 0 ? (
+                  <>
+                    <Gallery
+                      images={galleryImages}
+                      title={product.name}
+                      mode="carousel"
+                      aspectRatio="1/1"
+                      showLightbox={false}
+                    />
+                    {/* Badges overlaid on gallery */}
+                    <div className="absolute top-3 left-3 flex flex-col gap-2 z-10 pointer-events-none">
+                      {product.featured && (
+                        <span className="bg-lrp-green text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                          Featured
+                        </span>
+                      )}
+                      {hasDiscount && (
+                        <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                          Sale
+                        </span>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <div className="aspect-square bg-neutral-100 dark:bg-dark-bg-secondary rounded-xl flex items-center justify-center">
+                    <Package className="w-24 h-24 text-neutral-300 dark:text-neutral-600" />
                   </div>
                 )}
               </div>

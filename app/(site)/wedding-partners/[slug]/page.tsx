@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/sanity';
-import type { Media } from '@/types/sanity';
-import ImageGallery from '@/components/ImageGallery';
+import Gallery from '@/components/Gallery';
+import type { GalleryImage } from '@/components/Gallery';
 
 // Wedding category labels mapping
 const weddingCategoryLabels: Record<string, string> = {
@@ -228,18 +228,18 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
 
           {/* Images Gallery */}
           {partner.images && Array.isArray(partner.images) && partner.images.length > 0 && (() => {
-            const galleryImages = partner.images
+            const galleryImages: GalleryImage[] = partner.images
               .map((imageItem, index: number) => {
                 const imageUrl = typeof imageItem === 'object' ? getMediaUrl(imageItem) : null;
                 if (!imageUrl) return null;
-                return { url: imageUrl, alt: `${partner.name} - Image ${index + 1}` };
+                return { src: imageUrl, alt: `${partner.name} - Image ${index + 1}` };
               })
-              .filter((img): img is { url: string; alt: string } => img !== null);
+              .filter((img): img is GalleryImage => img !== null);
 
             return galleryImages.length > 0 ? (
               <div className="p-8">
                 <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-6">Gallery</h2>
-                <ImageGallery images={galleryImages} partnerName={partner.name} />
+                <Gallery images={galleryImages} title={partner.name} mode="grid" />
               </div>
             ) : null;
           })()}

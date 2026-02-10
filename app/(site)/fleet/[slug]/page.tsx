@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
-import BookingWidget from '@/components/BookingWidget';
+import FleetBookingCTA from '@/components/FleetBookingCTA';
 import TestimonialsSection from '@/components/TestimonialsSection';
-import VehicleGallery from '@/components/VehicleGallery';
+import Gallery from '@/components/Gallery';
+import type { GalleryImage } from '@/components/Gallery';
 import { TierBadges } from '@/components/TierBadge';
-import { getVehicleBySlug, getVehicleRelatedTestimonials } from '@/lib/api/sanity';
+import { getVehicleBySlug, getVehicleRelatedTestimonials, getMediaUrl } from '@/lib/api/sanity';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,7 +63,32 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   // Fetch vehicle-related testimonials (only 5-star reviews with vehicle keywords)
   const testimonials = await getVehicleRelatedTestimonials(3, 5).catch(() => []);
 
-  const images = vehicle.images || [];
+  // Build GalleryImage[] from featuredImage + images[], deduping by asset ID
+  const galleryImages: GalleryImage[] = [];
+  const seenAssetIds = new Set<string>();
+
+  if (vehicle.featuredImage) {
+    const featAsset = vehicle.featuredImage.asset as Record<string, unknown> | undefined;
+    const featAssetId = (featAsset?._id || featAsset?._ref) as string | undefined;
+    const url = getMediaUrl(vehicle.featuredImage);
+    if (url) {
+      galleryImages.push({ src: url, alt: `${vehicle.name} - Featured` });
+      if (featAssetId) seenAssetIds.add(featAssetId);
+    }
+  }
+
+  if (vehicle.images) {
+    for (const img of vehicle.images) {
+      const imgAsset = img.image?.asset as Record<string, unknown> | undefined;
+      const imgAssetId = (imgAsset?._id || imgAsset?._ref) as string | undefined;
+      if (imgAssetId && seenAssetIds.has(imgAssetId)) continue;
+      const url = getMediaUrl(img.image);
+      if (url) {
+        galleryImages.push({ src: url, alt: img.alt || `${vehicle.name}` });
+        if (imgAssetId) seenAssetIds.add(imgAssetId);
+      }
+    }
+  }
 
   // Breadcrumb Schema for SEO
   const breadcrumbSchema = {
@@ -122,10 +148,10 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Images Gallery */}
             <div>
-              <VehicleGallery
-                images={images}
-                vehicleName={vehicle.name}
-                featuredImage={vehicle.featuredImage}
+              <Gallery
+                images={galleryImages}
+                title={vehicle.name}
+                mode="carousel"
               />
             </div>
 
@@ -265,7 +291,9 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
               Reserve {vehicle.name} for your next trip
             </p>
           </div>
-          <BookingWidget />
+          <div className="flex justify-center">
+            <FleetBookingCTA vehicleName={vehicle.name} />
+          </div>
         </div>
       </section>
     </>

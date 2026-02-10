@@ -438,7 +438,7 @@ function GalleryThumbnails({ variant }: { variant: 'light' | 'dark' }) {
 
   return (
     <div ref={thumbRef} className="overflow-hidden">
-      <div ref={containerRef} className="flex gap-2">
+      <div ref={containerRef} className="flex gap-2 py-1 px-0.5">
         {images.map((img, i) => (
           <button
             key={i}
@@ -448,8 +448,8 @@ function GalleryThumbnails({ variant }: { variant: 'light' | 'dark' }) {
               size,
               i === selectedIndex
                 ? isDark
-                  ? 'ring-4 ring-white shadow-lg scale-105'
-                  : 'ring-4 ring-lrp-green shadow-lg scale-105'
+                  ? 'ring-4 ring-white shadow-lg'
+                  : 'ring-4 ring-lrp-green shadow-lg'
                 : isDark
                   ? 'ring-2 ring-white/30 hover:ring-white/60 opacity-60 hover:opacity-100'
                   : 'ring-2 ring-neutral-200 dark:ring-neutral-700 hover:ring-lrp-green/50 opacity-70 hover:opacity-100',

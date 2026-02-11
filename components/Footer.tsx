@@ -138,6 +138,7 @@ export default async function Footer() {
       { name: 'About Us', href: '/about-us' },
       { name: 'Testimonials', href: '/testimonials' },
       { name: 'Blog', href: '/blog' },
+      { name: 'Music', href: '/music' },
       { name: 'Contact', href: '/contact' },
     ],
     legal: [

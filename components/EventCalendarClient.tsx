@@ -39,7 +39,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
     })
   }, [events, searchTerm, venueFilter])
 
-  // Group events by venue for display
+  // Group events by venue for display, sorted by Sanity venue order
   const eventsByVenue = useMemo(() => {
     const grouped: Record<string, { venue: Venue; events: Event[] }> = {}
 
@@ -53,8 +53,15 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
       grouped[venue._id].events.push(event)
     })
 
-    return Object.values(grouped)
-  }, [filteredEvents])
+    // Build a venue order map from the venues prop (already sorted by Sanity order)
+    const venueOrder = new Map(venues.map((v, i) => [v._id, i]))
+
+    return Object.values(grouped).sort((a, b) => {
+      const orderA = venueOrder.get(a.venue._id) ?? Infinity
+      const orderB = venueOrder.get(b.venue._id) ?? Infinity
+      return orderA - orderB
+    })
+  }, [filteredEvents, venues])
 
   const formatDate = (dateString: string) => {
     // Extract YYYY-MM-DD from the ISO string to avoid any timezone shifting.

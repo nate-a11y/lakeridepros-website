@@ -141,13 +141,9 @@ const TAG_TO_CATEGORY: Record<string, StoreCategory> = {
   'ornament': 'home',
   'Seasonal Decorations': 'home',
 
-  // Limited Edition
+  // Limited Edition (only match explicitly tagged products)
   'Limited Edition': 'limited',
   'Limited': 'limited',
-  'Holiday': 'limited',
-  'Holiday Picks': 'limited',
-  'Seasonal': 'limited',
-  'Seasonal Picks': 'limited',
 }
 
 /**
@@ -166,9 +162,10 @@ function categorizeFromTags(tags: string[], title: string): StoreCategory[] {
   }
 
   // Check for limited edition (always check, regardless of other categories)
+  // Only triggers on "Limited" in the title or an explicit "Limited"/"Limited Edition" tag
   const titleLower = title.toLowerCase()
-  if (titleLower.includes('limited') || titleLower.includes('holiday') ||
-      tags.some(tag => tag.toLowerCase().includes('limited') || tag.toLowerCase().includes('holiday'))) {
+  if (titleLower.includes('limited') ||
+      tags.some(tag => tag.toLowerCase() === 'limited' || tag.toLowerCase() === 'limited edition')) {
     categories.add('limited')
   }
 

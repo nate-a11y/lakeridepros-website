@@ -44,6 +44,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     { name: 'Drinkware', value: 'drinkware' },
     { name: 'Home & Living', value: 'home' },
     { name: 'Limited Edition', value: 'limited' },
+    { name: 'Seasonal', value: 'seasonal' },
   ]
 
   const sortOptions = [
@@ -60,7 +61,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     // Category filter
     if (selectedCategory !== 'all') {
       filtered = filtered.filter((product) =>
-        product.categories?.includes(selectedCategory as 'apparel' | 'accessories' | 'drinkware' | 'home' | 'limited')
+        product.categories?.includes(selectedCategory)
       )
     }
 
@@ -176,21 +177,25 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       <section className="border-b border-neutral-200 dark:border-dark-border sticky top-0 bg-white dark:bg-lrp-black z-30 shadow-lg backdrop-blur-sm">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            {/* Premium Category Filter Pills */}
-            <div className="flex gap-3 overflow-x-auto scrollbar-hide w-full sm:w-auto pb-1">
-              {categories.map((category) => (
-                <button
-                  key={category.value}
-                  onClick={() => updateCategory(category.value)}
-                  className={`px-6 py-3 rounded-full font-semibold whitespace-nowrap transition-all duration-200 ${
-                    selectedCategory === category.value
-                      ? 'bg-lrp-green text-white shadow-[0_4px_16px_rgba(76,187,23,0.4)] scale-105'
-                      : 'bg-transparent border-2 border-lrp-green/30 text-lrp-green hover:bg-lrp-green hover:text-white hover:border-lrp-green hover:scale-105 hover:shadow-[0_4px_16px_rgba(76,187,23,0.3)]'
-                  }`}
-                >
-                  {category.name}
-                </button>
-              ))}
+            {/* Category Filter Pills — wraps on larger screens, scrolls on mobile with fade hints */}
+            <div className="relative w-full sm:w-auto">
+              <div className="flex gap-3 overflow-x-auto sm:overflow-x-visible sm:flex-wrap w-full sm:w-auto pb-1 scrollbar-hide">
+                {categories.map((category) => (
+                  <button
+                    key={category.value}
+                    onClick={() => updateCategory(category.value)}
+                    className={`px-6 py-3 rounded-full font-semibold whitespace-nowrap transition-all duration-200 ${
+                      selectedCategory === category.value
+                        ? 'bg-lrp-green text-white shadow-[0_4px_16px_rgba(76,187,23,0.4)] scale-105'
+                        : 'bg-transparent border-2 border-lrp-green/30 text-lrp-green hover:bg-lrp-green hover:text-white hover:border-lrp-green hover:scale-105 hover:shadow-[0_4px_16px_rgba(76,187,23,0.3)]'
+                    }`}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+              {/* Fade hint on right edge for mobile scroll */}
+              <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white dark:from-lrp-black to-transparent pointer-events-none sm:hidden" />
             </div>
 
             {/* Premium Sort Dropdown */}

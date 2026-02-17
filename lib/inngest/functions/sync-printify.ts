@@ -78,7 +78,60 @@ interface PrintifyProduct {
 // Category Mapping - Maps Printify tags to our store categories
 // ============================================================================
 
-type StoreCategory = 'apparel' | 'accessories' | 'drinkware' | 'home' | 'limited'
+type StoreCategory = 'apparel' | 'accessories' | 'drinkware' | 'home' | 'limited' | 'seasonal'
+
+// ============================================================================
+// Seasonal / Promotional Tag Detection (dynamic pattern matching)
+// ============================================================================
+
+/** Patterns that indicate a Printify promotional or seasonal tag */
+const SEASONAL_PATTERNS = [
+  // Promo suffixes Printify uses
+  /picks$/i,
+  /essentials$/i,
+  /bestsellers$/i,
+  /promotion$/i,
+  /challenge/i,
+
+  // Holidays
+  /valentine/i,
+  /halloween/i,
+  /christmas/i,
+  /easter/i,
+  /mother'?s\s*day/i,
+  /father'?s\s*day/i,
+  /st\.?\s*patrick/i,
+  /independence\s*day/i,
+  /thanksgiving/i,
+  /new\s*year/i,
+  /memorial\s*day/i,
+  /labor\s*day/i,
+  /black\s*friday/i,
+  /cyber\s*monday/i,
+  /4th\s*of\s*july/i,
+  /fourth\s*of\s*july/i,
+
+  // Seasons
+  /^spring\b/i,
+  /^summer\b/i,
+  /^fall\b/i,
+  /^autumn\b/i,
+  /^winter\b/i,
+
+  // Generic seasonal markers
+  /back\s*to\s*school/i,
+  /holiday\s/i,
+  /^holiday$/i,
+  /seasonal/i,
+  /elections?\s*season/i,
+]
+
+/**
+ * Check if a tag matches any seasonal/promotional pattern
+ */
+function isSeasonalTag(tag: string): boolean {
+  return SEASONAL_PATTERNS.some(pattern => pattern.test(tag))
+}
 
 const TAG_TO_CATEGORY: Record<string, StoreCategory> = {
   // Apparel
@@ -169,8 +222,15 @@ function categorizeFromTags(tags: string[], title: string): StoreCategory[] {
     categories.add('limited')
   }
 
-  // If no category found from tags, try title-based fallback
-  if (categories.size === 0 || (categories.size === 1 && categories.has('limited'))) {
+  // Check for seasonal/promotional tags (dynamic pattern matching)
+  if (tags.some(tag => isSeasonalTag(tag))) {
+    categories.add('seasonal')
+  }
+
+  // If no product-type category found from tags, try title-based fallback
+  // (limited and seasonal are supplementary — still need a product-type category)
+  const hasProductCategory = Array.from(categories).some(c => c !== 'limited' && c !== 'seasonal')
+  if (!hasProductCategory) {
     if (titleLower.includes('shirt') || titleLower.includes('hoodie') ||
         titleLower.includes('sweatshirt') || titleLower.includes('tee') ||
         titleLower.includes('tank') || titleLower.includes('polo')) {

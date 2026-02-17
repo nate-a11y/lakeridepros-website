@@ -92,6 +92,7 @@ export default defineType({
               {title: 'Drinkware', value: 'drinkware'},
               {title: 'Home & Living', value: 'home'},
               {title: 'Limited Edition', value: 'limited'},
+              {title: 'Seasonal', value: 'seasonal'},
             ],
           },
         }),

@@ -78,12 +78,13 @@ interface PrintifyProduct {
 // Category Mapping - Maps Printify tags to our store categories
 // ============================================================================
 
-type StoreCategory = 'apparel' | 'accessories' | 'drinkware' | 'home'
+type StoreCategory = 'apparel' | 'accessories' | 'drinkware' | 'home' | 'limited'
 
 const TAG_TO_CATEGORY: Record<string, StoreCategory> = {
   // Apparel
   "Men's Clothing": 'apparel',
   "Women's Clothing": 'apparel',
+  "Kids' Clothing": 'apparel',
   'Hoodies': 'apparel',
   'T-shirts': 'apparel',
   'Sweatshirts': 'apparel',
@@ -101,11 +102,14 @@ const TAG_TO_CATEGORY: Record<string, StoreCategory> = {
   'Accessories': 'accessories',
   'Phone Cases': 'accessories',
   'iPhone Cases': 'accessories',
+  'Phone accessory': 'accessories',
   'Hats': 'accessories',
+  'Beanies': 'accessories',
   'Car Accessories': 'accessories',
   'Stickers': 'accessories',
   'Magnets & Stickers': 'accessories',
   'Travel Accessories': 'accessories',
+  'Bags': 'accessories',
   'Shoes': 'accessories',
   'footwear': 'accessories',
 
@@ -136,6 +140,14 @@ const TAG_TO_CATEGORY: Record<string, StoreCategory> = {
   'Ornaments': 'home',
   'ornament': 'home',
   'Seasonal Decorations': 'home',
+
+  // Limited Edition
+  'Limited Edition': 'limited',
+  'Limited': 'limited',
+  'Holiday': 'limited',
+  'Holiday Picks': 'limited',
+  'Seasonal': 'limited',
+  'Seasonal Picks': 'limited',
 }
 
 /**
@@ -153,10 +165,15 @@ function categorizeFromTags(tags: string[], title: string): StoreCategory[] {
     }
   }
 
-  // If no category found from tags, try title-based fallback
-  if (categories.size === 0) {
-    const titleLower = title.toLowerCase()
+  // Check for limited edition (always check, regardless of other categories)
+  const titleLower = title.toLowerCase()
+  if (titleLower.includes('limited') || titleLower.includes('holiday') ||
+      tags.some(tag => tag.toLowerCase().includes('limited') || tag.toLowerCase().includes('holiday'))) {
+    categories.add('limited')
+  }
 
+  // If no category found from tags, try title-based fallback
+  if (categories.size === 0 || (categories.size === 1 && categories.has('limited'))) {
     if (titleLower.includes('shirt') || titleLower.includes('hoodie') ||
         titleLower.includes('sweatshirt') || titleLower.includes('tee') ||
         titleLower.includes('tank') || titleLower.includes('polo')) {
@@ -169,13 +186,15 @@ function categorizeFromTags(tags: string[], title: string): StoreCategory[] {
     }
     if (titleLower.includes('hat') || titleLower.includes('cap') ||
         titleLower.includes('bag') || titleLower.includes('phone') ||
-        titleLower.includes('sticker') || titleLower.includes('case') ||
-        titleLower.includes('flip flop')) {
+        titleLower.includes('sticker') || titleLower.includes('decal') ||
+        titleLower.includes('case') || titleLower.includes('flip flop') ||
+        titleLower.includes('umbrella')) {
       categories.add('accessories')
     }
     if (titleLower.includes('blanket') || titleLower.includes('towel') ||
         titleLower.includes('canvas') || titleLower.includes('poster') ||
-        titleLower.includes('ornament') || titleLower.includes('decor')) {
+        titleLower.includes('ornament') || titleLower.includes('decor') ||
+        titleLower.includes('air freshener')) {
       categories.add('home')
     }
   }

@@ -43,6 +43,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     { name: 'Accessories', value: 'accessories' },
     { name: 'Drinkware', value: 'drinkware' },
     { name: 'Home & Living', value: 'home' },
+    { name: 'Limited Edition', value: 'limited' },
   ]
 
   const sortOptions = [
@@ -59,7 +60,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     // Category filter
     if (selectedCategory !== 'all') {
       filtered = filtered.filter((product) =>
-        product.categories?.includes(selectedCategory as 'apparel' | 'accessories' | 'drinkware' | 'home')
+        product.categories?.includes(selectedCategory as 'apparel' | 'accessories' | 'drinkware' | 'home' | 'limited')
       )
     }
 
@@ -466,6 +467,11 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
               <span className="bg-lrp-green text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 backdrop-blur-sm">
                 <Star className="w-3 h-3 fill-current" />
                 Featured
+              </span>
+            )}
+            {product.categories?.includes('limited') && (
+              <span className="bg-amber-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
+                Limited Edition
               </span>
             )}
             {hasDiscount && (

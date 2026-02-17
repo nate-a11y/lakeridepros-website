@@ -91,6 +91,7 @@ export default defineType({
               {title: 'Accessories', value: 'accessories'},
               {title: 'Drinkware', value: 'drinkware'},
               {title: 'Home & Living', value: 'home'},
+              {title: 'Limited Edition', value: 'limited'},
             ],
           },
         }),

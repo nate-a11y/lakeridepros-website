@@ -130,7 +130,7 @@ export default defineType({
           {title: 'Home Services', value: 'home-services'},
           {title: 'Campgrounds / RV Parks / Camps', value: 'campgrounds-rv-parks'},
           {title: 'Entertainers / Venues', value: 'entertainers-venues'},
-          {title: 'Event Planners & Concierge Services', value: 'event-planners-concierge'},
+          {title: 'Event Planner / Concierge Services / Travel Agents', value: 'event-planners-concierge'},
           {title: 'Family Fun', value: 'family-fun'},
           {title: 'Nutrition Services / Personal Care', value: 'nutrition-personal-care'},
           {title: 'Golf Courses / Golf Simulators / Golf Equipment / Golf Carts', value: 'golf'},

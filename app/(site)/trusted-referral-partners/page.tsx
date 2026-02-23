@@ -35,7 +35,7 @@ const subcategoryLabels: Record<string, string> = {
   'home-services': 'Home Services',
   'campgrounds-rv-parks': 'Campgrounds / RV Parks / Camps',
   'entertainers-venues': 'Entertainers / Venues',
-  'event-planners-concierge': 'Event Planners & Concierge Services',
+  'event-planners-concierge': 'Event Planner / Concierge Services / Travel Agents',
   'family-fun': 'Family Fun',
   'nutrition-personal-care': 'Nutrition Services / Personal Care',
   'golf': 'Golf Courses / Golf Simulators / Golf Equipment / Golf Carts',

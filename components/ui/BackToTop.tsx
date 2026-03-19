@@ -21,7 +21,7 @@ export default function BackToTop() {
       style={{ opacity }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      className="fixed bottom-20 right-6 z-50 !w-12 !h-12 !min-h-0 rounded-full bg-dark-bg-secondary dark:bg-dark-bg-secondary border border-dark-border flex items-center justify-center text-neutral-400 hover:text-primary-light hover:border-primary/50 transition-colors shadow-lg"
+      className="fixed bottom-6 left-6 z-50 !w-12 !h-12 !min-h-0 rounded-full bg-dark-bg-secondary border border-dark-border flex items-center justify-center text-neutral-400 hover:text-primary-light hover:border-primary/50 transition-colors shadow-lg"
       aria-label="Back to top"
     >
       <svg

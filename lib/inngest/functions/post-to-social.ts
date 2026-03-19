@@ -159,11 +159,9 @@ export const postBlogToSocial = inngest.createFunction(
   {
     id: 'post-blog-to-social',
     name: 'Post Blog to Social Media',
-    // Retry configuration
     retries: 3,
+    triggers: [{ cron: '*/5 * * * *' }],
   },
-  // Run every 5 minutes
-  { cron: '*/5 * * * *' },
   async ({ step }) => {
     // Step 1: Find blog posts that need to be shared
     const postsToShare = await step.run('find-posts-to-share', async () => {
@@ -258,8 +256,8 @@ export const sharePostNow = inngest.createFunction(
     id: 'share-post-now',
     name: 'Share Post to Social Media Now',
     retries: 2,
+    triggers: [{ event: 'blog/share.requested' }],
   },
-  { event: 'blog/share.requested' },
   async ({ event, step }) => {
     const { postId } = event.data
 

@@ -653,8 +653,8 @@ export const syncPrintifyProducts = inngest.createFunction(
     name: 'Sync Printify Products',
     // Run twice daily at 6 AM and 6 PM UTC
     // You can also trigger this manually from the Inngest dashboard
+    triggers: [{ cron: '0 6,18 * * *' }],
   },
-  { cron: '0 6,18 * * *' },
   async ({ step }) => {
     // Step 1: Fetch all products from Printify
     const allProducts = await step.run('fetch-printify-products', async () => {

@@ -56,16 +56,10 @@ export default function HeroSection() {
               transition={{ duration: 0.6, delay: 0.5 }}
             >
               <TypeWriter
-                text="Missouri's premier transportation service. Safe rides, good times."
+                text="Missouri's premier transportation service. Safe rides, good times. Perfect for weddings, wine tours, bachelor parties, and special events."
                 delay={800}
-                speed={35}
-              />{' '}
-              <span className="inline">
-                Perfect for{' '}
-                <strong className="font-bold text-lrp-black dark:text-white">weddings</strong>,{' '}
-                <strong className="font-bold text-lrp-black dark:text-white">wine tours</strong>,{' '}
-                <strong className="font-bold text-lrp-black dark:text-white">bachelor parties</strong>, and special events.
-              </span>
+                speed={30}
+              />
             </motion.p>
 
             {/* Animated CTA Buttons */}

@@ -4,8 +4,8 @@ import AnimatedCounter from "./ui/AnimatedCounter";
 import ScrollReveal from "./ui/ScrollReveal";
 
 const stats = [
-  { target: 3, suffix: "+", label: "Years of Service", prefix: "" },
-  { target: 2000, suffix: "+", label: "Rides Completed", prefix: "" },
+  { target: 4, suffix: "+", label: "Years of Service", prefix: "" },
+  { target: 10000, suffix: "+", label: "Rides Completed", prefix: "" },
   { target: 200, suffix: "+", label: "5-Star Reviews", prefix: "" },
   { target: 10, suffix: "+", label: "Luxury Vehicles", prefix: "" },
 ];

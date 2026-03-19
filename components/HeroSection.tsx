@@ -45,9 +45,7 @@ export default function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
             >
-              Premium{' '}
-              <span className="text-chrome">Luxury Transportation</span>
-              {' '}at Lake of the Ozarks
+              Premium <span className="text-primary-dark dark:text-primary-light">Luxury Transportation</span> at Lake of the Ozarks
             </motion.h1>
 
             {/* TypeWriter Subtitle */}
@@ -61,20 +59,13 @@ export default function HeroSection() {
                 text="Missouri's premier transportation service. Safe rides, good times."
                 delay={800}
                 speed={35}
-              />
-            </motion.p>
-
-            {/* Service highlights */}
-            <motion.p
-              className="text-center text-lg mb-8 text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto"
-              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 3.5 }}
-            >
-              Perfect for{' '}
-              <strong className="font-bold text-lrp-black dark:text-white">weddings</strong>,{' '}
-              <strong className="font-bold text-lrp-black dark:text-white">wine tours</strong>,{' '}
-              <strong className="font-bold text-lrp-black dark:text-white">bachelor parties</strong>, and special events.
+              />{' '}
+              <span className="inline">
+                Perfect for{' '}
+                <strong className="font-bold text-lrp-black dark:text-white">weddings</strong>,{' '}
+                <strong className="font-bold text-lrp-black dark:text-white">wine tours</strong>,{' '}
+                <strong className="font-bold text-lrp-black dark:text-white">bachelor parties</strong>, and special events.
+              </span>
             </motion.p>
 
             {/* Animated CTA Buttons */}
@@ -82,7 +73,7 @@ export default function HeroSection() {
               className="flex flex-col sm:flex-row gap-4 justify-center"
               initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 4 }}
+              transition={{ duration: 0.6, delay: 1.2 }}
             >
               <motion.button
                 onClick={() => setIsBookingOpen(true)}
@@ -110,7 +101,7 @@ export default function HeroSection() {
               className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-lrp-text-secondary dark:text-dark-text-secondary"
               initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 4.5 }}
+              transition={{ duration: 0.6, delay: 1.8 }}
             >
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
@@ -137,7 +128,7 @@ export default function HeroSection() {
               className="mt-16"
               initial={shouldReduceMotion ? undefined : { opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 5, duration: 1 }}
+              transition={{ delay: 2.5, duration: 1 }}
             >
               <motion.div
                 animate={shouldReduceMotion ? undefined : { y: [0, 10, 0] }}

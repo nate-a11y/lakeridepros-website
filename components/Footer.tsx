@@ -264,10 +264,10 @@ export default async function Footer() {
               <ul className="space-y-2">
                 <li>
                   <Link
-                    href="/careers/driver-application"
+                    href="/careers"
                     className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
                   >
-                    Driver Application
+                    Careers
                   </Link>
                 </li>
                 <li>

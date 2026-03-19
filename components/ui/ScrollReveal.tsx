@@ -30,12 +30,12 @@ export default function ScrollReveal({
   };
 
   if (shouldReduceMotion) {
-    return <div className={className}>{children}</div>;
+    return <div className={`h-full ${className ?? ""}`}>{children}</div>;
   }
 
   return (
     <motion.div
-      className={className}
+      className={`h-full ${className ?? ""}`}
       initial={{
         opacity: 0,
         ...directions[direction],

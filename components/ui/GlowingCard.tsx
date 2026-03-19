@@ -36,12 +36,12 @@ export default function GlowingCard({
       onMouseLeave={() => setIsHovered(false)}
       whileHover={shouldReduceMotion ? undefined : { y: -5 }}
       transition={{ duration: 0.3 }}
-      className={`relative overflow-hidden ${className}`}
+      className={`relative ${className}`}
     >
       {/* Mouse-following glow */}
       {isHovered && (
         <div
-          className="pointer-events-none absolute -inset-px transition-opacity duration-300"
+          className="pointer-events-none absolute -inset-px z-0 transition-opacity duration-300"
           style={{
             opacity: isHovered ? 1 : 0,
             background: `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, ${glowColor}, transparent 60%)`,
@@ -50,7 +50,7 @@ export default function GlowingCard({
       )}
       {/* Animated border gradient */}
       <div
-        className="pointer-events-none absolute -inset-px rounded-xl transition-opacity duration-500"
+        className="pointer-events-none absolute -inset-px z-0 rounded-xl transition-opacity duration-500"
         style={{
           opacity: isHovered ? 1 : 0,
           background: `radial-gradient(300px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(76, 187, 23, 0.4), transparent 60%)`,
@@ -61,7 +61,7 @@ export default function GlowingCard({
           borderRadius: "0.75rem",
         }}
       />
-      <div className="relative z-10">{children}</div>
+      {children}
     </motion.div>
   );
 }

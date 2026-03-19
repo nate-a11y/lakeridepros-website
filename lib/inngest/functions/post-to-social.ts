@@ -153,14 +153,16 @@ async function postToInstagram(post: BlogPost): Promise<{ id: string } | null> {
 }
 
 /**
- * Main Inngest function - runs every 5 minutes to check for posts to share
+ * Main Inngest function - disabled until social media integration is working
+ * Was: cron every 5 minutes (way too aggressive anyway)
+ * TODO: Re-enable with '0 */6 * * *' (every 6 hours) once social posting works
  */
 export const postBlogToSocial = inngest.createFunction(
   {
     id: 'post-blog-to-social',
-    name: 'Post Blog to Social Media',
+    name: 'Post Blog to Social Media (DISABLED)',
     retries: 3,
-    triggers: [{ cron: '*/5 * * * *' }],
+    triggers: [{ event: 'blog/auto-share.disabled' }],
   },
   async ({ step }) => {
     // Step 1: Find blog posts that need to be shared

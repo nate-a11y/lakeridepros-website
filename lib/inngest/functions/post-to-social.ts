@@ -155,7 +155,7 @@ async function postToInstagram(post: BlogPost): Promise<{ id: string } | null> {
 /**
  * Main Inngest function - disabled until social media integration is working
  * Was: cron every 5 minutes (way too aggressive anyway)
- * TODO: Re-enable with '0 */6 * * *' (every 6 hours) once social posting works
+ * TODO: Re-enable with cron '0 0,6,12,18 * * *' (every 6 hours) once social posting works
  */
 export const postBlogToSocial = inngest.createFunction(
   {

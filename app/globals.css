@@ -853,17 +853,18 @@ body[data-page="booking"] [class*="moovs-fab"] {
   z-index: 1000 !important;
 }
 
-/* Hide Moovs Customer Portal iframe that renders as a white box */
-iframe[src*="moovs"],
-iframe[title*="Moovs"],
-iframe[title*="moovs"] {
-  position: fixed !important;
-  bottom: 0 !important;
-  right: 0 !important;
+/* Hide Moovs Customer Portal iframe that renders as a white box.
+   Only target the portal iframe, not the FAB button iframe.
+   The portal iframe is not positioned fixed by Moovs, unlike the FAB. */
+iframe[src*="moovs"]:not([style*="position: fixed"]),
+iframe[title*="Moovs"]:not([style*="position: fixed"]),
+iframe[title*="moovs"]:not([style*="position: fixed"]) {
   width: 0 !important;
   height: 0 !important;
   border: none !important;
   overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
 }
 
 /* Our modal should be above everything */

@@ -65,7 +65,6 @@ const nextConfig = {
       { source: '/wine-tour-shuttle', destination: '/services/wine-tour-shuttle', permanent: true },
       { source: '/bachelor-party-transportation', destination: '/services/bachelor-party-transportation', permanent: true },
       { source: '/old-kinderhook-transportation', destination: '/services/old-kinderhook-transportation', permanent: true },
-      { source: '/careers', destination: '/careers/driver-application', permanent: true },
       { source: '/admin', destination: '/studio', permanent: true },
       { source: '/services/airport-shuttle', destination: '/services/airport-transfers', permanent: true },
       { source: '/services/bachelor-bachelorette-transportation', destination: '/services/bachelor-party-transportation', permanent: true },

@@ -13,6 +13,10 @@ export async function POST(request: NextRequest) {
       howDidYouHear,
       aboutYourself,
       workExperience,
+      socialFacebook,
+      socialInstagram,
+      socialX,
+      socialTikTok,
       turnstileToken,
       resumeBase64,
       resumeFileName,
@@ -118,6 +122,17 @@ export async function POST(request: NextRequest) {
         <tr>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-weight: bold; color: #060606;">How They Heard About Us</td>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; color: #333333;">${escapeHtml(howDidYouHear)}</td>
+        </tr>
+        ` : ''}
+        ${socialFacebook || socialInstagram || socialX || socialTikTok ? `
+        <tr>
+          <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-weight: bold; color: #060606; vertical-align: top;">Social Media</td>
+          <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; color: #333333;">
+            ${socialFacebook ? `Facebook: ${escapeHtml(socialFacebook)}<br/>` : ''}
+            ${socialInstagram ? `Instagram: ${escapeHtml(socialInstagram)}<br/>` : ''}
+            ${socialX ? `X: ${escapeHtml(socialX)}<br/>` : ''}
+            ${socialTikTok ? `TikTok: ${escapeHtml(socialTikTok)}` : ''}
+          </td>
         </tr>
         ` : ''}
       </table>

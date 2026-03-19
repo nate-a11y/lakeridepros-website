@@ -21,6 +21,10 @@ const applicationSchema = z.object({
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   cityState: z.string().min(1, 'City, State is required').max(200),
   howDidYouHear: z.string().max(500).optional(),
+  socialFacebook: z.string().max(200).optional(),
+  socialInstagram: z.string().max(200).optional(),
+  socialX: z.string().max(200).optional(),
+  socialTikTok: z.string().max(200).optional(),
   aboutYourself: z.string().min(1, 'Please tell us about yourself').max(5000),
   workExperience: z.string().min(1, 'Please provide your work experience').max(5000),
 })
@@ -51,6 +55,10 @@ export default function GeneralApplicationPage() {
       phone: '',
       cityState: '',
       howDidYouHear: '',
+      socialFacebook: '',
+      socialInstagram: '',
+      socialX: '',
+      socialTikTok: '',
       aboutYourself: '',
       workExperience: '',
     },
@@ -337,6 +345,63 @@ export default function GeneralApplicationPage() {
                 className={`${inputBaseClass} ${inputNormalClass}`}
               />
             </div>
+
+            {/* Social Media Handles */}
+            <fieldset>
+              <legend className="block text-sm font-medium text-neutral-900 dark:text-white mb-3">
+                Social Media Handles <span className="text-lrp-text-secondary dark:text-dark-text-secondary font-normal">(optional)</span>
+              </legend>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="socialFacebook" className="block text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-1">
+                    Facebook
+                  </label>
+                  <input
+                    {...register('socialFacebook')}
+                    type="text"
+                    id="socialFacebook"
+                    placeholder="@yourname"
+                    className={`${inputBaseClass} ${inputNormalClass}`}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="socialInstagram" className="block text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-1">
+                    Instagram
+                  </label>
+                  <input
+                    {...register('socialInstagram')}
+                    type="text"
+                    id="socialInstagram"
+                    placeholder="@yourhandle"
+                    className={`${inputBaseClass} ${inputNormalClass}`}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="socialX" className="block text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-1">
+                    X (Twitter)
+                  </label>
+                  <input
+                    {...register('socialX')}
+                    type="text"
+                    id="socialX"
+                    placeholder="@yourhandle"
+                    className={`${inputBaseClass} ${inputNormalClass}`}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="socialTikTok" className="block text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-1">
+                    TikTok
+                  </label>
+                  <input
+                    {...register('socialTikTok')}
+                    type="text"
+                    id="socialTikTok"
+                    placeholder="@yourhandle"
+                    className={`${inputBaseClass} ${inputNormalClass}`}
+                  />
+                </div>
+              </div>
+            </fieldset>
 
             {/* Tell us about yourself */}
             <div>

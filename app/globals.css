@@ -853,6 +853,19 @@ body[data-page="booking"] [class*="moovs-fab"] {
   z-index: 1000 !important;
 }
 
+/* Hide Moovs Customer Portal iframe that renders as a white box */
+iframe[src*="moovs"],
+iframe[title*="Moovs"],
+iframe[title*="moovs"] {
+  position: fixed !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+
 /* Our modal should be above everything */
 .booking-modal-overlay {
   z-index: 9999 !important;

@@ -785,96 +785,9 @@ input[type="checkbox"].h-4 {
   }
 }
 
-/* Hide Moovs FAB on the dedicated booking page */
-body[data-page="booking"] #moovs-fab-button,
-body[data-page="booking"] [id*="moovs"],
-body[data-page="booking"] [class*="moovs-fab"] {
-  display: none !important;
-}
-
-/* Force Moovs buttons to match Lake Ride Pros branding with accessible contrast */
-/* Target both FAB and widget buttons */
-#moovs-fab-button,
-#moovs-widget-button,
-[id*="moovs-fab"],
-[class*="moovs-fab"],
-.moovs-widget-button {
-  background-color: #1a5c1f !important;
-  background: #1a5c1f !important;
-  color: #ffffff !important;
-}
-
-/* Only target buttons within the Moovs FAB container, not all fixed positioned divs */
-#moovs-fab-button > *,
-#moovs-widget-button > *,
-[id*="moovs-fab"] > button,
-[class*="moovs-fab"] > button,
-.moovs-widget-button > * {
-  background-color: #1a5c1f !important;
-  background: #1a5c1f !important;
-  color: #ffffff !important;
-}
-
-#moovs-fab-button:hover,
-#moovs-widget-button:hover,
-[id*="moovs-fab"]:hover,
-[class*="moovs-fab"]:hover,
-.moovs-widget-button:hover {
-  background-color: #237a28 !important;
-  background: #237a28 !important;
-  box-shadow: 0 0 20px rgba(26, 92, 31, 0.4) !important;
-}
-
-/* Override any inline styles Moovs might use */
-#moovs-fab-button[style],
-#moovs-widget-button[style],
-.moovs-widget-button[style],
-[id*="moovs"][style] {
-  background-color: #1a5c1f !important;
-  color: #ffffff !important;
-}
-
-/* If Moovs buttons have SVG or text, ensure it's visible on green */
-#moovs-fab-button svg,
-#moovs-fab-button span,
-#moovs-widget-button svg,
-#moovs-widget-button span,
-.moovs-widget-button svg,
-.moovs-widget-button span,
-[id*="moovs-fab"] svg,
-[id*="moovs-fab"] span {
-  color: white !important;
-  fill: white !important;
-}
-
-/* Ensure Moovs FAB has proper z-index but below our modal */
-#moovs-fab-button,
-[id*="moovs-fab"] {
-  z-index: 1000 !important;
-}
-
-/* Hide Moovs Customer Portal iframe that renders as a white box.
-   Only target the portal iframe, not the FAB button iframe.
-   The portal iframe is not positioned fixed by Moovs, unlike the FAB. */
-iframe[src*="moovs"]:not([style*="position: fixed"]),
-iframe[title*="Moovs"]:not([style*="position: fixed"]),
-iframe[title*="moovs"]:not([style*="position: fixed"]) {
-  width: 0 !important;
-  height: 0 !important;
-  border: none !important;
-  overflow: hidden !important;
-  position: absolute !important;
-  left: -9999px !important;
-}
-
 /* Our modal should be above everything */
 .booking-modal-overlay {
   z-index: 9999 !important;
-}
-
-/* Nuclear option: hide ALL fixed position elements in bottom-right when modal is open */
-body.modal-open [style*="position: fixed"][style*="bottom"][style*="right"]:not(.booking-modal):not(.booking-modal *) {
-  display: none !important;
 }
 
 /* ===========================

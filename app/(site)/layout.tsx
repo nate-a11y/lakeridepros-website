@@ -1,6 +1,5 @@
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { CartProvider } from "@/contexts/CartContext";
-import { MoovsWidget } from "@/components/MoovsWidget";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
@@ -36,7 +35,6 @@ export default function SiteLayout({
           </main>
           <Footer />
           <CartDrawer />
-          <MoovsWidget />
           <PhoneModal />
           <BackToTop />
           <FloatingCTA />

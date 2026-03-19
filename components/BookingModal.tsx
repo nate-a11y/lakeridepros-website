@@ -2,7 +2,6 @@
 
 import { useEffect, memo } from 'react'
 import FocusTrap from 'focus-trap-react'
-import { useMoovsFAB } from '@/hooks/useMoovsFAB'
 import { useHasMounted } from '@/hooks/useHasMounted'
 
 interface BookingModalProps {
@@ -12,9 +11,6 @@ interface BookingModalProps {
 
 export const BookingModal = memo(function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const mounted = useHasMounted()
-
-  // Hide Moovs FAB when modal is open
-  useMoovsFAB(isOpen)
 
   useEffect(() => {
     if (typeof window === 'undefined') return

@@ -1,6 +1,7 @@
 'use client';
 
 import { Calendar, CheckCircle, Clock, Smile } from 'lucide-react';
+import ScrollReveal from './ui/ScrollReveal';
 
 interface Step {
   number: number;
@@ -43,17 +44,19 @@ export default function HowItWorks() {
       className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2
-            id="how-it-works-heading"
-            className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
-          >
-            How Lake Ride Pros Works
-          </h2>
-          <p className="text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-            Book professional transportation in four simple steps
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <h2
+              id="how-it-works-heading"
+              className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
+            >
+              How Lake Ride Pros Works
+            </h2>
+            <p className="text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
+              Book professional transportation in four simple steps
+            </p>
+          </div>
+        </ScrollReveal>
 
         <div className="relative">
           {/* Connection Line - Desktop */}
@@ -61,10 +64,13 @@ export default function HowItWorks() {
 
           <div className="grid md:grid-cols-4 gap-8">
             {steps.map((step, index) => (
-              <div
+              <ScrollReveal
                 key={step.number}
+                delay={index * 0.15}
+                direction="up"
+              >
+              <div
                 className="relative group"
-                style={{ animationDelay: `${index * 150}ms` }}
               >
                 {/* Step Card */}
                 <div className="text-center">
@@ -114,6 +120,7 @@ export default function HowItWorks() {
                   </div>
                 )}
               </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>

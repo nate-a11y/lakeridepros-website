@@ -8,6 +8,7 @@ import { getMediaUrl } from '@/lib/api/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { ChevronRight } from 'lucide-react';
 import { BookingModal } from './BookingModal';
+import ScrollReveal from './ui/ScrollReveal';
 
 interface ServicesShowcaseProps {
   services: Service[];
@@ -33,24 +34,26 @@ export default function ServicesShowcase({
         className="py-16 bg-white dark:bg-dark-bg-primary transition-colors"
       >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2
-            id="services-showcase-heading"
-            className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
-          >
-            {title}
-          </h2>
-          <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-            {subtitle}
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <h2
+              id="services-showcase-heading"
+              className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
+            >
+              {title}
+            </h2>
+            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
+              {subtitle}
+            </p>
+          </div>
+        </ScrollReveal>
 
         {/* Services Grid Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* All Services as Cards */}
-          {services.map((service) => (
+          {services.map((service, index) => (
+            <ScrollReveal key={service._id} delay={index * 0.1} direction="up">
             <div
-              key={service._id}
               className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
               style={{ width: '100%' }}
             >
@@ -109,6 +112,7 @@ export default function ServicesShowcase({
                 </div>
               </div>
             </div>
+            </ScrollReveal>
           ))}
         </div>
 

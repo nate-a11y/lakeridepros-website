@@ -1,6 +1,8 @@
 'use client';
 
 import { ShieldCheck, MapPin, Award, ClipboardCheck, HeartPulse } from 'lucide-react';
+import ScrollReveal from './ui/ScrollReveal';
+import GlowingCard from './ui/GlowingCard';
 
 interface Reason {
   title: string;
@@ -49,25 +51,28 @@ export default function WhyChooseUs() {
       className="py-16 bg-white dark:bg-dark-bg-primary transition-colors"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2
-            id="why-choose-us-heading"
-            className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
-          >
-            Why Lake Ride Pros?
-          </h2>
-          <p className="text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-            We're not Uber. We're not a national chain. We're Lake Ozarks locals who've built our reputation one ride at a time.
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <h2
+              id="why-choose-us-heading"
+              className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
+            >
+              Why Lake Ride Pros?
+            </h2>
+            <p className="text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
+              We're not Uber. We're not a national chain. We're Lake Ozarks locals who've built our reputation one ride at a time.
+            </p>
+          </div>
+        </ScrollReveal>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {reasons.map((reason, index) => (
-            <div
+            <ScrollReveal
               key={reason.title}
-              className="group relative"
-              style={{ animationDelay: `${index * 100}ms` }}
+              delay={index * 0.1}
+              direction={index % 2 === 0 ? "up" : "up"}
             >
+              <GlowingCard className="group relative h-full">
               {/* Card */}
               <div className="relative h-full bg-neutral-50 dark:bg-dark-bg-secondary p-8 rounded-2xl transition-all duration-500 hover:shadow-xl overflow-hidden">
                 {/* Gradient accent on hover */}
@@ -102,7 +107,8 @@ export default function WhyChooseUs() {
                   <div className={`h-full bg-gradient-to-r ${reason.accentColor} transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-700 delay-100`} />
                 </div>
               </div>
-            </div>
+              </GlowingCard>
+            </ScrollReveal>
           ))}
         </div>
       </div>

@@ -217,6 +217,35 @@
   /* Custom animations */
   --animate-fadeIn: fadeIn 0.5s ease-in;
   --animate-slideUp: slideUp 0.6s ease-out;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-shimmer-text: shimmer-text 4s linear infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(76, 187, 23, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(76, 187, 23, 0.35);
+  }
+}
+
+@keyframes shimmer-text {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes gradient-rotate {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
 }
 
 @keyframes fadeIn {
@@ -275,6 +304,12 @@
   100% {
     transform: translateX(-75%);
   }
+}
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 
 /* Dark mode support - green pops even more on dark! */
@@ -664,6 +699,67 @@ input[type="checkbox"].h-4 {
       var(--primary-alpha-10) 10px,
       var(--primary-alpha-10) 20px
     );
+  }
+
+  /* Chrome metallic text with animated green shimmer */
+  .text-chrome {
+    background: linear-gradient(
+      90deg,
+      #3a8e11 0%,
+      #4cbb17 20%,
+      #90ee90 40%,
+      #60e421 45%,
+      #ffffff 50%,
+      #60e421 55%,
+      #4cbb17 60%,
+      #5cd91f 80%,
+      #3a8e11 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer-text 4s linear infinite;
+  }
+
+  /* Green glow box shadow utilities */
+  .shadow-green-glow {
+    box-shadow: 0 0 20px rgba(76, 187, 23, 0.3), 0 0 60px rgba(76, 187, 23, 0.1);
+  }
+
+  .shadow-green-glow-lg {
+    box-shadow: 0 0 40px rgba(76, 187, 23, 0.4), 0 0 80px rgba(76, 187, 23, 0.15);
+  }
+
+  /* Animated gradient border */
+  .border-gradient-animated {
+    position: relative;
+    border: none !important;
+  }
+
+  .border-gradient-animated::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--gradient-angle, 0deg),
+      transparent 30%,
+      #4cbb17 50%,
+      transparent 70%
+    );
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    animation: gradient-rotate 4s linear infinite;
+    pointer-events: none;
+  }
+
+  /* Subtle background grid pattern */
+  .bg-grid-pattern {
+    background-image: radial-gradient(circle, rgba(76, 187, 23, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 
   .stagger-fade-in {

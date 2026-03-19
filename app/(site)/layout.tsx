@@ -6,6 +6,9 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import { PhoneModal } from "@/components/PhoneModal";
 import ParadeMusicBanner from "@/components/ParadeMusicBanner";
+import ScrollProgress from "@/components/ui/ScrollProgress";
+import BackToTop from "@/components/ui/BackToTop";
+import FloatingCTA from "@/components/ui/FloatingCTA";
 
 export default function SiteLayout({
   children,
@@ -22,6 +25,7 @@ export default function SiteLayout({
         themes={['light', 'dark', 'high-contrast-light', 'high-contrast-dark']}
       >
         <CartProvider>
+          <ScrollProgress />
           <a href="#main-content" className="skip-link">
             Skip to main content
           </a>
@@ -34,6 +38,8 @@ export default function SiteLayout({
           <CartDrawer />
           <MoovsWidget />
           <PhoneModal />
+          <BackToTop />
+          <FloatingCTA />
         </CartProvider>
       </ThemeProvider>
     </div>

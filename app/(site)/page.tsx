@@ -16,6 +16,7 @@ import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schema
 import { getPopularServicesLocal } from '@/lib/analytics-server';
 
 // Lazy load below-fold components to reduce initial main thread work
+const StatsBar = nextDynamic(() => import('@/components/StatsBar'));
 const SpotifyEmbed = nextDynamic(() => import('@/components/SpotifyEmbed'));
 const ServicesShowcase = nextDynamic(() => import('@/components/ServicesShowcase'));
 const FeaturedVehiclesSection = nextDynamic(() => import('@/components/FeaturedVehiclesSection'));
@@ -150,6 +151,9 @@ export default async function HomePage() {
 
       {/* Hero Section with Booking Modal */}
       <HeroSection />
+
+      {/* Animated Stats Bar */}
+      <StatsBar />
 
       {/* Booking Widget Section */}
       <section id="booking" className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">

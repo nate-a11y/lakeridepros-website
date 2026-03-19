@@ -6,6 +6,8 @@ import type { Service } from '@/types/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { TrendingUp, ChevronRight } from 'lucide-react';
 import { BookingModal } from './BookingModal';
+import ScrollReveal from './ui/ScrollReveal';
+import GlowingCard from './ui/GlowingCard';
 
 interface PopularServicesRankingProps {
   services: Service[];
@@ -31,30 +33,30 @@ export default function PopularServicesRanking({
         className="py-16 bg-white dark:bg-dark-bg-primary transition-colors"
       >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <TrendingUp className="w-4 h-4" />
-            Trending Now
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <TrendingUp className="w-4 h-4" />
+              Trending Now
+            </div>
+            <h2
+              id="popular-services-heading"
+              className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
+            >
+              {title}
+            </h2>
+            {subtitle && (
+              <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
+                {subtitle}
+              </p>
+            )}
           </div>
-          <h2
-            id="popular-services-heading"
-            className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
-          >
-            {title}
-          </h2>
-          {subtitle && (
-            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-              {subtitle}
-            </p>
-          )}
-        </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
-            <div
-              key={service._id}
-              className="group relative"
-            >
+            <ScrollReveal key={service._id} delay={index * 0.1} direction="up">
+            <GlowingCard className="group relative h-full">
               {/* Gradient border effect */}
               <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-primary-light rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm" />
 
@@ -117,7 +119,8 @@ export default function PopularServicesRanking({
                   </div>
                 )}
               </div>
-            </div>
+            </GlowingCard>
+            </ScrollReveal>
           ))}
         </div>
       </div>

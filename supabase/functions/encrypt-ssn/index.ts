@@ -158,12 +158,17 @@ serve(async (req) => {
       )
     }
 
-    // Get encryption key from Supabase Vault
-    // In production, use: const encryptionKey = Deno.env.get('SSN_ENCRYPTION_KEY')!
-    const encryptionKey = Deno.env.get('SSN_ENCRYPTION_KEY') || 'default-dev-key-change-in-production'
-
-    if (!encryptionKey || encryptionKey === 'default-dev-key-change-in-production') {
-      console.warn('WARNING: Using default encryption key. Set SSN_ENCRYPTION_KEY in Supabase Vault!')
+    // Get encryption key from Supabase Vault — required, no fallback
+    const encryptionKey = Deno.env.get('SSN_ENCRYPTION_KEY')
+    if (!encryptionKey) {
+      console.error('SSN_ENCRYPTION_KEY environment variable is not configured')
+      return new Response(
+        JSON.stringify({ error: 'Server misconfiguration' }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
     }
 
     // Encrypt SSN

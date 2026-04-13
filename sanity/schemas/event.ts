@@ -24,6 +24,20 @@ export default defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'eventType',
+      title: 'Event Type',
+      type: 'string',
+      description: 'Category used to filter events in the navigation',
+      initialValue: 'concert',
+      options: {
+        list: [
+          {title: 'Concert', value: 'concert'},
+          {title: 'Tour', value: 'tour'},
+          {title: 'Special Event', value: 'special'},
+        ],
+      },
+    }),
+    defineField({
       name: 'venue',
       title: 'Venue',
       type: 'reference',

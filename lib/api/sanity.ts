@@ -67,10 +67,13 @@ export interface Venue {
   [key: string]: any
 }
 
+export type EventType = 'concert' | 'tour' | 'special'
+
 export interface Event {
   _id: string
   name: string
   slug: string
+  eventType?: EventType
   venue: Venue | string
   date: string
   time?: string

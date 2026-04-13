@@ -602,6 +602,7 @@ const eventProjection = `
   _type,
   name,
   slug,
+  eventType,
   venue-> {
     _id,
     name,

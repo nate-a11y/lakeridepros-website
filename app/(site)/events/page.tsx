@@ -1,36 +1,100 @@
-import { getUpcomingEvents, getVenues } from '@/lib/api/sanity'
+import { getUpcomingEvents, getVenues, type Event, type EventType } from '@/lib/api/sanity'
 import Link from 'next/link'
 import EventCalendarClient from '@/components/EventCalendarClient'
 
-export const metadata = {
-  title: 'Upcoming Event Ride Availability in Missouri | Lake Ride Pros',
-  description: 'Check ride availability for upcoming concerts and events across Missouri — Lake of the Ozarks, Kansas City, Sedalia, and more. Book transportation to OAMP, Lazy Gators, Encore, T-Mobile Center, Missouri State Fair, and other top venues.',
-  openGraph: {
-    title: 'Upcoming Event Ride Availability in Missouri | Lake Ride Pros',
-    description: 'Check ride availability for upcoming concerts and events across Missouri — Lake of the Ozarks, Kansas City, Sedalia, and more. Book transportation to OAMP, Lazy Gators, Encore, T-Mobile Center, and other top venues.',
-    url: 'https://www.lakeridepros.com/events',
-    siteName: 'Lake Ride Pros',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Event Ride Availability' }],
-    locale: 'en_US',
-    type: 'website',
+const EVENT_TYPE_COPY: Record<
+  EventType | 'all',
+  { heading: string; subheading: string; metaTitle: string; metaDescription: string }
+> = {
+  all: {
+    heading: 'Upcoming Event Availability',
+    subheading: 'Check ride availability for upcoming events at venues across Missouri.',
+    metaTitle: 'Upcoming Event Ride Availability in Missouri | Lake Ride Pros',
+    metaDescription:
+      'Check ride availability for upcoming concerts, tours, and special events across Missouri — Lake of the Ozarks, Kansas City, Sedalia, and more.',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Upcoming Event Ride Availability in Missouri | Lake Ride Pros',
-    description: 'Check ride availability for upcoming concerts and events across Missouri — Lake of the Ozarks, Kansas City, Sedalia, and more.',
-    images: ['/og-image.jpg'],
+  concert: {
+    heading: 'Upcoming Concerts',
+    subheading: 'Ride availability for upcoming concerts at venues across Missouri.',
+    metaTitle: 'Concert Ride Availability in Missouri | Lake Ride Pros',
+    metaDescription:
+      'Check ride availability for upcoming concerts across Missouri — OAMP, Lazy Gators, Encore, T-Mobile Center, and more.',
   },
+  tour: {
+    heading: 'Upcoming Tours',
+    subheading: 'Ride availability for upcoming tours across Missouri.',
+    metaTitle: 'Tour Ride Availability in Missouri | Lake Ride Pros',
+    metaDescription:
+      'Check ride availability for upcoming tours across Missouri with Lake Ride Pros transportation.',
+  },
+  special: {
+    heading: 'Upcoming Special Events',
+    subheading: 'Ride availability for upcoming special events across Missouri.',
+    metaTitle: 'Special Event Ride Availability in Missouri | Lake Ride Pros',
+    metaDescription:
+      'Check ride availability for upcoming special events across Missouri with Lake Ride Pros transportation.',
+  },
+}
+
+function normalizeType(value: string | string[] | undefined): EventType | 'all' {
+  const raw = Array.isArray(value) ? value[0] : value
+  if (raw === 'concert' || raw === 'tour' || raw === 'special') return raw
+  return 'all'
+}
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>
+}) {
+  const params = await searchParams
+  const type = normalizeType(params?.type)
+  const copy = EVENT_TYPE_COPY[type]
+  const url =
+    type === 'all'
+      ? 'https://www.lakeridepros.com/events'
+      : `https://www.lakeridepros.com/events?type=${type}`
+
+  return {
+    title: copy.metaTitle,
+    description: copy.metaDescription,
+    openGraph: {
+      title: copy.metaTitle,
+      description: copy.metaDescription,
+      url,
+      siteName: 'Lake Ride Pros',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Event Ride Availability' }],
+      locale: 'en_US',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: copy.metaTitle,
+      description: copy.metaDescription,
+      images: ['/og-image.jpg'],
+    },
+  }
 }
 
 export const dynamic = 'force-dynamic'
 
-export default async function EventsPage() {
+export default async function EventsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>
+}) {
+  const params = await searchParams
+  const type = normalizeType(params?.type)
+  const copy = EVENT_TYPE_COPY[type]
+
   const [events, venuesResponse] = await Promise.all([
     getUpcomingEvents(),
     getVenues(),
   ])
 
   const venues = venuesResponse.docs || []
+  const filteredEvents: Event[] =
+    type === 'all' ? events : events.filter((event) => event.eventType === type)
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -38,10 +102,10 @@ export default async function EventsPage() {
       <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-center">
-            Upcoming Event Availability
+            {copy.heading}
           </h1>
           <p className="text-xl text-white/90 max-w-3xl mx-auto text-center mb-6">
-            Check ride availability for upcoming events at venues across Missouri.
+            {copy.subheading}
           </p>
           <div className="flex justify-center">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
@@ -55,6 +119,38 @@ export default async function EventsPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Category Tabs */}
+      <section className="bg-white dark:bg-dark-bg-primary border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav aria-label="Event categories" className="flex flex-wrap gap-2 py-4">
+            {(
+              [
+                { value: 'all', label: 'All Events', href: '/events' },
+                { value: 'concert', label: 'Concerts', href: '/events?type=concert' },
+                { value: 'tour', label: 'Tours', href: '/events?type=tour' },
+                { value: 'special', label: 'Special Events', href: '/events?type=special' },
+              ] as const
+            ).map((tab) => {
+              const active = tab.value === type
+              return (
+                <Link
+                  key={tab.value}
+                  href={tab.href}
+                  aria-current={active ? 'page' : undefined}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                    active
+                      ? 'bg-primary text-black'
+                      : 'bg-gray-100 dark:bg-dark-bg-secondary text-lrp-black dark:text-white hover:bg-primary/20'
+                  }`}
+                >
+                  {tab.label}
+                </Link>
+              )
+            })}
+          </nav>
         </div>
       </section>
 
@@ -87,7 +183,7 @@ export default async function EventsPage() {
       </section>
 
       {/* Client Component with Filters and Event Display */}
-      <EventCalendarClient events={events} venues={venues} />
+      <EventCalendarClient events={filteredEvents} venues={venues} />
 
       {/* CTA Section */}
       <section className="bg-lrp-green py-16">

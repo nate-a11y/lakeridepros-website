@@ -8,13 +8,14 @@ import ThemeToggle from './ThemeToggle';
 import { BookingModal } from './BookingModal';
 import CartIcon from '@/components/cart/CartIcon';
 
-type DropdownType = 'services' | 'partners' | 'shop' | 'about' | 'social';
+type DropdownType = 'services' | 'partners' | 'shop' | 'events' | 'about' | 'social';
 type DropdownState = Record<DropdownType, boolean>;
 
 const initialDropdownState: DropdownState = {
   services: false,
   partners: false,
   shop: false,
+  events: false,
   about: false,
   social: false,
 };
@@ -157,7 +158,18 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
         { name: 'Insider Membership', href: '/insider-membership-benefits' },
       ]
     },
-    { name: 'Events', href: '/events' },
+    {
+      name: 'Events',
+      href: '/events',
+      hasDropdown: true,
+      dropdownType: 'events',
+      dropdownItems: [
+        { name: 'All Events', href: '/events' },
+        { name: 'Concerts', href: '/events?type=concert' },
+        { name: 'Tours', href: '/events?type=tour' },
+        { name: 'Special Events', href: '/events?type=special' },
+      ]
+    },
     {
       name: 'Learn More',
       href: '/about-us',
@@ -297,6 +309,23 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                   {item.dropdownType === 'shop' && dropdowns.shop && (
                     <div className="absolute top-full left-0 pt-2 z-50">
                     <div role="menu" aria-label="Shop & Perks submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
+                      {item.dropdownItems?.map((dropdownItem) => (
+                        <Link
+                          key={dropdownItem.name}
+                          href={dropdownItem.href}
+                          role="menuitem"
+                          className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
+                        >
+                          {dropdownItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                    </div>
+                  )}
+
+                  {item.dropdownType === 'events' && dropdowns.events && (
+                    <div className="absolute top-full left-0 pt-2 z-50">
+                    <div role="menu" aria-label="Events submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
                       {item.dropdownItems?.map((dropdownItem) => (
                         <Link
                           key={dropdownItem.name}

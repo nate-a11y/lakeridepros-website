@@ -136,6 +136,14 @@ export default defineType({
       readOnly: true,
       hidden: true,
     }),
+    defineField({
+      name: 'supabaseImageId',
+      title: 'Supabase Image ID',
+      type: 'number',
+      description: 'Tracks the Supabase media.id last synced. Empty means the image was set manually in Studio and should not be overwritten by portal uploads.',
+      readOnly: true,
+      hidden: true,
+    }),
   ],
   preview: {
     select: {

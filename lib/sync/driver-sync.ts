@@ -14,6 +14,77 @@ const SANITY_API_URL = `https://${SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01`
 const SYNCED_FIELDS = ['name', 'bio', 'active', 'display_on_website', 'role', 'vehicles', 'assignment_number'] as const
 
 /**
+ * Fetch a `media` row from Supabase so we can resolve an `image_id` to a public URL + MIME type.
+ * Returns null on any failure (RLS denial, missing row, network) — image sync is best-effort.
+ */
+async function fetchMediaRow(mediaId: number): Promise<{ url: string; mime_type: string } | null> {
+  if (!SUPABASE_SERVICE_KEY) return null
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/media?id=eq.${mediaId}&select=url,mime_type`,
+    {
+      headers: {
+        apikey: SUPABASE_SERVICE_KEY,
+        Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+      },
+    },
+  )
+  if (!res.ok) return null
+  const rows = (await res.json()) as Array<{ url: string; mime_type: string }>
+  return rows[0] ?? null
+}
+
+/**
+ * Download an image from Supabase Storage and upload it to Sanity's asset API.
+ * Returns the new Sanity asset `_id` (e.g., "image-<hash>-<wxh>-<ext>") or null on failure.
+ */
+async function uploadImageToSanity(url: string, mimeType: string): Promise<string | null> {
+  const imgRes = await fetch(url)
+  if (!imgRes.ok) {
+    console.error(`[Driver Sync] Failed to download image: ${imgRes.status} ${url}`)
+    return null
+  }
+  const buf = await imgRes.arrayBuffer()
+
+  const uploadRes = await fetch(`${SANITY_API_URL}/assets/images/${SANITY_DATASET}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': mimeType || 'image/jpeg',
+      Authorization: `Bearer ${SANITY_WRITE_TOKEN}`,
+    },
+    body: buf,
+  })
+
+  if (!uploadRes.ok) {
+    const text = await uploadRes.text()
+    console.error(`[Driver Sync] Sanity asset upload failed: ${uploadRes.status} ${text}`)
+    return null
+  }
+
+  const data = (await uploadRes.json()) as { document?: { _id?: string } }
+  return data.document?._id ?? null
+}
+
+/**
+ * Decide whether to sync a Supabase image into Sanity.
+ * Rules:
+ *   - No Supabase image     → skip (nothing to do)
+ *   - Sanity has no image   → sync (fill the empty slot)
+ *   - Sanity has image but no `supabaseImageId` → skip (manually curated, preserve it)
+ *   - Sanity has image + `supabaseImageId` matching current → skip (already synced)
+ *   - Sanity has image + `supabaseImageId` differing → sync (portal uploaded a new photo)
+ */
+function shouldSyncImage(
+  supabaseImageId: number | null | undefined,
+  existingHasImage: boolean,
+  existingSupabaseImageId: number | null | undefined,
+): boolean {
+  if (supabaseImageId == null) return false
+  if (!existingHasImage) return true
+  if (existingSupabaseImageId == null) return false
+  return existingSupabaseImageId !== supabaseImageId
+}
+
+/**
  * Sanity → Supabase: Called when a driverProfile is created or updated in Sanity Studio.
  * Updates or inserts only the display fields in Supabase.
  */
@@ -168,8 +239,10 @@ export async function syncSupabaseDriverToSanity(supabaseDriver: Record<string, 
     return
   }
 
-  // Find existing Sanity profile by supabaseId
-  const query = encodeURIComponent(`*[_type=="driverProfile" && supabaseId=="${driverId}"][0]{_id, lastSyncSource}`)
+  // Find existing Sanity profile by supabaseId (include image state for image-sync decision)
+  const query = encodeURIComponent(
+    `*[_type=="driverProfile" && supabaseId=="${driverId}"][0]{_id, lastSyncSource, supabaseImageId, "hasImage": defined(image.asset)}`,
+  )
   const queryRes = await fetch(`${SANITY_API_URL}/data/query/${SANITY_DATASET}?query=${query}`, {
     headers: { Authorization: `Bearer ${SANITY_WRITE_TOKEN}` },
   })
@@ -218,6 +291,22 @@ export async function syncSupabaseDriverToSanity(supabaseDriver: Record<string, 
     if (supabaseDriver.role) newDoc.role = supabaseDriver.role
     if (supabaseDriver.vehicles) newDoc.vehicles = supabaseDriver.vehicles
     if (supabaseDriver.assignment_number) newDoc.assignmentNumber = supabaseDriver.assignment_number
+
+    // Populate profile image from Supabase media table if available
+    const imageId = (supabaseDriver.image_id as number | null | undefined) ?? null
+    if (imageId != null) {
+      const media = await fetchMediaRow(imageId)
+      if (media?.url) {
+        const assetRef = await uploadImageToSanity(media.url, media.mime_type)
+        if (assetRef) {
+          newDoc.image = {
+            _type: 'image',
+            asset: { _type: 'reference', _ref: assetRef },
+          }
+          newDoc.supabaseImageId = imageId
+        }
+      }
+    }
 
     const mutRes = await fetch(`${SANITY_API_URL}/data/mutate/${SANITY_DATASET}`, {
       method: 'POST',
@@ -279,6 +368,29 @@ export async function syncSupabaseDriverToSanity(supabaseDriver: Record<string, 
   if (supabaseDriver.role !== undefined) sanityUpdate.role = supabaseDriver.role
   if (supabaseDriver.vehicles !== undefined) sanityUpdate.vehicles = supabaseDriver.vehicles
   if (supabaseDriver.assignment_number !== undefined) sanityUpdate.assignmentNumber = supabaseDriver.assignment_number
+
+  // Sync profile image if Sanity is missing one or the portal uploaded a new one.
+  // Manually-curated Sanity images (no supabaseImageId) are preserved.
+  const imageId = (supabaseDriver.image_id as number | null | undefined) ?? null
+  if (
+    shouldSyncImage(
+      imageId,
+      Boolean(existingProfile.hasImage),
+      existingProfile.supabaseImageId as number | null | undefined,
+    )
+  ) {
+    const media = await fetchMediaRow(imageId as number)
+    if (media?.url) {
+      const assetRef = await uploadImageToSanity(media.url, media.mime_type)
+      if (assetRef) {
+        sanityUpdate.image = {
+          _type: 'image',
+          asset: { _type: 'reference', _ref: assetRef },
+        }
+        sanityUpdate.supabaseImageId = imageId
+      }
+    }
+  }
 
   // Generate slug from name if name changed
   if (sanityUpdate.name) {

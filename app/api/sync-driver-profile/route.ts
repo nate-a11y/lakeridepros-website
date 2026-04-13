@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     // For UPDATEs, only sync if display-relevant fields changed
     if (type === 'UPDATE') {
       const oldRecord = payload.old_record || {}
-      const displayFields = ['name', 'bio', 'active', 'display_on_website', 'role', 'vehicles', 'assignment_number']
+      const displayFields = ['name', 'bio', 'active', 'display_on_website', 'role', 'vehicles', 'assignment_number', 'image_id']
       const hasDisplayFieldChange = displayFields.some(
         field => JSON.stringify(record[field]) !== JSON.stringify(oldRecord[field])
       )

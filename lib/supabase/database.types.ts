@@ -182,6 +182,108 @@ export interface Database {
         }
         Relationships: []
       }
+      giveaways: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          description: string | null
+          prize_description: string | null
+          social_post_url: string | null
+          start_date: string
+          end_date: string
+          active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          description?: string | null
+          prize_description?: string | null
+          social_post_url?: string | null
+          start_date: string
+          end_date: string
+          active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title?: string
+          description?: string | null
+          prize_description?: string | null
+          social_post_url?: string | null
+          start_date?: string
+          end_date?: string
+          active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      giveaway_entries: {
+        Row: {
+          id: string
+          giveaway_id: string
+          name: string
+          email: string
+          phone: string
+          address_line1: string
+          address_line2: string | null
+          city: string
+          state: string
+          zip: string
+          has_used_service: boolean
+          has_app: boolean | null
+          knows_apple_music: boolean
+          knows_spotify: boolean
+          is_winner: boolean
+          winner_selected_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          giveaway_id: string
+          name: string
+          email: string
+          phone: string
+          address_line1: string
+          address_line2?: string | null
+          city: string
+          state: string
+          zip: string
+          has_used_service: boolean
+          has_app?: boolean | null
+          knows_apple_music?: boolean
+          knows_spotify?: boolean
+          is_winner?: boolean
+          winner_selected_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          giveaway_id?: string
+          name?: string
+          email?: string
+          phone?: string
+          address_line1?: string
+          address_line2?: string | null
+          city?: string
+          state?: string
+          zip?: string
+          has_used_service?: boolean
+          has_app?: boolean | null
+          knows_apple_music?: boolean
+          knows_spotify?: boolean
+          is_winner?: boolean
+          winner_selected_at?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       audit_log: {
         Row: {
           id: string

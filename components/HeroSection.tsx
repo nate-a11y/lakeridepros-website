@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import ParticleField from './ui/ParticleField'
@@ -115,6 +116,30 @@ export default function HeroSection() {
                 </svg>
                 <span>AED & Stop the Bleed Trained</span>
               </div>
+            </motion.div>
+
+            {/* Powered By */}
+            <motion.div
+              className="mt-12 flex justify-center"
+              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 2.1 }}
+            >
+              <Link
+                href="/local-premier-partners/legacy-real-estate-group"
+                className="group flex flex-col items-center gap-2"
+              >
+                <span className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
+                  Powered by
+                </span>
+                <Image
+                  src="https://cdn.sanity.io/images/1hcdphjr/production/20de425c0da23174b563da7bfe1499ae7dbc7923-1024x762.webp"
+                  alt="Legacy Real Estate Group"
+                  width={200}
+                  height={149}
+                  className="h-auto w-40 transition-opacity group-hover:opacity-80"
+                />
+              </Link>
             </motion.div>
 
             {/* Scroll Indicator */}

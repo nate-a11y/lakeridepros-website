@@ -451,7 +451,6 @@ export default function GiveawaysAdminPage() {
                 value={pwd}
                 onChange={(e) => setPwd(e.target.value)}
                 required
-                autoFocus
                 className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary"
                 placeholder="Enter admin password"
               />
@@ -707,10 +706,11 @@ function EditView({
 
       <form onSubmit={onSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+          <label htmlFor="giveaway-title" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
             Title *
           </label>
           <input
+            id="giveaway-title"
             type="text"
             required
             value={form.title}
@@ -721,10 +721,11 @@ function EditView({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+          <label htmlFor="giveaway-slug" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
             URL Slug *
           </label>
           <input
+            id="giveaway-slug"
             type="text"
             required
             value={form.slug}
@@ -739,10 +740,11 @@ function EditView({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+          <label htmlFor="giveaway-prize" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
             Prize / Tagline
           </label>
           <input
+            id="giveaway-prize"
             type="text"
             value={form.prize_description}
             onChange={(e) => setForm((f) => ({ ...f, prize_description: e.target.value }))}
@@ -752,10 +754,11 @@ function EditView({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+          <label htmlFor="giveaway-description" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
             Description
           </label>
           <textarea
+            id="giveaway-description"
             rows={4}
             value={form.description}
             onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
@@ -765,10 +768,11 @@ function EditView({
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+          <label htmlFor="giveaway-social-post-url" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
             Social Post URL (the post they should like)
           </label>
           <input
+            id="giveaway-social-post-url"
             type="url"
             value={form.social_post_url}
             onChange={(e) => setForm((f) => ({ ...f, social_post_url: e.target.value }))}
@@ -779,10 +783,11 @@ function EditView({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+            <label htmlFor="giveaway-start-date" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
               Start Date *
             </label>
             <input
+              id="giveaway-start-date"
               type="datetime-local"
               required
               value={form.start_date}
@@ -791,10 +796,11 @@ function EditView({
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
+            <label htmlFor="giveaway-end-date" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
               End Date *
             </label>
             <input
+              id="giveaway-end-date"
               type="datetime-local"
               required
               value={form.end_date}

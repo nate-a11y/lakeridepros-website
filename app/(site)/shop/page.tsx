@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ShopClient from './ShopClient'
-import type { Product } from '@/types/sanity'
 import { getProducts } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {

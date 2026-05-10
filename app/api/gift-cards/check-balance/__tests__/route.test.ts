@@ -2,7 +2,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { POST } from '../route'
 import { NextRequest } from 'next/server'
 
-const mockFetch = vi.fn()
+const { mockFetch } = vi.hoisted(() => ({
+  mockFetch: vi.fn(),
+}))
 
 vi.mock('@/sanity/lib/client', () => ({
   writeClient: {

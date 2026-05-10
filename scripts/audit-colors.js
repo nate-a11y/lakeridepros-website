@@ -53,6 +53,7 @@ const SKIP_FILES = [
 // Paths to skip (email templates can't use CSS variables - they're HTML strings)
 const SKIP_PATHS = [
   '/api/email/',
+  '/api/careers/general-application/route.ts',
   '/lib/email.ts',
   '/lib/notifications/',
 ];

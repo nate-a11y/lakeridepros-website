@@ -59,6 +59,14 @@ const eslintConfig = defineConfig([
         },
       ],
       "@next/next/no-img-element": "warn",
+
+      // React Compiler lint rules introduced by newer Next/ESLint are too noisy for
+      // the current codebase; keep the existing React Hooks safety rules active while
+      // avoiding broad refactors during dependency maintenance.
+      "react-hooks/set-state-in-effect": "off",
+      "react-hooks/refs": "off",
+      "react-hooks/purity": "off",
+      "react-hooks/immutability": "off",
       "@typescript-eslint/ban-ts-comment": [
         "error",
         {
@@ -66,6 +74,13 @@ const eslintConfig = defineConfig([
           minimumDescriptionLength: 10,
         },
       ],
+    },
+  },
+
+  {
+    files: ["**/__tests__/**/*.{ts,tsx}", "**/*.test.{ts,tsx}"],
+    rules: {
+      "@next/next/no-html-link-for-pages": "off",
     },
   },
 ]);

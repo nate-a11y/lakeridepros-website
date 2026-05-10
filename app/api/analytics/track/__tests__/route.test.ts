@@ -3,11 +3,17 @@ import { POST } from '../route'
 import { NextRequest } from 'next/server'
 
 // Mock Sanity client
-const mockFetch = vi.fn()
-const mockCreate = vi.fn()
-const mockCommit = vi.fn()
-const mockSet = vi.fn().mockReturnValue({ commit: mockCommit })
-const mockPatch = vi.fn().mockReturnValue({ set: mockSet })
+const { mockFetch, mockCreate, mockCommit, mockSet, mockPatch } = vi.hoisted(() => {
+  const mockCommit = vi.fn()
+  const mockSet = vi.fn().mockReturnValue({ commit: mockCommit })
+  return {
+    mockFetch: vi.fn(),
+    mockCreate: vi.fn(),
+    mockCommit,
+    mockSet,
+    mockPatch: vi.fn().mockReturnValue({ set: mockSet }),
+  }
+})
 
 vi.mock('@/sanity/lib/client', () => ({
   writeClient: {

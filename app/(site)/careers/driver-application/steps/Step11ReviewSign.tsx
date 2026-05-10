@@ -70,7 +70,6 @@ export default function Step11ReviewSign({ onPrevious }: Step11ReviewSignProps) 
   // This is intentionally impure (time-based) for anti-bot protection
   const getTimeSinceLoad = () => {
     if (!formLoadTime.current) return 10000 // Default to valid time if not set
-    // eslint-disable-next-line react-hooks/purity -- Intentional: anti-bot timing check
     return performance.now() - formLoadTime.current
   }
 

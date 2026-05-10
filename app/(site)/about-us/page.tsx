@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
@@ -165,9 +166,11 @@ export default function AboutUsPage() {
               <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
                 <div className="flex flex-col md:flex-row items-center gap-6">
                   <div className="flex-shrink-0">
-                    <img
+                    <Image
                       src="https://dhwnlzborisjihhauchp.supabase.co/storage/v1/object/public/media/1769395379565-1000010589.webp"
                       alt="First Aid, CPR, AED, and Stop the Bleed Certified"
+                      width={128}
+                      height={128}
                       className="w-32 h-32 object-contain"
                     />
                   </div>

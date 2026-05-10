@@ -11,7 +11,7 @@ function getStripe() {
     throw new Error('STRIPE_SECRET_KEY is not set')
   }
   return new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2026-02-25.clover',
+    apiVersion: '2026-04-22.dahlia',
   })
 }
 
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Build line items
-    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [
+    const lineItems: Exclude<NonNullable<Parameters<typeof stripe.checkout.sessions.create>[0]>['line_items'], undefined> = [
       {
         price_data: {
           currency: 'usd',

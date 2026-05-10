@@ -3,8 +3,10 @@ import { POST } from '../route'
 import { NextRequest } from 'next/server'
 
 // Create shared mocks
-const mockConstructEvent = vi.fn()
-const mockRetrieve = vi.fn()
+const { mockConstructEvent, mockRetrieve } = vi.hoisted(() => ({
+  mockConstructEvent: vi.fn(),
+  mockRetrieve: vi.fn(),
+}))
 
 // Mock Stripe
 vi.mock('stripe', () => {
@@ -29,15 +31,21 @@ vi.mock('@/lib/email', () => ({
   sendOwnerGiftCardNotification: vi.fn().mockResolvedValue(true),
 }))
 
-const mockCreate = vi.fn().mockResolvedValue({
-  _id: 'test-id',
-  orderNumber: 'ORD-123456',
-  total: 100.00,
-  code: 'GC-ABC123',
+const { mockCreate, mockPatch } = vi.hoisted(() => {
+  const mockCommit = vi.fn().mockResolvedValue({})
+  const mockSet = vi.fn().mockReturnValue({ commit: mockCommit })
+  return {
+    mockCreate: vi.fn().mockResolvedValue({
+      _id: 'test-id',
+      orderNumber: 'ORD-123456',
+      total: 100.00,
+      code: 'GC-ABC123',
+    }),
+    mockCommit,
+    mockSet,
+    mockPatch: vi.fn().mockReturnValue({ set: mockSet }),
+  }
 })
-const mockCommit = vi.fn().mockResolvedValue({})
-const mockSet = vi.fn().mockReturnValue({ commit: mockCommit })
-const mockPatch = vi.fn().mockReturnValue({ set: mockSet })
 
 vi.mock('@/sanity/lib/client', () => ({
   writeClient: {

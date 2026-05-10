@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import Script from 'next/script'
 
 interface ChargebeePricingTableProps {
@@ -21,7 +21,7 @@ export function ChargebeePricingTable({
 }: ChargebeePricingTableProps) {
   const initialized = useRef(false)
 
-  const initializePricingTable = async () => {
+  const initializePricingTable = useCallback(async () => {
     if (initialized.current) return
     if (typeof window === 'undefined' || !window.Chargebee) return
 
@@ -33,14 +33,14 @@ export function ChargebeePricingTable({
     } catch (error) {
       console.error('Failed to initialize Chargebee pricing table:', error)
     }
-  }
+  }, [site])
 
   useEffect(() => {
     // If script is already loaded, initialize immediately
     if (window.Chargebee) {
       initializePricingTable()
     }
-  }, [])
+  }, [initializePricingTable])
 
   return (
     <>

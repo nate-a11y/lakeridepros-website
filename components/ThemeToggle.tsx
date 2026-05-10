@@ -122,6 +122,13 @@ export default function ThemeToggle() {
     }
   }, [focusedIndex, isOpen]);
 
+  const handleThemeSelect = useCallback((value: string) => {
+    setTheme(value);
+    setIsOpen(false);
+    setFocusedIndex(-1);
+    buttonRef.current?.focus();
+  }, [setTheme]);
+
   // Handle keyboard navigation
   const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
@@ -146,14 +153,7 @@ export default function ThemeToggle() {
         handleThemeSelect(themeOptions[focusedIndex].value);
       }
     }
-  }, [focusedIndex]);
-
-  const handleThemeSelect = (value: string) => {
-    setTheme(value);
-    setIsOpen(false);
-    setFocusedIndex(-1);
-    buttonRef.current?.focus();
-  };
+  }, [focusedIndex, handleThemeSelect]);
 
   if (!mounted) {
     return (

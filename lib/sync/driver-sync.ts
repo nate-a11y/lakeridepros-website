@@ -11,7 +11,7 @@ const SANITY_WRITE_TOKEN = process.env.SANITY_API_WRITE_TOKEN || ''
 const SANITY_API_URL = `https://${SANITY_PROJECT_ID}.api.sanity.io/v2024-01-01`
 
 // Display fields that are synced between systems
-const SYNCED_FIELDS = ['name', 'bio', 'active', 'display_on_website', 'role', 'vehicles', 'assignment_number'] as const
+const _SYNCED_FIELDS = ['name', 'bio', 'active', 'display_on_website', 'role', 'vehicles', 'assignment_number'] as const
 
 /**
  * Fetch a `media` row from Supabase so we can resolve an `image_id` to a public URL + MIME type.

@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useApplication } from '../context/ApplicationContext'
@@ -61,7 +61,8 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch
+    getValues,
+    control
   } = useForm<PersonalInfoFormData>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
@@ -81,7 +82,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
   })
 
   // Format SSN as user types
-  const ssnValue = watch('ssn')
+  const ssnValue = useWatch({ control, name: 'ssn' })
   useEffect(() => {
     if (ssnValue && !ssnMasked) {
       const cleaned = ssnValue.replace(/\D/g, '')
@@ -104,7 +105,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
 
   // Mask SSN on blur (show last 4 digits only)
   const handleSSNBlur = () => {
-    const ssn = watch('ssn')
+    const ssn = getValues('ssn')
     if (ssn && ssn.replace(/\D/g, '').length === 9) {
       const cleaned = ssn.replace(/\D/g, '')
       setFullSSN(cleaned) // Store full SSN before masking
@@ -116,7 +117,7 @@ export default function Step1Personal({ onNext }: Step1PersonalProps) {
 
   // Unmask SSN on focus
   const handleSSNFocus = () => {
-    const ssn = watch('ssn')
+    const ssn = getValues('ssn')
     if (ssnMasked && ssn.startsWith('XXX-XX-')) {
       setValue('ssn', '')
       setSSNMasked(false)

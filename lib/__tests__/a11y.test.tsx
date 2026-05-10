@@ -66,6 +66,7 @@ describe('Accessibility - Component Patterns', () => {
 
   it('images should have alt text', async () => {
     const { container } = render(
+      // eslint-disable-next-line @next/next/no-img-element -- Intentional fixture for image alt-text accessibility test.
       <img src="/logo.png" alt="Lake Ride Pros Logo" width={100} height={50} />
     )
 
@@ -75,6 +76,7 @@ describe('Accessibility - Component Patterns', () => {
 
   it('decorative images can have empty alt', async () => {
     const { container } = render(
+      // eslint-disable-next-line @next/next/no-img-element -- Intentional fixture for decorative image accessibility test.
       <img src="/decorative.png" alt="" role="presentation" width={100} height={50} />
     )
 

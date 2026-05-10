@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 export interface CartItem {
   productId: string
@@ -14,6 +14,32 @@ export interface CartItem {
   image: string
   imageAlt: string
   personalization?: string
+}
+
+const memoryStorage = (() => {
+  const store = new Map<string, string>()
+
+  return {
+    getItem: (name: string) => store.get(name) ?? null,
+    setItem: (name: string, value: string) => {
+      store.set(name, value)
+    },
+    removeItem: (name: string) => {
+      store.delete(name)
+    },
+  }
+})()
+
+function getCartStorage() {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return window.localStorage
+    }
+  } catch {
+    // Fall back below when localStorage exists but is disabled/unavailable.
+  }
+
+  return memoryStorage
 }
 
 interface CartState {
@@ -88,6 +114,7 @@ export const useCart = create<CartState>()(
     }),
     {
       name: 'lrp-cart-storage', // localStorage key
+      storage: createJSONStorage(getCartStorage),
       skipHydration: true, // Prevent automatic hydration on SSR
     }
   )

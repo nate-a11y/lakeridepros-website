@@ -12,7 +12,7 @@ interface GlowingCardProps {
 export default function GlowingCard({
   children,
   className = "",
-  glowColor = "rgba(76, 187, 23, 0.12)",
+  glowColor = "var(--primary-alpha-12)",
 }: GlowingCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -53,7 +53,7 @@ export default function GlowingCard({
         className="pointer-events-none absolute -inset-px z-0 rounded-xl transition-opacity duration-500"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(300px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(76, 187, 23, 0.4), transparent 60%)`,
+          background: `radial-gradient(300px circle at ${mousePosition.x}px ${mousePosition.y}px, var(--primary-alpha-40), transparent 60%)`,
           mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           maskComposite: "exclude",
           WebkitMaskComposite: "xor",

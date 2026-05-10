@@ -12,11 +12,16 @@ export function formatPrice(price: number): string {
 }
 
 export function formatDate(date: string | Date): string {
+  const parsedDate =
+    typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)
+      ? new Date(`${date}T00:00:00`)
+      : new Date(date);
+
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(new Date(date));
+  }).format(parsedDate);
 }
 
 export function truncateText(text: string, maxLength: number): string {

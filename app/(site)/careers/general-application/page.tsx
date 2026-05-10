@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { CheckCircle, Upload, X } from 'lucide-react'
@@ -45,7 +45,7 @@ export default function GeneralApplicationPage() {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
+    control,
   } = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
@@ -64,7 +64,7 @@ export default function GeneralApplicationPage() {
     },
   })
 
-  const selectedPositions = watch('positions')
+  const selectedPositions = useWatch({ control, name: 'positions' })
 
   const handlePositionChange = (position: string) => {
     const current = selectedPositions || []

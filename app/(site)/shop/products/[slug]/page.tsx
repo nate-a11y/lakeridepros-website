@@ -3,7 +3,6 @@ import Link from 'next/link'
 import ProductActions from './ProductActions'
 import { Metadata } from 'next'
 import { getProductBySlug, getMediaUrl } from '@/lib/api/sanity'
-import type { Product } from '@/types/sanity'
 
 interface ProductPageProps {
   params: Promise<{

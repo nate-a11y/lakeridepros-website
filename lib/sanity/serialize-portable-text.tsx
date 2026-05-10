@@ -118,6 +118,5 @@ export function RichText({ content, overrides }: RichTextProps) {
     ? { ...components, ...overrides }
     : components
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return <PortableText value={content as any} components={mergedComponents} />
 }

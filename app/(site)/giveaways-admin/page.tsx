@@ -6,6 +6,21 @@ import { Giveaway, GiveawayEntry, GiveawayWithCount } from '@/lib/supabase/givea
 const STORAGE_KEY = 'giveaway_admin_pwd';
 
 type View = 'list' | 'edit' | 'entries';
+type WinnerVideoStatus = 'queued' | 'rendering' | 'succeeded' | 'failed';
+
+interface WinnerVideoJob {
+  id: string;
+  giveaway_id: string;
+  winner_entry_id: string | null;
+  status: WinnerVideoStatus;
+  storage_path: string | null;
+  error_message: string | null;
+  requested_at: string;
+  started_at: string | null;
+  completed_at: string | null;
+  created_at: string;
+}
+
 
 interface FormState {
   slug: string;
@@ -51,6 +66,9 @@ export default function GiveawaysAdminPage() {
   const [winner, setWinner] = useState<GiveawayEntry | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinningName, setSpinningName] = useState('');
+  const [winnerVideoJob, setWinnerVideoJob] = useState<WinnerVideoJob | null>(null);
+  const [videoGenerating, setVideoGenerating] = useState(false);
+  const [videoDownloading, setVideoDownloading] = useState(false);
 
   const callApi = useCallback(
     async (payload: Record<string, unknown>) => {
@@ -219,6 +237,7 @@ export default function GiveawaysAdminPage() {
     setView('entries');
     setEntries([]);
     setWinner(null);
+    setWinnerVideoJob(null);
     setEntriesLoading(true);
     try {
       const json = await callApi({ action: 'list_entries', giveaway_id: g.id });
@@ -226,6 +245,8 @@ export default function GiveawaysAdminPage() {
       setEntries(list);
       const existingWinner = list.find((e) => e.is_winner);
       if (existingWinner) setWinner(existingWinner);
+      const jobJson = await callApi({ action: 'get_winner_video', giveaway_id: g.id });
+      setWinnerVideoJob(jobJson.job || null);
     } catch (err) {
       if (err instanceof Error && err.message !== 'unauthorized') {
         setGlobalError(err.message);
@@ -257,6 +278,7 @@ export default function GiveawaysAdminPage() {
       // Wait for the visual spin to finish
       await new Promise((r) => setTimeout(r, totalIterations * 100));
       setWinner(json.winner);
+      setWinnerVideoJob(null);
       setSpinningName('');
       // Refresh entries to reflect winner state
       const refreshed = await callApi({
@@ -279,6 +301,7 @@ export default function GiveawaysAdminPage() {
     try {
       await callApi({ action: 'clear_winner', giveaway_id: activeGiveaway.id });
       setWinner(null);
+      setWinnerVideoJob(null);
       const refreshed = await callApi({
         action: 'list_entries',
         giveaway_id: activeGiveaway.id,
@@ -288,6 +311,73 @@ export default function GiveawaysAdminPage() {
       if (err instanceof Error && err.message !== 'unauthorized') {
         setGlobalError(err.message);
       }
+    }
+  };
+
+  const refreshWinnerVideo = useCallback(async () => {
+    if (!activeGiveaway) return;
+    try {
+      const json = await callApi({ action: 'get_winner_video', giveaway_id: activeGiveaway.id });
+      setWinnerVideoJob(json.job || null);
+    } catch (err) {
+      if (err instanceof Error && err.message !== 'unauthorized') {
+        setGlobalError(err.message);
+      }
+    }
+  }, [activeGiveaway, callApi]);
+
+  useEffect(() => {
+    if (view !== 'entries' || !winnerVideoJob) return;
+    if (winnerVideoJob.status !== 'queued' && winnerVideoJob.status !== 'rendering') return;
+
+    const timer = setInterval(() => {
+      refreshWinnerVideo();
+    }, 3500);
+
+    return () => clearInterval(timer);
+  }, [view, winnerVideoJob, refreshWinnerVideo]);
+
+  const generateWinnerVideo = async () => {
+    if (!activeGiveaway || !winner || videoGenerating) return;
+    setVideoGenerating(true);
+    setGlobalError(null);
+    try {
+      const json = await callApi({
+        action: 'create_winner_video',
+        giveaway_id: activeGiveaway.id,
+      });
+      setWinnerVideoJob(json.job);
+    } catch (err) {
+      if (err instanceof Error && err.message !== 'unauthorized') {
+        setGlobalError(err.message);
+      }
+    } finally {
+      setVideoGenerating(false);
+    }
+  };
+
+  const downloadWinnerVideo = async () => {
+    if (!winnerVideoJob || videoDownloading) return;
+    setVideoDownloading(true);
+    setGlobalError(null);
+    try {
+      const json = await callApi({
+        action: 'get_winner_video_download_url',
+        job_id: winnerVideoJob.id,
+      });
+      const a = document.createElement('a');
+      a.href = json.url;
+      a.download = activeGiveaway ? `lrp-winner-${activeGiveaway.slug}.mp4` : 'lrp-winner-video.mp4';
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      if (err instanceof Error && err.message !== 'unauthorized') {
+        setGlobalError(err.message);
+      }
+    } finally {
+      setVideoDownloading(false);
     }
   };
 
@@ -463,6 +553,12 @@ export default function GiveawaysAdminPage() {
             spinningName={spinningName}
             onPickWinner={pickWinner}
             onClearWinner={clearWinner}
+            winnerVideoJob={winnerVideoJob}
+            videoGenerating={videoGenerating}
+            videoDownloading={videoDownloading}
+            onGenerateWinnerVideo={generateWinnerVideo}
+            onDownloadWinnerVideo={downloadWinnerVideo}
+            onRefreshWinnerVideo={refreshWinnerVideo}
             onExportCsv={exportCsv}
           />
         )}
@@ -754,6 +850,12 @@ function EntriesView({
   spinningName,
   onPickWinner,
   onClearWinner,
+  winnerVideoJob,
+  videoGenerating,
+  videoDownloading,
+  onGenerateWinnerVideo,
+  onDownloadWinnerVideo,
+  onRefreshWinnerVideo,
   onExportCsv,
 }: {
   giveaway: GiveawayWithCount;
@@ -764,6 +866,12 @@ function EntriesView({
   spinningName: string;
   onPickWinner: () => void;
   onClearWinner: () => void;
+  winnerVideoJob: WinnerVideoJob | null;
+  videoGenerating: boolean;
+  videoDownloading: boolean;
+  onGenerateWinnerVideo: () => void;
+  onDownloadWinnerVideo: () => void;
+  onRefreshWinnerVideo: () => void;
   onExportCsv: () => void;
 }) {
   return (
@@ -830,6 +938,57 @@ function EntriesView({
           </div>
         )}
       </section>
+
+      {winner && (
+        <section className="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-lg p-6 mb-6 border border-neutral-200 dark:border-dark-border">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-1">
+                Recording-Safe Winner Video
+              </h3>
+              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
+                Generates a vertical MP4 with LRP branding and winner name only — no personal info.
+              </p>
+              {winnerVideoJob && (
+                <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-2">
+                  Status: <span className="font-semibold uppercase">{winnerVideoJob.status}</span>
+                  {winnerVideoJob.error_message ? ` — ${winnerVideoJob.error_message}` : ''}
+                </p>
+              )}
+            </div>
+            <div className="flex gap-3 flex-wrap">
+              <button
+                onClick={onGenerateWinnerVideo}
+                disabled={videoGenerating || winnerVideoJob?.status === 'queued' || winnerVideoJob?.status === 'rendering'}
+                className="bg-primary hover:bg-primary-dark text-lrp-black font-semibold py-3 px-5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {videoGenerating || winnerVideoJob?.status === 'queued' || winnerVideoJob?.status === 'rendering'
+                  ? 'Generating...'
+                  : winnerVideoJob?.status === 'succeeded'
+                    ? 'Regenerate Video'
+                    : 'Generate Winner Video'}
+              </button>
+              {winnerVideoJob?.status === 'succeeded' && (
+                <button
+                  onClick={onDownloadWinnerVideo}
+                  disabled={videoDownloading}
+                  className="bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 font-semibold py-3 px-5 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {videoDownloading ? 'Preparing...' : 'Download MP4'}
+                </button>
+              )}
+              {winnerVideoJob && winnerVideoJob.status !== 'succeeded' && (
+                <button
+                  onClick={onRefreshWinnerVideo}
+                  className="bg-neutral-100 dark:bg-dark-bg-primary hover:bg-neutral-200 dark:hover:bg-dark-border text-neutral-700 dark:text-dark-text-primary font-semibold py-3 px-5 rounded-lg transition-colors"
+                >
+                  Refresh
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-lg border border-neutral-200 dark:border-dark-border overflow-hidden">
         <div className="px-6 py-4 border-b border-neutral-200 dark:border-dark-border flex justify-between items-center">

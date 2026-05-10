@@ -2,6 +2,7 @@ import { serve } from 'inngest/next'
 import { inngest } from '@/lib/inngest/client'
 import { syncPrintifyProducts } from '@/lib/inngest/functions/sync-printify'
 import { postBlogToSocial, sharePostNow } from '@/lib/inngest/functions/post-to-social'
+import { generateWinnerVideo } from '@/lib/inngest/functions/generate-winner-video'
 
 // Create the Inngest API handler with all functions
 export const { GET, POST, PUT } = serve({
@@ -10,5 +11,6 @@ export const { GET, POST, PUT } = serve({
     syncPrintifyProducts,
     postBlogToSocial,
     sharePostNow,
+    generateWinnerVideo,
   ],
 })

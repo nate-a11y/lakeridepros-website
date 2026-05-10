@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServerClient } from '@/lib/supabase/client';
 import { giveawayUpsertSchema } from '@/lib/validation/giveaways';
+import { inngest } from '@/lib/inngest/client';
+import { createWinnerVideoJob, getLatestWinnerVideoJob, getWinnerVideoSignedUrl } from '@/lib/giveaways/winner-video';
 
 type AdminAction =
   | { action: 'auth'; password: string }
@@ -10,7 +12,10 @@ type AdminAction =
   | { action: 'delete_giveaway'; password: string; id: string }
   | { action: 'list_entries'; password: string; giveaway_id: string }
   | { action: 'select_winner'; password: string; giveaway_id: string }
-  | { action: 'clear_winner'; password: string; giveaway_id: string };
+  | { action: 'clear_winner'; password: string; giveaway_id: string }
+  | { action: 'create_winner_video'; password: string; giveaway_id: string }
+  | { action: 'get_winner_video'; password: string; giveaway_id: string }
+  | { action: 'get_winner_video_download_url'; password: string; job_id: string };
 
 function checkAuth(password: string): boolean {
   const expected = process.env.GIVEAWAY_ADMIN_PASSWORD;
@@ -210,6 +215,29 @@ export async function POST(request: NextRequest) {
 
         if (error) throw error;
         return NextResponse.json({ ok: true }, { status: 200 });
+      }
+
+
+      case 'create_winner_video': {
+        const job = await createWinnerVideoJob(body.giveaway_id);
+        await inngest.send({
+          name: 'giveaway/winner-video.generate',
+          data: {
+            jobId: job.id,
+            giveawayId: body.giveaway_id,
+          },
+        });
+        return NextResponse.json({ job }, { status: 200 });
+      }
+
+      case 'get_winner_video': {
+        const job = await getLatestWinnerVideoJob(body.giveaway_id);
+        return NextResponse.json({ job }, { status: 200 });
+      }
+
+      case 'get_winner_video_download_url': {
+        const url = await getWinnerVideoSignedUrl(body.job_id);
+        return NextResponse.json({ url }, { status: 200 });
       }
 
       default:

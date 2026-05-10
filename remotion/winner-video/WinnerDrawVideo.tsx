@@ -1,7 +1,9 @@
 import React from 'react';
 import {
   AbsoluteFill,
+  Audio,
   Img,
+  Sequence,
   interpolate,
   spring,
   staticFile,
@@ -142,6 +144,42 @@ export function WinnerDrawVideo({
         overflow: 'hidden',
       }}
     >
+      <Sequence from={58} durationInFrames={172}>
+        <Audio
+          src={staticFile('audio/lrp-draw-riser.wav')}
+          volume={(audioFrame) =>
+            interpolate(audioFrame, [0, 18, 135, 172], [0, 0.36, 0.36, 0], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            })
+          }
+        />
+      </Sequence>
+
+      <Sequence from={207} durationInFrames={38}>
+        <Audio
+          src={staticFile('audio/lrp-winner-hit.wav')}
+          volume={(audioFrame) =>
+            interpolate(audioFrame, [0, 3, 30, 38], [0, 0.95, 0.72, 0], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            })
+          }
+        />
+      </Sequence>
+
+      <Sequence from={214} durationInFrames={86}>
+        <Audio
+          src={staticFile('audio/lrp-crowd-cheer.wav')}
+          volume={(audioFrame) =>
+            interpolate(audioFrame, [0, 8, 66, 86], [0, 0.82, 0.72, 0], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            })
+          }
+        />
+      </Sequence>
+
       <div
         style={{
           position: 'absolute',

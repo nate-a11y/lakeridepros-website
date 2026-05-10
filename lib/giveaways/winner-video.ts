@@ -10,6 +10,7 @@ interface WinnerVideoData {
   giveaway: Giveaway;
   winner: GiveawayEntry;
   entryCount: number;
+  entryNames: string[];
 }
 
 export async function getLatestWinnerVideoJob(giveawayId: string) {
@@ -200,11 +201,22 @@ async function loadWinnerVideoData(jobId: string, giveawayId: string): Promise<W
 
   if (winnerErr) throw winnerErr;
 
+  const { data: entrantRows, error: entrantsErr } = await supabase
+    .from('giveaway_entries')
+    .select('name')
+    .eq('giveaway_id', giveawayId)
+    .order('created_at', { ascending: true });
+
+  if (entrantsErr) throw entrantsErr;
+
   return {
     job: typedJob,
     giveaway: giveaway as Giveaway,
     winner: winner as GiveawayEntry,
     entryCount: countResult.count || 0,
+    entryNames: (entrantRows || [])
+      .map((entry) => entry.name)
+      .filter((name): name is string => Boolean(name && name.trim())),
   };
 }
 
@@ -214,6 +226,7 @@ function buildWinnerDrawProps(data: WinnerVideoData): WinnerDrawVideoProps {
     prizeDescription: data.giveaway.prize_description || 'Concert Ticket Giveaway',
     winnerName: data.winner.name,
     entryCount: data.entryCount,
+    entryNames: data.entryNames,
     drawDate: data.winner.winner_selected_at || data.job.requested_at,
     brand: 'lake-ride-pros',
   };

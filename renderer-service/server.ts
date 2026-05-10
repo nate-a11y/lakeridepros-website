@@ -8,6 +8,8 @@ import { WINNER_DRAW_VIDEO_ID, type WinnerDrawVideoProps } from '../remotion/win
 
 const PORT = Number(process.env.PORT || 8080);
 
+let bundledServeUrlPromise: Promise<string> | null = null;
+
 interface RenderRequest {
   jobId: string;
   inputProps: WinnerDrawVideoProps;
@@ -34,14 +36,7 @@ function validateProps(props: WinnerDrawVideoProps) {
 }
 
 async function renderMp4(inputProps: WinnerDrawVideoProps, jobId: string) {
-  const entryPoint = path.resolve(process.cwd(), 'remotion/winner-video/index.ts');
-  const publicDir = path.resolve(process.cwd(), 'public');
-  const serveUrl = await bundle({
-    entryPoint,
-    publicDir,
-    onProgress: (progress) => console.log(`Bundle ${Math.round(progress * 100)}%`),
-    ignoreRegisterRootWarning: true,
-  });
+  const serveUrl = await getBundledServeUrl();
 
   const composition = await selectComposition({
     serveUrl,
@@ -59,13 +54,24 @@ async function renderMp4(inputProps: WinnerDrawVideoProps, jobId: string) {
     inputProps: inputProps as unknown as Record<string, unknown>,
     overwrite: true,
     crf: 20,
-    concurrency: Number(process.env.REMOTION_CONCURRENCY || 2),
+    concurrency: Number(process.env.REMOTION_CONCURRENCY || 4),
     timeoutInMilliseconds: 240000,
     chromiumOptions: { disableWebSecurity: true },
     logLevel: 'info',
   });
 
   return outputPath;
+}
+
+async function getBundledServeUrl() {
+  bundledServeUrlPromise ||= bundle({
+    entryPoint: path.resolve(process.cwd(), 'remotion/winner-video/index.ts'),
+    publicDir: path.resolve(process.cwd(), 'public'),
+    onProgress: (progress) => console.log(`Bundle ${Math.round(progress * 100)}%`),
+    ignoreRegisterRootWarning: true,
+  });
+
+  return bundledServeUrlPromise;
 }
 
 async function handleRender(req: http.IncomingMessage, res: http.ServerResponse) {

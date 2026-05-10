@@ -10,10 +10,13 @@ import {
 } from 'remotion';
 import type { WinnerDrawVideoProps } from './types';
 
+const black = '#050705';
+const lrpGreen = '#62b946';
+const brightGreen = '#7ee45a';
+const white = '#f7fff2';
+const mutedWhite = 'rgba(247,255,242,0.72)';
 const gold = '#d6a93a';
-const deepGold = '#a97a13';
-const black = '#080806';
-const cream = '#fff7e1';
+const deepGold = '#9f7419';
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -33,54 +36,65 @@ function seededNumber(seed: number, idx: number) {
   return x - Math.floor(x);
 }
 
-function EntryPill({ index, seed }: { index: number; seed: number }) {
+function fitName(name: string) {
+  if (name.length > 26) return 30;
+  if (name.length > 20) return 34;
+  return 39;
+}
+
+function EntryPill({ index, seed, names }: { index: number; seed: number; names: string[] }) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const appear = spring({ frame: frame - index * 3, fps, config: { damping: 18, stiffness: 80 } });
-  const n = Math.floor(seededNumber(seed, index) * 997) + 1;
-  const x = interpolate(seededNumber(seed, index + 100), [0, 1], [-110, 110]);
+  const appear = spring({ frame: frame - index * 2, fps, config: { damping: 20, stiffness: 90 } });
+  const cycleOffset = Math.floor(frame / 7) + index * 3;
+  const name = names.length > 0
+    ? names[(cycleOffset + Math.floor(seededNumber(seed, index) * names.length)) % names.length]
+    : `Entry ${index + 1}`;
   const y = index * 82;
-  const pulse = Math.sin((frame + index * 11) / 7) * 0.5 + 0.5;
+  const pulse = Math.sin((frame + index * 9) / 8) * 0.5 + 0.5;
 
   return (
     <div
       style={{
         position: 'absolute',
-        left: 110 + x,
-        top: 0 + y,
-        width: 860,
+        left: 74,
+        top: y,
+        width: 782,
         height: 62,
         borderRadius: 999,
-        border: `1px solid rgba(214, 169, 58, ${0.28 + pulse * 0.22})`,
-        background: `linear-gradient(90deg, rgba(255,255,255,${0.08 + pulse * 0.05}), rgba(214,169,58,${0.08 + pulse * 0.08}))`,
-        color: 'rgba(255,247,225,0.74)',
+        border: `1.5px solid rgba(98,185,70,${0.42 + pulse * 0.22})`,
+        background: `linear-gradient(90deg, rgba(98,185,70,${0.13 + pulse * 0.08}), rgba(0,0,0,0.62))`,
+        color: white,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 32px',
+        justifyContent: 'center',
+        padding: '0 34px',
         fontFamily: 'Inter, Arial, sans-serif',
-        fontSize: 26,
-        letterSpacing: 1.4,
-        opacity: clamp(appear, 0, 1) * 0.86,
-        transform: `translateY(${interpolate(frame % 90, [0, 90], [0, -90])}px) scale(${0.96 + clamp(appear, 0, 1) * 0.04})`,
-        filter: 'blur(0.2px)',
+        fontSize: fitName(name),
+        fontWeight: 800,
+        letterSpacing: 0.8,
+        opacity: clamp(appear, 0, 1) * 0.95,
+        transform: `translateY(${interpolate(frame % 82, [0, 82], [0, -82])}px) scale(${0.97 + clamp(appear, 0, 1) * 0.03})`,
+        boxShadow: `0 0 28px rgba(98,185,70,${0.08 + pulse * 0.12})`,
+        overflow: 'hidden',
+        textAlign: 'center',
+        whiteSpace: 'nowrap',
       }}
     >
-      <span>VERIFIED ENTRY</span>
-      <span>#{String(n).padStart(3, '0')}</span>
+      {name}
     </div>
   );
 }
 
 function ConfettiPiece({ index, seed }: { index: number; seed: number }) {
   const frame = useCurrentFrame();
-  const start = 336 + Math.floor(seededNumber(seed, index) * 35);
-  const progress = clamp((frame - start) / 110, 0, 1);
+  const start = 218 + Math.floor(seededNumber(seed, index) * 24);
+  const progress = clamp((frame - start) / 112, 0, 1);
   const x = seededNumber(seed, index + 1) * 1080;
-  const drift = interpolate(seededNumber(seed, index + 2), [0, 1], [-160, 160]);
-  const y = interpolate(progress, [0, 1], [-40, 1320 + seededNumber(seed, index + 3) * 600]);
+  const drift = interpolate(seededNumber(seed, index + 2), [0, 1], [-170, 170]);
+  const y = interpolate(progress, [0, 1], [-50, 1420 + seededNumber(seed, index + 3) * 540]);
   const rotate = interpolate(progress, [0, 1], [0, 720 + seededNumber(seed, index + 4) * 540]);
-  const colors = [gold, cream, '#ffffff', deepGold];
+  const colors = [gold, white, deepGold, '#fff4c4'];
   const color = colors[index % colors.length];
 
   return (
@@ -89,38 +103,14 @@ function ConfettiPiece({ index, seed }: { index: number; seed: number }) {
         position: 'absolute',
         left: x + drift * progress,
         top: y,
-        width: 12 + seededNumber(seed, index + 5) * 20,
-        height: 26 + seededNumber(seed, index + 6) * 24,
+        width: 12 + seededNumber(seed, index + 5) * 22,
+        height: 24 + seededNumber(seed, index + 6) * 26,
         background: color,
         borderRadius: 4,
-        opacity: progress === 0 ? 0 : interpolate(progress, [0, 0.12, 0.82, 1], [0, 1, 1, 0]),
+        opacity: progress === 0 ? 0 : interpolate(progress, [0, 0.12, 0.84, 1], [0, 1, 1, 0]),
         transform: `rotate(${rotate}deg)`,
       }}
     />
-  );
-}
-
-function PrivacyBadge() {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        bottom: 74,
-        left: 90,
-        right: 90,
-        borderRadius: 28,
-        border: '1px solid rgba(255,247,225,0.18)',
-        background: 'rgba(255,247,225,0.07)',
-        color: 'rgba(255,247,225,0.72)',
-        fontFamily: 'Inter, Arial, sans-serif',
-        fontSize: 25,
-        lineHeight: 1.35,
-        textAlign: 'center',
-        padding: '22px 28px',
-      }}
-    >
-      Recording-safe draw: only the winner name is shown.
-    </div>
   );
 }
 
@@ -129,23 +119,26 @@ export function WinnerDrawVideo({
   prizeDescription,
   winnerName,
   entryCount,
+  entryNames = [],
   drawDate,
 }: WinnerDrawVideoProps) {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const seed = hashString(`${giveawayTitle}:${winnerName}:${entryCount}:${drawDate}`);
-
-  const introOpacity = interpolate(frame, [0, 30, 105], [0, 1, 0.2], { extrapolateRight: 'clamp' });
-  const scanOpacity = interpolate(frame, [80, 115, 310, 348], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const reveal = spring({ frame: frame - 330, fps, config: { damping: 16, stiffness: 70 } });
-  const logoScale = interpolate(frame, [0, 50, 330, 370], [0.82, 1, 0.86, 0.92], { extrapolateRight: 'clamp' });
-  const scanLine = interpolate(frame % 70, [0, 70], [290, 1180]);
   const safeEntryCount = Math.max(0, Number.isFinite(entryCount) ? entryCount : 0);
+  const names = entryNames.length > 0 ? entryNames : [winnerName];
+  const revealStart = 210;
+
+  const introOpacity = interpolate(frame, [0, 15, 58, 86], [0, 1, 1, 0.22], { extrapolateRight: 'clamp' });
+  const scanOpacity = interpolate(frame, [60, 85, 195, 225], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const reveal = spring({ frame: frame - revealStart, fps, config: { damping: 16, stiffness: 72 } });
+  const logoScale = interpolate(frame, [0, 36, revealStart, revealStart + 36], [0.84, 1, 0.84, 0.9], { extrapolateRight: 'clamp' });
+  const scanLine = interpolate(frame % 62, [0, 62], [60, 760]);
 
   return (
     <AbsoluteFill
       style={{
-        background: `radial-gradient(circle at 50% 18%, rgba(214,169,58,0.30), transparent 36%), linear-gradient(180deg, #11100c 0%, ${black} 58%, #000 100%)`,
+        background: `radial-gradient(circle at 50% 12%, rgba(98,185,70,0.36), transparent 30%), linear-gradient(180deg, #071007 0%, ${black} 58%, #000 100%)`,
         overflow: 'hidden',
       }}
     >
@@ -154,74 +147,60 @@ export function WinnerDrawVideo({
           position: 'absolute',
           inset: -100,
           backgroundImage:
-            'linear-gradient(rgba(214,169,58,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(214,169,58,0.08) 1px, transparent 1px)',
-          backgroundSize: '72px 72px',
-          transform: `translateY(${-(frame % 72)}px)`,
-          opacity: 0.35,
+            'linear-gradient(rgba(98,185,70,0.075) 1px, transparent 1px), linear-gradient(90deg, rgba(98,185,70,0.075) 1px, transparent 1px)',
+          backgroundSize: '70px 70px',
+          transform: `translateY(${-(frame % 70)}px)`,
+          opacity: 0.42,
         }}
       />
 
       <div
         style={{
           position: 'absolute',
-          top: 86,
+          top: 46,
           left: 0,
           right: 0,
           display: 'flex',
           justifyContent: 'center',
           transform: `scale(${logoScale})`,
+          zIndex: 3,
         }}
       >
         <div
           style={{
-            width: 520,
-            height: 220,
-            borderRadius: 42,
-            background: 'rgba(0,0,0,0.22)',
+            width: 330,
+            height: 330,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(98,185,70,0.22) 0%, rgba(98,185,70,0.10) 42%, rgba(0,0,0,0) 72%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 80px rgba(214,169,58,0.22)',
+            boxShadow: '0 0 90px rgba(98,185,70,0.20)',
           }}
         >
-          <Img
-            src={staticFile('Color logo - no background.png')}
-            style={{ width: 430, objectFit: 'contain' }}
-          />
+          <Img src={staticFile('Color logo - no background.png')} style={{ width: 300, height: 300, objectFit: 'contain' }} />
         </div>
       </div>
 
       <div
         style={{
           position: 'absolute',
-          top: 346,
+          top: 388,
           left: 80,
           right: 80,
           opacity: introOpacity,
           textAlign: 'center',
+          zIndex: 2,
         }}
       >
         <div
           style={{
-            color: gold,
-            fontFamily: 'Inter, Arial, sans-serif',
-            fontWeight: 800,
-            fontSize: 34,
-            letterSpacing: 8,
-            textTransform: 'uppercase',
-          }}
-        >
-          Lake Ride Pros
-        </div>
-        <div
-          style={{
-            color: cream,
+            color: white,
             fontFamily: 'Georgia, serif',
-            fontSize: 76,
+            fontSize: giveawayTitle.length > 22 ? 58 : 68,
             lineHeight: 1.05,
-            fontWeight: 800,
-            marginTop: 26,
-            textShadow: '0 8px 40px rgba(0,0,0,0.45)',
+            fontWeight: 900,
+            textShadow: '0 8px 36px rgba(0,0,0,0.58)',
           }}
         >
           {giveawayTitle}
@@ -229,10 +208,11 @@ export function WinnerDrawVideo({
         {prizeDescription ? (
           <div
             style={{
-              color: 'rgba(255,247,225,0.78)',
+              color: mutedWhite,
               fontFamily: 'Inter, Arial, sans-serif',
-              fontSize: 34,
-              marginTop: 24,
+              fontSize: 30,
+              fontWeight: 600,
+              marginTop: 18,
             }}
           >
             {prizeDescription}
@@ -240,32 +220,32 @@ export function WinnerDrawVideo({
         ) : null}
       </div>
 
-      <div style={{ position: 'absolute', inset: 0, opacity: scanOpacity }}>
+      <div style={{ position: 'absolute', inset: 0, opacity: scanOpacity, zIndex: 1 }}>
         <div
           style={{
             position: 'absolute',
-            top: 405,
-            left: 76,
-            right: 76,
-            height: 875,
+            top: 548,
+            left: 75,
+            right: 75,
+            height: 770,
             borderRadius: 44,
-            border: '2px solid rgba(214,169,58,0.35)',
-            background: 'rgba(0,0,0,0.28)',
+            border: '2px solid rgba(98,185,70,0.48)',
+            background: 'linear-gradient(180deg, rgba(0,0,0,0.72), rgba(5,12,5,0.56))',
             overflow: 'hidden',
-            boxShadow: 'inset 0 0 80px rgba(214,169,58,0.10), 0 0 70px rgba(0,0,0,0.35)',
+            boxShadow: 'inset 0 0 80px rgba(98,185,70,0.10), 0 0 64px rgba(98,185,70,0.12)',
           }}
         >
           <div
             style={{
               position: 'absolute',
-              top: 42,
+              top: 48,
               left: 0,
               right: 0,
-              height: 1050,
+              height: 980,
             }}
           >
-            {Array.from({ length: 18 }).map((_, i) => (
-              <EntryPill key={i} index={i} seed={seed} />
+            {Array.from({ length: 16 }).map((_, i) => (
+              <EntryPill key={i} index={i} seed={seed} names={names} />
             ))}
           </div>
           <div
@@ -274,9 +254,9 @@ export function WinnerDrawVideo({
               top: scanLine,
               left: 0,
               right: 0,
-              height: 4,
-              background: `linear-gradient(90deg, transparent, ${gold}, #fff, ${gold}, transparent)`,
-              boxShadow: `0 0 46px ${gold}`,
+              height: 5,
+              background: `linear-gradient(90deg, transparent, ${brightGreen}, ${white}, ${brightGreen}, transparent)`,
+              boxShadow: `0 0 44px ${brightGreen}`,
             }}
           />
         </div>
@@ -284,7 +264,7 @@ export function WinnerDrawVideo({
         <div
           style={{
             position: 'absolute',
-            top: 1326,
+            top: 1370,
             left: 80,
             right: 80,
             textAlign: 'center',
@@ -292,22 +272,23 @@ export function WinnerDrawVideo({
         >
           <div
             style={{
-              color: gold,
+              color: lrpGreen,
               fontFamily: 'Inter, Arial, sans-serif',
-              fontSize: 44,
-              fontWeight: 900,
+              fontSize: 40,
+              fontWeight: 950,
               letterSpacing: 5,
               textTransform: 'uppercase',
             }}
           >
-            Scanning verified entries
+            Scanning Entries
           </div>
           <div
             style={{
-              color: 'rgba(255,247,225,0.72)',
+              color: mutedWhite,
               fontFamily: 'Inter, Arial, sans-serif',
-              fontSize: 32,
-              marginTop: 22,
+              fontSize: 30,
+              fontWeight: 600,
+              marginTop: 18,
             }}
           >
             {safeEntryCount.toLocaleString()} eligible {safeEntryCount === 1 ? 'entry' : 'entries'} • Random draw in progress
@@ -320,24 +301,25 @@ export function WinnerDrawVideo({
           position: 'absolute',
           inset: 0,
           opacity: clamp(reveal, 0, 1),
-          transform: `scale(${interpolate(clamp(reveal, 0, 1), [0, 1], [0.88, 1])})`,
+          transform: `scale(${interpolate(clamp(reveal, 0, 1), [0, 1], [0.9, 1])})`,
+          zIndex: 4,
         }}
       >
-        {Array.from({ length: 90 }).map((_, i) => (
+        {Array.from({ length: 96 }).map((_, i) => (
           <ConfettiPiece key={i} index={i} seed={seed} />
         ))}
 
         <div
           style={{
             position: 'absolute',
-            top: 560,
-            left: 68,
-            right: 68,
+            top: 600,
+            left: 70,
+            right: 70,
             minHeight: 690,
             borderRadius: 58,
-            background: `linear-gradient(145deg, rgba(214,169,58,0.24), rgba(255,247,225,0.08), rgba(0,0,0,0.36))`,
-            border: `3px solid ${gold}`,
-            boxShadow: '0 0 110px rgba(214,169,58,0.32), inset 0 0 90px rgba(255,247,225,0.06)',
+            background: `linear-gradient(145deg, rgba(214,169,58,0.22), rgba(0,0,0,0.78), rgba(98,185,70,0.10))`,
+            border: `4px solid ${gold}`,
+            boxShadow: '0 0 110px rgba(214,169,58,0.34), inset 0 0 90px rgba(255,255,255,0.04)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -350,23 +332,23 @@ export function WinnerDrawVideo({
               color: gold,
               fontFamily: 'Inter, Arial, sans-serif',
               fontSize: 38,
-              fontWeight: 900,
-              letterSpacing: 7,
+              fontWeight: 950,
+              letterSpacing: 8,
               textTransform: 'uppercase',
-              marginBottom: 30,
+              marginBottom: 34,
             }}
           >
             Winner
           </div>
           <div
             style={{
-              color: cream,
+              color: white,
               fontFamily: 'Georgia, serif',
               fontSize: winnerName.length > 22 ? 82 : 104,
               lineHeight: 1.04,
               fontWeight: 900,
               textAlign: 'center',
-              textShadow: '0 10px 48px rgba(0,0,0,0.48)',
+              textShadow: '0 10px 48px rgba(0,0,0,0.58)',
               wordBreak: 'break-word',
             }}
           >
@@ -375,16 +357,17 @@ export function WinnerDrawVideo({
           <div
             style={{
               width: 520,
-              height: 2,
+              height: 3,
               background: `linear-gradient(90deg, transparent, ${gold}, transparent)`,
-              margin: '44px 0 34px',
+              margin: '46px 0 34px',
             }}
           />
           <div
             style={{
-              color: 'rgba(255,247,225,0.82)',
+              color: 'rgba(247,255,242,0.86)',
               fontFamily: 'Inter, Arial, sans-serif',
               fontSize: 31,
+              fontWeight: 650,
               textAlign: 'center',
               lineHeight: 1.35,
             }}
@@ -393,8 +376,6 @@ export function WinnerDrawVideo({
           </div>
         </div>
       </div>
-
-      <PrivacyBadge />
     </AbsoluteFill>
   );
 }

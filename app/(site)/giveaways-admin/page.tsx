@@ -944,10 +944,10 @@ function EntriesView({
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-1">
-                Recording-Safe Winner Video
+                Winner Reveal Video
               </h3>
               <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
-                Generates a vertical MP4 with LRP branding and winner name only — no personal info.
+                Generates a vertical MP4 with LRP branding, a live entrant-name scan, and final winner reveal.
               </p>
               {winnerVideoJob && (
                 <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mt-2">
@@ -972,7 +972,7 @@ function EntriesView({
                 <button
                   onClick={onDownloadWinnerVideo}
                   disabled={videoDownloading}
-                  className="bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-neutral-900 font-semibold py-3 px-5 rounded-lg transition-colors disabled:opacity-50"
+                  className="bg-white hover:bg-neutral-100 text-lrp-black dark:bg-white dark:hover:bg-neutral-100 dark:text-lrp-black border border-neutral-200 font-semibold py-3 px-5 rounded-lg transition-colors disabled:opacity-50"
                 >
                   {videoDownloading ? 'Preparing...' : 'Download MP4'}
                 </button>

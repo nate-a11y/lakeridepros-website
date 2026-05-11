@@ -11,6 +11,16 @@ interface ProductPageProps {
   }>
 }
 
+function getProductMetaDescription(productName: string, shortDescription?: string): string {
+  const rawDescription = typeof shortDescription === 'string' ? shortDescription.trim() : '';
+  const hasUsefulDescription = rawDescription.replace(/\W/g, '').length >= 40;
+
+  return metaDescription(
+    hasUsefulDescription ? rawDescription : '',
+    `${productName}. Official Lake Ride Pros merchandise and gear for Lake of the Ozarks transportation fans.`
+  );
+}
+
 export async function generateMetadata(props: ProductPageProps): Promise<Metadata> {
   const params = await props.params
   const product = await getProductBySlug(params.slug).catch(() => null);
@@ -22,10 +32,7 @@ export async function generateMetadata(props: ProductPageProps): Promise<Metadat
   }
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';
-  const description = metaDescription(
-    product.shortDescription || '',
-    `${productName}. Official Lake Ride Pros merchandise and gear.`
-  );
+  const description = getProductMetaDescription(productName, product.shortDescription);
   const imageUrl = product.featuredImage
     ? getMediaUrl(product.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
@@ -81,10 +88,7 @@ export default async function ProductPage(props: ProductPageProps) {
   }
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';
-  const description = metaDescription(
-    product.shortDescription || '',
-    `${productName}. Official Lake Ride Pros merchandise and gear.`
-  );
+  const description = getProductMetaDescription(productName, product.shortDescription);
   const imageUrl = product.featuredImage
     ? getMediaUrl(product.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';

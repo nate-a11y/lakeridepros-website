@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { BookingModal } from '@/components/BookingModal'
+import { LazyBookingModal } from '@/components/LazyBookingModal'
 
 interface FleetBookingCTAProps {
   vehicleName: string
@@ -19,7 +19,7 @@ export default function FleetBookingCTA({ vehicleName }: FleetBookingCTAProps) {
       >
         Book This Vehicle
       </button>
-      <BookingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      {isOpen && <LazyBookingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />}
     </>
   )
 }

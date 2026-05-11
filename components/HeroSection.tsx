@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import ParticleField from './ui/ParticleField'
 import TypeWriter from './ui/TypeWriter'
-import { BookingModal } from './BookingModal'
+import { LazyBookingModal } from './LazyBookingModal'
 
 export default function HeroSection() {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
@@ -165,10 +165,12 @@ export default function HeroSection() {
       </section>
 
       {/* Booking Modal */}
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-      />
+      {isBookingOpen && (
+        <LazyBookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+        />
+      )}
     </>
   )
 }

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { getDriverProfileBySlug, getMediaUrl } from '@/lib/api/sanity';
+import { metaDescription, metaTitle } from '@/lib/seo/metadata';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -53,18 +54,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const displayName = formatDisplayName(driver.name, driver.role);
   const roleLabel = getRoleLabel(driver.role);
   const imageUrl = getMediaUrl(driver.image);
+  const isOpenProfile = driver.name.trim().toLowerCase() === 'open';
+  const titleText = metaTitle(`${displayName} - ${roleLabel}`);
+  const descriptionText = metaDescription(
+    driver.bio ? `Meet ${displayName}, ${roleLabel} at Lake Ride Pros. ${driver.bio}` : '',
+    `Meet ${displayName}, ${roleLabel} at Lake Ride Pros, providing premium transportation services at Lake of the Ozarks.`
+  );
 
   return {
-    title: `${displayName} - ${roleLabel} | Lake Ride Pros`,
-    description: driver.bio
-      ? `Meet ${displayName}, ${roleLabel} at Lake Ride Pros. ${driver.bio.slice(0, 150)}...`
-      : `Meet ${displayName}, ${roleLabel} at Lake Ride Pros - providing premium transportation services at Lake of the Ozarks.`,
+    title: titleText,
+    description: descriptionText,
     alternates: {
       canonical: `https://www.lakeridepros.com/our-drivers/${slug}`,
     },
+    robots: isOpenProfile
+      ? {
+          index: false,
+          follow: true,
+        }
+      : {
+          index: true,
+          follow: true,
+        },
     openGraph: {
-      title: `${displayName} - ${roleLabel} | Lake Ride Pros`,
-      description: driver.bio || `${roleLabel} at Lake Ride Pros`,
+      title: titleText,
+      description: descriptionText,
       url: `https://www.lakeridepros.com/our-drivers/${slug}`,
       siteName: 'Lake Ride Pros',
       images: [{ url: imageUrl || 'https://www.lakeridepros.com/og-image.jpg', width: 1200, height: 630, alt: displayName }],

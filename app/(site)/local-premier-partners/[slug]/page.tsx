@@ -6,6 +6,7 @@ import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/sanity';
 import Gallery from '@/components/Gallery';
 import type { GalleryImage } from '@/components/Gallery';
+import { metaDescription as buildMetaDescription, metaTitle } from '@/lib/seo/metadata';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -35,11 +36,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? getMediaUrl(partnerLogo)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
-  const title = `${partner.name} | Lake Ride Pros Local Premier Partner`;
+  const title = metaTitle(partner.name);
 
-  const metaDescription = description
-    ? description.slice(0, 160)
-    : `${partner.name} - Lake Ride Pros local premier partner at Lake of the Ozarks`;
+  const metaDescription = buildMetaDescription(
+    description,
+    `${partner.name} is a Lake Ride Pros local premier partner at Lake of the Ozarks.`
+  );
 
   return {
     title,

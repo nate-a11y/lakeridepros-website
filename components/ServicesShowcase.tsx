@@ -7,7 +7,7 @@ import type { Service } from '@/types/sanity';
 import { getMediaUrl } from '@/lib/api/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { ChevronRight } from 'lucide-react';
-import { BookingModal } from './BookingModal';
+import { LazyBookingModal } from './LazyBookingModal';
 import ScrollReveal from './ui/ScrollReveal';
 
 interface ServicesShowcaseProps {
@@ -129,10 +129,12 @@ export default function ServicesShowcase({
       </div>
       </section>
 
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-      />
+      {isBookingOpen && (
+        <LazyBookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+        />
+      )}
     </>
   );
 }

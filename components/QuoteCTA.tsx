@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BookingModal } from './BookingModal';
+import { LazyBookingModal } from './LazyBookingModal';
 
 interface QuoteCTAProps {
   notes?: string;
@@ -27,10 +27,12 @@ export default function QuoteCTA({ notes }: QuoteCTAProps) {
         </button>
       </div>
 
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-      />
+      {isBookingOpen && (
+        <LazyBookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+        />
+      )}
     </>
   );
 }

@@ -209,6 +209,16 @@ const legacySlugRedirects = [
     "source": "/events/venues/T-Mobile-Center",
     "destination": "/events/venues/t-mobile-center",
     "permanent": true
+  },
+  {
+    "source": "/partners/hytech-marine-upholstery-flooring",
+    "destination": "/local-premier-partners/hytech-marine-upholstery-flooring",
+    "permanent": true
+  },
+  {
+    "source": "/partners/sunrise-movers",
+    "destination": "/local-premier-partners/sunrise-movers",
+    "permanent": true
   }
 ];
 

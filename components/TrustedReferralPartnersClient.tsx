@@ -68,10 +68,10 @@ export default function TrustedReferralPartnersClient({
   const PartnerCard = ({ partner }: { partner: Partner }) => {
     // Determine the correct URL path based on partner type
     const getPartnerUrl = (p: Partner): string => {
-      if (p.isPremierPartner) {
+      if (p.isPremierPartner || p.category === 'local-premier') {
         return `/local-premier-partners/${p.slug}`;
       }
-      if (p.isWeddingPartner) {
+      if (p.isWeddingPartner || p.category === 'wedding') {
         return `/wedding-partners/${p.slug}`;
       }
       return `/partners/${p.slug}`;

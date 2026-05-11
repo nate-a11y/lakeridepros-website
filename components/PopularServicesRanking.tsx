@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { Service } from '@/types/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { TrendingUp, ChevronRight } from 'lucide-react';
-import { BookingModal } from './BookingModal';
+import { LazyBookingModal } from './LazyBookingModal';
 import ScrollReveal from './ui/ScrollReveal';
 import GlowingCard from './ui/GlowingCard';
 
@@ -126,10 +126,12 @@ export default function PopularServicesRanking({
       </div>
       </section>
 
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-      />
+      {isBookingOpen && (
+        <LazyBookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+        />
+      )}
     </>
   );
 }

@@ -7,6 +7,7 @@ import Gallery from '@/components/Gallery';
 import type { GalleryImage } from '@/components/Gallery';
 import { TierBadges } from '@/components/TierBadge';
 import { getVehicleBySlug, getVehicleRelatedTestimonials, getMediaUrl } from '@/lib/api/sanity';
+import { metaDescription, metaTitle } from '@/lib/seo/metadata';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,16 +26,21 @@ export async function generateMetadata({ params }: VehiclePageProps): Promise<Me
   }
 
   const imageUrl = vehicle.featuredImage?.url || vehicle.images?.[0]?.image?.url;
+  const titleText = metaTitle(`${vehicle.name} Fleet`);
+  const descriptionText = metaDescription(
+    `${vehicle.name}: ${vehicle.description || ''}`,
+    `${vehicle.name} luxury transportation at Lake of the Ozarks with professional drivers and premium service.`
+  );
 
   return {
-    title: `${vehicle.name} | Lake Ride Pros Fleet`,
-    description: vehicle.description,
+    title: titleText,
+    description: descriptionText,
     alternates: {
       canonical: `https://www.lakeridepros.com/fleet/${slug}`,
     },
     openGraph: {
-      title: `${vehicle.name} | Lake Ride Pros Fleet`,
-      description: vehicle.description || `${vehicle.name} - Luxury transportation at Lake of the Ozarks`,
+      title: titleText,
+      description: descriptionText,
       url: `https://www.lakeridepros.com/fleet/${slug}`,
       siteName: 'Lake Ride Pros',
       images: imageUrl
@@ -45,8 +51,8 @@ export async function generateMetadata({ params }: VehiclePageProps): Promise<Me
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${vehicle.name} | Lake Ride Pros Fleet`,
-      description: vehicle.description || `${vehicle.name} - Luxury transportation at Lake of the Ozarks`,
+      title: titleText,
+      description: descriptionText,
       images: imageUrl ? [imageUrl] : ['/og-image.jpg'],
     },
   };

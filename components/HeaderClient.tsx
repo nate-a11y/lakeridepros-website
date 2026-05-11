@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState, useMemo, useCallback } from 'react';
 import { AtSign, ChevronDown } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
-import { BookingModal } from './BookingModal';
+import { LazyBookingModal } from './LazyBookingModal';
 import CartIcon from '@/components/cart/CartIcon';
 import { FacebookIcon, InstagramIcon, TikTokIcon, XIcon, YouTubeIcon } from '@/components/SocialIcons';
 
@@ -515,10 +515,12 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
       </nav>
 
       {/* Booking Modal */}
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={() => setIsBookingOpen(false)}
-      />
+      {isBookingOpen && (
+        <LazyBookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+        />
+      )}
     </header>
   );
 }

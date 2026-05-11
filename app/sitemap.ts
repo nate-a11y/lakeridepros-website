@@ -36,6 +36,7 @@ interface PartnerDoc {
 
 interface DriverDoc {
   slug?: string | { current: string } | null;
+  name?: string | null;
   updatedAt?: string;
   _updatedAt?: string;
 }
@@ -208,37 +209,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Skip partners without a slug
     if (!partner.slug) return;
 
-    const hasCheckboxSet =
-      partner.isPremierPartner === true ||
-      partner.isReferralPartner === true ||
-      partner.isWeddingPartner === true ||
-      partner.isPromotion === true;
-
     let urlPath: string;
     const partnerSlug = getSlugValue(partner.slug);
     if (!partnerSlug) return;
     const encodedSlug = encodePathSegment(partnerSlug);
+    const isPremierPartner =
+      partner.isPremierPartner === true || partner.category === 'local-premier';
+    const isWeddingPartner =
+      partner.isWeddingPartner === true || partner.category === 'wedding';
 
     // Determine the correct URL path based on partner type
-    // Priority: premier > wedding > referral (matches component logic)
-    if (hasCheckboxSet) {
-      if (partner.isPremierPartner) {
-        urlPath = `/local-premier-partners/${encodedSlug}`;
-      } else if (partner.isWeddingPartner) {
-        urlPath = `/wedding-partners/${encodedSlug}`;
-      } else {
-        // Referral partners and promotions go to /partners/
-        urlPath = `/partners/${encodedSlug}`;
-      }
+    // Priority: premier > wedding > referral. Legacy category remains authoritative
+    // when a migrated partner also has referral/promotion checkboxes set.
+    if (isPremierPartner) {
+      urlPath = `/local-premier-partners/${encodedSlug}`;
+    } else if (isWeddingPartner) {
+      urlPath = `/wedding-partners/${encodedSlug}`;
     } else {
-      // Legacy category field fallback
-      if (partner.category === 'local-premier') {
-        urlPath = `/local-premier-partners/${encodedSlug}`;
-      } else if (partner.category === 'wedding') {
-        urlPath = `/wedding-partners/${encodedSlug}`;
-      } else {
-        urlPath = `/partners/${encodedSlug}`;
-      }
+      // Referral partners and promotions go to /partners/
+      urlPath = `/partners/${encodedSlug}`;
     }
 
     partnerSitemapEntries.push({
@@ -255,6 +244,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   (drivers as DriverDoc[]).forEach((driver) => {
     const slug = getSlugValue(driver.slug);
     if (!slug) return;
+    if (driver.name?.trim().toLowerCase() === 'open') return;
 
     driverSitemapEntries.push({
       url: `${baseUrl}/our-drivers/${encodePathSegment(slug)}`,

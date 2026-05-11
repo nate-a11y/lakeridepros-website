@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { trackServiceEvent } from '@/lib/analytics';
 import { PhoneLink } from '@/components/PhoneLink';
 
@@ -13,6 +13,7 @@ export default function BookingWidget({ className = '', serviceSlug }: BookingWi
   const containerRef = useRef<HTMLDivElement>(null);
   const moovsEmbedUrl = process.env.NEXT_PUBLIC_MOOVS_EMBED_URL;
   const trackedRef = useRef(false);
+  const iframeLoadedRef = useRef(false);
 
   useEffect(() => {
     // Track booking intent when widget is displayed (only once)
@@ -22,25 +23,50 @@ export default function BookingWidget({ className = '', serviceSlug }: BookingWi
     }
   }, [serviceSlug]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+  const loadBookingIframe = useCallback(() => {
+    if (iframeLoadedRef.current || !containerRef.current || !moovsEmbedUrl) return;
 
-    // This will load the Moovs booking widget iframe when available
-    if (containerRef.current && moovsEmbedUrl) {
-      // Clear any existing content
-      containerRef.current.innerHTML = '';
+    // Clear any existing content
+    containerRef.current.innerHTML = '';
 
-      // Create and append iframe
-      const iframe = document.createElement('iframe');
-      iframe.src = moovsEmbedUrl;
-      iframe.style.width = '100%';
-      iframe.style.height = '600px';
-      iframe.style.border = 'none';
-      iframe.title = 'Book Your Ride';
+    // Create and append iframe
+    const iframe = document.createElement('iframe');
+    iframe.src = moovsEmbedUrl;
+    iframe.style.width = '100%';
+    iframe.style.height = '600px';
+    iframe.style.border = 'none';
+    iframe.title = 'Book Your Ride';
+    iframe.loading = 'lazy';
 
-      containerRef.current.appendChild(iframe);
-    }
+    containerRef.current.appendChild(iframe);
+    iframeLoadedRef.current = true;
   }, [moovsEmbedUrl]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !moovsEmbedUrl) return;
+
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (!('IntersectionObserver' in window)) {
+      loadBookingIframe();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          loadBookingIframe();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '600px' }
+    );
+
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, [loadBookingIframe, moovsEmbedUrl]);
 
   // Fallback UI when Moovs URL is not configured
   if (!moovsEmbedUrl) {

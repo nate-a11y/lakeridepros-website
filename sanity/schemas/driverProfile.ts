@@ -1,4 +1,5 @@
 import {defineType, defineField, defineArrayMember} from 'sanity'
+import {slugify, validateSlug} from '../lib/slug'
 
 export default defineType({
   name: 'driverProfile',
@@ -20,7 +21,9 @@ export default defineType({
       options: {
         source: 'name',
         maxLength: 96,
+        slugify,
       },
+      validation: (rule) => rule.custom(validateSlug),
     }),
     defineField({
       name: 'bio',

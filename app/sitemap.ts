@@ -6,8 +6,8 @@ import {
   getProductsLocal,
   getPagesLocal,
   getPartnersLocal,
+  getDriverProfiles,
 } from '@/lib/api/sanity';
-import { getDriversForWebsite } from '@/lib/supabase/drivers';
 
 // Regenerate sitemap every hour instead of at build time
 // This significantly reduces build time by deferring these queries
@@ -35,8 +35,18 @@ interface PartnerDoc {
 }
 
 interface DriverDoc {
-  id: string;
-  updated_at: string;
+  slug?: string | { current: string } | null;
+  updatedAt?: string;
+  _updatedAt?: string;
+}
+
+function getSlugValue(slug?: string | { current: string } | null): string | null {
+  if (!slug) return null;
+  return typeof slug === 'string' ? slug : slug.current;
+}
+
+function encodePathSegment(segment: string): string {
+  return encodeURIComponent(segment);
 }
 
 async function getSanityData() {
@@ -147,7 +157,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch dynamic content from Sanity and Supabase
   const [sanityData, drivers] = await Promise.all([
     getSanityData(),
-    getDriversForWebsite(),
+    getDriverProfiles(),
   ]);
   const { services, blogPosts, vehicles, products, pages, allPartners } = sanityData;
 
@@ -205,26 +215,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       partner.isPromotion === true;
 
     let urlPath: string;
+    const partnerSlug = getSlugValue(partner.slug);
+    if (!partnerSlug) return;
+    const encodedSlug = encodePathSegment(partnerSlug);
 
     // Determine the correct URL path based on partner type
     // Priority: premier > wedding > referral (matches component logic)
     if (hasCheckboxSet) {
       if (partner.isPremierPartner) {
-        urlPath = `/local-premier-partners/${partner.slug}`;
+        urlPath = `/local-premier-partners/${encodedSlug}`;
       } else if (partner.isWeddingPartner) {
-        urlPath = `/wedding-partners/${partner.slug}`;
+        urlPath = `/wedding-partners/${encodedSlug}`;
       } else {
         // Referral partners and promotions go to /partners/
-        urlPath = `/partners/${partner.slug}`;
+        urlPath = `/partners/${encodedSlug}`;
       }
     } else {
       // Legacy category field fallback
       if (partner.category === 'local-premier') {
-        urlPath = `/local-premier-partners/${partner.slug}`;
+        urlPath = `/local-premier-partners/${encodedSlug}`;
       } else if (partner.category === 'wedding') {
-        urlPath = `/wedding-partners/${partner.slug}`;
+        urlPath = `/wedding-partners/${encodedSlug}`;
       } else {
-        urlPath = `/partners/${partner.slug}`;
+        urlPath = `/partners/${encodedSlug}`;
       }
     }
 
@@ -237,12 +250,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   // Driver profile pages
-  const driverSitemapEntries = drivers.map((driver: DriverDoc) => ({
-    url: `${baseUrl}/our-drivers/${driver.id}`,
-    lastModified: new Date(driver.updated_at || currentDate),
-    changeFrequency: 'weekly' as const,
-    priority: 0.5,
-  }));
+  const driverSitemapEntries: MetadataRoute.Sitemap = [];
+
+  (drivers as DriverDoc[]).forEach((driver) => {
+    const slug = getSlugValue(driver.slug);
+    if (!slug) return;
+
+    driverSitemapEntries.push({
+      url: `${baseUrl}/our-drivers/${encodePathSegment(slug)}`,
+      lastModified: new Date(driver.updatedAt || driver._updatedAt || currentDate),
+      changeFrequency: 'weekly' as const,
+      priority: 0.5,
+    });
+  });
 
   return [
     ...staticSitemapEntries,

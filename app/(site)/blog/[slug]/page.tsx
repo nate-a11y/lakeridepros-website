@@ -6,6 +6,7 @@ import { getMediaUrl, getBlogPostBySlugLocal, getAdjacentBlogPostsLocal } from '
 import { formatDate } from '@/lib/utils';
 import { RichText } from '@/lib/sanity/serialize-portable-text';
 import BlogPostNavigation from '@/components/BlogPostNavigation';
+import { metaDescription, metaTitle } from '@/lib/seo/metadata';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,16 +48,17 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
-  const description = post.excerpt
-    ? post.excerpt.substring(0, 155)
-    : post.title.substring(0, 155);
+  const description = metaDescription(
+    post.excerpt || '',
+    `${post.title}. Expert transportation tips from Lake Ride Pros.`
+  );
   const imageUrl = post.featuredImage && typeof post.featuredImage === 'object'
     ? getMediaUrl(post.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   return {
-    title: `${post.title} | Lake Ozarks Transportation Blog`,
-    description: `${description}. Expert tips from Lake Ride Pros.`,
+    title: metaTitle(post.title),
+    description,
     keywords: post.categories?.length ? `${post.categories.join(', ')}, Lake of the Ozarks, transportation tips` : 'Lake of the Ozarks, transportation, travel tips',
     alternates: {
       canonical: `https://www.lakeridepros.com/blog/${slug}`,

@@ -27,8 +27,13 @@ type Props = {
 // Force dynamic rendering to avoid build-time database queries
 export const dynamic = 'force-dynamic';
 
+function canonicalPartnerPath(slug: string): string {
+  return `/wedding-partners/${encodeURIComponent(slug)}`;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const canonicalPath = canonicalPartnerPath(slug);
   const partner = await getPartnerBySlugLocal(slug);
 
   if (!partner) {
@@ -57,12 +62,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description: metaDescription,
     alternates: {
-      canonical: `https://www.lakeridepros.com/wedding-partners/${slug}`,
+      canonical: `https://www.lakeridepros.com${canonicalPath}`,
     },
     openGraph: {
       title,
       description: metaDescription,
-      url: `https://www.lakeridepros.com/wedding-partners/${slug}`,
+      url: `https://www.lakeridepros.com${canonicalPath}`,
       siteName: 'Lake Ride Pros',
       images: [
         {

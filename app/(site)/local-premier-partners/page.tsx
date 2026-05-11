@@ -5,6 +5,9 @@ import LocalPremierPartnersClient from '@/components/LocalPremierPartnersClient'
 export const metadata = {
   title: 'Local Premier Partners | Lake Ride Pros',
   description: 'Our premier local business partners at Lake of the Ozarks. Supporting local excellence.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/local-premier-partners',
+  },
   openGraph: {
     title: 'Local Premier Partners | Lake Ride Pros',
     description: 'Our premier local business partners at Lake of the Ozarks. Supporting local excellence.',

@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "lint:colors": "node scripts/audit-colors.js",
-    "lint:a11y": "eslint --no-warn-ignored --rule 'jsx-a11y/*: error' .",
+    "lint:a11y": "eslint --no-warn-ignored . --max-warnings=0",
     "lint:all": "npm run lint && npm run lint:colors",
     "test": "vitest",
     "test:watch": "vitest --watch",

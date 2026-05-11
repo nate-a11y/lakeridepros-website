@@ -5,6 +5,9 @@ import WeddingPartnersClient from '@/components/WeddingPartnersClient'
 export const metadata = {
   title: 'Wedding Partners | Lake Ride Pros',
   description: 'Our trusted wedding vendor partners at Lake of the Ozarks. Luxury transportation for your special day.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/wedding-partners',
+  },
   openGraph: {
     title: 'Wedding Partners | Lake Ride Pros',
     description: 'Our trusted wedding vendor partners at Lake of the Ozarks. Luxury transportation for your special day.',

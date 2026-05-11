@@ -3,6 +3,7 @@ import Link from 'next/link'
 import ProductActions from './ProductActions'
 import { Metadata } from 'next'
 import { getProductBySlug, getMediaUrl } from '@/lib/api/sanity'
+import { metaDescription, metaTitle } from '@/lib/seo/metadata'
 
 interface ProductPageProps {
   params: Promise<{
@@ -21,14 +22,17 @@ export async function generateMetadata(props: ProductPageProps): Promise<Metadat
   }
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';
-  const description = product.shortDescription || productName;
+  const description = metaDescription(
+    product.shortDescription || '',
+    `${productName}. Official Lake Ride Pros merchandise and gear.`
+  );
   const imageUrl = product.featuredImage
     ? getMediaUrl(product.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   return {
-    title: `${productName} | Lake Ride Pros Merchandise`,
-    description: `${description}. Shop official Lake Ride Pros gear and merchandise.`,
+    title: metaTitle(productName),
+    description,
     keywords: product.tags ? product.tags.map((t: { tag: string }) => t.tag).join(', ') : `${productName}, Lake of the Ozarks merchandise, Lake Ride Pros shop`,
     alternates: {
       canonical: `https://www.lakeridepros.com/shop/products/${params.slug}`,
@@ -77,6 +81,10 @@ export default async function ProductPage(props: ProductPageProps) {
   }
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';
+  const description = metaDescription(
+    product.shortDescription || '',
+    `${productName}. Official Lake Ride Pros merchandise and gear.`
+  );
   const imageUrl = product.featuredImage
     ? getMediaUrl(product.featuredImage)
     : 'https://www.lakeridepros.com/og-image.jpg';
@@ -86,7 +94,7 @@ export default async function ProductPage(props: ProductPageProps) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: productName,
-    description: product.shortDescription || productName,
+    description,
     image: imageUrl,
     brand: {
       '@type': 'Brand',

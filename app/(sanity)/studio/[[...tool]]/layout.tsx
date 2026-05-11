@@ -1,5 +1,9 @@
 export const metadata = {
   title: 'Lake Ride Pros CMS',
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function StudioLayout({

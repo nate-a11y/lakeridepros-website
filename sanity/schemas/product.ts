@@ -1,4 +1,5 @@
 import {defineType, defineField, defineArrayMember} from 'sanity'
+import {slugify, validateSlug} from '../lib/slug'
 
 export default defineType({
   name: 'product',
@@ -19,8 +20,9 @@ export default defineType({
       options: {
         source: 'name',
         maxLength: 96,
+        slugify,
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().custom(validateSlug),
     }),
     defineField({
       name: 'description',

@@ -11,6 +11,7 @@ import { getFAQsForService, generateFAQSchema } from '@/lib/serviceFAQs';
 import ServiceFAQ from '@/components/ServiceFAQ';
 import ServiceViewTracker from '@/components/ServiceViewTracker';
 import QuoteCTA from '@/components/QuoteCTA';
+import { metaDescription, metaTitle } from '@/lib/seo/metadata';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -36,23 +37,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : 'https://www.lakeridepros.com/og-image.jpg';
 
   // Enhanced title with location
-  const title = `${service.title} at Lake Ozarks | Lake Ride Pros`;
+  const title = metaTitle(`${service.title} at Lake Ozarks`);
 
   // Enhanced description with location + CTA
-  const metaDescription = description
-    ? `${description.slice(0, 140)} at Lake of the Ozarks. Book now!`
-    : `Professional ${service.title.toLowerCase()} at Lake of the Ozarks, Missouri. Professional drivers, luxury vehicles, 24/7 service. Book your ride today.`;
+  const descriptionText = metaDescription(
+    description
+      ? `${description} at Lake of the Ozarks. Book now.`
+      : '',
+    `Professional ${service.title.toLowerCase()} at Lake of the Ozarks, Missouri. Professional drivers, luxury vehicles, 24/7 service.`
+  );
 
   return {
     title,
-    description: metaDescription.slice(0, 160),
+    description: descriptionText,
     keywords: `${service.title}, Lake of the Ozarks transportation, luxury transportation Missouri, ${slug.replace(/-/g, ' ')}, professional drivers, Lake Ozarks, Osage Beach`,
     alternates: {
       canonical: `https://www.lakeridepros.com/services/${slug}`,
     },
     openGraph: {
       title,
-      description: metaDescription.slice(0, 160),
+      description: descriptionText,
       url: `https://www.lakeridepros.com/services/${slug}`,
       siteName: 'Lake Ride Pros',
       images: [
@@ -69,7 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title,
-      description: metaDescription.slice(0, 160),
+      description: descriptionText,
       images: [imageUrl],
     },
     robots: {

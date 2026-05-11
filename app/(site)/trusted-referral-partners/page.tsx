@@ -5,6 +5,9 @@ import TrustedReferralPartnersClient from '@/components/TrustedReferralPartnersC
 export const metadata = {
   title: 'Trusted Referral Partners | Lake Ride Pros',
   description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
+  alternates: {
+    canonical: 'https://www.lakeridepros.com/trusted-referral-partners',
+  },
   openGraph: {
     title: 'Trusted Referral Partners | Lake Ride Pros',
     description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',

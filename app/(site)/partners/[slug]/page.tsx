@@ -16,20 +16,21 @@ export const dynamic = 'force-dynamic';
 
 // Helper to determine redirect URL based on partner type
 function getRedirectUrl(partner: { isWeddingPartner?: boolean | null; isPremierPartner?: boolean | null; category?: string | null }, slug: string): string | null {
+  const encodedSlug = encodeURIComponent(slug);
   // Redirect wedding partners to dedicated page
   if (partner.isWeddingPartner) {
-    return `/wedding-partners/${slug}`;
+    return `/wedding-partners/${encodedSlug}`;
   }
   // Redirect premier partners to dedicated page
   if (partner.isPremierPartner) {
-    return `/local-premier-partners/${slug}`;
+    return `/local-premier-partners/${encodedSlug}`;
   }
   // Check legacy category field
   if (partner.category === 'wedding') {
-    return `/wedding-partners/${slug}`;
+    return `/wedding-partners/${encodedSlug}`;
   }
   if (partner.category === 'local-premier') {
-    return `/local-premier-partners/${slug}`;
+    return `/local-premier-partners/${encodedSlug}`;
   }
   // No redirect needed for referral partners - they stay on /partners/[slug]
   return null;
@@ -47,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   // Determine canonical URL based on partner type
   const redirectUrl = getRedirectUrl(partner, slug);
-  const canonicalPath = redirectUrl || `/partners/${slug}`;
+  const canonicalPath = redirectUrl || `/partners/${encodeURIComponent(slug)}`;
 
   const description = partner.blurb || partner.description || '';
   const partnerLogo = typeof partner.logo === 'object' ? partner.logo : null;

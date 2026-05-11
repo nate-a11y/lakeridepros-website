@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { permanentRedirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -43,6 +43,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!driver) {
     return {
       title: 'Team Member Not Found | Lake Ride Pros',
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
@@ -78,7 +82,7 @@ export default async function DriverDetailPage({ params }: Props) {
   const driver = await getDriverProfileBySlug(slug);
 
   if (!driver) {
-    permanentRedirect('/our-drivers');
+    notFound();
   }
 
   const imageUrl = getMediaUrl(driver.image);

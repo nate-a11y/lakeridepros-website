@@ -58,7 +58,9 @@ export async function getActiveEventWaitlistCounts(eventIds: string[]) {
       .from('event_waitlist_entries')
       .select('event_id, ride_type')
       .in('event_id', uniqueEventIds)
-      .gte('event_date_iso', getTodayCentralDateString())
+      // Count matching event IDs from the already-upcoming Events page.
+      // Include NULL dates so rows created before event_date_iso existed still count.
+      .or(`event_date_iso.gte.${getTodayCentralDateString()},event_date_iso.is.null`)
 
     if (error) throw error
 

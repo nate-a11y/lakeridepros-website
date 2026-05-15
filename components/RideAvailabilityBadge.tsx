@@ -19,7 +19,7 @@ const STATUS_CONFIG = {
     dotColor: 'bg-amber-500',
   },
   reserved: {
-    label: 'Reserved',
+    label: 'Sold Out',
     bgColor: 'bg-red-100 dark:bg-red-900/30',
     textColor: 'text-red-700 dark:text-red-400',
     dotColor: 'bg-red-500',

@@ -115,7 +115,7 @@ export default async function EventsPage({
                 <span className="inline-block w-3 h-3 rounded-full bg-amber-400 mx-2 ml-4"></span>
                 Limited
                 <span className="inline-block w-3 h-3 rounded-full bg-red-500 mx-2 ml-4"></span>
-                Reserved
+                Sold Out / Waitlist
               </p>
             </div>
           </div>

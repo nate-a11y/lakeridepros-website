@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Calendar, MapPin, Search } from 'lucide-react'
 import { Event, Venue } from '@/lib/api/sanity'
 import RideAvailabilityBadge from './RideAvailabilityBadge'
+import EventWaitlistModal, { EventWaitlistContext } from './EventWaitlistModal'
 
 interface EventCalendarClientProps {
   events: Event[]
@@ -25,6 +26,7 @@ const RIDE_TYPES = [
 export default function EventCalendarClient({ events, venues }: EventCalendarClientProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [venueFilter, setVenueFilter] = useState<string>('')
+  const [waitlist, setWaitlist] = useState<EventWaitlistContext | null>(null)
 
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
@@ -211,12 +213,33 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
                                 const availability = event.rideAvailability?.find(
                                   (r) => r.rideType === type.value
                                 )
+                                const status = availability?.status || 'available'
                                 return (
                                   <td key={type.value} className="px-3 py-4 text-center">
                                     <RideAvailabilityBadge
-                                      status={availability?.status || 'available'}
+                                      status={status}
                                       notes={availability?.notes}
                                     />
+                                    {status === 'reserved' && (
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          setWaitlist({
+                                            eventId: event._id,
+                                            eventName: event.name,
+                                            eventDate: dateInfo.full,
+                                            eventTime: event.time,
+                                            venueName: venue.name,
+                                            rideType: type.value,
+                                            rideTypeLabel: type.label,
+                                          })
+                                        }
+                                        className="mt-2 inline-flex min-h-9 items-center justify-center rounded-full border border-red-200 bg-white px-3 py-1 text-xs font-bold text-red-700 transition-colors hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-red-900/50 dark:bg-dark-bg-primary dark:text-red-300 dark:hover:bg-red-900/20"
+                                        aria-label={`Join the waitlist for ${type.label} at ${event.name}`}
+                                      >
+                                        Join waitlist
+                                      </button>
+                                    )}
                                   </td>
                                 )
                               })}
@@ -265,6 +288,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
           </div>
         </div>
       </section>
+      <EventWaitlistModal waitlist={waitlist} onClose={() => setWaitlist(null)} />
     </>
   )
 }

@@ -49,6 +49,31 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY)
 }
 
+function escapeHtml(value: string | number | null | undefined): string {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+interface EventWaitlistEmailDetails {
+  name: string
+  email: string
+  phone?: string | null
+  eventName: string
+  eventDate: string
+  eventTime?: string | null
+  venueName?: string | null
+  rideTypeLabel: string
+  partySize: number
+  pickupLocation?: string | null
+  dropoffLocation?: string | null
+  desiredPickupTime?: string | null
+  notes?: string | null
+}
+
 /**
  * Base email template with Lake Ride Pros branding and ADA compliance
  * - Uses official LRP colors: #4cbb17 (primary green), #3a8e11 (dark green), #060606 (black)
@@ -628,6 +653,121 @@ export async function sendContactConfirmation(
 
   } catch (error) {
     console.error('Contact confirmation error:', error)
+    return false
+  }
+}
+
+export async function sendEventWaitlistConfirmation(details: EventWaitlistEmailDetails) {
+  try {
+    const resend = getResend()
+    const content = `
+      <p>Hi <strong>${escapeHtml(details.name)}</strong>,</p>
+
+      <p>You're on the Lake Ride Pros waitlist. If availability opens for this event and vehicle type, our team will reach out as soon as possible.</p>
+
+      <div class="section">
+        <h3>Waitlist Details</h3>
+        <p>
+          <strong>Event:</strong> ${escapeHtml(details.eventName)}<br>
+          <strong>Date:</strong> ${escapeHtml(details.eventDate)}${details.eventTime ? ` at ${escapeHtml(details.eventTime)}` : ''}<br>
+          ${details.venueName ? `<strong>Venue:</strong> ${escapeHtml(details.venueName)}<br>` : ''}
+          <strong>Vehicle Type:</strong> ${escapeHtml(details.rideTypeLabel)}<br>
+          <strong>Party Size:</strong> ${escapeHtml(details.partySize)}
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>Trip Details</h3>
+        <p>
+          ${details.desiredPickupTime ? `<strong>Desired Pickup Time:</strong> ${escapeHtml(details.desiredPickupTime)}<br>` : ''}
+          ${details.pickupLocation ? `<strong>Pickup:</strong> ${escapeHtml(details.pickupLocation)}<br>` : ''}
+          ${details.dropoffLocation ? `<strong>Dropoff:</strong> ${escapeHtml(details.dropoffLocation)}<br>` : ''}
+          ${details.notes ? `<strong>Notes:</strong><br>${escapeHtml(details.notes).replace(/\n/g, '<br>')}` : 'No additional notes provided.'}
+        </p>
+      </div>
+
+      <p>This is not a confirmed booking yet. We'll contact you directly if we can accommodate the ride.</p>
+
+      <p>If anything changes, call <a href="tel:5732069499">(573) 206-9499</a> or reply to this email.</p>
+    `
+
+    const { data, error } = await resend.emails.send({
+      from: 'Lake Ride Pros <contactus@updates.lakeridepros.com>',
+      replyTo: 'contactus@lakeridepros.com',
+      to: details.email,
+      subject: `You're on the waitlist for ${details.eventName}`,
+      html: getEmailTemplate('Event Waitlist Confirmation', content),
+    })
+
+    if (error) {
+      console.error('Event waitlist confirmation email error:', error)
+      return false
+    }
+
+    console.log('Event waitlist confirmation email sent:', data)
+    return true
+  } catch (error) {
+    console.error('Event waitlist confirmation error:', error)
+    return false
+  }
+}
+
+export async function sendEventWaitlistAdminNotification(details: EventWaitlistEmailDetails) {
+  try {
+    const resend = getResend()
+    const content = `
+      <div class="section">
+        <h3>Customer</h3>
+        <p>
+          <strong>Name:</strong> ${escapeHtml(details.name)}<br>
+          <strong>Email:</strong> <a href="mailto:${escapeHtml(details.email)}">${escapeHtml(details.email)}</a><br>
+          ${details.phone ? `<strong>Phone:</strong> <a href="tel:${escapeHtml(details.phone)}">${escapeHtml(details.phone)}</a>` : ''}
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>Requested Ride</h3>
+        <p>
+          <strong>Event:</strong> ${escapeHtml(details.eventName)}<br>
+          <strong>Date:</strong> ${escapeHtml(details.eventDate)}${details.eventTime ? ` at ${escapeHtml(details.eventTime)}` : ''}<br>
+          ${details.venueName ? `<strong>Venue:</strong> ${escapeHtml(details.venueName)}<br>` : ''}
+          <strong>Vehicle Type:</strong> ${escapeHtml(details.rideTypeLabel)}<br>
+          <strong>Party Size:</strong> ${escapeHtml(details.partySize)}
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>Trip Details</h3>
+        <p>
+          ${details.desiredPickupTime ? `<strong>Desired Pickup Time:</strong> ${escapeHtml(details.desiredPickupTime)}<br>` : ''}
+          ${details.pickupLocation ? `<strong>Pickup:</strong> ${escapeHtml(details.pickupLocation)}<br>` : ''}
+          ${details.dropoffLocation ? `<strong>Dropoff:</strong> ${escapeHtml(details.dropoffLocation)}<br>` : ''}
+          ${details.notes ? `<strong>Notes:</strong><br>${escapeHtml(details.notes).replace(/\n/g, '<br>')}` : 'No additional notes provided.'}
+        </p>
+      </div>
+
+      <p style="color: #666666; font-size: 14px; margin-top: 30px;">
+        Reply to this email to follow up with the customer directly.
+      </p>
+    `
+
+    const { data, error } = await resend.emails.send({
+      from: 'Lake Ride Pros <contactus@updates.lakeridepros.com>',
+      replyTo: details.email,
+      to: 'contactus@lakeridepros.com',
+      subject: `🚐 New Event Waitlist: ${details.eventName} - ${details.rideTypeLabel}`,
+      html: getEmailTemplate('🚐 New Event Waitlist Request', content),
+    })
+
+    if (error) {
+      console.error('Event waitlist admin notification email error:', error)
+      return false
+    }
+
+    console.log('Event waitlist admin notification sent:', data)
+    return true
+  } catch (error) {
+    console.error('Event waitlist admin notification error:', error)
     return false
   }
 }

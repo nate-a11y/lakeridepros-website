@@ -335,6 +335,72 @@ export interface Database {
         }
         Relationships: []
       }
+      event_waitlist_entries: {
+        Row: {
+          id: string
+          created_at: string
+          event_id: string
+          event_name: string
+          event_date: string
+          event_time: string | null
+          venue_name: string | null
+          ride_type: string
+          ride_type_label: string
+          name: string
+          email: string
+          phone: string | null
+          party_size: number
+          pickup_location: string | null
+          dropoff_location: string | null
+          desired_pickup_time: string | null
+          notes: string | null
+          status: 'new' | 'contacted' | 'booked' | 'closed'
+          source: string
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          event_id: string
+          event_name: string
+          event_date: string
+          event_time?: string | null
+          venue_name?: string | null
+          ride_type: string
+          ride_type_label: string
+          name: string
+          email: string
+          phone?: string | null
+          party_size: number
+          pickup_location?: string | null
+          dropoff_location?: string | null
+          desired_pickup_time?: string | null
+          notes?: string | null
+          status?: 'new' | 'contacted' | 'booked' | 'closed'
+          source?: string
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          event_id?: string
+          event_name?: string
+          event_date?: string
+          event_time?: string | null
+          venue_name?: string | null
+          ride_type?: string
+          ride_type_label?: string
+          name?: string
+          email?: string
+          phone?: string | null
+          party_size?: number
+          pickup_location?: string | null
+          dropoff_location?: string | null
+          desired_pickup_time?: string | null
+          notes?: string | null
+          status?: 'new' | 'contacted' | 'booked' | 'closed'
+          source?: string
+        }
+        Relationships: []
+      }
       audit_log: {
         Row: {
           id: string

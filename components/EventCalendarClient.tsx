@@ -10,6 +10,7 @@ import EventWaitlistModal, { EventWaitlistContext } from './EventWaitlistModal'
 interface EventCalendarClientProps {
   events: Event[]
   venues: Venue[]
+  waitlistCounts?: Record<string, number>
 }
 
 // Ride type configuration
@@ -23,7 +24,7 @@ const RIDE_TYPES = [
   { value: 'luxury-shuttle', label: 'Luxury Shuttle', capacity: 'Up to 37' },
 ] as const
 
-export default function EventCalendarClient({ events, venues }: EventCalendarClientProps) {
+export default function EventCalendarClient({ events, venues, waitlistCounts = {} }: EventCalendarClientProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [venueFilter, setVenueFilter] = useState<string>('')
   const [waitlist, setWaitlist] = useState<EventWaitlistContext | null>(null)
@@ -71,6 +72,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
     const [year, month, day] = dateString.split('T')[0].split('-').map(Number)
     const date = new Date(Date.UTC(year, month - 1, day, 12, 0, 0))
     return {
+      iso: dateString.split('T')[0],
       month: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }).toUpperCase(),
       day,
       full: date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }),
@@ -214,6 +216,7 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
                                   (r) => r.rideType === type.value
                                 )
                                 const status = availability?.status || 'available'
+                                const waitlistCount = waitlistCounts[`${event._id}:${type.value}`] || 0
                                 return (
                                   <td key={type.value} className="px-3 py-4 text-center">
                                     <RideAvailabilityBadge
@@ -221,24 +224,30 @@ export default function EventCalendarClient({ events, venues }: EventCalendarCli
                                       notes={availability?.notes}
                                     />
                                     {status === 'reserved' && (
-                                      <button
-                                        type="button"
-                                        onClick={() =>
-                                          setWaitlist({
-                                            eventId: event._id,
-                                            eventName: event.name,
-                                            eventDate: dateInfo.full,
-                                            eventTime: event.time,
-                                            venueName: venue.name,
-                                            rideType: type.value,
-                                            rideTypeLabel: type.label,
-                                          })
-                                        }
-                                        className="mt-2 inline-flex min-h-9 items-center justify-center rounded-full border border-red-200 bg-white px-3 py-1 text-xs font-bold text-red-700 transition-colors hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-red-900/50 dark:bg-dark-bg-primary dark:text-red-300 dark:hover:bg-red-900/20"
-                                        aria-label={`Join the waitlist for ${type.label} at ${event.name}`}
-                                      >
-                                        Join waitlist
-                                      </button>
+                                      <div className="mt-2 flex flex-col items-center gap-1">
+                                        <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                                          {waitlistCount} on waitlist
+                                        </span>
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            setWaitlist({
+                                              eventId: event._id,
+                                              eventName: event.name,
+                                              eventDate: dateInfo.full,
+                                              eventDateIso: dateInfo.iso,
+                                              eventTime: event.time,
+                                              venueName: venue.name,
+                                              rideType: type.value,
+                                              rideTypeLabel: type.label,
+                                            })
+                                          }
+                                          className="inline-flex min-h-9 items-center justify-center rounded-full border border-red-200 bg-white px-3 py-1 text-xs font-bold text-red-700 transition-colors hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:border-red-900/50 dark:bg-dark-bg-primary dark:text-red-300 dark:hover:bg-red-900/20"
+                                          aria-label={`Join the waitlist for ${type.label} at ${event.name}`}
+                                        >
+                                          Join waitlist
+                                        </button>
+                                      </div>
                                     )}
                                   </td>
                                 )

@@ -771,3 +771,37 @@ export async function sendEventWaitlistAdminNotification(details: EventWaitlistE
     return false
   }
 }
+
+export async function sendEventWaitlistOtpCode(email: string, code: string) {
+  try {
+    const resend = getResend()
+    const content = `
+      <p>Your Lake Ride Pros event waitlist verification code is:</p>
+
+      <p style="background-color: #f5f5f5; color: #060606; font-size: 32px; font-weight: 700; padding: 18px; border-radius: 8px; text-align: center; font-family: 'Courier New', monospace; letter-spacing: 6px; margin: 20px 0; border: 2px solid #4cbb17;">
+        ${escapeHtml(code)}
+      </p>
+
+      <p>This code expires in 10 minutes. If you did not request this, you can ignore this email.</p>
+    `
+
+    const { data, error } = await resend.emails.send({
+      from: 'Lake Ride Pros <contactus@updates.lakeridepros.com>',
+      replyTo: 'contactus@lakeridepros.com',
+      to: email,
+      subject: 'Your Lake Ride Pros waitlist verification code',
+      html: getEmailTemplate('Waitlist Verification Code', content),
+    })
+
+    if (error) {
+      console.error('Event waitlist OTP email error:', error)
+      return false
+    }
+
+    console.log('Event waitlist OTP email sent:', data)
+    return true
+  } catch (error) {
+    console.error('Event waitlist OTP email error:', error)
+    return false
+  }
+}

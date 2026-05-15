@@ -7,6 +7,7 @@ export interface EventWaitlistContext {
   eventId: string
   eventName: string
   eventDate: string
+  eventDateIso?: string
   eventTime?: string
   venueName?: string
   rideType: string

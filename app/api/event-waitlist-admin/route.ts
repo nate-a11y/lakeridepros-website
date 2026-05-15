@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseServerClient } from '@/lib/supabase/client'
+import { getTodayCentralDateString } from '@/lib/event-waitlist'
 
 type AdminRequest =
   | { action: 'auth'; password: string }
-  | { action: 'list_entries'; password: string }
+  | { action: 'list_entries'; password: string; includePast?: boolean }
+  | { action: 'delete_entry'; password: string; id: string }
 
 function checkAuth(password: string): boolean {
   const expected = process.env.EVENT_WAITLIST_ADMIN_PASSWORD || process.env.GIVEAWAY_ADMIN_PASSWORD
@@ -32,14 +34,36 @@ export async function POST(request: NextRequest) {
 
     if (body.action === 'list_entries') {
       const supabase = getSupabaseServerClient()
-      const { data, error } = await supabase
+      let query = supabase
         .from('event_waitlist_entries')
         .select('*')
         .order('created_at', { ascending: false })
 
+      if (!body.includePast) {
+        query = query.or(`event_date_iso.gte.${getTodayCentralDateString()},event_date_iso.is.null`)
+      }
+
+      const { data, error } = await query
+
       if (error) throw error
 
       return NextResponse.json({ entries: data || [] }, { status: 200 })
+    }
+
+    if (body.action === 'delete_entry') {
+      if (!body.id) {
+        return NextResponse.json({ error: 'Missing waitlist entry ID' }, { status: 400 })
+      }
+
+      const supabase = getSupabaseServerClient()
+      const { error } = await supabase
+        .from('event_waitlist_entries')
+        .delete()
+        .eq('id', body.id)
+
+      if (error) throw error
+
+      return NextResponse.json({ ok: true }, { status: 200 })
     }
 
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 })

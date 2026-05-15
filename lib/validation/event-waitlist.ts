@@ -19,6 +19,7 @@ export const eventWaitlistSubmitSchema = z.object({
   eventId: requiredString('Event ID', 120),
   eventName: requiredString('Event name', 200),
   eventDate: requiredString('Event date', 80),
+  eventDateIso: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/, 'Event date is invalid').optional(),
   eventTime: optionalString(80),
   venueName: optionalString(200),
   rideType: requiredString('Vehicle type', 80),

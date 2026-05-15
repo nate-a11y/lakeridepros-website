@@ -6,6 +6,7 @@ import {
   sendEventWaitlistAdminNotification,
   sendEventWaitlistConfirmation,
 } from '@/lib/email'
+import { normalizePhone } from '@/lib/event-waitlist'
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,6 +45,7 @@ export async function POST(request: NextRequest) {
       event_id: data.eventId,
       event_name: data.eventName,
       event_date: data.eventDate,
+      event_date_iso: data.eventDateIso || null,
       event_time: data.eventTime || null,
       venue_name: data.venueName || null,
       ride_type: data.rideType,
@@ -51,6 +53,7 @@ export async function POST(request: NextRequest) {
       name: data.name,
       email: data.email.toLowerCase(),
       phone: data.phone || null,
+      phone_normalized: data.phone ? normalizePhone(data.phone) || null : null,
       party_size: data.partySize,
       pickup_location: data.pickupLocation || null,
       dropoff_location: data.dropoffLocation || null,

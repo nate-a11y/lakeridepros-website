@@ -1,6 +1,7 @@
 import { getUpcomingEvents, getVenues, type Event, type EventType } from '@/lib/api/sanity'
 import Link from 'next/link'
 import EventCalendarClient from '@/components/EventCalendarClient'
+import { getActiveEventWaitlistCounts } from '@/lib/event-waitlist'
 
 const EVENT_TYPE_COPY: Record<
   EventType | 'all',
@@ -95,6 +96,7 @@ export default async function EventsPage({
   const venues = venuesResponse.docs || []
   const filteredEvents: Event[] =
     type === 'all' ? events : events.filter((event) => event.eventType === type)
+  const waitlistCounts = await getActiveEventWaitlistCounts(filteredEvents.map((event) => event._id))
 
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
@@ -107,7 +109,7 @@ export default async function EventsPage({
           <p className="text-xl text-white/90 max-w-3xl mx-auto text-center mb-6">
             {copy.subheading}
           </p>
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center justify-center gap-4">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3">
               <p className="text-sm text-white/80">
                 <span className="inline-block w-3 h-3 rounded-full bg-green-400 mr-2"></span>
@@ -118,6 +120,12 @@ export default async function EventsPage({
                 Sold Out / Waitlist
               </p>
             </div>
+            <Link
+              href="/events/waitlist"
+              className="inline-flex min-h-11 items-center rounded-lg bg-white px-5 py-2 font-bold text-lrp-green transition-colors hover:bg-lrp-gray focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary"
+            >
+              Check your waitlist status
+            </Link>
           </div>
         </div>
       </section>
@@ -183,7 +191,7 @@ export default async function EventsPage({
       </section>
 
       {/* Client Component with Filters and Event Display */}
-      <EventCalendarClient events={filteredEvents} venues={venues} />
+      <EventCalendarClient events={filteredEvents} venues={venues} waitlistCounts={waitlistCounts} />
 
       {/* CTA Section */}
       <section className="bg-lrp-green py-16">

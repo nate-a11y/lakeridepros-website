@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS event_waitlist_entries (
   event_id TEXT NOT NULL,
   event_name TEXT NOT NULL,
   event_date TEXT NOT NULL,
+  event_date_iso DATE,
   event_time TEXT,
   venue_name TEXT,
 
@@ -17,6 +18,7 @@ CREATE TABLE IF NOT EXISTS event_waitlist_entries (
   name VARCHAR(200) NOT NULL,
   email VARCHAR(255) NOT NULL,
   phone VARCHAR(30),
+  phone_normalized TEXT,
   party_size INTEGER NOT NULL CHECK (party_size > 0 AND party_size <= 99),
   pickup_location TEXT,
   dropoff_location TEXT,
@@ -33,6 +35,14 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_event_waitlist_unique_email_event_ride
 
 CREATE INDEX IF NOT EXISTS idx_event_waitlist_created_at
   ON event_waitlist_entries(created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_event_waitlist_event_date_iso
+  ON event_waitlist_entries(event_date_iso)
+  WHERE event_date_iso IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_event_waitlist_phone_normalized
+  ON event_waitlist_entries(phone_normalized)
+  WHERE phone_normalized IS NOT NULL;
 
 CREATE INDEX IF NOT EXISTS idx_event_waitlist_event_ride
   ON event_waitlist_entries(event_id, ride_type, created_at DESC);

@@ -342,6 +342,7 @@ export interface Database {
           event_id: string
           event_name: string
           event_date: string
+          event_date_iso: string | null
           event_time: string | null
           venue_name: string | null
           ride_type: string
@@ -349,6 +350,7 @@ export interface Database {
           name: string
           email: string
           phone: string | null
+          phone_normalized: string | null
           party_size: number
           pickup_location: string | null
           dropoff_location: string | null
@@ -363,6 +365,7 @@ export interface Database {
           event_id: string
           event_name: string
           event_date: string
+          event_date_iso?: string | null
           event_time?: string | null
           venue_name?: string | null
           ride_type: string
@@ -370,6 +373,7 @@ export interface Database {
           name: string
           email: string
           phone?: string | null
+          phone_normalized?: string | null
           party_size: number
           pickup_location?: string | null
           dropoff_location?: string | null
@@ -384,6 +388,7 @@ export interface Database {
           event_id?: string
           event_name?: string
           event_date?: string
+          event_date_iso?: string | null
           event_time?: string | null
           venue_name?: string | null
           ride_type?: string
@@ -391,6 +396,7 @@ export interface Database {
           name?: string
           email?: string
           phone?: string | null
+          phone_normalized?: string | null
           party_size?: number
           pickup_location?: string | null
           dropoff_location?: string | null
@@ -398,6 +404,36 @@ export interface Database {
           notes?: string | null
           status?: 'new' | 'contacted' | 'booked' | 'closed'
           source?: string
+        }
+        Relationships: []
+      }
+      event_waitlist_lookup_codes: {
+        Row: {
+          id: string
+          created_at: string
+          identifier: string
+          code_hash: string
+          expires_at: string
+          used_at: string | null
+          attempts: number
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          identifier: string
+          code_hash: string
+          expires_at: string
+          used_at?: string | null
+          attempts?: number
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          identifier?: string
+          code_hash?: string
+          expires_at?: string
+          used_at?: string | null
+          attempts?: number
         }
         Relationships: []
       }

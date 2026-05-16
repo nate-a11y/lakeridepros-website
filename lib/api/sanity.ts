@@ -812,7 +812,9 @@ export async function getUpcomingEvents(): Promise<Event[]> {
 
     const upcoming = docs.filter((event) => {
       const eventDateStr = (event.date || '').split('T')[0]
-      return event.active !== false && eventDateStr >= todayStr
+      const venueActive =
+        typeof event.venue === 'object' ? event.venue?.active !== false : true
+      return event.active !== false && venueActive && eventDateStr >= todayStr
     })
 
     // Already sorted by date from the GROQ query
@@ -855,6 +857,7 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
     const eventDateStr = (event.date || '').split('T')[0]
 
     if (eventDateStr < todayStr) return null
+    if (typeof event.venue === 'object' && event.venue?.active === false) return null
 
     return event
   } catch (error) {

@@ -608,6 +608,7 @@ const eventProjection = `
     name,
     shortName,
     slug,
+    active,
     address,
     website,
     phone,

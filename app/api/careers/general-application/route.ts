@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
+const CAREERS_FROM_EMAIL = 'Lake Ride Pros Careers <contactus@updates.lakeridepros.com>'
+const CAREERS_REPLY_TO_EMAIL = 'owners@lakeridepros.com'
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -163,7 +166,8 @@ export async function POST(request: NextRequest) {
 
     // Send notification email to owners
     const { error: ownerEmailError } = await resend.emails.send({
-      from: 'Lake Ride Pros Careers <careers@lakeridepros.com>',
+      from: CAREERS_FROM_EMAIL,
+      replyTo: email,
       to: 'owners@lakeridepros.com',
       subject: `New Application: Sales/Brand Ambassador - ${fullName}`,
       html: applicationHtml,
@@ -213,7 +217,8 @@ export async function POST(request: NextRequest) {
 </html>`
 
     const { error: confirmationEmailError } = await resend.emails.send({
-      from: 'Lake Ride Pros Careers <careers@lakeridepros.com>',
+      from: CAREERS_FROM_EMAIL,
+      replyTo: CAREERS_REPLY_TO_EMAIL,
       to: email,
       subject: 'Application Received - Lake Ride Pros',
       html: confirmationHtml,

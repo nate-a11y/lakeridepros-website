@@ -1,12 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
+import { getSupabaseServerClient } from "@/lib/supabase/client";
 
-const CAREERS_FROM_EMAIL = 'Lake Ride Pros Careers <contactus@updates.lakeridepros.com>'
-const CAREERS_REPLY_TO_EMAIL = 'owners@lakeridepros.com'
+const CAREERS_FROM_EMAIL =
+  "Lake Ride Pros Careers <contactus@updates.lakeridepros.com>";
+const CAREERS_REPLY_TO_EMAIL = "owners@lakeridepros.com";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const body = await request.json();
     const {
       positions,
       fullName,
@@ -23,75 +25,167 @@ export async function POST(request: NextRequest) {
       turnstileToken,
       resumeBase64,
       resumeFileName,
-    } = body
+    } = body;
 
     // Validate required fields
-    if (!fullName || !email || !phone || !positions?.length || !cityState || !aboutYourself || !workExperience) {
+    if (
+      !fullName ||
+      !email ||
+      !phone ||
+      !positions?.length ||
+      !cityState ||
+      !aboutYourself ||
+      !workExperience
+    ) {
       return NextResponse.json(
-        { error: 'Please fill out all required fields.' },
-        { status: 400 }
-      )
+        { error: "Please fill out all required fields." },
+        { status: 400 },
+      );
     }
 
     if (!turnstileToken) {
       return NextResponse.json(
-        { error: 'Please complete the security verification.' },
-        { status: 400 }
-      )
+        { error: "Please complete the security verification." },
+        { status: 400 },
+      );
     }
 
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: 'Please enter a valid email address.' },
-        { status: 400 }
-      )
+        { error: "Please enter a valid email address." },
+        { status: 400 },
+      );
     }
 
     // Verify Turnstile token
-    const turnstileSecret = process.env.TURNSTILE_SECRET_KEY
+    const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
     if (!turnstileSecret) {
-      console.error('TURNSTILE_SECRET_KEY is not configured')
+      console.error("TURNSTILE_SECRET_KEY is not configured");
       return NextResponse.json(
-        { error: 'Security verification is not configured.' },
-        { status: 500 }
-      )
+        { error: "Security verification is not configured." },
+        { status: 500 },
+      );
     }
 
     const turnstileResponse = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
           secret: turnstileSecret,
           response: turnstileToken,
         }),
-      }
-    )
+      },
+    );
 
-    const turnstileResult = await turnstileResponse.json()
+    const turnstileResult = await turnstileResponse.json();
     if (!turnstileResult.success) {
       return NextResponse.json(
-        { error: 'Security verification failed. Please try again.' },
-        { status: 400 }
-      )
+        { error: "Security verification failed. Please try again." },
+        { status: 400 },
+      );
+    }
+
+    // Persist non-driver career applications so they appear in the LRP Driver Portal
+    // Applications review queue. The portal treats non-driver positions (Sales,
+    // Brand Ambassador, etc.) as staff onboarding instead of DOT driver compliance.
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0] ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
+    const userAgent = request.headers.get("user-agent") || "unknown";
+    const normalizedEmail = email.toLowerCase().trim();
+    const normalizedFullName = String(fullName).trim().replace(/\s+/g, " ");
+    const [firstName = "", ...lastNameParts] = normalizedFullName.split(" ");
+    const lastName = lastNameParts.join(" ");
+    const cityStateMatch = String(cityState)
+      .trim()
+      .match(/^(.+?),\s*([A-Za-z]{2})$/);
+    const positionList = (positions as string[]).join(", ");
+    const today = new Date().toISOString().split("T")[0];
+    const socialLinks = [
+      socialFacebook ? `Facebook: ${socialFacebook}` : null,
+      socialInstagram ? `Instagram: ${socialInstagram}` : null,
+      socialX ? `X: ${socialX}` : null,
+      socialTikTok ? `TikTok: ${socialTikTok}` : null,
+    ].filter(Boolean);
+
+    const applicationNotes = [
+      "General non-driver application submitted from /careers/general-application.",
+      howDidYouHear ? `How they heard about us: ${howDidYouHear}` : null,
+      socialLinks.length ? `Social media:\n${socialLinks.join("\n")}` : null,
+      resumeFileName
+        ? `Resume attached to owner notification email: ${resumeFileName}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+
+    const otherQualifications = [
+      `Positions of interest: ${positionList}`,
+      `City/State: ${cityState}`,
+      "",
+      "About themselves:",
+      aboutYourself,
+      "",
+      "Work experience:",
+      workExperience,
+    ].join("\n");
+
+    const supabase = getSupabaseServerClient();
+    const { error: applicationError } = (await supabase
+      .from("driver_applications")
+      // @ts-ignore - general/non-driver applications reuse the existing portal review table
+      .insert([
+        {
+          status: "submitted",
+          first_name: firstName,
+          last_name: lastName,
+          email: normalizedEmail,
+          phone,
+          address_city: cityStateMatch?.[1]?.trim() || null,
+          address_state: cityStateMatch?.[2]?.toUpperCase() || null,
+          position_applied: positionList,
+          date_of_application: today,
+          other_qualifications: otherQualifications,
+          employment_history: [
+            {
+              position: positionList,
+              details: workExperience,
+            },
+          ],
+          review_notes: applicationNotes,
+          submission_ip: ip,
+          submission_user_agent: userAgent,
+          updated_at: new Date().toISOString(),
+        } as any,
+      ])
+      .select("id")
+      .single()) as { error: any };
+
+    if (applicationError) {
+      console.error("Error saving general application:", applicationError);
+      return NextResponse.json(
+        { error: "Failed to submit application. Please try again." },
+        { status: 500 },
+      );
     }
 
     // Set up Resend
     if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY is not configured')
+      console.error("RESEND_API_KEY is not configured");
       return NextResponse.json(
-        { error: 'Email service is not configured.' },
-        { status: 500 }
-      )
+        { error: "Email service is not configured." },
+        { status: 500 },
+      );
     }
 
-    const resend = new Resend(process.env.RESEND_API_KEY)
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Build email HTML
-    const positionList = (positions as string[]).join(', ')
     const applicationHtml = `
 <!DOCTYPE html>
 <html lang="en">
@@ -121,23 +215,31 @@ export async function POST(request: NextRequest) {
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-weight: bold; color: #060606;">City, State</td>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; color: #333333;">${escapeHtml(cityState)}</td>
         </tr>
-        ${howDidYouHear ? `
+        ${
+          howDidYouHear
+            ? `
         <tr>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-weight: bold; color: #060606;">How They Heard About Us</td>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; color: #333333;">${escapeHtml(howDidYouHear)}</td>
         </tr>
-        ` : ''}
-        ${socialFacebook || socialInstagram || socialX || socialTikTok ? `
+        `
+            : ""
+        }
+        ${
+          socialFacebook || socialInstagram || socialX || socialTikTok
+            ? `
         <tr>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-weight: bold; color: #060606; vertical-align: top;">Social Media</td>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; color: #333333;">
-            ${socialFacebook ? `Facebook: ${escapeHtml(socialFacebook)}<br/>` : ''}
-            ${socialInstagram ? `Instagram: ${escapeHtml(socialInstagram)}<br/>` : ''}
-            ${socialX ? `X: ${escapeHtml(socialX)}<br/>` : ''}
-            ${socialTikTok ? `TikTok: ${escapeHtml(socialTikTok)}` : ''}
+            ${socialFacebook ? `Facebook: ${escapeHtml(socialFacebook)}<br/>` : ""}
+            ${socialInstagram ? `Instagram: ${escapeHtml(socialInstagram)}<br/>` : ""}
+            ${socialX ? `X: ${escapeHtml(socialX)}<br/>` : ""}
+            ${socialTikTok ? `TikTok: ${escapeHtml(socialTikTok)}` : ""}
           </td>
         </tr>
-        ` : ''}
+        `
+            : ""
+        }
       </table>
 
       <h3 style="color: #060606; font-size: 16px; margin-top: 24px;">About Themselves</h3>
@@ -146,40 +248,40 @@ export async function POST(request: NextRequest) {
       <h3 style="color: #060606; font-size: 16px; margin-top: 24px;">Work Experience</h3>
       <p style="color: #333333; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(workExperience)}</p>
 
-      ${resumeFileName ? '<p style="color: #3a8e11; font-size: 14px; margin-top: 24px;">Resume attached to this email.</p>' : ''}
+      ${resumeFileName ? '<p style="color: #3a8e11; font-size: 14px; margin-top: 24px;">Resume attached to this email.</p>' : ""}
     </div>
     <div style="background-color: #f5f5f5; padding: 16px; text-align: center;">
       <p style="color: #666666; font-size: 12px; margin: 0;">Lake Ride Pros Careers Portal</p>
     </div>
   </div>
 </body>
-</html>`
+</html>`;
 
     // Build attachments array
-    const attachments: Array<{ filename: string; content: string }> = []
+    const attachments: Array<{ filename: string; content: string }> = [];
     if (resumeBase64 && resumeFileName) {
       attachments.push({
         filename: resumeFileName,
         content: resumeBase64,
-      })
+      });
     }
 
     // Send notification email to owners
     const { error: ownerEmailError } = await resend.emails.send({
       from: CAREERS_FROM_EMAIL,
       replyTo: email,
-      to: 'owners@lakeridepros.com',
+      to: "owners@lakeridepros.com",
       subject: `New Application: Sales/Brand Ambassador - ${fullName}`,
       html: applicationHtml,
       ...(attachments.length > 0 ? { attachments } : {}),
-    })
+    });
 
     if (ownerEmailError) {
-      console.error('Error sending owner notification email:', ownerEmailError)
+      console.error("Error sending owner notification email:", ownerEmailError);
       return NextResponse.json(
-        { error: 'Failed to submit application. Please try again.' },
-        { status: 500 }
-      )
+        { error: "Failed to submit application. Please try again." },
+        { status: 500 },
+      );
     }
 
     // Send confirmation email to applicant
@@ -195,7 +297,7 @@ export async function POST(request: NextRequest) {
     <div style="padding: 24px;">
       <p style="color: #060606; font-size: 16px; line-height: 1.6;">Hi ${escapeHtml(fullName)},</p>
       <p style="color: #333333; font-size: 16px; line-height: 1.6;">
-        Thank you for applying to the <strong>${escapeHtml(positionList)}</strong> position${(positions as string[]).length > 1 ? 's' : ''} at Lake Ride Pros!
+        Thank you for applying to the <strong>${escapeHtml(positionList)}</strong> position${(positions as string[]).length > 1 ? "s" : ""} at Lake Ride Pros!
       </p>
       <p style="color: #333333; font-size: 16px; line-height: 1.6;">
         We have received your application and a member of our team will review it shortly. You can expect to hear from us within 2-3 business days.
@@ -214,39 +316,42 @@ export async function POST(request: NextRequest) {
     </div>
   </div>
 </body>
-</html>`
+</html>`;
 
     const { error: confirmationEmailError } = await resend.emails.send({
       from: CAREERS_FROM_EMAIL,
       replyTo: CAREERS_REPLY_TO_EMAIL,
       to: email,
-      subject: 'Application Received - Lake Ride Pros',
+      subject: "Application Received - Lake Ride Pros",
       html: confirmationHtml,
-    })
+    });
 
     if (confirmationEmailError) {
       // Log but don't fail - the main submission succeeded
-      console.error('Error sending confirmation email:', confirmationEmailError)
+      console.error(
+        "Error sending confirmation email:",
+        confirmationEmailError,
+      );
     }
 
     return NextResponse.json(
-      { message: 'Application submitted successfully.' },
-      { status: 200 }
-    )
+      { message: "Application submitted successfully." },
+      { status: 200 },
+    );
   } catch (error) {
-    console.error('General application submission error:', error)
+    console.error("General application submission error:", error);
     return NextResponse.json(
-      { error: 'An unexpected error occurred. Please try again.' },
-      { status: 500 }
-    )
+      { error: "An unexpected error occurred. Please try again." },
+      { status: 500 },
+    );
   }
 }
 
 function escapeHtml(str: string): string {
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }

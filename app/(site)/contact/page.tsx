@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, FormEvent, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { PhoneLink } from '@/components/PhoneLink';
 import Turnstile from '@/components/Turnstile';
 
@@ -106,7 +107,7 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-boardson text-4xl sm:text-5xl font-bold mb-4">Contact Us</h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Get in touch with our team for bookings, inquiries, or support
+            Get in touch with our team for general questions, support, or partnership inquiries
           </p>
         </div>
       </header>
@@ -220,10 +221,39 @@ export default function ContactPage() {
 
             {/* Contact Form */}
             <div className="lg:col-span-2">
+              <section
+                className="mb-8 rounded-2xl border border-primary/30 bg-primary/10 p-6 shadow-sm dark:border-primary/40 dark:bg-primary/15"
+                aria-labelledby="booking-guidance-title"
+              >
+                <h2 id="booking-guidance-title" className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">
+                  Need a quote or ready to book?
+                </h2>
+                <p className="text-neutral-700 dark:text-neutral-300 mb-5">
+                  For ride pricing, availability, reservations, airport transportation, weddings, or group events,
+                  please use our booking flow instead of the contact form. It collects the trip details we need to
+                  respond faster.
+                </p>
+                <Link
+                  href="/book"
+                  className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 font-semibold text-lrp-black transition-colors hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                  Quote Now / Book Now
+                </Link>
+              </section>
               <div className="bg-white dark:bg-dark-bg-secondary shadow-lg rounded-lg p-8 border border-neutral-200 dark:border-dark-border transition-colors">
                 <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
-                  Send Us a Message
+                  Send a General Message
                 </h2>
+                <p className="text-neutral-700 dark:text-neutral-300 mb-6">
+                  Use this form for non-booking questions, website support, partnerships, media inquiries, or feedback.
+                </p>
+                <p className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-100">
+                  If your message is about trip details, pricing, availability, or booking a ride, use{' '}
+                  <Link href="/book" className="font-semibold underline underline-offset-2 hover:no-underline">
+                    Quote Now / Book Now
+                  </Link>{' '}
+                  instead so we receive everything needed to help quickly.
+                </p>
                 <form onSubmit={handleSubmit} className="space-y-6" aria-label="Contact form" noValidate>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>

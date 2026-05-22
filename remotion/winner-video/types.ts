@@ -10,7 +10,7 @@ export interface WinnerDrawVideoProps {
 
 export const WINNER_DRAW_VIDEO_ID = 'WinnerDrawVideo';
 export const WINNER_DRAW_FPS = 30;
-export const WINNER_DRAW_DURATION_FRAMES = 300; // 10 seconds
+export const WINNER_DRAW_DURATION_FRAMES = 900; // 30 seconds
 export const WINNER_DRAW_WIDTH = 1080;
 export const WINNER_DRAW_HEIGHT = 1920;
 

@@ -19,6 +19,7 @@ const white = '#f7fff2';
 const mutedWhite = 'rgba(247,255,242,0.72)';
 const gold = '#d6a93a';
 const deepGold = '#9f7419';
+const revealStartFrame = 660;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -48,7 +49,7 @@ function EntryPill({ index, seed, names }: { index: number; seed: number; names:
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const appear = spring({ frame: frame - index * 2, fps, config: { damping: 20, stiffness: 90 } });
-  const cycleOffset = Math.floor(frame / 7) + index * 3;
+  const cycleOffset = Math.floor(frame / 5) + index * 3;
   const name = names.length > 0
     ? names[(cycleOffset + Math.floor(seededNumber(seed, index) * names.length)) % names.length]
     : `Entry ${index + 1}`;
@@ -90,8 +91,8 @@ function EntryPill({ index, seed, names }: { index: number; seed: number; names:
 
 function ConfettiPiece({ index, seed }: { index: number; seed: number }) {
   const frame = useCurrentFrame();
-  const start = 218 + Math.floor(seededNumber(seed, index) * 24);
-  const progress = clamp((frame - start) / 112, 0, 1);
+  const start = revealStartFrame + 8 + Math.floor(seededNumber(seed, index) * 96);
+  const progress = clamp((frame - start) / 210, 0, 1);
   const x = seededNumber(seed, index + 1) * 1080;
   const drift = interpolate(seededNumber(seed, index + 2), [0, 1], [-170, 170]);
   const y = interpolate(progress, [0, 1], [-50, 1420 + seededNumber(seed, index + 3) * 540]);
@@ -116,6 +117,46 @@ function ConfettiPiece({ index, seed }: { index: number; seed: number }) {
   );
 }
 
+function EnergyBurst({ seed }: { seed: number }) {
+  const frame = useCurrentFrame();
+  const pop = spring({ frame: frame - revealStartFrame, fps: 30, config: { damping: 12, stiffness: 82 } });
+  const opacity = interpolate(frame, [revealStartFrame, revealStartFrame + 22, revealStartFrame + 130], [0, 1, 0], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+
+  return (
+    <>
+      {Array.from({ length: 34 }).map((_, i) => {
+        const angle = seededNumber(seed, i) * Math.PI * 2;
+        const length = 190 + seededNumber(seed, i + 20) * 260;
+        const width = 7 + seededNumber(seed, i + 40) * 13;
+        const x = Math.cos(angle) * length * clamp(pop, 0, 1);
+        const y = Math.sin(angle) * length * clamp(pop, 0, 1);
+
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: 540,
+              top: 945,
+              width,
+              height: 155 + seededNumber(seed, i + 60) * 180,
+              borderRadius: 999,
+              background: i % 3 === 0 ? gold : brightGreen,
+              opacity,
+              transform: `translate(${x}px, ${y}px) rotate(${angle}rad)`,
+              transformOrigin: 'center top',
+              boxShadow: `0 0 32px ${i % 3 === 0 ? gold : brightGreen}`,
+            }}
+          />
+        );
+      })}
+    </>
+  );
+}
+
 export function WinnerDrawVideo({
   giveawayTitle,
   prizeDescription,
@@ -127,40 +168,42 @@ export function WinnerDrawVideo({
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const seed = hashString(`${giveawayTitle}:${winnerName}:${entryCount}:${drawDate}`);
-  const safeEntryCount = Math.max(0, Number.isFinite(entryCount) ? entryCount : 0);
   const names = entryNames.length > 0 ? entryNames : [winnerName];
-  const revealStart = 210;
 
-  const introOpacity = interpolate(frame, [0, 15, 58, 86], [0, 1, 1, 0.22], { extrapolateRight: 'clamp' });
-  const scanOpacity = interpolate(frame, [60, 85, 195, 225], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const reveal = spring({ frame: frame - revealStart, fps, config: { damping: 16, stiffness: 72 } });
-  const logoScale = interpolate(frame, [0, 36, revealStart, revealStart + 36], [0.84, 1, 0.84, 0.9], { extrapolateRight: 'clamp' });
+  const introOpacity = interpolate(frame, [0, 28, 135, 185], [0, 1, 1, 0.18], { extrapolateRight: 'clamp' });
+  const scanOpacity = interpolate(frame, [125, 165, 615, 680], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const preRevealOpacity = interpolate(frame, [505, 545, 640, 675], [0, 1, 1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const reveal = spring({ frame: frame - revealStartFrame, fps, config: { damping: 14, stiffness: 78 } });
+  const logoScale = interpolate(frame, [0, 54, revealStartFrame, revealStartFrame + 42], [0.84, 1, 0.82, 0.9], { extrapolateRight: 'clamp' });
   const scanLine = interpolate(frame % 62, [0, 62], [60, 760]);
+  const backgroundPulse = Math.sin(frame / 18) * 0.5 + 0.5;
 
   return (
     <AbsoluteFill
       style={{
-        background: `radial-gradient(circle at 50% 12%, rgba(98,185,70,0.36), transparent 30%), linear-gradient(180deg, #071007 0%, ${black} 58%, #000 100%)`,
+        background: `radial-gradient(circle at 50% 12%, rgba(98,185,70,${0.28 + backgroundPulse * 0.11}), transparent 30%), radial-gradient(circle at 12% 72%, rgba(214,169,58,0.16), transparent 28%), linear-gradient(180deg, #071007 0%, ${black} 58%, #000 100%)`,
         overflow: 'hidden',
       }}
     >
-      <Sequence from={58} durationInFrames={172}>
-        <Audio
-          src={staticFile('audio/lrp-draw-riser.wav')}
-          volume={(audioFrame) =>
-            interpolate(audioFrame, [0, 18, 135, 172], [0, 0.36, 0.36, 0], {
-              extrapolateLeft: 'clamp',
-              extrapolateRight: 'clamp',
-            })
-          }
-        />
-      </Sequence>
+      {[120, 292, 464, 586].map((start, index) => (
+        <Sequence key={start} from={start} durationInFrames={172}>
+          <Audio
+            src={staticFile('audio/lrp-draw-riser.wav')}
+            volume={(audioFrame) =>
+              interpolate(audioFrame, [0, 18, 135, 172], [0, 0.22 + index * 0.05, 0.2 + index * 0.05, 0], {
+                extrapolateLeft: 'clamp',
+                extrapolateRight: 'clamp',
+              })
+            }
+          />
+        </Sequence>
+      ))}
 
-      <Sequence from={207} durationInFrames={38}>
+      <Sequence from={648} durationInFrames={38}>
         <Audio
           src={staticFile('audio/lrp-winner-hit.wav')}
           volume={(audioFrame) =>
-            interpolate(audioFrame, [0, 3, 30, 38], [0, 0.95, 0.72, 0], {
+            interpolate(audioFrame, [0, 3, 30, 38], [0, 1, 0.78, 0], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
             })
@@ -168,11 +211,23 @@ export function WinnerDrawVideo({
         />
       </Sequence>
 
-      <Sequence from={214} durationInFrames={86}>
+      <Sequence from={664} durationInFrames={132}>
         <Audio
           src={staticFile('audio/lrp-crowd-cheer.wav')}
           volume={(audioFrame) =>
-            interpolate(audioFrame, [0, 8, 66, 86], [0, 0.82, 0.72, 0], {
+            interpolate(audioFrame, [0, 8, 102, 132], [0, 0.9, 0.74, 0], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+            })
+          }
+        />
+      </Sequence>
+
+      <Sequence from={785} durationInFrames={115}>
+        <Audio
+          src={staticFile('audio/lrp-crowd-cheer.wav')}
+          volume={(audioFrame) =>
+            interpolate(audioFrame, [0, 10, 84, 115], [0, 0.54, 0.42, 0], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
             })
@@ -187,7 +242,7 @@ export function WinnerDrawVideo({
           backgroundImage:
             'linear-gradient(rgba(98,185,70,0.075) 1px, transparent 1px), linear-gradient(90deg, rgba(98,185,70,0.075) 1px, transparent 1px)',
           backgroundSize: '70px 70px',
-          transform: `translateY(${-(frame % 70)}px)`,
+          transform: `translateY(${-(frame % 70)}px) rotate(${Math.sin(frame / 140) * 0.8}deg)`,
           opacity: 0.42,
         }}
       />
@@ -242,6 +297,19 @@ export function WinnerDrawVideo({
           }}
         >
           {giveawayTitle}
+        </div>
+        <div
+          style={{
+            color: gold,
+            fontFamily: 'Inter, Arial, sans-serif',
+            fontSize: 34,
+            fontWeight: 950,
+            letterSpacing: 7,
+            textTransform: 'uppercase',
+            marginTop: 28,
+          }}
+        >
+          Winner Drawing
         </div>
         {prizeDescription ? (
           <div
@@ -329,7 +397,57 @@ export function WinnerDrawVideo({
               marginTop: 18,
             }}
           >
-            {safeEntryCount.toLocaleString()} eligible {safeEntryCount === 1 ? 'entry' : 'entries'} • Random draw in progress
+            Names are flying • Random draw in progress
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          opacity: preRevealOpacity,
+          zIndex: 3,
+          pointerEvents: 'none',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: 1348,
+            left: 70,
+            right: 70,
+            borderRadius: 34,
+            border: `2px solid rgba(214,169,58,0.58)`,
+            background: 'linear-gradient(90deg, rgba(214,169,58,0.16), rgba(98,185,70,0.14), rgba(214,169,58,0.16))',
+            boxShadow: '0 0 70px rgba(214,169,58,0.18)',
+            padding: '34px 44px',
+            textAlign: 'center',
+          }}
+        >
+          <div
+            style={{
+              color: gold,
+              fontFamily: 'Inter, Arial, sans-serif',
+              fontSize: 42,
+              fontWeight: 950,
+              letterSpacing: 6,
+              textTransform: 'uppercase',
+            }}
+          >
+            Finalizing the Draw
+          </div>
+          <div
+            style={{
+              color: white,
+              fontFamily: 'Georgia, serif',
+              fontSize: 62,
+              fontWeight: 900,
+              marginTop: 18,
+              textShadow: '0 8px 34px rgba(0,0,0,0.5)',
+            }}
+          >
+            Winner reveal incoming...
           </div>
         </div>
       </div>
@@ -343,7 +461,9 @@ export function WinnerDrawVideo({
           zIndex: 4,
         }}
       >
-        {Array.from({ length: 96 }).map((_, i) => (
+        <EnergyBurst seed={seed} />
+
+        {Array.from({ length: 150 }).map((_, i) => (
           <ConfettiPiece key={i} index={i} seed={seed} />
         ))}
 
@@ -376,7 +496,7 @@ export function WinnerDrawVideo({
               marginBottom: 34,
             }}
           >
-            Winner
+            You Just Won
           </div>
           <div
             style={{
@@ -391,6 +511,20 @@ export function WinnerDrawVideo({
             }}
           >
             {winnerName}
+          </div>
+          <div
+            style={{
+              color: brightGreen,
+              fontFamily: 'Inter, Arial, sans-serif',
+              fontSize: 60,
+              fontWeight: 1000,
+              letterSpacing: 4,
+              textTransform: 'uppercase',
+              marginTop: 30,
+              textShadow: `0 0 34px ${lrpGreen}`,
+            }}
+          >
+            Let&apos;s Go!
           </div>
           <div
             style={{

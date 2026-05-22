@@ -55,7 +55,7 @@ async function renderMp4(inputProps: WinnerDrawVideoProps, jobId: string) {
     overwrite: true,
     crf: 20,
     concurrency: Number(process.env.REMOTION_CONCURRENCY || 4),
-    timeoutInMilliseconds: 240000,
+    timeoutInMilliseconds: 600000,
     chromiumOptions: { disableWebSecurity: true },
     logLevel: 'info',
   });

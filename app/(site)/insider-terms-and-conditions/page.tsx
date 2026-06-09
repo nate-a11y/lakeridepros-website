@@ -57,10 +57,10 @@ export default function InsiderTermsAndConditionsPage() {
             <h2 className="text-2xl font-bold mt-10 mb-4">1. Membership Structure and Fees</h2>
             <p className="mb-4">Membership is offered on a subscription basis and billed monthly as follows:</p>
             <ul className="list-disc pl-6 mb-4">
-              <li>Individual Membership: $19.99/month</li>
-              <li>Family Membership: $29.99/month</li>
-              <li>Business Membership: $39.99/month</li>
-              <li>Hold / Vacation Status: $9.99/month</li>
+              <li>Individual Membership: $9.99/month</li>
+              <li>Family Membership: $19.99/month</li>
+              <li>Business Membership: $29.99/month</li>
+              <li>Hold / Vacation Status: $4.99/month</li>
             </ul>
             <p className="mb-4">Membership fees are:</p>
             <ul className="list-disc pl-6 mb-4">
@@ -190,7 +190,7 @@ export default function InsiderTermsAndConditionsPage() {
             <p className="mb-6">If membership is later restarted, the Member will begin as a brand-new enrollee with no prior points or status.</p>
 
             <h3 className="text-xl font-semibold mt-6 mb-3">Hold / Vacation Status</h3>
-            <p className="mb-4">Members may place their membership on Hold / Vacation Status for $9.99/month.</p>
+            <p className="mb-4">Members may place their membership on Hold / Vacation Status for $4.99/month.</p>
             <p className="mb-2">While on Hold:</p>
             <ul className="list-disc pl-6 mb-4">
               <li>Membership remains active</li>

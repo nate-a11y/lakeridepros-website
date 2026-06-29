@@ -45,7 +45,7 @@ const faqSchema = {
       name: 'How much does Lake of the Ozarks transportation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban) at $2.90/mile. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr (tiered), Luxury Sprinter $175/hr (tiered), Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers. Contact us at (573) 206-9499 for exact quote.'
+        text: 'Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban) at $2.90/mile, and Pink Patrol transfer service starts at a $250 minimum plus mileage. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr (tiered), Luxury Sprinter $175/hr (tiered), Pink Patrol $225/hr weekdays and $250/hr weekends (tiered), Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers. Contact us at (573) 206-9499 for exact quote.'
       }
     },
     {
@@ -401,7 +401,7 @@ export default function PricingPage() {
 
             {/* Flat Rate Vehicles */}
             <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Larger Vehicles (Flat Rate)</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
               {/* Limo Bus */}
               <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
                 <Users className="w-8 h-8 text-lrp-green mb-3" />
@@ -436,6 +436,15 @@ export default function PricingPage() {
                 <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-37 passengers</p>
                 <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$275 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
                 <p className="text-xs text-gray-600 dark:text-lrp-gray">$400 base + $20 booking fee</p>
+              </div>
+
+              {/* Pink Patrol */}
+              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-[#db2777]">
+                <Users className="w-8 h-8 text-[#db2777] mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Pink Patrol</h4>
+                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-23 passengers</p>
+                <div className="text-2xl font-bold text-[#db2777] mb-1">$250 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                <p className="text-xs text-gray-600 dark:text-lrp-gray">Transfer service plus mileage</p>
               </div>
             </div>
 
@@ -580,7 +589,7 @@ export default function PricingPage() {
 
             {/* Larger Vehicles - Tiered Hourly */}
             <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Larger Vehicles (Tiered Rates)</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
               {/* Limo Bus */}
               <div className="bg-lrp-green p-8 rounded-lg text-white relative">
                 <div className="absolute top-4 right-4 bg-white text-lrp-green text-xs font-bold px-3 py-1 rounded-full">
@@ -653,6 +662,32 @@ export default function PricingPage() {
                 </ul>
               </div>
 
+              {/* Pink Patrol */}
+              <div className="bg-[radial-gradient(circle_at_20%_20%,#ff4fb3_0%,#db2777_35%,#111827_100%)] p-8 rounded-lg text-white relative overflow-hidden">
+                <div className="absolute top-4 right-4 bg-white text-[#db2777] text-xs font-bold px-3 py-1 rounded-full">
+                  NEW
+                </div>
+                <Users className="w-10 h-10 text-white mb-4" />
+                <h4 className="text-xl font-bold mb-2">Pink Patrol</h4>
+                <p className="text-white/90 text-sm mb-4">1-23 passengers</p>
+                <div className="text-3xl font-bold mb-2">$225<span className="text-lg text-white/80">/hour</span></div>
+                <p className="text-sm text-white/80 mb-4">3-hour minimum (4 hours weekends)</p>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
+                    <span className="text-white/90">Weekdays: first 3 hrs $225/hr</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
+                    <span className="text-white/90">Weekends: first 4 hrs $250/hr</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
+                    <span className="text-white/90">23-passenger party bus</span>
+                  </li>
+                </ul>
+              </div>
+
               {/* Luxury Shuttle */}
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
                 <Users className="w-10 h-10 text-lrp-green mb-4" />
@@ -677,7 +712,7 @@ export default function PricingPage() {
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
-              <strong>Note:</strong> Weekend rates (Fri-Sun) have 4-hour minimums for Limo Bus, Rescue Squad & Sprinter. Weekday minimums are 3 hours. All prices subject to 3% credit card processing fee.
+              <strong>Note:</strong> Weekend rates (Fri-Sun) have 4-hour minimums for Limo Bus, Rescue Squad, Sprinter, and Pink Patrol. Weekday minimums are 3 hours. All prices subject to 3% credit card processing fee.
             </p>
           </div>
         </section>
@@ -942,7 +977,7 @@ export default function PricingPage() {
                   How much does Lake of the Ozarks transportation cost?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile with a $15 minimum, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban with beverages) at $2.90/mile. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr, Luxury Sprinter $175/hr, Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers! Contact us at (573) 206-9499 for a custom quote.
+                  Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile with a $15 minimum, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban with beverages) at $2.90/mile, and Pink Patrol transfer service starts at a $250 minimum plus mileage. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr, Luxury Sprinter $175/hr, Pink Patrol $225/hr weekdays and $250/hr weekends, Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers! Contact us at (573) 206-9499 for a custom quote.
                 </p>
               </details>
 

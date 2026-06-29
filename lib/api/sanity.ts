@@ -6,7 +6,7 @@
  */
 
 import { groq } from 'next-sanity'
-import { client } from '@/sanity/lib/client'
+import { client, writeClient } from '@/sanity/lib/client'
 import {
   servicesQuery,
   serviceBySlugQuery,
@@ -258,7 +258,7 @@ export async function getRandomVehicles(limit = 3): Promise<Vehicle[]> {
 /** Get a single vehicle by its slug. */
 export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
   try {
-    const raw = await client.fetch(vehicleBySlugQuery, { slug }, { next: { revalidate: 60 } })
+    const raw = await writeClient.fetch(vehicleBySlugQuery, { slug }, { cache: 'no-store' })
     return raw ? normalizeDoc<Vehicle>(raw) : null
   } catch (error) {
     console.error(`[Sanity] Error fetching vehicle ${slug}:`, error)

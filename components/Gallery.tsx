@@ -31,6 +31,7 @@ export interface GalleryProps {
   showLightbox?: boolean
   aspectRatio?: string
   className?: string
+  accentVariant?: 'default' | 'pink'
 }
 
 /* ------------------------------------------------------------------ */
@@ -62,6 +63,7 @@ export default function Gallery({
   showLightbox = true,
   aspectRatio = '4/3',
   className,
+  accentVariant = 'default',
 }: GalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -98,9 +100,10 @@ export default function Gallery({
           <GalleryCarousel
             aspectRatio={aspectRatio}
             showLightbox={showLightbox}
+            accentVariant={accentVariant}
           />
         ) : (
-          <GalleryGrid />
+          <GalleryGrid accentVariant={accentVariant} />
         )}
       </div>
 
@@ -122,9 +125,11 @@ export default function Gallery({
 function GalleryCarousel({
   aspectRatio,
   showLightbox,
+  accentVariant,
 }: {
   aspectRatio: string
   showLightbox: boolean
+  accentVariant: 'default' | 'pink'
 }) {
   const { images, selectedIndex, scrollTo, openLightbox } = useContext(Ctx)
 
@@ -216,7 +221,7 @@ function GalleryCarousel({
       </div>
 
       {/* Thumbnail filmstrip */}
-      {images.length > 1 && <GalleryThumbnails variant="light" />}
+      {images.length > 1 && <GalleryThumbnails variant="light" accentVariant={accentVariant} />}
     </div>
   )
 }
@@ -225,7 +230,7 @@ function GalleryCarousel({
 /*  GalleryGrid                                                        */
 /* ------------------------------------------------------------------ */
 
-function GalleryGrid() {
+function GalleryGrid({ accentVariant }: { accentVariant: 'default' | 'pink' }) {
   const { images, openLightbox } = useContext(Ctx)
 
   return (
@@ -234,7 +239,12 @@ function GalleryGrid() {
         <button
           key={i}
           onClick={() => openLightbox(i)}
-          className="group relative aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 cursor-pointer transition-all hover:border-lrp-green hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-lrp-green focus:ring-offset-2"
+          className={cn(
+            'group relative aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 cursor-pointer transition-all hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2',
+            accentVariant === 'pink'
+              ? 'hover:border-[#db2777] focus:ring-[#db2777]'
+              : 'hover:border-lrp-green focus:ring-lrp-green',
+          )}
           aria-label={`View ${img.alt} in fullscreen`}
         >
           <Image
@@ -245,7 +255,7 @@ function GalleryGrid() {
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-            <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-lrp-green text-white p-3 rounded-full">
+            <div className={cn('opacity-0 group-hover:opacity-100 transition-opacity text-white p-3 rounded-full', accentVariant === 'pink' ? 'bg-[#db2777]' : 'bg-lrp-green')}>
               <ZoomIn className="w-6 h-6" />
             </div>
           </div>
@@ -418,7 +428,13 @@ function GalleryLightbox({
 /*  GalleryThumbnails                                                  */
 /* ------------------------------------------------------------------ */
 
-function GalleryThumbnails({ variant }: { variant: 'light' | 'dark' }) {
+function GalleryThumbnails({
+  variant,
+  accentVariant = 'default',
+}: {
+  variant: 'light' | 'dark'
+  accentVariant?: 'default' | 'pink'
+}) {
   const { images, selectedIndex, scrollTo } = useContext(Ctx)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -449,11 +465,15 @@ function GalleryThumbnails({ variant }: { variant: 'light' | 'dark' }) {
               i === selectedIndex
                 ? isDark
                   ? 'ring-4 ring-white shadow-lg'
-                  : 'ring-4 ring-lrp-green shadow-lg'
+                  : accentVariant === 'pink'
+                    ? 'ring-4 ring-[#db2777] shadow-lg'
+                    : 'ring-4 ring-lrp-green shadow-lg'
                 : isDark
                   ? 'ring-2 ring-white/30 hover:ring-white/60 opacity-60 hover:opacity-100'
-                  : 'ring-2 ring-neutral-200 dark:ring-neutral-700 hover:ring-lrp-green/50 opacity-70 hover:opacity-100',
-              isDark ? 'focus:ring-white' : 'focus:ring-lrp-green',
+                  : accentVariant === 'pink'
+                    ? 'ring-2 ring-neutral-200 dark:ring-neutral-700 hover:ring-[#db2777]/50 opacity-70 hover:opacity-100'
+                    : 'ring-2 ring-neutral-200 dark:ring-neutral-700 hover:ring-lrp-green/50 opacity-70 hover:opacity-100',
+              isDark ? 'focus:ring-white' : accentVariant === 'pink' ? 'focus:ring-[#db2777]' : 'focus:ring-lrp-green',
             )}
             aria-label={`View image ${i + 1}`}
             aria-current={i === selectedIndex ? 'true' : undefined}

@@ -8,6 +8,7 @@ import type { GalleryImage } from '@/components/Gallery';
 import { TierBadges } from '@/components/TierBadge';
 import { getVehicleBySlug, getVehicleRelatedTestimonials, getMediaUrl } from '@/lib/api/sanity';
 import { metaDescription, metaTitle } from '@/lib/seo/metadata';
+import { cn } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,6 +66,9 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   if (!vehicle) {
     permanentRedirect('/fleet');
   }
+
+  const isPinkPatrol = vehicle.slug === 'pink-patrol';
+  const accentVariant = isPinkPatrol ? 'pink' : 'default';
 
   // Fetch vehicle-related testimonials (only 5-star reviews with vehicle keywords)
   const testimonials = await getVehicleRelatedTestimonials(3, 5).catch(() => []);
@@ -130,11 +134,24 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        className={cn(
+          'text-white py-12',
+          isPinkPatrol
+            ? 'relative overflow-hidden bg-[radial-gradient(circle_at_20%_20%,#ff4fb3_0%,#db2777_26%,#111827_72%)]'
+            : 'bg-gradient-to-r from-primary to-primary-dark',
+        )}
+      >
+        {isPinkPatrol && (
+          <div
+            className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.16)_0%,transparent_28%,rgba(0,0,0,0.28)_72%)] pointer-events-none"
+            aria-hidden="true"
+          />
+        )}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/fleet"
-            className="inline-flex items-center text-white/90 hover:text-white mb-4"
+            className="inline-flex items-center text-white/90 hover:text-white mb-4 focus:outline-none focus:ring-2 focus:ring-white/80 rounded"
           >
             <svg className="h-5 w-5 mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
               <path d="M15 19l-7-7 7-7" />
@@ -158,6 +175,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                 images={galleryImages}
                 title={vehicle.name}
                 mode="carousel"
+                accentVariant={accentVariant}
               />
             </div>
 
@@ -201,7 +219,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {vehicle.amenities.map((amenityObj, index) => (
                       <li key={index} className="flex items-center text-neutral-700">
-                        <svg className="h-5 w-5 text-secondary mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className={cn('h-5 w-5 mr-2', isPinkPatrol ? 'text-[#db2777]' : 'text-secondary')} fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                           <path d="M5 13l4 4L19 7" />
                         </svg>
                         {amenityObj.amenity}
@@ -228,7 +246,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                           (Taxi-style)
                         </span>
                       </div>
-                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                      <p className={cn('text-2xl font-bold', isPinkPatrol ? 'text-[#db2777] dark:text-pink-300' : 'text-primary dark:text-primary-light')}>
                         Starting at ${vehicle.pricing.pointToPointMinimum}
                       </p>
                     </div>
@@ -242,7 +260,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                           Hourly Charter
                         </span>
                       </div>
-                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                      <p className={cn('text-2xl font-bold', isPinkPatrol ? 'text-[#db2777] dark:text-pink-300' : 'text-primary dark:text-primary-light')}>
                         ${vehicle.pricing.hourlyRate}/hour
                       </p>
                     </div>
@@ -256,7 +274,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                           Full Day Rate
                         </span>
                       </div>
-                      <p className="text-2xl font-bold text-primary dark:text-primary-light">
+                      <p className={cn('text-2xl font-bold', isPinkPatrol ? 'text-[#db2777] dark:text-pink-300' : 'text-primary dark:text-primary-light')}>
                         ${vehicle.pricing.dailyRate}
                       </p>
                     </div>
@@ -287,7 +305,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
       )}
 
       {/* Booking Section */}
-      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary">
+      <section className={cn('py-16', isPinkPatrol ? 'bg-pink-50/40 dark:bg-[#190912]' : 'bg-neutral-50 dark:bg-dark-bg-secondary')}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
@@ -298,7 +316,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
             </p>
           </div>
           <div className="flex justify-center">
-            <FleetBookingCTA vehicleName={vehicle.name} />
+            <FleetBookingCTA vehicleName={vehicle.name} accentVariant={accentVariant} />
           </div>
         </div>
       </section>

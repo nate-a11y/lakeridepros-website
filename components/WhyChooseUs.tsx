@@ -32,7 +32,7 @@ const reasons: Reason[] = [
   },
   {
     title: 'Award Winning',
-    description: "Missouri's Best 2024, 2025, 2026. Lake Lifestyles Best of the Lake 2024, 2025. Recognized for excellence in transportation.",
+    description: "Missouri's Best Private Transportation 2024–2027 and Best Wedding Transportation 2027. Lake Lifestyles Best of the Lake 2024–2026. Recognized for excellence in transportation.",
     icon: <Award className="w-8 h-8" />,
     accentColor: 'from-amber-500 to-orange-600',
   },

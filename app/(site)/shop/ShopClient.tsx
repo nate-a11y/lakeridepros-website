@@ -127,7 +127,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-lrp-black">
       {/* Hero Section - Premium Design */}
-      <section className="relative bg-gradient-to-br from-lrp-green via-lrp-green to-lrp-green-dark py-16 md:py-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#2f730e] via-[#2f730e] to-[#24580b] py-16 md:py-20 overflow-hidden">
         {/* Subtle geometric background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/20 rounded-full blur-3xl"></div>
@@ -186,8 +186,8 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                     onClick={() => updateCategory(category.value)}
                     className={`px-6 py-3 rounded-full font-semibold whitespace-nowrap transition-all duration-200 ${
                       selectedCategory === category.value
-                        ? 'bg-lrp-green text-white shadow-[0_4px_16px_rgba(76,187,23,0.4)] scale-105'
-                        : 'bg-transparent border-2 border-lrp-green/30 text-lrp-green hover:bg-lrp-green hover:text-white hover:border-lrp-green hover:scale-105 hover:shadow-[0_4px_16px_rgba(76,187,23,0.3)]'
+                        ? 'bg-[#2f730e] text-white shadow-[0_4px_16px_rgba(47,115,14,0.35)] scale-105'
+                        : 'bg-transparent border-2 border-[#2f730e]/30 text-[#2f730e] dark:text-lrp-green-light hover:bg-[#2f730e] hover:text-white dark:hover:text-white hover:border-[#2f730e] hover:scale-105 hover:shadow-[0_4px_16px_rgba(47,115,14,0.3)]'
                     }`}
                   >
                     {category.name}
@@ -201,6 +201,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
             {/* Premium Sort Dropdown */}
             <div className="relative w-full sm:w-auto">
               <select
+                aria-label="Sort products"
                 value={sortBy}
                 onChange={(e) => updateSortBy(e.target.value)}
                 className="appearance-none w-full sm:w-auto pl-4 pr-10 py-3 rounded-xl border-2 border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white font-semibold cursor-pointer hover:border-lrp-green/50 transition-all focus:outline-none focus:border-lrp-green focus:shadow-[0_0_0_3px_rgba(76,187,23,0.1)] dark:[color-scheme:dark]"
@@ -264,7 +265,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                     updateSearchQuery('')
                     updateCategory('all')
                   }}
-                  className="inline-block bg-lrp-green hover:bg-lrp-green-dark text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-[0_8px_24px_rgba(76,187,23,0.4)] hover:scale-105"
+                  className="inline-block bg-[#2f730e] hover:bg-[#24580b] text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg hover:shadow-[0_8px_24px_rgba(76,187,23,0.4)] hover:scale-105"
                 >
                   Clear Filters
                 </button>
@@ -332,7 +333,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                         onClick={() => setCurrentPage(pageNum)}
                         className={`px-4 py-2 rounded-lg border-2 font-semibold transition-all ${
                           currentPage === pageNum
-                            ? 'border-lrp-green bg-lrp-green text-white'
+                            ? 'border-[#2f730e] bg-[#2f730e] text-white'
                             : 'border-neutral-200 dark:border-dark-border bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white hover:border-lrp-green'
                         }`}
                       >
@@ -364,7 +365,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
       </section>
 
       {/* Premium Free Shipping Banner */}
-      <section className="relative bg-gradient-to-r from-lrp-green via-lrp-green-light to-lrp-green-dark py-10 mt-16 overflow-hidden">
+      <section className="relative bg-gradient-to-r from-[#2f730e] via-[#2f730e] to-[#24580b] py-10 mt-16 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-64 h-64 bg-white/30 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl"></div>
@@ -469,7 +470,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
           {/* Premium Badges */}
           <div className="absolute top-4 left-4 flex flex-col gap-2">
             {product.featured && (
-              <span className="bg-lrp-green text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 backdrop-blur-sm">
+              <span className="bg-[#2f730e] text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg flex items-center gap-1 backdrop-blur-sm">
                 <Star className="w-3 h-3 fill-current" />
                 Featured
               </span>
@@ -495,7 +496,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
                 onQuickView()
               }}
               aria-label={`Quick view ${product.name}`}
-              className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-lrp-green text-white px-6 py-3 rounded-xl font-bold shadow-xl hover:bg-lrp-green-dark hover:scale-105 transform"
+              className="opacity-0 group-hover:opacity-100 transition-all duration-200 bg-[#2f730e] text-white px-6 py-3 rounded-xl font-bold shadow-xl hover:bg-[#24580b] hover:scale-105 transform"
             >
               Quick View
             </button>
@@ -529,7 +530,7 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
           </div>
 
           {/* Premium View Details Button */}
-          <span className="block w-full bg-lrp-green group-hover:bg-lrp-green-dark text-white py-3 rounded-xl font-bold transition-all group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(76,187,23,0.4)] text-sm text-center">
+          <span className="block w-full bg-[#2f730e] group-hover:bg-[#24580b] text-white py-3 rounded-xl font-bold transition-all group-hover:scale-[1.02] group-hover:shadow-[0_4px_16px_rgba(76,187,23,0.4)] text-sm text-center">
             View Details →
           </span>
 

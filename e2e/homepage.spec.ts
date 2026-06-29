@@ -10,8 +10,8 @@ test.describe('Homepage', () => {
     await page.goto('/')
 
     // Check for main navigation elements
-    await expect(page.locator('nav')).toBeVisible()
-    await expect(page.getByRole('link', { name: /home/i })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible()
+    await expect(page.getByRole('link', { name: /lake ride pros logo/i })).toBeVisible()
   })
 
   test('displays footer', async ({ page }) => {

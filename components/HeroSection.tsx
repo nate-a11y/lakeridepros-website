@@ -66,15 +66,15 @@ export default function HeroSection() {
             {/* Animated CTA Buttons */}
             <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center"
-              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={shouldReduceMotion ? undefined : { y: 20 }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.6, delay: 1.2 }}
             >
               <motion.button
                 onClick={() => setIsBookingOpen(true)}
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
-                className="bg-primary hover:bg-primary-dark text-lrp-black font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg hover:shadow-xl shadow-green-glow"
+                className="bg-[#2f730e] hover:bg-[#24580b] text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg hover:shadow-xl shadow-green-glow"
               >
                 Book Your Ride
               </motion.button>
@@ -84,7 +84,7 @@ export default function HeroSection() {
               >
                 <Link
                   href="/fleet"
-                  className="bg-white dark:bg-dark-bg-secondary hover:bg-primary-light dark:hover:bg-primary border-2 border-primary text-primary dark:text-primary-light hover:text-lrp-black font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-md"
+                  className="bg-white dark:bg-dark-bg-secondary hover:bg-primary-light dark:hover:bg-primary border-2 border-primary text-[#2f730e] dark:text-[#5cd91f] hover:text-lrp-black font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-md"
                 >
                   View Our Fleet
                 </Link>

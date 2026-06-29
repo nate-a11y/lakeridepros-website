@@ -66,12 +66,12 @@ export default async function FleetPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
       {/* Hero */}
-      <section className="bg-primary py-16">
+      <section className="bg-[#2f730e] py-16">
         <div className="container mx-auto px-4">
           <h1 className="font-boardson text-4xl md:text-5xl font-bold text-white text-center">
             Our Luxury Fleet
           </h1>
-          <p className="text-white/90 text-center mt-4 text-lg">
+          <p className="text-white text-center mt-4 text-lg">
             Professional vehicles for every occasion at Lake of the Ozarks
           </p>
         </div>
@@ -232,17 +232,17 @@ export default async function FleetPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-primary py-16">
+      <section className="bg-[#2f730e] py-16">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Not Sure Which Vehicle Is Right for You?
           </h2>
-          <p className="text-white/90 mb-8 text-lg">
+          <p className="text-white mb-8 text-lg">
             Contact us and we'll help you choose the perfect vehicle for your event.
           </p>
           <Link
             href="/contact"
-            className="inline-block bg-white text-primary hover:bg-neutral-100 px-10 py-4 rounded-lg font-bold text-lg transition-all"
+            className="inline-block bg-white text-[#2f730e] hover:bg-neutral-100 px-10 py-4 rounded-lg font-bold text-lg transition-all"
           >
             Contact Us
           </Link>

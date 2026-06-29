@@ -8,7 +8,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { generateResumeUrl } from '@/lib/resume-link'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY is not set')
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,6 +33,7 @@ export async function POST(request: NextRequest) {
     const applicantName = firstName && lastName ? `${firstName} ${lastName}` : 'there'
 
     // Send reminder email
+    const resend = getResend()
     const emailResult = await resend.emails.send({
       from: 'Lake Ride Pros <noreply@lakeridepros.com>',
       to: email,

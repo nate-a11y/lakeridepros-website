@@ -102,13 +102,13 @@ export default function PricingPage() {
 
       <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-lrp-green to-lrp-green/80 py-16">
+        <section className="bg-gradient-to-r from-[#2f730e] to-[#24580b] py-16">
           <div className="container mx-auto px-4 text-center">
             <DollarSign className="w-16 h-16 text-white mx-auto mb-6" />
             <h1 className="font-boardson text-4xl md:text-5xl font-bold text-white mb-4">
               Transparent Pricing for Lake of the Ozarks Transportation
             </h1>
-            <p className="text-white/90 text-xl max-w-3xl mx-auto">
+            <p className="text-white text-xl max-w-3xl mx-auto">
               No hidden fees. No surprises. Just honest, upfront pricing for premium transportation services.
             </p>
           </div>
@@ -591,27 +591,27 @@ export default function PricingPage() {
             <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Larger Vehicles (Tiered Rates)</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
               {/* Limo Bus */}
-              <div className="bg-lrp-green p-8 rounded-lg text-white relative">
-                <div className="absolute top-4 right-4 bg-white text-lrp-green text-xs font-bold px-3 py-1 rounded-full">
+              <div className="bg-[#2f730e] p-8 rounded-lg text-white relative">
+                <div className="absolute top-4 right-4 bg-white text-[#2f730e] text-xs font-bold px-3 py-1 rounded-full">
                   MOST POPULAR
                 </div>
                 <Users className="w-10 h-10 text-white mb-4" />
                 <h4 className="text-xl font-bold mb-2">Limo Bus</h4>
-                <p className="text-white/90 text-sm mb-4">1-14 passengers</p>
-                <div className="text-3xl font-bold mb-2">$130<span className="text-lg text-white/80">/hour</span></div>
-                <p className="text-sm text-white/80 mb-4">3-hour minimum (4 hours weekends)</p>
+                <p className="text-white text-sm mb-4">1-14 passengers</p>
+                <div className="text-3xl font-bold mb-2">$130<span className="text-lg text-white">/hour</span></div>
+                <p className="text-sm text-white mb-4">3-hour minimum (4 hours weekends)</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">First 3-4 hrs: $130/hr</span>
+                    <span className="text-white">First 3-4 hrs: $130/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">After: $110/hr</span>
+                    <span className="text-white">After: $110/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">LED lights & premium sound</span>
+                    <span className="text-white">LED lights & premium sound</span>
                   </li>
                 </ul>
               </div>
@@ -669,9 +669,9 @@ export default function PricingPage() {
                 </div>
                 <Users className="w-10 h-10 text-white mb-4" />
                 <h4 className="text-xl font-bold mb-2">Pink Patrol</h4>
-                <p className="text-white/90 text-sm mb-4">1-23 passengers</p>
-                <div className="text-3xl font-bold mb-2">$225<span className="text-lg text-white/80">/hour</span></div>
-                <p className="text-sm text-white/80 mb-4">3-hour minimum (4 hours weekends)</p>
+                <p className="text-white text-sm mb-4">1-23 passengers</p>
+                <div className="text-3xl font-bold mb-2">$225<span className="text-lg text-white">/hour</span></div>
+                <p className="text-sm text-white mb-4">3-hour minimum (4 hours weekends)</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
@@ -796,12 +796,12 @@ export default function PricingPage() {
                     <span className="text-gray-700 dark:text-lrp-gray text-sm">Hotel-to-venue shuttles</span>
                   </li>
                 </ul>
-                <Link href="/book" className="block w-full text-center bg-lrp-green-dark hover:bg-lrp-green text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                <Link href="/book" className="block w-full text-center bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 rounded-lg font-semibold transition-all">
                   Get Quote
                 </Link>
               </div>
 
-              <div className="bg-lrp-green p-8 rounded-lg text-white relative border-4 border-lrp-green-light">
+              <div className="bg-[#2f730e] p-8 rounded-lg text-white relative border-4 border-lrp-green-light">
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-lrp-green-light text-lrp-black text-xs font-bold px-4 py-2 rounded-full whitespace-nowrap">
                   MOST COMMON
                 </div>
@@ -810,26 +810,26 @@ export default function PricingPage() {
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">15-40 guests</span>
+                    <span className="text-white text-sm">15-40 guests</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">2-3 vehicles coordinated</span>
+                    <span className="text-white text-sm">2-3 vehicles coordinated</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">Multiple venue shuttles</span>
+                    <span className="text-white text-sm">Multiple venue shuttles</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">Airport transfers available</span>
+                    <span className="text-white text-sm">Airport transfers available</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90 text-sm">"Stop the Clock" option</span>
+                    <span className="text-white text-sm">"Stop the Clock" option</span>
                   </li>
                 </ul>
-                <Link href="/book" className="block w-full text-center bg-white text-lrp-green-dark hover:bg-lrp-gray px-6 py-3 rounded-lg font-semibold transition-all">
+                <Link href="/book" className="block w-full text-center bg-white text-[#2f730e] hover:bg-lrp-gray px-6 py-3 rounded-lg font-semibold transition-all">
                   Get Quote
                 </Link>
               </div>
@@ -859,7 +859,7 @@ export default function PricingPage() {
                     <span className="text-gray-700 dark:text-lrp-gray text-sm">Full weekend packages</span>
                   </li>
                 </ul>
-                <PhoneLink className="block w-full text-center bg-lrp-green-dark hover:bg-lrp-green text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                <PhoneLink className="block w-full text-center bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 rounded-lg font-semibold transition-all">
                   Call/Text for Quote
                 </PhoneLink>
               </div>
@@ -1058,23 +1058,23 @@ export default function PricingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-lrp-green">
+        <section className="py-16 bg-[#2f730e]">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Get Your Free Quote?
             </h2>
-            <p className="text-white/90 text-xl mb-8 max-w-2xl mx-auto">
+            <p className="text-white text-xl mb-8 max-w-2xl mx-auto">
               No obligation. Instant pricing. Book online or call us directly for a custom quote.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/book"
-                className="inline-block bg-white text-lrp-green hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
+                className="inline-block bg-white text-[#2f730e] hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
               >
                 Get Instant Quote
               </Link>
               <PhoneLink
-                className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
+                className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#2f730e] px-10 py-4 rounded-lg font-bold text-lg transition-all"
               >
                 <Phone className="w-5 h-5" />
                 (573) 206-9499

@@ -73,9 +73,6 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
     setDropdowns(prev => ({ ...prev, [type]: false }));
   }, []);
 
-  const toggleDropdown = useCallback((type: DropdownType) => {
-    setDropdowns(prev => ({ ...prev, [type]: !prev[type] }));
-  }, []);
 
   // Memoize service dropdown items to avoid recreation on every render
   const serviceDropdownItems = useMemo(() => [
@@ -216,7 +213,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        toggleDropdown(item.dropdownType as DropdownType);
+                        openDropdown(item.dropdownType as DropdownType);
                       }
                       if (e.key === 'Escape') {
                         closeDropdown(item.dropdownType as DropdownType);
@@ -387,7 +384,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    toggleDropdown('social');
+                    openDropdown('social');
                   }
                   if (e.key === 'Escape') {
                     closeDropdown('social');

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { sendOrderConfirmation, sendOwnerOrderNotification, sendOwnerGiftCardNotification } from '@/lib/email'
+import { createPrintifyOrder } from '@/lib/printify/orders'
 import { writeClient } from '@/sanity/lib/client'
 
 function getStripe() {
@@ -77,9 +78,10 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
       expand: ['line_items', 'line_items.data.price.product', 'customer_details', 'shipping_details'],
     })
 
-    const _lineItems = fullSession.line_items?.data || []
+    const lineItems = fullSession.line_items?.data || []
     const customerEmail = fullSession.customer_details?.email
     const customerName = fullSession.customer_details?.name
+    const customerPhone = fullSession.customer_details?.phone
     const shippingDetails = (fullSession as unknown as { shipping_details?: { address?: Stripe.Address } }).shipping_details
     const shippingAddress = shippingDetails?.address
 
@@ -88,10 +90,13 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
       return
     }
 
-    // Parse cart items from metadata
-    let cartItems = []
+    // Prefer Stripe line items as the order source of truth. Metadata is a
+    // fallback for older sessions and for tests where line_items are omitted.
+    let cartItems = lineItemsToCartItems(lineItems)
     try {
-      cartItems = JSON.parse(fullSession.metadata?.cartItems || '[]')
+      if (cartItems.length === 0) {
+        cartItems = JSON.parse(fullSession.metadata?.cartItems || '[]')
+      }
     } catch (error) {
       console.error('Failed to parse cart items:', error)
     }
@@ -129,16 +134,38 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
       status: 'processing',
     }
 
-    // Create order in Sanity CMS
-    const order = await writeClient.create({
+    const existingOrder = await writeClient.fetch(
+      `*[_type == "order" && stripeCheckoutSessionId == $sessionId][0] {
+        _id,
+        orderNumber,
+        total,
+        items,
+        printifyOrderId
+      }`,
+      { sessionId: session.id }
+    )
+
+    const order = existingOrder || await writeClient.create({
       _type: 'order',
       ...orderData,
     }) as any
 
-    console.log('Order created:', order.orderNumber)
+    console.log(existingOrder ? 'Order already exists:' : 'Order created:', order.orderNumber)
 
-    // Send order to Printify (next step)
-    await sendToPrintify(order as unknown as OrderData, cartItems, orderData.shippingAddress, customerEmail)
+    const printifyResult = order.printifyOrderId
+      ? { id: order.printifyOrderId, error: null }
+      : await sendToPrintify(
+        order as unknown as OrderData,
+        cartItems,
+        orderData.shippingAddress,
+        customerEmail,
+        customerName,
+        customerPhone
+      )
+
+    if (existingOrder) {
+      return
+    }
 
     // Send confirmation email to customer
     await sendOrderConfirmationEmail(order as unknown as OrderData, customerEmail, customerName)
@@ -150,7 +177,9 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
       customerEmail,
       order.total,
       cartItems,
-      orderData.shippingAddress
+      orderData.shippingAddress,
+      printifyResult.id,
+      printifyResult.error
     )
 
   } catch (error) {
@@ -166,7 +195,7 @@ interface OrderData {
 }
 
 interface CartItem {
-  productId: string | number
+  productId: string
   productName: string
   variantId: string
   variantName: string
@@ -174,6 +203,38 @@ interface CartItem {
   price: number
   size?: string
   color?: string
+}
+
+function lineItemsToCartItems(lineItems: Stripe.LineItem[]): CartItem[] {
+  return lineItems.flatMap((lineItem) => {
+    const product = lineItem.price?.product
+
+    if (!product || typeof product === 'string' || 'deleted' in product) {
+      return []
+    }
+
+    const productId = product.metadata?.productId
+    const variantId = product.metadata?.variantId
+
+    if (!productId || !variantId) {
+      return []
+    }
+
+    const quantity = lineItem.quantity || 1
+    const unitAmount = lineItem.price?.unit_amount
+      ?? (lineItem.amount_subtotal ? Math.round(lineItem.amount_subtotal / quantity) : 0)
+
+    return [{
+      productId,
+      productName: product.name || lineItem.description || 'Product',
+      variantId,
+      variantName: product.description || [product.metadata?.size, product.metadata?.color].filter(Boolean).join(' / ') || 'Default',
+      quantity,
+      price: unitAmount / 100,
+      size: product.metadata?.size || undefined,
+      color: product.metadata?.color || undefined,
+    }]
+  })
 }
 
 interface ShippingAddress {
@@ -185,38 +246,47 @@ interface ShippingAddress {
   country: string
 }
 
-async function sendToPrintify(order: OrderData, cartItems: CartItem[], shippingAddress: ShippingAddress, customerEmail: string) {
+async function sendToPrintify(
+  order: OrderData,
+  cartItems: CartItem[],
+  shippingAddress: ShippingAddress,
+  customerEmail: string,
+  customerName: string,
+  customerPhone?: string | null
+) {
   try {
-    // This will be implemented in the next prompt
     console.log('Sending order to Printify:', order.orderNumber)
-
-    // Call Printify API endpoint (to be created)
-    const response = await fetch('/api/printify/create-order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId: order._id,
-        orderNumber: order.orderNumber,
-        cartItems,
-        shippingAddress,
-        customerEmail,
-      }),
+    const printifyOrder = await createPrintifyOrder({
+      orderNumber: order.orderNumber,
+      cartItems,
+      shippingAddress,
+      customerEmail,
+      customerName,
+      customerPhone,
     })
 
-    if (response.ok) {
-      const printifyOrder = await response.json()
-      console.log('Printify order created:', printifyOrder.id)
+    console.log('Printify order created:', printifyOrder.id)
 
-      // Update order with Printify order ID in Sanity
-      await writeClient.patch(order._id).set({
-        printifyOrderId: printifyOrder.id,
-      }).commit()
-    }
+    // Update order with Printify order ID in Sanity
+    await writeClient.patch(order._id).set({
+      printifyOrderId: printifyOrder.id,
+      status: 'sent_to_printify',
+      printifyError: null,
+      printifyLastAttemptAt: new Date().toISOString(),
+    }).commit()
+
+    return { id: printifyOrder.id, error: null }
 
   } catch (error) {
     console.error('Error sending to Printify:', error)
+    const message = error instanceof Error ? error.message : 'Unknown Printify error'
+
+    await writeClient.patch(order._id).set({
+      printifyError: message,
+      printifyLastAttemptAt: new Date().toISOString(),
+    }).commit()
+
+    return { id: null, error: message }
   }
 }
 

@@ -12,6 +12,7 @@ interface CartItem {
   quantity: number
   size?: string
   color?: string
+  personalization?: string
 }
 
 function getStripe() {
@@ -57,10 +58,11 @@ export async function POST(request: NextRequest) {
           description: item.variantName,
           images: [item.image],
           metadata: {
-            productId: item.productId,
+            productId: String(item.productId),
             variantId: item.variantId,
             size: item.size || '',
             color: item.color || '',
+            personalization: item.personalization || '',
           },
         },
         unit_amount: Math.round(item.price * 100), // Convert to cents
@@ -113,9 +115,15 @@ export async function POST(request: NextRequest) {
       },
       metadata: {
         cartItems: JSON.stringify(items.map((item: CartItem) => ({
-          productId: item.productId,
+          productId: String(item.productId),
           variantId: item.variantId,
+          productName: item.productName,
+          variantName: item.variantName,
+          price: item.price,
           quantity: item.quantity,
+          size: item.size || '',
+          color: item.color || '',
+          personalization: item.personalization || '',
         }))),
       },
     })

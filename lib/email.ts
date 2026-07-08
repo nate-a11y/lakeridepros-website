@@ -371,10 +371,25 @@ export async function sendOwnerOrderNotification(
   customerEmail: string,
   orderTotal: number,
   items: OrderItem[],
-  shippingAddress: ShippingAddress
+  shippingAddress: ShippingAddress,
+  printifyOrderId?: string | null,
+  printifyError?: string | null
 ) {
   try {
     const resend = getResend()
+    const fulfillmentMessage = printifyError
+      ? `
+        <p style="color: #b91c1c; font-size: 14px; margin-top: 30px;">
+          <strong>Printify fulfillment failed:</strong> ${printifyError}<br>
+          The customer was charged and the order was recorded, but it needs manual fulfillment/retry.
+        </p>
+      `
+      : `
+        <p style="color: #666666; font-size: 14px; margin-top: 30px;">
+          This order has been automatically sent to Printify for fulfillment${printifyOrderId ? ` (Printify order: ${printifyOrderId})` : ''}.
+          Log in to the admin panel to view full details or update the order status.
+        </p>
+      `
 
     const content = `
       <h2 style="color: #060606;">Order #${orderNumber}</h2>
@@ -412,10 +427,7 @@ export async function sendOwnerOrderNotification(
         </p>
       </div>
 
-      <p style="color: #666666; font-size: 14px; margin-top: 30px;">
-        This order has been automatically sent to Printify for fulfillment.
-        Log in to the admin panel to view full details or update the order status.
-      </p>
+      ${fulfillmentMessage}
     `
 
     const { data, error } = await resend.emails.send({

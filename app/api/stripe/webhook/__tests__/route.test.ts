@@ -31,10 +31,11 @@ vi.mock('@/lib/email', () => ({
   sendOwnerGiftCardNotification: vi.fn().mockResolvedValue(true),
 }))
 
-const { mockCreate, mockPatch } = vi.hoisted(() => {
+const { mockCreate, mockPatch, mockFetchSanity } = vi.hoisted(() => {
   const mockCommit = vi.fn().mockResolvedValue({})
   const mockSet = vi.fn().mockReturnValue({ commit: mockCommit })
   return {
+    mockFetchSanity: vi.fn(),
     mockCreate: vi.fn().mockResolvedValue({
       _id: 'test-id',
       orderNumber: 'ORD-123456',
@@ -48,7 +49,11 @@ const { mockCreate, mockPatch } = vi.hoisted(() => {
 })
 
 vi.mock('@/sanity/lib/client', () => ({
+  client: {
+    fetch: mockFetchSanity,
+  },
   writeClient: {
+    fetch: mockFetchSanity,
     create: mockCreate,
     patch: mockPatch,
   },
@@ -67,6 +72,19 @@ describe('Stripe Webhook Handler', () => {
     process.env.STRIPE_SECRET_KEY = 'sk_test_123'
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_123'
     process.env.NEXT_PUBLIC_SITE_URL = 'http://localhost:3000'
+    process.env.PRINTIFY_API_TOKEN = 'printify-test-token'
+    process.env.PRINTIFY_SHOP_ID = 'shop-123'
+    mockFetchSanity.mockResolvedValueOnce(null)
+    mockFetchSanity.mockResolvedValue({
+      _id: 'prod_123',
+      printifyProductId: 'printify-product-123',
+      variants: [
+        {
+          sku: 'var_123',
+          printifyVariantId: '12345',
+        },
+      ],
+    })
   })
 
   const createMockRequest = (body: string, signature: string = 'test-signature') => {

@@ -40,6 +40,13 @@ interface SanityProductForPrintify {
 interface PrintifyOrderResponse {
   id: string
   status?: string
+  productionStatus?: 'not_attempted' | 'sent_to_production' | 'failed'
+  productionError?: string
+}
+
+interface PrintifyApiError extends Error {
+  status?: number
+  responseBody?: string
 }
 
 function getPrintifyConfig() {
@@ -164,13 +171,47 @@ export async function createPrintifyOrder({
   }
 
   if (process.env.NODE_ENV === 'production') {
-    await sendPrintifyOrderToProduction(printifyOrder.id)
+    try {
+      await sendPrintifyOrderToProduction(printifyOrder.id)
+      printifyOrder.productionStatus = 'sent_to_production'
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown Printify send-to-production error'
+      console.error('Failed to send Printify order to production:', message)
+      printifyOrder.productionStatus = 'failed'
+      printifyOrder.productionError = message
+    }
+  } else {
+    printifyOrder.productionStatus = 'not_attempted'
   }
 
   return printifyOrder
 }
 
 async function sendPrintifyOrderToProduction(orderId: string) {
+  const maxAttempts = 3
+  let lastError: Error | null = null
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      await postSendToProduction(orderId)
+      return
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error('Unknown Printify send-to-production error')
+
+      if (attempt === maxAttempts || !isPendingStatusError(error)) {
+        throw lastError
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 5000))
+    }
+  }
+
+  if (lastError) {
+    throw lastError
+  }
+}
+
+async function postSendToProduction(orderId: string) {
   const { token, shopId } = getPrintifyConfig()
 
   const response = await fetch(
@@ -188,6 +229,18 @@ async function sendPrintifyOrderToProduction(orderId: string) {
   if (!response.ok) {
     const errorData = await response.text()
     console.error('Failed to send order to production:', errorData)
-    throw new Error(`Printify send-to-production error: ${response.status}`)
+    const error = new Error(`Printify send-to-production error: ${response.status}`) as PrintifyApiError
+    error.status = response.status
+    error.responseBody = errorData
+    throw error
   }
+}
+
+function isPendingStatusError(error: unknown) {
+  if (!(error instanceof Error)) {
+    return false
+  }
+
+  const apiError = error as PrintifyApiError
+  return apiError.status === 400 && apiError.responseBody?.includes('status pending')
 }

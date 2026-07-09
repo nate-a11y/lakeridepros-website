@@ -270,12 +270,12 @@ async function sendToPrintify(
     // Update order with Printify order ID in Sanity
     await writeClient.patch(order._id).set({
       printifyOrderId: printifyOrder.id,
-      status: 'sent_to_printify',
-      printifyError: null,
+      status: printifyOrder.productionStatus === 'sent_to_production' ? 'in_production' : 'sent_to_printify',
+      printifyError: printifyOrder.productionError || null,
       printifyLastAttemptAt: new Date().toISOString(),
     }).commit()
 
-    return { id: printifyOrder.id, error: null }
+    return { id: printifyOrder.id, error: printifyOrder.productionError || null }
 
   } catch (error) {
     console.error('Error sending to Printify:', error)

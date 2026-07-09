@@ -19,6 +19,8 @@ export async function POST(request: NextRequest) {
       success: true,
       id: printifyOrder.id,
       status: printifyOrder.status,
+      productionStatus: printifyOrder.productionStatus,
+      productionError: printifyOrder.productionError,
     })
 
   } catch (error: unknown) {

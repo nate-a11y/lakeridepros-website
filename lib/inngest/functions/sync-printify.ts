@@ -2,7 +2,6 @@ import { inngest } from '../client'
 import { writeClient } from '@/sanity/lib/client'
 import { groq } from 'next-sanity'
 import { revalidatePaths } from '@/lib/revalidation'
-import { isPrintifyProductPublished } from '@/lib/printify/product-status'
 import { createHash } from 'crypto'
 import crypto from 'crypto'
 
@@ -72,11 +71,6 @@ export interface PrintifyProduct {
   blueprint_id: number
   print_provider_id: number
   visible: boolean
-  external?: {
-    id?: string
-    handle?: string
-    type?: number
-  } | null
   sales_channel_properties?: PrintifySalesChannelProperties
 }
 
@@ -722,19 +716,16 @@ export const syncPrintifyProducts = inngest.createFunction(
 
       console.log(`[Inngest Sync] Fetched ${products.length} total products from Printify`)
 
-      // Custom API stores can retain visible=false even after publishing. The
-      // external storefront handle is Printify's acknowledgement that our
-      // channel published the product successfully.
-      const publishedCount = products.filter(isPrintifyProductPublished).length
-      const unpublishedCount = products.length - publishedCount
-      console.log(
-        `[Inngest Sync] Publication breakdown: ${publishedCount} published, ${unpublishedCount} unpublished`
-      )
+      // Log visibility breakdown
+      const visibleCount = products.filter(p => p.visible === true).length
+      const hiddenCount = products.length - visibleCount
+      console.log(`[Inngest Sync] Visibility breakdown: ${visibleCount} visible, ${hiddenCount} hidden`)
 
-      const publishedProducts = products.filter(isPrintifyProductPublished)
-      console.log(`[Inngest Sync] Will sync ${publishedProducts.length} published products`)
+      // Filter to only include visible/published products
+      const visibleProducts = products.filter(p => p.visible === true)
+      console.log(`[Inngest Sync] Will sync ${visibleProducts.length} visible products`)
 
-      return publishedProducts
+      return visibleProducts
     })
 
     // Step 2: Process products in batches
@@ -811,12 +802,12 @@ export const syncPrintifyProducts = inngest.createFunction(
         groq`*[_type == "product" && defined(printifyProductId)]{ _id, printifyProductId, name }`
       )
 
-      const publishedPrintifyIds = new Set(allProducts.map(p => p.id))
+      const visiblePrintifyIds = new Set(allProducts.map(p => p.id))
       let deactivated = 0
 
       for (const product of sanityProducts) {
-        // If product is not published to the LRP storefront, mark it as draft
-        if (!publishedPrintifyIds.has(product.printifyProductId as string)) {
+        // If product is not in the visible Printify products list, mark as draft
+        if (!visiblePrintifyIds.has(product.printifyProductId as string)) {
           await writeClient.patch(product._id).set({ status: 'draft' }).commit()
           deactivated++
           console.log(`[Inngest Sync] Deactivated product "${product.name}" (not visible in Printify)`)

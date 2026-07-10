@@ -1,19 +1,27 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingBag, Star, Search, X, Heart, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import QuickViewModal from './QuickViewModal'
 import { getMediaUrl } from '@/lib/utils'
+import {
+  getShopCategoryHref,
+  normalizeShopCategory,
+  SHOP_CATEGORIES,
+} from '@/lib/store/shop-categories'
 import type { Product, SanityImage } from '@/types/sanity'
 
 interface ShopClientProps {
   initialProducts: Product[]
+  initialCategory: string
 }
 
-export default function ShopClient({ initialProducts }: ShopClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState('all')
+export default function ShopClient({ initialProducts, initialCategory }: ShopClientProps) {
+  const [selectedCategory, setSelectedCategory] = useState(() =>
+    normalizeShopCategory(initialCategory)
+  )
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('featured')
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null)
@@ -23,8 +31,28 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
 
   // Filter setters that also reset page to 1
   const updateCategory = useCallback((category: string) => {
-    setSelectedCategory(category)
+    const normalizedCategory = normalizeShopCategory(category)
+    setSelectedCategory(normalizedCategory)
     setCurrentPage(1)
+
+    if (typeof window !== 'undefined') {
+      window.history.pushState(
+        {},
+        '',
+        getShopCategoryHref(normalizedCategory)
+      )
+    }
+  }, [])
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const category = new URLSearchParams(window.location.search).get('category')
+      setSelectedCategory(normalizeShopCategory(category))
+      setCurrentPage(1)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
   const updateSearchQuery = useCallback((query: string) => {
@@ -36,16 +64,6 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
     setSortBy(sort)
     setCurrentPage(1)
   }, [])
-
-  const categories = [
-    { name: 'All Products', value: 'all' },
-    { name: 'Apparel', value: 'apparel' },
-    { name: 'Accessories', value: 'accessories' },
-    { name: 'Drinkware', value: 'drinkware' },
-    { name: 'Home & Living', value: 'home' },
-    { name: 'Limited Edition', value: 'limited' },
-    { name: 'Seasonal', value: 'seasonal' },
-  ]
 
   const sortOptions = [
     { name: 'Featured', value: 'featured' },
@@ -180,10 +198,18 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
             {/* Category Filter Pills — wraps on larger screens, scrolls on mobile with fade hints */}
             <div className="relative w-full sm:w-auto">
               <div className="flex gap-3 overflow-x-auto sm:overflow-x-visible sm:flex-wrap w-full sm:w-auto pb-1 scrollbar-hide">
-                {categories.map((category) => (
-                  <button
+                {SHOP_CATEGORIES.map((category) => (
+                  <Link
                     key={category.value}
-                    onClick={() => updateCategory(category.value)}
+                    href={getShopCategoryHref(category.value)}
+                    scroll={false}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      updateCategory(category.value)
+                    }}
+                    aria-current={
+                      selectedCategory === category.value ? 'page' : undefined
+                    }
                     className={`px-6 py-3 rounded-full font-semibold whitespace-nowrap transition-all duration-200 ${
                       selectedCategory === category.value
                         ? 'bg-[#2f730e] text-white shadow-[0_4px_16px_rgba(47,115,14,0.35)] scale-105'
@@ -191,7 +217,7 @@ export default function ShopClient({ initialProducts }: ShopClientProps) {
                     }`}
                   >
                     {category.name}
-                  </button>
+                  </Link>
                 ))}
               </div>
               {/* Fade hint on right edge for mobile scroll */}

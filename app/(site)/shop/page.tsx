@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import ShopClient from './ShopClient'
 import { getProducts } from '@/lib/api/sanity'
+import { normalizeShopCategory } from '@/lib/store/shop-categories'
 
 export const metadata: Metadata = {
   title: 'Shop Lake Ride Pros Merchandise | T-Shirts, Hats & More',
@@ -27,12 +28,24 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function ShopPage() {
+interface ShopPageProps {
+  searchParams: Promise<{ category?: string | string[] }>
+}
+
+export default async function ShopPage({ searchParams }: ShopPageProps) {
   const { docs: products } = await getProducts()
+  const params = await searchParams
+  const categoryParam = Array.isArray(params.category)
+    ? params.category[0]
+    : params.category
+  const initialCategory = normalizeShopCategory(categoryParam)
 
   return (
     <>
-      <ShopClient initialProducts={products} />
+      <ShopClient
+        initialProducts={products}
+        initialCategory={initialCategory}
+      />
       {/* Server-side rendered product links for SEO crawlers */}
       {/* Hidden visually but accessible to search engines */}
       <nav aria-label="All products" className="sr-only">

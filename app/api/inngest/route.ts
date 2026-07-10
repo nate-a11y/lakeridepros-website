@@ -1,6 +1,7 @@
 import { serve } from 'inngest/next'
 import { inngest } from '@/lib/inngest/client'
 import { syncPrintifyProducts } from '@/lib/inngest/functions/sync-printify'
+import { syncPrintifyPublishedProduct } from '@/lib/inngest/functions/sync-published-printify'
 import { postBlogToSocial, sharePostNow } from '@/lib/inngest/functions/post-to-social'
 import { generateWinnerVideo } from '@/lib/inngest/functions/generate-winner-video'
 
@@ -9,6 +10,7 @@ export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [
     syncPrintifyProducts,
+    syncPrintifyPublishedProduct,
     postBlogToSocial,
     sharePostNow,
     generateWinnerVideo,

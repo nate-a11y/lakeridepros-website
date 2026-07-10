@@ -60,7 +60,7 @@ interface PrintifySalesChannelProperties {
   [key: string]: unknown
 }
 
-interface PrintifyProduct {
+export interface PrintifyProduct {
   id: string
   title: string
   description: string
@@ -72,6 +72,15 @@ interface PrintifyProduct {
   print_provider_id: number
   visible: boolean
   sales_channel_properties?: PrintifySalesChannelProperties
+}
+
+export interface ProcessProductResult {
+  created: boolean
+  updated: boolean
+  imagesReused: number
+  imagesUploaded: number
+  sanityProductId: string
+  slug: string
 }
 
 // ============================================================================
@@ -485,10 +494,17 @@ async function ensureUniqueSlug(baseSlug: string, existingProductId?: string): P
 }
 
 // Process a single product
-async function processProduct(
+export async function processProduct(
   printifyProduct: PrintifyProduct
-): Promise<{ created: boolean; updated: boolean; imagesReused: number; imagesUploaded: number }> {
-  const result = { created: false, updated: false, imagesReused: 0, imagesUploaded: 0 }
+): Promise<ProcessProductResult> {
+  const result: ProcessProductResult = {
+    created: false,
+    updated: false,
+    imagesReused: 0,
+    imagesUploaded: 0,
+    sanityProductId: '',
+    slug: '',
+  }
 
   // Check if product already exists
   const existing = await writeClient.fetch(
@@ -638,10 +654,14 @@ async function processProduct(
   if (existing) {
     await writeClient.patch(existing._id).set(productData).commit()
     result.updated = true
+    result.sanityProductId = existing._id
   } else {
-    await writeClient.create({ _type: 'product', ...productData })
+    const createdProduct = await writeClient.create({ _type: 'product', ...productData })
     result.created = true
+    result.sanityProductId = createdProduct._id
   }
+
+  result.slug = slug
 
   return result
 }

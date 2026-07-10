@@ -3,6 +3,7 @@
 import { useState, useCallback } from 'react'
 import { ShoppingCart, Check, Package, Truck, Shield } from 'lucide-react'
 import { useCart } from '@/lib/store/cart'
+import { parseProductDescription } from '@/lib/store/product-description'
 import { getMediaUrl, cn } from '@/lib/utils'
 import { VariantSelector } from '@/components/shop'
 import Gallery from '@/components/Gallery'
@@ -24,6 +25,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
   const [personalizationText, setPersonalizationText] = useState('')
 
   const { addItem } = useCart()
+  const descriptionSections = parseProductDescription(product.description)
 
   const handleAddToCart = useCallback(() => {
     if (!selectedVariant) return
@@ -148,19 +150,37 @@ export default function ProductActions({ product }: ProductActionsProps) {
         </div>
 
         {/* Description */}
-        <div className="text-neutral-600 dark:text-neutral-300 leading-relaxed prose prose-sm dark:prose-invert max-w-none">
-          {product.shortDescription || (
-            Array.isArray(product.description)
-              ? product.description
-                  .filter((block: Record<string, unknown>) => block._type === 'block')
-                  .map((block: Record<string, unknown>) =>
-                    Array.isArray(block.children)
-                      ? block.children.map((child: Record<string, unknown>) => child.text || '').join('')
-                      : ''
-                  )
-                  .join(' ')
-                  .slice(0, 300)
-              : ''
+        <div className="text-neutral-600 dark:text-neutral-300 leading-relaxed space-y-4">
+          {descriptionSections.length > 0 ? (
+            descriptionSections.map((section, index) => {
+              if (section.type === 'heading') {
+                return (
+                  <h2
+                    key={`${section.type}-${index}`}
+                    className="text-lg font-bold text-neutral-900 dark:text-white pt-2"
+                  >
+                    {section.text}
+                  </h2>
+                )
+              }
+
+              if (section.type === 'list') {
+                return (
+                  <ul
+                    key={`${section.type}-${index}`}
+                    className="list-disc space-y-1 pl-5"
+                  >
+                    {section.items.map((item, itemIndex) => (
+                      <li key={`${item}-${itemIndex}`}>{item}</li>
+                    ))}
+                  </ul>
+                )
+              }
+
+              return <p key={`${section.type}-${index}`}>{section.text}</p>
+            })
+          ) : (
+            <p>{product.shortDescription}</p>
           )}
         </div>
 

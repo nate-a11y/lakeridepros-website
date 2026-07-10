@@ -2,6 +2,7 @@ import { inngest } from '../client'
 import { writeClient } from '@/sanity/lib/client'
 import { groq } from 'next-sanity'
 import { revalidatePaths } from '@/lib/revalidation'
+import { createProductExcerpt } from '@/lib/store/product-description'
 import { createHash } from 'crypto'
 import crypto from 'crypto'
 
@@ -631,7 +632,8 @@ export async function processProduct(
         ],
       },
     ],
-    shortDescription: printifyProduct.description?.substring(0, 200) || printifyProduct.title,
+    shortDescription:
+      createProductExcerpt(printifyProduct.description, 200) || printifyProduct.title,
     featuredImage,
     images: additionalImages,
     price: basePrice,
@@ -648,7 +650,8 @@ export async function processProduct(
     personalization,
     status: 'active' as const,
     metaTitle: printifyProduct.title,
-    metaDescription: printifyProduct.description?.substring(0, 160) || printifyProduct.title,
+    metaDescription:
+      createProductExcerpt(printifyProduct.description, 160) || printifyProduct.title,
   }
 
   if (existing) {

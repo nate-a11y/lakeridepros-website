@@ -79,6 +79,13 @@ async function acknowledgePublishingFailed(
   );
 }
 
+async function acknowledgeProductUnpublished(shopId: string, productId: string) {
+  await printifyRequest(
+    `/shops/${shopId}/products/${productId}/unpublish.json`,
+    { method: "POST" },
+  );
+}
+
 async function deactivateSanityProduct(productId: string) {
   const product = await writeClient.fetch(
     groq`*[_type == "product" && printifyProductId == $productId][0]{ _id }`,
@@ -142,15 +149,15 @@ export const syncPrintifyPublishedProduct = inngest.createFunction(
       });
 
       await step.run("acknowledge-unpublish", async () => {
-        await acknowledgePublishingSucceeded(
-          data.shopId,
-          data.productId,
-          deactivated?._id || data.productId,
-          `${storeUrl}/shop`,
-        );
+        await acknowledgeProductUnpublished(data.shopId, data.productId);
       });
 
-      return { success: true, action: "delete", productId: data.productId };
+      return {
+        success: true,
+        action: "delete",
+        productId: data.productId,
+        sanityProductId: deactivated?._id || null,
+      };
     }
 
     const product = await step.run("fetch-printify-product", async () => {

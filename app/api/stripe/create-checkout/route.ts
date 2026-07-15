@@ -113,18 +113,11 @@ export async function POST(request: NextRequest) {
       automatic_tax: {
         enabled: true, // Stripe calculates tax automatically
       },
+      // Cart details live on each Stripe line item's Product metadata. Session
+      // metadata values are limited to 500 characters, so serializing the
+      // entire cart here breaks checkout as soon as several items are added.
       metadata: {
-        cartItems: JSON.stringify(items.map((item: CartItem) => ({
-          productId: String(item.productId),
-          variantId: item.variantId,
-          productName: item.productName,
-          variantName: item.variantName,
-          price: item.price,
-          quantity: item.quantity,
-          size: item.size || '',
-          color: item.color || '',
-          personalization: item.personalization || '',
-        }))),
+        type: 'merch',
       },
     })
 

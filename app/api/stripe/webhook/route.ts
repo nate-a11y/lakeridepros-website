@@ -203,6 +203,7 @@ interface CartItem {
   price: number
   size?: string
   color?: string
+  personalization?: string
 }
 
 function lineItemsToCartItems(lineItems: Stripe.LineItem[]): CartItem[] {
@@ -233,6 +234,7 @@ function lineItemsToCartItems(lineItems: Stripe.LineItem[]): CartItem[] {
       price: unitAmount / 100,
       size: product.metadata?.size || undefined,
       color: product.metadata?.color || undefined,
+      personalization: product.metadata?.personalization || undefined,
     }]
   })
 }

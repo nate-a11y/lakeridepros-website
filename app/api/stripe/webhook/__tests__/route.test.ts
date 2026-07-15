@@ -147,17 +147,6 @@ describe('Stripe Webhook Handler', () => {
 
   describe('Checkout Session Completed - Regular Order', () => {
     it('processes regular product order successfully', async () => {
-      const cartItems = [
-        {
-          productId: 'prod_123',
-          productName: 'Test Product',
-          variantId: 'var_123',
-          variantName: 'Medium / Blue',
-          quantity: 2,
-          price: 29.99,
-        },
-      ]
-
       const mockSession = {
         id: 'cs_test_123',
         object: 'checkout.session',
@@ -171,14 +160,49 @@ describe('Stripe Webhook Handler', () => {
         },
         amount_total: 10997,
         amount_subtotal: 5998,
-        metadata: {
-          cartItems: JSON.stringify(cartItems),
-        },
+        metadata: { type: 'merch' },
       }
 
       const fullSession = {
         ...mockSession,
-        line_items: { data: [] },
+        line_items: {
+          data: [
+            {
+              quantity: 2,
+              amount_subtotal: 5998,
+              description: 'Test Product',
+              price: {
+                unit_amount: 2999,
+                product: {
+                  id: 'stripe_product_123',
+                  name: 'Test Product',
+                  description: 'Medium / Blue',
+                  metadata: {
+                    productId: 'prod_123',
+                    variantId: 'var_123',
+                    size: 'Medium',
+                    color: 'Blue',
+                    personalization: 'Booth Crew',
+                  },
+                },
+              },
+            },
+            {
+              quantity: 1,
+              amount_subtotal: 599,
+              description: 'Shipping',
+              price: {
+                unit_amount: 599,
+                product: {
+                  id: 'stripe_shipping',
+                  name: 'Shipping',
+                  description: 'Standard shipping',
+                  metadata: {},
+                },
+              },
+            },
+          ],
+        },
         shipping_details: {
           address: {
             line1: '123 Main St',
@@ -221,6 +245,19 @@ describe('Stripe Webhook Handler', () => {
           expand: expect.arrayContaining(['line_items', 'customer_details', 'shipping_details']),
         })
       )
+      expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({
+        items: [{
+          productId: 'prod_123',
+          productName: 'Test Product',
+          variantId: 'var_123',
+          variantName: 'Medium / Blue',
+          quantity: 2,
+          price: 29.99,
+          size: 'Medium',
+          color: 'Blue',
+          personalization: 'Booth Crew',
+        }],
+      }))
     })
 
     it('handles missing customer information gracefully', async () => {

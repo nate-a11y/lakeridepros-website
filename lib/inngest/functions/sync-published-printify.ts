@@ -3,6 +3,7 @@ import { inngest } from "../client";
 import { revalidatePaths } from "@/lib/revalidation";
 import { writeClient } from "@/sanity/lib/client";
 import { processProduct, type PrintifyProduct } from "./sync-printify";
+import { isExcludedPrintifyProduct } from "@/lib/printify/excluded-products";
 
 const PRINTIFY_API_URL = "https://api.printify.com/v1";
 
@@ -135,6 +136,28 @@ export const syncPrintifyPublishedProduct = inngest.createFunction(
     }
 
     const storeUrl = getPublicStoreUrl();
+
+    if (isExcludedPrintifyProduct(data.productId)) {
+      const deactivated = await step.run(
+        "deactivate-excluded-product",
+        async () => deactivateSanityProduct(data.productId),
+      );
+
+      await step.run("revalidate-excluded-product", async () => {
+        await revalidatePaths(["/shop", "/"]);
+      });
+
+      await step.run("acknowledge-excluded-product-unpublish", async () => {
+        await acknowledgeProductUnpublished(data.shopId, data.productId);
+      });
+
+      return {
+        success: true,
+        action: "excluded",
+        productId: data.productId,
+        sanityProductId: deactivated?._id || null,
+      };
+    }
 
     if (data.action === "delete") {
       const deactivated = await step.run(

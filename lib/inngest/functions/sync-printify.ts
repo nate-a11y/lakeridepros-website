@@ -5,6 +5,7 @@ import { revalidatePaths } from '@/lib/revalidation'
 import { createProductExcerpt } from '@/lib/store/product-description'
 import { createHash } from 'crypto'
 import crypto from 'crypto'
+import { isExcludedPrintifyProduct } from '@/lib/printify/excluded-products'
 
 const PRINTIFY_API_URL = 'https://api.printify.com/v1'
 const PRINTIFY_TOKEN = process.env.PRINTIFY_API_TOKEN
@@ -725,8 +726,14 @@ export const syncPrintifyProducts = inngest.createFunction(
       console.log(`[Inngest Sync] Visibility breakdown: ${visibleCount} visible, ${hiddenCount} hidden`)
 
       // Filter to only include visible/published products
-      const visibleProducts = products.filter(p => p.visible === true)
+      const visibleProducts = products.filter(
+        p => p.visible === true && !isExcludedPrintifyProduct(p.id)
+      )
+      const excludedCount = products.filter(p => isExcludedPrintifyProduct(p.id)).length
       console.log(`[Inngest Sync] Will sync ${visibleProducts.length} visible products`)
+      if (excludedCount > 0) {
+        console.log(`[Inngest Sync] Ignoring ${excludedCount} explicitly excluded product(s)`)
+      }
 
       return visibleProducts
     })

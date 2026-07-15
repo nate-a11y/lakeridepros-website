@@ -97,6 +97,7 @@ export default defineType({
                   {title: 'LRP Black (Seats 1-6)', value: 'lrp-black'},
                   {title: 'Limo Bus (Seats up to 14)', value: 'limo-bus'},
                   {title: 'Rescue Squad (Seats up to 14)', value: 'rescue-squad'},
+                  {title: 'Pink Patrol (Seats up to 23)', value: 'pink-patrol'},
                   {title: 'Luxury Sprinter (Seats up to 13)', value: 'luxury-sprinter'},
                   {title: 'Luxury Shuttle Bus (Seats up to 37)', value: 'luxury-shuttle'},
                 ],

@@ -18,6 +18,7 @@ const RIDE_TYPES = [
   { value: 'lrp-black', label: 'LRP Black', capacity: 'Seats 1-6' },
   { value: 'limo-bus', label: 'Limo Bus', capacity: 'Up to 14' },
   { value: 'rescue-squad', label: 'Rescue Squad', capacity: 'Up to 14' },
+  { value: 'pink-patrol', label: 'Pink Patrol', capacity: 'Up to 23' },
   { value: 'luxury-sprinter', label: 'Luxury Sprinter', capacity: 'Up to 13' },
   { value: 'luxury-shuttle', label: 'Luxury Shuttle', capacity: 'Up to 37' },
 ] as const

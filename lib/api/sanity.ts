@@ -84,6 +84,7 @@ export interface Event {
       | 'lrp-black'
       | 'limo-bus'
       | 'rescue-squad'
+      | 'pink-patrol'
       | 'luxury-sprinter'
       | 'luxury-shuttle'
     status: 'available' | 'limited' | 'reserved'

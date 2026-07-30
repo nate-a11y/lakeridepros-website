@@ -718,6 +718,49 @@ describe("Chargebee Insider bootstrap/backfill", () => {
     expect(rpc).not.toHaveBeenCalled();
   });
 
+  it("quarantines an unmapped subscription while applying an independently matched subscription", async () => {
+    const rpc = vi.fn().mockImplementation((_name, params) =>
+      Promise.resolve({
+        data: {
+          bootstrapValidated: true,
+          duplicate: false,
+          historicalBackfill: false,
+          memberId: params.expected_member_id,
+          memberCreated: false,
+        },
+        error: null,
+      }),
+    );
+
+    const summary = await runInsiderChargebeeBootstrap({
+      apply: true,
+      chargebee: client({
+        approvedSubscriptions: [
+          approvedSubscription("subscription-1", "customer-1"),
+          approvedSubscription(
+            "subscription-unmapped",
+            "customer-unmapped",
+            "unmapped@example.com",
+          ),
+        ],
+      }),
+      members,
+      supabase: { rpc },
+      planEnv: PLAN_ENV,
+    });
+
+    expect(summary).toMatchObject({
+      subscriptionsReady: 1,
+      subscriptionsBlocked: 1,
+      currentSnapshotEvents: 1,
+      eventsApplied: 1,
+      failures: 0,
+    });
+    expect(summary.issues[0].code).toBe("unmapped_member");
+    expect(rpc).toHaveBeenCalledTimes(1);
+    expect(rpc.mock.calls[0][1].expected_member_id).toBe("member-1");
+  });
+
   it("uses a unique normalized phone only when customer identity does not conflict", async () => {
     const phoneOnly = approvedSubscription("subscription-1", "customer-1", "");
     phoneOnly.customer.email = undefined;

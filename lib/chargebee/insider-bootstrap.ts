@@ -1238,7 +1238,11 @@ export async function runInsiderChargebeeBootstrap(options: {
   };
 
   if (!apply) return summary;
-  if (issues.length > 0) {
+  // An approved-plan subscription with no exact existing-member match stays
+  // quarantined for manual reconciliation, but must not prevent independently
+  // validated subscriptions from being backfilled. Every ambiguity, conflict,
+  // stale snapshot, cadence issue, and history failure still blocks the batch.
+  if (issues.some((issue) => issue.code !== "unmapped_member")) {
     return summary;
   }
 

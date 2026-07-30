@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test'
 
+const insiderPreviewEnvironment =
+  'INSIDERS_DEMO_MODE=true INSIDERS_INTERNAL_PREVIEW_MODE=true INSIDERS_CHARGEBEE_MANAGEMENT_MODE=live'
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -35,9 +38,15 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run build && npm run start',
+    command: `${insiderPreviewEnvironment} npm run build && ${insiderPreviewEnvironment} npm run start`,
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 180000,
+    env: {
+      INSIDERS_DEMO_MODE: 'true',
+      INSIDERS_INTERNAL_PREVIEW_MODE: 'true',
+      // Exercise the authenticated controls without invoking their API routes.
+      INSIDERS_CHARGEBEE_MANAGEMENT_MODE: 'live',
+    },
   },
 })

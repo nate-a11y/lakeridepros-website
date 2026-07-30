@@ -196,7 +196,7 @@ export function InsiderNotificationSettings({
   return (
     <section
       aria-labelledby="notification-settings-heading"
-      className="overflow-hidden rounded-3xl border border-primary/20 bg-[radial-gradient(circle_at_top_right,rgba(76,187,23,0.13),transparent_35%),#18181b]"
+      className="overflow-hidden rounded-3xl border border-primary/20 bg-[radial-gradient(circle_at_top_right,var(--primary-alpha-12),transparent_35%),#18181b]"
     >
       <div className="border-b border-white/10 p-6 sm:p-7">
         <div className="flex items-start gap-4">

@@ -227,7 +227,7 @@ export default async function InsiderMembershipBenefitsPage({
       <section className="relative border-b border-primary/20">
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(76,187,23,0.18),transparent_33%),radial-gradient(circle_at_90%_70%,rgba(190,255,0,0.09),transparent_28%)]"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,var(--primary-alpha-20),transparent_33%),radial-gradient(circle_at_90%_70%,rgba(190,255,0,0.09),transparent_28%)]"
         />
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8 lg:py-24">
           <div>

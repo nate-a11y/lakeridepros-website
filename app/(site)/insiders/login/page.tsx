@@ -35,7 +35,7 @@ export default async function InsiderLoginPage({
     <section className="relative overflow-hidden bg-black px-4 py-16 sm:px-6 lg:px-8">
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(76,187,23,0.24),transparent_42%),radial-gradient(circle_at_bottom_left,rgba(76,187,23,0.12),transparent_38%)]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,var(--primary-alpha-20),transparent_42%),radial-gradient(circle_at_bottom_left,var(--primary-alpha-12),transparent_38%)]"
       />
       <div className="relative mx-auto grid max-w-6xl overflow-hidden rounded-3xl border border-white/12 bg-zinc-950 shadow-2xl lg:grid-cols-[1.05fr_0.95fr]">
         <div className="relative min-h-[360px] bg-black">

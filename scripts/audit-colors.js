@@ -56,6 +56,8 @@ const SKIP_PATHS = [
   '/api/careers/general-application/route.ts',
   '/lib/email.ts',
   '/lib/notifications/',
+  // Builds inline HTML email markup, where CSS variables are unavailable.
+  '/lib/insiders/notification-delivery.ts',
 ];
 
 // Allowed patterns (e.g., in comments or definitions)

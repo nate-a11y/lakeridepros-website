@@ -60,7 +60,7 @@ function TermsSection({
 export default function InsiderTermsAndConditionsPage() {
   return (
     <div className="bg-black text-white">
-      <header className="border-b border-primary/20 bg-[radial-gradient(circle_at_top,rgba(76,187,23,0.2),transparent_42%)]">
+      <header className="border-b border-primary/20 bg-[radial-gradient(circle_at_top,var(--primary-alpha-20),transparent_42%)]">
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
           <p className="text-sm font-black uppercase tracking-[0.22em] text-primary">
             Lake Ride Pros Insider Rewards

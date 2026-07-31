@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import ParticleField from './ui/ParticleField'
-import TypeWriter from './ui/TypeWriter'
 import { LazyBookingModal } from './LazyBookingModal'
 
 export default function HeroSection() {
@@ -49,18 +48,14 @@ export default function HeroSection() {
               Premium <span className="text-primary-dark dark:text-primary-light">Luxury Transportation</span> at Lake of the Ozarks
             </motion.h1>
 
-            {/* TypeWriter Subtitle */}
+            {/* Static subtitle prevents cumulative layout shift on mobile. */}
             <motion.p
               className="text-center text-xl mt-6 mb-8 text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto"
               initial={shouldReduceMotion ? undefined : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <TypeWriter
-                text="Missouri's premier transportation service. Safe rides, good times. Perfect for weddings, wine tours, bachelor parties, and special events."
-                delay={800}
-                speed={30}
-              />
+              Missouri&apos;s premier transportation service. Safe rides, good times. Perfect for weddings, wine tours, bachelor parties, and special events.
             </motion.p>
 
             {/* Animated CTA Buttons */}

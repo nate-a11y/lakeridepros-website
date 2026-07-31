@@ -30,7 +30,7 @@ export default function FeaturedBlogSection({
   title = 'Latest News & Updates',
   subtitle = 'Stay informed with our latest articles and company news',
 }: FeaturedBlogSectionProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLUListElement>(null);
 
   if (posts.length === 0) {
     return null;
@@ -151,10 +151,9 @@ export default function FeaturedBlogSection({
             )}
 
             {/* Scrollable container */}
-            <div
+            <ul
               ref={scrollContainerRef}
               className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide"
-              role="list"
               aria-label="More articles"
             >
               {otherPosts.map((post) => {
@@ -163,13 +162,16 @@ export default function FeaturedBlogSection({
                   : null;
 
                 return (
-                  <Link
+                  <li
                     key={post._id}
-                    href={`/blog/${post.slug}`}
-                    className="group flex-shrink-0 snap-start bg-white dark:bg-dark-bg-tertiary rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                    style={{ display: 'flex', flexDirection: 'column', width: '320px' }}
-                    role="listitem"
+                    className="flex-shrink-0 snap-start"
+                    style={{ width: '320px' }}
                   >
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="group h-full w-full overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:bg-dark-bg-tertiary"
+                      style={{ display: 'flex', flexDirection: 'column' }}
+                    >
                     <div style={{ display: 'block', position: 'relative', height: '10rem', width: '100%', overflow: 'hidden' }}>
                       {imageUrl ? (
                         <Image
@@ -214,10 +216,11 @@ export default function FeaturedBlogSection({
                         <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </span>
                     </div>
-                  </Link>
+                    </Link>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
 
             {/* Scroll indicator dots for mobile */}
             {otherPosts.length > 1 && (

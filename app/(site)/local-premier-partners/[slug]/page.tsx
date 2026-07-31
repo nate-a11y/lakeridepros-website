@@ -154,42 +154,42 @@ export default async function PremierPartnerDetailPage({ params }: Props) {
                 )}
 
                 {/* Contact Info */}
-                <div className="space-y-3">
+                <div className="grid gap-3">
                   {partner.website && (
                     <a
                       href={partner.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark transition-colors"
+                      className="!flex w-fit max-w-full items-center !justify-start gap-3 text-lrp-green transition-colors hover:text-lrp-green-dark"
                       aria-label={`Visit ${partner.name} website (opens in new tab)`}
                     >
-                      <Globe className="w-5 h-5" aria-hidden="true" />
+                      <Globe className="h-5 w-5 shrink-0" aria-hidden="true" />
                       <span>Visit Website</span>
-                      <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                      <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
                     </a>
                   )}
                   {partner.phone && (
                     <a
                       href={`tel:${partner.phone}`}
-                      className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
+                      className="!flex w-fit max-w-full items-center !justify-start gap-3 text-lrp-text-secondary transition-colors hover:text-lrp-green dark:text-dark-text-secondary"
                     >
-                      <Phone className="w-5 h-5" />
+                      <Phone className="h-5 w-5 shrink-0" />
                       <span>{partner.phone}</span>
                     </a>
                   )}
                   {partner.email && (
                     <a
                       href={`mailto:${partner.email}`}
-                      className="flex items-center gap-2 text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green transition-colors"
+                      className="!flex w-fit max-w-full items-center !justify-start gap-3 text-lrp-text-secondary transition-colors hover:text-lrp-green dark:text-dark-text-secondary"
                     >
-                      <Mail className="w-5 h-5" />
-                      <span>{partner.email}</span>
+                      <Mail className="h-5 w-5 shrink-0" />
+                      <span className="break-all sm:break-normal">{partner.email}</span>
                     </a>
                   )}
                   {partner.address && (
-                    <div className="flex items-start gap-2 text-lrp-text-secondary dark:text-dark-text-secondary">
-                      <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
-                      <span>{partner.address}</span>
+                    <div className="flex max-w-full items-start gap-3 text-lrp-text-secondary dark:text-dark-text-secondary">
+                      <MapPin className="mt-0.5 h-5 w-5 shrink-0" />
+                      <span className="break-words">{partner.address}</span>
                     </div>
                   )}
                 </div>

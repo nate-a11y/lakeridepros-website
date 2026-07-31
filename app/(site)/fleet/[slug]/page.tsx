@@ -67,6 +67,12 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
     permanentRedirect('/fleet');
   }
 
+  // Retired vehicles are intentionally absent from the public fleet and
+  // sitemap. Redirect old detail URLs instead of leaving indexable orphans.
+  if (vehicle.available !== true) {
+    permanentRedirect('/fleet');
+  }
+
   const isPinkPatrol = vehicle.slug === 'pink-patrol';
   const accentVariant = isPinkPatrol ? 'pink' : 'default';
 

@@ -3,13 +3,13 @@ import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Lake Ride Pros',
-  description: 'Lake Ride Pros privacy policy and data protection practices.',
+  description: 'Learn how Lake Ride Pros collects, uses, protects, and shares personal information when you visit our website, book transportation, or contact our team.',
   alternates: {
     canonical: 'https://www.lakeridepros.com/privacy-policy',
   },
   openGraph: {
     title: 'Privacy Policy | Lake Ride Pros',
-    description: 'Lake Ride Pros privacy policy and data protection practices.',
+    description: 'Learn how Lake Ride Pros collects, uses, protects, and shares personal information when you visit our website, book transportation, or contact our team.',
     url: 'https://www.lakeridepros.com/privacy-policy',
     siteName: 'Lake Ride Pros',
     images: [
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Privacy Policy | Lake Ride Pros',
-    description: 'Lake Ride Pros privacy policy and data protection practices.',
+    description: 'Learn how Lake Ride Pros collects, uses, protects, and shares personal information when you visit our website, book transportation, or contact our team.',
     images: ['/og-image.jpg'],
   },
 }

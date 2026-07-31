@@ -245,6 +245,8 @@ export default async function ServiceDetailPage({ params }: Props) {
                 src={imageUrl}
                 alt={serviceImageObj?.alt || service.title}
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                quality={65}
                 className="object-cover"
               />
             </div>

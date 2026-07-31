@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Return Policy | Lake Ride Pros',
-  description: 'Return and refund policy for Lake Ride Pros merchandise and products.',
+  description: 'Review return, refund, exchange, and eligibility policies for Lake Ride Pros merchandise, including damaged items and order-support instructions.',
   alternates: {
     canonical: 'https://www.lakeridepros.com/return-policy',
   },

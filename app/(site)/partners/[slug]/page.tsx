@@ -98,6 +98,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PartnerDetailPage({ params }: Props) {
   const { slug } = await params;
+
+  // This legacy record contains internal driver promo-code instructions, not
+  // customer-facing partner content.
+  if (slug === 'lrp-promotions') {
+    permanentRedirect('/trusted-referral-partners');
+  }
+
   const partner = await getPartnerBySlugLocal(slug);
 
   if (!partner) {

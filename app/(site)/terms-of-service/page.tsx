@@ -5,13 +5,13 @@ import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
   title: 'Terms of Service | Lake Ride Pros',
-  description: 'Lake Ride Pros terms of service and booking conditions.',
+  description: 'Review Lake Ride Pros terms of service, including reservations, payments, cancellations, rider responsibilities, safety policies, and booking conditions.',
   alternates: {
     canonical: 'https://www.lakeridepros.com/terms-of-service',
   },
   openGraph: {
     title: 'Terms of Service | Lake Ride Pros',
-    description: 'Lake Ride Pros terms of service and booking conditions.',
+    description: 'Review Lake Ride Pros terms of service, including reservations, payments, cancellations, rider responsibilities, safety policies, and booking conditions.',
     url: 'https://www.lakeridepros.com/terms-of-service',
     siteName: 'Lake Ride Pros',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Terms of Service' }],
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Terms of Service | Lake Ride Pros',
-    description: 'Lake Ride Pros terms of service and booking conditions.',
+    description: 'Review Lake Ride Pros terms of service, including reservations, payments, cancellations, rider responsibilities, safety policies, and booking conditions.',
     images: ['/og-image.jpg'],
   },
 }

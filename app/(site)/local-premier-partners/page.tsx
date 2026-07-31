@@ -4,13 +4,13 @@ import LocalPremierPartnersClient from '@/components/LocalPremierPartnersClient'
 
 export const metadata = {
   title: 'Local Premier Partners | Lake Ride Pros',
-  description: 'Our premier local business partners at Lake of the Ozarks. Supporting local excellence.',
+  description: 'Discover Lake Ride Pros local premier partners: trusted Lake of the Ozarks businesses offering standout services, experiences, and community connections.',
   alternates: {
     canonical: 'https://www.lakeridepros.com/local-premier-partners',
   },
   openGraph: {
     title: 'Local Premier Partners | Lake Ride Pros',
-    description: 'Our premier local business partners at Lake of the Ozarks. Supporting local excellence.',
+    description: 'Discover Lake Ride Pros local premier partners: trusted Lake of the Ozarks businesses offering standout services, experiences, and community connections.',
     url: 'https://www.lakeridepros.com/local-premier-partners',
     siteName: 'Lake Ride Pros',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Local Partners' }],
@@ -20,7 +20,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Local Premier Partners | Lake Ride Pros',
-    description: 'Our premier local business partners at Lake of the Ozarks.',
+    description: 'Discover Lake Ride Pros local premier partners: trusted Lake of the Ozarks businesses offering standout services, experiences, and community connections.',
     images: ['/og-image.jpg'],
   },
 }

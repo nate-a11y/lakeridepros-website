@@ -4,13 +4,13 @@ import TrustedReferralPartnersClient from '@/components/TrustedReferralPartnersC
 
 export const metadata = {
   title: 'Trusted Referral Partners | Lake Ride Pros',
-  description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
+  description: 'Explore trusted Lake of the Ozarks businesses recommended by Lake Ride Pros for dining, lodging, events, home services, recreation, and more.',
   alternates: {
     canonical: 'https://www.lakeridepros.com/trusted-referral-partners',
   },
   openGraph: {
     title: 'Trusted Referral Partners | Lake Ride Pros',
-    description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
+    description: 'Explore trusted Lake of the Ozarks businesses recommended by Lake Ride Pros for dining, lodging, events, home services, recreation, and more.',
     url: 'https://www.lakeridepros.com/trusted-referral-partners',
     siteName: 'Lake Ride Pros',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Trusted Partners' }],
@@ -20,7 +20,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Trusted Referral Partners | Lake Ride Pros',
-    description: 'Our trusted referral partners. Quality services recommended by Lake Ride Pros.',
+    description: 'Explore trusted Lake of the Ozarks businesses recommended by Lake Ride Pros for dining, lodging, events, home services, recreation, and more.',
     images: ['/og-image.jpg'],
   },
 }

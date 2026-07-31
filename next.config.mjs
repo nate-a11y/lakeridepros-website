@@ -75,7 +75,9 @@ const nextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    // Site content is capped at 1200px. Larger candidates caused Next.js to
+    // expose 300KB-1.3MB vehicle images without improving rendered quality.
+    deviceSizes: [640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000,
     qualities: [65, 75, 80, 85],
@@ -102,9 +104,16 @@ const nextConfig = {
       { source: '/lrp-limo-bus', destination: '/fleet/limo-bus', permanent: true },
       { source: '/luxury-sprinter-van', destination: '/fleet/sprinter-van', permanent: true },
       { source: '/our-fleet-and-drivers', destination: '/fleet', permanent: true },
+      { source: '/fleet/lrp7-madison', destination: '/fleet', permanent: true },
+      { source: '/fleet/lrp11-kelley', destination: '/fleet', permanent: true },
+      { source: '/fleet/lrp4-jasey', destination: '/fleet', permanent: true },
+      { source: '/fleet/lrp5', destination: '/fleet', permanent: true },
+      { source: '/fleet/lrp17-sandra', destination: '/fleet', permanent: true },
+      { source: '/fleet/lrp20-nick', destination: '/fleet', permanent: true },
       { source: '/events-1', destination: '/services/group-event-transportation', permanent: true },
       { source: '/25484956-256c-4ca3-bcb1-05c6bb284472', destination: '/our-drivers', permanent: true },
       { source: '/referral-partners', destination: '/trusted-referral-partners', permanent: true },
+      { source: '/partners/lrp-promotions', destination: '/trusted-referral-partners', permanent: true },
       { source: '/airport-transportation-solutions', destination: '/services', permanent: true },
       { source: '/premium-private-transportation-service', destination: '/services', permanent: true },
       { source: '/hourly-charter-services', destination: '/services', permanent: true },

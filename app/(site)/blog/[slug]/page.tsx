@@ -198,6 +198,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 src={getMediaUrl(post.featuredImage)}
                 alt={post.featuredImage.alt || post.title}
                 fill
+                sizes="(max-width: 896px) 100vw, 896px"
+                quality={65}
                 className="object-cover"
               />
             </div>

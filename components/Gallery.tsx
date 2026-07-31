@@ -176,6 +176,7 @@ function GalleryCarousel({
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  quality={65}
                   priority={i === 0}
                 />
               </div>
@@ -253,6 +254,7 @@ function GalleryGrid({ accentVariant }: { accentVariant: 'default' | 'pink' }) {
             fill
             className="object-contain p-2 transition-transform group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            quality={65}
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
             <div className={cn('opacity-0 group-hover:opacity-100 transition-opacity text-white p-3 rounded-full', accentVariant === 'pink' ? 'bg-[#db2777]' : 'bg-lrp-green')}>
@@ -381,7 +383,8 @@ function GalleryLightbox({
                       alt={img.alt}
                       fill
                       className="object-contain"
-                      sizes="100vw"
+                      sizes="(max-width: 1200px) 100vw, 1200px"
+                      quality={65}
                       priority={i === startIndex}
                     />
                   </div>
@@ -485,6 +488,7 @@ function GalleryThumbnails({
               height={80}
               className="w-full h-full object-cover"
               sizes="80px"
+              quality={65}
             />
           </button>
         ))}

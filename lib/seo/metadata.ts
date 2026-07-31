@@ -43,7 +43,20 @@ export function metaTitle(primary: string, suffix = 'Lake Ride Pros', maxLength 
   return `${truncateMeta(cleanPrimary, primaryBudget)}${separator}${cleanSuffix}`
 }
 
-export function metaDescription(input: string, fallback: string, maxLength = 155): string {
-  const source = normalizeMetaText(input || fallback)
+export function metaDescription(
+  input: string,
+  fallback: string,
+  maxLength = 155,
+  minLength = 120,
+): string {
+  const primary = normalizeMetaText(input)
+  const supplement = normalizeMetaText(fallback)
+
+  // Preserve useful CMS copy, then supplement short excerpts rather than
+  // replacing them with generic text.
+  const source = primary.length >= minLength || !supplement
+    ? primary || supplement
+    : `${primary}${primary ? ' ' : ''}${supplement}`
+
   return truncateMeta(source, maxLength)
 }

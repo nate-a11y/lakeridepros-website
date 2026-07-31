@@ -222,6 +222,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let urlPath: string;
     const partnerSlug = getSlugValue(partner.slug);
     if (!partnerSlug) return;
+    if (partnerSlug === 'lrp-promotions') return;
     const encodedSlug = encodePathSegment(partnerSlug);
     const isPremierPartner =
       partner.isPremierPartner === true || partner.category === 'local-premier';

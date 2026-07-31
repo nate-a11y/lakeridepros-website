@@ -31,6 +31,10 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
+type BlogPageProps = {
+  searchParams: Promise<{ page?: string | string[] }>;
+};
+
 // Helper function to get category display name
 const getCategoryLabel = (categoryValue: string): string => {
   const categoryMap: Record<string, string> = {
@@ -42,16 +46,22 @@ const getCategoryLabel = (categoryValue: string): string => {
   return categoryMap[categoryValue] || categoryValue;
 };
 
-export default async function BlogPage() {
-  const blogData = await getBlogPostsLocal({ limit: 12 });
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const params = await searchParams;
+  const pageValue = Array.isArray(params.page) ? params.page[0] : params.page;
+  const requestedPage = Number.parseInt(pageValue || '1', 10);
+  const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+  const blogData = await getBlogPostsLocal({ limit: 12, page });
 
   const posts = blogData.docs;
-  const hasNextPage = blogData.hasNextPage;
   const currentPage = blogData.page;
+  const totalPages = blogData.totalPages;
+  const isFirstPage = currentPage === 1;
 
-  // Get featured post (first post) and remaining posts
-  const featuredPost = posts[0];
-  const remainingPosts = posts.slice(1);
+  // Preserve the large featured treatment on page one. Subsequent pages show
+  // all 12 posts in the crawlable article grid.
+  const featuredPost = isFirstPage ? posts[0] : undefined;
+  const remainingPosts = isFirstPage ? posts.slice(1) : posts;
   const featuredImageUrl = featuredPost?.featuredImage && typeof featuredPost.featuredImage === 'object'
     ? getMediaUrl(featuredPost.featuredImage)
     : null;
@@ -140,13 +150,13 @@ export default async function BlogPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {remainingPosts.length > 0 && (
             <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-8">
-              More Articles
+              {isFirstPage ? 'More Articles' : `Articles — Page ${currentPage}`}
             </h2>
           )}
           <BlogPostsGrid
-            initialPosts={remainingPosts}
-            initialHasNextPage={hasNextPage}
-            initialPage={currentPage}
+            posts={remainingPosts}
+            currentPage={currentPage}
+            totalPages={totalPages}
           />
         </div>
       </section>

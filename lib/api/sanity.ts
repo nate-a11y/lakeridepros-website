@@ -267,14 +267,11 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
   }
 }
 
-/**
- * Local variant — returns ALL vehicles regardless of `available` status.
- * Returns unwrapped arrays for sitemap generation.
- */
+/** Local variant used by sitemap generation; returns available vehicles only. */
 export const getVehiclesLocal = async (): Promise<Vehicle[]> => {
   try {
     const raw: any[] = await client.fetch(
-      groq`*[_type == "vehicle"] | order(order asc) {
+      groq`*[_type == "vehicle" && available == true] | order(order asc) {
         _id, _type, name, slug, type, description, capacity,
         featuredImage { ..., asset-> { _id, url, metadata } },
         images[] { ..., image { ..., asset-> { _id, url, metadata } }, alt },

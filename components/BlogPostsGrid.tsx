@@ -1,52 +1,18 @@
-'use client';
-
-import { useState } from 'react';
+import Link from 'next/link';
 import BlogPostCard from '@/components/BlogPostCard';
 import type { BlogPost } from '@/types/sanity';
 
 interface BlogPostsGridProps {
-  initialPosts: BlogPost[];
-  initialHasNextPage: boolean;
-  initialPage: number;
+  posts: BlogPost[];
+  currentPage: number;
+  totalPages: number;
 }
 
 export default function BlogPostsGrid({
-  initialPosts,
-  initialHasNextPage,
-  initialPage
+  posts,
+  currentPage,
+  totalPages,
 }: BlogPostsGridProps) {
-  const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
-  const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
-  const [currentPage, setCurrentPage] = useState(initialPage);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const loadMore = async () => {
-    if (isLoading || !hasNextPage) return;
-
-    setIsLoading(true);
-
-    try {
-      const nextPage = currentPage + 1;
-      const response = await fetch(
-        `/api/blog-posts?limit=12&page=${nextPage}&where=${JSON.stringify({ published: { equals: true } })}&sort=-publishedDate&depth=2`
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch more posts');
-      }
-
-      const data = await response.json();
-
-      setPosts(prevPosts => [...prevPosts, ...data.docs]);
-      setHasNextPage(data.hasNextPage);
-      setCurrentPage(nextPage);
-    } catch (error) {
-      console.error('Error loading more posts:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   if (posts.length === 0) {
     return (
       <div className="text-center py-12">
@@ -64,17 +30,47 @@ export default function BlogPostsGrid({
           <BlogPostCard key={post._id} post={post} />
         ))}
       </div>
-      {hasNextPage && (
-        <div className="text-center mt-12">
-          <button
-            onClick={loadMore}
-            disabled={isLoading}
-            className="bg-primary hover:bg-primary-dark text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            aria-label={isLoading ? 'Loading more blog posts' : 'Load more blog posts'}
-          >
-            {isLoading ? 'Loading...' : 'Load More'}
-          </button>
-        </div>
+      {totalPages > 1 && (
+        <nav
+          aria-label="Blog pagination"
+          className="mt-12 flex flex-wrap items-center justify-center gap-2"
+        >
+          {currentPage > 1 && (
+            <Link
+              href={currentPage === 2 ? '/blog' : `/blog?page=${currentPage - 1}`}
+              rel="prev"
+              className="!inline-flex min-h-11 items-center rounded-lg border border-primary px-4 py-2 font-semibold text-primary transition-colors hover:bg-primary hover:text-lrp-black"
+            >
+              Previous
+            </Link>
+          )}
+
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+            <Link
+              key={page}
+              href={page === 1 ? '/blog' : `/blog?page=${page}`}
+              aria-current={page === currentPage ? 'page' : undefined}
+              aria-label={`Blog page ${page}`}
+              className={`!inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border px-3 py-2 font-semibold transition-colors ${
+                page === currentPage
+                  ? 'border-primary bg-primary text-lrp-black'
+                  : 'border-neutral-300 text-neutral-700 hover:border-primary hover:text-primary dark:border-neutral-600 dark:text-neutral-200'
+              }`}
+            >
+              {page}
+            </Link>
+          ))}
+
+          {currentPage < totalPages && (
+            <Link
+              href={`/blog?page=${currentPage + 1}`}
+              rel="next"
+              className="!inline-flex min-h-11 items-center rounded-lg border border-primary px-4 py-2 font-semibold text-primary transition-colors hover:bg-primary hover:text-lrp-black"
+            >
+              Next
+            </Link>
+          )}
+        </nav>
       )}
     </>
   );

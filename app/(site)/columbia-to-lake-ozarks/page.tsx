@@ -7,8 +7,8 @@ import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
-  title: 'Columbia MO to Lake of the Ozarks Transportation | Shuttle Service',
-  description: 'Direct shuttle service from Columbia, Missouri to Lake of the Ozarks. Airport transfers, weekend getaways, group trips. Serving Mizzou students, families, and groups.',
+  title: 'Columbia to Lake of the Ozarks Shuttle | Lake Ride Pros',
+  description: 'Private shuttle service from Columbia, Missouri to Lake of the Ozarks for airport transfers, Mizzou trips, weekend getaways and groups.',
   keywords: [
     'Columbia to Lake Ozarks shuttle',
     'Lake of the Ozarks transportation from Columbia',

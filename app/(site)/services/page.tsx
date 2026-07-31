@@ -5,6 +5,7 @@ import BookingWidget from '@/components/BookingWidget';
 import { getServices, getMediaUrl } from '@/lib/api/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { ChevronRight } from 'lucide-react';
+import { seoServicePageList } from './_data/seoServicePages';
 
 export const metadata: Metadata = {
   title: 'Transportation Services | Lake Ride Pros',
@@ -206,6 +207,40 @@ export default async function ServicesPage() {
               </p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Specialty SEO Landing Pages */}
+      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
+              Specialty Transportation Guides
+            </h2>
+            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
+              Planning a more specific Lake of the Ozarks itinerary? These private transportation pages cover common restaurant, dock, hotel, resort, and vacation rental scenarios.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {seoServicePageList.map((service) => (
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="group rounded-2xl bg-white dark:bg-dark-bg-primary p-6 shadow-sm hover:shadow-lg hover:border-primary border-2 border-transparent transition-all duration-300"
+              >
+                <h3 className="text-lg font-bold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
+                  {service.metadataDescription}
+                </p>
+                <span className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm">
+                  View guide
+                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

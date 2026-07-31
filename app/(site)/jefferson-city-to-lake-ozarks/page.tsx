@@ -7,8 +7,8 @@ import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
-  title: 'Jefferson City to Lake of the Ozarks Transportation | Shuttle',
-  description: 'Direct shuttle service from Jefferson City, Missouri to Lake of the Ozarks. Corporate groups, families, weekend trips. Just 60 miles—closest major city to the Lake.',
+  title: 'Jefferson City to Lake Ozarks Shuttle | Lake Ride Pros',
+  description: 'Private shuttle service from Jefferson City to Lake of the Ozarks for corporate groups, families, airport connections and weekend trips.',
   keywords: [
     'Jefferson City to Lake Ozarks shuttle',
     'Lake of the Ozarks transportation from Jefferson City',

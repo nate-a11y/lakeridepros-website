@@ -91,7 +91,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/contact', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/blog', priority: 0.8, changeFrequency: 'daily' as const },
     { url: '/gift-cards', priority: 0.8, changeFrequency: 'monthly' as const },
-    { url: '/gift-card-balance', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/shop', priority: 0.7, changeFrequency: 'weekly' as const },
     { url: '/testimonials', priority: 0.8, changeFrequency: 'weekly' as const },
 
@@ -126,10 +125,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Specialty landing pages
     { url: '/bagnell-dam-strip-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/lake-ozarks-airport-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/services/restaurant-shuttle', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/services/boat-dock-pickup', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/services/lodge-of-four-seasons-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/services/executive-black-car-service', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/services/vacation-rental-transportation', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/services/hotel-shuttle-service', priority: 0.8, changeFrequency: 'monthly' as const },
 
     // Career pages
     { url: '/careers/driver-application', priority: 0.7, changeFrequency: 'monthly' as const },
-    { url: '/careers/application-status', priority: 0.5, changeFrequency: 'monthly' as const },
 
     // Team page
     { url: '/our-drivers', priority: 0.7, changeFrequency: 'weekly' as const },
@@ -137,9 +141,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Insider membership pages
     { url: '/insider-membership-benefits', priority: 0.6, changeFrequency: 'monthly' as const },
     { url: '/insider-terms-and-conditions', priority: 0.5, changeFrequency: 'yearly' as const },
-
-    // Shopping cart (important for e-commerce)
-    { url: '/cart', priority: 0.5, changeFrequency: 'daily' as const },
 
     // Legal pages
     { url: '/privacy-policy', priority: 0.5, changeFrequency: 'yearly' as const },
@@ -187,12 +188,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Products
-  const productSitemapEntries = (products as SitemapDoc[]).map((product: SitemapDoc) => ({
-    url: `${baseUrl}/shop/products/${product.slug}`,
-    lastModified: new Date(product.updatedAt || currentDate),
-    changeFrequency: 'weekly' as const,
-    priority: 0.6,
-  }));
+  const productSitemapEntries = (products as SitemapDoc[]).flatMap((product: SitemapDoc) => {
+    const slug = getSlugValue(product.slug);
+
+    // A sitemap should contain only canonical, indexable URLs. Sanity now blocks
+    // unsafe slugs, but this guard prevents legacy or imported records from
+    // publishing broken product URLs.
+    if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return [];
+
+    return [{
+      url: `${baseUrl}/shop/products/${encodePathSegment(slug)}`,
+      lastModified: new Date(product.updatedAt || currentDate),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }];
+  });
 
   // Custom pages
   const pageSitemapEntries = (pages as SitemapDoc[]).map((page: SitemapDoc) => ({

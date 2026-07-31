@@ -3,6 +3,10 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Shopping Cart | Lake Ride Pros',
   description: 'Review your Lake Ride Pros merchandise order',
+  robots: {
+    index: false,
+    follow: true,
+  },
   alternates: {
     canonical: 'https://www.lakeridepros.com/cart',
   },

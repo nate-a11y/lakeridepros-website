@@ -7,7 +7,7 @@ import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
-  title: 'Lake of the Ozarks Airport Transportation | Grand Glaize Airport Shuttle | Lake Ride Pros',
+  title: 'Lake of the Ozarks Airport Shuttle | Lake Ride Pros',
   description: 'Professional airport shuttle service to/from Lake of the Ozarks. Grand Glaize Airport (KOZS), MCI, STL, SGF. Private aviation, commercial flights. Book now!',
   keywords: [
     'Lake of the Ozarks airport transportation',

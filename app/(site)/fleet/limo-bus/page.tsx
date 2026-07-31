@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Luxury Limo Bus Rental - Lake of the Ozarks | Lake Ride Pros',
-  description: '14-passenger luxury limo bus for weddings, bachelor parties, wine tours at Lake of the Ozarks. Premium amenities, professional drivers, LED lighting. Book your party bus today!',
+  description: 'Book a 14-passenger limo bus for Lake of the Ozarks weddings, bachelor parties and wine tours, with premium sound, LED lighting and professional drivers.',
   keywords: ['limo bus Lake Ozarks', 'party bus rental', 'luxury limo bus Missouri', 'bachelor party bus', 'wedding limo bus Osage Beach'],
   openGraph: {
     title: 'Luxury Limo Bus - Lake Ride Pros',

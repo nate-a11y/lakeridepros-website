@@ -1,4 +1,4 @@
-import { permanentRedirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ProductActions from './ProductActions'
 import { Metadata } from 'next'
@@ -16,7 +16,7 @@ function getProductMetaDescription(productName: string, shortDescription?: strin
   const hasUsefulDescription = rawDescription.replace(/\W/g, '').length >= 40;
 
   return metaDescription(
-    hasUsefulDescription ? rawDescription : '',
+    hasUsefulDescription ? `${productName}. ${rawDescription}` : '',
     `${productName}. Official Lake Ride Pros merchandise and gear for Lake of the Ozarks transportation fans.`
   );
 }
@@ -28,6 +28,11 @@ export async function generateMetadata(props: ProductPageProps): Promise<Metadat
   if (!product) {
     return {
       title: 'Product Not Found | Lake Ride Pros Shop',
+      description: 'The requested Lake Ride Pros product could not be found.',
+      robots: {
+        index: false,
+        follow: true,
+      },
     };
   }
 
@@ -84,7 +89,7 @@ export default async function ProductPage(props: ProductPageProps) {
   const product = await getProductBySlug(params.slug)
 
   if (!product) {
-    permanentRedirect('/shop')
+    notFound()
   }
 
   const productName = typeof product.name === 'string' ? product.name : 'Product';

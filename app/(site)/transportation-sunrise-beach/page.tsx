@@ -8,7 +8,7 @@ import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/s
 
 export const metadata: Metadata = {
   title: 'Transportation in Sunrise Beach MO | Lake Ride Pros',
-  description: 'Premier transportation service in Sunrise Beach, Missouri. Serving condos, resorts, and vacation rentals along Mile Markers 20-40. Weddings, nightlife, airport shuttles.',
+  description: 'Private transportation in Sunrise Beach, Missouri, serving condos, resorts and vacation rentals for weddings, nightlife and airport transfers.',
   keywords: [
     'Sunrise Beach transportation',
     'Sunrise Beach shuttle service',

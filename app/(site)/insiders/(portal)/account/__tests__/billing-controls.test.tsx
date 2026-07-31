@@ -20,7 +20,10 @@ vi.mock('../../actions', () => ({
   createInsiderRequest: vi.fn(),
 }))
 
-import { InsiderBillingControls, InsiderRiderList } from '../page'
+import {
+  InsiderBillingControls,
+  InsiderRiderList,
+} from '../AccountMemberControls'
 
 const riders = [
   {

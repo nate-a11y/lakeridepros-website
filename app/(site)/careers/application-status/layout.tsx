@@ -3,6 +3,10 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Application Status | Lake Ride Pros Careers',
   description: 'Check the status of your Lake Ride Pros driver application.',
+  robots: {
+    index: false,
+    follow: true,
+  },
   alternates: {
     canonical: 'https://www.lakeridepros.com/careers/application-status',
   },

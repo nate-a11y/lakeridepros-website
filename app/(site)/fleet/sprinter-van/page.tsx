@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Luxury Sprinter Van Service - Lake of the Ozarks | Lake Ride Pros',
-  description: 'Luxury sprinter van for small groups, wine tours, and airport transfers at Lake of the Ozarks. Leather seating, privacy glass, professional drivers. Book your van today!',
+  title: 'Sprinter Van Service at Lake Ozarks | Lake Ride Pros',
+  description: 'Book a luxury sprinter van for Lake of the Ozarks airport transfers, wine tours and small groups, with leather seating and professional drivers.',
   keywords: ['sprinter van Lake Ozarks', 'luxury van rental', 'wine tour van', 'airport transfer van Missouri', 'small group transportation'],
   openGraph: {
     title: 'Luxury Sprinter Van - Lake Ride Pros',

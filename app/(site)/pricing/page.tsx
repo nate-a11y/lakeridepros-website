@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { PhoneLink } from '@/components/PhoneLink'
 
 export const metadata: Metadata = {
-  title: 'Pricing & Rates | Lake of the Ozarks Transportation | Lake Ride Pros',
-  description: 'Transparent pricing for Lake of the Ozarks transportation. Airport shuttle rates, wedding packages, hourly rentals, party buses. No hidden fees. Get an instant quote!',
+  title: 'Lake of the Ozarks Transportation Pricing | Lake Ride Pros',
+  description: 'See transparent Lake of the Ozarks transportation rates for airport transfers, weddings, hourly service and party buses. Request your custom quote.',
   keywords: [
     'Lake of the Ozarks transportation cost',
     'Lake Ozarks shuttle pricing',

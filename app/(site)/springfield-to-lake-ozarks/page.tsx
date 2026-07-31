@@ -7,8 +7,8 @@ import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
-  title: 'Springfield MO to Lake of the Ozarks Transportation | Shuttle',
-  description: 'Direct shuttle service from Springfield, Missouri to Lake of the Ozarks. Groups, families, airport connections. Serving SGF airport, Missouri State, and all Springfield.',
+  title: 'Springfield to Lake Ozarks Shuttle | Lake Ride Pros',
+  description: 'Private shuttle service from Springfield to Lake of the Ozarks for groups, families and SGF airport connections. Door-to-door service available.',
   keywords: [
     'Springfield to Lake Ozarks shuttle',
     'Lake of the Ozarks transportation from Springfield',

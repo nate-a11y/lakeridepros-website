@@ -88,8 +88,7 @@ export default function ShopClient({ initialProducts, initialCategory }: ShopCli
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter((product) =>
         product.name.toLowerCase().includes(query) ||
-        (Array.isArray(product.description) ?
-          JSON.stringify(product.description).toLowerCase().includes(query) : false) ||
+        product.shortDescription?.toLowerCase().includes(query) ||
         product.categories?.some((cat) => cat.toLowerCase().includes(query))
       )
     }

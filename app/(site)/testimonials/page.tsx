@@ -7,7 +7,7 @@ import type { Testimonial } from '@/types/sanity'
 
 export const metadata: Metadata = {
   title: 'Customer Reviews & Testimonials | Lake Ride Pros',
-  description: 'Read what our customers say about Lake Ride Pros. Real 5-star reviews from weddings, bachelor parties, corporate events, and airport transportation at Lake of the Ozarks.',
+  description: 'Read real Lake Ride Pros customer reviews for weddings, airport transfers, bachelor parties, corporate events and transportation at Lake of the Ozarks.',
   keywords: [
     'Lake Ride Pros reviews',
     'Lake Ozarks transportation reviews',

@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'About Us - Lake Ride Pros | Premier Transportation Company',
-  description: 'Learn about Lake Ride Pros, Missouri\'s premier luxury transportation company. Founded in 2022 at Lake of the Ozarks by Jim Brentlinger, Nate Bulock, and Michael Brandt. Professional, licensed, insured.',
+  description: 'Meet Lake Ride Pros, a licensed and insured Lake of the Ozarks transportation company founded in 2022 by Jim Brentlinger, Nate Bullock and Michael Brandt.',
   keywords: ['about Lake Ride Pros', 'Lake Ozarks transportation company', 'Missouri luxury transportation', 'professional drivers'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/about-us',

@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Rescue Squad Specialty Vehicle - Unique Party Bus | Lake Ride Pros',
-  description: 'Unique rescue squad specialty vehicle for memorable parties and events at Lake of the Ozarks. Converted rescue vehicle with party lights. Book this one-of-a-kind experience!',
+  title: 'Rescue Squad Party Bus | Lake Ride Pros',
+  description: 'Book the Rescue Squad, a converted specialty vehicle with party lighting for memorable celebrations and events at Lake of the Ozarks.',
   keywords: ['specialty vehicle Lake Ozarks', 'unique party bus', 'rescue squad truck', 'novelty transportation Missouri', 'themed party bus'],
   openGraph: {
     title: 'Rescue Squad Specialty Vehicle - Lake Ride Pros',

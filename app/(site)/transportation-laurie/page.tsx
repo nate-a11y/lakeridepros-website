@@ -8,7 +8,7 @@ import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/s
 
 export const metadata: Metadata = {
   title: 'Transportation in Laurie MO | Lake Ride Pros',
-  description: 'Premier transportation service in Laurie, Missouri. Serving the west side of Lake of the Ozarks, Hurricane Deck, and the 5A area. Weddings, nightlife, airport shuttles.',
+  description: 'Private transportation in Laurie, Missouri, serving the west side of Lake of the Ozarks for weddings, nightlife and airport transfers.',
   keywords: [
     'Laurie Missouri transportation',
     'Laurie Lake Ozarks shuttle',

@@ -7,8 +7,8 @@ import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
-  title: 'Kansas City to Lake of the Ozarks Transportation | MCI Airport Shuttle | Lake Ride Pros',
-  description: 'Luxury shuttle service from Kansas City (MCI Airport) to Lake of the Ozarks. Professional drivers, comfortable vehicles, door-to-door service. Book your MCI shuttle today!',
+  title: 'Kansas City to Lake Ozarks Shuttle | Lake Ride Pros',
+  description: 'Private shuttle service from Kansas City and MCI Airport to Lake of the Ozarks, with professional drivers and door-to-door transportation.',
   keywords: [
     'Kansas City to Lake of the Ozarks',
     'MCI airport to Lake Ozarks shuttle',

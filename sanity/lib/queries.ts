@@ -283,42 +283,31 @@ export const productsQuery = groq`
   *[_type == "product" && status == "active"] | order(order asc) {
     _id,
     _type,
+    _createdAt,
+    _updatedAt,
     name,
     slug,
-    description,
     shortDescription,
     featuredImage {
-      ...,
+      alt,
       asset-> {
         _id,
-        url,
-        metadata
+        url
       }
     },
     images[] {
-      ...,
+      alt,
       asset-> {
         _id,
-        url,
-        metadata
+        url
       }
     },
     price,
     compareAtPrice,
-    sku,
     categories,
-    tags,
-    inStock,
-    stockQuantity,
     featured,
     variants,
-    printifyProductId,
-    printifyBlueprintId,
-    printifyPrintProviderId,
-    personalization,
-    status,
-    metaTitle,
-    metaDescription
+    status
   }
 `
 

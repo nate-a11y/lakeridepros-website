@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Luxury SUV Service - Suburban Transportation | Lake Ride Pros',
-  description: 'Luxury Suburban SUV service for small groups and airport transfers at Lake of the Ozarks. Leather seating, spacious interior, professional drivers. Book your SUV today!',
+  title: 'Luxury SUV Transportation | Lake Ride Pros',
+  description: 'Book a luxury Suburban SUV for Lake of the Ozarks airport transfers and small groups, with leather seating, luggage space and professional drivers.',
   keywords: ['SUV service Lake Ozarks', 'luxury suburban', 'daily transportation', 'executive travel Missouri', 'airport transfer SUV'],
   openGraph: {
     title: 'Luxury SUV Service - Lake Ride Pros',

@@ -7,7 +7,7 @@ import { resolveSlug } from '@/types/sanity';
 
 export const metadata: Metadata = {
   title: 'Our Fleet - Luxury Vehicles | Lake Ride Pros',
-  description: 'View our fleet of luxury transportation vehicles at Lake of the Ozarks. Limo buses, sprinter vans, shuttle buses, and specialty vehicles. Professional, licensed, insured.',
+  description: 'Explore Lake Ride Pros limo buses, sprinter vans, shuttle buses, SUVs and specialty vehicles for groups at Lake of the Ozarks.',
   alternates: {
     canonical: 'https://www.lakeridepros.com/fleet',
   },

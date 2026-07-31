@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Shuttle Bus Service - 37 Passenger - Lake of the Ozarks | Lake Ride Pros',
-  description: '37-passenger shuttle bus for weddings, corporate events, large groups at Lake of the Ozarks. Comfortable seating, PA system, ADA accessible. Book your shuttle today!',
+  title: '37-Passenger Shuttle Bus | Lake Ride Pros',
+  description: 'Book a 37-passenger shuttle bus for Lake of the Ozarks weddings, corporate events and large groups, with comfortable seating and a PA system.',
   keywords: ['shuttle bus Lake Ozarks', 'wedding shuttle', 'large group transportation', 'corporate shuttle Missouri', '37 passenger bus'],
   openGraph: {
     title: 'Shuttle Bus Service - Lake Ride Pros',

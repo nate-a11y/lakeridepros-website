@@ -7,7 +7,7 @@ import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
-  title: 'Bagnell Dam Strip Transportation | Bar Hopping Party Bus | Lake Ride Pros',
+  title: 'Bagnell Dam Strip Transportation | Lake Ride Pros',
   description: 'Safe, reliable transportation for Bagnell Dam Strip bar hopping and nightlife at Lake of the Ozarks. Party buses, shuttles, designated driver service. Book now!',
   keywords: [
     'Bagnell Dam Strip transportation',

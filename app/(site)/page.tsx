@@ -33,8 +33,8 @@ const NewsletterSignup = nextDynamic(() => import('@/components/NewsletterSignup
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
-  title: 'Lake of the Ozarks Transportation | Weddings, Airport, Nightlife | Lake Ride Pros',
-  description: 'Premier luxury transportation at Lake of the Ozarks. Wedding shuttles, airport transfers (MCI, STL, SGF), nightlife party buses. Professional drivers, 24/7 service.',
+  title: 'Lake of the Ozarks Transportation | Lake Ride Pros',
+  description: 'Luxury transportation at Lake of the Ozarks for weddings, airport transfers, nightlife and groups. Professional drivers and service available 24/7.',
   keywords: [
     'Lake of the Ozarks transportation',
     'luxury transportation Missouri',
@@ -83,7 +83,9 @@ export const metadata: Metadata = {
   },
 };
 
-export const dynamic = 'force-dynamic';
+// Homepage content is CMS-backed and already uses revalidated Sanity queries.
+// Rebuild the route periodically instead of forcing every request through SSR.
+export const revalidate = 300;
 
 export default async function HomePage() {
   // Fetch data with error handling - use HTTP API calls for consistent media URLs

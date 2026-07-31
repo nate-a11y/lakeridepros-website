@@ -106,6 +106,15 @@ export async function POST(request: NextRequest) {
         revalidatePath('/wedding-partners')
         revalidatePath('/')
         revalidatedPaths.push('/trusted-referral-partners', '/local-premier-partners', '/wedding-partners', '/')
+        if (slug) {
+          const detailPaths = [
+            `/partners/${slug}`,
+            `/local-premier-partners/${slug}`,
+            `/wedding-partners/${slug}`,
+          ]
+          detailPaths.forEach((path) => revalidatePath(path))
+          revalidatedPaths.push(...detailPaths)
+        }
         break
 
       case 'testimonial':

@@ -637,7 +637,11 @@ export async function getPartners(
   featured = false,
 ): Promise<Partner[]> {
   try {
-    const raw: any[] = await client.fetch(partnersQuery, {}, { next: { revalidate: 60 } })
+    const raw: any[] = await client.fetch(
+      partnersQuery,
+      {},
+      { next: { revalidate: 60, tags: ['partners'] } },
+    )
     let partners = normalizeDocs(raw)
 
     // GROQ already filters by active, but double-check in JS for safety
@@ -666,7 +670,11 @@ export async function getPartnersByType(
   featured = false,
 ): Promise<Partner[]> {
   try {
-    const raw: any[] = await client.fetch(partnersQuery, {}, { next: { revalidate: 60 } })
+    const raw: any[] = await client.fetch(
+      partnersQuery,
+      {},
+      { next: { revalidate: 60, tags: ['partners'] } },
+    )
     let partners = normalizeDocs(raw)
 
     partners = partners.filter((p) => p.active === true)
@@ -700,7 +708,7 @@ export async function getPartnerBySlugLocal(slug: string): Promise<Partner | nul
         active, publish_date
       }`,
       { slug },
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60, tags: ['partners'] } },
     )
     return raw ? normalizeDoc<Partner>(raw) : null
   } catch (error) {

@@ -194,9 +194,13 @@ export default defineType({
     defineField({
       name: 'website',
       title: 'Website',
-      type: 'string',
+      type: 'url',
       description: 'Partner website URL',
       fieldset: 'contact',
+      validation: (rule) =>
+        rule
+          .uri({ scheme: ['http', 'https'] })
+          .error('Enter the complete website URL, including https://'),
     }),
     defineField({
       name: 'phone',

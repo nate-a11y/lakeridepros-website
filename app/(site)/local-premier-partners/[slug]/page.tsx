@@ -7,6 +7,7 @@ import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/sanity';
 import Gallery from '@/components/Gallery';
 import type { GalleryImage } from '@/components/Gallery';
 import { metaDescription as buildMetaDescription, metaTitle } from '@/lib/seo/metadata';
+import { normalizeExternalWebsiteUrl } from '@/lib/external-url';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -84,6 +85,7 @@ export default async function PremierPartnerDetailPage({ params }: Props) {
 
   const logoObj = typeof partner.logo === 'object' ? partner.logo : null;
   const logoUrl = logoObj ? getMediaUrl(logoObj) : null;
+  const websiteUrl = normalizeExternalWebsiteUrl(partner.website);
 
   return (
     <div className="min-h-screen bg-lrp-white dark:bg-dark-bg-primary">
@@ -155,9 +157,9 @@ export default async function PremierPartnerDetailPage({ params }: Props) {
 
                 {/* Contact Info */}
                 <div className="grid gap-3">
-                  {partner.website && (
+                  {websiteUrl && (
                     <a
-                      href={partner.website}
+                      href={websiteUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="!flex w-fit max-w-full items-center !justify-start gap-3 text-lrp-green transition-colors hover:text-lrp-green-dark"

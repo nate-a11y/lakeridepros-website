@@ -3,6 +3,8 @@ import { writeClient } from '@/sanity/lib/client';
 import { groq } from 'next-sanity';
 import { transformGoogleReviewToTestimonial } from '@/lib/google-reviews';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Shared sync logic — fetches Google reviews via Outscraper and upserts into Sanity
  */
@@ -11,10 +13,10 @@ async function runSync() {
     console.log('Starting Google reviews sync via Outscraper...');
 
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
-    if (!supabaseUrl || !supabaseAnonKey) {
-      throw new Error('Supabase configuration missing. Set SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error('Supabase server configuration missing');
     }
 
     // Get the last sync timestamp to only fetch new/updated reviews
@@ -37,7 +39,7 @@ async function runSync() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${supabaseAnonKey}`,
+        'Authorization': `Bearer ${supabaseServiceKey}`,
       },
       body: JSON.stringify({
         placeId: process.env.GOOGLE_PLACE_ID || 'ChIJJ8GI2fuCGWIRW8RfPECoxN4',
@@ -152,7 +154,16 @@ export async function POST(req: NextRequest) {
  */
 export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization')
-  if (authHeader === `Bearer ${process.env.CRON_SECRET}`) {
+  const cronSecret = process.env.CRON_SECRET
+
+  // Vercel only sends the cron Authorization header when CRON_SECRET exists.
+  // Fail closed when a caller supplies credentials but the deployment is
+  // missing or does not match the configured secret.
+  if (authHeader) {
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     return runSync()
   }
 

@@ -1,8 +1,14 @@
 // Supabase Edge Function for syncing Google Reviews via Outscraper
-// Deno runtime - no npm needed, uses import maps
+// STANDALONE VERSION - No external imports needed
+// Deno runtime - copy this entire file to Supabase Dashboard
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { corsHeaders } from "../_shared/cors.ts"
+
+// CORS headers (inlined)
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
 
 interface OutscraperReview {
   review_id: string
@@ -26,8 +32,8 @@ interface OutscraperResponse {
   data: Array<{
     name: string
     place_id: string
-    reviews?: OutscraperReview[]
-    reviews_count?: number
+    reviews?: number
+    reviews_data?: OutscraperReview[]
     rating?: number
   }>
 }
@@ -51,17 +57,39 @@ serve(async (req) => {
   }
 
   try {
+    // Only the server-side website sync may invoke this billable function.
+    const authHeader = req.headers.get('Authorization')
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    if (!authHeader || !serviceRoleKey) {
+      return new Response(
+        JSON.stringify({ success: false, error: 'Missing Authorization header' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const token = authHeader.replace('Bearer ', '')
+    if (token !== serviceRoleKey) {
+      console.error('Unauthorized access attempt - invalid token')
+      return new Response(
+        JSON.stringify({ success: false, error: 'Unauthorized - Invalid API key' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     // Get Outscraper API key from environment
     const outscraperApiKey = Deno.env.get('OUTSCRAPER_API_KEY')
     if (!outscraperApiKey) {
       throw new Error('OUTSCRAPER_API_KEY not configured in Supabase secrets')
     }
 
-    // Get Place ID from request or environment
-    const { placeId } = await req.json().catch(() => ({}))
+    // Get Place ID and last sync timestamp from request or environment
+    const { placeId, lastSyncTimestamp } = await req.json().catch(() => ({}))
     const googlePlaceId = placeId || Deno.env.get('GOOGLE_PLACE_ID') || 'ChIJJ8GI2fuCGWIRW8RfPECoxN4'
 
     console.log('Fetching reviews for Place ID:', googlePlaceId)
+    if (lastSyncTimestamp) {
+      console.log('Only fetching reviews since:', new Date(lastSyncTimestamp).toISOString())
+    }
 
     // Call Outscraper API with retry logic
     let response: Response | null = null
@@ -70,8 +98,18 @@ serve(async (req) => {
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        // Outscraper Google Maps Reviews API endpoint
-        const outscraperUrl = `https://api.outscraper.com/maps/reviews-v3?query=place_id:${googlePlaceId}&reviewsLimit=250&language=en&async=false`
+        // Outscraper Google Maps Reviews API endpoint (correct base URL)
+        // Note: query parameter takes the Place ID directly, NOT with "place_id:" prefix
+        // Using 'cutoff' parameter to only fetch reviews since last sync (saves API quota)
+        // cutoff = oldest timestamp allowed (so reviews SINCE that date)
+        let outscraperUrl = `https://api.app.outscraper.com/maps/reviews-v2?query=${googlePlaceId}&reviewsLimit=250&language=en&async=false&sort=newest`
+
+        // If we have a last sync timestamp, only fetch reviews since then
+        if (lastSyncTimestamp) {
+          const cutoffTimestamp = Math.floor(new Date(lastSyncTimestamp).getTime() / 1000)
+          outscraperUrl += `&cutoff=${cutoffTimestamp}`
+          console.log(`Using cutoff timestamp: ${cutoffTimestamp} (${new Date(lastSyncTimestamp).toISOString()})`)
+        }
 
         response = await fetch(outscraperUrl, {
           method: 'GET',
@@ -106,10 +144,12 @@ serve(async (req) => {
 
     const data: OutscraperResponse = await response.json()
     console.log('Outscraper response status:', data.status)
+    console.log('Outscraper data array length:', data.data?.length || 0)
 
     // Extract reviews from response
     const placeData = data.data?.[0]
     if (!placeData) {
+      console.error('No place data in response!')
       return new Response(
         JSON.stringify({
           success: true,
@@ -128,8 +168,8 @@ serve(async (req) => {
       )
     }
 
-    const outscraperReviews = placeData.reviews || []
-    console.log(`Found ${outscraperReviews.length} reviews for ${placeData.name}`)
+    const outscraperReviews = placeData.reviews_data || []
+    console.log(`Found ${outscraperReviews.length} reviews for ${placeData.name} (${placeData.reviews} total)`)
 
     // Transform Outscraper reviews to Google My Business API format
     // This ensures compatibility with existing Payload CMS logic
@@ -162,7 +202,7 @@ serve(async (req) => {
         reviews: transformedReviews,
         metadata: {
           businessName: placeData.name,
-          totalReviews: placeData.reviews_count || transformedReviews.length,
+          totalReviews: placeData.reviews || transformedReviews.length,
           rating: placeData.rating,
           placeId: placeData.place_id
         }

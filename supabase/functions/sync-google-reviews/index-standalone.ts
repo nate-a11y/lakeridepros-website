@@ -32,8 +32,8 @@ interface OutscraperResponse {
   data: Array<{
     name: string
     place_id: string
-    reviews?: OutscraperReview[]
-    reviews_count?: number
+    reviews?: number
+    reviews_data?: OutscraperReview[]
     rating?: number
   }>
 }
@@ -57,24 +57,18 @@ serve(async (req) => {
   }
 
   try {
-    // 🔒 SECURITY: Verify authentication
-    // Check for valid Supabase anon key or service role key
+    // Only the server-side website sync may invoke this billable function.
     const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    if (!authHeader || !serviceRoleKey) {
       return new Response(
         JSON.stringify({ success: false, error: 'Missing Authorization header' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
-    // Extract the token (format: "Bearer TOKEN")
     const token = authHeader.replace('Bearer ', '')
-
-    // Verify it matches your Supabase anon key or service role key
-    const validAnonKey = Deno.env.get('SUPABASE_ANON_KEY')
-    const validServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-
-    if (token !== validAnonKey && token !== validServiceKey) {
+    if (token !== serviceRoleKey) {
       console.error('Unauthorized access attempt - invalid token')
       return new Response(
         JSON.stringify({ success: false, error: 'Unauthorized - Invalid API key' }),
@@ -151,7 +145,6 @@ serve(async (req) => {
     const data: OutscraperResponse = await response.json()
     console.log('Outscraper response status:', data.status)
     console.log('Outscraper data array length:', data.data?.length || 0)
-    console.log('Full Outscraper response:', JSON.stringify(data, null, 2))
 
     // Extract reviews from response
     const placeData = data.data?.[0]
@@ -209,7 +202,7 @@ serve(async (req) => {
         reviews: transformedReviews,
         metadata: {
           businessName: placeData.name,
-          totalReviews: placeData.reviews_count || transformedReviews.length,
+          totalReviews: placeData.reviews || transformedReviews.length,
           rating: placeData.rating,
           placeId: placeData.place_id
         }

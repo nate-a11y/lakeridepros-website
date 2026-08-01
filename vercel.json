@@ -16,6 +16,9 @@
   "functions": {
     "app/api/printify/sync-products/route.ts": {
       "maxDuration": 300
+    },
+    "app/api/sync-google-reviews/route.ts": {
+      "maxDuration": 300
     }
   },
   "crons": [

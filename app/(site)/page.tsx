@@ -14,6 +14,8 @@ import {
 import { resolveSlug } from '@/types/sanity';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
 import { getPopularServicesLocal } from '@/lib/analytics-server';
+import { client } from '@/sanity/lib/client';
+import { groq } from 'next-sanity';
 
 // Lazy load below-fold components to reduce initial main thread work
 const StatsBar = nextDynamic(() => import('@/components/StatsBar'));
@@ -90,13 +92,26 @@ export const revalidate = 300;
 export default async function HomePage() {
   // Fetch data with error handling - use HTTP API calls for consistent media URLs
   // Optimized: Reduced limits to minimize HTML payload size
-  const [servicesData, vehicles, blogPosts, testimonials, partnersData, popularServicesData] = await Promise.all([
+  const [servicesData, vehicles, blogPosts, testimonials, partnersData, popularServicesData, googleReviewSummary] = await Promise.all([
     getServices({ limit: 30 }).catch(() => ({ docs: [] })), // For services section + popular filtering
     getRandomVehicles(3).catch(() => []),
     getLatestBlogPostsLocal(10).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),
     getPopularServicesLocal(5).catch(() => []),
+    client.fetch<{reviewCount: number; ratingValue: number | null}>(groq`{
+      "reviewCount": count(*[
+        _type == "testimonial"
+        && source == "google"
+        && googleReviewStatus != "not_found"
+      ]),
+      "ratingValue": math::avg(*[
+        _type == "testimonial"
+        && source == "google"
+        && googleReviewStatus != "not_found"
+        && defined(rating)
+      ].rating)
+    }`).catch(() => ({reviewCount: 308, ratingValue: 5})),
   ]);
 
   const services = servicesData.docs || [];
@@ -132,12 +147,21 @@ export default async function HomePage() {
     isWeddingPartner: p.isWeddingPartner,
   }));
 
+  const currentLocalBusinessSchema = {
+    ...localBusinessSchema,
+    aggregateRating: {
+      ...localBusinessSchema.aggregateRating,
+      ratingValue: String(googleReviewSummary.ratingValue ?? 5),
+      reviewCount: String(googleReviewSummary.reviewCount || 308),
+    },
+  };
+
   return (
     <>
       {/* SEO Structured Data (JSON-LD) */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(currentLocalBusinessSchema) }}
       />
       <script
         type="application/ld+json"

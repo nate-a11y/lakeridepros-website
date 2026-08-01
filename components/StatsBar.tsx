@@ -5,9 +5,9 @@ import ScrollReveal from "./ui/ScrollReveal";
 
 const stats = [
   { target: 5, suffix: "+", label: "Years of Service", prefix: "" },
-  { target: 10000, suffix: "+", label: "Rides Completed", prefix: "" },
-  { target: 250, suffix: "+", label: "5-Star Reviews", prefix: "" },
-  { target: 10, suffix: "+", label: "Luxury Vehicles", prefix: "" },
+  { target: 15000, suffix: "+", label: "Rides Completed", prefix: "" },
+  { target: 300, suffix: "+", label: "Google Reviews", prefix: "" },
+  { target: 25, suffix: "+", label: "Luxury Vehicles", prefix: "" },
 ];
 
 export default function StatsBar() {

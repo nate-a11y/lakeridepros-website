@@ -151,7 +151,7 @@ export default async function HomePage() {
     ...localBusinessSchema,
     aggregateRating: {
       ...localBusinessSchema.aggregateRating,
-      ratingValue: String(googleReviewSummary.ratingValue ?? 5),
+      ratingValue: (googleReviewSummary.ratingValue ?? 5).toFixed(1),
       reviewCount: String(googleReviewSummary.reviewCount || 308),
     },
   };

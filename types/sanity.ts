@@ -139,6 +139,7 @@ export interface Testimonial extends SanityDocument {
   externalId?: string
   externalUrl?: string
   syncedAt?: string
+  googleReviewStatus?: 'current' | 'not_found'
   [key: string]: unknown
 }
 

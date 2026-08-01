@@ -26,6 +26,19 @@ export interface GoogleReview {
   };
 }
 
+export interface GoogleReviewsSyncResult {
+  reviews: GoogleReview[];
+  totalReviewCount: number;
+  averageRating: number | null;
+}
+
+interface GoogleReviewsPage {
+  reviews?: GoogleReview[];
+  averageRating?: number;
+  totalReviewCount?: number;
+  nextPageToken?: string;
+}
+
 /**
  * Convert Google star rating enum to numeric value
  */
@@ -115,6 +128,88 @@ export async function fetchGoogleReviews(
     console.error('Error fetching Google reviews:', error);
     throw error;
   }
+}
+
+/**
+ * Fetch the complete current review set from Google Business Profile.
+ * Google caps each page at 50 reviews, so callers that need an authoritative
+ * count must follow every nextPageToken rather than relying on one page.
+ */
+export async function fetchAllGoogleReviews(
+  locationId?: string,
+): Promise<GoogleReviewsSyncResult> {
+  const location = locationId || process.env.GOOGLE_BUSINESS_LOCATION_ID;
+
+  if (!location) {
+    throw new Error('Google Business Location ID not configured');
+  }
+
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    throw new Error('Google OAuth credentials not configured');
+  }
+
+  const auth = getOAuth2Client();
+  const { token } = await auth.getAccessToken();
+
+  if (!token) {
+    throw new Error('Failed to get access token from Google');
+  }
+
+  const reviewsById = new Map<string, GoogleReview>();
+  let pageToken: string | undefined;
+  let totalReviewCount = 0;
+  let averageRating: number | null = null;
+  let pageCount = 0;
+
+  do {
+    const params = new URLSearchParams({
+      pageSize: '50',
+      orderBy: 'updateTime desc',
+    });
+    if (pageToken) params.set('pageToken', pageToken);
+
+    const response = await fetch(
+      `https://mybusiness.googleapis.com/v4/${location}/reviews?${params.toString()}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Google API error: ${response.status} ${response.statusText} - ${errorText}`,
+      );
+    }
+
+    const page = await response.json() as GoogleReviewsPage;
+    for (const review of page.reviews || []) {
+      reviewsById.set(review.reviewId, review);
+    }
+
+    if (typeof page.totalReviewCount === 'number') {
+      totalReviewCount = page.totalReviewCount;
+    }
+    if (typeof page.averageRating === 'number') {
+      averageRating = page.averageRating;
+    }
+
+    pageToken = page.nextPageToken;
+    pageCount += 1;
+    if (pageCount > 100) {
+      throw new Error('Google review pagination exceeded the safety limit');
+    }
+  } while (pageToken);
+
+  const reviews = Array.from(reviewsById.values());
+  return {
+    reviews,
+    totalReviewCount: totalReviewCount || reviews.length,
+    averageRating,
+  };
 }
 
 /**

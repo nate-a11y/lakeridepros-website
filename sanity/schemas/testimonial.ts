@@ -96,6 +96,20 @@ export default defineType({
       description: 'Last time this review was synced from external source',
       readOnly: true,
     }),
+    defineField({
+      name: 'googleReviewStatus',
+      title: 'Google Review Status',
+      type: 'string',
+      description: 'Whether this review is still returned by the current Google Business Profile review set',
+      readOnly: true,
+      hidden: ({document}) => document?.source !== 'google',
+      options: {
+        list: [
+          {title: 'Current', value: 'current'},
+          {title: 'No longer returned by Google', value: 'not_found'},
+        ],
+      },
+    }),
   ],
   preview: {
     select: {

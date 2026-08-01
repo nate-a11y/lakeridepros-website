@@ -392,6 +392,7 @@ export const productBySlugQuery = groq`
  */
 export const testimonialsQuery = groq`
   *[_type == "testimonial"
+    && (source != "google" || googleReviewStatus != "not_found")
     && ($featured == false || featured == true)
     && ($minRating == 0 || rating >= $minRating)
   ] | order(order asc) {
@@ -415,7 +416,8 @@ export const testimonialsQuery = groq`
     source,
     externalId,
     externalUrl,
-    syncedAt
+    syncedAt,
+    googleReviewStatus
   }
 `
 

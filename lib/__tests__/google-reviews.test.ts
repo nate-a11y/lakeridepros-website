@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { convertStarRating, fetchGoogleReviews, getAuthorizationUrl, getTokensFromCode, transformGoogleReviewToTestimonial, type GoogleReview } from '../google-reviews'
+import { convertStarRating, fetchAllGoogleReviews, fetchGoogleReviews, getAuthorizationUrl, getTokensFromCode, transformGoogleReviewToTestimonial, type GoogleReview } from '../google-reviews'
 
 // Mock googleapis
 const mockGetAccessToken = vi.fn()
@@ -193,6 +193,57 @@ describe('Google Reviews Utility Functions', () => {
       (global.fetch as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('Network error'))
 
       await expect(fetchGoogleReviews()).rejects.toThrow('Network error')
+    })
+  })
+
+  describe('fetchAllGoogleReviews', () => {
+    it('follows pagination and returns authoritative Google metadata', async () => {
+      process.env.GOOGLE_CLIENT_ID = 'test-client-id'
+      process.env.GOOGLE_CLIENT_SECRET = 'test-client-secret'
+      process.env.GOOGLE_REFRESH_TOKEN = 'test-refresh-token'
+      process.env.GOOGLE_BUSINESS_LOCATION_ID = 'accounts/123/locations/456'
+      mockGetAccessToken.mockResolvedValue({ token: 'test-access-token' })
+
+      const firstReview = {
+        reviewId: 'review-1',
+        reviewer: { displayName: 'First Rider' },
+        starRating: 'FIVE',
+        createTime: '2026-07-01T00:00:00Z',
+        updateTime: '2026-07-01T00:00:00Z',
+      }
+      const secondReview = {
+        ...firstReview,
+        reviewId: 'review-2',
+        reviewer: { displayName: 'Second Rider' },
+      }
+
+      ;(global.fetch as ReturnType<typeof vi.fn>)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            reviews: [firstReview],
+            totalReviewCount: 308,
+            averageRating: 5,
+            nextPageToken: 'next-page',
+          }),
+        } as Response)
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ reviews: [secondReview] }),
+        } as Response)
+
+      const result = await fetchAllGoogleReviews()
+
+      expect(result).toEqual({
+        reviews: [firstReview, secondReview],
+        totalReviewCount: 308,
+        averageRating: 5,
+      })
+      expect(global.fetch).toHaveBeenNthCalledWith(
+        2,
+        expect.stringContaining('pageToken=next-page'),
+        expect.any(Object),
+      )
     })
   })
 

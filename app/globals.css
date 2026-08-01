@@ -765,11 +765,11 @@ input[type="checkbox"] {
 
   /* Partner logo scrolling animations */
   .animate-scroll-left {
-    animation: scroll-left 15s linear infinite;
+    animation: scroll-left 40s linear infinite;
   }
 
   .animate-scroll-left-delayed {
-    animation: scroll-left-delayed 15s linear infinite;
+    animation: scroll-left-delayed 40s linear infinite;
   }
 
   .animate-scroll-left:hover,

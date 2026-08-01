@@ -178,7 +178,7 @@ export default function CustomerPhotoUpload() {
                 maxLength={80}
                 autoComplete="name"
                 autoCapitalize="words"
-                className="min-h-12 w-full rounded-xl border border-white/15 bg-neutral-900 px-4 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-lime-500 focus:ring-2 focus:ring-lime-500/25"
+                className="min-h-12 w-full rounded-xl border border-white/20 bg-[#151515] px-4 text-base text-white outline-none transition placeholder:text-[#8f8f8f] focus:border-lime-500 focus:ring-2 focus:ring-lime-500/25"
                 placeholder="Who should we thank?"
               />
             </label>
@@ -194,7 +194,7 @@ export default function CustomerPhotoUpload() {
                 autoCorrect="on"
                 autoCapitalize="sentences"
                 spellCheck
-                className="w-full rounded-xl border border-white/15 bg-neutral-900 px-4 py-3 text-base text-white outline-none transition placeholder:text-neutral-600 focus:border-lime-500 focus:ring-2 focus:ring-lime-500/25"
+                className="w-full rounded-xl border border-white/20 bg-[#151515] px-4 py-3 text-base text-white outline-none transition placeholder:text-[#8f8f8f] focus:border-lime-500 focus:ring-2 focus:ring-lime-500/25"
                 placeholder="Wedding, birthday, driver shout-out, or anything else…"
               />
             </label>
@@ -221,7 +221,7 @@ export default function CustomerPhotoUpload() {
             </div>
 
             {files.length > 0 ? (
-              <div className="rounded-2xl border border-white/10 bg-neutral-900/70 p-3">
+              <div className="rounded-2xl border border-white/10 bg-[#151515] p-3">
                 <div className="mb-2 flex items-center justify-between text-xs text-neutral-400">
                   <span>{files.length} selected</span>
                   <span>{fileSize(totalSize)} total</span>
@@ -246,7 +246,7 @@ export default function CustomerPhotoUpload() {
               </div>
             ) : null}
 
-            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 bg-neutral-900/60 p-3 text-sm leading-5 text-neutral-300">
+            <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/15 bg-[#151515] p-3 text-sm leading-5 text-[#d4d4d4]">
               <input
                 type="checkbox"
                 checked={consent}
@@ -276,7 +276,7 @@ export default function CustomerPhotoUpload() {
               type="button"
               onClick={upload}
               disabled={busy || files.length === 0 || !turnstileToken}
-              className="min-h-14 w-full rounded-xl bg-lime-500 px-5 text-base font-extrabold text-black transition hover:bg-lime-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime-400 disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-400"
+              className="min-h-14 w-full rounded-xl bg-lime-500 px-5 text-base font-extrabold text-black transition hover:bg-lime-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime-400 disabled:cursor-not-allowed disabled:bg-[#292929] disabled:text-[#a8a8a8]"
             >
               {busy ? progress || 'Uploading…' : `Share ${files.length || ''} photo${files.length === 1 ? '' : 's'}`}
             </button>

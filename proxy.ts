@@ -4,6 +4,19 @@ import { updateInsiderSession } from '@/lib/supabase/auth-proxy'
 import { getCaseSensitiveLegacyRedirect } from '@/lib/seo/case-sensitive-redirects'
 
 export async function proxy(request: NextRequest) {
+  // Next's optimizer rejects widths that are no longer configured. Preserve
+  // old image URLs retained by crawlers/browser caches by mapping the former
+  // 3840px candidate to the current 1200px maximum.
+  if (
+    request.nextUrl.pathname === '/_next/image' &&
+    request.nextUrl.searchParams.get('w') === '3840'
+  ) {
+    const destination = request.nextUrl.clone()
+    destination.searchParams.set('w', '1200')
+    destination.searchParams.set('q', '65')
+    return NextResponse.rewrite(destination)
+  }
+
   const legacyDestination = getCaseSensitiveLegacyRedirect(
     request.nextUrl.pathname,
   )
@@ -23,6 +36,10 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    {
+      source: '/_next/image',
+      has: [{ type: 'query', key: 'w', value: '3840' }],
+    },
     '/insiders/:path*',
     '/our-drivers/:path*',
     '/events/:path*',

@@ -5,6 +5,18 @@ import {
   type ChargebeeSyncRpcClient,
   type InsiderChargebeeSyncEvent,
 } from '@/lib/chargebee/insider-sync'
+import { Resend } from 'resend'
+import { buildInsiderWelcomeEmail } from '@/lib/insiders/welcome'
+import { createInsiderWelcomeToken } from '@/lib/insiders/welcome-link'
+import { getInsiderWelcomeProfile } from '@/lib/insiders/welcome-server'
+
+function createdMemberId(result: unknown) {
+  if (!result || typeof result !== 'object') return null
+  const record = result as Record<string, unknown>
+  return record.memberCreated === true && typeof record.memberId === 'string'
+    ? record.memberId
+    : null
+}
 
 export const syncInsiderChargebeeSubscription = inngest.createFunction(
   {
@@ -55,11 +67,72 @@ export const syncInsiderChargebeeSubscription = inngest.createFunction(
   async ({ event, step }) => {
     const data = event.data as InsiderChargebeeSyncEvent
 
-    return step.run('fetch-and-sync-authoritative-subscription', async () => {
+    const syncResult = await step.run(
+      'fetch-and-sync-authoritative-subscription',
+      async () => {
       return processInsiderChargebeeSync(data, {
         supabase:
           getSupabaseServerClient() as unknown as ChargebeeSyncRpcClient,
       })
+      },
+    )
+
+    const memberId = createdMemberId(syncResult)
+    const welcomeMode = process.env.INSIDERS_WELCOME_EMAIL_MODE || 'off'
+    if (!memberId || welcomeMode !== 'send') {
+      return {
+        sync: syncResult,
+        welcomeEmail: {
+          enabled: welcomeMode === 'send',
+          sent: false,
+          reason: memberId ? 'delivery_disabled' : 'not_a_new_member',
+        },
+      }
+    }
+
+    const welcomeEmail = await step.run('send-insider-welcome-email', async () => {
+      if (!process.env.RESEND_API_KEY) {
+        throw new Error('RESEND_API_KEY is required for Insider welcome email')
+      }
+
+      const profile = await getInsiderWelcomeProfile(memberId)
+      if (!profile) {
+        throw new Error('New Insider welcome profile is unavailable')
+      }
+
+      const token = createInsiderWelcomeToken(memberId, {
+        expiresAt: new Date((data.occurredAt + 30 * 24 * 60 * 60) * 1000),
+      })
+      const siteUrl = (
+        process.env.NEXT_PUBLIC_SITE_URL || 'https://www.lakeridepros.com'
+      ).replace(/\/$/, '')
+      const message = buildInsiderWelcomeEmail(
+        profile,
+        `${siteUrl}/insiders/welcome/${token}`,
+      )
+      const resend = new Resend(process.env.RESEND_API_KEY)
+      const { data: sent, error } = await resend.emails.send(
+        {
+          from:
+            process.env.INSIDERS_EMAIL_FROM ||
+            'Lake Ride Pros Insider Rewards <contactus@updates.lakeridepros.com>',
+          replyTo: 'contactus@lakeridepros.com',
+          to: profile.email,
+          subject: message.subject,
+          text: message.text,
+          html: message.html,
+          tags: [
+            { name: 'audience', value: 'insider_rewards' },
+            { name: 'message', value: 'welcome' },
+          ],
+        },
+        { idempotencyKey: `insider-welcome/${memberId}` },
+      )
+
+      if (error) throw new Error(`Welcome email failed: ${error.message}`)
+      return { sent: true, emailId: sent?.id || null }
     })
+
+    return { sync: syncResult, welcomeEmail }
   },
 )

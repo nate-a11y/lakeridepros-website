@@ -22,6 +22,10 @@ describe('Insider welcome email', () => {
     expect(email.text).toContain('5% savings')
     expect(email.html).toContain('Sherry Grabow')
     expect(email.html).toContain(
+      'https://www.lakeridepros.com/insider-rewards/lake-ride-pros-logo.png',
+    )
+    expect(email.html).toContain('alt="Lake Ride Pros"')
+    expect(email.html).toContain(
       'https://www.lakeridepros.com/insiders/welcome/signed-token',
     )
   })

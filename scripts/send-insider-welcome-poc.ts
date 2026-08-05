@@ -92,7 +92,7 @@ async function main() {
       replyTo: 'contactus@lakeridepros.com',
       to: 'nate@lakeridepros.com',
       cc: 'contactus@lakeridepros.com',
-      subject: `[PROOF] ${message.subject}`,
+      subject: `[UPDATED PROOF] ${message.subject}`,
       text: message.text,
       html: message.html,
       tags: [
@@ -101,7 +101,7 @@ async function main() {
       ],
     },
     {
-      idempotencyKey: `insider-welcome-proof/${profile.memberId}/2026-08-04`,
+      idempotencyKey: `insider-welcome-proof/${profile.memberId}/2026-08-04/v2-logo`,
     },
   )
 

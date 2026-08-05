@@ -164,6 +164,17 @@ export function buildInsiderWelcomeEmail(
   const safeName = escapeHtml(profile.name)
   const safeFirstName = escapeHtml(firstName(profile.name))
   const safeUrl = escapeHtml(welcomeUrl)
+  let logoUrl =
+    'https://www.lakeridepros.com/insider-rewards/lake-ride-pros-logo.png'
+  try {
+    logoUrl = new URL(
+      '/insider-rewards/lake-ride-pros-logo.png',
+      welcomeUrl,
+    ).toString()
+  } catch {
+    // Keep the canonical production asset when a malformed preview URL is used.
+  }
+  const safeLogoUrl = escapeHtml(logoUrl)
   const lifetimeMessage = profile.lifetimeTier
     ? `<p style="margin:12px 0 0;color:#cffafe;font-size:14px;font-weight:700;">${escapeHtml(INSIDER_TIERS[profile.lifetimeTier].label)} for life</p>`
     : ''
@@ -195,6 +206,7 @@ export function buildInsiderWelcomeEmail(
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:620px;border:1px solid #4cbb17;border-radius:24px;overflow:hidden;background:#111111;">
             <tr>
               <td style="padding:36px 32px 24px;text-align:center;background:radial-gradient(circle at top,#173d0b 0,#080808 58%);">
+                <img src="${safeLogoUrl}" width="104" height="104" alt="Lake Ride Pros" style="display:block;width:104px;height:104px;margin:0 auto 18px;object-fit:contain;" />
                 <p style="margin:0;color:#7ee442;font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;">Lake Ride Pros</p>
                 <h1 style="margin:10px 0 0;color:#ffffff;font-size:34px;line-height:1.15;">Insider Rewards</h1>
                 <p style="margin:18px 0 0;color:#d4d4d8;font-size:18px;line-height:1.55;">Welcome, <strong style="color:#7ee442;">${safeFirstName}</strong>. Your membership is ready.</p>

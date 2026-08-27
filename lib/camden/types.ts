@@ -88,6 +88,7 @@ export interface CamdenTrip {
 export interface CamdenRequest {
   id: string
   reference: string
+  requestKind?: "ride" | "change" | "cancellation"
   riderId: string
   riderName: string
   status: CamdenRequestStatus

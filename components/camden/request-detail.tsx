@@ -6,6 +6,7 @@ import { useParams, useSearchParams } from "next/navigation"
 import { FormEvent, useCallback, useState } from "react"
 import { createCamdenPortalService } from "@/lib/camden/service"
 import type { CamdenRequestStatus } from "@/lib/camden/types"
+import { CamdenModal } from "./modal"
 import { PortalShell } from "./portal-shell"
 import { ErrorState, fieldClass, formatPortalDate, formatPortalTime, LoadingState, Notice, primaryButtonClass, secondaryButtonClass, StatusBadge } from "./ui"
 import { useCamdenData } from "./use-camden-data"
@@ -31,6 +32,7 @@ export function RequestDetailView() {
   const [saving, setSaving] = useState(false)
   const [transitionStatus, setTransitionStatus] = useState<CamdenRequestStatus | "">("")
   const [publicExplanation, setPublicExplanation] = useState("")
+  const [coordinatorActionOpen, setCoordinatorActionOpen] = useState(false)
 
   async function sendMessage(event: FormEvent) {
     event.preventDefault(); if (!message.trim()) return
@@ -61,7 +63,7 @@ export function RequestDetailView() {
     setSaving(true); setFeedback(null)
     try {
       await createCamdenPortalService("coordinator").transitionRequest(id, transitionStatus, data.detail.request.version, publicExplanation.trim() || undefined)
-      setTransitionStatus(""); setPublicExplanation(""); setFeedback("Request status updated."); await reload()
+      setTransitionStatus(""); setPublicExplanation(""); setCoordinatorActionOpen(false); setFeedback("Request status updated."); await reload()
     } catch (caught) { setFeedback(caught instanceof Error ? caught.message : "Status could not be updated.") } finally { setSaving(false) }
   }
 
@@ -73,6 +75,8 @@ export function RequestDetailView() {
   const syncedCost = request.trips.reduce<number | null>((sum, trip) => trip.cost == null ? sum : (sum ?? 0) + trip.cost, null)
   const availableReasons = action ? data.changeReasons.filter((item) => item.kind === action) : []
   const selectedReason = availableReasons.find((item) => item.id === reason)
+  const canRequestFollowup = (!request.requestKind || request.requestKind === "ride") && ["acknowledged", "needs_information", "information_received", "confirmed"].includes(request.status)
+  const canTransition = isCoordinator && !["confirmed", "completed", "cancelled", "declined", "no_show"].includes(request.status)
 
   return (
     <PortalShell context={data.context}>
@@ -82,7 +86,7 @@ export function RequestDetailView() {
         {feedback && <div role="status" className="mt-5 rounded-xl border border-blue-200 bg-blue-50 p-4 font-semibold">{feedback}</div>}
         {request.riderVisibleExplanation && <div className="mt-5"><Notice tone="warning" title="Update from Lake Ride Pros">{request.riderVisibleExplanation}</Notice></div>}
         <section aria-labelledby="itinerary-heading" className="mt-6 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7">
-          <div className="flex flex-wrap items-start justify-between gap-3"><h2 id="itinerary-heading" className="text-xl font-extrabold">Request details</h2>{request.status === "pending" && !editing && <button type="button" onClick={() => { setNotes(request.notes ?? ""); setEditing(true) }} className={secondaryButtonClass}><Pencil className="mr-2 size-4" aria-hidden="true" />Edit pending request</button>}</div>
+          <div className="flex flex-wrap items-start justify-between gap-3"><h2 id="itinerary-heading" className="text-xl font-extrabold">Request details</h2>{request.status === "pending" && <button type="button" onClick={() => { setFeedback(null); setNotes(request.notes ?? ""); setEditing(true) }} className={secondaryButtonClass}><Pencil className="mr-2 size-4" aria-hidden="true" />Edit pending request</button>}</div>
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
             <div className="flex gap-3"><CalendarDays className="mt-0.5 size-5 shrink-0 text-[#245f0b]" aria-hidden="true" /><div><p className="text-xs font-bold uppercase text-neutral-600">Ride date</p><div className="mt-1 font-semibold">{formatPortalDate(request.rideDate)}</div></div></div>
             <div className="flex gap-3"><Clock3 className="mt-0.5 size-5 shrink-0 text-[#245f0b]" aria-hidden="true" /><div><p className="text-xs font-bold uppercase text-neutral-600">Timing</p><div className="mt-1">Pickup {formatPortalTime(request.requestedPickupTime)}<br />Arrive by {formatPortalTime(request.appointmentTime)}{request.direction === "round_trip" && <><br />Return {request.returnKind === "will_call" ? "call when ready" : formatPortalTime(request.returnTime ?? "")}</>}</div></div></div>
@@ -91,17 +95,219 @@ export function RequestDetailView() {
             {isCoordinator && <div><p className="text-xs font-bold uppercase text-neutral-600">Assigned transportation specialist</p><div className="mt-1 font-semibold">{request.assigneeName ?? "Unassigned"}</div></div>}
             {isCoordinator && <div><p className="text-xs font-bold uppercase text-neutral-600">Current trip cost</p><div className="mt-1 font-extrabold">{syncedCost == null ? "Available after scheduling" : syncedCost.toLocaleString("en-US", { style: "currency", currency: "USD" })}</div></div>}
           </div>
-          {editing && <form onSubmit={savePending} className="mt-6 rounded-xl bg-neutral-50 p-4"><label htmlFor="edit-notes" className="mb-1 block text-sm font-bold">Request notes</label><textarea id="edit-notes" rows={4} maxLength={1000} className={fieldClass} value={notes} onChange={(event) => setNotes(event.target.value)} /><p className="mt-2 text-sm text-neutral-600">Only pending requests can be edited directly. This update is recorded in the audit history.</p><div className="mt-4 flex flex-wrap justify-end gap-2"><button type="button" onClick={() => setEditing(false)} className={secondaryButtonClass}>Cancel</button><button disabled={saving} className={primaryButtonClass}>Save update</button></div></form>}
-          <div className="mt-6 flex flex-wrap gap-3 border-t border-neutral-200 pt-5"><Link href={`/camden-county/requests/new?duplicate=${request.id}${isCoordinator ? "&onBehalf=true" : ""}`} className={secondaryButtonClass}><Copy className="mr-2 size-4" aria-hidden="true" />Duplicate request</Link>{!["pending", "declined", "cancelled", "completed", "no_show"].includes(request.status) && <><button type="button" onClick={() => { setAction("change"); setReason("") }} className={secondaryButtonClass}>Request a change</button><button type="button" onClick={() => { setAction("cancellation"); setReason("") }} className={secondaryButtonClass}>Request cancellation</button></>}</div>
+          <div className="mt-6 flex flex-wrap gap-3 border-t border-neutral-200 pt-5"><Link href={`/camden-county/requests/new?duplicate=${request.id}${isCoordinator ? "&onBehalf=true" : ""}`} className={secondaryButtonClass}><Copy className="mr-2 size-4" aria-hidden="true" />Duplicate request</Link>{canTransition && <button type="button" onClick={() => { setFeedback(null); setTransitionStatus(""); setPublicExplanation(""); setCoordinatorActionOpen(true) }} className={primaryButtonClass}>Update status</button>}{canRequestFollowup && <><button type="button" onClick={() => { setFeedback(null); setAction("change"); setReason(""); setExplanation("") }} className={secondaryButtonClass}>Request a change</button><button type="button" onClick={() => { setFeedback(null); setAction("cancellation"); setReason(""); setExplanation("") }} className={secondaryButtonClass}>Request cancellation</button></>}</div>
         </section>
         {request.trips.length > 0 && <section aria-labelledby="linked-trips-heading" className="mt-6 rounded-2xl border border-green-200 bg-green-50 p-5 sm:p-6"><h2 id="linked-trips-heading" className="text-xl font-extrabold">Confirmed trip details</h2><p className="mt-1 text-sm text-neutral-700">Trip details are updated from Lake Ride Pros records and may take up to 15 minutes. Driver and vehicle information will also be sent by text when available.</p><div className="mt-4 grid gap-3 sm:grid-cols-2">{request.trips.map((trip, index) => <article key={trip.id} className="rounded-xl bg-white p-4"><p className="text-xs font-bold uppercase text-neutral-600">{request.trips.length > 1 ? `Trip ${index + 1}` : "Scheduled trip"}</p><p className="mt-2 font-semibold capitalize">{trip.status.replaceAll("_", " ")}</p><p className="mt-2 text-sm"><span className="font-bold">Driver:</span> {trip.driverName ?? "Not assigned"}<br /><span className="font-bold">Vehicle:</span> {trip.vehicleName ?? "Not assigned"}</p></article>)}</div></section>}
-        {isCoordinator && !["confirmed", "completed", "cancelled", "declined", "no_show"].includes(request.status) && <section aria-labelledby="coordinator-actions-heading" className="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-5 sm:p-6"><h2 id="coordinator-actions-heading" className="text-xl font-extrabold">Coordinator action</h2><p className="mt-1 text-sm text-neutral-700">Acknowledgement means the request was reviewed; it does not confirm the ride. Confirmation occurs automatically after Lake Ride Pros completes and links the reservation.</p><form onSubmit={submitTransition} className="mt-4 grid gap-4 sm:grid-cols-2"><div><label htmlFor="transition-status" className="mb-1 block text-sm font-bold">Move request to</label><select id="transition-status" className={fieldClass} value={transitionStatus} onChange={(event) => setTransitionStatus(event.target.value as typeof transitionStatus)} required><option value="">Select an action</option><option value="acknowledged">Acknowledged</option><option value="needs_information">Needs information</option><option value="declined">Declined</option></select></div>{["declined", "needs_information"].includes(transitionStatus) && <div><label htmlFor="public-explanation" className="mb-1 block text-sm font-bold">Rider-visible explanation <span aria-hidden="true">*</span></label><textarea id="public-explanation" className={fieldClass} rows={3} value={publicExplanation} onChange={(event) => setPublicExplanation(event.target.value)} required /></div>}<div className="sm:col-span-2"><button disabled={saving || !transitionStatus} className={primaryButtonClass}>{saving ? "Saving…" : "Save status"}</button></div></form></section>}
-        {action && <section aria-labelledby="followup-heading" className="mt-6 rounded-2xl border-2 border-amber-300 bg-amber-50 p-5"><h2 id="followup-heading" className="text-xl font-extrabold">Request {action === "change" ? "a change" : "cancellation"}</h2><p className="mt-2 text-sm">This creates a separate, auditable request. The scheduled ride remains unchanged until Lake Ride Pros processes it.</p><form onSubmit={submitFollowup} className="mt-4 space-y-4"><div><label htmlFor="reason" className="mb-1 block text-sm font-bold">Reason <span aria-hidden="true">*</span></label><select id="reason" className={fieldClass} value={reason} onChange={(event) => setReason(event.target.value)} required><option value="">Select a reason</option>{availableReasons.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}</select>{!availableReasons.length && <p role="alert" className="mt-2 text-sm font-semibold text-red-800">No reasons are configured. Contact Lake Ride Pros.</p>}</div><div><label htmlFor="explanation" className="mb-1 block text-sm font-bold">Explanation {selectedReason?.requiresExplanation && <span aria-hidden="true">*</span>}</label><textarea id="explanation" className={fieldClass} rows={3} value={explanation} onChange={(event) => setExplanation(event.target.value)} required={selectedReason?.requiresExplanation} /></div><div className="flex flex-wrap justify-end gap-2"><button type="button" onClick={() => setAction(null)} className={secondaryButtonClass}>Never mind</button><button disabled={saving || !availableReasons.length} className={primaryButtonClass}>Submit request</button></div></form></section>}
         <section aria-labelledby="conversation-heading" className="mt-6 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7">
           <div className="flex gap-3"><MessageSquareText className="mt-0.5 size-6 text-[#245f0b]" aria-hidden="true" /><div><h2 id="conversation-heading" className="text-xl font-extrabold">Request conversation</h2><p className="mt-1 text-sm text-neutral-600">Messages are text-only and cannot be edited or deleted. Text alerts will send you back here to reply.</p></div></div>
           {data.detail.messages.length ? <ol className="mt-6 space-y-4">{data.detail.messages.map((item) => <li key={item.id} className={`max-w-[90%] rounded-2xl p-4 ${item.authorRole === "rider" ? "ml-auto bg-[#eaf8e4]" : "bg-neutral-100"}`}><div className="flex flex-wrap items-baseline justify-between gap-2"><p className="text-sm font-bold">{item.authorName}</p><time className="text-xs text-neutral-600" dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</time></div><p className="mt-2 whitespace-pre-wrap text-sm">{item.body}</p></li>)}</ol> : <p className="mt-5 rounded-xl bg-neutral-50 p-4 text-sm text-neutral-600">No messages yet.</p>}
           <form onSubmit={sendMessage} className="mt-6"><label htmlFor="new-message" className="mb-1 block text-sm font-bold">Add a message</label><textarea id="new-message" rows={3} maxLength={2000} className={fieldClass} value={message} onChange={(event) => setMessage(event.target.value)} required /><div className="mt-3 flex justify-end"><button disabled={saving || !message.trim()} className={primaryButtonClass}><Send className="mr-2 size-4" aria-hidden="true" />Send message</button></div></form>
         </section>
+        <CamdenModal
+          open={editing}
+          onClose={() => setEditing(false)}
+          title="Edit pending request"
+          description="Changes are recorded in the request audit history."
+          busy={saving}
+        >
+          {feedback && (
+            <div
+              role="alert"
+              className="mb-4 rounded-xl border border-red-300 bg-red-50 p-4 text-sm font-semibold text-red-900"
+            >
+              {feedback}
+            </div>
+          )}
+          <form onSubmit={savePending} className="space-y-4">
+            <div>
+              <label
+                htmlFor="edit-notes"
+                className="mb-1 block text-sm font-bold"
+              >
+                Request notes
+              </label>
+              <textarea
+                id="edit-notes"
+                rows={4}
+                maxLength={1000}
+                className={fieldClass}
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
+              />
+            </div>
+            <p className="text-sm text-neutral-600">
+              Only pending requests can be edited directly.
+            </p>
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setEditing(false)}
+                className={secondaryButtonClass}
+              >
+                Never mind
+              </button>
+              <button disabled={saving} className={primaryButtonClass}>
+                {saving ? "Saving…" : "Save update"}
+              </button>
+            </div>
+          </form>
+        </CamdenModal>
+
+        <CamdenModal
+          open={coordinatorActionOpen}
+          onClose={() => setCoordinatorActionOpen(false)}
+          title="Update request status"
+          description="Acknowledgement means the request was reviewed; confirmation occurs after Lake Ride Pros schedules and links the reservation."
+          busy={saving}
+        >
+          {feedback && (
+            <div
+              role="alert"
+              className="mb-4 rounded-xl border border-red-300 bg-red-50 p-4 text-sm font-semibold text-red-900"
+            >
+              {feedback}
+            </div>
+          )}
+          <form onSubmit={submitTransition} className="space-y-4">
+            <div>
+              <label
+                htmlFor="transition-status"
+                className="mb-1 block text-sm font-bold"
+              >
+                Move request to
+              </label>
+              <select
+                id="transition-status"
+                className={fieldClass}
+                value={transitionStatus}
+                onChange={(event) =>
+                  setTransitionStatus(
+                    event.target.value as typeof transitionStatus,
+                  )
+                }
+                required
+              >
+                <option value="">Select an action</option>
+                <option value="acknowledged">Acknowledged</option>
+                <option value="needs_information">Needs information</option>
+                <option value="declined">Declined</option>
+              </select>
+            </div>
+            {["declined", "needs_information"].includes(transitionStatus) && (
+              <div>
+                <label
+                  htmlFor="public-explanation"
+                  className="mb-1 block text-sm font-bold"
+                >
+                  Rider-visible explanation <span aria-hidden="true">*</span>
+                </label>
+                <textarea
+                  id="public-explanation"
+                  className={fieldClass}
+                  rows={3}
+                  value={publicExplanation}
+                  onChange={(event) => setPublicExplanation(event.target.value)}
+                  required
+                />
+              </div>
+            )}
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setCoordinatorActionOpen(false)}
+                className={secondaryButtonClass}
+              >
+                Never mind
+              </button>
+              <button
+                disabled={saving || !transitionStatus}
+                className={primaryButtonClass}
+              >
+                {saving ? "Saving…" : "Save status"}
+              </button>
+            </div>
+          </form>
+        </CamdenModal>
+
+        <CamdenModal
+          open={Boolean(action)}
+          onClose={() => setAction(null)}
+          title={`Request ${action === "change" ? "a change" : "cancellation"}`}
+          description="This creates a separate, auditable request. The scheduled ride remains unchanged until Lake Ride Pros processes it."
+          busy={saving}
+        >
+          {feedback && (
+            <div
+              role="alert"
+              className="mb-4 rounded-xl border border-red-300 bg-red-50 p-4 text-sm font-semibold text-red-900"
+            >
+              {feedback}
+            </div>
+          )}
+          <form onSubmit={submitFollowup} className="space-y-4">
+            <div>
+              <label htmlFor="reason" className="mb-1 block text-sm font-bold">
+                Reason <span aria-hidden="true">*</span>
+              </label>
+              <select
+                id="reason"
+                className={fieldClass}
+                value={reason}
+                onChange={(event) => setReason(event.target.value)}
+                required
+              >
+                <option value="">Select a reason</option>
+                {availableReasons.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+              {!availableReasons.length && (
+                <p
+                  role="alert"
+                  className="mt-2 text-sm font-semibold text-red-800"
+                >
+                  No reasons are configured. Contact Lake Ride Pros.
+                </p>
+              )}
+            </div>
+            <div>
+              <label
+                htmlFor="explanation"
+                className="mb-1 block text-sm font-bold"
+              >
+                Explanation{" "}
+                {selectedReason?.requiresExplanation && (
+                  <span aria-hidden="true">*</span>
+                )}
+              </label>
+              <textarea
+                id="explanation"
+                className={fieldClass}
+                rows={3}
+                value={explanation}
+                onChange={(event) => setExplanation(event.target.value)}
+                required={selectedReason?.requiresExplanation}
+              />
+            </div>
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setAction(null)}
+                className={secondaryButtonClass}
+              >
+                Never mind
+              </button>
+              <button
+                disabled={saving || !availableReasons.length}
+                className={primaryButtonClass}
+              >
+                {saving ? "Submitting…" : "Submit request"}
+              </button>
+            </div>
+          </form>
+        </CamdenModal>
       </div>
     </PortalShell>
   )

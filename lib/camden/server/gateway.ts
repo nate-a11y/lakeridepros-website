@@ -42,6 +42,9 @@ export async function callCamdenGateway(
     if (lower.includes("version") || lower.includes("conflict")) {
       throw new CamdenServiceError("This request changed since you opened it. Refresh and try again.", "conflict")
     }
+    if (lower.includes("active ride request") || lower.includes("changes and cancellations require") || lower.includes("active reason") || lower.includes("explanation is required")) {
+      throw new CamdenServiceError(error.message, "validation")
+    }
     throw new CamdenServiceError("The Treatment Court portal is temporarily unavailable.", "unavailable")
   }
   return data

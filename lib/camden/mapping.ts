@@ -83,6 +83,7 @@ export function mapRequest(value: unknown): CamdenRequest {
   return {
     id: stringValue(row.id),
     reference: stringValue(row.reference ?? row.request_reference),
+    requestKind: stringValue(row.request_kind ?? row.requestKind, "ride") as CamdenRequest["requestKind"],
     riderId: stringValue(row.rider_id ?? row.riderId),
     riderName: stringValue(row.rider_name ?? row.riderName, "Rider"),
     status: stringValue(row.status, "pending") as CamdenRequestStatus,

@@ -92,7 +92,7 @@ describe("Camden BFF allowlists", () => {
     const routeSource = source("app/api/camden/data/[operation]/route.ts")
     const gatewaySource = source("lib/camden/server/gateway.ts")
     expect(routeSource).not.toMatch(/\.from\(|\.rpc\(/)
-    expect(gatewaySource).toContain('.rpc("camden_portal_gateway"')
+    expect(gatewaySource).toMatch(/\.rpc\(\s*"camden_portal_gateway"/)
     expect(gatewaySource).not.toMatch(/\.from\(/)
   })
 })

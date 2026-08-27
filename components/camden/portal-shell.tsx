@@ -56,7 +56,7 @@ export function PortalShell({ context, children }: PortalShellProps) {
         <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link href={context?.role === "coordinator" ? "/camden-county/coordinator" : "/camden-county"} className="flex min-h-11 min-w-11 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#4cbb17]/40">
             <Image src="/Color logo - no background (1).svg" alt="Lake Ride Pros" width={122} height={42} priority className="h-10 w-auto" />
-            <span className="hidden border-l border-neutral-300 pl-3 text-sm font-semibold text-neutral-700 sm:block">Camden County Portal</span>
+            <span className="hidden border-l border-neutral-300 pl-3 text-sm font-semibold text-neutral-700 sm:block">Treatment Court Transportation</span>
           </Link>
           {context && (
             <div className="flex items-center gap-2">

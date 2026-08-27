@@ -19,7 +19,7 @@ export function RequestCard({ request, showRider = false, showCost = false }: { 
       </div>
       {request.lateUrgent && <p className="mt-4 rounded-lg bg-amber-100 px-3 py-2 text-sm font-bold text-amber-950">Late / urgent request — fulfillment is not guaranteed</p>}
       <div className="mt-5 flex items-center justify-between gap-3 border-t border-neutral-200 pt-4">
-        {showCost ? <p className="text-sm"><span className="text-neutral-600">Moovs cost</span><br /><strong className="text-base">{syncedCost == null ? "Not available" : syncedCost.toLocaleString("en-US", { style: "currency", currency: "USD" })}</strong></p> : <span />}
+        {showCost ? <p className="text-sm"><span className="text-neutral-600">Current trip cost</span><br /><strong className="text-base">{syncedCost == null ? "Not available" : syncedCost.toLocaleString("en-US", { style: "currency", currency: "USD" })}</strong></p> : <span />}
         <Link href={`/camden-county/requests/${request.id}${showRider ? "?coordinator=true" : ""}`} className="inline-flex min-h-11 items-center rounded-xl px-3 font-bold text-[#245f0b] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#4cbb17]/40">View details <ArrowRight className="ml-1 size-4" aria-hidden="true" /></Link>
       </div>
     </article>

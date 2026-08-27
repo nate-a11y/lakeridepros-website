@@ -129,22 +129,22 @@ export function CamdenLoginForm() {
     <PortalShell>
       <div className="mx-auto grid min-h-[calc(100dvh-10rem)] max-w-5xl items-center gap-10 py-5 lg:grid-cols-[1.1fr_.9fr]">
         <section>
-          <p className="text-sm font-extrabold uppercase tracking-[.18em] text-[#245f0b]">Camden County transportation</p>
-          <h1 className="mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">Your rides, without the paperwork chase.</h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-neutral-700">Submit approved transportation requests, follow their progress, and keep every update in one secure place.</p>
+          <p className="text-sm font-extrabold uppercase tracking-[.18em] text-[#245f0b]">Camden County Treatment Court</p>
+          <h1 className="mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">Transportation requests, all in one place.</h1>
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-neutral-700">Submit transportation requests, track their status, and communicate with the transportation team through one secure portal.</p>
           <ul className="mt-7 space-y-4 text-sm font-semibold text-neutral-700">
-            <li className="flex gap-3"><MessageSquareText className="size-5 shrink-0 text-[#245f0b]" aria-hidden="true" />Sign in with a one-time code sent by text</li>
-            <li className="flex gap-3"><ShieldCheck className="size-5 shrink-0 text-[#245f0b]" aria-hidden="true" />Access is limited to riders approved by Lake Ride Pros</li>
-            <li className="flex gap-3"><KeyRound className="size-5 shrink-0 text-[#245f0b]" aria-hidden="true" />Ride prices are never shown to rider accounts</li>
+            <li className="flex gap-3"><MessageSquareText className="size-5 shrink-0 text-[#245f0b]" aria-hidden="true" />Sign in securely with a one-time code sent to your mobile phone</li>
+            <li className="flex gap-3"><ShieldCheck className="size-5 shrink-0 text-[#245f0b]" aria-hidden="true" />Submit requests using approved pickup and destination locations</li>
+            <li className="flex gap-3"><KeyRound className="size-5 shrink-0 text-[#245f0b]" aria-hidden="true" />View request status, confirmed trip details, and messages</li>
           </ul>
         </section>
         <section aria-labelledby="sign-in-heading" className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-xl sm:p-8">
           <h2 id="sign-in-heading" className="text-2xl font-extrabold">{step === "phone" ? "Sign in to your portal" : "Enter your code"}</h2>
-          <p className="mt-2 text-sm text-neutral-600">{step === "phone" ? "Use the mobile number approved for your Camden County rides." : `We sent a six-digit code to ${maskPhone(normalizedPhone)}.`}</p>
+          <p className="mt-2 text-sm text-neutral-600">{step === "phone" ? "Enter the mobile number associated with your Treatment Court transportation access." : `We sent a six-digit code to ${maskPhone(normalizedPhone)}.`}</p>
           {error && <div role="alert" className="mt-5 rounded-xl border border-red-300 bg-red-50 p-4 text-sm font-semibold text-red-900">{error}</div>}
           {step === "phone" ? (
             <form onSubmit={requestCode} className="mt-6 space-y-5">
-              <div><label htmlFor="portal-phone" className="mb-2 block text-sm font-bold">Mobile phone number</label><input id="portal-phone" type="tel" inputMode="tel" autoComplete="tel" className={fieldClass} value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="(555) 555-1234" required aria-describedby="phone-help" /><p id="phone-help" className="mt-2 text-xs text-neutral-600">Message and data rates may apply. Login and ride updates are transactional, not marketing.</p></div>
+              <div><label htmlFor="portal-phone" className="mb-2 block text-sm font-bold">Mobile phone number</label><input id="portal-phone" type="tel" inputMode="tel" autoComplete="tel" className={fieldClass} value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="(555) 555-1234" required aria-describedby="phone-help" /><p id="phone-help" className="mt-2 text-xs text-neutral-600">Standard message and data rates may apply.</p></div>
               {!demoMode && <Turnstile key={captchaKey} onSuccess={setCaptchaToken} onExpire={() => setCaptchaToken("")} onError={() => setError("The security check could not load. Please try again.")} />}
               <button type="submit" disabled={busy || !captchaToken} className={`${primaryButtonClass} w-full`}>{busy ? "Sending code…" : "Text me a code"}<ArrowRight className="ml-2 size-4" aria-hidden="true" /></button>
             </form>
@@ -161,7 +161,7 @@ export function CamdenLoginForm() {
               <button type="button" onClick={() => { setStep("phone"); setCode(""); setChallengeToken(""); setResendSeconds(0); resetCaptcha(); setError(null) }} className={`${secondaryButtonClass} w-full`}>Use a different number</button>
             </form>
           )}
-          <p className="mt-6 border-t border-neutral-200 pt-5 text-center text-xs leading-relaxed text-neutral-600">Not approved or having trouble? Contact your Treatment Court coordinator. For your privacy, we cannot confirm whether a phone number is registered.</p>
+          <p className="mt-6 border-t border-neutral-200 pt-5 text-center text-xs leading-relaxed text-neutral-600">Need help signing in? Contact your Treatment Court coordinator or Lake Ride Pros support.</p>
           {demoMode && <div className="mt-6 rounded-xl border border-dashed border-violet-400 bg-violet-50 p-4"><p className="text-sm font-extrabold text-violet-950">Development preview only</p><div className="mt-3 grid gap-2 sm:grid-cols-2"><button type="button" onClick={() => enterDemo("rider")} className={secondaryButtonClass}>Preview rider</button><button type="button" onClick={() => enterDemo("coordinator")} className={secondaryButtonClass}>Preview coordinator</button></div></div>}
         </section>
       </div>

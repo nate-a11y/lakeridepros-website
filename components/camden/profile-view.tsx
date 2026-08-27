@@ -31,7 +31,7 @@ export function ProfileView() {
         <p className="text-sm font-bold text-[#245f0b]">Account</p>
         <h1 className="mt-1 text-3xl font-extrabold tracking-tight sm:text-4xl">Your profile</h1>
         <p className="mt-2 text-neutral-600">Review your approved contact information and pickup locations.</p>
-        <div className="mt-6"><Notice title="Protected profile changes"><p>Name changes require LRP review. A different login phone must be verified and approved before it replaces your current number. Contact Rebecca to begin either change.</p></Notice></div>
+        <div className="mt-6"><Notice title="Protected profile changes"><p>Name changes require Lake Ride Pros review. A different login phone must be verified and approved before it replaces your current number. Contact Rebecca to begin either change.</p></Notice></div>
         <section aria-labelledby="identity-heading" className="mt-6 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7">
           <h2 id="identity-heading" className="text-xl font-extrabold">Identity</h2>
           <dl className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -46,7 +46,7 @@ export function ProfileView() {
           <button disabled={saving} className={`${primaryButtonClass} mt-4`}>{saving ? "Saving…" : "Save email"}</button>
         </form>
         <section aria-labelledby="pickups-heading" className="mt-6 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-7">
-          <div className="flex gap-3"><ShieldCheck className="size-6 text-[#245f0b]" aria-hidden="true" /><div><h2 id="pickups-heading" className="text-xl font-extrabold">Approved pickup locations</h2><p className="mt-1 text-sm text-neutral-600">Ask Rebecca to submit a new pickup address for LRP approval.</p></div></div>
+          <div className="flex gap-3"><ShieldCheck className="size-6 text-[#245f0b]" aria-hidden="true" /><div><h2 id="pickups-heading" className="text-xl font-extrabold">Approved pickup locations</h2><p className="mt-1 text-sm text-neutral-600">Ask Rebecca to submit a new pickup address for Lake Ride Pros approval.</p></div></div>
           {data.pickupLocations.length ? <ul className="mt-5 space-y-3">{data.pickupLocations.map((location) => <li key={location.id} className="rounded-xl bg-neutral-50 p-4"><p className="font-bold">{location.name}{location.isDefault && <span className="ml-2 rounded-full bg-green-100 px-2 py-1 text-xs text-green-900">Default</span>}</p><p className="mt-1 text-sm text-neutral-700">{location.address}</p></li>)}</ul> : <p className="mt-5 text-sm text-neutral-600">No approved pickup locations are available yet.</p>}
         </section>
         <section className="mt-6 rounded-2xl border border-amber-300 bg-amber-50 p-5"><h2 className="font-extrabold">Urgent transportation help</h2><p className="mt-2 text-sm text-neutral-700">Portal messages are not monitored for emergencies or immediate dispatch assistance.</p><a href={`tel:${data.context.supportPhone}`} className="mt-3 inline-flex min-h-11 items-center font-bold text-amber-950 underline"><PhoneCall className="mr-2 size-4" aria-hidden="true" />Call urgent support</a></section>

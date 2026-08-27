@@ -12,9 +12,6 @@ export function getCamdenServerConfig() {
     supabaseServiceRoleKey: required("CAMDEN_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY"),
     otpPepper: required("CAMDEN_OTP_PEPPER"),
     sessionHashPepper: required("CAMDEN_SESSION_HASH_PEPPER", "CAMDEN_OTP_PEPPER"),
-    twilioAccountSid: required("CAMDEN_TWILIO_ACCOUNT_SID", "TWILIO_ACCOUNT_SID"),
-    twilioAuthToken: required("CAMDEN_TWILIO_AUTH_TOKEN", "TWILIO_AUTH_TOKEN"),
-    twilioFromNumber: process.env.CAMDEN_TWILIO_FROM_NUMBER || process.env.TWILIO_FROM || required("TWILIO_FROM_NUMBER"),
     turnstileSecret: required("TURNSTILE_SECRET_KEY"),
   }
 }

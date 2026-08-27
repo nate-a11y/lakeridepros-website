@@ -41,7 +41,7 @@ External coordinator transitions are limited to `acknowledged`, `needs_informati
 - `CAMDEN_SESSION_HASH_PEPPER` (request metadata hashing; may fall back to OTP pepper)
 - `CAMDEN_ALLOWED_ORIGIN` (required in production)
 - `TURNSTILE_SECRET_KEY`
-- `CAMDEN_TWILIO_ACCOUNT_SID`, `CAMDEN_TWILIO_AUTH_TOKEN`, `CAMDEN_TWILIO_FROM_NUMBER`
+- Supabase Edge Function `camden-send-otp`, authenticated server-to-server with the service-role key and using the existing LRP Twilio secrets stored in Supabase
   - Shared `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_FROM` are supported fallbacks.
 
 Never prefix Supabase service credentials, Twilio credentials, or peppers with `NEXT_PUBLIC_`.

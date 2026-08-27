@@ -32,10 +32,12 @@ describe("Camden browser isolation", () => {
 
   it("keeps Supabase and Twilio credentials in server-only modules", () => {
     const configSource = source("lib/camden/server/config.ts")
+    const twilioSource = source("lib/camden/server/twilio.ts")
     expect(configSource).toContain('import "server-only"')
     expect(configSource).not.toContain("NEXT_PUBLIC_SUPABASE")
     expect(configSource).toContain("CAMDEN_SUPABASE_SERVICE_ROLE_KEY")
-    expect(configSource).toContain("CAMDEN_TWILIO_AUTH_TOKEN")
+    expect(twilioSource).toContain("/functions/v1/camden-send-otp")
+    expect(twilioSource).toContain("Bearer ${config.supabaseServiceRoleKey}")
   })
 
   it("defers Twilio delivery until after the generic OTP response path", () => {

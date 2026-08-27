@@ -1,12 +1,17 @@
 import "server-only"
 import type {
   CamdenCoordinatorData,
+  CamdenCoordinatorParticipantSnapshot,
   CamdenDashboardData,
+  CamdenParticipantProfile,
+  CamdenParticipantSnapshots,
   CamdenRequest,
   CamdenRequestDetail,
   CamdenRole,
+  CamdenSnapshotFilter,
   CamdenUserContext,
 } from "./types"
+import { resolveSnapshotDateRange } from "./snapshot-period"
 
 const pickupLocations = [
   { id: "pickup-home", name: "Home", address: "214 Walnut Street, Camden, MO 64017", isDefault: true },
@@ -165,6 +170,73 @@ export function createDemoCoordinatorDashboard(): CamdenCoordinatorData {
       monthSpend: 2841.75,
       contractSpend: 6920.25,
     },
+  }
+}
+
+const demoProfiles: CamdenParticipantProfile[] = [
+  {
+    riderId: "demo-rider",
+    fullName: "Jordan Taylor",
+    phone: "+15735550123",
+    email: "jordan@example.com",
+    status: "active",
+    phase: "Phase 2",
+    homeLocations: [{ id: "pickup-home", name: "Home", address: pickupLocations[0].address, isDefault: true }],
+    treatmentLocations: [{ id: "destination-compass", name: "Compass Health", address: destinations[0].address }],
+    drugTestingSites: [{ id: "destination-court", name: "Camden County Courthouse", address: destinations[1].address }],
+  },
+  {
+    riderId: "demo-rider-2",
+    fullName: "Avery Morgan",
+    phone: "+15735550145",
+    status: "active",
+    phase: "Phase 1",
+    homeLocations: [{ id: "pickup-avery", name: "Home", address: "34 Oak Street, Camden, MO 64017", isDefault: true }],
+    treatmentLocations: [{ id: "destination-compass", name: "Compass Health", address: destinations[0].address }],
+    drugTestingSites: [],
+  },
+]
+
+export function createDemoParticipantSnapshots(role: "rider" | "coordinator", filter: CamdenSnapshotFilter): CamdenParticipantSnapshots {
+  const dates = resolveSnapshotDateRange(filter, new Date("2026-08-27T12:00:00Z"))
+  const factor = filter.period === "program_to_date" ? 3 : filter.period === "custom" ? 2 : 1
+  const coordinatorParticipants: CamdenCoordinatorParticipantSnapshot[] = demoProfiles.map((profile, index) => ({
+    role: "coordinator",
+    profile,
+    metrics: {
+      ridesScheduled: (index ? 4 : 6) * factor,
+      ridesCompleted: (index ? 3 : 5) * factor,
+      ridesCancelled: index ? 1 : 0,
+      noShows: index ? 0 : 1,
+      finalizedRides: (index ? 4 : 6) * factor,
+      cancellationRate: index ? 25 : 0,
+      totalCost: (index ? 218.5 : 386.75) * factor,
+    },
+    hasPersonalTransportation: index === 1,
+  }))
+  const window = {
+    period: filter.period,
+    startDate: dates.startDate ?? "2026-01-01",
+    endDate: dates.endDate ?? "2026-08-27",
+    label: "",
+  }
+  if (role === "coordinator") return { role, window, participants: coordinatorParticipants }
+  const own = coordinatorParticipants[0]
+  return {
+    role,
+    window,
+    participants: [{
+      role,
+      profile: own.profile,
+      metrics: {
+        ridesScheduled: own.metrics.ridesScheduled,
+        ridesCompleted: own.metrics.ridesCompleted,
+        ridesCancelled: own.metrics.ridesCancelled,
+        noShows: own.metrics.noShows,
+        finalizedRides: own.metrics.finalizedRides,
+        cancellationRate: own.metrics.cancellationRate,
+      },
+    }],
   }
 }
 

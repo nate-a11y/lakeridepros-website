@@ -6,6 +6,7 @@ import { useCallback } from "react"
 import { createCamdenPortalService } from "@/lib/camden/service"
 import { PortalShell } from "./portal-shell"
 import { RequestCard } from "./request-card"
+import { RiderAccountability } from "./rider-accountability"
 import { EmptyState, ErrorState, LoadingState, Notice, primaryButtonClass } from "./ui"
 import { useCamdenData } from "./use-camden-data"
 
@@ -30,6 +31,7 @@ export function RiderDashboard() {
           <p id="urgent-support">Portal messages are not monitored for emergencies or immediate dispatch assistance. <a href={`tel:${data.context.supportPhone}`} className="mt-2 inline-flex min-h-11 items-center font-bold text-amber-950 underline"><PhoneCall className="mr-2 size-4" aria-hidden="true" />Call urgent support</a></p>
         </Notice>
       </section>
+      <RiderAccountability />
       <section aria-labelledby="pending-heading" className="mt-9">
         <div className="mb-4 flex items-center justify-between"><div><h2 id="pending-heading" className="text-2xl font-extrabold">Requests in progress</h2><p className="mt-1 text-sm text-neutral-600">Submitted requests that are being reviewed or scheduled.</p></div></div>
         {pending.length ? <div className="grid gap-4 xl:grid-cols-2">{pending.map((request) => <RequestCard key={request.id} request={request} />)}</div> : <EmptyState title="No pending requests" message="When you submit a request, its review status will appear here." actionHref="/camden-county/requests/new" actionLabel="Submit a request" />}

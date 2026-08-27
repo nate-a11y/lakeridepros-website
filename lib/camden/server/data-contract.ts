@@ -5,6 +5,19 @@ const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).max(10)
 const time = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/).max(8)
 const optionalTime = time.optional()
 
+export const CamdenParticipantSnapshotQuerySchema = z.object({
+  period: z.enum(["program_to_date", "current_month", "previous_month", "custom"]),
+  startDate: date.optional(),
+  endDate: date.optional(),
+}).strict().superRefine((value, context) => {
+  if (value.period === "custom" && (!value.startDate || !value.endDate)) {
+    context.addIssue({ code: "custom", message: "Custom dates are required." })
+  }
+  if (value.startDate && value.endDate && value.startDate > value.endDate) {
+    context.addIssue({ code: "custom", message: "The start date must be on or before the end date." })
+  }
+})
+
 const requestDraft = z.object({
   riderId: uuid.optional(),
   rideTypeId: uuid,
@@ -37,5 +50,5 @@ export const CamdenDataSchemas = {
 
 export type CamdenMutationName = keyof typeof CamdenDataSchemas
 
-export const CAMDEN_READ_OPERATIONS = ["context", "dashboard", "coordinator-dashboard", "request"] as const
+export const CAMDEN_READ_OPERATIONS = ["context", "dashboard", "coordinator-dashboard", "participant-snapshots", "request"] as const
 export const CAMDEN_MUTATION_OPERATIONS = Object.keys(CamdenDataSchemas) as CamdenMutationName[]

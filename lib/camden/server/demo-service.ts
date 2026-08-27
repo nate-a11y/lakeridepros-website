@@ -1,12 +1,13 @@
 import "server-only"
-import { createDemoCoordinatorDashboard, createDemoDashboard, createDemoRequestDetail } from "../demo-data"
-import type { CamdenFollowupStatus, CamdenRequestStatus } from "../types"
+import { createDemoCoordinatorDashboard, createDemoDashboard, createDemoParticipantSnapshots, createDemoRequestDetail } from "../demo-data"
+import type { CamdenFollowupStatus, CamdenRequestStatus, CamdenSnapshotFilter } from "../types"
 
 export class ServerDemoCamdenService {
   constructor(private readonly persona: "rider" | "coordinator") {}
   getContext() { return Promise.resolve(createDemoDashboard(this.persona).context) }
   getDashboard() { return Promise.resolve(createDemoDashboard(this.persona)) }
   getCoordinatorDashboard() { return Promise.resolve(createDemoCoordinatorDashboard()) }
+  getParticipantSnapshots(filter: CamdenSnapshotFilter) { return Promise.resolve(createDemoParticipantSnapshots(this.persona, filter)) }
   getRequest(id: string) { return Promise.resolve(createDemoRequestDetail(id)) }
   private done(message: string) { return Promise.resolve({ id: crypto.randomUUID(), message }) }
   submitRequest() { return this.done("Request submitted") }

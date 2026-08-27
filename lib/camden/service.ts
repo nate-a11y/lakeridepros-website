@@ -6,11 +6,13 @@ import {
   type CamdenDashboardData,
   type CamdenFollowupKind,
   type CamdenFollowupStatus,
+  type CamdenParticipantSnapshots,
   type CamdenPortalService,
   type CamdenProfileUpdate,
   type CamdenRequestDetail,
   type CamdenRequestDraft,
   type CamdenRequestStatus,
+  type CamdenSnapshotFilter,
 } from "./types"
 
 export { hideRiderCosts, serializeCamdenRequestDraft }
@@ -47,6 +49,12 @@ class BffCamdenService implements CamdenPortalService {
     return this.request<CamdenDashboardData>("dashboard", { query })
   }
   getCoordinatorDashboard() { return this.request<CamdenCoordinatorData>("coordinator-dashboard") }
+  getParticipantSnapshots(filter: CamdenSnapshotFilter) {
+    const query = new URLSearchParams({ period: filter.period })
+    if (filter.startDate) query.set("startDate", filter.startDate)
+    if (filter.endDate) query.set("endDate", filter.endDate)
+    return this.request<CamdenParticipantSnapshots>("participant-snapshots", { query })
+  }
   getRequest(id: string) { return this.request<CamdenRequestDetail>("request", { query: new URLSearchParams({ id }) }) }
   submitRequest(input: CamdenRequestDraft) { return this.request<CamdenActionResult>("submit-request", { method: "POST", body: { input } }) }
   updatePendingRequest(id: string, version: number, patch: Partial<CamdenRequestDraft>) { return this.request<CamdenActionResult>("update-pending-request", { method: "POST", body: { id, version, patch } }) }

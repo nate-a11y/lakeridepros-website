@@ -17,6 +17,7 @@ export const CAMDEN_GATEWAY_OPERATIONS = [
   "create_location_request",
   "update_profile",
   "coordinator_dashboard",
+  "participant_snapshots",
   "transition_request",
 ] as const
 

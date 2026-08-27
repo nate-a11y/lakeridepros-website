@@ -3,10 +3,13 @@ import type {
   CamdenDashboardData,
   CamdenFollowupAction,
   CamdenLocation,
+  CamdenParticipantProfile,
+  CamdenParticipantSnapshots,
   CamdenRequest,
   CamdenRequestDraft,
   CamdenRequestStatus,
   CamdenRideType,
+  CamdenSnapshotFilter,
   CamdenUserContext,
 } from "./types"
 
@@ -133,6 +136,80 @@ export function mapRequest(value: unknown): CamdenRequest {
     riderVisibleExplanation: stringValue(row.decline_explanation ?? row.rider_visible_explanation ?? row.riderVisibleExplanation) || undefined,
     action,
     trips,
+  }
+}
+
+function mapSnapshotLocations(value: unknown): CamdenLocation[] {
+  return (Array.isArray(value) ? value : []).map((item) => {
+    const row = record(item)
+    return {
+      id: stringValue(row.id),
+      name: stringValue(row.name, "Approved location"),
+      address: stringValue(row.address) || addressValue(row),
+      isDefault: Boolean(row.is_primary),
+    }
+  })
+}
+
+export function mapParticipantSnapshots(
+  value: unknown,
+  role: "rider" | "coordinator",
+  filter: CamdenSnapshotFilter,
+): CamdenParticipantSnapshots {
+  const payload = record(value)
+  const period = record(payload.period)
+  const startDate = stringValue(period.start_date, filter.startDate ?? "")
+  const endDate = stringValue(period.end_date, filter.endDate ?? "")
+  const profileFor = (row: UnknownRecord): CamdenParticipantProfile => ({
+    riderId: stringValue(row.rider_id),
+    fullName: stringValue(row.full_name, "Participant"),
+    phone: stringValue(row.phone) || undefined,
+    email: stringValue(row.email) || undefined,
+    status: stringValue(row.status) || undefined,
+    phase: ({ phase_1: "Phase 1", phase_2: "Phase 2", phase_3: "Phase 3" } as Record<string, string>)[stringValue(row.phase)] ?? "Not assigned",
+    homeLocations: mapSnapshotLocations(row.home_locations),
+    treatmentLocations: mapSnapshotLocations(row.treatment_locations),
+    drugTestingSites: mapSnapshotLocations(row.drug_testing_sites),
+  })
+  const metricsFor = (row: UnknownRecord) => {
+    const metrics = record(row.metrics)
+    return {
+      ridesScheduled: numberValue(metrics.rides_scheduled),
+      ridesCompleted: numberValue(metrics.rides_completed),
+      ridesCancelled: numberValue(metrics.rides_cancelled),
+      noShows: numberValue(metrics.no_shows),
+      finalizedRides: numberValue(metrics.finalized_rides),
+      cancellationRate: numberValue(metrics.cancellation_rate),
+    }
+  }
+  const rows = Array.isArray(payload.participants) ? payload.participants.map(record) : []
+  const window = {
+    period: filter.period,
+    startDate,
+    endDate,
+    label: stringValue(period.label) || [startDate, endDate].filter(Boolean).join(" through ") || "Program to date",
+  }
+
+  if (role === "rider") {
+    return {
+      role,
+      window,
+      participants: rows.map((row) => ({ role, profile: profileFor(row), metrics: metricsFor(row) })),
+    }
+  }
+
+  return {
+    role,
+    window,
+    participants: rows.map((row) => {
+      const metrics = record(row.metrics)
+      return {
+        role,
+        profile: profileFor(row),
+        metrics: { ...metricsFor(row), totalCost: numberValue(metrics.total_cost) },
+        hasPersonalTransportation: Boolean(row.has_personal_transportation),
+      }
+    }),
   }
 }
 

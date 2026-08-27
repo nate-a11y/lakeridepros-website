@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { CalendarDays, ClipboardList, FileChartColumn, History, LogOut, Menu, UserRound, X } from "lucide-react"
+import { CalendarDays, ClipboardList, FileChartColumn, History, LogOut, Menu, UserRound, UsersRound, X } from "lucide-react"
 import { useState } from "react"
 import type { CamdenUserContext } from "@/lib/camden/types"
 import { isCamdenDemoEnabled } from "@/lib/camden/service"
@@ -22,6 +22,7 @@ const riderLinks = [
 
 const coordinatorLinks = [
   { href: "/camden-county/coordinator", label: "Coordinator", icon: FileChartColumn },
+  { href: "/camden-county/participants", label: "Participant snapshots", icon: UsersRound },
   { href: "/camden-county/requests/new?onBehalf=true", label: "Request for a rider", icon: ClipboardList },
 ]
 

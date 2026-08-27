@@ -4,6 +4,7 @@ import {
   hideRiderCosts,
   mapContext,
   mapDashboard,
+  mapParticipantSnapshots,
   mapRequest,
   record,
   serializeCamdenRequestDraft,
@@ -16,13 +17,16 @@ import {
   type CamdenCoordinatorData,
   type CamdenFollowupKind,
   type CamdenFollowupStatus,
+  type CamdenParticipantSnapshots,
   type CamdenProfileUpdate,
   type CamdenRequest,
   type CamdenRequestDetail,
   type CamdenRequestDraft,
   type CamdenRequestStatus,
+  type CamdenSnapshotFilter,
   type CamdenUserContext,
 } from "../types"
+import { resolveSnapshotDateRange } from "../snapshot-period"
 import { callCamdenGateway, type CamdenGatewayOperation } from "./gateway"
 
 export class ServerCamdenPortalService {
@@ -71,6 +75,15 @@ export class ServerCamdenPortalService {
         contractSpend: dashboard.requests.reduce((total, request) => total + requestSpend(request), 0),
       },
     }
+  }
+
+  async getParticipantSnapshots(filter: CamdenSnapshotFilter): Promise<CamdenParticipantSnapshots> {
+    const dates = resolveSnapshotDateRange(filter)
+    const [context, raw] = await Promise.all([
+      this.getContext(),
+      this.gateway("participant_snapshots", { start_date: dates.startDate, end_date: dates.endDate }),
+    ])
+    return mapParticipantSnapshots(raw, context.role === "coordinator" ? "coordinator" : "rider", filter)
   }
 
   async getRequest(id: string): Promise<CamdenRequestDetail> {

@@ -191,6 +191,71 @@ export interface CamdenCoordinatorData extends CamdenDashboardData {
   invoices: CamdenInvoice[]
 }
 
+export type CamdenSnapshotPeriod = "program_to_date" | "current_month" | "previous_month" | "custom"
+
+export interface CamdenSnapshotFilter {
+  period: CamdenSnapshotPeriod
+  startDate?: string
+  endDate?: string
+}
+
+export interface CamdenSnapshotWindow {
+  period: CamdenSnapshotPeriod
+  startDate: string
+  endDate: string
+  label: string
+}
+
+export interface CamdenParticipantProfile {
+  riderId: string
+  fullName: string
+  phone?: string
+  email?: string
+  status?: string
+  phase?: string
+  homeLocations: CamdenLocation[]
+  treatmentLocations: CamdenLocation[]
+  drugTestingSites: CamdenLocation[]
+}
+
+export interface CamdenAccountabilityMetrics {
+  ridesScheduled: number
+  ridesCompleted: number
+  ridesCancelled: number
+  noShows: number
+  finalizedRides: number
+  cancellationRate: number
+}
+
+export interface CamdenRiderParticipantSnapshot {
+  role: "rider"
+  profile: CamdenParticipantProfile
+  metrics: CamdenAccountabilityMetrics
+}
+
+export interface CamdenCoordinatorParticipantSnapshot {
+  role: "coordinator"
+  profile: CamdenParticipantProfile
+  metrics: CamdenAccountabilityMetrics & {
+    totalCost: number
+  }
+  hasPersonalTransportation: boolean
+}
+
+export interface CamdenRiderSnapshots {
+  role: "rider"
+  window: CamdenSnapshotWindow
+  participants: CamdenRiderParticipantSnapshot[]
+}
+
+export interface CamdenCoordinatorSnapshots {
+  role: "coordinator"
+  window: CamdenSnapshotWindow
+  participants: CamdenCoordinatorParticipantSnapshot[]
+}
+
+export type CamdenParticipantSnapshots = CamdenRiderSnapshots | CamdenCoordinatorSnapshots
+
 export interface CamdenRequestDraft {
   riderId?: string
   rideTypeId: string
@@ -221,6 +286,7 @@ export interface CamdenPortalService {
   getContext(): Promise<CamdenUserContext>
   getDashboard(status?: CamdenRequestStatus): Promise<CamdenDashboardData>
   getCoordinatorDashboard(): Promise<CamdenCoordinatorData>
+  getParticipantSnapshots(filter: CamdenSnapshotFilter): Promise<CamdenParticipantSnapshots>
   getRequest(id: string): Promise<CamdenRequestDetail>
   submitRequest(input: CamdenRequestDraft): Promise<CamdenActionResult>
   updatePendingRequest(id: string, version: number, patch: Partial<CamdenRequestDraft>): Promise<CamdenActionResult>

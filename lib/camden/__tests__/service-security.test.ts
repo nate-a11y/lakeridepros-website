@@ -58,6 +58,18 @@ describe("Camden County demo role isolation", () => {
     expect(fetchMock).toHaveBeenCalledWith("/api/camden/data/coordinator-dashboard", expect.objectContaining({ headers: expect.objectContaining({ "X-Camden-Demo-Persona": "coordinator" }) }))
     fetchMock.mockRestore()
   })
+
+  it("requests participant snapshots through a named same-origin endpoint", async () => {
+    vi.stubEnv("NODE_ENV", "development")
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({}), { status: 200 }))
+    await createCamdenPortalService("rider").getParticipantSnapshots({ period: "custom", startDate: "2026-08-01", endDate: "2026-08-27" })
+    expect(fetchMock).toHaveBeenCalledWith("/api/camden/data/participant-snapshots?period=custom&startDate=2026-08-01&endDate=2026-08-27", expect.objectContaining({
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: expect.objectContaining({ "X-Camden-Demo-Persona": "rider" }),
+    }))
+    fetchMock.mockRestore()
+  })
 })
 
 describe("Camden same-record action client contract", () => {

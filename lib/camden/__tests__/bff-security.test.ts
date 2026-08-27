@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
-import { CAMDEN_MUTATION_OPERATIONS, CAMDEN_READ_OPERATIONS, CamdenDataSchemas } from "../server/data-contract"
-import { mapDashboard } from "../mapping"
+import { CAMDEN_MUTATION_OPERATIONS, CAMDEN_READ_OPERATIONS, CamdenDataSchemas, CamdenParticipantSnapshotQuerySchema } from "../server/data-contract"
+import { mapDashboard, mapParticipantSnapshots } from "../mapping"
 
 const root = resolve(process.cwd())
 const source = (path: string) => readFileSync(resolve(root, path), "utf8")
@@ -59,7 +59,7 @@ describe("Camden browser isolation", () => {
 
 describe("Camden BFF allowlists", () => {
   it("exposes only named read and mutation endpoints", () => {
-    expect(CAMDEN_READ_OPERATIONS).toEqual(["context", "dashboard", "coordinator-dashboard", "request"])
+    expect(CAMDEN_READ_OPERATIONS).toEqual(["context", "dashboard", "coordinator-dashboard", "participant-snapshots", "request"])
     expect(CAMDEN_MUTATION_OPERATIONS).toEqual([
       "submit-request", "update-pending-request", "duplicate-request", "add-message", "create-followup",
       "transition-followup", "transition-request", "request-location", "accept-policy", "update-profile",
@@ -115,6 +115,22 @@ describe("Camden BFF allowlists", () => {
     expect(gatewaySource).toMatch(/\.rpc\(\s*"camden_portal_gateway"/)
     expect(gatewaySource).not.toMatch(/\.from\(/)
   })
+
+  it("accepts only named participant snapshot periods and complete custom ranges", () => {
+    expect(CamdenParticipantSnapshotQuerySchema.safeParse({ period: "current_month" }).success).toBe(true)
+    expect(CamdenParticipantSnapshotQuerySchema.safeParse({ period: "custom", startDate: "2026-08-01", endDate: "2026-08-27" }).success).toBe(true)
+    expect(CamdenParticipantSnapshotQuerySchema.safeParse({ period: "custom", startDate: "2026-08-27" }).success).toBe(false)
+    expect(CamdenParticipantSnapshotQuerySchema.safeParse({ period: "custom", startDate: "2026-08-27", endDate: "2026-08-01" }).success).toBe(false)
+    expect(CamdenParticipantSnapshotQuerySchema.safeParse({ period: "all_time", riderId: "someone-else" }).success).toBe(false)
+  })
+
+  it("allowlists the participant snapshot gateway without exposing arbitrary rider selection", () => {
+    const gatewaySource = source("lib/camden/server/gateway.ts")
+    const routeSource = source("app/api/camden/data/[operation]/route.ts")
+    expect(gatewaySource).toContain('"participant_snapshots"')
+    expect(routeSource).toContain("CamdenParticipantSnapshotQuerySchema")
+    expect(routeSource).not.toContain("riderId")
+  })
 })
 
 describe("Camden response privacy", () => {
@@ -132,5 +148,34 @@ describe("Camden response privacy", () => {
 
   it("retains Moovs costs for coordinator-shaped dashboard responses", () => {
     expect(mapDashboard(raw("coordinator")).requests[0].trips[0].cost).toBe(88.5)
+  })
+
+  const rawSnapshots = {
+    period: { start_date: "2026-08-01", end_date: "2026-08-27" },
+    participants: [{
+      rider_id: "rider-1", full_name: "Rider", status: "active", phase: "phase_2",
+      home_locations: [], treatment_locations: [], drug_testing_sites: [],
+      metrics: { rides_scheduled: 6, rides_completed: 5, rides_cancelled: 1, no_shows: 0, finalized_rides: 6, cancellation_rate: 16.67, total_cost: 425.5 },
+      personal_usage_detected: true, personal_usage_override: false, has_personal_transportation: false,
+    }],
+  }
+
+  it("defensively strips cost and all personal-use fields from rider snapshots", () => {
+    const result = mapParticipantSnapshots(rawSnapshots, "rider", { period: "current_month" })
+    expect(result.role).toBe("rider")
+    expect(JSON.stringify(result)).not.toMatch(/cost|personalUse|personal_usage|hasPersonalTransportation/i)
+    expect(result.participants[0].metrics.ridesCompleted).toBe(5)
+  })
+
+  it("returns cost and the final override-aware personal-use result only to coordinators", () => {
+    const result = mapParticipantSnapshots(rawSnapshots, "coordinator", { period: "current_month" })
+    if (result.role !== "coordinator") throw new Error("Expected coordinator snapshot shape")
+    expect(result.participants[0].metrics.totalCost).toBe(425.5)
+    expect(result.participants[0].hasPersonalTransportation).toBe(false)
+    expect(JSON.stringify(result)).not.toMatch(/personalUsageDetected|personalUseOverride|personal_usage/i)
+  })
+
+  it("keeps rider accountability UI free of cost, billing, and personal-use language", () => {
+    expect(source("components/camden/rider-accountability.tsx")).not.toMatch(/cost|billing|personal.?use/i)
   })
 })

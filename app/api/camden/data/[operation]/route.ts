@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server"
 import { CamdenServiceError, type CamdenFollowupStatus, type CamdenRequestStatus } from "@/lib/camden/types"
-import { CAMDEN_MUTATION_OPERATIONS, CAMDEN_READ_OPERATIONS, CamdenDataSchemas, type CamdenMutationName } from "@/lib/camden/server/data-contract"
+import { CAMDEN_MUTATION_OPERATIONS, CAMDEN_READ_OPERATIONS, CamdenDataSchemas, CamdenParticipantSnapshotQuerySchema, type CamdenMutationName } from "@/lib/camden/server/data-contract"
 import { noStoreJson, readBoundedJson } from "@/lib/camden/server/http"
 import { isSameOriginMutation, requestFingerprint } from "@/lib/camden/server/security"
 import { isServerCamdenDemoEnabled, ServerDemoCamdenService } from "@/lib/camden/server/demo-service"
@@ -36,6 +36,11 @@ export async function GET(request: NextRequest, context: { params: Promise<{ ope
     const demo = demoServiceFor(request)
     if (operation === "context") return noStoreJson(await demo.getContext())
     if (operation === "coordinator-dashboard") return noStoreJson(await demo.getCoordinatorDashboard())
+    if (operation === "participant-snapshots") {
+      const parsed = CamdenParticipantSnapshotQuerySchema.safeParse(Object.fromEntries(request.nextUrl.searchParams))
+      if (!parsed.success) return noStoreJson({ error: "Choose a valid reporting period.", code: "validation" }, { status: 400 })
+      return noStoreJson(await demo.getParticipantSnapshots(parsed.data))
+    }
     if (operation === "request") return noStoreJson(await demo.getRequest(request.nextUrl.searchParams.get("id") || "demo-request"))
     return noStoreJson(await demo.getDashboard())
   }
@@ -44,6 +49,11 @@ export async function GET(request: NextRequest, context: { params: Promise<{ ope
   try {
     if (operation === "context") return noStoreJson(await service.getContext())
     if (operation === "coordinator-dashboard") return noStoreJson(await service.getCoordinatorDashboard())
+    if (operation === "participant-snapshots") {
+      const parsed = CamdenParticipantSnapshotQuerySchema.safeParse(Object.fromEntries(request.nextUrl.searchParams))
+      if (!parsed.success) return noStoreJson({ error: "Choose a valid reporting period.", code: "validation" }, { status: 400 })
+      return noStoreJson(await service.getParticipantSnapshots(parsed.data))
+    }
     if (operation === "request") {
       const id = request.nextUrl.searchParams.get("id") || ""
       if (!UUID_PATTERN.test(id)) return noStoreJson({ error: "Invalid request." }, { status: 400 })

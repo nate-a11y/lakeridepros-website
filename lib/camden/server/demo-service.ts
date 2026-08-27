@@ -1,6 +1,6 @@
 import "server-only"
 import { createDemoCoordinatorDashboard, createDemoDashboard, createDemoRequestDetail } from "../demo-data"
-import type { CamdenRequestStatus } from "../types"
+import type { CamdenFollowupStatus, CamdenRequestStatus } from "../types"
 
 export class ServerDemoCamdenService {
   constructor(private readonly persona: "rider" | "coordinator") {}
@@ -13,7 +13,8 @@ export class ServerDemoCamdenService {
   updatePendingRequest() { return this.done("Request updated") }
   duplicateRequest() { return this.done("Request duplicated") }
   addMessage() { return this.done("Message sent") }
-  createFollowup(_id: string, kind: "change" | "cancellation") { return this.done(`${kind === "change" ? "Change" : "Cancellation"} requested`) }
+  createFollowup(_id: string, _version: number, kind: "change" | "cancellation") { return this.done(`${kind === "change" ? "Change" : "Cancellation"} requested`) }
+  transitionFollowup(_id: string, _version: number, status: Exclude<CamdenFollowupStatus, "requested">) { return this.done(`Follow-up ${status}`) }
   transitionRequest(_id: string, status: CamdenRequestStatus) { return this.done(`Request moved to ${status.replaceAll("_", " ")}`) }
   requestLocation() { return this.done("Location submitted for approval") }
   acceptPolicy() { return this.done("Policy accepted") }

@@ -62,8 +62,28 @@ describe("Camden BFF allowlists", () => {
     expect(CAMDEN_READ_OPERATIONS).toEqual(["context", "dashboard", "coordinator-dashboard", "request"])
     expect(CAMDEN_MUTATION_OPERATIONS).toEqual([
       "submit-request", "update-pending-request", "duplicate-request", "add-message", "create-followup",
-      "transition-request", "request-location", "accept-policy", "update-profile",
+      "transition-followup", "transition-request", "request-location", "accept-policy", "update-profile",
     ])
+  })
+
+  it("requires optimistic concurrency for a same-record ride action", () => {
+    const input = {
+      id: "00000000-0000-4000-8000-000000000001",
+      kind: "change",
+      reasonId: "00000000-0000-4000-8000-000000000002",
+    }
+    expect(CamdenDataSchemas["create-followup"].safeParse(input).success).toBe(false)
+    expect(CamdenDataSchemas["create-followup"].safeParse({ ...input, version: 2 }).success).toBe(true)
+  })
+
+  it("allows only coordinator follow-up transitions supported by the gateway", () => {
+    const baseline = { id: "00000000-0000-4000-8000-000000000001", version: 2 }
+    for (const status of ["acknowledged", "declined", "completed"]) {
+      expect(CamdenDataSchemas["transition-followup"].safeParse({ ...baseline, status }).success).toBe(true)
+    }
+    for (const status of ["requested", "pending", "cancelled", "no_show"]) {
+      expect(CamdenDataSchemas["transition-followup"].safeParse({ ...baseline, status }).success).toBe(false)
+    }
   })
 
   it("rejects workflow statuses a coordinator must not set", () => {

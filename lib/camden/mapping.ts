@@ -1,6 +1,7 @@
 import type {
   CamdenChangeReason,
   CamdenDashboardData,
+  CamdenFollowupAction,
   CamdenLocation,
   CamdenRequest,
   CamdenRequestDraft,
@@ -61,6 +62,26 @@ export function hideRiderCosts(request: CamdenRequest): CamdenRequest {
 
 export function mapRequest(value: unknown): CamdenRequest {
   const row = record(value)
+  const actionKind = stringValue(row.action_kind)
+  const actionStatus = stringValue(row.action_status)
+  const action: CamdenFollowupAction | null = ["change", "cancellation"].includes(actionKind) && ["requested", "acknowledged", "declined", "completed"].includes(actionStatus) ? {
+    cycleId: stringValue(row.action_cycle_id),
+    sequence: numberValue(row.action_sequence, 1),
+    kind: actionKind as CamdenFollowupAction["kind"],
+    status: actionStatus as CamdenFollowupAction["status"],
+    previousStatus: stringValue(row.action_previous_status) as CamdenFollowupAction["previousStatus"] || undefined,
+    reasonId: stringValue(row.action_reason_id) || undefined,
+    reasonLabel: stringValue(row.action_reason_label, actionKind === "change" ? "Requested ride change" : "Requested cancellation"),
+    explanation: stringValue(row.action_explanation) || undefined,
+    requestedBy: stringValue(row.action_requested_by) || undefined,
+    requestedAt: stringValue(row.action_requested_at),
+    acknowledgeDueAt: stringValue(row.action_acknowledge_due_at) || undefined,
+    resolveDueAt: stringValue(row.action_resolve_due_at) || undefined,
+    acknowledgedAt: stringValue(row.action_acknowledged_at) || undefined,
+    resolvedAt: stringValue(row.action_resolved_at) || undefined,
+    resolutionExplanation: stringValue(row.action_resolution_explanation) || undefined,
+    lateUrgent: Boolean(row.action_late_urgent),
+  } : null
   const trips = Array.isArray(row.trips) ? row.trips.map((tripValue) => {
     const trip = record(tripValue)
     return {
@@ -110,6 +131,7 @@ export function mapRequest(value: unknown): CamdenRequest {
     updatedAt: stringValue(row.updated_at ?? row.updatedAt),
     assigneeName: stringValue(row.assignee_name ?? row.assigneeName) || undefined,
     riderVisibleExplanation: stringValue(row.decline_explanation ?? row.rider_visible_explanation ?? row.riderVisibleExplanation) || undefined,
+    action,
     trips,
   }
 }

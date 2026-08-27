@@ -11,14 +11,18 @@ import { EmptyState, ErrorState, fieldClass, LoadingState, primaryButtonClass, s
 import { useCamdenData } from "./use-camden-data"
 
 export function CoordinatorDashboard() {
-  const [status, setStatus] = useState<"all" | CamdenRequestStatus>("all")
+  const [status, setStatus] = useState<"all" | CamdenRequestStatus | "action_acknowledged">("all")
   const [search, setSearch] = useState("")
   const loader = useCallback(() => createCamdenPortalService("coordinator").getCoordinatorDashboard(), [])
   const { data, error, loading, reload } = useCamdenData(loader)
-  const requests = useMemo(() => data?.requests.filter((request) => (status === "all" || request.status === status) && (!search || `${request.riderName} ${request.reference}`.toLowerCase().includes(search.toLowerCase()))) ?? [], [data, search, status])
+  const requests = useMemo(() => data?.requests.filter((request) => {
+    const matchesStatus = status === "all" || (status === "action_acknowledged" ? request.action?.status === "acknowledged" : request.status === status)
+    const haystack = `${request.riderName} ${request.reference} ${request.action?.reasonLabel ?? ""}`.toLowerCase()
+    return matchesStatus && (!search || haystack.includes(search.toLowerCase()))
+  }) ?? [], [data, search, status])
   function exportCsv() {
     const cell = (value: unknown) => `"${String(value ?? "").replaceAll('"', '""')}"`
-    const rows = [["Reference", "Rider", "Status", "Ride type", "Ride date", "Pickup", "Destination", "Current trip cost"], ...requests.map((request) => [request.reference, request.riderName, request.status, request.rideTypeName, request.rideDate, request.pickupName, request.destinationName, request.trips.reduce((sum, trip) => sum + (trip.cost ?? 0), 0)])]
+    const rows = [["Reference", "Rider", "Ride status", "Active action", "Action status", "Action reason", "Ride type", "Ride date", "Pickup", "Destination", "Current trip cost"], ...requests.map((request) => [request.reference, request.riderName, request.status, request.action?.kind ?? "", request.action?.status ?? "", request.action?.reasonLabel ?? "", request.rideTypeName, request.rideDate, request.pickupName, request.destinationName, request.trips.reduce((sum, trip) => sum + (trip.cost ?? 0), 0)])]
     const blob = new Blob([rows.map((row) => row.map(cell).join(",")).join("\n")], { type: "text/csv;charset=utf-8" })
     const url = URL.createObjectURL(blob); const link = document.createElement("a")
     link.href = url; link.download = `camden-county-report-${new Date().toISOString().slice(0, 10)}.csv`; link.click(); URL.revokeObjectURL(url)
@@ -36,7 +40,7 @@ export function CoordinatorDashboard() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"><div><h2 id="request-queue-heading" className="text-2xl font-extrabold">Request queue</h2><p className="mt-1 text-sm text-neutral-600">Trip costs are visible only to authorized coordinators and Lake Ride Pros staff.</p></div><div className="flex flex-wrap gap-2"><button type="button" onClick={exportCsv} disabled={!requests.length} className={secondaryButtonClass}><Download className="mr-2 size-4" aria-hidden="true" /> Export filtered CSV</button></div></div>
         <div className="mt-4 grid gap-3 rounded-2xl border border-neutral-200 bg-white p-4 sm:grid-cols-2">
           <div><label htmlFor="request-search" className="mb-1 block text-sm font-bold">Search rider or reference</label><input id="request-search" className={fieldClass} type="search" value={search} onChange={(event) => setSearch(event.target.value)} /></div>
-          <div><label htmlFor="status-filter" className="mb-1 flex items-center text-sm font-bold"><Filter className="mr-1 size-4" aria-hidden="true" />Status</label><select id="status-filter" className={fieldClass} value={status} onChange={(event) => setStatus(event.target.value as typeof status)}><option value="all">All statuses</option><option value="pending">Pending</option><option value="needs_information">Needs information</option><option value="information_received">Information received</option><option value="acknowledged">Acknowledged</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option><option value="no_show">No show</option></select></div>
+          <div><label htmlFor="status-filter" className="mb-1 flex items-center text-sm font-bold"><Filter className="mr-1 size-4" aria-hidden="true" />Status or active action</label><select id="status-filter" className={fieldClass} value={status} onChange={(event) => setStatus(event.target.value as typeof status)}><option value="all">All statuses</option><option value="pending">Pending</option><option value="needs_information">Needs information</option><option value="information_received">Information received</option><option value="acknowledged">Acknowledged</option><option value="confirmed">Confirmed</option><option value="change_requested">Change requested</option><option value="cancellation_requested">Cancellation requested</option><option value="action_acknowledged">Action acknowledged</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option><option value="declined">Declined</option><option value="no_show">No show</option></select></div>
         </div>
         <p role="status" className="mt-4 text-sm font-semibold text-neutral-600">{requests.length} request{requests.length === 1 ? "" : "s"}</p>
         {requests.length ? <div className="mt-3 grid gap-4 xl:grid-cols-2">{requests.map((request) => <RequestCard key={request.id} request={request} showRider showCost />)}</div> : <EmptyState title="No matching requests" message="Try changing your search or status filter." />}

@@ -15,6 +15,31 @@ export type CamdenRequestStatus =
 
 export type CamdenTripDirection = "one_way" | "round_trip"
 export type CamdenReturnKind = "scheduled" | "will_call"
+export type CamdenFollowupKind = "change" | "cancellation"
+export type CamdenFollowupStatus = "requested" | "acknowledged" | "declined" | "completed"
+
+export interface CamdenFollowupAction {
+  cycleId: string
+  sequence: number
+  kind: CamdenFollowupKind
+  status: CamdenFollowupStatus
+  previousStatus?: CamdenRequestStatus
+  reasonId?: string
+  reasonLabel: string
+  explanation?: string
+  requestedBy?: string
+  requestedAt: string
+  acknowledgeDueAt?: string
+  resolveDueAt?: string
+  acknowledgedAt?: string
+  resolvedAt?: string
+  resolutionExplanation?: string
+  lateUrgent: boolean
+}
+
+export function isFollowupActive(action: CamdenFollowupAction | null): boolean {
+  return Boolean(action && ["requested", "acknowledged"].includes(action.status))
+}
 
 export interface CamdenUserContext {
   userId: string
@@ -88,7 +113,7 @@ export interface CamdenTrip {
 export interface CamdenRequest {
   id: string
   reference: string
-  requestKind?: "ride" | "change" | "cancellation"
+  requestKind?: "ride"
   riderId: string
   riderName: string
   status: CamdenRequestStatus
@@ -115,6 +140,7 @@ export interface CamdenRequest {
   updatedAt: string
   assigneeName?: string
   riderVisibleExplanation?: string
+  action: CamdenFollowupAction | null
   trips: CamdenTrip[]
 }
 
@@ -200,7 +226,8 @@ export interface CamdenPortalService {
   updatePendingRequest(id: string, version: number, patch: Partial<CamdenRequestDraft>): Promise<CamdenActionResult>
   duplicateRequest(id: string, patch: Partial<CamdenRequestDraft>): Promise<CamdenActionResult>
   addMessage(id: string, body: string): Promise<CamdenActionResult>
-  createFollowup(id: string, kind: "change" | "cancellation", reasonId: string, explanation?: string): Promise<CamdenActionResult>
+  createFollowup(id: string, version: number, kind: CamdenFollowupKind, reasonId: string, explanation?: string): Promise<CamdenActionResult>
+  transitionFollowup(id: string, version: number, status: Exclude<CamdenFollowupStatus, "requested">, publicExplanation?: string): Promise<CamdenActionResult>
   transitionRequest(id: string, status: CamdenRequestStatus, version: number, publicExplanation?: string): Promise<CamdenActionResult>
   requestLocation(name: string, address: { address_line1: string; address_line2?: string; city: string; state: string; postal_code: string }, notes?: string): Promise<CamdenActionResult>
   acceptPolicy(policyId: string): Promise<CamdenActionResult>

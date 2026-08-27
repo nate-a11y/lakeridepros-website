@@ -13,6 +13,7 @@ export const CAMDEN_GATEWAY_OPERATIONS = [
   "add_message",
   "request_change",
   "request_cancel",
+  "transition_followup",
   "create_location_request",
   "update_profile",
   "coordinator_dashboard",
@@ -39,10 +40,18 @@ export async function callCamdenGateway(
     if (lower.includes("permission") || lower.includes("role") || lower.includes("not found")) {
       throw new CamdenServiceError("You do not have access to that information.", "forbidden")
     }
-    if (lower.includes("version") || lower.includes("conflict")) {
+    if (error.code === "40001" || lower.includes("version") || lower.includes("conflict") || lower.includes("changed by another user")) {
       throw new CamdenServiceError("This request changed since you opened it. Refresh and try again.", "conflict")
     }
-    if (lower.includes("active ride request") || lower.includes("changes and cancellations require") || lower.includes("active reason") || lower.includes("explanation is required")) {
+    if (
+      lower.includes("active ride request")
+      || lower.includes("active action")
+      || lower.includes("active followup")
+      || lower.includes("active follow-up")
+      || lower.includes("changes and cancellations require")
+      || lower.includes("active reason")
+      || lower.includes("explanation is required")
+    ) {
       throw new CamdenServiceError(error.message, "validation")
     }
     throw new CamdenServiceError("The Treatment Court portal is temporarily unavailable.", "unavailable")

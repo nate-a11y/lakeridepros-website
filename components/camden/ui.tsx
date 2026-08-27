@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { AlertCircle, CheckCircle2, Clock3, Info, RefreshCcw } from "lucide-react"
-import type { CamdenRequestStatus } from "@/lib/camden/types"
+import type { CamdenFollowupAction, CamdenRequestStatus } from "@/lib/camden/types"
 
 const statusLabels: Record<CamdenRequestStatus, string> = {
   pending: "Pending",
@@ -34,6 +34,23 @@ export function StatusBadge({ status }: { status: CamdenRequestStatus }) {
   return <span className={`inline-flex min-h-7 items-center rounded-full px-3 py-1 text-xs font-bold ${statusStyles[status]}`}>{statusLabels[status]}</span>
 }
 
+export function followupLabel(action: CamdenFollowupAction): string {
+  const kind = action.kind === "change" ? "Change" : "Cancellation"
+  const status = action.status === "requested" ? "requested" : action.status
+  return `${kind} ${status}`
+}
+
+const followupStyles: Record<CamdenFollowupAction["status"], string> = {
+  requested: "bg-amber-100 text-amber-950",
+  acknowledged: "bg-blue-100 text-blue-950",
+  declined: "bg-red-100 text-red-900",
+  completed: "bg-green-100 text-green-900",
+}
+
+export function FollowupBadge({ action }: { action: CamdenFollowupAction }) {
+  return <span className={`inline-flex min-h-7 items-center rounded-full px-3 py-1 text-xs font-bold ${followupStyles[action.status]}`}>{followupLabel(action)}</span>
+}
+
 export function LoadingState({ label = "Loading your portal" }: { label?: string }) {
   return <div role="status" className="mx-auto flex min-h-64 max-w-md flex-col items-center justify-center gap-4 text-center"><RefreshCcw className="size-8 animate-spin text-[#245f0b] motion-reduce:animate-none" aria-hidden="true" /><p className="font-semibold">{label}</p><span className="sr-only">Please wait</span></div>
 }
@@ -61,6 +78,10 @@ export function formatPortalTime(time: string) {
   if (!time) return "Time pending"
   const [hour = "0", minute = "0"] = time.split(":")
   return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", timeZone: "UTC" }).format(new Date(Date.UTC(2020, 0, 1, Number(hour), Number(minute))))
+}
+
+export function formatPortalDateTime(value: string) {
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value))
 }
 
 export const fieldClass = "min-h-12 w-full rounded-xl border border-neutral-400 bg-white px-3 py-2 text-base text-neutral-950 shadow-sm outline-none placeholder:text-neutral-500 focus:border-[#3a8e11] focus:ring-4 focus:ring-[#4cbb17]/25 disabled:cursor-not-allowed disabled:bg-neutral-100"

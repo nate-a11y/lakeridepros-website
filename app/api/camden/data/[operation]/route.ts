@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server"
-import { CamdenServiceError, type CamdenRequestStatus } from "@/lib/camden/types"
+import { CamdenServiceError, type CamdenFollowupStatus, type CamdenRequestStatus } from "@/lib/camden/types"
 import { CAMDEN_MUTATION_OPERATIONS, CAMDEN_READ_OPERATIONS, CamdenDataSchemas, type CamdenMutationName } from "@/lib/camden/server/data-contract"
 import { noStoreJson, readBoundedJson } from "@/lib/camden/server/http"
 import { isSameOriginMutation, requestFingerprint } from "@/lib/camden/server/security"
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ op
     const messages: Record<CamdenMutationName, string> = {
       "submit-request": "Request submitted", "update-pending-request": "Request updated", "duplicate-request": "Request duplicated",
       "add-message": "Message sent", "create-followup": "Follow-up requested", "transition-request": "Request status updated",
-      "request-location": "Location submitted for approval", "accept-policy": "Policy accepted", "update-profile": "Profile updated",
+      "transition-followup": "Follow-up updated", "request-location": "Location submitted for approval", "accept-policy": "Policy accepted", "update-profile": "Profile updated",
     }
     // Exercise the same server-only fixture adapter without exposing fixture records to browser bundles.
     if (operation === "accept-policy") return noStoreJson(await demo.acceptPolicy())
@@ -86,7 +86,8 @@ export async function POST(request: NextRequest, context: { params: Promise<{ op
       case "update-pending-request": return noStoreJson(await service.updatePendingRequest(input.id as string, input.version as number, input.patch as Parameters<typeof service.updatePendingRequest>[2]))
       case "duplicate-request": return noStoreJson(await service.duplicateRequest(input.id as string, input.patch as Parameters<typeof service.duplicateRequest>[1]))
       case "add-message": return noStoreJson(await service.addMessage(input.id as string, input.body as string))
-      case "create-followup": return noStoreJson(await service.createFollowup(input.id as string, input.kind as "change" | "cancellation", input.reasonId as string, input.explanation as string | undefined))
+      case "create-followup": return noStoreJson(await service.createFollowup(input.id as string, input.version as number, input.kind as "change" | "cancellation", input.reasonId as string, input.explanation as string | undefined))
+      case "transition-followup": return noStoreJson(await service.transitionFollowup(input.id as string, input.version as number, input.status as Exclude<CamdenFollowupStatus, "requested">, input.publicExplanation as string | undefined))
       case "transition-request": return noStoreJson(await service.transitionRequest(input.id as string, input.status as CamdenRequestStatus, input.version as number, input.publicExplanation as string | undefined))
       case "request-location": return noStoreJson(await service.requestLocation(input.name as string, input.address as Parameters<typeof service.requestLocation>[1], input.notes as string | undefined))
       case "accept-policy": return noStoreJson(await service.acceptPolicy(input.policyId as string, { ipHash: requestFingerprint(request), userAgent: request.headers.get("user-agent")?.slice(0, 500) || null }))

@@ -4,6 +4,8 @@ import {
   type CamdenActionResult,
   type CamdenCoordinatorData,
   type CamdenDashboardData,
+  type CamdenFollowupKind,
+  type CamdenFollowupStatus,
   type CamdenPortalService,
   type CamdenProfileUpdate,
   type CamdenRequestDetail,
@@ -50,7 +52,8 @@ class BffCamdenService implements CamdenPortalService {
   updatePendingRequest(id: string, version: number, patch: Partial<CamdenRequestDraft>) { return this.request<CamdenActionResult>("update-pending-request", { method: "POST", body: { id, version, patch } }) }
   duplicateRequest(id: string, patch: Partial<CamdenRequestDraft>) { return this.request<CamdenActionResult>("duplicate-request", { method: "POST", body: { id, patch } }) }
   addMessage(id: string, body: string) { return this.request<CamdenActionResult>("add-message", { method: "POST", body: { id, body } }) }
-  createFollowup(id: string, kind: "change" | "cancellation", reasonId: string, explanation?: string) { return this.request<CamdenActionResult>("create-followup", { method: "POST", body: { id, kind, reasonId, explanation } }) }
+  createFollowup(id: string, version: number, kind: CamdenFollowupKind, reasonId: string, explanation?: string) { return this.request<CamdenActionResult>("create-followup", { method: "POST", body: { id, version, kind, reasonId, explanation } }) }
+  transitionFollowup(id: string, version: number, status: Exclude<CamdenFollowupStatus, "requested">, publicExplanation?: string) { return this.request<CamdenActionResult>("transition-followup", { method: "POST", body: { id, version, status, publicExplanation } }) }
   transitionRequest(id: string, status: CamdenRequestStatus, version: number, publicExplanation?: string) { return this.request<CamdenActionResult>("transition-request", { method: "POST", body: { id, status, version, publicExplanation } }) }
   requestLocation(name: string, address: { address_line1: string; address_line2?: string; city: string; state: string; postal_code: string }, notes?: string) { return this.request<CamdenActionResult>("request-location", { method: "POST", body: { name, address, notes } }) }
   acceptPolicy(policyId: string) { return this.request<CamdenActionResult>("accept-policy", { method: "POST", body: { policyId } }) }

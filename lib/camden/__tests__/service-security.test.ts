@@ -59,3 +59,34 @@ describe("Camden County demo role isolation", () => {
     fetchMock.mockRestore()
   })
 })
+
+describe("Camden same-record action client contract", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+    vi.restoreAllMocks()
+  })
+
+  it("submits a change against the original ride id and expected version", async () => {
+    vi.stubEnv("NODE_ENV", "production")
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({ id: "request-1", message: "Saved" }), { status: 200 }))
+
+    await createCamdenPortalService("rider").createFollowup("request-1", 7, "change", "reason-1", "New time")
+
+    expect(fetchMock).toHaveBeenCalledWith("/api/camden/data/create-followup", expect.objectContaining({
+      method: "POST",
+      body: JSON.stringify({ id: "request-1", version: 7, kind: "change", reasonId: "reason-1", explanation: "New time" }),
+    }))
+  })
+
+  it("uses the dedicated coordinator resolution endpoint", async () => {
+    vi.stubEnv("NODE_ENV", "production")
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({ id: "request-1", message: "Saved" }), { status: 200 }))
+
+    await createCamdenPortalService("coordinator").transitionFollowup("request-1", 8, "completed", "Updated in Moovs")
+
+    expect(fetchMock).toHaveBeenCalledWith("/api/camden/data/transition-followup", expect.objectContaining({
+      method: "POST",
+      body: JSON.stringify({ id: "request-1", version: 8, status: "completed", publicExplanation: "Updated in Moovs" }),
+    }))
+  })
+})

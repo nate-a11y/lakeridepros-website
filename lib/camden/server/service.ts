@@ -10,15 +10,18 @@ import {
   stringValue,
   type UnknownRecord,
 } from "../mapping"
-import type {
-  CamdenActionResult,
-  CamdenCoordinatorData,
-  CamdenProfileUpdate,
-  CamdenRequest,
-  CamdenRequestDetail,
-  CamdenRequestDraft,
-  CamdenRequestStatus,
-  CamdenUserContext,
+import {
+  isFollowupActive,
+  type CamdenActionResult,
+  type CamdenCoordinatorData,
+  type CamdenFollowupKind,
+  type CamdenFollowupStatus,
+  type CamdenProfileUpdate,
+  type CamdenRequest,
+  type CamdenRequestDetail,
+  type CamdenRequestDraft,
+  type CamdenRequestStatus,
+  type CamdenUserContext,
 } from "../types"
 import { callCamdenGateway, type CamdenGatewayOperation } from "./gateway"
 
@@ -59,7 +62,10 @@ export class ServerCamdenPortalService {
       summary: {
         requestCount: dashboard.requests.length,
         pendingCount: dashboard.requests.filter((request) => request.status === "pending").length,
-        needsAttentionCount: dashboard.requests.filter((request) => ["needs_information", "information_received"].includes(request.status)).length,
+        needsAttentionCount: dashboard.requests.filter((request) =>
+          ["needs_information", "information_received", "change_requested", "cancellation_requested"].includes(request.status)
+          || isFollowupActive(request.action),
+        ).length,
         confirmedCount: dashboard.requests.filter((request) => request.status === "confirmed").length,
         monthSpend: dashboard.requests.filter((request) => request.rideDate.startsWith(monthPrefix)).reduce((total, request) => total + requestSpend(request), 0),
         contractSpend: dashboard.requests.reduce((total, request) => total + requestSpend(request), 0),
@@ -127,11 +133,21 @@ export class ServerCamdenPortalService {
     return this.action("add_message", { request_id: id, body })
   }
 
-  createFollowup(id: string, kind: "change" | "cancellation", reasonId: string, explanation?: string) {
+  createFollowup(id: string, version: number, kind: CamdenFollowupKind, reasonId: string, explanation?: string) {
     return this.action(kind === "change" ? "request_change" : "request_cancel", {
       request_id: id,
+      expected_version: version,
       reason_id: reasonId,
       explanation: explanation ?? null,
+    })
+  }
+
+  transitionFollowup(id: string, version: number, status: Exclude<CamdenFollowupStatus, "requested">, publicExplanation?: string) {
+    return this.action("transition_followup", {
+      request_id: id,
+      expected_version: version,
+      new_status: status,
+      public_explanation: publicExplanation ?? null,
     })
   }
 

@@ -218,6 +218,19 @@ export interface CamdenParticipantProfile {
   drugTestingSites: CamdenLocation[]
 }
 
+export interface CamdenParticipantRosterDetails {
+  courtProgram?: "dwi" | "veterans"
+  jurisdictionCounty?: string
+  caseNumber?: string
+  programStartedOn?: string
+  programStartNeedsReview: boolean
+  nextPhase?: "phase_2" | "phase_3" | "phase_4" | "phase_5" | "graduation"
+  treatmentProvider?: string
+  curfew?: string
+  sourceHomeAddress?: string
+  transportationEligibility: "pending" | "approved" | "not_needed" | "suspended"
+}
+
 export interface CamdenAccountabilityMetrics {
   ridesScheduled: number
   ridesCompleted: number
@@ -236,6 +249,7 @@ export interface CamdenRiderParticipantSnapshot {
 export interface CamdenCoordinatorParticipantSnapshot {
   role: "coordinator"
   profile: CamdenParticipantProfile
+  roster: CamdenParticipantRosterDetails
   metrics: CamdenAccountabilityMetrics & {
     totalCost: number
   }

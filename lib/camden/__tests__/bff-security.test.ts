@@ -153,8 +153,14 @@ describe("Camden response privacy", () => {
   const rawSnapshots = {
     period: { start_date: "2026-08-01", end_date: "2026-08-27" },
     participants: [{
-      rider_id: "rider-1", full_name: "Rider", status: "active", phase: "phase_2",
+      rider_id: "rider-1", full_name: "Rider", status: "active", phase: "phase_5",
       home_locations: [], treatment_locations: [], drug_testing_sites: [],
+      roster: {
+        court_program: "dwi", jurisdiction_county: "Example County", case_number: "26XX-DEMO0001",
+        program_started_on: "2026-01-10", program_start_needs_review: false, next_phase: "graduation",
+        treatment_provider: "Example Provider", curfew: "10 PM–6 AM", source_home_address: "100 Test Street",
+        transportation_eligibility: "pending",
+      },
       metrics: { rides_scheduled: 6, rides_completed: 5, rides_cancelled: 1, no_shows: 0, finalized_rides: 6, cancellation_rate: 16.67, total_cost: 425.5 },
       personal_usage_detected: true, personal_usage_override: false, has_personal_transportation: false,
     }],
@@ -163,8 +169,9 @@ describe("Camden response privacy", () => {
   it("defensively strips cost and all personal-use fields from rider snapshots", () => {
     const result = mapParticipantSnapshots(rawSnapshots, "rider", { period: "current_month" })
     expect(result.role).toBe("rider")
-    expect(JSON.stringify(result)).not.toMatch(/cost|personalUse|personal_usage|hasPersonalTransportation/i)
+    expect(JSON.stringify(result)).not.toMatch(/cost|personalUse|personal_usage|hasPersonalTransportation|roster|caseNumber|curfew|sourceHomeAddress/i)
     expect(result.participants[0].metrics.ridesCompleted).toBe(5)
+    expect(result.participants[0].profile.phase).toBe("Phase 5")
   })
 
   it("returns cost and the final override-aware personal-use result only to coordinators", () => {
@@ -172,6 +179,8 @@ describe("Camden response privacy", () => {
     if (result.role !== "coordinator") throw new Error("Expected coordinator snapshot shape")
     expect(result.participants[0].metrics.totalCost).toBe(425.5)
     expect(result.participants[0].hasPersonalTransportation).toBe(false)
+    expect(result.participants[0].roster.caseNumber).toBe("26XX-DEMO0001")
+    expect(result.participants[0].roster.nextPhase).toBe("graduation")
     expect(JSON.stringify(result)).not.toMatch(/personalUsageDetected|personalUseOverride|personal_usage/i)
   })
 

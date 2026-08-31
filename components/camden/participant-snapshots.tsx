@@ -13,18 +13,35 @@ function percent(value: number) {
   return `${Math.round(value * 10) / 10}%`
 }
 
+const phaseLabel = (value?: string) => ({ phase_1: "Phase 1", phase_2: "Phase 2", phase_3: "Phase 3", phase_4: "Phase 4", phase_5: "Phase 5", graduation: "Graduation" } as Record<string, string>)[value ?? ""] ?? "Not provided"
+const programLabel = (value?: string) => value === "dwi" ? "DWI Court" : value === "veterans" ? "Veterans Court" : "Not provided"
+const eligibilityLabel = (value: string) => ({ pending: "Pending review", approved: "Approved", not_needed: "Transportation not needed", suspended: "Suspended" } as Record<string, string>)[value] ?? "Pending review"
+
 function LocationList({ title, locations }: { title: string; locations: CamdenLocation[] }) {
   if (!locations.length) return null
   return <div><h4 className="text-xs font-bold uppercase tracking-wide text-neutral-600">{title}</h4><ul className="mt-2 space-y-2">{locations.map((location) => <li key={location.id} className="flex min-w-0 gap-2 text-sm"><MapPin className="mt-0.5 size-4 shrink-0 text-neutral-500" aria-hidden="true" /><span className="min-w-0"><strong>{location.name}</strong><br /><span className="break-words text-neutral-600">{location.address}</span></span></li>)}</ul></div>
 }
 
 function SnapshotCard({ participant }: { participant: CamdenCoordinatorParticipantSnapshot }) {
-  const { profile, metrics } = participant
+  const { profile, roster, metrics } = participant
   return (
     <article className="min-w-0 rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0"><h3 className="break-words text-xl font-extrabold">{profile.fullName}</h3><p className="mt-1 text-sm text-neutral-600">{profile.status || "Participant profile"}</p></div><span className={`inline-flex min-h-7 items-center rounded-full px-3 py-1 text-xs font-bold ${profile.phase === "Not assigned" ? "bg-amber-100 text-amber-950" : "bg-green-100 text-green-900"}`}>{profile.phase || "Not assigned"}</span></div>
       <div className="mt-4 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:gap-x-5">{profile.phone && <a href={`tel:${profile.phone}`} className="inline-flex min-h-11 items-center font-semibold text-[#245f0b] underline"><Phone className="mr-2 size-4" aria-hidden="true" />{profile.phone}</a>}{profile.email && <a href={`mailto:${profile.email}`} className="inline-flex min-h-11 min-w-0 items-center break-all font-semibold text-[#245f0b] underline">{profile.email}</a>}</div>
       <dl className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4"><Metric label="Scheduled" value={metrics.ridesScheduled} /><Metric label="Completed" value={metrics.ridesCompleted} /><Metric label="Cancelled" value={metrics.ridesCancelled} /><Metric label="No-shows" value={metrics.noShows} /><Metric label="Finalized" value={metrics.finalizedRides} /><Metric label="Cancellation rate" value={percent(metrics.cancellationRate)} /><Metric label="Total cost" value={metrics.totalCost.toLocaleString("en-US", { style: "currency", currency: "USD" })} /><Metric label="Personal transportation billed separately" value={participant.hasPersonalTransportation ? "Yes" : "No"} /></dl>
+      <section aria-label="Confidential roster details" className="mt-5 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2"><h4 className="font-extrabold">Roster details</h4><span className={`inline-flex min-h-7 items-center rounded-full px-3 py-1 text-xs font-bold ${roster.transportationEligibility === "approved" ? "bg-green-100 text-green-900" : roster.transportationEligibility === "suspended" ? "bg-red-100 text-red-900" : "bg-amber-100 text-amber-950"}`}>{eligibilityLabel(roster.transportationEligibility)}</span></div>
+        <dl className="mt-3 grid gap-x-4 gap-y-3 text-sm sm:grid-cols-2">
+          <div><dt className="font-bold text-neutral-600">Court program</dt><dd>{programLabel(roster.courtProgram)}</dd></div>
+          <div><dt className="font-bold text-neutral-600">County</dt><dd>{roster.jurisdictionCounty || "Not provided"}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Case number</dt><dd className="break-all">{roster.caseNumber || "Not provided"}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Date began</dt><dd>{roster.programStartedOn ? formatPortalDate(roster.programStartedOn) : "Not provided"}{roster.programStartNeedsReview ? <strong className="ml-2 text-amber-800">Review date</strong> : null}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Next milestone</dt><dd>{phaseLabel(roster.nextPhase)}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Treatment provider</dt><dd>{roster.treatmentProvider || "Not provided"}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Curfew</dt><dd>{roster.curfew || "Not provided"}</dd></div>
+          <div className="sm:col-span-2"><dt className="font-bold text-neutral-600">Roster home address</dt><dd className="break-words">{roster.sourceHomeAddress || "Not provided"}</dd><p className="mt-1 text-xs text-neutral-500">Reference only; this is not an approved pickup until LRP reviews it.</p></div>
+        </dl>
+      </section>
       <details className="mt-5 rounded-xl border border-neutral-200 bg-neutral-50"><summary className="min-h-11 cursor-pointer px-4 py-3 font-bold text-[#245f0b] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#4cbb17]/40">Approved locations</summary><div className="grid gap-5 border-t border-neutral-200 p-4 sm:grid-cols-3"><LocationList title="Home" locations={profile.homeLocations} /><LocationList title="Treatment" locations={profile.treatmentLocations} /><LocationList title="Drug testing" locations={profile.drugTestingSites} />{!profile.homeLocations.length && !profile.treatmentLocations.length && !profile.drugTestingSites.length && <p className="text-sm text-neutral-600">No approved locations are listed.</p>}</div></details>
     </article>
   )

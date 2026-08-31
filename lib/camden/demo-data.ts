@@ -203,6 +203,18 @@ export function createDemoParticipantSnapshots(role: "rider" | "coordinator", fi
   const coordinatorParticipants: CamdenCoordinatorParticipantSnapshot[] = demoProfiles.map((profile, index) => ({
     role: "coordinator",
     profile,
+    roster: {
+      courtProgram: index ? "veterans" : "dwi",
+      jurisdictionCounty: index ? undefined : "Example County",
+      caseNumber: index ? "26XX-DEMO0002" : "26XX-DEMO0001",
+      programStartedOn: index ? "2026-06-05" : "2026-01-18",
+      programStartNeedsReview: false,
+      nextPhase: index ? "phase_2" : "phase_3",
+      treatmentProvider: index ? "VA" : "Example Provider",
+      curfew: index ? undefined : "10 PM–6 AM",
+      sourceHomeAddress: index ? "200 Demo Avenue, Example City, MO 65049" : "100 Demo Street, Example City, MO 65020",
+      transportationEligibility: "pending",
+    },
     metrics: {
       ridesScheduled: (index ? 4 : 6) * factor,
       ridesCompleted: (index ? 3 : 5) * factor,

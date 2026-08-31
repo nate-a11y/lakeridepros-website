@@ -4,6 +4,7 @@ import type {
   CamdenFollowupAction,
   CamdenLocation,
   CamdenParticipantProfile,
+  CamdenParticipantRosterDetails,
   CamdenParticipantSnapshots,
   CamdenRequest,
   CamdenRequestDraft,
@@ -151,6 +152,25 @@ function mapSnapshotLocations(value: unknown): CamdenLocation[] {
   })
 }
 
+function mapParticipantRoster(value: unknown): CamdenParticipantRosterDetails {
+  const row = record(value)
+  const courtProgram = stringValue(row.court_program)
+  const nextPhase = stringValue(row.next_phase)
+  const eligibility = stringValue(row.transportation_eligibility, "pending")
+  return {
+    courtProgram: (["dwi", "veterans"].includes(courtProgram) ? courtProgram : undefined) as CamdenParticipantRosterDetails["courtProgram"],
+    jurisdictionCounty: stringValue(row.jurisdiction_county) || undefined,
+    caseNumber: stringValue(row.case_number) || undefined,
+    programStartedOn: stringValue(row.program_started_on) || undefined,
+    programStartNeedsReview: Boolean(row.program_start_needs_review),
+    nextPhase: (/^(?:phase_[2-5]|graduation)$/.test(nextPhase) ? nextPhase : undefined) as CamdenParticipantRosterDetails["nextPhase"],
+    treatmentProvider: stringValue(row.treatment_provider) || undefined,
+    curfew: stringValue(row.curfew) || undefined,
+    sourceHomeAddress: stringValue(row.source_home_address) || undefined,
+    transportationEligibility: (["pending", "approved", "not_needed", "suspended"].includes(eligibility) ? eligibility : "pending") as CamdenParticipantRosterDetails["transportationEligibility"],
+  }
+}
+
 export function mapParticipantSnapshots(
   value: unknown,
   role: "rider" | "coordinator",
@@ -166,7 +186,7 @@ export function mapParticipantSnapshots(
     phone: stringValue(row.phone) || undefined,
     email: stringValue(row.email) || undefined,
     status: stringValue(row.status) || undefined,
-    phase: ({ phase_1: "Phase 1", phase_2: "Phase 2", phase_3: "Phase 3" } as Record<string, string>)[stringValue(row.phase)] ?? "Not assigned",
+    phase: ({ phase_1: "Phase 1", phase_2: "Phase 2", phase_3: "Phase 3", phase_4: "Phase 4", phase_5: "Phase 5" } as Record<string, string>)[stringValue(row.phase)] ?? "Not assigned",
     homeLocations: mapSnapshotLocations(row.home_locations),
     treatmentLocations: mapSnapshotLocations(row.treatment_locations),
     drugTestingSites: mapSnapshotLocations(row.drug_testing_sites),
@@ -206,6 +226,7 @@ export function mapParticipantSnapshots(
       return {
         role,
         profile: profileFor(row),
+        roster: mapParticipantRoster(row.roster),
         metrics: { ...metricsFor(row), totalCost: numberValue(metrics.total_cost) },
         hasPersonalTransportation: Boolean(row.has_personal_transportation),
       }

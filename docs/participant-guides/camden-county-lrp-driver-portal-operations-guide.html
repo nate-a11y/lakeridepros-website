@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LRP Driver Portal Operations Guide — Camden County</title>
+  <link rel="stylesheet" href="full-guide.css" />
+  <style>
+    .field-map { display:grid; grid-template-columns:1fr .34in 1fr; gap:.09in; align-items:stretch; margin:.16in 0; }
+    .map-card { padding:.14in; border:1px solid var(--line); border-radius:.12in; background:#fff; }
+    .map-card.source { background:var(--green-soft); border-color:#86c76b; }
+    .map-card.target { background:var(--blue-soft); border-color:#93c5fd; }
+    .map-card h3 { margin:0 0 .04in; font-size:10pt; }
+    .map-card p { margin:0; font-size:8.5pt; line-height:1.35; }
+    .map-arrow { display:grid; place-items:center; color:var(--green-dark); font-size:17pt; font-weight:900; }
+    .field-table { width:100%; margin:.14in 0; border-collapse:separate; border-spacing:0; border:1px solid var(--line); border-radius:.12in; overflow:hidden; }
+    .field-table th { padding:.09in .1in; color:white; background:var(--green-deep); text-align:left; font-size:8.4pt; letter-spacing:.03em; }
+    .field-table td { padding:.085in .1in; border-top:1px solid var(--line); vertical-align:top; font-size:8.2pt; line-height:1.32; color:var(--slate); }
+    .field-table td:first-child { width:26%; color:var(--ink); font-weight:800; }
+    .field-table td:nth-child(2) { width:31%; color:var(--ink); font-weight:700; }
+    .code { font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight:800; color:var(--green-deep); }
+    .flow { display:grid; grid-template-columns:repeat(4,1fr); gap:.08in; margin:.15in 0; }
+    .flow > div { position:relative; padding:.13in .12in; border:1px solid var(--line); border-radius:.12in; background:white; }
+    .flow b { display:block; font-size:9pt; }
+    .flow span { display:block; margin-top:.04in; font-size:7.8pt; line-height:1.32; color:var(--slate); }
+    .mini-screen-grid { display:grid; grid-template-columns:1fr 1fr; gap:.14in; margin-top:.14in; }
+    .mini-screen-grid .screen { margin:0; height:2.72in; }
+    .mini-screen-grid .screen img { min-height:100%; object-fit:cover; object-position:top; }
+    .gate-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.1in; margin:.14in 0; }
+    .gate { padding:.13in; border:1px solid var(--line); border-radius:.12in; background:#fff; }
+    .gate .gate-no { display:grid; place-items:center; width:.28in; height:.28in; margin-bottom:.06in; border-radius:50%; color:white; background:var(--green-dark); font-size:9pt; font-weight:900; }
+    .gate h3 { font-size:10pt; }
+    .gate p { margin:0; font-size:8.1pt; line-height:1.34; }
+    .compact li { margin:.04in 0; font-size:8.6pt; line-height:1.35; }
+    .rule { margin:.13in 0; padding:.12in .15in; border-left:.05in solid var(--green-dark); background:var(--green-soft); }
+    .rule p { margin:0; font-size:9pt; }
+    .private-label { display:inline-block; margin-bottom:.09in; padding:.05in .1in; border:1px solid rgba(255,255,255,.28); border-radius:999px; color:#d9efcf; font-size:8pt; font-weight:900; letter-spacing:.09em; text-transform:uppercase; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="page cover" aria-labelledby="cover-title">
+      <div class="content">
+        <div class="cover-top">
+          <img src="../../public/Color%20logo%20-%20no%20background.png" alt="Lake Ride Pros logo" />
+          <div class="cover-brand">Lake Ride Pros<small>Camden County Treatment Court Transportation</small></div>
+        </div>
+
+        <div class="cover-main">
+          <span class="private-label">Internal operations guide</span>
+          <p class="eyebrow">LRP Driver Portal Staff Workflow</p>
+          <h1 id="cover-title">Review. Build in Moovs. Reconcile.</h1>
+          <p class="lede">The complete staff-side process for managing portal requests, entering the right identifiers in Moovs, confirming rides, handling follow-ups, and keeping participant access ready.</p>
+
+          <div class="cover-process" aria-label="Three-part operations workflow">
+            <div class="cover-step"><b>1. Review</b><span>Claim the request, verify eligibility and route details, then acknowledge it.</span></div>
+            <div class="cover-arrow" aria-hidden="true">›</div>
+            <div class="cover-step"><b>2. Schedule</b><span>Create the reservation in Moovs with the exact request reference and participant phone.</span></div>
+            <div class="cover-arrow" aria-hidden="true">›</div>
+            <div class="cover-step"><b>3. Reconcile</b><span>Let sync confirm the request, then clear exceptions, actions, and reporting items.</span></div>
+          </div>
+        </div>
+
+        <div class="cover-url">
+          <p>Open the staff workspace<strong>LRP Driver Portal → Camden County</strong></p>
+          <p class="cover-version">Updated<br /><strong>August 2026</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" aria-labelledby="workspace-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="workspace-title">1. Start in the request queue</h2>
+        <p class="section-intro">Use the Camden County workspace as the control center. Start with work requiring attention—not with the oldest item you happen to see.</p>
+
+        <figure class="screen" style="height:4.62in">
+          <img src="assets/10-lrp-bolt-queue-crop.jpg" alt="LRP Driver Portal Camden County request queue with program metrics, reconciliation alerts, request list, and selected request detail" />
+          <span class="callout-dot" style="left:52%; top:7%">1</span>
+          <span class="callout-dot" style="left:44%; top:33%">2</span>
+          <span class="callout-dot" style="left:85%; top:56%">3</span>
+        </figure>
+        <p class="screen-caption">Sample local fixture data. Live records contain confidential participant and program information.</p>
+
+        <div class="action-grid">
+          <article class="action-card"><div class="icon">1</div><h3>Scan the alerts</h3><p>Resolve missing references, duplicate matches, phone mismatches, and likely no-shows before they age.</p></article>
+          <article class="action-card"><div class="icon">2</div><h3>Filter the queue</h3><p>Prioritize Needs information, Pending near target, and active change or cancellation requests.</p></article>
+          <article class="action-card"><div class="icon">3</div><h3>Open one request</h3><p>Review the participant, phone, timing, route, notes, messages, and timeline before acting.</p></article>
+        </div>
+
+        <div class="note success" style="margin-top:.14in"><p><strong>Daily order:</strong> reconciliation issues → needs-attention work → pending requests near review target → acknowledged requests awaiting Moovs scheduling → follow-up actions → no-shows.</p></div>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="review-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20background.png" onerror="this.src='../../public/Color%20logo%20-%20no%20background.png'" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="review-title">2. Claim, verify, and acknowledge</h2>
+        <p class="section-intro">Requests begin unclaimed. Claim the record before working it so another staff member can see who owns the next step.</p>
+
+        <figure class="screen" style="height:4.37in">
+          <img src="assets/17-lrp-bolt-process-request-crop.jpg" alt="LRP Driver Portal request processing area with claim control, request statuses, participant-visible message, and LRP-only note" />
+          <span class="callout-dot" style="left:14%; top:12%">1</span>
+          <span class="callout-dot" style="left:49%; top:42%">2</span>
+          <span class="callout-dot" style="left:44%; top:77%">3</span>
+        </figure>
+        <p class="screen-caption">The available controls change with the request status and the action currently in progress.</p>
+
+        <ol class="steps two">
+          <li><span class="num">1</span><strong>Select Claim request.</strong><p>Confirm the assignment shows you before making a status change.</p></li>
+          <li><span class="num">2</span><strong>Verify the basics.</strong><p>Participant, verified phone, date, pickup/arrival timing, approved pickup, destination, companion, and notes.</p></li>
+          <li><span class="num">3</span><strong>Choose the right status.</strong><p>Use Acknowledged when valid and ready for Moovs entry; Needs information when something is missing.</p></li>
+          <li><span class="num">4</span><strong>Explain adverse outcomes.</strong><p>Declined requires a clear rider-visible reason. Cancelled is for a request that will not proceed.</p></li>
+        </ol>
+
+        <div class="note warning" style="margin-top:.14in"><p><strong>There is no “Approve request” button.</strong> For a valid ride request, <strong>Acknowledged</strong> means “LRP reviewed it and is working on scheduling.” It is not a ride confirmation. <strong>Approve transportation</strong> is a separate participant eligibility control.</p></div>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="moovs-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="moovs-title">3. Moovs field map: what goes where</h2>
+        <p class="section-intro">The exact request reference and the participant's verified phone are the two keys that let LRP Driver Portal find the Moovs trip and confirm the portal request.</p>
+
+        <div class="field-map" aria-label="Request reference mapping">
+          <div class="map-card source"><h3>LRP Driver Portal request reference</h3><p class="code">CC-20260827-0001</p><p>Select <strong>Copy reference</strong>.</p></div>
+          <div class="map-arrow" aria-hidden="true">→</div>
+          <div class="map-card target"><h3>Moovs reservation</h3><p><strong>External Reference Number</strong></p><p>Paste the exact reference—no extra words.</p></div>
+        </div>
+
+        <table class="field-table" aria-label="LRP Driver Portal to Moovs field mapping">
+          <thead><tr><th>From LRP Driver Portal</th><th>Where it goes in Moovs</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>Request reference</td><td>Reservation → <strong>External Reference Number</strong></td><td>Paste the exact <span class="code">CC-…</span> value. Never leave it only in trip notes.</td></tr>
+            <tr><td>Participant + verified phone</td><td>Passenger on the reservation + <strong>Passenger Phone Number</strong></td><td>Select/create the correct passenger. The phone must match the verified portal phone.</td></tr>
+            <tr><td>Service date and timing</td><td>Reservation date, pickup time, and/or arrival timing</td><td>Use the request details to schedule the operationally correct pickup.</td></tr>
+            <tr><td>Approved pickup + destination</td><td>Pickup and drop-off locations</td><td>Use the approved/requested route. Resolve any destination review first.</td></tr>
+            <tr><td>Companion + rider notes</td><td>Appropriate reservation notes, only if operationally needed</td><td>Carry only information the driver/dispatch team needs.</td></tr>
+            <tr><td>Copy Moovs summary</td><td>Working checklist while building the reservation</td><td>Helpful for entry; it does <strong>not</strong> replace External Reference Number.</td></tr>
+            <tr><td>Moovs Full Confirmation / trip ID</td><td>Nowhere to paste in LRP Driver Portal</td><td>The sync captures the stable Moovs ID automatically.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="note info"><p><strong>Copy Moovs summary example:</strong><br /><span class="code">CC-20260827-0001</span><br />Jordan Ellis · +15735550142<br />2026-08-27 at 10:30 AM<br />Jordan's home → Compass Health — Camdenton</p></div>
+
+        <div class="note warning" style="margin-top:.11in"><p><strong>Do not mix up IDs.</strong> Allowed Moovs company IDs and booking contact IDs belong in <strong>Program setup</strong> and control which Moovs records the integration can discover. They are not per-request reference numbers and should not be changed casually.</p></div>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="sync-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="sync-title">4. Let sync confirm—and clear exceptions</h2>
+        <p class="section-intro">LRP Driver Portal checks Moovs on a 15-minute cadence. A pending request confirms automatically only when it finds one in-scope Moovs trip with both the exact reference and verified passenger phone.</p>
+
+        <div class="flow" aria-label="Automated confirmation sequence">
+          <div><b>1. Acknowledge</b><span>Request is reviewed and ready to schedule.</span></div>
+          <div><b>2. Build in Moovs</b><span>Correct passenger, phone, route, time, and external reference.</span></div>
+          <div><b>3. Sync matches</b><span>Exact reference + verified phone + allowed program scope.</span></div>
+          <div><b>4. Confirmed</b><span>Request links to the trip and the participant receives confirmation SMS.</span></div>
+        </div>
+
+        <figure class="screen" style="height:3.55in">
+          <img src="assets/10-lrp-bolt-queue-crop.jpg" alt="LRP Driver Portal request queue showing reconciliation alerts and linked request information" style="transform:scale(1.28); transform-origin:56% 4%;" />
+          <span class="callout-dot" style="left:48%; top:16%">1</span>
+          <span class="callout-dot" style="left:77%; top:29%">2</span>
+        </figure>
+        <p class="screen-caption">Use the reconciliation cards and request detail to investigate records that did not link cleanly.</p>
+
+        <div class="status-grid">
+          <div class="status"><span class="pill info">Missing reference</span><p>Add the exact request reference to the Moovs External Reference Number field, then allow sync to retry.</p></div>
+          <div class="status"><span class="pill info">Phone mismatch</span><p>Verify the Moovs passenger is the participant and correct the passenger phone. Never force a match by guessing.</p></div>
+          <div class="status"><span class="pill info">Duplicate reference</span><p>Review every Moovs trip carrying the reference. Round trips can be valid; unintended duplicates must be corrected.</p></div>
+          <div class="status"><span class="pill confirmed">Linked</span><p>Moovs remains the pricing and operational source of truth. Multiple trip rows may link to one round-trip request.</p></div>
+        </div>
+
+        <div class="note warning" style="margin-top:.13in"><p><strong>Likely no-show:</strong> review the trip evidence, then choose <strong>Not a no-show</strong> or <strong>Confirm no-show</strong>. Add a concise audit note when context will help the next reviewer.</p></div>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="followup-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="followup-title">5. Process changes, cancellations, and messages</h2>
+        <p class="section-intro">Participant actions remain attached to the original request. LRP Driver Portal records the conversation and audit trail; the actual operational change still happens in Moovs.</p>
+
+        <figure class="screen" style="height:4.42in">
+          <img src="assets/18-lrp-bolt-followup-actions-crop.jpg" alt="LRP Driver Portal active cancellation request with acknowledge and decline controls, rider-visible message, and internal note" />
+          <span class="callout-dot" style="left:19%; top:24%">1</span>
+          <span class="callout-dot" style="left:53%; top:48%">2</span>
+          <span class="callout-dot" style="left:44%; top:79%">3</span>
+        </figure>
+        <p class="screen-caption">Sample fixture data. The rider-visible update and internal note serve different audiences.</p>
+
+        <ol class="steps two">
+          <li><span class="num">1</span><strong>Claim and review the action.</strong><p>Read the participant's reason, timing, current Moovs trip, and action deadlines.</p></li>
+          <li><span class="num">2</span><strong>Acknowledge the action.</strong><p>Tell the participant it is being handled; do not imply the Moovs change is complete yet.</p></li>
+          <li><span class="num">3</span><strong>Update Moovs manually.</strong><p>Change or cancel the operational reservation and verify the result in Moovs.</p></li>
+          <li><span class="num">4</span><strong>Complete the action in LRP Driver Portal.</strong><p>Record the participant-facing outcome and any necessary internal audit context.</p></li>
+        </ol>
+
+        <div class="split" style="margin-top:.14in">
+          <div class="note info"><p><strong>Shared rider message</strong><br />Visible to the participant and coordinator. Write clearly, professionally, and with no internal-only detail.</p></div>
+          <div class="note"><p><strong>LRP-only note</strong><br />Never shown to the participant/coordinator. Use for concise operational or audit context.</p></div>
+        </div>
+        <p class="tiny" style="margin-top:.1in">Messages and internal notes are immutable after submission. Review before saving. Portal v1 does not write changes or cancellations into Moovs automatically.</p>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="participant-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="participant-title">6. Manage participants through three separate gates</h2>
+        <p class="section-intro">Transportation eligibility, portal login, and approved pickups are independent. Enabling one does not automatically enable the others.</p>
+
+        <figure class="screen" style="height:3.85in">
+          <img src="assets/19-lrp-bolt-participant-controls-crop.jpg" alt="LRP Driver Portal participant management controls for transportation eligibility, approved pickup, and portal login" />
+          <span class="callout-dot" style="left:35%; top:28%">1</span>
+          <span class="callout-dot" style="left:74%; top:31%">2</span>
+          <span class="callout-dot" style="left:36%; top:70%">3</span>
+        </figure>
+        <p class="screen-caption">A new participant starts pending, without a portal identity, and without an approved pickup.</p>
+
+        <div class="gate-grid">
+          <article class="gate"><div class="gate-no">1</div><h3>Transportation eligibility</h3><p><strong>Approve transportation</strong> only after program authorization. Suspend/resume separately when eligibility changes.</p></article>
+          <article class="gate"><div class="gate-no">2</div><h3>Approved pickup</h3><p>Add, approve, edit, and select a default pickup. The roster/source home address is reference-only—not automatically approved.</p></article>
+          <article class="gate"><div class="gate-no">3</div><h3>Portal login</h3><p>Enable access only when the participant is ready. Suspend/reactivate login without changing transportation eligibility.</p></article>
+        </div>
+
+        <div class="quick-grid" style="margin-top:.12in">
+          <div class="quick-card"><h3>Safe onboarding order</h3><ol class="compact"><li>Verify identity and mobile phone.</li><li>Approve transportation if authorized.</li><li>Add and approve the pickup; set the default.</li><li>Enable portal access and verify the user can sign in.</li></ol></div>
+          <div class="quick-card"><h3>Before troubleshooting requests</h3><ul class="compact"><li>Eligibility is active.</li><li>Portal login is active.</li><li>At least one pickup is approved.</li><li>Ride type and destination are allowed.</li><li>The verified phone is current.</li></ul></div>
+        </div>
+
+        <div class="note warning" style="margin-top:.12in"><p><strong>Common trap:</strong> portal access alone does not make someone ride-ready. Without transportation approval and an approved pickup, the participant still cannot submit a valid request.</p></div>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="config-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="config-title">7. Keep locations and ride rules current</h2>
+        <p class="section-intro">These settings control which routes participants can request and when the portal allows a request, change, or cancellation.</p>
+
+        <div class="mini-screen-grid">
+          <figure class="screen"><img src="assets/13-lrp-bolt-locations-crop.jpg" alt="LRP Driver Portal locations workspace with pending destination review and destination categories" /></figure>
+          <figure class="screen"><img src="assets/14-lrp-bolt-ride-types-crop.jpg" alt="LRP Driver Portal ride type settings for notice periods, same-day requests, and change or cancellation cutoffs" /></figure>
+        </div>
+        <p class="screen-caption">Left: destination review and catalog. Right: ride-type policy and service targets. Sample fixture data.</p>
+
+        <div class="split" style="margin-top:.17in">
+          <div>
+            <h3>Locations</h3>
+            <ul class="checklist">
+              <li>Review pending rider destinations before use.</li>
+              <li>Approve or reject with enough context for the audit trail.</li>
+              <li>Keep destination names, categories, addresses, and active status accurate.</li>
+              <li>Do not treat a roster home address as an approved pickup.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Ride types</h3>
+            <ul class="checklist">
+              <li>Advance notice and same-day rules determine when requests are allowed.</li>
+              <li>Change/cancel cutoffs determine whether participant actions are available.</li>
+              <li>Acknowledge and confirmation targets drive queue urgency.</li>
+              <li>Policy changes affect future participant behavior immediately—verify before saving.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="note warning" style="margin-top:.18in"><p><strong>Configuration changes have program-wide impact.</strong> Confirm any policy or location change with the program owner before editing. Preserve the reason for material changes in the appropriate operational record.</p></div>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="reporting-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="reporting-title">8. Reporting and protected program setup</h2>
+        <p class="section-intro">Use Reporting for evidence and exports. Use Program setup only for authorized administrative changes—not routine request processing.</p>
+
+        <div class="mini-screen-grid">
+          <figure class="screen"><img src="assets/15-lrp-bolt-reporting-crop.jpg" alt="LRP Driver Portal reporting workspace with date filters, cost metrics, invoice evidence, and CSV export" /></figure>
+          <figure class="screen"><img src="assets/16-lrp-bolt-setup-crop.jpg" alt="LRP Driver Portal program setup for support, dates, budgets, recipients, and allowed Moovs IDs" /></figure>
+        </div>
+        <p class="screen-caption">Sample fixture data. Never share screenshots or exports outside approved program channels.</p>
+
+        <div class="split" style="margin-top:.17in">
+          <div class="quick-card"><h3>Reporting</h3><ul class="compact"><li>Filter the correct period before reviewing totals.</li><li>Use linked Moovs costs and invoice evidence as the operational record.</li><li>Export CSV only when needed and store it in an approved location.</li><li>Payments and accounting actions remain outside the portal.</li></ul></div>
+          <div class="quick-card"><h3>Program setup</h3><ul class="compact"><li>Support phone, program dates, budgets, and report/SMS recipients.</li><li>Allowed Moovs company and booking contact IDs define integration scope.</li><li>These IDs are not request references.</li><li>Verify authorization and exact values before any change.</li></ul></div>
+        </div>
+
+        <div class="note warning" style="margin-top:.17in"><p><strong>High-risk area:</strong> a wrong allowed company ID or booking contact ID can hide valid trips or pull the wrong records into reconciliation. Do not experiment. If uncertain, stop and verify with the program owner or integration administrator.</p></div>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="checklist-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">LRP Driver Portal Operations Guide</div>
+        </header>
+
+        <h2 id="checklist-title">9. The complete request checklist</h2>
+        <p class="section-intro">Use this sequence every time. The goal is a clean participant experience, a correct Moovs reservation, and an auditable LRP Driver Portal record.</p>
+
+        <ol class="steps two">
+          <li><span class="num">1</span><strong>Claim the request.</strong><p>Confirm ownership before touching status or messages.</p></li>
+          <li><span class="num">2</span><strong>Verify participant readiness.</strong><p>Eligibility, verified phone, approved pickup, destination, ride type, and timing.</p></li>
+          <li><span class="num">3</span><strong>Read the full record.</strong><p>Route, appointment/arrival time, companion, notes, conversation, and active actions.</p></li>
+          <li><span class="num">4</span><strong>Acknowledge—or ask.</strong><p>Acknowledge valid work. Use Needs information or Declined with a clear rider-visible explanation.</p></li>
+          <li><span class="num">5</span><strong>Copy the reference.</strong><p>Paste the exact <span class="code">CC-…</span> into Moovs External Reference Number.</p></li>
+          <li><span class="num">6</span><strong>Build the Moovs reservation.</strong><p>Correct participant and phone, schedule, route, notes, company, and booking contact.</p></li>
+          <li><span class="num">7</span><strong>Wait for the 15-minute sync.</strong><p>Do not manually claim confirmation. Confirmed follows a clean reference + phone match.</p></li>
+          <li><span class="num">8</span><strong>Resolve any exception.</strong><p>Missing reference, phone mismatch, duplicates, or out-of-scope company/contact.</p></li>
+          <li><span class="num">9</span><strong>Process follow-ups in both systems.</strong><p>Acknowledge in LRP Driver Portal, change/cancel in Moovs, then complete the portal action.</p></li>
+          <li><span class="num">10</span><strong>Close the loop.</strong><p>Verify participant-facing status, record concise audit context, and clear the queue item.</p></li>
+        </ol>
+
+        <div class="rule"><p><strong>The one-line rule:</strong> <span class="code">CC request reference</span> goes in <strong>Moovs External Reference Number</strong>; the verified participant mobile goes on the <strong>Moovs passenger</strong>. When both match, sync does the rest.</p></div>
+
+        <div class="quick-grid">
+          <div class="quick-card"><h3>Stop and verify when…</h3><ul class="compact"><li>The participant phone differs between systems.</li><li>More than the expected trip rows use a reference.</li><li>The trip is not in the allowed company/contact scope.</li><li>Someone asks for a program-wide settings change.</li><li>You cannot tell whether a message is participant-visible.</li></ul></div>
+          <div class="quick-card"><h3>Privacy and audit</h3><ul class="compact"><li>LRP Driver Portal data is confidential.</li><li>Use only the information needed to schedule and support the ride.</li><li>Do not share exports, screenshots, or participant details in unapproved channels.</li><li>Never put credentials or secrets in notes.</li><li>Sign out or lock the device when finished.</li></ul></div>
+        </div>
+
+        <div class="url-card">
+          <div><p class="url">LRP Driver Portal → Camden County</p><p class="hint">Request queue · Riders · Locations · Ride types · Reporting · Program setup</p></div>
+          <div style="text-align:right"><p><strong>Questions?</strong></p><p class="hint">Escalate uncertain matches or configuration changes before acting.</p></div>
+        </div>
+      </div>
+      <footer class="page-footer"><span>Internal · Camden County Staff Operations</span><span class="page-number">Page </span></footer>
+    </section>
+  </main>
+</body>
+</html>

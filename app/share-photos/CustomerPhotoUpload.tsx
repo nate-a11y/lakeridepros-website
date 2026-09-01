@@ -149,7 +149,7 @@ export default function CustomerPhotoUpload() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(76,187,23,0.18),transparent_34%),#000] px-4 py-8 text-white sm:py-12">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,var(--primary-alpha-20),transparent_34%),#000] px-4 py-8 text-white sm:py-12">
       <div className="mx-auto max-w-xl">
         <div className="mb-6 text-center">
           <Image

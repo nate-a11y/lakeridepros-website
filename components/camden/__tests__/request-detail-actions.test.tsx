@@ -102,6 +102,36 @@ beforeEach(() => {
 })
 
 describe("same-record ride actions", () => {
+  it("distinguishes a pending portal request from its linked trip status", async () => {
+    const pendingRequest: CamdenRequest = {
+      ...request,
+      status: "pending",
+      action: null,
+      trips: [
+        {
+          id: "trip-1",
+          pickupAt: "2026-09-02T08:15:00-05:00",
+          pickupName: "Home",
+          pickupAddress: "1 Main St",
+          destinationName: "Compass Health",
+          destinationAddress: "2 Main St",
+          status: "confirmed",
+        },
+      ],
+    }
+    getRequest.mockResolvedValue({
+      request: pendingRequest,
+      messages: [],
+    } satisfies CamdenRequestDetail)
+
+    render(<RequestDetailView />)
+
+    expect(await screen.findByText("Linked Lake Ride Pros trip")).toBeInTheDocument()
+    expect(screen.getByText(/request status shown at the top and the linked trip status below are separate/i)).toBeInTheDocument()
+    expect(screen.getByText("Lake Ride Pros trip status")).toBeInTheDocument()
+    expect(screen.queryByText("Confirmed trip details")).not.toBeInTheDocument()
+  })
+
   it("prevents a rider from opening a second action while one is active", async () => {
     navigation.coordinator = false
     render(<RequestDetailView />)

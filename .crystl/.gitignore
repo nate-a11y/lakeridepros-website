@@ -1,0 +1,5 @@
+*
+!.gitignore
+!heroes/
+!heroes/**
+!heroes.json

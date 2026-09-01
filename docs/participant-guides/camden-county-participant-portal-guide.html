@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Camden County Participant Transportation Portal — How-To Guide</title>
+  <style>
+    :root {
+      --green: #4cbb17;
+      --green-dark: #245f0b;
+      --green-deep: #174b08;
+      --green-soft: #eaf8e4;
+      --ink: #111827;
+      --slate: #4b5563;
+      --line: #d9e1d6;
+      --paper: #f6f8f5;
+      --amber: #fffbeb;
+      --amber-line: #f59e0b;
+      --blue-soft: #eff6ff;
+      --blue: #1d4ed8;
+    }
+
+    * { box-sizing: border-box; }
+
+    @page { size: Letter; margin: 0; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      background: #dfe5dc;
+      font-family: Avenir Next, Avenir, Inter, Helvetica Neue, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body { counter-reset: page; }
+
+    .page {
+      position: relative;
+      width: 8.5in;
+      height: 11in;
+      overflow: hidden;
+      background: white;
+      page-break-after: always;
+      break-after: page;
+      counter-increment: page;
+    }
+
+    .page:last-child { page-break-after: auto; }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: .72in .68in .62in;
+      height: 100%;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: .34in;
+      padding-bottom: .12in;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: .1in;
+      color: var(--green-dark);
+      font-size: 9pt;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .brand-lockup img { width: .34in; height: .34in; object-fit: contain; }
+
+    .guide-label {
+      color: #6b7280;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .page-footer {
+      position: absolute;
+      left: .68in;
+      right: .68in;
+      bottom: .28in;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #6b7280;
+      font-size: 7.8pt;
+      border-top: 1px solid var(--line);
+      padding-top: .1in;
+    }
+
+    .page-footer .page-number::after { content: counter(page); }
+
+    .eyebrow {
+      margin: 0 0 .09in;
+      color: var(--green-dark);
+      font-size: 9pt;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: .13in;
+      font-size: 31pt;
+      line-height: 1.02;
+      letter-spacing: -.035em;
+    }
+
+    h2 {
+      margin: .28in 0 .08in;
+      font-size: 24pt;
+      line-height: 1.08;
+      letter-spacing: -.028em;
+    }
+
+    h3 {
+      margin-bottom: .05in;
+      font-size: 12pt;
+      line-height: 1.2;
+    }
+
+    p, li {
+      font-size: 10pt;
+      line-height: 1.47;
+      color: var(--slate);
+    }
+
+    strong { color: var(--ink); }
+
+    .lede {
+      max-width: 6.55in;
+      font-size: 12pt;
+      line-height: 1.5;
+    }
+
+    .section-intro {
+      margin-bottom: .2in;
+      max-width: 6.7in;
+    }
+
+    .screen {
+      position: relative;
+      overflow: hidden;
+      margin: .18in 0;
+      border: 1px solid #cfd8cc;
+      border-radius: .16in;
+      box-shadow: 0 .08in .22in rgba(28, 59, 18, .13);
+      background: var(--paper);
+    }
+
+    .screen img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .screen-caption {
+      margin: .07in 0 0;
+      color: #6b7280;
+      font-size: 7.7pt;
+    }
+
+    .callout-dot {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: .28in;
+      height: .28in;
+      border: 2px solid white;
+      border-radius: 50%;
+      color: white;
+      background: var(--green-dark);
+      box-shadow: 0 2px 7px rgba(0,0,0,.3);
+      font-size: 9pt;
+      font-weight: 900;
+    }
+
+    .steps {
+      display: grid;
+      gap: .1in;
+      margin: .16in 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .steps.two { grid-template-columns: 1fr 1fr; }
+
+    .steps li {
+      position: relative;
+      min-height: .58in;
+      padding: .11in .12in .11in .5in;
+      border: 1px solid var(--line);
+      border-radius: .12in;
+      background: #fff;
+    }
+
+    .steps .num {
+      position: absolute;
+      left: .12in;
+      top: .12in;
+      display: grid;
+      place-items: center;
+      width: .27in;
+      height: .27in;
+      border-radius: 50%;
+      color: white;
+      background: var(--green-dark);
+      font-size: 9pt;
+      font-weight: 900;
+    }
+
+    .steps p { margin: .02in 0 0; font-size: 8.7pt; line-height: 1.38; }
+
+    .note {
+      padding: .14in .16in;
+      border: 1px solid var(--line);
+      border-radius: .12in;
+      background: var(--paper);
+    }
+
+    .note p { margin: 0; font-size: 9pt; }
+
+    .note.warning { border-color: var(--amber-line); background: var(--amber); }
+    .note.info { border-color: #93c5fd; background: var(--blue-soft); }
+    .note.success { border-color: #86efac; background: #f0fdf4; }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .16in;
+    }
+
+    .checklist {
+      margin: .08in 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      position: relative;
+      margin: .07in 0;
+      padding-left: .25in;
+      font-size: 9.2pt;
+    }
+
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: -.01in;
+      color: var(--green-dark);
+      font-size: 12pt;
+      font-weight: 900;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .1in;
+      margin-top: .14in;
+    }
+
+    .status {
+      padding: .1in .12in;
+      border: 1px solid var(--line);
+      border-radius: .1in;
+    }
+
+    .status p { margin: .03in 0 0; font-size: 8.2pt; line-height: 1.35; }
+
+    .pill {
+      display: inline-block;
+      padding: .035in .09in;
+      border-radius: 999px;
+      font-size: 8pt;
+      font-weight: 900;
+    }
+
+    .pill.pending { color: #78350f; background: #fef3c7; }
+    .pill.ack { color: #1e3a8a; background: #dbeafe; }
+    .pill.info { color: #9a3412; background: #ffedd5; }
+    .pill.confirmed { color: #166534; background: #dcfce7; }
+    .pill.changed { color: #1e3a8a; background: #dbeafe; }
+    .pill.cancelled { color: #991b1b; background: #fee2e2; }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .1in;
+      margin-top: .14in;
+    }
+
+    .action-card {
+      min-height: .94in;
+      padding: .13in;
+      border: 1px solid var(--line);
+      border-radius: .12in;
+      background: #fff;
+    }
+
+    .action-card .icon {
+      display: grid;
+      place-items: center;
+      width: .3in;
+      height: .3in;
+      margin-bottom: .07in;
+      border-radius: .08in;
+      color: var(--green-dark);
+      background: var(--green-soft);
+      font-size: 12pt;
+      font-weight: 900;
+    }
+
+    .action-card p { margin: 0; font-size: 8.2pt; line-height: 1.35; }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .16in;
+      margin-top: .16in;
+    }
+
+    .quick-card {
+      padding: .18in;
+      border: 1px solid var(--line);
+      border-radius: .14in;
+    }
+
+    .quick-card ul { margin: .06in 0 0; padding-left: .18in; }
+    .quick-card li { margin: .06in 0; font-size: 9pt; }
+
+    .url-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .2in;
+      margin-top: .18in;
+      padding: .16in .18in;
+      color: white;
+      background: var(--green-deep);
+      border-radius: .14in;
+    }
+
+    .url-card p { margin: 0; color: white; }
+    .url-card .url { font-size: 14pt; font-weight: 900; }
+    .url-card .hint { margin-top: .025in; color: #d8efcf; font-size: 8pt; }
+
+    /* Cover */
+    .cover {
+      color: white;
+      background:
+        radial-gradient(circle at 96% 4%, rgba(124, 223, 71, .38), transparent 30%),
+        linear-gradient(145deg, #0e230c 0%, #174b08 58%, #245f0b 100%);
+    }
+
+    .cover::before {
+      content: "";
+      position: absolute;
+      width: 5.4in;
+      height: 5.4in;
+      right: -2.8in;
+      bottom: -2.1in;
+      border: .11in solid rgba(255,255,255,.09);
+      border-radius: 50%;
+      box-shadow: 0 0 0 .52in rgba(255,255,255,.04), 0 0 0 1.05in rgba(255,255,255,.025);
+    }
+
+    .cover .content { padding: .75in .72in .65in; }
+
+    .cover-top {
+      display: flex;
+      align-items: center;
+      gap: .16in;
+    }
+
+    .cover-top img {
+      width: .77in;
+      height: .77in;
+      padding: .06in;
+      border-radius: .16in;
+      background: white;
+      object-fit: contain;
+    }
+
+    .cover-brand { font-size: 13pt; font-weight: 900; letter-spacing: .11em; }
+    .cover-brand small { display: block; margin-top: .02in; color: #cce8c1; font-size: 8pt; letter-spacing: .08em; }
+
+    .cover-main { margin-top: 1.08in; max-width: 6.55in; }
+    .cover .eyebrow { color: #b9f09d; }
+    .cover h1 { margin-bottom: .2in; color: white; font-size: 43pt; line-height: .98; }
+    .cover .lede { color: #e6f3e1; font-size: 14pt; }
+
+    .cover-process {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: .12in;
+      margin-top: .55in;
+    }
+
+    .cover-step {
+      min-height: 1.1in;
+      padding: .16in;
+      border: 1px solid rgba(255,255,255,.19);
+      border-radius: .15in;
+      background: rgba(255,255,255,.08);
+    }
+
+    .cover-step b { display: block; color: white; font-size: 11pt; }
+    .cover-step span { display: block; margin-top: .06in; color: #d5e8ce; font-size: 8.5pt; line-height: 1.35; }
+    .cover-arrow { color: #9de276; font-size: 18pt; font-weight: 900; }
+
+    .cover-url {
+      position: absolute;
+      left: .72in;
+      right: .72in;
+      bottom: .72in;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .2in;
+      padding-top: .17in;
+      border-top: 1px solid rgba(255,255,255,.24);
+    }
+
+    .cover-url p { margin: 0; color: #d4e9cb; font-size: 9pt; }
+    .cover-url strong { display: block; color: white; font-size: 14pt; }
+    .cover-version { text-align: right; }
+
+    .tiny { font-size: 7.7pt; line-height: 1.35; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="page cover" aria-labelledby="cover-title">
+      <div class="content">
+        <div class="cover-top">
+          <img src="../../public/Color%20logo%20-%20no%20background.png" alt="Lake Ride Pros logo" />
+          <div class="cover-brand">Lake Ride Pros<small>Camden County Treatment Court Transportation</small></div>
+        </div>
+
+        <div class="cover-main">
+          <p class="eyebrow">Participant How-To Guide</p>
+          <h1 id="cover-title">Request a ride.<br />Track every update.</h1>
+          <p class="lede">A simple, step-by-step guide to signing in, submitting transportation requests, checking confirmation details, and asking for a change or cancellation.</p>
+
+          <div class="cover-process" aria-label="Three-step portal process">
+            <div class="cover-step"><b>1. Sign in</b><span>Use your approved mobile number and the six-digit code sent by text.</span></div>
+            <div class="cover-arrow" aria-hidden="true">›</div>
+            <div class="cover-step"><b>2. Submit</b><span>Choose your ride details and approved pickup and destination.</span></div>
+            <div class="cover-arrow" aria-hidden="true">›</div>
+            <div class="cover-step"><b>3. Confirm</b><span>Watch the status until Lake Ride Pros marks the ride confirmed.</span></div>
+          </div>
+        </div>
+
+        <div class="cover-url">
+          <p>Open the participant portal<strong>lakeridepros.com/camden-county</strong></p>
+          <p class="cover-version">Updated<br /><strong>August 2026</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" aria-labelledby="signin-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">Participant Portal Guide</div>
+        </header>
+
+        <h2 id="signin-title">1. Sign in securely</h2>
+        <p class="section-intro">No password is needed. Portal access works only for mobile numbers approved for the Camden County transportation program.</p>
+
+        <figure class="screen">
+          <img src="assets/01-sign-in-crop.jpg" alt="Participant portal sign-in screen with mobile phone number field and Text me a code button" />
+          <span class="callout-dot" style="left:58%; top:35%">1</span>
+          <span class="callout-dot" style="left:67%; top:63%">2</span>
+        </figure>
+        <p class="screen-caption">Example screen. Enter the same mobile number that was approved for your participant profile.</p>
+
+        <ol class="steps two">
+          <li><span class="num">1</span><strong>Enter your approved mobile number.</strong><p>Use the number connected to your Treatment Court transportation access.</p></li>
+          <li><span class="num">2</span><strong>Select “Text me a code.”</strong><p>A six-digit, one-time sign-in code will arrive by SMS.</p></li>
+          <li><span class="num">3</span><strong>Enter the six-digit code.</strong><p>If it expires or never arrives, complete the security check and request a new one.</p></li>
+          <li><span class="num">4</span><strong>Accept the transportation rules.</strong><p>Before your first request, review and accept the current notice, location, change, and cancellation rules.</p></li>
+        </ol>
+
+        <div class="note info" style="margin-top:.15in">
+          <p><strong>Can’t sign in?</strong> Recheck the phone number first. Unknown or unapproved numbers cannot create their own account. Contact your Treatment Court coordinator or Lake Ride Pros for help.</p>
+        </div>
+      </div>
+      <footer class="page-footer"><span>Camden County Treatment Court Transportation</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="request-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">Participant Portal Guide</div>
+        </header>
+
+        <h2 id="request-title">2. Submit a transportation request</h2>
+        <p class="section-intro">From <strong>My rides</strong>, select <strong>Submit a new request</strong> — or choose <strong>New request</strong> in the menu.</p>
+
+        <figure class="screen" style="height:4.72in">
+          <img src="assets/03-new-request-crop.jpg" alt="New transportation request form with ride details, approved locations, companions, and notes" />
+          <span class="callout-dot" style="left:46%; top:27%">1</span>
+          <span class="callout-dot" style="left:61%; top:49%">2</span>
+          <span class="callout-dot" style="left:80%; top:73%">3</span>
+        </figure>
+        <p class="screen-caption">Example screen. Your actual ride types and approved locations may be different.</p>
+
+        <div class="split" style="margin-top:.12in">
+          <div>
+            <h3>Enter the ride details</h3>
+            <ul class="checklist">
+              <li><strong>Ride type</strong> and ride date</li>
+              <li><strong>Requested pickup time</strong> and appointment / required-arrival time</li>
+              <li><strong>One way</strong> or <strong>round trip</strong></li>
+              <li>For round trips: a return time or <strong>Call when ready</strong></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Choose approved locations</h3>
+            <ul class="checklist">
+              <li>Select an approved pickup and destination</li>
+              <li>Add companion count/details when shown</li>
+              <li>Add short operational notes only</li>
+              <li>Select <strong>Submit request</strong> and watch for the success message</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="note warning" style="margin-top:.1in">
+          <p><strong>Important:</strong> Submitting a request does not guarantee transportation. The ride is confirmed only after Lake Ride Pros completes scheduling and the portal shows <strong>Confirmed</strong>.</p>
+        </div>
+      </div>
+      <footer class="page-footer"><span>Camden County Treatment Court Transportation</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="details-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">Participant Portal Guide</div>
+        </header>
+
+        <h2 id="details-title">3. Get the request right the first time</h2>
+        <p class="section-intro">A complete request helps the team review and schedule your transportation faster.</p>
+
+        <div class="quick-grid">
+          <article class="quick-card">
+            <h3>Advance notice</h3>
+            <p>Read the notice shown after choosing a ride type. Some appointments may require advance notice. Same-day drug-test requests may be allowed, but they are not guaranteed.</p>
+          </article>
+          <article class="quick-card">
+            <h3>Pickup vs. arrival</h3>
+            <p>Enter both when you want to be picked up and when you must arrive. Lake Ride Pros may adjust pickup timing while scheduling.</p>
+          </article>
+          <article class="quick-card">
+            <h3>Location not listed?</h3>
+            <p>Select <strong>Ask for another approved location</strong>. The location cannot be selected for a ride until it has been reviewed and approved.</p>
+          </article>
+          <article class="quick-card">
+            <h3>Possible duplicate?</h3>
+            <p>If another request exists for a similar date and time, the portal will warn you. Submit another only if it is truly a separate ride.</p>
+          </article>
+        </div>
+
+        <h2 style="font-size:18pt; margin-top:.28in">Before you select “Submit request”</h2>
+        <div class="split">
+          <div class="note success">
+            <h3>Do include</h3>
+            <ul class="checklist">
+              <li>The correct appointment date and arrival time</li>
+              <li>Whether you need one-way or round-trip service</li>
+              <li>A companion count, if applicable</li>
+              <li>Useful pickup instructions, such as an entrance</li>
+            </ul>
+          </div>
+          <div class="note warning">
+            <h3>Do not include</h3>
+            <ul class="checklist">
+              <li>Diagnoses or unnecessary medical information</li>
+              <li>An unapproved address in the notes field</li>
+              <li>Multiple ride dates in one request</li>
+              <li>An emergency or immediate dispatch request</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="url-card" style="margin-top:.22in">
+          <div><p class="url">One ride date = one request</p><p class="hint">Need the same ride again? Open the prior ride and use Duplicate request, then choose a new date and time.</p></div>
+        </div>
+
+        <div class="note info" style="margin-top:.18in">
+          <p><strong>Late / urgent requests:</strong> The portal may still allow a request after the normal cutoff, but it will be marked late / urgent and fulfillment is not guaranteed.</p>
+        </div>
+      </div>
+      <footer class="page-footer"><span>Camden County Treatment Court Transportation</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="status-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">Participant Portal Guide</div>
+        </header>
+
+        <h2 id="status-title">4. Track the status on “My rides”</h2>
+        <p class="section-intro">You will receive text alerts for important updates. Sign back in to see the full status, request details, and any message from the team.</p>
+
+        <figure class="screen" style="height:4.15in">
+          <img src="assets/02-dashboard-crop.jpg" alt="My rides dashboard showing ride accountability, requests in progress, and confirmed rides" />
+          <span class="callout-dot" style="left:79%; top:8%">1</span>
+          <span class="callout-dot" style="left:42%; top:73%">2</span>
+        </figure>
+        <p class="screen-caption">Example screen. Requests in progress and confirmed rides are shown separately.</p>
+
+        <div class="status-grid" aria-label="Request status guide">
+          <div class="status"><span class="pill pending">Pending</span><p>Submitted and waiting for review.</p></div>
+          <div class="status"><span class="pill ack">Acknowledged</span><p>Reviewed; processing or scheduling is underway. This is not yet confirmation.</p></div>
+          <div class="status"><span class="pill info">Needs information</span><p>The team needs an answer. Open the request and reply in the conversation.</p></div>
+          <div class="status"><span class="pill confirmed">Confirmed</span><p>A Lake Ride Pros trip is scheduled and linked. Review the trip details.</p></div>
+          <div class="status"><span class="pill changed">Change requested</span><p>Your requested change is attached to the ride and being reviewed.</p></div>
+          <div class="status"><span class="pill cancelled">Cancelled / Declined / No show</span><p>A final or exception outcome. Open the ride to review any explanation.</p></div>
+        </div>
+
+        <div class="note info" style="margin-top:.13in">
+          <p><strong>Ride accountability:</strong> The dashboard also shows your Treatment Court phase and ride counts for the selected period. Synced ride activity may take up to 15 minutes to appear.</p>
+        </div>
+      </div>
+      <footer class="page-footer"><span>Camden County Treatment Court Transportation</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="manage-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">Participant Portal Guide</div>
+        </header>
+
+        <h2 id="manage-title">5. Review, message, change, or cancel</h2>
+        <p class="section-intro">Open any request with <strong>View details</strong>. A confirmed ride can show the pickup, arrival time, route, driver, and vehicle when available.</p>
+
+        <figure class="screen" style="height:4.65in">
+          <img src="assets/04-request-details-crop.jpg" alt="Confirmed request details with route, timing, driver, vehicle, and actions for duplicate, change, or cancellation" />
+          <span class="callout-dot" style="left:83%; top:9%">1</span>
+          <span class="callout-dot" style="left:70%; top:55%">2</span>
+          <span class="callout-dot" style="left:42%; top:86%">3</span>
+        </figure>
+        <p class="screen-caption">Example screen. Driver and vehicle details are also sent by text when available.</p>
+
+        <div class="action-grid">
+          <article class="action-card"><div class="icon">↻</div><h3>Duplicate request</h3><p>Prefills a prior ride. You still choose a new date/time and submit a new request.</p></article>
+          <article class="action-card"><div class="icon">✎</div><h3>Request a change</h3><p>Choose the reason and explain what changed. The original ride stays visible while reviewed.</p></article>
+          <article class="action-card"><div class="icon">×</div><h3>Request cancellation</h3><p>Choose the reason. The ride is not cancelled until the action is processed.</p></article>
+        </div>
+
+        <div class="note warning" style="margin-top:.13in">
+          <p><strong>A request is not an immediate change.</strong> After a ride has been acknowledged or confirmed, changes and cancellations must be reviewed. Watch the action status until it is completed.</p>
+        </div>
+
+        <div class="note info" style="margin-top:.1in">
+          <p><strong>Use the request conversation for non-urgent questions.</strong> Messages are text-only, cannot be edited or deleted, and are not monitored for emergencies or immediate dispatch assistance.</p>
+        </div>
+      </div>
+      <footer class="page-footer"><span>Camden County Treatment Court Transportation</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="profile-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">Participant Portal Guide</div>
+        </header>
+
+        <h2 id="profile-title">6. Keep your profile and locations current</h2>
+        <p class="section-intro">Open <strong>Profile</strong> to review the approved name, verified mobile number, optional email, and approved pickup locations on your account.</p>
+
+        <figure class="screen" style="height:4.75in">
+          <img src="assets/05-profile-crop.jpg" alt="Participant profile screen with approved identity, email, pickup locations, and urgent transportation help" />
+          <span class="callout-dot" style="left:69%; top:35%">1</span>
+          <span class="callout-dot" style="left:53%; top:80%">2</span>
+        </figure>
+        <p class="screen-caption">Example screen uses sample participant information.</p>
+
+        <div class="split" style="margin-top:.12in">
+          <div class="note success">
+            <h3>You can update</h3>
+            <p>Your optional email address directly in the portal.</p>
+          </div>
+          <div class="note info">
+            <h3>Contact the program to update</h3>
+            <p>Your name, sign-in phone number, or pickup address. Phone changes require verification; new pickup locations require approval.</p>
+          </div>
+        </div>
+
+        <div class="quick-grid" style="margin-top:.15in">
+          <article class="quick-card"><h3>History</h3><p>Use <strong>History</strong> to review completed, cancelled, declined, and no-show rides available in your participant view.</p></article>
+          <article class="quick-card"><h3>Sign out</h3><p>When you are finished — especially on a shared phone or computer — select <strong>Sign out</strong> in the portal menu.</p></article>
+        </div>
+      </div>
+      <footer class="page-footer"><span>Camden County Treatment Court Transportation</span><span class="page-number">Page </span></footer>
+    </section>
+
+    <section class="page" aria-labelledby="quick-title">
+      <div class="content">
+        <header class="page-header">
+          <div class="brand-lockup"><img src="../../public/Color%20logo%20-%20no%20background.png" alt="" />Lake Ride Pros</div>
+          <div class="guide-label">Participant Portal Guide</div>
+        </header>
+
+        <p class="eyebrow" style="margin-top:.38in">Quick Reference</p>
+        <h1 id="quick-title">Know what to do next</h1>
+        <p class="lede">The portal is the source for your current request status and confirmed trip details.</p>
+
+        <div class="quick-grid" style="margin-top:.28in">
+          <article class="quick-card">
+            <h3>Before requesting</h3>
+            <ul>
+              <li>Use your approved mobile number to sign in.</li>
+              <li>Read the ride type’s notice requirement.</li>
+              <li>Have the appointment date and arrival time ready.</li>
+              <li>Choose only approved pickup and destination locations.</li>
+            </ul>
+          </article>
+          <article class="quick-card">
+            <h3>After requesting</h3>
+            <ul>
+              <li>Look for the “Request submitted” message.</li>
+              <li>Watch for text alerts and sign back in for details.</li>
+              <li>Remember: Acknowledged is not Confirmed.</li>
+              <li>Open the request if the team needs more information.</li>
+            </ul>
+          </article>
+          <article class="quick-card">
+            <h3>If plans change</h3>
+            <ul>
+              <li>Edit notes directly only while the request is Pending.</li>
+              <li>After review, use Request a change or Request cancellation.</li>
+              <li>Wait for the action to be completed.</li>
+              <li>For a repeated ride, use Duplicate request.</li>
+            </ul>
+          </article>
+          <article class="quick-card">
+            <h3>If you need help</h3>
+            <ul>
+              <li>Non-urgent request question: use the request conversation.</li>
+              <li>Immediate ride help: use Call urgent support inside the portal.</li>
+              <li>Emergency or immediate danger: call 911.</li>
+              <li>General Lake Ride Pros help: (573) 206-9499.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="url-card" style="margin-top:.28in">
+          <div><p class="url">lakeridepros.com/camden-county</p><p class="hint">Save this address in your phone for faster access.</p></div>
+        </div>
+
+        <div class="note warning" style="margin-top:.2in">
+          <p><strong>Portal messages are not monitored for emergencies or immediate dispatch assistance.</strong> Use the tap-to-call urgent-support option shown in your portal when you need immediate ride help.</p>
+        </div>
+
+        <p class="tiny" style="margin-top:.22in">Screens in this guide use sample participant and trip information. Your portal may show different ride types, destinations, notice rules, statuses, or support information based on current program settings.</p>
+      </div>
+      <footer class="page-footer"><span>Lake Ride Pros · (573) 206-9499 · contactus@lakeridepros.com</span><span class="page-number">Page </span></footer>
+    </section>
+  </main>
+</body>
+</html>

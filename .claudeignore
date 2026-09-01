@@ -1,0 +1,34 @@
+# Heavy/generated dependency and build output
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Local/editor/agent state
+.git/
+.vercel/
+.crystl-agent-history/
+.DS_Store
+*.tsbuildinfo
+*.log
+.claude/*.lock
+.claude/settings.local.json
+
+# Secrets and machine-specific env
+.env
+.env.*
+!.env.example
+.mcp.json
+
+# Supabase local/link metadata and generated temp files
+supabase/.temp/
+
+# Large local media exports and ad hoc backups
+media/
+*.backup_*
+*.original.png

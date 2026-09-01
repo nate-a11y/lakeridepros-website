@@ -145,6 +145,7 @@ media/
 *.backup_*
 *.original.png
 playwright-report/
+test-results/
 .vercel
 .env*.local
 .DS_Store

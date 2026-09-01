@@ -5,6 +5,7 @@ import { isInsiderDemoMode } from '@/lib/insiders/demo-mode'
 const PUBLIC_INSIDER_PATHS = [
   '/insiders/login',
   '/insiders/auth/callback',
+  '/insiders/welcome/',
 ]
 
 export async function updateInsiderSession(request: NextRequest) {

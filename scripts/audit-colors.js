@@ -58,6 +58,7 @@ const SKIP_PATHS = [
   '/lib/notifications/',
   // Builds inline HTML email markup, where CSS variables are unavailable.
   '/lib/insiders/notification-delivery.ts',
+  '/lib/insiders/welcome.ts',
 ];
 
 // Allowed patterns (e.g., in comments or definitions)

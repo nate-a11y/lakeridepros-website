@@ -157,13 +157,17 @@ function mapParticipantRoster(value: unknown): CamdenParticipantRosterDetails {
   const courtProgram = stringValue(row.court_program)
   const nextPhase = stringValue(row.next_phase)
   const eligibility = stringValue(row.transportation_eligibility, "pending")
+  const progressStatus = stringValue(row.phase_progress_status, "active")
   return {
-    courtProgram: (["dwi", "veterans"].includes(courtProgram) ? courtProgram : undefined) as CamdenParticipantRosterDetails["courtProgram"],
+    courtProgram: (["dwi", "drug", "veterans"].includes(courtProgram) ? courtProgram : undefined) as CamdenParticipantRosterDetails["courtProgram"],
     jurisdictionCounty: stringValue(row.jurisdiction_county) || undefined,
     caseNumber: stringValue(row.case_number) || undefined,
-    programStartedOn: stringValue(row.program_started_on) || undefined,
-    programStartNeedsReview: Boolean(row.program_start_needs_review),
+    phaseStartedOn: stringValue(row.phase_started_on) || stringValue(row.program_started_on) || undefined,
+    phaseStartNeedsReview: Boolean(row.phase_start_needs_review ?? row.program_start_needs_review),
     nextPhase: (/^(?:phase_[2-5]|graduation)$/.test(nextPhase) ? nextPhase : undefined) as CamdenParticipantRosterDetails["nextPhase"],
+    nextPhaseTargetOn: stringValue(row.next_phase_target_on) || undefined,
+    supervisionProvider: stringValue(row.supervision_provider) || undefined,
+    phaseProgressStatus: (["active", "on_hold"].includes(progressStatus) ? progressStatus : "active") as CamdenParticipantRosterDetails["phaseProgressStatus"],
     treatmentProvider: stringValue(row.treatment_provider) || undefined,
     curfew: stringValue(row.curfew) || undefined,
     sourceHomeAddress: stringValue(row.source_home_address) || undefined,

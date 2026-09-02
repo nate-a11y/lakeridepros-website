@@ -157,7 +157,8 @@ describe("Camden response privacy", () => {
       home_locations: [], treatment_locations: [], drug_testing_sites: [],
       roster: {
         court_program: "dwi", jurisdiction_county: "Example County", case_number: "26XX-DEMO0001",
-        program_started_on: "2026-01-10", program_start_needs_review: false, next_phase: "graduation",
+        phase_started_on: "2026-01-10", phase_start_needs_review: false, next_phase: "graduation",
+        next_phase_target_on: "2026-09-18", supervision_provider: "OCCS - Camden", phase_progress_status: "on_hold",
         treatment_provider: "Example Provider", curfew: "10 PM–6 AM", source_home_address: "100 Test Street",
         transportation_eligibility: "pending",
       },
@@ -181,6 +182,10 @@ describe("Camden response privacy", () => {
     expect(result.participants[0].hasPersonalTransportation).toBe(false)
     expect(result.participants[0].roster.caseNumber).toBe("26XX-DEMO0001")
     expect(result.participants[0].roster.nextPhase).toBe("graduation")
+    expect(result.participants[0].roster.phaseStartedOn).toBe("2026-01-10")
+    expect(result.participants[0].roster.nextPhaseTargetOn).toBe("2026-09-18")
+    expect(result.participants[0].roster.supervisionProvider).toBe("OCCS - Camden")
+    expect(result.participants[0].roster.phaseProgressStatus).toBe("on_hold")
     expect(JSON.stringify(result)).not.toMatch(/personalUsageDetected|personalUseOverride|personal_usage/i)
   })
 

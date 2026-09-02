@@ -14,7 +14,7 @@ function percent(value: number) {
 }
 
 const phaseLabel = (value?: string) => ({ phase_1: "Phase 1", phase_2: "Phase 2", phase_3: "Phase 3", phase_4: "Phase 4", phase_5: "Phase 5", graduation: "Graduation" } as Record<string, string>)[value ?? ""] ?? "Not provided"
-const programLabel = (value?: string) => value === "dwi" ? "DWI Court" : value === "veterans" ? "Veterans Court" : "Not provided"
+const programLabel = (value?: string) => value === "dwi" ? "DWI Court" : value === "drug" ? "Drug Court" : value === "veterans" ? "Veterans Court" : "Not provided"
 const eligibilityLabel = (value: string) => ({ pending: "Pending review", approved: "Approved", not_needed: "Transportation not needed", suspended: "Suspended" } as Record<string, string>)[value] ?? "Pending review"
 
 function LocationList({ title, locations }: { title: string; locations: CamdenLocation[] }) {
@@ -35,8 +35,10 @@ function SnapshotCard({ participant }: { participant: CamdenCoordinatorParticipa
           <div><dt className="font-bold text-neutral-600">Court program</dt><dd>{programLabel(roster.courtProgram)}</dd></div>
           <div><dt className="font-bold text-neutral-600">County</dt><dd>{roster.jurisdictionCounty || "Not provided"}</dd></div>
           <div><dt className="font-bold text-neutral-600">Case number</dt><dd className="break-all">{roster.caseNumber || "Not provided"}</dd></div>
-          <div><dt className="font-bold text-neutral-600">Date began</dt><dd>{roster.programStartedOn ? formatPortalDate(roster.programStartedOn) : "Not provided"}{roster.programStartNeedsReview ? <strong className="ml-2 text-amber-800">Review date</strong> : null}</dd></div>
-          <div><dt className="font-bold text-neutral-600">Next milestone</dt><dd>{phaseLabel(roster.nextPhase)}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Current phase began</dt><dd>{roster.phaseStartedOn ? formatPortalDate(roster.phaseStartedOn) : "Not provided"}{roster.phaseStartNeedsReview ? <strong className="ml-2 text-amber-800">Review date</strong> : null}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Next milestone</dt><dd>{phaseLabel(roster.nextPhase)}{roster.nextPhaseTargetOn ? <><br /><span className="text-xs text-neutral-500">Target {formatPortalDate(roster.nextPhaseTargetOn)}; does not advance automatically</span></> : null}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Phase progress</dt><dd>{roster.phaseProgressStatus === "on_hold" ? "On hold" : "Active"}</dd></div>
+          <div><dt className="font-bold text-neutral-600">Supervision provider</dt><dd>{roster.supervisionProvider || "Not provided"}</dd></div>
           <div><dt className="font-bold text-neutral-600">Treatment provider</dt><dd>{roster.treatmentProvider || "Not provided"}</dd></div>
           <div><dt className="font-bold text-neutral-600">Curfew</dt><dd>{roster.curfew || "Not provided"}</dd></div>
           <div className="sm:col-span-2"><dt className="font-bold text-neutral-600">Roster home address</dt><dd className="break-words">{roster.sourceHomeAddress || "Not provided"}</dd><p className="mt-1 text-xs text-neutral-500">Reference only; this is not an approved pickup until LRP reviews it.</p></div>

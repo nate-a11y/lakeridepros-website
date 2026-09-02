@@ -219,12 +219,15 @@ export interface CamdenParticipantProfile {
 }
 
 export interface CamdenParticipantRosterDetails {
-  courtProgram?: "dwi" | "veterans"
+  courtProgram?: "dwi" | "drug" | "veterans"
   jurisdictionCounty?: string
   caseNumber?: string
-  programStartedOn?: string
-  programStartNeedsReview: boolean
+  phaseStartedOn?: string
+  phaseStartNeedsReview: boolean
   nextPhase?: "phase_2" | "phase_3" | "phase_4" | "phase_5" | "graduation"
+  nextPhaseTargetOn?: string
+  supervisionProvider?: string
+  phaseProgressStatus: "active" | "on_hold"
   treatmentProvider?: string
   curfew?: string
   sourceHomeAddress?: string

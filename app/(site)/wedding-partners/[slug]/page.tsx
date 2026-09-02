@@ -19,6 +19,9 @@ const weddingCategoryLabels: Record<string, string> = {
   'bridal-beauty-style': 'Bridal Beauty & Style',
   'transportation': 'Transportation',
   'hotels-lodging': 'Hotels & Lodging',
+  'travel-agents': 'Travel Agents',
+  'djs-live-bands': 'DJs / Live Bands',
+  'bartenders-mobile-bar-services': 'Bartenders / Mobile Bar Services',
   'other-services': 'Other Services',
 };
 

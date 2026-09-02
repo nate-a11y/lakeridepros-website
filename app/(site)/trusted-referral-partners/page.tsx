@@ -32,6 +32,7 @@ const subcategoryLabels: Record<string, string> = {
   'advertising-marketing-technology': 'Advertising / Marketing / Technology',
   'auto-marine-services': 'Auto & Marine Services',
   'bars-restaurants': 'Bars & Restaurants',
+  'catering-services': 'Catering Services',
   'boat-captains-charters': 'Boat Captains & Charters',
   'lodging-rentals': 'Condos / Hotels / Short Term / Long Term Rentals / Airbnb-VRBO',
   'construction-developers': 'Construction / Developers',

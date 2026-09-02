@@ -10,7 +10,8 @@ export default defineType({
       name: 'name',
       title: 'Name',
       type: 'string',
-      description: 'Full name of the team member',
+      description: 'Managed in the Driver Portal Directory for linked profiles',
+      readOnly: ({document}) => Boolean(document?.supabaseId),
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -29,7 +30,8 @@ export default defineType({
       name: 'bio',
       title: 'Bio',
       type: 'text',
-      description: 'Short biography displayed on the website',
+      description: 'Managed in the Driver Portal Directory for linked profiles',
+      readOnly: ({document}) => Boolean(document?.supabaseId),
     }),
     defineField({
       name: 'image',
@@ -44,21 +46,24 @@ export default defineType({
       name: 'displayOnWebsite',
       title: 'Display on Website',
       type: 'boolean',
-      description: 'Show this team member on the public website',
+      description: 'Managed in the Driver Portal Directory for linked profiles',
+      readOnly: ({document}) => Boolean(document?.supabaseId),
       initialValue: true,
     }),
     defineField({
       name: 'active',
       title: 'Active',
       type: 'boolean',
-      description: 'Whether this team member is currently active',
+      description: 'Managed in the Driver Portal Directory for linked profiles',
+      readOnly: ({document}) => Boolean(document?.supabaseId),
       initialValue: true,
     }),
     defineField({
       name: 'role',
       title: 'Role',
       type: 'array',
-      description: 'Team member roles',
+      description: 'Managed in the Driver Portal Directory for linked profiles',
+      readOnly: ({document}) => Boolean(document?.supabaseId),
       of: [
         defineArrayMember({
           type: 'string',
@@ -81,7 +86,8 @@ export default defineType({
       name: 'vehicles',
       title: 'Vehicles',
       type: 'array',
-      description: 'Vehicles this team member is trained on',
+      description: 'Managed in the Driver Portal Directory for linked profiles',
+      readOnly: ({document}) => Boolean(document?.supabaseId),
       of: [
         defineArrayMember({
           type: 'string',
@@ -101,7 +107,8 @@ export default defineType({
       name: 'assignmentNumber',
       title: 'Assignment Number',
       type: 'string',
-      description: 'Badge/assignment number (e.g., LRP1, LRP2)',
+      description: 'Managed in the Driver Portal Directory for linked profiles',
+      readOnly: ({document}) => Boolean(document?.supabaseId),
     }),
     defineField({
       name: 'order',

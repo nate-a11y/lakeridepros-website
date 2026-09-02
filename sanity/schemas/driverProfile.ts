@@ -70,6 +70,7 @@ export default defineType({
           options: {
             list: [
               {title: 'Owner', value: 'owner'},
+              {title: 'Admin', value: 'admin'},
               {title: 'Driver', value: 'driver'},
               {title: 'Dispatcher', value: 'dispatcher'},
               {title: 'Manager', value: 'manager'},
@@ -168,6 +169,7 @@ export default defineType({
       const roleLabels = (role || []).map((r: string) => {
         switch (r) {
           case 'owner': return 'Owner'
+          case 'admin': return 'Admin'
           case 'driver': return 'Driver'
           case 'dispatcher': return 'Dispatcher'
           case 'manager': return 'Manager'

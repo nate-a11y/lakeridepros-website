@@ -54,6 +54,7 @@ function getRoleLabel(role: string[] | undefined): string {
   const labels = role.map((r) => {
     switch (r) {
       case 'owner': return 'Owner';
+      case 'admin': return 'Admin';
       case 'dispatcher': return 'Dispatcher';
       case 'driver': return 'Professional Driver';
       case 'cdl_trainer': return 'CDL Trainer';

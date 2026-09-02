@@ -70,6 +70,7 @@ export default defineType({
               {title: 'Manager', value: 'manager'},
               {title: 'Trainer', value: 'trainer'},
               {title: 'CDL Trainer', value: 'cdl_trainer'},
+              {title: 'Brand Ambassador', value: 'brand_ambassador'},
               {title: 'Aesthetic Master Technician', value: 'aesthetic_master_technician'},
             ],
           },
@@ -165,6 +166,7 @@ export default defineType({
           case 'manager': return 'Manager'
           case 'trainer': return 'Trainer'
           case 'cdl_trainer': return 'CDL Trainer'
+          case 'brand_ambassador': return 'Brand Ambassador'
           case 'aesthetic_master_technician': return 'Aesthetic Tech'
           default: return r
         }

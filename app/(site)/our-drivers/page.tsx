@@ -60,6 +60,7 @@ function getRoleLabel(role: string[] | undefined): string {
       case 'aesthetic_master_technician': return 'Aesthetic Master Technician';
       case 'manager': return 'Manager';
       case 'trainer': return 'Trainer';
+      case 'brand_ambassador': return 'Brand Ambassador';
       default: return 'Team Member';
     }
   });

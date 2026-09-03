@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'About Us - Lake Ride Pros | Premier Transportation Company',
-  description: 'Meet Lake Ride Pros, a licensed and insured Lake of the Ozarks transportation company founded in 2022 by Jim Brentlinger, Nate Bullock and Michael Brandt.',
+  description: 'Meet Lake Ride Pros, a licensed and insured Lake of the Ozarks transportation company founded in 2020 by Jim Brentlinger, Nate Bullock and Michael Brandt.',
   keywords: ['about Lake Ride Pros', 'Lake Ozarks transportation company', 'Missouri luxury transportation', 'professional drivers'],
   alternates: {
     canonical: 'https://www.lakeridepros.com/about-us',
@@ -34,7 +34,7 @@ export default function AboutUsPage() {
     "url": "https://www.lakeridepros.com",
     "logo": "https://www.lakeridepros.com/logo.png",
     "description": "Premier luxury transportation service at Lake of the Ozarks, Missouri. Specializing in limo buses, sprinter vans, and shuttle services.",
-    "foundingDate": "2022",
+    "foundingDate": "2020",
     "founder": [
       {
         "@type": "Person",
@@ -92,7 +92,7 @@ export default function AboutUsPage() {
 
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed mb-6">
-                <strong>Lake Ride Pros</strong> was founded in 2022 by <strong>Jim Brentlinger</strong>,
+                <strong>Lake Ride Pros</strong> was founded in 2020 by <strong>Jim Brentlinger</strong>,
                 <strong> Nate Bullock</strong>, and <strong>Michael Brandt</strong> with a simple mission:
                 to provide the Lake of the Ozarks community with safe, reliable, and luxurious transportation
                 that puts customer satisfaction first.

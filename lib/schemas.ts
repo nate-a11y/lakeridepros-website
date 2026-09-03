@@ -11,7 +11,7 @@ export const localBusinessSchema = {
   "priceRange": "$$-$$$",
   "description": "Premier luxury transportation at Lake of the Ozarks. Wedding shuttles, airport transfers, party buses, and corporate travel.",
   "slogan": "Your Premier Transportation Partner at Lake of the Ozarks",
-  "foundingDate": "2022",
+  "foundingDate": "2020",
   "address": {
     "@type": "PostalAddress",
     "addressRegion": "MO",
@@ -77,7 +77,7 @@ export const organizationSchema = {
   "url": "https://www.lakeridepros.com",
   "logo": "https://www.lakeridepros.com/logo.png",
   "description": "Premier luxury transportation service at Lake of the Ozarks, Missouri",
-  "foundingDate": "2022",
+  "foundingDate": "2020",
   "founder": [
     { "@type": "Person", "name": "Jim Brentlinger" },
     { "@type": "Person", "name": "Nate Bullock" },

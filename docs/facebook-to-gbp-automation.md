@@ -24,6 +24,7 @@ The automation:
 - Adds a topic-appropriate Lake Ride Pros landing page with Google Post UTM parameters.
 - Writes credentials nowhere outside `.env.local` and never logs access tokens.
 - Exits without publishing when no safe candidate exists.
+- Displays a local macOS notification after a successful publication or a failed scheduled run.
 
 Time-sensitive event posts and offers remain manual because their dates, availability, terms, and media need human verification.
 

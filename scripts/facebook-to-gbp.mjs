@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import crypto from 'node:crypto'
+import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
@@ -153,6 +154,11 @@ export function buildTrackedUrl(message, facebookPostId) {
 
 export function fingerprint(text) {
   return crypto.createHash('sha256').update(String(text).toLowerCase().replace(/\W+/g, ' ').trim()).digest('hex')
+}
+
+function notifyUser(message) {
+  const script = `display notification ${JSON.stringify(message)} with title "Lake Ride Pros GBP Sync"`
+  spawnSync('/usr/bin/osascript', ['-e', script], { stdio: 'ignore', timeout: 5_000 })
 }
 
 function loadEnvironment(repoRoot) {
@@ -389,6 +395,7 @@ export async function run(options = {}) {
     writeState(stateFile, state)
     console.log(`Published Facebook post ${candidate.post.id} to Google (${created.state || 'submitted'}).`)
     if (created.searchUrl) console.log(`Google post: ${created.searchUrl}`)
+    notifyUser('A Facebook post was published to Google Business Profile.')
     return { status: 'published', created }
   } finally {
     fs.rmSync(lockDir, { recursive: true, force: true })
@@ -401,6 +408,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     await run({ publish })
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Facebook-to-GBP sync failed: ${error.message}`)
+    notifyUser('The scheduled sync failed. Check the local launchd error log.')
     process.exitCode = 1
   }
 }

@@ -7,6 +7,7 @@ const META_PAGE_ACCESS_TOKEN = process.env.META_PAGE_ACCESS_TOKEN
 const FACEBOOK_PAGE_ID = process.env.FACEBOOK_PAGE_ID
 const INSTAGRAM_ACCOUNT_ID = process.env.INSTAGRAM_ACCOUNT_ID
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.lakeridepros.com'
+const META_GRAPH_API_VERSION = 'v26.0'
 
 interface BlogPost {
   _id: string
@@ -42,7 +43,7 @@ async function postToFacebook(post: BlogPost): Promise<{ id: string } | null> {
 
   try {
     const response = await fetch(
-      `https://graph.facebook.com/v21.0/${FACEBOOK_PAGE_ID}/feed`,
+      `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${FACEBOOK_PAGE_ID}/feed`,
       {
         method: 'POST',
         headers: {
@@ -99,7 +100,7 @@ async function postToInstagram(post: BlogPost): Promise<{ id: string } | null> {
   try {
     // Step 1: Create media container
     const containerResponse = await fetch(
-      `https://graph.facebook.com/v21.0/${INSTAGRAM_ACCOUNT_ID}/media`,
+      `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${INSTAGRAM_ACCOUNT_ID}/media`,
       {
         method: 'POST',
         headers: {
@@ -124,7 +125,7 @@ async function postToInstagram(post: BlogPost): Promise<{ id: string } | null> {
 
     // Step 2: Publish the container
     const publishResponse = await fetch(
-      `https://graph.facebook.com/v21.0/${INSTAGRAM_ACCOUNT_ID}/media_publish`,
+      `https://graph.facebook.com/${META_GRAPH_API_VERSION}/${INSTAGRAM_ACCOUNT_ID}/media_publish`,
       {
         method: 'POST',
         headers: {

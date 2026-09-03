@@ -3,7 +3,7 @@
 ## To Do
 - [x] Run Crystl Project Optimizer and export/copy the analysis for the agent
   Focus on SEO, content structure, deployment commands, and accessibility checks.
-- [ ] Audit local SEO and conversion basics
+- [~] Audit local SEO and conversion basics
   Check page titles, descriptions, structured data, service areas, CTAs, and trust signals.
 - [ ] Add a launch QA checklist
   Include mobile, accessibility, contact/booking links, analytics, and performance basics.
@@ -18,3 +18,7 @@
 ## Done
 - [x] Updated Sanity packages to v6.2.0 / next-sanity v13.1.1 and verified lint, tests, color audit, and build on 2026-06-29
 - [x] Added Crystl local heroes and starter Workbench on 2026-06-22
+- [x] Restore Meta Page API and build Facebook-to-GBP draft queue ⧗2026-09-03T03:00:47-05:00 #f40cf605
+  Refresh the expired Facebook Page access token, move integration to the current Graph API version, fetch recent Lake Ride Pros posts read-only, deduplicate and date-check them, and prepare Google Business Profile Updates with UTM-tagged CTAs. Require review before publishing.
+  > 2026-09-03: Read 100 recent published Facebook posts and created a 10-item GBP draft queue. Durable Meta token/app credential repair remains. ⧗2026-09-03T02:52:18-05:00
+  > 2026-09-03: Repaired Website Link app ID/secret pairing, generated a validated long-lived Lake Ride Pros Page token with no reported expiration, updated Vercel Production/Preview/Development secrets, upgraded Graph API calls to v26.0, and verified Page post reads. ⧗2026-09-03T03:00:47-05:00

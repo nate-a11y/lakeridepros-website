@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+const META_GRAPH_API_VERSION = 'v26.0'
+
 /**
  * GET /api/social/get-accounts
  *
@@ -21,7 +23,7 @@ export async function GET() {
   try {
     // First, try to get the page info directly (works if token is a Page Access Token)
     const pageResponse = await fetch(
-      `https://graph.facebook.com/v21.0/me?fields=id,name,instagram_business_account{id,username}&access_token=${accessToken}`
+      `https://graph.facebook.com/${META_GRAPH_API_VERSION}/me?fields=id,name,instagram_business_account{id,username}&access_token=${accessToken}`
     )
 
     if (!pageResponse.ok) {

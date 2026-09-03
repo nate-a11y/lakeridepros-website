@@ -127,6 +127,15 @@ test.describe('Accessibility - Critical Pages', () => {
       includedImpacts: ['critical', 'serious']
     })
   })
+
+  test('Transportation insights page has no critical/serious violations', async ({ page }) => {
+    await page.goto('/lake-ozarks-transportation-insights')
+    await page.waitForLoadState('domcontentloaded')
+
+    await checkAccessibility(page, {
+      includedImpacts: ['critical', 'serious']
+    })
+  })
 })
 
 test.describe('Accessibility - Interactive Components', () => {

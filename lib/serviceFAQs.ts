@@ -33,7 +33,7 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'Can you accommodate large groups or luggage?',
-      answer: 'Absolutely! Our fleet includes Sprinter vans and shuttle buses that can accommodate groups of 6-14 passengers with ample luggage space. We also offer Suburban vehicles for smaller groups with extra luggage needs.',
+      answer: 'Absolutely! Our fleet includes SUVs, a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, and a 37-passenger Executive Shuttle. Passenger capacity does not guarantee luggage space, so tell us how many bags you are bringing when you request a quote.',
     },
     {
       question: 'Is gratuity included in the airport transfer rate?',
@@ -153,7 +153,7 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'How many people can fit in your party buses?',
-      answer: 'Our party buses accommodate 14-20 passengers depending on the vehicle. We also have Sprinter vans for smaller groups (6-14) and can coordinate multiple vehicles for larger parties. Contact us for specific capacity details.',
+      answer: 'Our group fleet includes a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, and a 37-passenger Executive Shuttle. We can coordinate multiple vehicles for larger parties. Contact us so we can match the current vehicle and layout to your group.',
     },
     {
       question: 'What amenities are included in party bus rentals?',
@@ -201,7 +201,7 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'How many people can participate in a wine tour?',
-      answer: 'Our wine tour vehicles accommodate 6-14 passengers depending on the vehicle. Larger groups can be accommodated with multiple vehicles. Smaller groups often prefer our Suburban or Sprinter van options.',
+      answer: 'We can serve wine-tour groups in SUVs, a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, or a 37-passenger Executive Shuttle. Larger groups can use multiple vehicles. We will recommend a vehicle based on passenger count, pickup plan, and the experience you want.',
     },
     {
       question: 'Are wine tastings included in the price?',

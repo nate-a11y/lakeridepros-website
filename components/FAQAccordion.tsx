@@ -16,11 +16,11 @@ const faqItems: FAQItem[] = [
   },
   {
     question: 'How far in advance should I book?',
-    answer: 'For weddings and major events, we recommend booking 2-4 weeks in advance to ensure vehicle availability. However, we often accommodate last-minute bookings based on our fleet availability. Contact us for same-day or next-day service.',
+    answer: 'Booking lead time depends on the trip. In our completed-trip data, the observed median was 2 days for nightlife, 6 days for airport transportation, 25 days for bachelor and bachelorette trips, and 89 days for weddings among records with usable booking timestamps. For peak summer weekends, reserve earlier whenever possible.',
   },
   {
     question: 'What types of vehicles are available?',
-    answer: 'We offer luxury limo buses (14 passengers), sprinter vans (up to 11 passengers), shuttle buses (37 passengers), specialty vehicles, and standard vehicles like Suburbans. All vehicles feature premium amenities including sound systems, LED lighting, and comfortable seating.',
+    answer: 'Our current published fleet includes 4-passenger Flex vehicles, 7-passenger Elite SUVs, a 13-passenger Executive Sprinter, 14-passenger Limo Bus and Rescue Squad options, the 23-passenger Pink Patrol, and a 37-passenger Executive Shuttle Bus. Luggage and equipment can reduce usable passenger space, so confirm your needs when booking.',
   },
   {
     question: 'Do you provide transportation for weddings?',

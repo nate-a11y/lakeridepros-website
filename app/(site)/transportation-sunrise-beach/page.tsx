@@ -95,7 +95,7 @@ const faqSchema = {
       name: 'How much does transportation cost in Sunrise Beach?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates in Sunrise Beach start at $120/hour for sprinter vans (up to 14 passengers). Rates vary based on vehicle type, group size, and service duration. Contact us for a custom quote for your Sunrise Beach transportation needs.'
+        text: 'Sunrise Beach transportation pricing depends on the vehicle, group size, route, timing, and service duration. Check our current pricing page and request a custom quote for your exact transportation plan.'
       }
     },
     {
@@ -369,7 +369,7 @@ export default async function SunriseBeachTransportationPage() {
                   How much does transportation cost in Sunrise Beach?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Transportation rates in Sunrise Beach start at $120/hour for sprinter vans (up to 14 passengers). Rates vary based on vehicle type, group size, and service duration. Contact us for a custom quote.
+                  Sunrise Beach transportation pricing depends on the vehicle, group size, route, timing, and service duration. Check our current pricing page and request a custom quote for your exact transportation plan.
                 </p>
               </details>
 

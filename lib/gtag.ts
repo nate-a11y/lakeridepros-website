@@ -3,6 +3,8 @@
  * Use these functions to track custom events throughout the app
  */
 
+import { getStoredAIReferralSource } from '@/lib/ai-referrals'
+
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
@@ -26,7 +28,11 @@ export const event = (
 ) => {
   if (!GA_MEASUREMENT_ID) return
 
-  window.gtag('event', action, params)
+  const aiReferralSource = getStoredAIReferralSource()
+  window.gtag('event', action, {
+    ...params,
+    ...(aiReferralSource ? { ai_referral_source: aiReferralSource } : {}),
+  })
 }
 
 // Predefined events for common actions

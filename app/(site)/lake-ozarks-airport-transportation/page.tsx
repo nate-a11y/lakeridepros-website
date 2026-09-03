@@ -96,7 +96,7 @@ const faqSchema = {
       name: 'How much does airport transportation cost at Lake of the Ozarks?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Local transfers from Grand Glaize Airport (KOZS) start at $50-100 depending on destination. MCI Airport to Lake Ozarks starts at $220, STL starts at $250, and Springfield (SGF) starts at $180. Prices vary by vehicle type and passenger count. Contact us at (573) 206-9499 for exact quotes.'
+        text: 'Airport-transfer pricing depends on the airport, exact pickup and destination, vehicle, passenger count, luggage, timing, and whether you need one-way or round-trip service. Check our current pricing page and request an exact quote.'
       }
     },
     {
@@ -460,7 +460,7 @@ export default async function LakeOzarksAirportTransportationPage() {
                   How much does airport transportation cost at Lake of the Ozarks?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Local transfers from Grand Glaize Airport (KOZS) start at $50-100 depending on destination. MCI Airport to Lake Ozarks starts at $220, STL starts at $250, and Springfield (SGF) starts at $180. Prices vary by vehicle type and passenger count. Contact us at (573) 206-9499 for exact quotes.
+                  Airport-transfer pricing depends on the airport, exact pickup and destination, vehicle, passenger count, luggage, timing, and whether you need one-way or round-trip service. Check our current pricing page and request an exact quote.
                 </p>
               </details>
 

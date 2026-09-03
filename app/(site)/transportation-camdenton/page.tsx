@@ -95,7 +95,7 @@ const faqSchema = {
       name: 'How much does transportation cost in Camdenton?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates in Camdenton start at $120/hour for sprinter vans and $150/hour for larger vehicles. Wine tours and wedding packages have custom pricing based on duration and stops. Contact us for a personalized Camdenton transportation quote.'
+        text: 'Camdenton transportation pricing depends on the vehicle, group size, route, timing, and service duration. Wine tours and wedding plans are quoted for their specific itinerary. Check our current pricing page and request a personalized quote.'
       }
     }
   ]
@@ -329,7 +329,7 @@ export default async function CamdentonTransportationPage() {
                   How much does transportation cost in Camdenton?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Transportation rates in Camdenton start at $120/hour for sprinter vans and $150/hour for larger vehicles. Wine tours and wedding packages have custom pricing based on duration and stops. Contact us for a personalized quote.
+                  Camdenton transportation pricing depends on the vehicle, group size, route, timing, and service duration. Wine tours and wedding plans are quoted for their specific itinerary. Check our current pricing page and request a personalized quote.
                 </p>
               </details>
 

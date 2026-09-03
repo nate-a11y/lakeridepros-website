@@ -102,7 +102,7 @@ const faqSchema = {
       name: 'How much does shuttle service from Columbia to Lake Ozarks cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Shuttle rates from Columbia to Lake of the Ozarks start at $120/hour with a typical 3-hour round trip minimum. Group rates available for larger parties. Contact us for a custom quote based on your specific pickup location and Lake destination.'
+        text: 'Pricing from Columbia to Lake of the Ozarks depends on the vehicle, pickup location, destination, timing, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote for the exact trip.'
       }
     }
   ]
@@ -246,7 +246,7 @@ export default async function ColumbiaToLakeOzarksPage() {
               <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
                 <h3 className="font-bold text-xl text-lrp-black dark:text-white mb-3">Perfect for Groups</h3>
                 <p className="text-gray-700 dark:text-lrp-gray">
-                  Bachelor/bachelorette parties, family reunions, friend groups, sorority/fraternity trips. Our sprinter vans (14 passengers) and buses (up to 56) keep everyone together for the whole weekend.
+                  Bachelor/bachelorette parties, family reunions, friend groups, and sorority or fraternity trips. Our current group fleet ranges from a 13-passenger Executive Sprinter to a 37-passenger Executive Shuttle, and we can coordinate multiple vehicles for larger groups.
                 </p>
               </div>
             </div>
@@ -330,7 +330,7 @@ export default async function ColumbiaToLakeOzarksPage() {
                   How much does shuttle service from Columbia to Lake Ozarks cost?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Shuttle rates from Columbia to Lake of the Ozarks start at $120/hour with a typical 3-hour round trip minimum. Group rates available for larger parties. Contact us for a custom quote based on your specific pickup location and Lake destination.
+                  Pricing from Columbia to Lake of the Ozarks depends on the vehicle, pickup location, destination, timing, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote for the exact trip.
                 </p>
               </details>
 

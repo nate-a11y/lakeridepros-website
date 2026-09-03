@@ -123,6 +123,7 @@ export default async function Footer() {
     company: [
       { name: 'About Us', href: '/about-us' },
       { name: 'Testimonials', href: '/testimonials' },
+      { name: 'Transportation Insights', href: '/lake-ozarks-transportation-insights' },
       { name: 'Blog', href: '/blog' },
       { name: 'Music', href: '/music' },
       { name: 'Contact', href: '/contact' },

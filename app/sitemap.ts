@@ -93,15 +93,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/gift-cards', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/shop', priority: 0.7, changeFrequency: 'weekly' as const },
     { url: '/testimonials', priority: 0.8, changeFrequency: 'weekly' as const },
+    { url: '/lake-ozarks-transportation-insights', priority: 0.8, changeFrequency: 'monthly' as const },
 
     // All service pages are now CMS-driven and included via serviceSitemapEntries below
-
-    // Fleet pages
-    { url: '/fleet/limo-bus', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/fleet/sprinter-van', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/fleet/shuttle-bus', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/fleet/rescue-squad', priority: 0.9, changeFrequency: 'monthly' as const },
-    { url: '/fleet/suburbans', priority: 0.9, changeFrequency: 'monthly' as const },
 
     // Partner pages
     { url: '/wedding-partners', priority: 0.7, changeFrequency: 'monthly' as const },

@@ -2,7 +2,7 @@
 
 > Lake Ride Pros is a professional luxury transportation company serving Lake of the Ozarks, Missouri, with chauffeured rides for weddings, airport transfers, nightlife, events, corporate travel, group transportation, and lake-area service routes.
 
-Last updated: 2026-05-11
+Last updated: 2026-09-03
 Canonical site: [https://www.lakeridepros.com](https://www.lakeridepros.com)
 Booking: [https://www.lakeridepros.com/book](https://www.lakeridepros.com/book)
 Contact: [https://www.lakeridepros.com/contact](https://www.lakeridepros.com/contact)
@@ -32,6 +32,7 @@ Lake Ride Pros provides scheduled, professionally driven transportation at Lake 
 - [Fleet](https://www.lakeridepros.com/fleet)
 - [Testimonials](https://www.lakeridepros.com/testimonials)
 - [Team/drivers](https://www.lakeridepros.com/our-drivers)
+- [Original transportation data and planning insights](https://www.lakeridepros.com/lake-ozarks-transportation-insights)
 
 ## High-intent service pages
 

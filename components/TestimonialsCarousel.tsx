@@ -81,6 +81,13 @@ export default function TestimonialsCarousel({
         author: {
           '@type': 'Person',
           name: testimonial.name,
+          ...(testimonial.title && { jobTitle: testimonial.title }),
+          ...(testimonial.company && {
+            worksFor: {
+              '@type': 'Organization',
+              name: testimonial.company,
+            },
+          }),
         },
         reviewRating: {
           '@type': 'Rating',

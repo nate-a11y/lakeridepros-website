@@ -90,7 +90,7 @@ const faqSchema = {
       name: 'How much does a shuttle from Kansas City to Lake of the Ozarks cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'One-way shuttle service from MCI Airport to Lake of the Ozarks starts at $220 for up to 6 passengers in a luxury Sprinter van. Larger groups and round-trip service available at discounted rates. Contact us at (573) 206-9499 for a custom quote.'
+        text: 'MCI Airport transportation pricing depends on the vehicle, exact pickup and destination, timing, passenger count, luggage, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote.'
       }
     },
     {
@@ -114,7 +114,7 @@ const faqSchema = {
       name: 'Can you accommodate large groups from Kansas City?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely! We specialize in group transportation from Kansas City to Lake of the Ozarks. Our fleet includes Sprinter vans (6-14 passengers), limo buses (14 passengers), and shuttle buses (up to 37 passengers). We can coordinate multiple vehicles for groups of 100+.'
+        text: 'Absolutely! We specialize in group transportation from Kansas City to Lake of the Ozarks. Our current fleet includes a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, and a 37-passenger Executive Shuttle. We can coordinate multiple vehicles for larger groups.'
       }
     },
     {
@@ -398,7 +398,7 @@ export default async function KansasCityToLakeOzarksPage() {
                   How much does a shuttle from Kansas City to Lake of the Ozarks cost?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  One-way shuttle service from MCI Airport to Lake of the Ozarks starts at $220 for up to 6 passengers in a luxury Sprinter van. Larger groups and round-trip service available at discounted rates. Contact us at (573) 206-9499 for a custom quote.
+                  MCI Airport transportation pricing depends on the vehicle, exact pickup and destination, timing, passenger count, luggage, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote.
                 </p>
               </details>
 
@@ -425,7 +425,7 @@ export default async function KansasCityToLakeOzarksPage() {
                   Can you accommodate large groups from Kansas City?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Absolutely! We specialize in group transportation from Kansas City to Lake of the Ozarks. Our fleet includes Sprinter vans (6-14 passengers), limo buses (14 passengers), and shuttle buses (up to 37 passengers). We can coordinate multiple vehicles for groups of 100+.
+                  Absolutely! We specialize in group transportation from Kansas City to Lake of the Ozarks. Our current fleet includes a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, and a 37-passenger Executive Shuttle. We can coordinate multiple vehicles for larger groups.
                 </p>
               </details>
 

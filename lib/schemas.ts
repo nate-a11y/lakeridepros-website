@@ -80,7 +80,7 @@ export const organizationSchema = {
   "foundingDate": "2022",
   "founder": [
     { "@type": "Person", "name": "Jim Brentlinger" },
-    { "@type": "Person", "name": "Nate Bulock" },
+    { "@type": "Person", "name": "Nate Bullock" },
     { "@type": "Person", "name": "Michael Brandt" }
   ],
   "sameAs": [
@@ -117,7 +117,7 @@ export const faqSchema = {
       "name": "How far in advance should I book transportation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "For weddings and major events, we recommend booking 2-4 weeks in advance to ensure vehicle availability. For airport shuttles and regular transportation, 24-48 hours notice is typically sufficient. We also accommodate last-minute bookings based on fleet availability."
+        "text": "Booking lead time depends on the trip. In our completed-trip data, the observed median was 2 days for nightlife, 6 days for airport transportation, 25 days for bachelor and bachelorette trips, and 89 days for weddings among records with usable booking timestamps. For peak summer weekends, reserve earlier whenever possible."
       }
     },
     {
@@ -125,7 +125,7 @@ export const faqSchema = {
       "name": "What types of vehicles are available?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Our fleet includes luxury limo buses (14 passengers), Mercedes Sprinter vans (6-14 passengers), shuttle buses (37 passengers), SUVs, and specialty vehicles. All vehicles feature premium amenities, professional sound systems, comfortable seating, and are meticulously maintained."
+        "text": "Our current published fleet includes 4-passenger Flex vehicles, 7-passenger Elite SUVs, a 13-passenger Executive Sprinter, 14-passenger Limo Bus and Rescue Squad options, the 23-passenger Pink Patrol, and a 37-passenger Executive Shuttle Bus. Luggage and equipment can reduce usable passenger space, so confirm your needs when booking."
       }
     },
     {
@@ -141,7 +141,7 @@ export const faqSchema = {
       "name": "How much does transportation cost at Lake of the Ozarks?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Rates vary based on vehicle type, distance, and duration. Airport shuttles start around $180 one-way. Hourly rentals start at $120/hour for Sprinter vans. Wedding packages start at $600. Contact us at (573) 206-9499 for a custom quote tailored to your needs."
+        "text": "Rates vary by current service tier, vehicle, distance, timing, duration, passenger count, and trip requirements. Review the current pricing page or contact Lake Ride Pros at (573) 206-9499 for an exact quote."
       }
     },
     {

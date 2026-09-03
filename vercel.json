@@ -6,6 +6,28 @@
       "has": [
         {
           "type": "host",
+          "value": "lakeridepros.store"
+        }
+      ],
+      "destination": "https://www.lakeridepros.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.lakeridepros.store"
+        }
+      ],
+      "destination": "https://www.lakeridepros.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
           "value": "lakeridepros.com"
         }
       ],

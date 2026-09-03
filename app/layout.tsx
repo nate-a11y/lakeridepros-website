@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { AIReferralTracker } from "@/components/AIReferralTracker";
 import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/600.css";
 import "@fontsource/montserrat/800.css";
@@ -59,6 +60,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <GoogleAnalytics />
+        <AIReferralTracker />
         {children}
         <Analytics />
       </body>

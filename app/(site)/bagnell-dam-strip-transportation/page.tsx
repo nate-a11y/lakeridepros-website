@@ -80,7 +80,7 @@ const faqSchema = {
       name: 'How much does Bagnell Dam Strip transportation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Bagnell Dam Strip party bus and shuttle service starts at $120/hour for Sprinter vans (up to 14 passengers) and $150/hour for limo buses. Most bar hopping groups book 4-6 hour packages. Contact us at (573) 206-9499 for custom pricing and group discounts.'
+        text: 'Bagnell Dam Strip transportation pricing depends on the vehicle, group size, timing, and service duration. Many bar-hopping groups reserve a multi-hour itinerary. Check our current pricing page and request a custom quote for your group.'
       }
     },
     {
@@ -423,7 +423,7 @@ export default async function BagnellDamStripTransportationPage() {
                   How much does Bagnell Dam Strip transportation cost?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Bagnell Dam Strip party bus and shuttle service starts at $120/hour for Sprinter vans (up to 14 passengers) and $150/hour for limo buses. Most bar hopping groups book 4-6 hour packages. Contact us at (573) 206-9499 for custom pricing and group discounts.
+                  Bagnell Dam Strip transportation pricing depends on the vehicle, group size, timing, and service duration. Many bar-hopping groups reserve a multi-hour itinerary. Check our current pricing page and request a custom quote for your group.
                 </p>
               </details>
 

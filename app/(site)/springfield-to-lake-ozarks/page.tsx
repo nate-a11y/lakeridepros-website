@@ -101,7 +101,7 @@ const faqSchema = {
       name: 'How much does shuttle service from Springfield to Lake Ozarks cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Shuttle rates from Springfield to Lake of the Ozarks start at $120/hour with a typical 4-hour round trip minimum. Airport transfers have set rates. Contact us for a custom quote based on your pickup location and Lake destination.'
+        text: 'Pricing from Springfield to Lake of the Ozarks depends on the vehicle, pickup location, destination, timing, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote for the exact trip.'
       }
     }
   ]
@@ -331,7 +331,7 @@ export default async function SpringfieldToLakeOzarksPage() {
                   How much does shuttle service from Springfield to Lake Ozarks cost?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Shuttle rates from Springfield to Lake of the Ozarks start at $120/hour with a typical 4-hour round trip minimum. Airport transfers have set rates. Contact us for a custom quote based on your pickup location and Lake destination.
+                  Pricing from Springfield to Lake of the Ozarks depends on the vehicle, pickup location, destination, timing, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote for the exact trip.
                 </p>
               </details>
 

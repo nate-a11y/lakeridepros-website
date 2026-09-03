@@ -95,7 +95,7 @@ const faqSchema = {
       name: 'How much does transportation cost in Laurie?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates from Laurie start at $120/hour for sprinter vans (up to 14 passengers). Rates vary based on vehicle type, group size, and destination. Contact us for a custom quote.'
+        text: 'Laurie transportation pricing depends on the vehicle, group size, route, timing, and service duration. Check our current pricing page and request a custom quote for your exact transportation plan.'
       }
     },
     {
@@ -361,7 +361,7 @@ export default async function LaurieTransportationPage() {
                   How much does transportation cost in Laurie?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Transportation rates from Laurie start at $120/hour for sprinter vans (up to 14 passengers). Rates vary based on vehicle type, group size, and destination. Contact us for a custom quote.
+                  Laurie transportation pricing depends on the vehicle, group size, route, timing, and service duration. Check our current pricing page and request a custom quote for your exact transportation plan.
                 </p>
               </details>
 

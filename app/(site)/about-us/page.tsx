@@ -42,7 +42,7 @@ export default function AboutUsPage() {
       },
       {
         "@type": "Person",
-        "name": "Nate Bulock"
+        "name": "Nate Bullock"
       },
       {
         "@type": "Person",
@@ -93,7 +93,7 @@ export default function AboutUsPage() {
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed mb-6">
                 <strong>Lake Ride Pros</strong> was founded in 2022 by <strong>Jim Brentlinger</strong>,
-                <strong> Nate Bulock</strong>, and <strong>Michael Brandt</strong> with a simple mission:
+                <strong> Nate Bullock</strong>, and <strong>Michael Brandt</strong> with a simple mission:
                 to provide the Lake of the Ozarks community with safe, reliable, and luxurious transportation
                 that puts customer satisfaction first.
               </p>
@@ -215,7 +215,7 @@ export default function AboutUsPage() {
                 <span className="text-6xl text-primary font-bold">NB</span>
               </div>
               <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
-                Nate Bulock
+                Nate Bullock
               </h3>
               <p className="text-primary font-semibold mb-4">Co-Founder</p>
               <p className="text-neutral-700 dark:text-neutral-300">

@@ -95,7 +95,7 @@ const faqSchema = {
       name: 'How much does transportation cost in Lake Ozark?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates in Lake Ozark start at $120/hour for sprinter vans (up to 14 passengers) and $150/hour for larger shuttle buses. Wedding and corporate event packages have custom pricing. Contact us for a personalized Lake Ozark transportation quote.'
+        text: 'Lake Ozark transportation pricing depends on the vehicle, group size, route, timing, and service duration. Wedding and corporate plans are quoted for their specific itinerary. Check our current pricing page and request a personalized quote.'
       }
     }
   ]
@@ -329,7 +329,7 @@ export default async function LakeOzarkTransportationPage() {
                   How much does transportation cost in Lake Ozark?
                 </summary>
                 <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Transportation rates in Lake Ozark start at $120/hour for sprinter vans (up to 14 passengers) and $150/hour for larger shuttle buses. Wedding and corporate event packages have custom pricing. Contact us for a personalized quote.
+                  Lake Ozark transportation pricing depends on the vehicle, group size, route, timing, and service duration. Wedding and corporate plans are quoted for their specific itinerary. Check our current pricing page and request a personalized quote.
                 </p>
               </details>
 

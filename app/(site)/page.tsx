@@ -111,7 +111,7 @@ export default async function HomePage() {
         && googleReviewStatus != "not_found"
         && defined(rating)
       ].rating)
-    }`).catch(() => ({reviewCount: 308, ratingValue: 5})),
+    }`).catch(() => ({reviewCount: 322, ratingValue: 5})),
   ]);
 
   const services = servicesData.docs || [];
@@ -152,7 +152,7 @@ export default async function HomePage() {
     aggregateRating: {
       ...localBusinessSchema.aggregateRating,
       ratingValue: (googleReviewSummary.ratingValue ?? 5).toFixed(1),
-      reviewCount: String(googleReviewSummary.reviewCount || 308),
+      reviewCount: String(googleReviewSummary.reviewCount || 322),
     },
   };
 

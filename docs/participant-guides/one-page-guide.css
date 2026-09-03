@@ -1,5 +1,7 @@
 :root {
   --green: #4cbb17;
+  --primary-alpha-5: rgba(76, 187, 23, 0.05);
+  --primary-alpha-12: rgba(76, 187, 23, 0.12);
   --green-dark: #245f0b;
   --green-deep: #174b08;
   --green-soft: #eaf8e4;
@@ -39,9 +41,9 @@ html, body {
   top: -1.55in;
   width: 3.6in;
   height: 3.6in;
-  border: .08in solid rgba(76,187,23,.12);
+  border: .08in solid var(--primary-alpha-12);
   border-radius: 50%;
-  box-shadow: 0 0 0 .34in rgba(76,187,23,.05);
+  box-shadow: 0 0 0 .34in var(--primary-alpha-5);
 }
 
 .content { position: relative; z-index: 1; height: 100%; padding: .48in .55in .43in; }
@@ -110,4 +112,3 @@ p { color: var(--slate); }
 
 .mini-title { display: flex; align-items: center; justify-content: space-between; gap: .1in; }
 .mini-title span { color: #6b7280; font-size: 6.7pt; font-weight: 700; }
-

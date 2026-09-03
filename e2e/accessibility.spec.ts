@@ -58,7 +58,7 @@ async function checkAccessibility(
 test.describe('Accessibility - Critical Pages', () => {
   test('Homepage has no critical/serious violations', async ({ page }) => {
     await page.goto('/')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     await checkAccessibility(page, {
       includedImpacts: ['critical', 'serious']
@@ -67,7 +67,7 @@ test.describe('Accessibility - Critical Pages', () => {
 
   test('Contact page has no critical/serious violations', async ({ page }) => {
     await page.goto('/contact')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     await checkAccessibility(page, {
       includedImpacts: ['critical', 'serious']
@@ -76,7 +76,7 @@ test.describe('Accessibility - Critical Pages', () => {
 
   test('Services page has no critical/serious violations', async ({ page }) => {
     await page.goto('/services')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     await checkAccessibility(page, {
       includedImpacts: ['critical', 'serious']
@@ -85,7 +85,7 @@ test.describe('Accessibility - Critical Pages', () => {
 
   test('Shop page has no critical/serious violations', async ({ page }) => {
     await page.goto('/shop')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     await checkAccessibility(page, {
       includedImpacts: ['critical', 'serious']
@@ -94,7 +94,7 @@ test.describe('Accessibility - Critical Pages', () => {
 
   test('Gift Cards page has no critical/serious violations', async ({ page }) => {
     await page.goto('/gift-cards')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     await checkAccessibility(page, {
       includedImpacts: ['critical', 'serious']
@@ -103,7 +103,7 @@ test.describe('Accessibility - Critical Pages', () => {
 
   test('Blog page has no critical/serious violations', async ({ page }) => {
     await page.goto('/blog')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     await checkAccessibility(page, {
       includedImpacts: ['critical', 'serious']
@@ -112,7 +112,7 @@ test.describe('Accessibility - Critical Pages', () => {
 
   test('Fleet page has no critical/serious violations', async ({ page }) => {
     await page.goto('/fleet')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     await checkAccessibility(page, {
       includedImpacts: ['critical', 'serious']
@@ -121,7 +121,7 @@ test.describe('Accessibility - Critical Pages', () => {
 
   test('Pricing page has no critical/serious violations', async ({ page }) => {
     await page.goto('/pricing')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     await checkAccessibility(page, {
       includedImpacts: ['critical', 'serious']
@@ -195,7 +195,7 @@ test.describe('Accessibility - Interactive Components', () => {
 test.describe('Accessibility - Forms', () => {
   test('Contact form has proper labels and error handling', async ({ page }) => {
     await page.goto('/contact')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     // Check form has proper labels
     const nameInput = page.locator('#name')
@@ -235,7 +235,7 @@ test.describe('Accessibility - Forms', () => {
 test.describe('Accessibility - Modals and Dialogs', () => {
   test('Cart drawer has proper dialog role', async ({ page }) => {
     await page.goto('/shop')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     // Find a product and add to cart to trigger cart drawer
     const addToCartButton = page.getByRole('button', { name: /add to cart/i })
@@ -308,7 +308,7 @@ test.describe('Accessibility - Focus Management', () => {
 test.describe('Accessibility - Color Contrast', () => {
   test('Text has sufficient color contrast', async ({ page }) => {
     await page.goto('/')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     // axe-core checks color contrast automatically
     await checkAccessibility(page, {
@@ -343,7 +343,7 @@ test.describe('Accessibility - Color Contrast', () => {
 test.describe('Accessibility - Images and Media', () => {
   test('Images have alt text', async ({ page }) => {
     await page.goto('/')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     // Check all images have alt attributes
     const images = page.locator('img')
@@ -369,19 +369,19 @@ test.describe('Accessibility - Full Page Scans (All Violations)', () => {
 
   test.skip('Homepage - full audit', async ({ page }) => {
     await page.goto('/')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
     await checkAccessibility(page)
   })
 
   test.skip('Contact - full audit', async ({ page }) => {
     await page.goto('/contact')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
     await checkAccessibility(page)
   })
 
   test.skip('Shop - full audit', async ({ page }) => {
     await page.goto('/shop')
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
     await checkAccessibility(page)
   })
 })

@@ -233,13 +233,29 @@ test.describe('Insider Rewards internal release candidate', () => {
       page.getByRole('link', { name: 'Manage billing' }),
     ).toBeVisible()
 
-    await page.getByRole('button', { name: 'Change plan' }).click()
-    await expect(page).toHaveURL(/\/insiders\/account\?billing=preview/)
-    await expect(
-      page.getByText(
-        'Plan changes open securely in Chargebee for the account owner.',
-      ),
-    ).toBeVisible()
+    const changePlanButton = page.getByRole('button', { name: 'Change plan' })
+    const changePlanForm = changePlanButton.locator('xpath=ancestor::form')
+    await expect(changePlanForm).toHaveAttribute(
+      'action',
+      '/api/insiders/billing/pricing-page',
+    )
+    await expect(changePlanForm).toHaveAttribute('method', 'post')
+
+    // Exercise the POST directly: Playwright's bundled WebKit can stall on
+    // native empty-form navigation even after the server returns its 303.
+    const response = await page.request.post(
+      '/api/insiders/billing/pricing-page',
+      { maxRedirects: 0 },
+    )
+    expect(response.status()).toBe(303)
+    const redirectUrl = response.headers().location
+    expect(redirectUrl).toMatch(/\/insiders\/account\?billing=preview/)
+
+    const redirectPage = await page.request.get(redirectUrl)
+    expect(redirectPage.status()).toBe(200)
+    expect(await redirectPage.text()).toContain(
+      'Plan changes open securely in Chargebee for the account owner.',
+    )
   })
 
   test('portal remains responsive and accessible on mobile', async ({

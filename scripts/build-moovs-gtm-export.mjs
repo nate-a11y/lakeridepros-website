@@ -14,8 +14,8 @@ const filter = (variable, value, type = 'EQUALS') => ({ type, parameter: [templa
 const portalFilters = [filter('Page Hostname', 'customer.moovs.app'), filter('Page Path', '^/lake-ride-pros(/|$)', 'MATCH_REGEX')]
 const websiteFilters = [filter('Page Hostname', '^(www\\.)?lakeridepros\\.com$', 'MATCH_REGEX')]
 
-// Documented gtag.js commands in standard GTM Custom HTML tags avoid relying on
-// undocumented native-template export schemas. Scripts are ES5-compatible.
+// Portal-only initialization. Event delivery uses native GA4 tags below.
+// All custom scripts are ES5-compatible and never emit same-name events.
 export const initializePortal = `<script>
 (function(w,d){
   if(w.location.hostname!=='customer.moovs.app'||!/^\\/lake-ride-pros(\\/|$)/.test(w.location.pathname)) return;
@@ -33,52 +33,23 @@ export const initializePortal = `<script>
 })(window,document);
 </script>`
 
-export const forwardMoovsEvent = `<script>
-(function(w){
-  if(w.location.hostname!=='customer.moovs.app'||!/^\\/lake-ride-pros(\\/|$)/.test(w.location.pathname)) return;
-  var name={{Event}};
-  if(!/^(moovs_create_quote|moovs_create_reservation|moovs_confirm_reservation|moovs_page_view_info|moovs_page_view_vehicle|moovs_page_view_quote_summary|moovs_page_view_reservation_summary|moovs_page_view_reservation_request_summary|moovs_page_view_confirm_quote)$/.test(name)) return;
-  w.dataLayer=w.dataLayer||[];
-  w.gtag=w.gtag||function(){w.dataLayer.push(arguments);};
-  var params={send_to:'${GA4_ID}',event_category:'Moovs_Tracking',booking_platform:'moovs'};
-  if(name==='moovs_create_reservation'||name==='moovs_confirm_reservation'){
-    // Read the event object itself, not a persistent data-layer value that could
-    // leak a previous reservation's total into a later event with no value.
-    for(var i=w.dataLayer.length-1;i>=0;i--){
-      var item=w.dataLayer[i];
+// Native GA4 event tags MUST be used: gtag('event', sameName) inside Custom HTML
+// re-enters GTM's data layer and can retrigger the same Custom Event indefinitely.
+// Schema verified against a GA4 Event tag created/exported in GTM's own editor.
+export const CONTEXT_KEYS = ['booking_location', 'service_slug', 'vehicle_slug', 'form_id', 'error_type', 'contact_location']
+export function currentEventValue(key) {
+  return `function(){
+    var name={{Event}}, layer=window.dataLayer||[];
+    for(var i=layer.length-1;i>=0;i--){
+      var item=layer[i];
       if(item&&item.event===name){
-        if(typeof item.value==='number'&&isFinite(item.value)&&item.value>=0){params.value=item.value;params.currency='USD';}
-        break;
+        var value=item[${JSON.stringify(key === 'currency' ? 'value' : key)}];
+        ${key === 'value' || key === 'currency' ? "if(name!=='moovs_create_reservation'&&name!=='moovs_confirm_reservation') return;\n        if(typeof value==='number'&&isFinite(value)&&value>=0) return " + (key === 'currency' ? "'USD'" : 'value') + ';' : "if(typeof value==='string'&&value.length<=100) return value;"}
+        return;
       }
     }
-  }
-  w.gtag('event',name,params);
-})(window);
-</script>`
-
-export const forwardWebsiteEvent = `<script>
-(function(w){
-  if(!/^(www\\.)?lakeridepros\\.com$/.test(w.location.hostname)) return;
-  var name={{Event}};
-  if(!/^(${WEBSITE_EVENTS.join('|')})$/.test(name)) return;
-  w.dataLayer=w.dataLayer||[];
-  w.gtag=w.gtag||function(){w.dataLayer.push(arguments);};
-  var params={send_to:'${GA4_ID}'};
-  var keys=['booking_location','service_slug','vehicle_slug','form_id','error_type','contact_location'];
-  if(name==='booking_portal_click') params.booking_destination='https://customer.moovs.app/lake-ride-pros/';
-  for(var i=w.dataLayer.length-1;i>=0;i--){
-    var item=w.dataLayer[i];
-    if(item&&item.event===name){
-      for(var j=0;j<keys.length;j++){
-        var key=keys[j];
-        if(typeof item[key]==='string') params[key]=item[key].slice(0,100);
-      }
-      break;
-    }
-  }
-  w.gtag('event',name,params);
-})(window);
-</script>`
+  }`
+}
 
 export function buildExport(original) {
   const result = structuredClone(original)
@@ -88,11 +59,31 @@ export function buildExport(original) {
   result.exportTime = new Date().toISOString()
   const common = { accountId: version.accountId, containerId: version.containerId }
   const tag = (id, name, html, triggerId) => ({ ...common, tagId: id, name, type: 'html', parameter: [template('html', html), { type: 'BOOLEAN', key: 'supportDocumentWrite', value: 'false' }], firingTriggerId: [triggerId], tagFiringOption: 'ONCE_PER_EVENT' })
+  const variableName = key => `LRP - Current event - ${key}`
+  const eventTag = (event, id, params) => ({
+    ...common, tagId: id, name: `LRP - GA4 - ${event}`, type: 'gaawe',
+    parameter: [
+      { type: 'BOOLEAN', key: 'sendEcommerceData', value: 'false' },
+      template('measurementIdOverride', GA4_ID), template('eventName', event),
+      { type: 'LIST', key: 'eventSettingsTable', list: Object.entries(params).map(([key, value]) => ({ type: 'MAP', map: [template('parameter', key), template('parameterValue', value)] })) },
+    ], firingTriggerId: [id], tagFiringOption: 'ONCE_PER_EVENT',
+  })
   version.tag = [
     tag('1', 'LRP - GA4 portal configuration (Moovs only)', initializePortal, '1'),
-    ...MOOVS_EVENTS.map((event, index) => ({ ...tag(String(index + 10), `LRP - GA4 - ${event}`, forwardMoovsEvent, String(index + 10)), setupTag: [{ tagName: 'LRP - GA4 portal configuration (Moovs only)', stopOnSetupFailure: true }] })),
-    ...WEBSITE_EVENTS.map((event, index) => tag(String(index + 30), `LRP - GA4 - ${event}`, forwardWebsiteEvent, String(index + 30))),
+    ...MOOVS_EVENTS.map((event, index) => ({
+      ...eventTag(event, String(index + 10), { event_category: 'Moovs_Tracking', booking_platform: 'moovs',
+        ...(['moovs_create_reservation', 'moovs_confirm_reservation'].includes(event) ? { value: `{{${variableName('value')}}}`, currency: `{{${variableName('currency')}}}` } : {}),
+      }),
+      setupTag: [{ tagName: 'LRP - GA4 portal configuration (Moovs only)', stopOnSetupFailure: true }],
+    })),
+    ...WEBSITE_EVENTS.map((event, index) => eventTag(event, String(index + 30), {
+      ...Object.fromEntries(CONTEXT_KEYS.map(key => [key, `{{${variableName(key)}}}`])),
+      ...(event === 'booking_portal_click' ? { booking_destination: 'https://customer.moovs.app/lake-ride-pros/' } : {}),
+    })),
   ]
+  version.variable = [...CONTEXT_KEYS, 'value', 'currency'].map((key, index) => ({
+    ...common, variableId: String(index + 1), name: variableName(key), type: 'jsm', parameter: [template('javascript', currentEventValue(key))],
+  }))
   version.trigger = [
     { ...common, triggerId: '1', name: 'LRP - Moovs portal pages only', type: 'PAGEVIEW', filter: portalFilters },
     ...MOOVS_EVENTS.map((event, index) => ({ ...common, triggerId: String(index + 10), name: `LRP - ${event}`, type: 'CUSTOM_EVENT', customEventFilter: [filter('_event', event)], filter: portalFilters })),

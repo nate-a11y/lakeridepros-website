@@ -9,10 +9,15 @@
 - Original `GTM-KKNTGMB7_workspace2.json` is preserved. It contained no tags, triggers, or custom variables.
 - Personal factory's analytics plan is for Moovs corporate marketing, not LRP. Its IDs and corporate events are intentionally not copied.
 
-## Import and activate (required; not performed by the code deployment)
+## Published status
+- GTM **Version 3** published 2026-09-05 as `nate@lakeridepros.com`: 22 tags, 22 triggers, 8 variables.
+- Tag Assistant preview verified `view_service` and `moovs_page_view_info` each fired once using native GA4 tags. No recursive data-layer event traffic.
+- Website deployment is live. Full reservation/value/GA4 DebugView and domain-admin verification remain pending.
+
+## Import and activate (future rebuilds; deployment alone does not publish GTM)
 1. Open the **Lake Ride Pros GTM container**, Admin → Import Container. Select the generated JSON and a new workspace.
-2. Choose **Merge**, review the preview, and confirm **22 tags / 22 triggers**: 9 Moovs event tags, 12 website event tags, 1 portal-only GA4 initializer. Do not overwrite unrelated workspace changes. If existing equivalent GA4/event tags have since been added, resolve duplicates before publishing.
-3. These are standard Custom HTML tags running documented `gtag` commands; allow Custom HTML under container security settings. The initializer is also sequenced before Moovs event tags and guarded to configure GA4 once per page. No custom variable templates are required.
+2. Choose **Merge**, review the preview, and confirm **22 tags / 22 triggers / 8 variables**: 9 Moovs event tags, 12 website event tags, 1 portal-only GA4 initializer. Do not overwrite unrelated workspace changes. If existing equivalent GA4/event tags have since been added, resolve duplicates before publishing.
+3. Event delivery uses **21 native GA4 Event tags**, not Custom HTML `gtag('event')` forwarding (which re-enters GTM and can loop). One portal-only Custom HTML initializer is sequenced before Moovs event tags and guarded to configure GA4 once per page. Eight read-only Custom JavaScript variables extract only current-event context/value; they never push events.
 4. Confirm Moovs Conversion Tracking is enabled and the operator's configured container is `GTM-KKNTGMB7`.
 5. In GA4 → Admin → Data streams → LakeRidePro Web → Configure tag settings → Configure your domains, include `lakeridepros.com` (including www) and `customer.moovs.app`. The code also supplies linker settings before GA configuration.
 6. Preview both domains using Tag Assistant. Check GA4 DebugView and the checklist below, then **Submit / Publish** the GTM workspace.
@@ -71,7 +76,7 @@ Shop/gift-card payment completion is deliberately not inferred from a button or 
 - Cross-domain continuity requires the same GA4 destination on both domains, Google's scripts/consent being available, and the destination retaining the linker during redirects. It cannot be guaranteed by UTM forwarding alone.
 
 ## Verification checklist
-- [ ] GTM import accepted and published; correct container enabled in Moovs.
+- [x] GTM import accepted and Version 3 published; correct container observed loading in Moovs.
 - [ ] Website landing with test UTMs → internal service/book navigation → portal retains UTMs and supported click IDs; no test email/token forwarded.
 - [ ] With analytics allowed, real outbound click has a fresh `_gl`; destination and subsequent portal navigation retain GA client/session continuity.
 - [ ] Exactly one website GA4 page view per normal page/navigation, not duplicate config from this export.
@@ -81,7 +86,7 @@ Shop/gift-card payment completion is deliberately not inferred from a button or 
 - [ ] Other Moovs operators and private LRP routes do not produce these custom events.
 - [ ] Confirm currency and key-event settings before relying on value or advertising conversions.
 
-Automated checks exercise attribution, clicks, routing, accepted/rejected inquiries, scoped triggers, all event scripts, and numeric-value handling. They **do not replace a real GTM import, publish, or end-to-end Moovs booking test**.
+Automated checks exercise attribution, clicks, routing, accepted/rejected inquiries, scoped triggers, native tag schema, no recursive event forwarding, and numeric-value handling. They **do not replace a real GTM import, publish, or end-to-end Moovs booking test**.
 
 ## Regenerate
 `node scripts/build-moovs-gtm-export.mjs ORIGINAL.json NEW-OUTPUT.json`
@@ -91,3 +96,8 @@ The generator refuses a wrong container, a nonempty input workspace, or overwrit
 ## Sources
 - [Moovs documented events](https://intercom.help/moovs-05c940f1970e/en/articles/8466983-what-types-of-events-can-you-track-with-gtm-in-your-customer-portal)
 - [Google cross-domain linker](https://developers.google.com/tag-platform/devguides/cross-domain)
+
+## Rollout correction (2026-09-05)
+An initial Version 2 used Custom HTML to forward same-name events through `gtag`. The live smoke test caught recursive GTM triggering. Version 1 (empty baseline) was immediately republished while all 21 event tags were replaced with native GA4 Event tags. Do not restore Version 2. QA event counts during this brief test may be inflated; no test reservation or payment was submitted. Regression tests now require native `gaawe` tags and prohibit Custom HTML `gtag('event')` forwarding.
+
+The corrected Version 3 passed GTM validation and was published under `nate@lakeridepros.com`. Preview confirmed a single native website `view_service` and a single native Moovs `moovs_page_view_info`; portal configuration runs only once despite being invoked as both page tag and setup tag. All 429 current unit tests pass.

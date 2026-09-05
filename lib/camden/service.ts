@@ -51,6 +51,7 @@ class BffCamdenService implements CamdenPortalService {
   getCoordinatorDashboard() { return this.request<CamdenCoordinatorData>("coordinator-dashboard") }
   getParticipantSnapshots(filter: CamdenSnapshotFilter) {
     const query = new URLSearchParams({ period: filter.period })
+    if (filter.transportationEligibility) query.set("transportationEligibility", filter.transportationEligibility)
     if (filter.startDate) query.set("startDate", filter.startDate)
     if (filter.endDate) query.set("endDate", filter.endDate)
     return this.request<CamdenParticipantSnapshots>("participant-snapshots", { query })

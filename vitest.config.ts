@@ -38,6 +38,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, '.'),
+      // Resolve Next's server boundary marker for isolated server-module tests.
+      'server-only': path.resolve(import.meta.dirname, 'node_modules/next/dist/compiled/server-only/empty.js'),
     },
   },
 })

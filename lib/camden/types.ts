@@ -154,6 +154,8 @@ export interface CamdenMessage {
 }
 
 export interface CamdenRequestDetail {
+  /** Coordinator-only contact from the authorized request participant. */
+  riderPhone?: string
   request: CamdenRequest
   messages: CamdenMessage[]
 }
@@ -194,6 +196,7 @@ export interface CamdenCoordinatorData extends CamdenDashboardData {
 export type CamdenSnapshotPeriod = "program_to_date" | "current_month" | "previous_month" | "custom"
 
 export interface CamdenSnapshotFilter {
+  transportationEligibility?: "approved" | "all"
   period: CamdenSnapshotPeriod
   startDate?: string
   endDate?: string

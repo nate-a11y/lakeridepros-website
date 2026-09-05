@@ -81,7 +81,7 @@ export class ServerCamdenPortalService {
     const dates = resolveSnapshotDateRange(filter)
     const [context, raw] = await Promise.all([
       this.getContext(),
-      this.gateway("participant_snapshots", { start_date: dates.startDate, end_date: dates.endDate }),
+      this.gateway("participant_snapshots", { start_date: dates.startDate, end_date: dates.endDate, approved_only: filter.transportationEligibility !== "all" }),
     ])
     return mapParticipantSnapshots(raw, context.role === "coordinator" ? "coordinator" : "rider", filter)
   }
@@ -122,7 +122,11 @@ export class ServerCamdenPortalService {
       destination_address: requestRow.destination_address ?? addressValue(destinationRow),
       trips: payload.trips,
     })
-    return { request: context.role === "rider" ? hideRiderCosts(request) : request, messages }
+    return {
+      request: context.role === "rider" ? hideRiderCosts(request) : request,
+      messages,
+      ...(context.role === "coordinator" ? { riderPhone: stringValue(riderRow.normalized_phone) || undefined } : {}),
+    }
   }
 
   private async action(operation: CamdenGatewayOperation, payload: UnknownRecord): Promise<CamdenActionResult> {

@@ -216,7 +216,7 @@ export function createDemoParticipantSnapshots(role: "rider" | "coordinator", fi
       treatmentProvider: index ? "VA" : "Example Provider",
       curfew: index ? undefined : "10 PM–6 AM",
       sourceHomeAddress: index ? "200 Demo Avenue, Example City, MO 65049" : "100 Demo Street, Example City, MO 65020",
-      transportationEligibility: "pending",
+      transportationEligibility: index ? "pending" : "approved",
     },
     metrics: {
       ridesScheduled: (index ? 4 : 6) * factor,
@@ -235,7 +235,7 @@ export function createDemoParticipantSnapshots(role: "rider" | "coordinator", fi
     endDate: dates.endDate ?? "2026-08-27",
     label: "",
   }
-  if (role === "coordinator") return { role, window, participants: coordinatorParticipants }
+  if (role === "coordinator") return { role, window, participants: filter.transportationEligibility === "all" ? coordinatorParticipants : coordinatorParticipants.filter((participant) => participant.roster.transportationEligibility === "approved") }
   const own = coordinatorParticipants[0]
   return {
     role,
@@ -255,9 +255,10 @@ export function createDemoParticipantSnapshots(role: "rider" | "coordinator", fi
   }
 }
 
-export function createDemoRequestDetail(id: string): CamdenRequestDetail {
+export function createDemoRequestDetail(id: string, role: "rider" | "coordinator" = "rider"): CamdenRequestDetail {
   const request = requests.find((candidate) => candidate.id === id) ?? requests[0]
   return {
+    ...(role === "coordinator" ? { riderPhone: demoProfiles.find((profile) => profile.riderId === request.riderId)?.phone } : {}),
     request: { ...request, trips: request.trips.map((trip) => ({ ...trip, cost: undefined })) },
     messages: [
       { id: "message-1", requestId: id, authorName: "Jordan Taylor", authorRole: "rider", body: "I will be ready at the side entrance.", createdAt: "2026-08-27T15:02:00.000Z" },

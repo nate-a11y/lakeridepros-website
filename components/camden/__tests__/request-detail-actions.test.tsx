@@ -158,3 +158,28 @@ describe("same-record ride actions", () => {
     await waitFor(() => expect(transitionFollowup).toHaveBeenCalledWith("request-1", 4, "acknowledged", undefined))
   })
 })
+
+describe("coordinator participant phone", () => {
+  it("shows a callable participant phone below the name", async () => {
+    getRequest.mockResolvedValue({ request, messages: [], riderPhone: "+15735550123" })
+    render(<RequestDetailView />)
+    const phone = await screen.findByRole("link", { name: "+15735550123" })
+    expect(phone).toHaveAttribute("href", "tel:+15735550123")
+    expect(screen.getByText("Jordan Taylor").compareDocumentPosition(phone) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it("omits absent or malformed phone numbers", async () => {
+    getRequest.mockResolvedValue({ request, messages: [], riderPhone: "javascript:alert(1)" })
+    render(<RequestDetailView />)
+    await screen.findByText("Jordan Taylor")
+    expect(document.querySelector('a[href^="tel:"]')).not.toBeInTheDocument()
+  })
+
+  it("does not render the coordinator contact in the rider view", async () => {
+    navigation.coordinator = false
+    getRequest.mockResolvedValue({ request, messages: [], riderPhone: "+15735550123" })
+    render(<RequestDetailView />)
+    await screen.findByText(request.reference)
+    expect(screen.queryByRole("link", { name: "+15735550123" })).not.toBeInTheDocument()
+  })
+})

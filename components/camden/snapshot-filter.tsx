@@ -17,7 +17,7 @@ export function SnapshotFilter({ value, onApply, busy = false, idPrefix }: { val
 
   function submit(event: FormEvent) {
     event.preventDefault()
-    onApply(draft.period === "custom" ? draft : { period: draft.period })
+    onApply(draft.period === "custom" ? draft : { period: draft.period, ...(draft.transportationEligibility ? { transportationEligibility: draft.transportationEligibility } : {}) })
   }
 
   return (
@@ -28,6 +28,13 @@ export function SnapshotFilter({ value, onApply, busy = false, idPrefix }: { val
           {periods.map((period) => <option key={period.value} value={period.value}>{period.label}</option>)}
         </select>
       </div>
+      {value.transportationEligibility && <div>
+        <label htmlFor={`${idPrefix}-eligibility`} className="mb-1 block text-sm font-bold">Participants</label>
+        <select id={`${idPrefix}-eligibility`} className={fieldClass} value={draft.transportationEligibility ?? "approved"} onChange={(event) => setDraft((current) => ({ ...current, transportationEligibility: event.target.value as "approved" | "all" }))}>
+          <option value="approved">Approved for transportation</option>
+          <option value="all">All participants</option>
+        </select>
+      </div>}
       {draft.period === "custom" && <>
         <div><label htmlFor={`${idPrefix}-start`} className="mb-1 block text-sm font-bold">Start date</label><input id={`${idPrefix}-start`} type="date" className={fieldClass} value={draft.startDate ?? ""} max={draft.endDate} onChange={(event) => setDraft((current) => ({ ...current, startDate: event.target.value }))} required /></div>
         <div><label htmlFor={`${idPrefix}-end`} className="mb-1 block text-sm font-bold">End date</label><input id={`${idPrefix}-end`} type="date" className={fieldClass} value={draft.endDate ?? ""} min={draft.startDate} onChange={(event) => setDraft((current) => ({ ...current, endDate: event.target.value }))} required /></div>

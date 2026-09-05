@@ -8,7 +8,7 @@ export class ServerDemoCamdenService {
   getDashboard() { return Promise.resolve(createDemoDashboard(this.persona)) }
   getCoordinatorDashboard() { return Promise.resolve(createDemoCoordinatorDashboard()) }
   getParticipantSnapshots(filter: CamdenSnapshotFilter) { return Promise.resolve(createDemoParticipantSnapshots(this.persona, filter)) }
-  getRequest(id: string) { return Promise.resolve(createDemoRequestDetail(id)) }
+  getRequest(id: string) { return Promise.resolve(createDemoRequestDetail(id, this.persona)) }
   private done(message: string) { return Promise.resolve({ id: crypto.randomUUID(), message }) }
   submitRequest() { return this.done("Request submitted") }
   updatePendingRequest() { return this.done("Request updated") }

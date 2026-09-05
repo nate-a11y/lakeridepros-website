@@ -7,6 +7,7 @@ const optionalTime = time.optional()
 
 export const CamdenParticipantSnapshotQuerySchema = z.object({
   period: z.enum(["program_to_date", "current_month", "previous_month", "custom"]),
+  transportationEligibility: z.enum(["approved", "all"]).optional(),
   startDate: date.optional(),
   endDate: date.optional(),
 }).strict().superRefine((value, context) => {

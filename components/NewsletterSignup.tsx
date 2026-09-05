@@ -1,5 +1,7 @@
 'use client';
 
+import { trackWebsiteEvent } from '@/lib/website-tracking'
+
 import { useState, FormEvent } from 'react';
 import Turnstile from '@/components/Turnstile';
 
@@ -46,6 +48,7 @@ export default function NewsletterSignup() {
 
       if (response.ok) {
         setStatus('success');
+        trackWebsiteEvent('newsletter_signup', { form_id: 'newsletter' });
         setMessage(data.message || 'Thanks for subscribing!');
         setEmail('');
         setTurnstileToken(null);

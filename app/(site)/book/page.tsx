@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { PhoneLink } from '@/components/PhoneLink'
+import BookingWidget from '@/components/BookingWidget'
 
 export const metadata: Metadata = {
   title: 'Book Your Ride | Lake Ride Pros',
@@ -40,16 +41,8 @@ export default function BookPage() {
         </div>
       </section>
 
-      {/* Moovs Booking Interface */}
-      <section className="container mx-auto px-4 py-8" aria-label="Booking form">
-        <div className="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl overflow-hidden border border-neutral-200 dark:border-dark-border">
-          <iframe
-            src="https://customer.moovs.app/lake-ride-pros/iframe"
-            title="Lake Ride Pros Booking System - Select vehicle, date, time and complete your reservation"
-            className="w-full border-0 min-h-[900px] h-[calc(100vh-250px)]"
-            allow="payment"
-          />
-        </div>
+      <section className="container mx-auto px-4 py-8" aria-label="Online booking">
+        <BookingWidget />
       </section>
 
       {/* Contact Help Section */}

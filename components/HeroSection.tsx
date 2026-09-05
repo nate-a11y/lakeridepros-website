@@ -1,14 +1,12 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import ParticleField from './ui/ParticleField'
-import { LazyBookingModal } from './LazyBookingModal'
+import { MoovsBookingLink } from '@/components/MoovsBookingLink'
 
 export default function HeroSection() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
 
   return (
@@ -65,14 +63,11 @@ export default function HeroSection() {
               animate={{ y: 0 }}
               transition={{ duration: 0.6, delay: 1.2 }}
             >
-              <motion.button
-                onClick={() => setIsBookingOpen(true)}
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+              <MoovsBookingLink location="hero"
                 className="bg-[#2f730e] hover:bg-[#24580b] text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg hover:shadow-xl shadow-green-glow"
               >
                 Book Your Ride
-              </motion.button>
+              </MoovsBookingLink>
               <motion.div
                 whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
                 whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
@@ -159,13 +154,6 @@ export default function HeroSection() {
         </div>
       </section>
 
-      {/* Booking Modal */}
-      {isBookingOpen && (
-        <LazyBookingModal
-          isOpen={isBookingOpen}
-          onClose={() => setIsBookingOpen(false)}
-        />
-      )}
     </>
   )
 }

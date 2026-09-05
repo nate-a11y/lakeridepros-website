@@ -1,5 +1,7 @@
 "use client";
 
+import { MoovsBookingLink } from "@/components/MoovsBookingLink";
+
 import {
   motion,
   useScroll,
@@ -19,12 +21,10 @@ export default function FloatingCTA() {
       style={shouldReduceMotion ? undefined : { opacity, y }}
       className="fixed bottom-6 right-6 z-[1000] hidden sm:block"
     >
-      <motion.a
-        href="https://customer.moovs.app/lake-ride-pros/new/info?moovs_source=widget"
+      <MoovsBookingLink
+        location="floating_quote"
         target="_blank"
-        rel="noopener noreferrer"
-        whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
-        whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+        rel="noopener"
         className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary-dark text-lrp-black font-bold rounded-full shadow-lg hover:shadow-xl transition-colors"
       >
         <svg
@@ -41,7 +41,7 @@ export default function FloatingCTA() {
           />
         </svg>
         Get a Quote
-      </motion.a>
+      </MoovsBookingLink>
     </motion.div>
   );
 }

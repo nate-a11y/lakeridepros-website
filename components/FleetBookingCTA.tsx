@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { LazyBookingModal } from '@/components/LazyBookingModal'
+import { MoovsBookingLink } from '@/components/MoovsBookingLink'
 import { cn } from '@/lib/utils'
 
 interface FleetBookingCTAProps {
@@ -10,12 +9,10 @@ interface FleetBookingCTAProps {
 }
 
 export default function FleetBookingCTA({ vehicleName, accentVariant = 'default' }: FleetBookingCTAProps) {
-  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
+      <MoovsBookingLink location="fleet"
         aria-label={`Book ${vehicleName}`}
         className={cn(
           'inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white rounded-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2',
@@ -25,8 +22,7 @@ export default function FleetBookingCTA({ vehicleName, accentVariant = 'default'
         )}
       >
         Book This Vehicle
-      </button>
-      {isOpen && <LazyBookingModal isOpen={isOpen} onClose={() => setIsOpen(false)} />}
+      </MoovsBookingLink>
     </>
   )
 }

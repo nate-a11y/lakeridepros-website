@@ -1,3 +1,7 @@
+import { WebsiteAnalytics } from "@/components/WebsiteAnalytics";
+import { Suspense } from "react";
+import { BookingAttributionCapture } from "@/components/BookingAttributionCapture";
+import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { CartProvider } from "@/contexts/CartContext";
 import Header from "@/components/Header";
@@ -16,6 +20,9 @@ export default function SiteLayout({
 }) {
   return (
     <div data-main-app>
+      <GoogleTagManager />
+      <WebsiteAnalytics />
+      <Suspense fallback={null}><BookingAttributionCapture /></Suspense>
       <ThemeProvider
         attribute="class"
         defaultTheme="dark"

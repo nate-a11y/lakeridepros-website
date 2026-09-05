@@ -115,6 +115,7 @@ export const trackEmailClick = () => {
 // Extend Window interface for TypeScript
 declare global {
   interface Window {
+    dataLayer: unknown[]
     gtag: (
       command: 'config' | 'event',
       targetId: string,

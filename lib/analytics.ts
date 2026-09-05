@@ -27,6 +27,7 @@ export async function trackServiceEvent(
     const baseUrl = getBaseUrl()
     const response = await fetch(`${baseUrl}/api/analytics/track`, {
       method: 'POST',
+      keepalive: eventType === 'booking',
       headers: {
         'Content-Type': 'application/json',
       },

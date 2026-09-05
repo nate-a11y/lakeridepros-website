@@ -3,6 +3,7 @@
 import { useState, FormEvent, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { PhoneLink } from '@/components/PhoneLink';
+import { trackWebsiteEvent } from '@/lib/website-tracking';
 import Turnstile from '@/components/Turnstile';
 
 export default function ContactPage() {
@@ -15,6 +16,7 @@ export default function ContactPage() {
   });
   const [honeypot, setHoneypot] = useState('');
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const formStarted = useRef(false);
   const formLoadTime = useRef<number>(0);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -32,6 +34,7 @@ export default function ContactPage() {
     // Anti-bot validation: Check if honeypot field is filled
     if (honeypot) {
       setStatus('error');
+      trackWebsiteEvent('contact_form_error', { form_id: 'contact', error_type: 'validation' });
       setMessage('Invalid submission detected.');
       return;
     }
@@ -40,6 +43,7 @@ export default function ContactPage() {
     const timeSinceLoad = Date.now() - formLoadTime.current;
     if (timeSinceLoad < 2000) {
       setStatus('error');
+      trackWebsiteEvent('contact_form_error', { form_id: 'contact', error_type: 'validation' });
       setMessage('Please take your time to fill out the form.');
       return;
     }
@@ -47,6 +51,7 @@ export default function ContactPage() {
     // Verify Turnstile token
     if (!turnstileToken) {
       setStatus('error');
+      trackWebsiteEvent('contact_form_error', { form_id: 'contact', error_type: 'validation' });
       setMessage('Please complete the security check.');
       return;
     }
@@ -61,6 +66,7 @@ export default function ContactPage() {
 
       if (!verifyResponse.ok) {
         setStatus('error');
+        trackWebsiteEvent('contact_form_error', { form_id: 'contact', error_type: 'security' });
         setMessage('Security verification failed. Please try again.');
         setTurnstileToken(null);
         return;
@@ -80,20 +86,27 @@ export default function ContactPage() {
 
       if (response.ok) {
         setStatus('success');
+        trackWebsiteEvent('contact_form_submit', { form_id: 'contact' });
         setMessage('Thank you! We\'ll get back to you soon.');
         setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
         setTurnstileToken(null);
       } else {
         setStatus('error');
+        trackWebsiteEvent('contact_form_error', { form_id: 'contact', error_type: 'server' });
         setMessage(data.error || 'Something went wrong. Please try again.');
       }
     } catch (_error) {
       setStatus('error');
+      trackWebsiteEvent('contact_form_error', { form_id: 'contact', error_type: 'network' });
       setMessage('Network error. Please try again later.');
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    if (!formStarted.current) {
+      formStarted.current = true;
+      trackWebsiteEvent('contact_form_start', { form_id: 'contact' });
+    }
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,

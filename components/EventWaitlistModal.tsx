@@ -1,5 +1,7 @@
 'use client'
 
+import { trackWebsiteEvent } from '@/lib/website-tracking'
+
 import { FormEvent, ReactElement, useEffect, useId, useState } from 'react'
 import { X } from 'lucide-react'
 
@@ -97,6 +99,7 @@ export default function EventWaitlistModal({ waitlist, onClose }: EventWaitlistM
         throw new Error(json.error || 'Could not add you to the waitlist.')
       }
 
+      trackWebsiteEvent('event_waitlist_join', { form_id: 'event_waitlist' })
       setSuccess(json.message || "You're on the waitlist.")
       setForm(initialForm)
     } catch (submitError) {

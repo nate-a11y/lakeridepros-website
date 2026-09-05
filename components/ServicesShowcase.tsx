@@ -1,13 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Service } from '@/types/sanity';
 import { getMediaUrl } from '@/lib/api/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { ChevronRight } from 'lucide-react';
-import { LazyBookingModal } from './LazyBookingModal';
+import { MoovsBookingLink } from '@/components/MoovsBookingLink'
 import ScrollReveal from './ui/ScrollReveal';
 
 interface ServicesShowcaseProps {
@@ -21,7 +20,6 @@ export default function ServicesShowcase({
   title = 'Our Services',
   subtitle = 'From airport transfers to special events, we provide premium transportation for every occasion',
 }: ServicesShowcaseProps) {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   if (services.length === 0) {
     return null;
@@ -95,12 +93,11 @@ export default function ServicesShowcase({
                       From ${service.pricing.basePrice}
                     </span>
                   ) : (
-                    <button
-                      onClick={() => setIsBookingOpen(true)}
+                    <MoovsBookingLink serviceSlug={typeof service.slug === 'string' ? service.slug : service.slug.current} location="services_showcase"
                       className="text-primary dark:text-primary-light font-semibold text-sm hover:underline focus:outline-none focus:underline"
                     >
                       Get Quote
-                    </button>
+                    </MoovsBookingLink>
                   )}
                   <Link
                     href={`/services/${service.slug}`}
@@ -128,13 +125,6 @@ export default function ServicesShowcase({
         </div>
       </div>
       </section>
-
-      {isBookingOpen && (
-        <LazyBookingModal
-          isOpen={isBookingOpen}
-          onClose={() => setIsBookingOpen(false)}
-        />
-      )}
     </>
   );
 }

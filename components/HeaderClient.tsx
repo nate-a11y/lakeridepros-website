@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState, useMemo, useCallback } from 'react';
 import { AtSign, ChevronDown } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
-import { LazyBookingModal } from './LazyBookingModal';
+import { MoovsBookingLink } from '@/components/MoovsBookingLink'
 import CartIcon from '@/components/cart/CartIcon';
 import { FacebookIcon, InstagramIcon, TikTokIcon, XIcon, YouTubeIcon } from '@/components/SocialIcons';
 
@@ -61,7 +61,6 @@ interface HeaderClientProps {
 
 export default function HeaderClient({ services, popularServiceSlugs = [] }: HeaderClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [dropdowns, setDropdowns] = useState<DropdownState>(initialDropdownState);
 
   // Memoized dropdown handlers to prevent recreation on every render
@@ -353,12 +352,11 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
             ))}
 
             {/* Quote Now Button */}
-            <button
-              onClick={() => setIsBookingOpen(true)}
+            <MoovsBookingLink location="header"
               className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-2.5 rounded-lg font-semibold transition-colors hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Quote Now
-            </button>
+            </MoovsBookingLink>
           </div>
 
           {/* Right side buttons */}
@@ -497,27 +495,17 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
               ))}
 
               {/* Mobile Quote Now Button */}
-              <button
-                onClick={() => {
-                  setIsBookingOpen(true)
-                  setMobileMenuOpen(false)
-                }}
+              <MoovsBookingLink location="mobile_header"
+                onClick={() => setMobileMenuOpen(false)}
                 className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-3 rounded-lg font-semibold text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 Quote Now
-              </button>
+              </MoovsBookingLink>
             </nav>
           </div>
         )}
       </nav>
 
-      {/* Booking Modal */}
-      {isBookingOpen && (
-        <LazyBookingModal
-          isOpen={isBookingOpen}
-          onClose={() => setIsBookingOpen(false)}
-        />
-      )}
     </header>
   );
 }

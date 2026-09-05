@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import type { Service } from '@/types/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
 import { TrendingUp, ChevronRight } from 'lucide-react';
-import { LazyBookingModal } from './LazyBookingModal';
+import { MoovsBookingLink } from '@/components/MoovsBookingLink'
 import ScrollReveal from './ui/ScrollReveal';
 import GlowingCard from './ui/GlowingCard';
 
@@ -20,7 +19,6 @@ export default function PopularServicesRanking({
   title = 'Most Requested Services',
   subtitle = 'See what our customers book most often',
 }: PopularServicesRankingProps) {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   if (services.length === 0) {
     return null;
@@ -94,12 +92,11 @@ export default function PopularServicesRanking({
                       From ${service.pricing.basePrice}
                     </span>
                   ) : (
-                    <button
-                      onClick={() => setIsBookingOpen(true)}
+                    <MoovsBookingLink serviceSlug={typeof service.slug === 'string' ? service.slug : service.slug.current} location="popular_services"
                       className="text-sm text-primary dark:text-primary-light font-semibold hover:underline focus:outline-none focus:underline"
                     >
                       Get Quote
-                    </button>
+                    </MoovsBookingLink>
                   )}
                   <Link
                     href={`/services/${service.slug}`}
@@ -125,13 +122,6 @@ export default function PopularServicesRanking({
         </div>
       </div>
       </section>
-
-      {isBookingOpen && (
-        <LazyBookingModal
-          isOpen={isBookingOpen}
-          onClose={() => setIsBookingOpen(false)}
-        />
-      )}
     </>
   );
 }

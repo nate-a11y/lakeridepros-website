@@ -1,14 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { LazyBookingModal } from './LazyBookingModal';
+import { MoovsBookingLink } from '@/components/MoovsBookingLink'
 
 interface QuoteCTAProps {
   notes?: string;
 }
 
 export default function QuoteCTA({ notes }: QuoteCTAProps) {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   return (
     <>
@@ -19,20 +17,12 @@ export default function QuoteCTA({ notes }: QuoteCTAProps) {
         <p className="text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
           {notes || 'Contact Lake Ride Pros for personalized pricing tailored to your needs.'}
         </p>
-        <button
-          onClick={() => setIsBookingOpen(true)}
+        <MoovsBookingLink location="quote_card"
           className="bg-primary hover:bg-primary-dark text-lrp-black px-8 py-3 rounded-lg font-semibold transition-all hover:shadow-lg inline-flex items-center gap-2"
         >
           Quote Now
-        </button>
+        </MoovsBookingLink>
       </div>
-
-      {isBookingOpen && (
-        <LazyBookingModal
-          isOpen={isBookingOpen}
-          onClose={() => setIsBookingOpen(false)}
-        />
-      )}
     </>
   );
 }

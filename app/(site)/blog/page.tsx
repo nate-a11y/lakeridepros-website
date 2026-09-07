@@ -1,10 +1,10 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import BlogPostsGrid from '@/components/BlogPostsGrid';
+import BlogArticleList from '@/components/blog-editorial/BlogArticleList';
+import styles from '@/components/blog-editorial/BlogEditorial.module.css';
 import { getBlogPostsLocal, getMediaUrl } from '@/lib/api/sanity';
 import { formatDate } from '@/lib/utils';
-import { FileText, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Blog | Lake Ride Pros',
@@ -67,99 +67,43 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     : null;
 
   return (
-    <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary via-primary-dark to-secondary text-white py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block px-4 py-1 bg-white/10 rounded-full text-sm font-medium mb-4">
-            Lake Ride Pros Blog
-          </span>
-          <h1 className="font-boardson text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
-            News & Insights
-          </h1>
-          <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-            Stay updated with the latest from Lake Ride Pros - transportation tips, local events, and behind-the-scenes stories
-          </p>
+    <div className={styles.page}>
+      <header className={styles.hero}>
+        <div className={styles.wrap}>
+          <p className="mb-5 font-boardson text-3xl text-[#2f730e]">Lake Ride Pros Blog</p>
+          <h1>News & Insights</h1>
+          <p className="mt-6 text-lg leading-relaxed text-[#444]">Stay updated with the latest from Lake Ride Pros - transportation tips, local events, and behind-the-scenes stories</p>
         </div>
-      </section>
-
-      {/* Featured Post Section */}
+      </header>
       {featuredPost && (
-        <section className="py-12 bg-lrp-gray dark:bg-dark-bg-secondary transition-colors">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-sm font-semibold text-primary dark:text-primary-light uppercase tracking-wider mb-6">
-              Featured Article
-            </h2>
-            <Link
-              href={`/blog/${featuredPost.slug}`}
-              className="group block bg-white dark:bg-dark-bg-tertiary rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300"
-            >
-              <div className="grid md:grid-cols-2 gap-0">
-                {/* Image */}
-                <div className="relative h-64 md:h-full min-h-[300px] overflow-hidden">
-                  {featuredImageUrl ? (
-                    <Image
-                      src={featuredImageUrl}
-                      alt={(featuredPost.featuredImage && typeof featuredPost.featuredImage === 'object' ? featuredPost.featuredImage.alt : null) || featuredPost.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      quality={85}
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-dark-bg-primary">
-                      <FileText className="w-24 h-24 text-neutral-300 dark:text-neutral-500" />
-                    </div>
-                  )}
+        <section className="pb-16 sm:pb-20">
+          <div className={styles.wrap}>
+            <h2 className="mb-6 border-t border-[#999] pt-5 text-lg font-bold">Featured Article</h2>
+            <Link href={`/blog/${featuredPost.slug}`} className={`${styles.articleLink} ${styles.featured}`}>
+              {featuredImageUrl && (
+                <div className={styles.featuredImage}>
+                  <Image src={featuredImageUrl} alt={(featuredPost.featuredImage && typeof featuredPost.featuredImage === 'object' ? featuredPost.featuredImage.alt : null) || featuredPost.title} fill sizes="(min-width: 1024px) 55vw, 100vw" quality={85} loading="eager" fetchPriority="high" />
                 </div>
-                {/* Content */}
-                <div className="p-8 md:p-10 flex flex-col justify-center">
-                  <div className="flex items-center gap-3 text-sm mb-4">
-                    {featuredPost.categories && featuredPost.categories.length > 0 && (
-                      <span className="px-3 py-1 bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light rounded-full font-medium">
-                        {getCategoryLabel(featuredPost.categories[0])}
-                      </span>
-                    )}
-                    {featuredPost.publishedDate && (
-                      <time dateTime={featuredPost.publishedDate} className="text-neutral-500 dark:text-neutral-400">
-                        {formatDate(featuredPost.publishedDate)}
-                      </time>
-                    )}
-                  </div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-4 group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
-                    {featuredPost.title}
-                  </h3>
-                  {featuredPost.excerpt && (
-                    <p className="text-neutral-600 dark:text-neutral-300 text-lg mb-6 line-clamp-3">
-                      {featuredPost.excerpt}
-                    </p>
-                  )}
-                  <div className="inline-flex items-center gap-2 text-primary dark:text-primary-light font-semibold group-hover:gap-3 transition-all">
-                    Read Full Article
-                    <ArrowRight className="w-5 h-5" />
-                  </div>
+              )}
+              <div className="min-w-0">
+                <div className={`${styles.meta} mb-5`}>
+                  {featuredPost.categories?.[0] && <span className={styles.category}>{getCategoryLabel(featuredPost.categories[0])}</span>}
+                  {featuredPost.publishedDate && <time dateTime={featuredPost.publishedDate}>{formatDate(featuredPost.publishedDate)}</time>}
                 </div>
+                <h3>{featuredPost.title}</h3>
+                {featuredPost.excerpt && <p className="text-lg text-[#444]">{featuredPost.excerpt}</p>}
+                <span className={styles.read}>Read Full Article</span>
               </div>
             </Link>
           </div>
         </section>
       )}
-
-      {/* Blog Posts Grid */}
-      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {remainingPosts.length > 0 && (
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-8">
-              {isFirstPage ? 'More Articles' : `Articles — Page ${currentPage}`}
-            </h2>
-          )}
-          <BlogPostsGrid
-            posts={remainingPosts}
-            currentPage={currentPage}
-            totalPages={totalPages}
-          />
+      <section className="bg-lrp-gray py-12 sm:py-16">
+        <div className={styles.wrap}>
+          {remainingPosts.length > 0 && <h2 className="mb-8 text-3xl tracking-[-0.02em] sm:text-4xl">{isFirstPage ? 'More Articles' : `Articles — Page ${currentPage}`}</h2>}
+          <BlogArticleList posts={remainingPosts} currentPage={currentPage} totalPages={totalPages} />
         </div>
       </section>
-    </>
+    </div>
   );
 }

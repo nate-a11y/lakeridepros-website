@@ -1,0 +1,120 @@
+/* Public support pages only: the same CelebriSans / white / black editorial
+   language as the public site, with a quieter measure for policies and forms. */
+.page {
+  --background: #fff;
+  --foreground: var(--lrp-black);
+  --neutral-50: #fafafa;
+  --neutral-100: #f3f3f3;
+  --neutral-200: #dedede;
+  --neutral-300: #b3b3b3;
+  --neutral-400: #777;
+  --neutral-500: #666;
+  --neutral-600: #555;
+  --neutral-700: #333;
+  --neutral-800: #171717;
+  --neutral-900: var(--lrp-black);
+  --dark-bg-primary: #fff;
+  --dark-bg-secondary: #fff;
+  --dark-bg-tertiary: #f5f5f5;
+  --dark-text-primary: var(--lrp-black);
+  --dark-text-secondary: #555;
+  --dark-text-muted: #666;
+  --dark-border: #c5c5c5;
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f3f3f3;
+  --color-neutral-200: #dedede;
+  --color-neutral-300: #b3b3b3;
+  --color-neutral-400: #777;
+  --color-neutral-500: #666;
+  --color-neutral-600: #555;
+  --color-neutral-700: #333;
+  --color-neutral-800: #171717;
+  --color-neutral-900: var(--lrp-black);
+  --color-dark-bg-primary: #fff;
+  --color-dark-bg-secondary: #fff;
+  --color-dark-bg-tertiary: #f5f5f5;
+  --color-dark-text-primary: var(--lrp-black);
+  --color-dark-text-secondary: #555;
+  --color-dark-text-muted: #666;
+  --color-dark-border: #c5c5c5;
+  color: var(--lrp-black);
+  background: #fff;
+  color-scheme: light;
+  min-height: 60vh;
+}
+.page :where(h1, h2, h3, h4) {
+  font-family: 'CelebriSans', sans-serif;
+  text-wrap: balance;
+  color: var(--lrp-black);
+  letter-spacing: -.025em;
+}
+.page h1 { font-size: clamp(2.25rem, 5vw, 4.5rem); line-height: 1.07; font-weight: 700; letter-spacing: -.045em; }
+.page h2 { line-height: 1.2; }
+.page :where(p, li) { line-height: 1.75; }
+.page :where(a) { text-underline-offset: .2em; }
+.page :where(a[href^='mailto:'], code) { overflow-wrap: anywhere; }
+.page :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 3px solid var(--lrp-black); outline-offset: 4px; }
+.page :where([class~='grid'], [class~='flex']) > * { min-width: 0; }
+.page :where(a[class*='bg-'], button) { min-height: 44px; }
+.page :where([class*='rounded-lg'], [class*='rounded-2xl']) { border-radius: 0; box-shadow: none; }
+.page :where([class~='text-primary'], [class~='text-lrp-green'], [class~='text-lrp-green-dark']) { color: #287b0c; }
+.hero { background: var(--lrp-black); color: #fff; padding-block: clamp(3rem, 6vw, 5rem); }
+.hero > div { max-width: 960px; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 2rem); }
+.page .hero h1 { color: #fff; text-align: left; margin: 0; }
+.page .hero p { color: #fff; text-align: left; max-width: 70ch; }
+.hero :where(a, button):focus-visible { outline-color: #fff; }
+.reading { max-width: 832px; margin-inline: auto; padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 2rem); }
+.reading h2 { color: var(--lrp-black); margin-top: 2.5rem; font-size: clamp(1.5rem, 3vw, 2rem); }
+.reading h3 { color: var(--lrp-black); font-size: 1.25rem; }
+.reading :where(p, ul, ol) { font-size: 1rem; }
+.reading :where(a:not([class*='bg-'])) { color: #287b0c; text-decoration-line: underline; }
+.reading :where(section + section) { padding-top: .5rem; border-top: 1px solid #dedede; }
+.reading :where([class*='bg-lrp-gray'], [class*='bg-neutral-50'], [class*='bg-lrp-green/'], [class*='bg-primary/']) { background: #f5f5f5; }
+.reading :where(div[class*='rounded-lg']) { background: transparent; border: 0; border-top: 1px solid #dedede; padding: 1.5rem 0; }
+.forms { padding: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 2rem); }
+.forms h1 { font-size: clamp(2.25rem, 4.5vw, 3.5rem); }
+.forms :where(header) { text-align: left; padding-bottom: 1rem; }
+.forms :where([class~='dark:text-white']) { color: var(--lrp-black); }
+.forms :where([class~='dark:text-primary-light'], [class~='dark:text-primary']) { color: #287b0c; }
+.forms :where([class~='dark:text-neutral-400'], [class~='dark:text-neutral-500']) { color: #666; }
+.forms :where([class~='dark:bg-neutral-700']) { background: #dedede; }
+.forms :where(input:not([type='checkbox']):not([type='radio']), select, textarea) { font-size: 1rem; min-height: 48px; border-radius: 0; color: var(--lrp-black); background: #fff; }
+.forms :where(input, textarea)::placeholder { color: #666; opacity: 1; }
+.forms :where(label:has(input[type='checkbox']), label:has(input[type='radio'])) { min-height: 44px; }
+.forms :where([class~='shadow-md'], [class~='shadow-lg']) { box-shadow: none; }
+.formPanel { border: 0; border-top: 1px solid #c5c5c5; padding: 2rem 0; background: #fff; }
+.forms .formPanel { padding-inline: 0; }
+.confirmation { text-align: left; }
+.confirmation > h1 { padding-bottom: 1.5rem; border-bottom: 1px solid var(--lrp-black); }
+.confirmation :where(a) { justify-content: flex-start; }
+.idRow { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+.idRow code { flex: 1 1 220px; font-size: .875rem; }
+.timeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.insights :where([class*='rounded-2xl']) { border-inline: 0; border-bottom: 0; padding-inline: 0; }
+.insights :where(section) { background: #fff; }
+.insights :where(section + section) > div { border-top: 1px solid #dedede; padding-top: 2rem; }
+.insights :where([class*='bg-lrp-green/']) { background: #f5f5f5; padding: 1.5rem; }
+.insights .hero > div { max-width: 1088px; }
+.cmsHero { background: var(--lrp-black); color: #fff; display: grid; }
+.cmsHeroImage { position: relative; aspect-ratio: 16 / 9; }
+.page .cmsHero h1 { color: #fff; text-align: left; margin: 0; align-self: center; padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 3rem); }
+@media (min-width: 768px) { .cmsHero { grid-template-columns: 1fr 1fr; align-items: stretch; } .cmsHeroImage { aspect-ratio: 4 / 3; } }
+@media (max-width: 639px) {
+  .reading :where([class~='p-8']) { padding: 1.25rem; }
+  .forms :where([class~='p-8']) { padding: 1.25rem; }
+  .timeline { grid-template-columns: 1fr; gap: 1.5rem; }
+  .timeline > div { flex-direction: row; align-items: flex-start; gap: 1rem; }
+  .timeline > div > div:last-child { margin-top: 0; text-align: left; }
+  .timeline p { max-width: none; }
+  .timelineLine { display: none; }
+}
+
+.forms :where([class~='dark:text-gray-200'], [class~='dark:text-gray-300']) { color: #333; }
+.forms :where([class~='dark:bg-gray-800']) { background: #f5f5f5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .page :where(*) { transition-duration: .01ms; animation-duration: .01ms; animation-iteration-count: 1; }
+}
+
+/* Error text also appears inside the driver's pale-green consent panel. */
+.forms :where([class~='text-red-600']) { color: #b91c1c; }

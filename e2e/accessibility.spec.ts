@@ -149,12 +149,17 @@ test.describe('Accessibility - Interactive Components', () => {
       await servicesButton.first().focus()
       await servicesButton.first().press('Enter')
 
-      // Dropdown should open
-      const dropdown = page.getByRole('menu')
-      await expect(dropdown.first()).toBeVisible({ timeout: 2000 })
+      // This is a disclosure containing ordinary navigation links, not an ARIA
+      // application menu. Verify the disclosure state and its first link.
+      await expect(servicesButton.first()).toHaveAttribute('aria-expanded', 'true')
+      await expect(
+        page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'All services' }),
+      ).toBeVisible({ timeout: 2000 })
 
       // Escape should close it
       await page.keyboard.press('Escape')
+      await expect(servicesButton.first()).toHaveAttribute('aria-expanded', 'false')
+      await expect(servicesButton.first()).toBeFocused()
     }
 
     await checkAccessibility(page, {

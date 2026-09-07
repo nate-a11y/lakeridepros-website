@@ -1,6 +1,6 @@
+import PartnerDirectoryShell from '@/components/partners/PartnerDirectoryShell'
+import PartnerDirectory from '@/components/partners/PartnerDirectory'
 import { getPartners } from '@/lib/api/sanity'
-import Link from 'next/link'
-import TrustedReferralPartnersClient from '@/components/TrustedReferralPartnersClient'
 
 export const metadata = {
   title: 'Trusted Referral Partners | Lake Ride Pros',
@@ -48,45 +48,18 @@ const subcategoryLabels: Record<string, string> = {
 }
 
 export default async function TrustedReferralPartnersPage() {
-  // Fetch all referral partners (includes Premier Partners who get dual exposure)
-  // The getPartners('trusted-referral') already includes Premier Partners
-  const allReferralPartners = await getPartners('trusted-referral')
+  const partners = await getPartners('trusted-referral')
 
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-center">Trusted Referral Partners</h1>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto text-center">
-            Businesses and services we trust and recommend. Our referral partners meet our high standards for quality and professionalism.
-          </p>
-        </div>
-      </section>
-
-      {/* Client Component with Filters and Partner Display */}
-      <TrustedReferralPartnersClient
-        trustedPartners={allReferralPartners}
-        subcategoryLabels={subcategoryLabels}
-      />
-
-      {/* CTA Section */}
-      <section className="bg-lrp-green py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Need Transportation Services?
-          </h2>
-          <p className="text-white/90 text-lg mb-8">
-            Experience the Lake Ride Pros difference - luxury transportation you can trust.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-block bg-white text-lrp-green-dark hover:bg-lrp-gray hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
-          >
-            Book Your Ride
-          </Link>
-        </div>
-      </section>
-    </div>
+    <PartnerDirectoryShell
+      title="Trusted Referral Partners"
+      description="Businesses and services we trust and recommend. Our referral partners meet our high standards for quality and professionalism."
+      currentPath="/trusted-referral-partners"
+      ctaTitle="Need Transportation Services?"
+      ctaDescription="Experience the Lake Ride Pros difference - luxury transportation you can trust."
+      ctaLabel="Book Your Ride"
+    >
+      <PartnerDirectory partners={partners} kind="referral" subcategoryLabels={subcategoryLabels} />
+    </PartnerDirectoryShell>
   )
 }

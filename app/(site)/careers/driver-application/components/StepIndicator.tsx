@@ -37,7 +37,7 @@ export default function StepIndicator({ currentStep, onStepClick }: StepIndicato
   return (
     <div className="mb-8">
       {/* Mobile view - current step only */}
-      <div className="md:hidden">
+      <div className="xl:hidden">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-lrp-text-secondary dark:text-dark-text-secondary">
             Step {currentStep} of {steps.length}
@@ -51,7 +51,7 @@ export default function StepIndicator({ currentStep, onStepClick }: StepIndicato
       </div>
 
       {/* Desktop view - all steps */}
-      <div className="hidden md:block">
+      <div className="hidden xl:block">
         <div className="flex items-center justify-between">
           {steps.map((step, index) => (
             <React.Fragment key={step.number}>

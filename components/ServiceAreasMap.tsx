@@ -1,93 +1,50 @@
-'use client';
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 
-import { MapPin, Navigation } from 'lucide-react';
-
-interface ServiceArea {
-  name: string;
-  description: string;
-}
-
-const serviceAreas: ServiceArea[] = [
-  {
-    name: 'Osage Beach',
-    description: 'Tan-Tar-A Resort, Margaritaville, Bagnell Dam Strip, lakefront venues',
-  },
-  {
-    name: 'Camdenton',
-    description: 'Old Kinderhook, local wineries, wedding venues, special events',
-  },
-  {
-    name: 'Lake Ozark',
-    description: 'Lodge of Four Seasons, lakefront properties, event venues',
-  },
-  {
-    name: 'Statewide Service',
-    description: 'Columbia, Jefferson City, Kansas City, St. Louis, and beyond',
-  },
-];
+const serviceAreas = [
+  ['Osage Beach', 'Tan-Tar-A Resort, Margaritaville, Bagnell Dam Strip, and lakefront venues', '/transportation-osage-beach'],
+  ['Camdenton', 'Old Kinderhook, local wineries, wedding venues, and special events', '/transportation-camdenton'],
+  ['Lake Ozark', 'Lodge of Four Seasons, lakefront properties, restaurants, and event venues', '/transportation-lake-ozark'],
+  ['Statewide', 'Columbia, Jefferson City, Kansas City, St. Louis, and destinations beyond the Lake', '/services'],
+]
 
 export default function ServiceAreasMap() {
   return (
-    <section
-      aria-labelledby="service-areas-heading"
-      className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <Navigation className="w-4 h-4" />
-            Serving All of Missouri
+    <section aria-labelledby="service-areas-heading" className="bg-[#0a0a0a] py-20 text-white sm:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 border-t border-white/25 pt-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
+            <p className="mb-4 font-semibold text-[#7bea45]">Home base: Lake of the Ozarks</p>
+            <h2
+              id="service-areas-heading"
+              className="max-w-4xl font-celebri text-5xl font-black leading-[0.9] tracking-[-0.055em] sm:text-6xl lg:text-7xl"
+            >
+              Local knowledge. Missouri reach.
+            </h2>
           </div>
-          <h2
-            id="service-areas-heading"
-            className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4"
-          >
-            Serving Lake of the Ozarks and Beyond
-          </h2>
-          <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
-            Based at <strong className="text-neutral-900 dark:text-white">Lake of the Ozarks</strong>, we provide luxury transportation throughout{' '}
-            <strong className="text-neutral-900 dark:text-white">Missouri</strong>, specializing in premium service for the area's top destinations.
+          <p className="max-w-lg leading-relaxed text-white/68 lg:col-span-4">
+            Based at Lake of the Ozarks, we provide professional transportation throughout Missouri
+            with deep familiarity across the Lake&apos;s roads, resorts, venues, and airports.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {serviceAreas.map((area, index) => (
-            <div
-              key={area.name}
-              className="group relative overflow-hidden rounded-xl transition-all duration-300 bg-white dark:bg-dark-bg-tertiary hover:shadow-lg hover:-translate-y-1"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {/* Pin icon */}
-              <div className="absolute top-4 right-4 text-primary/10 dark:text-primary/20">
-                <MapPin className="w-12 h-12" />
-              </div>
-
-              <div className="relative p-6">
-                {/* Location marker */}
-                <div className="flex items-center gap-2 mb-3 text-primary dark:text-primary-light">
-                  <div className="w-3 h-3 rounded-full bg-primary animate-pulse" />
-                  <span className="text-xs font-semibold uppercase tracking-wider">
-                    Service Area
-                  </span>
-                </div>
-
-                {/* Area name */}
-                <h3 className="text-xl font-bold mb-2 text-neutral-900 dark:text-white">
-                  {area.name}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
-                  {area.description}
-                </p>
-              </div>
-
-              {/* Bottom border animation */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-            </div>
+        <ol className="mt-14 border-t border-white/25">
+          {serviceAreas.map(([name, description, href], index) => (
+            <li key={name} className="border-b border-white/25">
+              <Link
+                href={href}
+                className="group grid gap-3 py-7 sm:grid-cols-[4rem_1fr_1.4fr_auto] sm:items-center"
+                style={{ display: 'grid' }}
+              >
+                <span className="text-sm text-[#7bea45]">0{index + 1}</span>
+                <h3 className="text-2xl font-black tracking-[-0.025em] sm:text-3xl">{name}</h3>
+                <p className="max-w-xl text-sm leading-relaxed text-white/65 sm:text-base">{description}</p>
+                <ArrowUpRight className="size-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" aria-hidden="true" />
+              </Link>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
-  );
+  )
 }

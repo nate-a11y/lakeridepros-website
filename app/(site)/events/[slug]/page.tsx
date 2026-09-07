@@ -5,7 +5,8 @@ import Image from 'next/image'
 import { getEventBySlug, getUpcomingEvents } from '@/lib/api/sanity'
 import { getMediaUrl } from '@/lib/utils'
 import { Calendar, Clock, MapPin, ArrowLeft } from 'lucide-react'
-import RideAvailabilityBadge from '@/components/RideAvailabilityBadge'
+import RideStatus from '@/components/events-editorial/RideStatus'
+import styles from '@/components/events-editorial/EventsEditorial.module.css'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -39,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${event.name} at ${venueName} — Ride Availability | Lake Ride Pros`,
     description: event.description || `Book your ride to ${event.name} at ${venueName}, Missouri. Check availability and reserve your transportation with Lake Ride Pros.`,
+    alternates: { canonical: `https://www.lakeridepros.com/events/${event.slug}` },
     openGraph: {
       title: `${event.name} at ${venueName} | Lake Ride Pros`,
       description: event.description || `Book your ride to ${event.name} at ${venueName}, Missouri.`,
@@ -88,199 +90,163 @@ export default async function EventDetailPage({ params }: Props) {
   })
 
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
-      {/* Back Link */}
-      <div className="bg-gray-50 dark:bg-dark-bg-secondary border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link
-            href="/events"
-            className="inline-flex items-center text-primary hover:text-primary-dark transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+    <div className={styles.page}>
+      <div className={styles.back}>
+        <div className={styles.container}>
+          <Link href="/events" className={styles.textLink}>
+            <ArrowLeft size={16} aria-hidden="true" />
             Back to Event Calendar
           </Link>
         </div>
       </div>
-
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-lrp-black to-gray-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-              {/* Date Badge */}
-              <div className="inline-flex items-center bg-primary text-black px-4 py-2 rounded-full font-bold mb-4">
-                <Calendar className="w-5 h-5 mr-2" />
-                {formattedDate}
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl font-bold mb-4">{event.name}</h1>
-
-              {venue && (
-                <div className="flex items-center text-gray-300 mb-4">
-                  <MapPin className="w-5 h-5 mr-2 flex-shrink-0" />
-                  <span className="text-xl">{venue.name}</span>
-                </div>
-              )}
-
-              {event.time && (
-                <div className="flex items-center text-gray-300 mb-6">
-                  <Clock className="w-5 h-5 mr-2 flex-shrink-0" />
-                  <span>{event.time}</span>
-                </div>
-              )}
-
-              {event.description && (
-                <p className="text-gray-300 text-lg mb-6">{event.description}</p>
-              )}
-
-              <Link
-                href="/book"
-                className="inline-flex items-center bg-primary hover:bg-primary-dark text-black font-bold px-8 py-4 rounded-lg transition-colors text-lg"
-              >
+      <section className={styles.hero}>
+        <div className={`${styles.container} ${styles.heroGrid}`}>
+          <div>
+            <p className={styles.eventDate}>
+              <Calendar size={20} aria-hidden="true" />
+              <time dateTime={event.date.split('T')[0]}>{formattedDate}</time>
+            </p>
+            <h1>{event.name}</h1>
+            {venue && (
+              <p className={styles.heroFact}>
+                <MapPin size={20} aria-hidden="true" />
+                {venue.name}
+              </p>
+            )}
+            {event.time && (
+              <p className={styles.heroFact}>
+                <Clock size={20} aria-hidden="true" />
+                {event.time}
+              </p>
+            )}
+            <div className={styles.actions}>
+              <Link href="/book" className={styles.button}>
                 Book Your Ride Online
               </Link>
-              <p className="text-gray-400 text-sm mt-3">
-                Or call <a href="tel:573-206-9499" className="text-primary hover:text-primary-dark">(573) 206-9499</a>
-              </p>
             </div>
-
-            {/* Event Image */}
-            {event.image && typeof event.image === 'object' && (
-              <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl">
+            <p className={styles.phone}>
+              Or call <a href="tel:573-206-9499">(573) 206-9499</a>
+            </p>
+          </div>
+          {event.image && typeof event.image === 'object' && (
+            <div className={styles.heroImage}>
+              <Image
+                src={getMediaUrl(event.image)}
+                alt={event.image.alt || event.name}
+                fill
+                sizes="(min-width: 1024px) 480px, (min-width: 640px) 80vw, 100vw"
+                preload
+              />
+            </div>
+          )}
+        </div>
+      </section>
+      {event.description && (
+        <section
+          className={styles.section}
+          aria-labelledby="event-description-heading"
+        >
+          <div className={`${styles.container} ${styles.descriptionGrid}`}>
+            <h2 id="event-description-heading">About the event</h2>
+            <p className={styles.description}>{event.description}</p>
+          </div>
+        </section>
+      )}
+      {venue && (
+        <section className={styles.venueInfo} aria-label="Venue information">
+          <div className={`${styles.container} ${styles.venueInfoInner}`}>
+            {venue.image && typeof venue.image === 'object' && (
+              <div className={styles.venueLogo}>
                 <Image
-                  src={getMediaUrl(event.image)}
-                  alt={event.image.alt || event.name}
+                  src={getMediaUrl(venue.image)}
+                  alt={venue.image.alt || venue.name}
                   fill
-                  className="object-cover"
-                  priority
+                  sizes="88px"
                 />
               </div>
             )}
-          </div>
-        </div>
-      </section>
-
-      {/* Venue Info */}
-      {venue && (
-        <section className="bg-gray-50 dark:bg-dark-bg-secondary py-8 border-b border-gray-200 dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap items-center gap-6">
-              {venue.image && typeof venue.image === 'object' && (
-                <div className="relative w-20 h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 shadow">
-                  <Image
-                    src={getMediaUrl(venue.image)}
-                    alt={venue.image.alt || venue.name}
-                    fill
-                    className="object-contain p-2"
-                  />
-                </div>
+            <div>
+              <h2>{venue.name}</h2>
+              {venue.address && <p>{venue.address}</p>}
+            </div>
+            <div className={styles.actions}>
+              {venue.website && (
+                <a
+                  href={venue.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.textLink}
+                >
+                  Visit Website
+                </a>
               )}
-              <div>
-                <h2 className="text-xl font-bold text-lrp-black dark:text-white">{venue.name}</h2>
-                {venue.address && (
-                  <p className="text-gray-600 dark:text-gray-400">{venue.address}</p>
-                )}
-              </div>
-              <div className="flex gap-4 ml-auto">
-                {venue.website && (
-                  <a
-                    href={venue.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:text-primary-dark font-semibold"
-                  >
-                    Visit Website
-                  </a>
-                )}
-                {venue.phone && (
-                  <a
-                    href={`tel:${venue.phone}`}
-                    className="text-primary hover:text-primary-dark font-semibold"
-                  >
-                    {venue.phone}
-                  </a>
-                )}
-              </div>
+              {venue.phone && (
+                <a href={`tel:${venue.phone}`} className={styles.textLink}>
+                  {venue.phone}
+                </a>
+              )}
             </div>
           </div>
         </section>
       )}
-
-      {/* Ride Availability */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-lrp-black dark:text-white mb-8 text-center">
-            Ride Availability
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <section
+        className={styles.section}
+        aria-labelledby="ride-availability-heading"
+      >
+        <div className={styles.container}>
+          <h2 id="ride-availability-heading">Ride Availability</h2>
+          <div className={styles.rideRows}>
             {RIDE_TYPES.map((type) => {
               const availability = event.rideAvailability?.find(
-                (r) => r.rideType === type.value
+                (r) => r.rideType === type.value,
               )
               const status = availability?.status || 'available'
-
               return (
-                <div
-                  key={type.value}
-                  className="bg-white dark:bg-dark-bg-secondary rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6"
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-lrp-black dark:text-white">
-                      {type.label}
-                    </h3>
-                    <RideAvailabilityBadge status={status} notes={availability?.notes} />
+                <div key={type.value} className={styles.rideRow}>
+                  <div>
+                    <h3>{type.label}</h3>
+                    <p className={styles.rideCapacity}>{type.capacity}</p>
                   </div>
-                  <p className="text-primary font-semibold mb-2">{type.capacity}</p>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    {type.description}
-                  </p>
-                  {availability?.notes && (
-                    <p className="mt-3 text-sm text-amber-600 dark:text-amber-400 italic">
-                      {availability.notes}
-                    </p>
-                  )}
+                  <RideStatus status={status} />
+                  <div className={styles.rideDescription}>
+                    <p>{type.description}</p>
+                    {availability?.notes && (
+                      <p className={styles.statusNote}>{availability.notes}</p>
+                    )}
+                  </div>
                 </div>
               )
             })}
           </div>
-
-          {/* Legend */}
-          <div className="mt-8 flex justify-center gap-8 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-green-500"></span>
-              <span className="text-gray-600 dark:text-gray-400">Available</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-amber-500"></span>
-              <span className="text-gray-600 dark:text-gray-400">Limited</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-red-500"></span>
-              <span className="text-gray-600 dark:text-gray-400">Reserved</span>
-            </div>
+          <div className={styles.statusLegend} aria-label="Availability key">
+            <span className={styles.status} data-status="available">
+              Available
+            </span>
+            <span className={styles.status} data-status="limited">
+              Limited
+            </span>
+            <span className={styles.status} data-status="reserved">
+              Reserved
+            </span>
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="bg-primary py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-            Ready to Book Your Ride?
-          </h2>
-          <p className="text-black/80 text-lg mb-8">
-            Reserve your transportation to {event.name} in just a few clicks.
-          </p>
-          <Link
-            href="/book"
-            className="inline-block bg-black text-white hover:bg-gray-800 px-12 py-4 rounded-lg font-bold text-lg transition-all"
-          >
-            Book Online Now
-          </Link>
-          <p className="text-black/70 text-sm mt-4">
-            Prefer to talk? Call <a href="tel:573-206-9499" className="font-semibold hover:underline">(573) 206-9499</a>
-          </p>
+      <section className={styles.close}>
+        <div className={`${styles.container} ${styles.closeGrid}`}>
+          <div>
+            <h2>Ready to Book Your Ride?</h2>
+            <p className={styles.intro}>
+              Reserve your transportation to {event.name} in just a few clicks.
+            </p>
+          </div>
+          <div>
+            <Link href="/book" className={styles.button}>
+              Book Online Now
+            </Link>
+            <p className={styles.phone}>
+              Prefer to talk? Call <a href="tel:573-206-9499">(573) 206-9499</a>
+            </p>
+          </div>
         </div>
       </section>
     </div>

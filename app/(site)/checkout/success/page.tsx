@@ -1,5 +1,6 @@
 'use client'
 
+import CommercePage from '@/components/commerce-editorial/CommercePage'
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -40,14 +41,14 @@ function CheckoutSuccessContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-dark-bg-primary flex items-center justify-center">
+      <CommercePage variant="receipt" className="min-h-screen bg-white dark:bg-dark-bg-primary flex items-center justify-center">
         <Loader2 className="w-12 h-12 text-lrp-green animate-spin" />
-      </div>
+      </CommercePage>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-bg-primary py-20">
+    <CommercePage variant="receipt" className="min-h-screen bg-white dark:bg-dark-bg-primary py-20">
       <div className="container mx-auto px-4 max-w-2xl">
         {/* Success Icon */}
         <div className="text-center mb-8">
@@ -159,7 +160,7 @@ function CheckoutSuccessContent() {
           </a>
         </div>
       </div>
-    </div>
+    </CommercePage>
   )
 }
 
@@ -167,9 +168,9 @@ export default function CheckoutSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-white dark:bg-dark-bg-primary flex items-center justify-center">
+        <CommercePage variant="receipt" className="min-h-screen bg-white dark:bg-dark-bg-primary flex items-center justify-center">
           <Loader2 className="w-12 h-12 text-lrp-green animate-spin" />
-        </div>
+        </CommercePage>
       }
     >
       <CheckoutSuccessContent />

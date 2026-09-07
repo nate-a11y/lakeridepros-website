@@ -15,6 +15,7 @@
     "audit:insiders-chargebee": "node scripts/audit-insiders-chargebee.mjs",
     "audit:insiders-chargebee-growth": "node scripts/audit-insiders-chargebee-growth.mjs",
     "audit:insiders-chargebee-all": "npm run audit:insiders-chargebee && npm run audit:insiders-chargebee-growth",
+    "audit:gtm": "node scripts/audit-gtm-coverage.mjs",
     "bootstrap:insiders-chargebee": "tsx scripts/bootstrap-insiders-chargebee.ts",
     "send:insiders-welcome-poc": "tsx scripts/send-insider-welcome-poc.ts",
     "fix:insiders-chargebee": "node scripts/fix-insiders-chargebee.mjs",

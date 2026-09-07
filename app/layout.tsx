@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";
+import { GoogleTagManager } from "@/components/GoogleTagManager";
 import { AIReferralTracker } from "@/components/AIReferralTracker";
 import "@fontsource/montserrat/400.css";
 import "@fontsource/montserrat/600.css";
@@ -11,17 +12,17 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#1a1a2e',
+  themeColor: 'black',
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
-  title: "Lake Ride Pros | Luxury Transportation at Lake of the Ozarks",
-  description: "Premium luxury transportation at Lake of the Ozarks, Missouri. Professional drivers, 24/7 service, luxury vehicles for all occasions. Book your ride today!",
+  title: "Lake Ride Pros | Missouri Transportation from Lake of the Ozarks",
+  description: "Professional transportation based at Lake of the Ozarks and serving trips throughout Missouri, from private rides and airports to weddings, events, and groups.",
   keywords: ["luxury transportation", "Lake of the Ozarks", "Missouri", "limousine service", "airport transfer", "charter service"],
   openGraph: {
-    title: "Lake Ride Pros - Premium Luxury Transportation",
-    description: "Experience premium luxury transportation services at Lake of the Ozarks, Missouri.",
+    title: "Lake Ride Pros - Professional Transportation Across Missouri",
+    description: "Private rides, airport transfers, weddings, events, and group transportation from Lake of the Ozarks to destinations throughout Missouri.",
     type: "website",
     locale: "en_US",
     siteName: "Lake Ride Pros",
@@ -36,8 +37,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lake Ride Pros - Premium Luxury Transportation",
-    description: "Experience premium luxury transportation services at Lake of the Ozarks, Missouri.",
+    title: "Lake Ride Pros - Professional Transportation Across Missouri",
+    description: "Private rides, airport transfers, weddings, events, and group transportation from Lake of the Ozarks to destinations throughout Missouri.",
     images: ['/og-image.jpg'],
   },
   verification: {
@@ -59,6 +60,9 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="antialiased">
+        {/* Root placement ensures every rendered page—not only the marketing
+            route group—loads the same GTM container. */}
+        <GoogleTagManager />
         <GoogleAnalytics />
         <AIReferralTracker />
         {children}

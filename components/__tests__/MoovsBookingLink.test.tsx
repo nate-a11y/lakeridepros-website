@@ -48,7 +48,7 @@ describe('MoovsBookingLink', () => {
   it('renders a booking card without any iframe or impression counted as a booking', () => {
     const { container } = render(<BookingWidget serviceSlug="airport" />)
     expect(container.querySelector('iframe')).toBeNull()
-    expect(screen.getByRole('link', { name: /Open Customer Portal/ })).toHaveAttribute('href', MOOVS_PORTAL_URL)
+    expect(screen.getByRole('link', { name: /open customer portal/i })).toHaveAttribute('href', MOOVS_PORTAL_URL)
     expect(trackServiceEvent).not.toHaveBeenCalled()
   })
 })

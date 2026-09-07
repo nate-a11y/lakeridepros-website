@@ -1,13 +1,8 @@
+import PartnerDetail from '@/components/partners/PartnerDetail';
 import { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';
-import Image from 'next/image';
-import Link from 'next/link';
-import { ExternalLink, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/sanity';
-import Gallery from '@/components/Gallery';
-import type { GalleryImage } from '@/components/Gallery';
 import { metaDescription as buildMetaDescription, metaTitle } from '@/lib/seo/metadata';
-import { normalizeExternalWebsiteUrl } from '@/lib/external-url';
 
 // Wedding category labels mapping
 const weddingCategoryLabels: Record<string, string> = {
@@ -103,171 +98,12 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
     permanentRedirect('/wedding-partners');
   }
 
-  const logoObj = typeof partner.logo === 'object' ? partner.logo : null;
-  const logoUrl = logoObj ? getMediaUrl(logoObj) : null;
-  const websiteUrl = normalizeExternalWebsiteUrl(partner.website);
-
   // Use wedding-specific content if available
   const displayBlurb = partner.weddingBlurb || partner.blurb;
   const displayDescription = partner.weddingDescription || partner.description;
-
-  // Get wedding category label
   const weddingCategoryLabel = partner.weddingCategory
     ? weddingCategoryLabels[partner.weddingCategory] || partner.weddingCategory
     : 'Wedding Partner';
 
-  return (
-    <div className="min-h-screen bg-lrp-white dark:bg-dark-bg-primary">
-      {/* Breadcrumbs */}
-      <div className="bg-white dark:bg-dark-bg-secondary border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <nav className="flex" aria-label="Breadcrumb">
-            <ol className="inline-flex items-center space-x-1 md:space-x-3">
-              <li className="inline-flex items-center">
-                <Link href="/" className="text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green dark:hover:text-lrp-green">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <div className="flex items-center">
-                  <span className="mx-2 text-gray-400 dark:text-gray-600">/</span>
-                  <Link href="/wedding-partners" className="text-lrp-text-secondary dark:text-dark-text-secondary hover:text-lrp-green dark:hover:text-lrp-green">
-                    Wedding Partners
-                  </Link>
-                </div>
-              </li>
-              <li aria-current="page">
-                <div className="flex items-center">
-                  <span className="mx-2 text-gray-400 dark:text-gray-600">/</span>
-                  <span className="text-lrp-text-secondary dark:text-dark-text-secondary">{partner.name}</span>
-                </div>
-              </li>
-            </ol>
-          </nav>
-        </div>
-      </div>
-
-      {/* Partner Detail */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-          {/* Header Section */}
-          <div className="p-8 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex flex-col md:flex-row gap-8 items-start">
-              {/* Logo */}
-              {logoUrl && (
-                <div className="flex-shrink-0 w-full md:w-auto">
-                  <div className="w-full h-72 md:w-72 md:h-72 bg-gray-50 dark:bg-dark-bg-primary border-2 border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center p-6">
-                    <Image
-                      src={logoUrl}
-                      alt={partner.name}
-                      width={270}
-                      height={270}
-                      className="max-w-full max-h-full object-contain"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Partner Info */}
-              <div className="flex-1">
-                <h1 className="text-4xl font-bold text-lrp-black dark:text-white mb-2">
-                  {partner.name}
-                </h1>
-                <p className="text-sm text-lrp-green font-medium mb-4">
-                  {weddingCategoryLabel}
-                </p>
-
-                {/* Blurb - use wedding-specific if available */}
-                {displayBlurb && (
-                  <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-6">
-                    {displayBlurb}
-                  </p>
-                )}
-
-                {/* Contact Info */}
-                <div className="grid gap-3">
-                  {websiteUrl && (
-                    <a
-                      href={websiteUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="!flex w-fit max-w-full items-center !justify-start gap-3 text-lrp-green transition-colors hover:text-lrp-green-dark"
-                      aria-label={`Visit ${partner.name} website (opens in new tab)`}
-                    >
-                      <Globe className="h-5 w-5 shrink-0" aria-hidden="true" />
-                      <span>Visit Website</span>
-                      <ExternalLink className="h-4 w-4 shrink-0" aria-hidden="true" />
-                    </a>
-                  )}
-                  {partner.phone && (
-                    <a
-                      href={`tel:${partner.phone}`}
-                      className="!flex w-fit max-w-full items-center !justify-start gap-3 text-lrp-text-secondary transition-colors hover:text-lrp-green dark:text-dark-text-secondary"
-                    >
-                      <Phone className="h-5 w-5 shrink-0" />
-                      <span>{partner.phone}</span>
-                    </a>
-                  )}
-                  {partner.email && (
-                    <a
-                      href={`mailto:${partner.email}`}
-                      className="!flex w-fit max-w-full items-center !justify-start gap-3 text-lrp-text-secondary transition-colors hover:text-lrp-green dark:text-dark-text-secondary"
-                    >
-                      <Mail className="h-5 w-5 shrink-0" />
-                      <span className="break-all sm:break-normal">{partner.email}</span>
-                    </a>
-                  )}
-                  {partner.address && (
-                    <div className="flex max-w-full items-start gap-3 text-lrp-text-secondary dark:text-dark-text-secondary">
-                      <MapPin className="mt-0.5 h-5 w-5 shrink-0" />
-                      <span className="break-words">{partner.address}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Description Section - use wedding-specific if available */}
-          {displayDescription && (
-            <div className="p-8 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-4">About</h2>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary whitespace-pre-wrap leading-relaxed">
-                {displayDescription}
-              </p>
-            </div>
-          )}
-
-          {/* Images Gallery */}
-          {partner.images && Array.isArray(partner.images) && partner.images.length > 0 && (() => {
-            const galleryImages: GalleryImage[] = partner.images
-              .map((imageItem, index: number) => {
-                const imageUrl = typeof imageItem === 'object' ? getMediaUrl(imageItem) : null;
-                if (!imageUrl) return null;
-                return { src: imageUrl, alt: `${partner.name} - Image ${index + 1}` };
-              })
-              .filter((img): img is GalleryImage => img !== null);
-
-            return galleryImages.length > 0 ? (
-              <div className="p-8">
-                <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-6">Gallery</h2>
-                <Gallery images={galleryImages} title={partner.name} mode="grid" />
-              </div>
-            ) : null;
-          })()}
-        </div>
-
-        {/* Back Button */}
-        <div className="mt-8">
-          <Link
-            href="/wedding-partners"
-            className="inline-flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark font-medium"
-          >
-            <span>←</span>
-            <span>Back to Wedding Partners</span>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+  return <PartnerDetail partner={partner} backLink="/wedding-partners" categoryLabel="Wedding Partners" displayCategory={weddingCategoryLabel} blurb={displayBlurb} description={displayDescription} />;
 }

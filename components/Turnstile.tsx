@@ -26,7 +26,7 @@ export default function Turnstile({ onSuccess, onError, onExpire }: TurnstilePro
       onExpire={onExpire}
       options={{
         theme: resolvedTheme === 'dark' ? 'dark' : 'light',
-        size: 'normal',
+        size: 'flexible',
       }}
     />
   )

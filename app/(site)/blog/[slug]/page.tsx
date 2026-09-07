@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { getMediaUrl, getBlogPostBySlugLocal, getAdjacentBlogPostsLocal } from '@/lib/api/sanity';
 import { formatDate } from '@/lib/utils';
 import { RichText } from '@/lib/sanity/serialize-portable-text';
-import BlogPostNavigation from '@/components/BlogPostNavigation';
+import BlogArticleNavigation from '@/components/blog-editorial/BlogArticleNavigation';
+import styles from '@/components/blog-editorial/BlogEditorial.module.css';
 import { metaDescription, metaTitle } from '@/lib/seo/metadata';
 
 export const dynamic = 'force-dynamic';
@@ -168,7 +169,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   };
 
   return (
-    <>
+    <div className={styles.page}>
       {/* Structured Data */}
       <script
         type="application/ld+json"
@@ -179,62 +180,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      {/* Hero Section */}
-      <section className="py-12 bg-neutral-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/blog"
-            className="inline-flex items-center text-primary hover:text-primary-dark mb-6"
-          >
-            <svg className="h-5 w-5 mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Blog
-          </Link>
-
-          {post.featuredImage && typeof post.featuredImage === 'object' && (
-            <div className="relative h-96 rounded-lg overflow-hidden mb-8">
-              <Image
-                src={getMediaUrl(post.featuredImage)}
-                alt={post.featuredImage.alt || post.title}
-                fill
-                sizes="(max-width: 896px) 100vw, 896px"
-                quality={65}
-                className="object-cover"
-              />
-            </div>
-          )}
-
-          <div className="flex items-center text-sm text-lrp-text-secondary mb-4">
-            {post.publishedDate && (
-              <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>
-            )}
-            {post.categories && post.categories.length > 0 && (
-              <>
-                <span className="mx-2">•</span>
-                <span className="text-primary">
-                  {getCategoryLabel(post.categories[0])}
-                </span>
-              </>
-            )}
-            <span className="mx-2">•</span>
+      <header className={styles.postHeader}>
+        <div className={styles.wrap}>
+          <Link href="/blog" className="mb-6 inline-flex min-h-11 items-center font-semibold text-[#2f730e] underline underline-offset-4 hover:text-lrp-black">Back to Blog</Link>
+          <div className={`${styles.meta} mb-6`}>
+            {post.publishedDate && <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>}
+            {post.categories?.[0] && <span className={styles.category}>{getCategoryLabel(post.categories[0])}</span>}
             <span>By {getAuthorName(post.author)}</span>
           </div>
-
-          <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 mb-6">
-            {post.title}
-          </h1>
-
-          {post.excerpt && (
-            <p className="text-xl text-lrp-text-secondary dark:text-dark-text-secondary mb-8">{post.excerpt}</p>
+          <h1 className={styles.postTitle}>{post.title}</h1>
+          {post.excerpt && <p className={styles.postExcerpt}>{post.excerpt}</p>}
+          {post.featuredImage && typeof post.featuredImage === 'object' && (
+            <div className={styles.postImage}>
+              <Image src={getMediaUrl(post.featuredImage)} alt={post.featuredImage.alt || post.title} fill sizes="(min-width: 1100px) 1050px, 100vw" quality={85} loading="eager" fetchPriority="high" />
+            </div>
           )}
         </div>
-      </section>
+      </header>
 
       {/* Content */}
-      <article className="py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none text-neutral-700 leading-relaxed">
+      <article className={styles.prose}>
+        <div>
+          <div>
             {post.content ? (
               typeof post.content === 'string' ? (
                 // Legacy HTML content from older posts
@@ -252,12 +219,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
           {post.categories && post.categories.length > 0 && (
             <div className="mt-12 pt-8 border-t">
-              <h3 className="text-sm font-semibold text-neutral-900 mb-4">Categories:</h3>
+              <h2 className="!mt-0 !text-lg">Categories:</h2>
               <div className="flex flex-wrap gap-2">
                 {post.categories.map((category) => (
                   <span
                     key={category}
-                    className="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm"
+                    className="border-b-2 border-primary py-1 text-sm font-semibold"
                   >
                     {getCategoryLabel(category)}
                   </span>
@@ -269,10 +236,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </article>
 
       {/* Next/Previous Navigation */}
-      <BlogPostNavigation
+      <BlogArticleNavigation
         previous={adjacentPosts.previous}
         next={adjacentPosts.next}
       />
-    </>
+    </div>
   );
 }

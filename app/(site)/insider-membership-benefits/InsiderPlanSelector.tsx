@@ -122,6 +122,7 @@ export function InsiderPlanSelector({
                 alt={`${plan.name} Insider Rewards membership`}
                 width={1672}
                 height={941}
+                loading={plan.membershipType === 'individual' ? 'eager' : 'lazy'}
                 className="aspect-video h-auto w-full border-b border-white/10 object-cover"
               />
 

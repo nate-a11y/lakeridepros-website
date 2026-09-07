@@ -1,5 +1,7 @@
+import CorePage from '@/components/core-editorial/CorePage'
+import CoreHero from '@/components/core-editorial/CoreHero'
 import type { Metadata } from 'next'
-import { DollarSign, Phone, CheckCircle, Info, Clock, Users, MapPin } from 'lucide-react'
+import { Phone, CheckCircle, Info, Clock, Users, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { PhoneLink } from '@/components/PhoneLink'
 
@@ -93,50 +95,47 @@ const faqSchema = {
 
 export default function PricingPage() {
   return (
-    <>
+    <CorePage>
       {/* Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
+      <div className="min-h-screen bg-white">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-[#2f730e] to-[#24580b] py-16">
-          <div className="container mx-auto px-4 text-center">
-            <DollarSign className="w-16 h-16 text-white mx-auto mb-6" />
+        <CoreHero image="suv">
             <h1 className="font-boardson text-4xl md:text-5xl font-bold text-white mb-4">
               Transparent Pricing for Lake of the Ozarks Transportation
             </h1>
             <p className="text-white text-xl max-w-3xl mx-auto">
               No hidden fees. No surprises. Just honest, upfront pricing for premium transportation services.
             </p>
-          </div>
-        </section>
+          </CoreHero>
 
         {/* Pricing Guarantee */}
-        <section className="py-12 bg-lrp-gray dark:bg-dark-bg-secondary">
+        <section className="py-12 bg-white">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto bg-white dark:bg-dark-bg-primary p-8 rounded-lg border-2 border-lrp-green">
-              <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-4 flex items-center gap-3">
-                <CheckCircle className="w-8 h-8 text-lrp-green" />
+            <div className="max-w-4xl mx-auto bg-white py-8 border-t border-lrp-green">
+              <h2 className="text-2xl font-bold text-lrp-black mb-4 flex items-center gap-3">
+                <CheckCircle className="w-8 h-8 text-[#2f730e]" />
                 Our Pricing Promise
               </h2>
-              <div className="grid md:grid-cols-3 gap-6 text-center">
+              <div className="grid md:grid-cols-3 gap-6 text-left">
                 <div>
-                  <CheckCircle className="w-6 h-6 text-lrp-green mx-auto mb-2" />
-                  <p className="font-semibold text-lrp-black dark:text-white">No Hidden Fees</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">What we quote is what you pay</p>
+                  <CheckCircle className="w-6 h-6 text-[#2f730e] mb-2" />
+                  <p className="font-semibold text-lrp-black">No Hidden Fees</p>
+                  <p className="text-sm text-gray-600">What we quote is what you pay</p>
                 </div>
                 <div>
-                  <CheckCircle className="w-6 h-6 text-lrp-green mx-auto mb-2" />
-                  <p className="font-semibold text-lrp-black dark:text-white">Licensed & Insured</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">Full commercial coverage</p>
+                  <CheckCircle className="w-6 h-6 text-[#2f730e] mb-2" />
+                  <p className="font-semibold text-lrp-black">Licensed & Insured</p>
+                  <p className="text-sm text-gray-600">Full commercial coverage</p>
                 </div>
                 <div>
-                  <CheckCircle className="w-6 h-6 text-lrp-green mx-auto mb-2" />
-                  <p className="font-semibold text-lrp-black dark:text-white">Free Quotes</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">No obligation, instant estimates</p>
+                  <CheckCircle className="w-6 h-6 text-[#2f730e] mb-2" />
+                  <p className="font-semibold text-lrp-black">Free Quotes</p>
+                  <p className="text-sm text-gray-600">No obligation, instant estimates</p>
                 </div>
               </div>
             </div>
@@ -144,9 +143,9 @@ export default function PricingPage() {
         </section>
 
         {/* Stop the Clock Feature - Compact Accordion */}
-        <section id="stop-the-clock" className="py-8 bg-gradient-to-br from-lrp-green to-lrp-green/80 scroll-mt-20">
+        <section id="stop-the-clock" className="py-8 bg-lrp-black scroll-mt-20">
           <div className="container mx-auto px-4">
-            <details className="max-w-3xl mx-auto bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 group">
+            <details className="max-w-3xl mx-auto bg-white/10 border border-white/20 group">
               <summary className="flex items-center justify-between gap-4 p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
                 <div className="flex items-center gap-4">
                   <Clock className="w-10 h-10 text-white flex-shrink-0" />
@@ -169,7 +168,7 @@ export default function PricingPage() {
 
               <div className="px-6 pb-6 pt-2 border-t border-white/20">
                 <div className="grid md:grid-cols-2 gap-4 mb-4">
-                  <div className="bg-white/10 rounded-lg p-4">
+                  <div className="bg-white/10 p-4">
                     <h3 className="font-bold text-white mb-2">How It Works</h3>
                     <ul className="space-y-2 text-sm text-white/90">
                       <li className="flex items-start gap-2">
@@ -187,7 +186,7 @@ export default function PricingPage() {
                     </ul>
                   </div>
 
-                  <div className="bg-white/10 rounded-lg p-4">
+                  <div className="bg-white/10 p-4">
                     <h3 className="font-bold text-white mb-2">Pricing</h3>
                     <div className="space-y-2">
                       <div>
@@ -202,7 +201,7 @@ export default function PricingPage() {
                   </div>
                 </div>
 
-                <div className="bg-white/10 rounded-lg p-4 mb-4">
+                <div className="bg-white/10 p-4 mb-4">
                   <h3 className="font-bold text-white mb-2">Perfect For</h3>
                   <div className="grid sm:grid-cols-3 gap-3 text-sm text-white/90">
                     <div><span className="font-semibold text-white">Private Dinners</span> — don't pay for idle time</div>
@@ -220,179 +219,179 @@ export default function PricingPage() {
         </section>
 
         {/* Point to Point Rates - Per Mile */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black text-left mb-4">
               Point to Point Rates
             </h2>
-            <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
+            <p className="text-left text-gray-600 mb-12 max-w-2xl mx-auto">
               Per-mile pricing for sedans and SUVs. Flat rates for larger vehicles.
             </p>
 
             {/* Per-Mile Tiers */}
-            <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Sedans & SUVs (Per Mile)</h3>
-            <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto mb-12">
+            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Sedans & SUVs (Per Mile)</h3>
+            <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
               {/* Flex */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-blue-500">
+              <div className="bg-white py-6 border-t border-black/25">
                 <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-6 h-6 text-blue-500" />
-                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">FLEX</span>
+                  <Users className="w-6 h-6 text-[#2f730e]" />
+                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">FLEX</span>
                 </div>
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Flex</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-4 passengers</p>
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Flex</h4>
+                <p className="text-sm text-gray-600 mb-4">1-4 passengers</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">$2.25/mi</span>
+                    <span className="text-sm text-gray-600">First 50 miles</span>
+                    <span className="font-bold text-[#2f730e]">$2.25/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">$1.85/mi</span>
+                    <span className="text-sm text-gray-600">After 50 miles</span>
+                    <span className="font-bold text-[#2f730e]">$1.85/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">$5</span>
+                    <span className="text-sm text-gray-600">Booking fee</span>
+                    <span className="font-bold text-[#2f730e]">$5</span>
                   </div>
                 </div>
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-blue-600 dark:text-blue-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="text-xl font-bold text-[#2f730e]">$15 <span className="text-sm font-normal text-gray-600">minimum</span></div>
                 </div>
               </div>
 
               {/* Flex Reserve */}
-              <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/20 dark:to-dark-bg-primary p-6 rounded-lg border-2 border-blue-600 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+              <div className="bg-white py-6 border-t border-black/25 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-lrp-black text-white text-xs font-bold px-3 py-1 whitespace-nowrap">
                   SAVE 10%
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-6 h-6 text-blue-600" />
-                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">RESERVE</span>
+                  <Clock className="w-6 h-6 text-[#2f730e]" />
+                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">RESERVE</span>
                 </div>
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Flex Reserve</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-4 passengers</p>
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Flex Reserve</h4>
+                <p className="text-sm text-gray-600 mb-4">1-4 passengers</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">$2.03/mi</span>
+                    <span className="text-sm text-gray-600">First 50 miles</span>
+                    <span className="font-bold text-[#2f730e]">$2.03/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">$1.67/mi</span>
+                    <span className="text-sm text-gray-600">After 50 miles</span>
+                    <span className="font-bold text-[#2f730e]">$1.67/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400">$5</span>
+                    <span className="text-sm text-gray-600">Booking fee</span>
+                    <span className="font-bold text-[#2f730e]">$5</span>
                   </div>
                 </div>
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-blue-600 dark:text-blue-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">Book 24+ hrs ahead</p>
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="text-xl font-bold text-[#2f730e]">$15 <span className="text-sm font-normal text-gray-600">minimum</span></div>
+                  <p className="text-xs text-[#2f730e] mt-2 font-medium">Book 24+ hrs ahead</p>
                 </div>
               </div>
 
               {/* Elite */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-purple-600">
+              <div className="bg-white py-6 border-t border-black/25">
                 <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-6 h-6 text-purple-600" />
-                  <span className="bg-purple-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">ELITE</span>
+                  <Users className="w-6 h-6 text-[#2f730e]" />
+                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">ELITE</span>
                 </div>
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Elite</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-7 passengers</p>
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Elite</h4>
+                <p className="text-sm text-gray-600 mb-4">1-7 passengers</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
-                    <span className="font-bold text-purple-600 dark:text-purple-400">$2.50/mi</span>
+                    <span className="text-sm text-gray-600">First 50 miles</span>
+                    <span className="font-bold text-[#2f730e]">$2.50/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
-                    <span className="font-bold text-purple-600 dark:text-purple-400">$2.15/mi</span>
+                    <span className="text-sm text-gray-600">After 50 miles</span>
+                    <span className="font-bold text-[#2f730e]">$2.15/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
-                    <span className="font-bold text-purple-600 dark:text-purple-400">$5</span>
+                    <span className="text-sm text-gray-600">Booking fee</span>
+                    <span className="font-bold text-[#2f730e]">$5</span>
                   </div>
                 </div>
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-purple-600 dark:text-purple-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="text-xl font-bold text-[#2f730e]">$15 <span className="text-sm font-normal text-gray-600">minimum</span></div>
                 </div>
               </div>
 
               {/* Elite Reserve */}
-              <div className="bg-gradient-to-b from-purple-50 to-white dark:from-purple-900/20 dark:to-dark-bg-primary p-6 rounded-lg border-2 border-purple-600 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+              <div className="bg-white py-6 border-t border-black/25 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-lrp-black text-white text-xs font-bold px-3 py-1 whitespace-nowrap">
                   SAVE 10%
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-6 h-6 text-purple-600" />
-                  <span className="bg-purple-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">RESERVE</span>
+                  <Clock className="w-6 h-6 text-[#2f730e]" />
+                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">RESERVE</span>
                 </div>
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Elite Reserve</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-7 passengers</p>
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Elite Reserve</h4>
+                <p className="text-sm text-gray-600 mb-4">1-7 passengers</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">First 50 miles</span>
-                    <span className="font-bold text-purple-600 dark:text-purple-400">$2.25/mi</span>
+                    <span className="text-sm text-gray-600">First 50 miles</span>
+                    <span className="font-bold text-[#2f730e]">$2.25/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">After 50 miles</span>
-                    <span className="font-bold text-purple-600 dark:text-purple-400">$1.94/mi</span>
+                    <span className="text-sm text-gray-600">After 50 miles</span>
+                    <span className="font-bold text-[#2f730e]">$1.94/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-lrp-gray">Booking fee</span>
-                    <span className="font-bold text-purple-600 dark:text-purple-400">$5</span>
+                    <span className="text-sm text-gray-600">Booking fee</span>
+                    <span className="font-bold text-[#2f730e]">$5</span>
                   </div>
                 </div>
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="text-xl font-bold text-purple-600 dark:text-purple-400">$15 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                  <p className="text-xs text-purple-600 dark:text-purple-400 mt-2 font-medium">Book 24+ hrs ahead</p>
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="text-xl font-bold text-[#2f730e]">$15 <span className="text-sm font-normal text-gray-600">minimum</span></div>
+                  <p className="text-xs text-[#2f730e] mt-2 font-medium">Book 24+ hrs ahead</p>
                 </div>
               </div>
 
               {/* LRP Black */}
-              <div className="bg-lrp-black p-6 rounded-lg border-2 border-amber-400 text-white">
+              <div className="bg-lrp-black p-6 border-2 border-black/25 text-white">
                 <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-6 h-6 text-amber-400" />
-                  <span className="bg-black text-amber-400 border border-amber-400 text-xs font-bold px-2 py-0.5 rounded-full">LRP BLACK</span>
+                  <Users className="w-6 h-6 text-primary-light" />
+                  <span className="bg-black text-primary-light border border-black/25 text-xs font-bold px-2 py-0.5">LRP BLACK</span>
                 </div>
                 <h4 className="font-bold text-lg mb-1">LRP Black</h4>
                 <p className="text-sm text-white/70 mb-4">1-6 passengers (Suburban)</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-white/70">First 50 miles</span>
-                    <span className="font-bold text-amber-400">$2.90/mi</span>
+                    <span className="font-bold text-primary-light">$2.90/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-white/70">After 50 miles</span>
-                    <span className="font-bold text-amber-400">$2.60/mi</span>
+                    <span className="font-bold text-primary-light">$2.60/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-white/70">Booking fee</span>
-                    <span className="font-bold text-amber-400">$10</span>
+                    <span className="font-bold text-primary-light">$10</span>
                   </div>
                 </div>
                 <div className="pt-4 border-t border-white/20">
-                  <div className="text-xl font-bold text-amber-400">$25 <span className="text-sm font-normal text-white/70">minimum</span></div>
+                  <div className="text-xl font-bold text-primary-light">$25 <span className="text-sm font-normal text-white/70">minimum</span></div>
                   <p className="text-xs text-white/70 mt-2">Select beverages included. 24hr advance booking required.</p>
                 </div>
               </div>
             </div>
 
             {/* Reserve Benefits Callout */}
-            <div className="max-w-4xl mx-auto mb-12 p-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-white">
-              <h3 className="text-xl font-bold mb-4 text-center">Why Book Reserve?</h3>
-              <div className="grid md:grid-cols-3 gap-4 text-center">
+            <div className="max-w-4xl mx-auto mb-12 p-6 bg-lrp-black text-white">
+              <h3 className="text-xl font-bold mb-4 text-left">Why Book Reserve?</h3>
+              <div className="grid md:grid-cols-3 gap-4 text-left">
                 <div>
-                  <CheckCircle className="w-8 h-8 mx-auto mb-2" />
+                  <CheckCircle className="w-8 h-8 mb-2" />
                   <p className="font-semibold">10% Discount</p>
                   <p className="text-sm text-white/80">Book 24+ hours ahead</p>
                 </div>
                 <div>
-                  <CheckCircle className="w-8 h-8 mx-auto mb-2" />
+                  <CheckCircle className="w-8 h-8 mb-2" />
                   <p className="font-semibold">No Surge Pricing</p>
                   <p className="text-sm text-white/80">Same rate, every time</p>
                 </div>
                 <div>
-                  <CheckCircle className="w-8 h-8 mx-auto mb-2" />
+                  <CheckCircle className="w-8 h-8 mb-2" />
                   <p className="font-semibold">All Year Round</p>
                   <p className="text-sm text-white/80">Peak season included</p>
                 </div>
@@ -400,56 +399,56 @@ export default function PricingPage() {
             </div>
 
             {/* Flat Rate Vehicles */}
-            <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Larger Vehicles (Flat Rate)</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
+            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Larger Vehicles (Flat Rate)</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
               {/* Limo Bus */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Limo Bus</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-14 passengers</p>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$90 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">$80 base + $10 booking fee</p>
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <Users className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Limo Bus</h4>
+                <p className="text-sm text-gray-600 mb-3">1-14 passengers</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$90 <span className="text-sm font-normal text-gray-600">minimum</span></div>
+                <p className="text-xs text-gray-600">$80 base + $10 booking fee</p>
               </div>
 
               {/* Rescue Squad */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Rescue Squad</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-14 passengers</p>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$90 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">$80 base + $10 booking fee</p>
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <Users className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Rescue Squad</h4>
+                <p className="text-sm text-gray-600 mb-3">1-14 passengers</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$90 <span className="text-sm font-normal text-gray-600">minimum</span></div>
+                <p className="text-xs text-gray-600">$80 base + $10 booking fee</p>
               </div>
 
               {/* Luxury Sprinter */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Luxury Sprinter</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-13 passengers</p>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$175 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">$175 base + $10 booking fee</p>
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <Users className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Luxury Sprinter</h4>
+                <p className="text-sm text-gray-600 mb-3">1-13 passengers</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$175 <span className="text-sm font-normal text-gray-600">minimum</span></div>
+                <p className="text-xs text-gray-600">$175 base + $10 booking fee</p>
               </div>
 
               {/* Luxury Shuttle */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Luxury Shuttle</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-37 passengers</p>
-                <div className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1">$275 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">$400 base + $20 booking fee</p>
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <Users className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Luxury Shuttle</h4>
+                <p className="text-sm text-gray-600 mb-3">1-37 passengers</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$275 <span className="text-sm font-normal text-gray-600">minimum</span></div>
+                <p className="text-xs text-gray-600">$400 base + $20 booking fee</p>
               </div>
 
               {/* Pink Patrol */}
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-[#db2777]">
-                <Users className="w-8 h-8 text-[#db2777] mb-3" />
-                <h4 className="font-bold text-lg text-lrp-black dark:text-white mb-1">Pink Patrol</h4>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1-23 passengers</p>
-                <div className="text-2xl font-bold text-[#db2777] mb-1">$250 <span className="text-sm font-normal text-gray-600 dark:text-lrp-gray">minimum</span></div>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">Transfer service plus mileage</p>
+              <div className="bg-white py-6 border-t border-black/25">
+                <Users className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Pink Patrol</h4>
+                <p className="text-sm text-gray-600 mb-3">1-23 passengers</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$250 <span className="text-sm font-normal text-gray-600">minimum</span></div>
+                <p className="text-xs text-gray-600">Transfer service plus mileage</p>
               </div>
             </div>
 
-            <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
-              All prices include professional driver, fuel, and insurance. <Link href="/book" className="text-lrp-green hover:underline">Get a quote</Link> for exact pricing.
+            <p className="text-left text-sm text-gray-600 mt-8">
+              All prices include professional driver, fuel, and insurance. <Link href="/book" className="text-[#2f730e] hover:underline">Get a quote</Link> for exact pricing.
             </p>
           </div>
         </section>
@@ -457,130 +456,130 @@ export default function PricingPage() {
         {/* Hourly Rental Rates */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black text-left mb-4">
               Hourly Rental Rates
             </h2>
-            <p className="text-center text-gray-600 dark:text-lrp-gray mb-8 max-w-2xl mx-auto">
+            <p className="text-left text-gray-600 mb-8 max-w-2xl mx-auto">
               Perfect for bar hopping, nightlife, local events, and flexible transportation needs
             </p>
-            <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
+            <p className="text-left text-sm text-gray-600 mb-12 max-w-2xl mx-auto">
               <strong>Add "Stop the Clock"</strong> to any hourly reservation and pause your meter when you don't need the vehicle
             </p>
 
             {/* Sedans & SUVs - Flat Hourly */}
-            <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Sedans & SUVs (Flat Rate)</h3>
-            <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-7xl mx-auto mb-12">
+            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Sedans & SUVs (Flat Rate)</h3>
+            <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
               {/* Flex */}
-              <div className="bg-white dark:bg-dark-bg-secondary p-6 rounded-lg border-2 border-blue-500">
+              <div className="bg-white py-6 border-t border-black/25">
                 <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-6 h-6 text-blue-500" />
-                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">FLEX</span>
+                  <Users className="w-6 h-6 text-[#2f730e]" />
+                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">FLEX</span>
                 </div>
-                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Flex</h4>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-4 passengers</p>
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">$80<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-hour minimum</p>
+                <h4 className="text-xl font-bold text-lrp-black mb-2">Flex</h4>
+                <p className="text-gray-600 text-sm mb-4">1-4 passengers</p>
+                <div className="text-3xl font-bold text-[#2f730e] mb-2">$80<span className="text-lg text-gray-600">/hour</span></div>
+                <p className="text-sm text-gray-600 mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Flat rate all hours</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Flat rate all hours</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Sedans & small SUVs</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Sedans & small SUVs</span>
                   </li>
                 </ul>
               </div>
 
               {/* Flex Reserve */}
-              <div className="bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/20 dark:to-dark-bg-secondary p-6 rounded-lg border-2 border-blue-600 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+              <div className="bg-white py-6 border-t border-black/25 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-lrp-black text-white text-xs font-bold px-3 py-1 whitespace-nowrap">
                   SAVE 10%
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-6 h-6 text-blue-600" />
-                  <span className="bg-blue-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">RESERVE</span>
+                  <Clock className="w-6 h-6 text-[#2f730e]" />
+                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">RESERVE</span>
                 </div>
-                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Flex Reserve</h4>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-4 passengers</p>
-                <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">$72<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-blue-600 dark:text-blue-400 mb-4 font-medium">Book 48+ hrs ahead</p>
+                <h4 className="text-xl font-bold text-lrp-black mb-2">Flex Reserve</h4>
+                <p className="text-gray-600 text-sm mb-4">1-4 passengers</p>
+                <div className="text-3xl font-bold text-[#2f730e] mb-2">$72<span className="text-lg text-gray-600">/hour</span></div>
+                <p className="text-sm text-[#2f730e] mb-4 font-medium">Book 48+ hrs ahead</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">No surge pricing ever</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">No surge pricing ever</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Same rate year-round</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Same rate year-round</span>
                   </li>
                 </ul>
               </div>
 
               {/* Elite */}
-              <div className="bg-white dark:bg-dark-bg-secondary p-6 rounded-lg border-2 border-purple-600">
+              <div className="bg-white py-6 border-t border-black/25">
                 <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-6 h-6 text-purple-600" />
-                  <span className="bg-purple-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">ELITE</span>
+                  <Users className="w-6 h-6 text-[#2f730e]" />
+                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">ELITE</span>
                 </div>
-                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Elite</h4>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-7 passengers</p>
-                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">$100<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">1-hour minimum</p>
+                <h4 className="text-xl font-bold text-lrp-black mb-2">Elite</h4>
+                <p className="text-gray-600 text-sm mb-4">1-7 passengers</p>
+                <div className="text-3xl font-bold text-[#2f730e] mb-2">$100<span className="text-lg text-gray-600">/hour</span></div>
+                <p className="text-sm text-gray-600 mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Flat rate all hours</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Flat rate all hours</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Larger SUVs</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Larger SUVs</span>
                   </li>
                 </ul>
               </div>
 
               {/* Elite Reserve */}
-              <div className="bg-gradient-to-b from-purple-50 to-white dark:from-purple-900/20 dark:to-dark-bg-secondary p-6 rounded-lg border-2 border-purple-600 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+              <div className="bg-white py-6 border-t border-black/25 relative">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-lrp-black text-white text-xs font-bold px-3 py-1 whitespace-nowrap">
                   SAVE 10%
                 </div>
                 <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-6 h-6 text-purple-600" />
-                  <span className="bg-purple-700 text-white text-xs font-bold px-2 py-0.5 rounded-full">RESERVE</span>
+                  <Clock className="w-6 h-6 text-[#2f730e]" />
+                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">RESERVE</span>
                 </div>
-                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Elite Reserve</h4>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-7 passengers</p>
-                <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">$90<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-purple-600 dark:text-purple-400 mb-4 font-medium">Book 48+ hrs ahead</p>
+                <h4 className="text-xl font-bold text-lrp-black mb-2">Elite Reserve</h4>
+                <p className="text-gray-600 text-sm mb-4">1-7 passengers</p>
+                <div className="text-3xl font-bold text-[#2f730e] mb-2">$90<span className="text-lg text-gray-600">/hour</span></div>
+                <p className="text-sm text-[#2f730e] mb-4 font-medium">Book 48+ hrs ahead</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">No surge pricing ever</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">No surge pricing ever</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Same rate year-round</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Same rate year-round</span>
                   </li>
                 </ul>
               </div>
 
               {/* LRP Black */}
-              <div className="bg-lrp-black p-6 rounded-lg text-white border-2 border-amber-400">
+              <div className="bg-lrp-black p-6 text-white border-2 border-black/25">
                 <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-6 h-6 text-amber-400" />
-                  <span className="bg-black text-amber-400 border border-amber-400 text-xs font-bold px-2 py-0.5 rounded-full">LRP BLACK</span>
+                  <Users className="w-6 h-6 text-primary-light" />
+                  <span className="bg-black text-primary-light border border-black/25 text-xs font-bold px-2 py-0.5">LRP BLACK</span>
                 </div>
                 <h4 className="text-xl font-bold mb-2">LRP Black</h4>
                 <p className="text-white/70 text-sm mb-4">1-6 passengers (Suburban)</p>
-                <div className="text-3xl font-bold text-amber-400 mb-2">$120<span className="text-lg text-white/70">/hour</span></div>
+                <div className="text-3xl font-bold text-primary-light mb-2">$120<span className="text-lg text-white/70">/hour</span></div>
                 <p className="text-sm text-white/70 mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-primary-light mt-0.5 flex-shrink-0" />
                     <span className="text-white/90">Beverages included</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-primary-light mt-0.5 flex-shrink-0" />
                     <span className="text-white/90">24hr advance required</span>
                   </li>
                 </ul>
@@ -588,11 +587,11 @@ export default function PricingPage() {
             </div>
 
             {/* Larger Vehicles - Tiered Hourly */}
-            <h3 className="text-xl font-bold text-lrp-black dark:text-white text-center mb-6">Larger Vehicles (Tiered Rates)</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
+            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Larger Vehicles (Tiered Rates)</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
               {/* Limo Bus */}
-              <div className="bg-[#2f730e] p-8 rounded-lg text-white relative">
-                <div className="absolute top-4 right-4 bg-white text-[#2f730e] text-xs font-bold px-3 py-1 rounded-full">
+              <div className="bg-lrp-black p-8 text-white relative">
+                <div className="absolute top-4 right-4 bg-white text-[#2f730e] text-xs font-bold px-3 py-1">
                   MOST POPULAR
                 </div>
                 <Users className="w-10 h-10 text-white mb-4" />
@@ -617,54 +616,54 @@ export default function PricingPage() {
               </div>
 
               {/* Rescue Squad */}
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Rescue Squad</h4>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-14 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$130<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum (4 hours weekends)</p>
+              <div className="bg-white py-8">
+                <Users className="w-10 h-10 text-[#2f730e] mb-4" />
+                <h4 className="text-xl font-bold text-lrp-black mb-2">Rescue Squad</h4>
+                <p className="text-gray-600 text-sm mb-4">1-14 passengers</p>
+                <div className="text-3xl font-bold text-[#2f730e] mb-2">$130<span className="text-lg text-gray-600">/hour</span></div>
+                <p className="text-sm text-gray-600 mb-4">3-hour minimum (4 hours weekends)</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">First 3-4 hrs: $130/hr</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">First 3-4 hrs: $130/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">After: $110/hr</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">After: $110/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Unique party vehicle</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Unique party vehicle</span>
                   </li>
                 </ul>
               </div>
 
               {/* Luxury Sprinter */}
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Luxury Sprinter</h4>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-13 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$175<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">3-hour minimum (4 hours weekends)</p>
+              <div className="bg-white py-8">
+                <Users className="w-10 h-10 text-[#2f730e] mb-4" />
+                <h4 className="text-xl font-bold text-lrp-black mb-2">Luxury Sprinter</h4>
+                <p className="text-gray-600 text-sm mb-4">1-13 passengers</p>
+                <div className="text-3xl font-bold text-[#2f730e] mb-2">$175<span className="text-lg text-gray-600">/hour</span></div>
+                <p className="text-sm text-gray-600 mb-4">3-hour minimum (4 hours weekends)</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">First 3-4 hrs: $175/hr</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">First 3-4 hrs: $175/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">After: $155/hr</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">After: $155/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Premium executive seating</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Premium executive seating</span>
                   </li>
                 </ul>
               </div>
 
               {/* Pink Patrol */}
-              <div className="bg-[radial-gradient(circle_at_20%_20%,#ff4fb3_0%,#db2777_35%,#111827_100%)] p-8 rounded-lg text-white relative overflow-hidden">
-                <div className="absolute top-4 right-4 bg-white text-[#db2777] text-xs font-bold px-3 py-1 rounded-full">
+              <div className="bg-lrp-black p-8 text-white relative overflow-hidden">
+                <div className="absolute top-4 right-4 bg-white text-[#2f730e] text-xs font-bold px-3 py-1">
                   NEW
                 </div>
                 <Users className="w-10 h-10 text-white mb-4" />
@@ -689,77 +688,77 @@ export default function PricingPage() {
               </div>
 
               {/* Luxury Shuttle */}
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <Users className="w-10 h-10 text-lrp-green mb-4" />
-                <h4 className="text-xl font-bold text-lrp-black dark:text-white mb-2">Luxury Shuttle</h4>
-                <p className="text-gray-600 dark:text-lrp-gray text-sm mb-4">1-37 passengers</p>
-                <div className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-2">$275<span className="text-lg text-gray-600 dark:text-lrp-gray">/hour</span></div>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-4">2-hour minimum</p>
+              <div className="bg-white py-8">
+                <Users className="w-10 h-10 text-[#2f730e] mb-4" />
+                <h4 className="text-xl font-bold text-lrp-black mb-2">Luxury Shuttle</h4>
+                <p className="text-gray-600 text-sm mb-4">1-37 passengers</p>
+                <div className="text-3xl font-bold text-[#2f730e] mb-2">$275<span className="text-lg text-gray-600">/hour</span></div>
+                <p className="text-sm text-gray-600 mb-4">2-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Flat rate all hours</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Flat rate all hours</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Large group capacity</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Large group capacity</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray">Luggage space included</span>
+                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Luggage space included</span>
                   </li>
                 </ul>
               </div>
             </div>
-            <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
+            <p className="text-left text-sm text-gray-600 mt-8">
               <strong>Note:</strong> Weekend rates (Fri-Sun) have 4-hour minimums for Limo Bus, Rescue Squad, Sprinter, and Pink Patrol. Weekday minimums are 3 hours. All prices subject to 3% credit card processing fee.
             </p>
           </div>
         </section>
 
         {/* Airport Shuttle Rates */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black text-left mb-4">
               Airport Shuttle Pricing
             </h2>
-            <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
+            <p className="text-left text-gray-600 mb-12 max-w-2xl mx-auto">
               Call for exact quotes — pricing varies by vehicle type, distance, and final destination
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Lee C Fine (AIZ)</h3>
-                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">At Lake of the Ozarks</p>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">Private aviation & FBO service</p>
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black mb-2">Lee C Fine (AIZ)</h3>
+                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Get Quote</Link>
+                <p className="text-sm text-gray-600 mb-3">At Lake of the Ozarks</p>
+                <p className="text-xs text-gray-600">Private aviation & FBO service</p>
               </div>
 
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Kansas City (MCI)</h3>
-                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2.5-3 hours</p>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">Flight tracking included</p>
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black mb-2">Kansas City (MCI)</h3>
+                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Get Quote</Link>
+                <p className="text-sm text-gray-600 mb-3">2.5-3 hours</p>
+                <p className="text-xs text-gray-600">Flight tracking included</p>
               </div>
 
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">St. Louis (STL)</h3>
-                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">2-2.5 hours</p>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">Delay adjustment included</p>
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black mb-2">St. Louis (STL)</h3>
+                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Get Quote</Link>
+                <p className="text-sm text-gray-600 mb-3">2-2.5 hours</p>
+                <p className="text-xs text-gray-600">Delay adjustment included</p>
               </div>
 
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Springfield (SGF)</h3>
-                <Link href="/book" className="text-2xl font-bold text-lrp-green-dark dark:text-lrp-green mb-1 hover:underline block">Get Quote</Link>
-                <p className="text-sm text-gray-600 dark:text-lrp-gray mb-3">1.5-2 hours</p>
-                <p className="text-xs text-gray-600 dark:text-lrp-gray">Round-trip discounts available</p>
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black mb-2">Springfield (SGF)</h3>
+                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Get Quote</Link>
+                <p className="text-sm text-gray-600 mb-3">1.5-2 hours</p>
+                <p className="text-xs text-gray-600">Round-trip discounts available</p>
               </div>
             </div>
-            <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
+            <p className="text-left text-sm text-gray-600 mt-8">
               Airport shuttle pricing based on distance, vehicle type, and passenger count. Rates vary by destination address. Call (573) 206-9499 for instant quote.
             </p>
           </div>
@@ -768,41 +767,41 @@ export default function PricingPage() {
         {/* Wedding Packages */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black text-left mb-4">
               Wedding Transportation
             </h2>
-            <p className="text-center text-gray-600 dark:text-lrp-gray mb-12 max-w-2xl mx-auto">
+            <p className="text-left text-gray-600 mb-12 max-w-2xl mx-auto">
               Custom packages based on hourly rates, guest count, and venue logistics
             </p>
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Intimate Weddings</h3>
-                <Link href="/book" className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4 hover:underline block">Custom Quote</Link>
+              <div className="bg-white py-8">
+                <h3 className="text-xl font-bold text-lrp-black mb-4">Intimate Weddings</h3>
+                <Link href="/book" className="text-3xl font-bold text-[#2f730e] mb-4 hover:underline block">Custom Quote</Link>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Up to 14 guests</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">Up to 14 guests</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Sprinter or Party Bus</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">Sprinter or Party Bus</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">4-hour minimum (weekends)</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">4-hour minimum (weekends)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Hotel-to-venue shuttles</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">Hotel-to-venue shuttles</span>
                   </li>
                 </ul>
-                <Link href="/book" className="block w-full text-center bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                <Link href="/book" className="block w-full text-left bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 font-semibold transition-all">
                   Get Quote
                 </Link>
               </div>
 
-              <div className="bg-[#2f730e] p-8 rounded-lg text-white relative border-4 border-lrp-green-light">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-lrp-green-light text-lrp-black text-xs font-bold px-4 py-2 rounded-full whitespace-nowrap">
+              <div className="bg-lrp-black p-8 text-white relative border-t-4 border-primary">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-lrp-green-light text-lrp-black text-xs font-bold px-4 py-2 whitespace-nowrap">
                   MOST COMMON
                 </div>
                 <h3 className="text-xl font-bold mb-4">Standard Weddings</h3>
@@ -829,79 +828,79 @@ export default function PricingPage() {
                     <span className="text-white text-sm">"Stop the Clock" option</span>
                   </li>
                 </ul>
-                <Link href="/book" className="block w-full text-center bg-white text-[#2f730e] hover:bg-lrp-gray px-6 py-3 rounded-lg font-semibold transition-all">
+                <Link href="/book" className="block w-full text-left bg-white text-[#2f730e] hover:bg-white px-6 py-3 font-semibold transition-all">
                   Get Quote
                 </Link>
               </div>
 
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg">
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-4">Large Weddings</h3>
-                <Link href="/book" className="text-3xl font-bold text-lrp-green-dark dark:text-lrp-green mb-4 hover:underline block">Custom Quote</Link>
+              <div className="bg-white py-8">
+                <h3 className="text-xl font-bold text-lrp-black mb-4">Large Weddings</h3>
+                <Link href="/book" className="text-3xl font-bold text-[#2f730e] mb-4 hover:underline block">Custom Quote</Link>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">50+ guests</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">50+ guests</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Multi-vehicle fleet</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">Multi-vehicle fleet</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Continuous shuttle loops</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">Continuous shuttle loops</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Dedicated day-of coordinator</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">Dedicated day-of coordinator</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-lrp-gray text-sm">Full weekend packages</span>
+                    <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">Full weekend packages</span>
                   </li>
                 </ul>
-                <PhoneLink className="block w-full text-center bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                <PhoneLink className="block w-full text-left bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 font-semibold transition-all">
                   Call/Text for Quote
                 </PhoneLink>
               </div>
             </div>
-            <p className="text-center text-sm text-gray-600 dark:text-lrp-gray mt-8">
+            <p className="text-left text-sm text-gray-600 mt-8">
               Wedding pricing based on hourly rates, vehicle type, guest count, and timeline. All packages include professional driver, fuel, insurance, and coordination. Additional discounted services available through our trusted referral partners. Call (573) 206-9499 for custom quote.
             </p>
           </div>
         </section>
 
         {/* Pricing Factors */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4 max-w-5xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black text-left mb-12">
               What Affects Your Price?
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <Info className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-3">Distance & Duration</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
+              <div className="bg-white py-6">
+                <Info className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black mb-3">Distance & Duration</h3>
+                <p className="text-gray-700 text-sm">
                   Longer distances and rental times naturally increase costs. Airport shuttles are priced by route, while local events are hourly. We optimize routes to keep your costs down.
                 </p>
               </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <Users className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-3">Vehicle Type</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
+              <div className="bg-white py-6">
+                <Users className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black mb-3">Vehicle Type</h3>
+                <p className="text-gray-700 text-sm">
                   Larger vehicles cost more due to fuel, licensing, and maintenance. But per-person, they're often the best value. A 14-passenger limo bus is $130/hour ($9.29/person).
                 </p>
               </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <Clock className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-3">Peak vs. Off-Peak</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
+              <div className="bg-white py-6">
+                <Clock className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black mb-3">Peak vs. Off-Peak</h3>
+                <p className="text-gray-700 text-sm">
                   Summer weekends (May-September) and major events (Shootout, Bikefest) have higher demand. Book early for peak season. Off-season and weekday rates may be lower.
                 </p>
               </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <MapPin className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-3">Special Requests</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
+              <div className="bg-white py-6">
+                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h3 className="font-bold text-lg text-lrp-black mb-3">Special Requests</h3>
+                <p className="text-gray-700 text-sm">
                   Custom decorations, specific vehicle requests, or last-minute bookings may incur additional fees. We'll always disclose these upfront when you request a quote.
                 </p>
               </div>
@@ -912,53 +911,53 @@ export default function PricingPage() {
         {/* What's Included */}
         <section className="py-16">
           <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black text-left mb-4">
               What's Included in All Pricing
             </h2>
-            <p className="text-center text-gray-600 dark:text-lrp-gray mb-12">
+            <p className="text-left text-gray-600 mb-12">
               Unlike rideshare services, here's what you get with every Lake Ride Pros booking
             </p>
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="flex items-start gap-3 p-4 bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg">
-                <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
+              <div className="flex items-start gap-3 p-4 bg-white">
+                <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-lrp-black dark:text-white">Professional Licensed Driver</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">DOT-compliant, background-checked, uniformed</p>
+                  <p className="font-semibold text-lrp-black">Professional Licensed Driver</p>
+                  <p className="text-sm text-gray-600">DOT-compliant, background-checked, uniformed</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg">
-                <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
+              <div className="flex items-start gap-3 p-4 bg-white">
+                <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-lrp-black dark:text-white">Fuel & Tolls</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">All fuel costs and major route tolls included</p>
+                  <p className="font-semibold text-lrp-black">Fuel & Tolls</p>
+                  <p className="text-sm text-gray-600">All fuel costs and major route tolls included</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg">
-                <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
+              <div className="flex items-start gap-3 p-4 bg-white">
+                <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-lrp-black dark:text-white">Commercial Insurance</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">Full liability coverage for your protection</p>
+                  <p className="font-semibold text-lrp-black">Commercial Insurance</p>
+                  <p className="text-sm text-gray-600">Full liability coverage for your protection</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg">
-                <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
+              <div className="flex items-start gap-3 p-4 bg-white">
+                <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-lrp-black dark:text-white">Flight Tracking (Airport Service)</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">Real-time monitoring, delay adjustment included</p>
+                  <p className="font-semibold text-lrp-black">Flight Tracking (Airport Service)</p>
+                  <p className="text-sm text-gray-600">Real-time monitoring, delay adjustment included</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg">
-                <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
+              <div className="flex items-start gap-3 p-4 bg-white">
+                <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-lrp-black dark:text-white">24/7 Dispatch Support</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">Always available before, during, and after service</p>
+                  <p className="font-semibold text-lrp-black">24/7 Dispatch Support</p>
+                  <p className="text-sm text-gray-600">Always available before, during, and after service</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-lrp-gray dark:bg-dark-bg-secondary rounded-lg">
-                <CheckCircle className="w-5 h-5 text-lrp-green mt-0.5 flex-shrink-0" />
+              <div className="flex items-start gap-3 p-4 bg-white">
+                <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-lrp-black dark:text-white">Clean, Maintained Vehicles</p>
-                  <p className="text-sm text-gray-600 dark:text-lrp-gray">Inspected daily, professionally detailed</p>
+                  <p className="font-semibold text-lrp-black">Clean, Maintained Vehicles</p>
+                  <p className="text-sm text-gray-600">Inspected daily, professionally detailed</p>
                 </div>
               </div>
             </div>
@@ -966,90 +965,90 @@ export default function PricingPage() {
         </section>
 
         {/* FAQ */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black text-left mb-12">
               Pricing FAQs
             </h2>
             <div className="space-y-4">
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
                   How much does Lake of the Ozarks transportation cost?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile with a $15 minimum, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban with beverages) at $2.90/mile, and Pink Patrol transfer service starts at a $250 minimum plus mileage. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr, Luxury Sprinter $175/hr, Pink Patrol $225/hr weekdays and $250/hr weekends, Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers! Contact us at (573) 206-9499 for a custom quote.
                 </p>
               </details>
 
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
                   Are there any hidden fees?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, estimated tolls (if applicable), insurance, and professional driver. The only additional charges may be gratuity (optional) or wait time beyond the agreed window. All potential costs are disclosed upfront.
                 </p>
               </details>
 
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
                   Do you offer discounts for round-trip or multi-day bookings?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   Yes! We offer discounted rates for round-trip airport shuttles (typically 10-15% savings compared to two one-way trips), multi-day event packages, and large group bookings. Contact us for volume pricing and custom packages.
                 </p>
               </details>
 
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
                   What is included in your pricing?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   All Lake Ride Pros pricing includes: professional licensed driver, fuel, commercial insurance, vehicle maintenance, tolls on major routes, flight tracking (for airport service), and 24/7 dispatch support. Optional add-ons include decorations, special requests, and extended wait times.
                 </p>
               </details>
 
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
                   How do I get an exact quote?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   Call us at (573) 206-9499 or use our online booking form. Provide your pickup/dropoff locations, date, time, passenger count, and service type. We'll provide an instant quote with no obligation to book.
                 </p>
               </details>
 
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg border-2 border-lrp-green">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-lrp-green" />
+              <details className="bg-white py-6 border-t border-lrp-green">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-[#2f730e]" />
                   What is "Stop the Clock" and how does it work?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   "Stop the Clock" is our exclusive feature for hourly reservations that lets you pause the meter when you don't need the vehicle. After 2 hours into your reservation, you can pause for up to 4 hours for a flat fee of $200 (then $50/hour for additional time beyond 4 hours). This is perfect for private dinners, wedding ceremonies, corporate meetings, or any event where you don't want to pay for idle vehicle time. The pause must be pre-planned at booking time so we can staff and schedule accordingly. For example: Book a 6-hour reservation, use the vehicle for 3 hours, pause during a 2-hour dinner ($200), then resume service for your return trip — you only pay for 4 hours of active service + the $200 pause fee instead of the full 6 hours.
                 </p>
               </details>
 
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
                   Do you price match competitors?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   Nope! We've found that price matching often means service matching, and we're not willing to go there. Our vehicles are newer, our drivers are more experienced, and our dispatch actually answers the phone. Some things are worth paying for—like not ending up stranded at the airport because someone saved $20.
                 </p>
               </details>
 
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
                   Is gratuity included or extra?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   Gratuity is not included in our quoted rates but is appreciated for great service. Standard gratuity is 20-25% of the fare, with 20% as the minimum selection when booking online. You can also select a custom amount or tip your driver directly in cash.
                 </p>
               </details>
 
-              <details className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
                   What forms of payment do you accept?
                 </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
+                <p className="text-gray-700 mt-4">
                   We accept all major credit cards (Visa, MasterCard, Amex, Discover), debit cards, Venmo, Zelle, and cash. Payment can be made when booking online or by calling (573) 206-9499. Corporate accounts and invoicing available for business clients.
                 </p>
               </details>
@@ -1058,23 +1057,23 @@ export default function PricingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-[#2f730e]">
-          <div className="container mx-auto px-4 text-center">
+        <section className="py-16 bg-lrp-black">
+          <div className="container mx-auto px-4 text-left">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Get Your Free Quote?
             </h2>
             <p className="text-white text-xl mb-8 max-w-2xl mx-auto">
               No obligation. Instant pricing. Book online or call us directly for a custom quote.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-start">
               <Link
                 href="/book"
-                className="inline-block bg-white text-[#2f730e] hover:bg-lrp-gray px-10 py-4 rounded-lg font-bold text-lg transition-all"
+                className="inline-block bg-white text-[#2f730e] hover:bg-white px-10 py-4 font-bold text-lg transition-all"
               >
                 Get Instant Quote
               </Link>
               <PhoneLink
-                className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#2f730e] px-10 py-4 rounded-lg font-bold text-lg transition-all"
+                className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary-light px-10 py-4 font-bold text-lg transition-all"
               >
                 <Phone className="w-5 h-5" />
                 (573) 206-9499
@@ -1083,6 +1082,6 @@ export default function PricingPage() {
           </div>
         </section>
       </div>
-    </>
+    </CorePage>
   )
 }

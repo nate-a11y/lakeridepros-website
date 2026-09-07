@@ -1,3 +1,4 @@
+import CommercePage from '@/components/commerce-editorial/CommercePage'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -223,7 +224,7 @@ export default async function InsiderMembershipBenefitsPage({
       : undefined
 
   return (
-    <div className="overflow-hidden bg-black text-white">
+    <CommercePage variant="membership">
       <section className="relative border-b border-primary/20">
         <div
           aria-hidden="true"
@@ -546,6 +547,6 @@ export default async function InsiderMembershipBenefitsPage({
           </p>
         </div>
       </section>
-    </div>
+    </CommercePage>
   )
 }

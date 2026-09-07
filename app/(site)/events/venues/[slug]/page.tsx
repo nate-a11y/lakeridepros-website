@@ -5,8 +5,9 @@ import Image from 'next/image'
 import { getVenueBySlug, getUpcomingEvents } from '@/lib/api/sanity'
 import { getMediaUrl } from '@/lib/utils'
 import { renderPortableTextToHtml } from '@/lib/sanity/render-rich-text'
-import { MapPin, Globe, Phone, ArrowLeft, Calendar, Clock } from 'lucide-react'
-import RideAvailabilityBadge from '@/components/RideAvailabilityBadge'
+import { MapPin, Globe, Phone, ArrowLeft } from 'lucide-react'
+import RideStatus from '@/components/events-editorial/RideStatus'
+import styles from '@/components/events-editorial/EventsEditorial.module.css'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -34,6 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${venue.name} — Upcoming Events & Ride Availability | Lake Ride Pros`,
     description: venue.description || `Check upcoming events and book your ride to ${venue.name} in Missouri. See ride availability and reserve transportation with Lake Ride Pros.`,
+    alternates: { canonical: `https://www.lakeridepros.com/events/venues/${venue.slug}` },
     openGraph: {
       title: `${venue.name} Events | Lake Ride Pros`,
       description: venue.description || `Upcoming events and ride availability at ${venue.name}.`,
@@ -60,241 +62,229 @@ export default async function VenueDetailPage({ params }: Props) {
 
   // Get upcoming events and filter to this venue
   const allEvents = await getUpcomingEvents()
-  const venueEvents = allEvents.filter(event => {
-    const eventVenueId = typeof event.venue === 'object' ? String(event.venue?._id) : String(event.venue)
+  const venueEvents = allEvents.filter((event) => {
+    const eventVenueId =
+      typeof event.venue === 'object'
+        ? String(event.venue?._id)
+        : String(event.venue)
     return eventVenueId === String(venue._id)
   })
+  const venueDetailsHtml = renderPortableTextToHtml(venue.additionalInfo)
+    .replace(/<h1(?=[ >])/g, '<h2')
+    .replace(/<\/h1>/g, '</h2>')
 
   const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split('T')[0].split('-').map(Number)
     const date = new Date(Date.UTC(year, month - 1, day, 12, 0, 0))
     return {
-      month: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }).toUpperCase(),
+      month: date
+        .toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' })
+        .toUpperCase(),
       day,
-      full: date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' }),
+      full: date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'UTC',
+      }),
     }
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
-      {/* Back Link */}
-      <div className="bg-gray-50 dark:bg-dark-bg-secondary border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link
-            href="/events"
-            className="inline-flex items-center text-primary hover:text-primary-dark transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+    <div className={styles.page}>
+      <div className={styles.back}>
+        <div className={styles.container}>
+          <Link href="/events" className={styles.textLink}>
+            <ArrowLeft size={16} aria-hidden="true" />
             Back to All Events
           </Link>
         </div>
       </div>
-
-      {/* Venue Hero */}
-      <section className="bg-gradient-to-r from-lrp-black to-gray-800 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-start gap-8">
-            {venue.image && typeof venue.image === 'object' && (
-              <div className="relative w-full md:w-80 h-64 md:h-72 bg-white rounded-2xl overflow-hidden flex-shrink-0 shadow-xl">
-                <Image
-                  src={getMediaUrl(venue.image)}
-                  alt={venue.image.alt || venue.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 320px"
-                  priority
-                />
-              </div>
+      <section className={styles.hero}>
+        <div className={`${styles.container} ${styles.heroGrid}`}>
+          <div>
+            <h1>{venue.name}</h1>
+            {venue.address && (
+              <p className={styles.heroFact}>
+                <MapPin size={20} aria-hidden="true" />
+                {venue.address}
+              </p>
             )}
-            <div className="flex-1 text-center md:text-left">
-              <h1 className="text-4xl sm:text-5xl font-bold mb-3">{venue.name}</h1>
-              {venue.address && (
-                <p className="flex items-center justify-center md:justify-start text-gray-300 text-lg mb-2">
-                  <MapPin className="w-5 h-5 mr-2 flex-shrink-0" />
-                  {venue.address}
-                </p>
+            {venue.description && (
+              <p className={styles.intro}>{venue.description}</p>
+            )}
+            <div className={styles.actions}>
+              {venue.website && (
+                <a
+                  href={venue.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.textLink}
+                >
+                  <Globe size={16} aria-hidden="true" />
+                  Visit Website
+                </a>
               )}
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-4">
-                {venue.website && (
-                  <a
-                    href={venue.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center text-primary hover:text-primary-dark font-semibold"
-                  >
-                    <Globe className="w-4 h-4 mr-2" />
-                    Visit Website
-                  </a>
-                )}
-                {venue.phone && (
-                  <a
-                    href={`tel:${venue.phone}`}
-                    className="inline-flex items-center text-primary hover:text-primary-dark font-semibold"
-                  >
-                    <Phone className="w-4 h-4 mr-2" />
-                    {venue.phone}
-                  </a>
-                )}
-              </div>
-              {venue.description && (
-                <p className="text-gray-300 text-lg mt-6 max-w-3xl">{venue.description}</p>
+              {venue.phone && (
+                <a href={`tel:${venue.phone}`} className={styles.textLink}>
+                  <Phone size={16} aria-hidden="true" />
+                  {venue.phone}
+                </a>
               )}
             </div>
           </div>
+          {venue.image && typeof venue.image === 'object' && (
+            <div className={styles.heroImage}>
+              <Image
+                src={getMediaUrl(venue.image)}
+                alt={venue.image.alt || venue.name}
+                fill
+                sizes="(min-width: 1024px) 480px, (min-width: 640px) 80vw, 100vw"
+                preload
+              />
+            </div>
+          )}
         </div>
       </section>
-
-      {/* Photo Gallery */}
       {venue.gallery && venue.gallery.length > 0 && (
-        <section className="py-10 border-b border-gray-200 dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-6">
-              Venue Photos
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <section className={styles.section}>
+          <div className={styles.container}>
+            <h2>Venue Photos</h2>
+            <div className={styles.gallery}>
               {venue.gallery.map((item, index) => {
                 const img = typeof item.image === 'object' ? item.image : null
                 if (!img) return null
                 return (
-                  <div key={item.id || index} className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-md group">
-                    <Image
-                      src={getMediaUrl(img)}
-                      alt={item.caption || img.alt || `${venue.name} photo ${index + 1}`}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                    {item.caption && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
-                        <p className="text-white text-sm">{item.caption}</p>
-                      </div>
-                    )}
-                  </div>
+                  <figure key={item.id || index}>
+                    <div className={styles.galleryImage}>
+                      <Image
+                        src={getMediaUrl(img)}
+                        alt={
+                          item.caption ||
+                          img.alt ||
+                          `${venue.name} photo ${index + 1}`
+                        }
+                        fill
+                        sizes="(min-width: 1024px) 390px, (min-width: 640px) 50vw, 100vw"
+                      />
+                    </div>
+                    {item.caption && <figcaption>{item.caption}</figcaption>}
+                  </figure>
                 )
               })}
             </div>
           </div>
         </section>
       )}
-
-      {/* Additional Venue Info */}
-      {venue.additionalInfo && renderPortableTextToHtml(venue.additionalInfo) && (
-        <section className="py-10 border-b border-gray-200 dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-lrp-black dark:text-white mb-4">
-              Venue Details
-            </h2>
-            <div
-              dangerouslySetInnerHTML={{ __html: renderPortableTextToHtml(venue.additionalInfo) }}
-              className="prose-themed text-lg max-w-none"
-            />
-          </div>
-        </section>
-      )}
-
-      {/* Upcoming Events */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-lrp-black dark:text-white mb-8">
-            Upcoming Events at {venue.shortName || venue.name}
-          </h2>
-
-          {venueEvents.length === 0 ? (
-            <div className="text-center py-16">
-              <Calendar className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-              <p className="text-xl text-gray-500 dark:text-gray-400">
-                No upcoming events scheduled at this venue. Check back soon!
-              </p>
+      {venueDetailsHtml && (
+          <section className={styles.section}>
+            <div className={styles.container}>
+              <h2>Venue Details</h2>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: venueDetailsHtml,
+                }}
+                className={styles.richText}
+              />
             </div>
+          </section>
+        )}
+      <section className={styles.section}>
+        <div className={styles.container}>
+          <h2>Upcoming Events at {venue.shortName || venue.name}</h2>
+          {venueEvents.length === 0 ? (
+            <p className={styles.empty}>
+              No upcoming events scheduled at this venue. Check back soon!
+            </p>
           ) : (
-            <div className="space-y-4">
+            <div className={styles.rideRows}>
               {venueEvents.map((event) => {
                 const dateInfo = formatDate(event.date)
                 return (
-                  <div
-                    key={event._id}
-                    className="bg-white dark:bg-dark-bg-secondary rounded-xl shadow border border-gray-200 dark:border-gray-700 overflow-hidden"
-                  >
-                    <div className="flex flex-col sm:flex-row">
-                      {/* Date Badge */}
-                      <div className="flex-shrink-0 sm:w-24 bg-gray-50 dark:bg-dark-bg-primary flex sm:flex-col items-center justify-center p-4 gap-2 sm:gap-0">
-                        <div className="text-primary font-bold text-sm">{dateInfo.month}</div>
-                        <div className="text-3xl font-bold text-lrp-black dark:text-white">{dateInfo.day}</div>
-                      </div>
-
-                      {/* Event Info */}
-                      <div className="flex-1 p-4 sm:p-6">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                          <div>
-                            <Link
-                              href={`/events/${event.slug}`}
-                              className="text-xl font-bold text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors"
-                            >
+                  <article key={event._id} className={styles.venueEvent}>
+                    <div className={styles.venueEventTop}>
+                      <div className={styles.eventIdentity}>
+                        <time
+                          dateTime={event.date.split('T')[0]}
+                          aria-label={dateInfo.full}
+                          className={styles.date}
+                        >
+                          <span className={styles.dateMonth}>
+                            {dateInfo.month}
+                          </span>
+                          <span className={styles.dateDay}>{dateInfo.day}</span>
+                        </time>
+                        <div>
+                          <h3 className={styles.eventName}>
+                            <Link href={`/events/${event.slug}`}>
                               {event.name}
                             </Link>
-                            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-                              {dateInfo.full}
-                              {event.time && (
-                                <span className="inline-flex items-center ml-3">
-                                  <Clock className="w-3 h-3 mr-1" />
-                                  {event.time}
-                                </span>
-                              )}
-                            </p>
-                          </div>
-                          <Link
-                            href="/book"
-                            className="inline-flex items-center bg-primary hover:bg-primary-dark text-black font-bold px-6 py-2 rounded-lg transition-colors text-sm whitespace-nowrap"
-                          >
-                            Book Ride
-                          </Link>
+                          </h3>
+                          <p className={styles.eventTime}>
+                            {dateInfo.full}
+                            {event.time && (
+                              <>
+                                <br />
+                                {event.time}
+                              </>
+                            )}
+                          </p>
                         </div>
-
-                        {/* Ride Availability Row */}
-                        {event.rideAvailability && event.rideAvailability.length > 0 && (
-                          <div className="flex flex-wrap gap-3 mt-4">
-                            {RIDE_TYPES.map((type) => {
-                              const availability = event.rideAvailability?.find(
-                                (r) => r.rideType === type.value
-                              )
-                              if (!availability) return null
-                              return (
-                                <div key={type.value} className="flex items-center gap-2 text-sm">
-                                  <span className="text-gray-600 dark:text-gray-400">{type.label}:</span>
-                                  <RideAvailabilityBadge status={availability.status} notes={availability.notes} />
-                                </div>
-                              )
-                            })}
-                          </div>
-                        )}
                       </div>
+                      <Link href="/book" className={styles.button}>
+                        Book Ride
+                      </Link>
                     </div>
-                  </div>
+                    {event.rideAvailability &&
+                      event.rideAvailability.length > 0 && (
+                        <dl
+                          className={styles.availability}
+                          aria-label={`Ride availability for ${event.name}`}
+                        >
+                          {RIDE_TYPES.map((type) => {
+                            const availability = event.rideAvailability?.find(
+                              (r) => r.rideType === type.value,
+                            )
+                            if (!availability) return null
+                            return (
+                              <div key={type.value}>
+                                <dt className={styles.rideName}>
+                                  {type.label}
+                                </dt>
+                                <dd>
+                                  <RideStatus
+                                    status={availability.status}
+                                    notes={availability.notes}
+                                  />
+                                </dd>
+                              </div>
+                            )
+                          })}
+                        </dl>
+                      )}
+                  </article>
                 )
               })}
             </div>
           )}
         </div>
       </section>
-
-      {/* CTA */}
-      <section className="bg-primary py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
-            Need a Ride to {venue.shortName || venue.name}?
-          </h2>
-          <p className="text-black/80 text-lg mb-8">
-            Book your transportation in just a few clicks.
-          </p>
-          <Link
-            href="/book"
-            className="inline-block bg-black text-white hover:bg-gray-800 px-12 py-4 rounded-lg font-bold text-lg transition-all"
-          >
-            Book Online Now
-          </Link>
-          <p className="text-black/70 text-sm mt-4">
-            Or call <a href="tel:573-206-9499" className="font-semibold hover:underline">(573) 206-9499</a>
-          </p>
+      <section className={styles.close}>
+        <div className={`${styles.container} ${styles.closeGrid}`}>
+          <div>
+            <h2>Need a Ride to {venue.shortName || venue.name}?</h2>
+            <p className={styles.intro}>
+              Book your transportation in just a few clicks.
+            </p>
+          </div>
+          <div>
+            <Link href="/book" className={styles.button}>
+              Book Online Now
+            </Link>
+            <p className={styles.phone}>
+              Or call <a href="tel:573-206-9499">(573) 206-9499</a>
+            </p>
+          </div>
         </div>
       </section>
     </div>

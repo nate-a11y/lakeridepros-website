@@ -7,6 +7,7 @@ import Turnstile from '@/components/Turnstile';
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('');
+  const [showChallenge, setShowChallenge] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -18,6 +19,7 @@ export default function NewsletterSignup() {
 
     // Verify Turnstile token
     if (!turnstileToken) {
+      setShowChallenge(true);
       setStatus('error');
       setMessage('Please complete the security check.');
       return;
@@ -63,19 +65,25 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <div className="bg-primary dark:bg-dark-bg-tertiary py-12 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-white mb-2">
-            Stay Updated
+    <section aria-labelledby="newsletter-heading" className="bg-primary py-14 text-lrp-black sm:py-20">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-16 lg:px-8">
+        <div>
+          <p className="font-boardson text-3xl leading-none">The local short list</p>
+          <h2 id="newsletter-heading" className="mt-4 max-w-xl text-balance font-celebri text-4xl font-black leading-[0.95] tracking-[-0.045em] sm:text-5xl">
+            Know what&apos;s moving before the weekend does.
           </h2>
-          <p className="text-white/90 dark:text-neutral-300">
-            Subscribe to our newsletter for exclusive offers and updates
+          <p id="newsletter-description" className="mt-5 max-w-xl text-base leading-relaxed sm:text-lg">
+            Lake events, planning notes, fleet updates, and occasional offers—sent when there is something worth sharing.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-          <div className="flex flex-col sm:flex-row gap-3">
+        <form
+          onSubmit={handleSubmit}
+          onFocusCapture={() => setShowChallenge(true)}
+          className="border-t border-lrp-black/35 pt-6"
+          aria-describedby="newsletter-description"
+        >
+          <div className="flex flex-col gap-3 sm:flex-row">
             <label htmlFor="newsletter-email" className="sr-only">
               Email address
             </label>
@@ -85,45 +93,45 @@ export default function NewsletterSignup() {
               name="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email..."
+              placeholder="Email address"
               required
               disabled={status === 'loading'}
               autoComplete="email"
               aria-label="Email address for newsletter signup"
-              className="flex-1 px-4 py-3 rounded-lg border-0 bg-white dark:bg-dark-bg-secondary text-neutral-900 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-400 focus:ring-2 focus:ring-secondary dark:focus:ring-primary focus:outline-none disabled:opacity-50 transition-colors"
+              className="min-h-14 flex-1 border border-lrp-black bg-white px-4 py-3 text-lrp-black placeholder:text-lrp-black/55 focus:outline focus:outline-3 focus:outline-offset-2 focus:outline-lrp-black disabled:opacity-55"
             />
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="bg-secondary-dark dark:bg-primary-dark hover:bg-secondary dark:hover:bg-primary text-lrp-black font-semibold px-8 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="min-h-14 bg-lrp-black px-8 py-3 font-black text-white hover:bg-white hover:text-lrp-black focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-lrp-black disabled:cursor-not-allowed disabled:opacity-55"
             >
               {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
             </button>
           </div>
 
           {/* Cloudflare Turnstile */}
-          <div className="flex justify-center mt-4">
-            <Turnstile
-              onSuccess={(token) => setTurnstileToken(token)}
-              onError={() => setTurnstileToken(null)}
-              onExpire={() => setTurnstileToken(null)}
-            />
-          </div>
+          {showChallenge && (
+            <div className="mt-4 flex justify-start">
+              <Turnstile
+                onSuccess={(token) => setTurnstileToken(token)}
+                onError={() => setTurnstileToken(null)}
+                onExpire={() => setTurnstileToken(null)}
+              />
+            </div>
+          )}
 
           {message && (
             <p
               role={status === 'success' ? 'status' : 'alert'}
               aria-live="polite"
               aria-atomic="true"
-              className={`mt-3 text-center text-sm ${
-                status === 'success' ? 'text-green-200 dark:text-primary-light' : 'text-red-200 dark:text-red-300'
-              }`}
+              className="mt-3 text-sm font-bold"
             >
               {message}
             </p>
           )}
         </form>
       </div>
-    </div>
+    </section>
   );
 }

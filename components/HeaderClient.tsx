@@ -1,511 +1,246 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState, useMemo, useCallback } from 'react';
-import { AtSign, ChevronDown } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
+import { useEffect, useMemo, useRef, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ChevronDown, Menu, X } from 'lucide-react'
 import { MoovsBookingLink } from '@/components/MoovsBookingLink'
-import CartIcon from '@/components/cart/CartIcon';
-import { FacebookIcon, InstagramIcon, TikTokIcon, XIcon, YouTubeIcon } from '@/components/SocialIcons';
-
-type DropdownType = 'services' | 'partners' | 'shop' | 'events' | 'about' | 'social';
-type DropdownState = Record<DropdownType, boolean>;
-
-const initialDropdownState: DropdownState = {
-  services: false,
-  partners: false,
-  shop: false,
-  events: false,
-  about: false,
-  social: false,
-};
-
-const socialLinks = [
-  {
-    name: 'Facebook',
-    href: 'https://facebook.com/lakeridepros',
-    icon: FacebookIcon,
-  },
-  {
-    name: 'Instagram',
-    href: 'https://instagram.com/lakeridepros',
-    icon: InstagramIcon,
-  },
-  {
-    name: 'X (Twitter)',
-    href: 'https://x.com/LakeRidePros?s=09',
-    icon: XIcon,
-  },
-  {
-    name: 'YouTube',
-    href: 'https://youtube.com/@lakeridepros?si=oS45binC05S-krrq',
-    icon: YouTubeIcon,
-  },
-  {
-    name: 'TikTok',
-    href: 'https://www.tiktok.com/@lakeridepros?_r=1&_t=ZT-91WVPg1ADlu',
-    icon: TikTokIcon,
-  },
-];
+import CartIcon from '@/components/cart/CartIcon'
 
 interface Service {
-  name: string;
-  slug: string;
+  name: string
+  slug: string
 }
 
 interface HeaderClientProps {
-  services: Service[];
-  popularServiceSlugs?: string[];
+  services: Service[]
+  popularServiceSlugs?: string[]
 }
 
+type MenuName = 'services' | 'partners' | 'explore'
+
+const partners = [
+  { name: 'Wedding partners', href: '/wedding-partners' },
+  { name: 'Local premier partners', href: '/local-premier-partners' },
+  { name: 'Trusted referral partners', href: '/trusted-referral-partners' },
+]
+
+const explore = [
+  { name: 'Manage your profile', href: 'https://customer.moovs.app/lake-ride-pros/user/profile' },
+  { name: 'Pricing', href: '/pricing' },
+  { name: 'Lake guides', href: '/blog' },
+  { name: 'Music', href: '/music' },
+  { name: 'Our drivers', href: '/our-drivers' },
+  { name: 'Testimonials', href: '/testimonials' },
+  { name: 'Gift cards', href: '/gift-cards' },
+  { name: 'Shop', href: '/shop' },
+  { name: 'Insider membership', href: '/insider-membership-benefits' },
+  { name: 'About Lake Ride Pros', href: '/about-us' },
+]
+
+const focus = 'focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary-light'
+
 export default function HeaderClient({ services, popularServiceSlugs = [] }: HeaderClientProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dropdowns, setDropdowns] = useState<DropdownState>(initialDropdownState);
+  const [openMenu, setOpenMenu] = useState<MenuName | null>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileExpanded, setMobileExpanded] = useState<MenuName | null>(null)
+  const mobileMenuButton = useRef<HTMLButtonElement>(null)
 
-  // Memoized dropdown handlers to prevent recreation on every render
-  const openDropdown = useCallback((type: DropdownType) => {
-    setDropdowns(prev => ({ ...prev, [type]: true }));
-  }, []);
+  useEffect(() => {
+    if (!mobileOpen) return
 
-  const closeDropdown = useCallback((type: DropdownType) => {
-    setDropdowns(prev => ({ ...prev, [type]: false }));
-  }, []);
+    function closeOnEscape(event: globalThis.KeyboardEvent) {
+      if (event.key !== 'Escape') return
+      setMobileOpen(false)
+      mobileMenuButton.current?.focus()
+    }
 
+    document.addEventListener('keydown', closeOnEscape)
+    return () => document.removeEventListener('keydown', closeOnEscape)
+  }, [mobileOpen])
 
-  // Memoize service dropdown items to avoid recreation on every render
-  const serviceDropdownItems = useMemo(() => [
-    { name: 'All Services', href: '/services' },
-    ...services.map((service) => ({
-      name: service.name,
-      href: `/services/${service.slug}`,
-    })),
-  ], [services]);
+  const orderedServices = useMemo(() => {
+    const fallback = [
+      'airport-transfers',
+      'wedding-transportation',
+      'corporate-executive-travel',
+      'group-shuttle-services',
+      'events-festivals',
+      'party-bus-nightlife',
+    ]
+    const priority = popularServiceSlugs.length > 0 ? popularServiceSlugs : fallback
+    return [...services].sort((a, b) => {
+      const aIndex = priority.indexOf(a.slug)
+      const bIndex = priority.indexOf(b.slug)
+      if (aIndex === -1 && bIndex === -1) return a.name.localeCompare(b.name)
+      if (aIndex === -1) return 1
+      if (bIndex === -1) return -1
+      return aIndex - bIndex
+    })
+  }, [popularServiceSlugs, services])
 
-  // Use analytics-based popular services, fallback to hardcoded list
-  const fallbackServiceSlugs = useMemo(() => [
-    'wedding-transportation',
-    'airport-shuttle',
-    'nightlife-transportation',
-    'corporate-transportation',
-    'private-aviation-transportation',
-  ], []);
+  function closeMobile() {
+    setMobileOpen(false)
+  }
 
-  // Use analytics data if available, otherwise use fallback
-  const featuredServiceSlugs = useMemo(() =>
-    popularServiceSlugs.length > 0 ? popularServiceSlugs : fallbackServiceSlugs,
-    [popularServiceSlugs, fallbackServiceSlugs]
-  );
+  function desktopMenu(name: MenuName, label: string, children: React.ReactNode) {
+    const isOpen = openMenu === name
+    return (
+      <div
+        className="relative"
+        role="none"
+        onMouseEnter={() => setOpenMenu(name)}
+        onMouseLeave={() => setOpenMenu(null)}
+        onBlur={event => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node)) setOpenMenu(null)
+        }}
+        onClick={event => {
+          if ((event.target as Element).closest('a')) setOpenMenu(null)
+        }}
+        onKeyDownCapture={event => {
+          if (event.key === 'Escape') {
+            event.preventDefault()
+            setOpenMenu(null)
+            event.currentTarget.querySelector<HTMLButtonElement>('button')?.focus()
+          }
+        }}
+      >
+        <button
+          type="button"
+          aria-expanded={isOpen}
+          aria-haspopup="true"
+          className={`flex min-h-12 items-center gap-1 text-sm font-bold text-white/85 hover:text-primary-light ${focus}`}
+          onClick={() => setOpenMenu(isOpen ? null : name)}
+          onKeyDown={event => {
+            if (event.key === 'Escape') setOpenMenu(null)
+          }}
+        >
+          {label} <ChevronDown className={`size-4 motion-safe:transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+        </button>
+        {isOpen && children}
+      </div>
+    )
+  }
 
-  const featuredServices = useMemo(() => services
-    .filter(s => featuredServiceSlugs.includes(s.slug))
-    .sort((a, b) => featuredServiceSlugs.indexOf(a.slug) - featuredServiceSlugs.indexOf(b.slug))
-    .map(s => ({ name: s.name, href: `/services/${s.slug}` })),
-    [services, featuredServiceSlugs]
-  );
+  function mobileGroup(name: MenuName, label: string, links: Array<{ name: string; href: string }>) {
+    const isOpen = mobileExpanded === name
+    return (
+      <div className="border-b border-white/20">
+        <button
+          type="button"
+          className="flex w-full items-center justify-between py-4 text-left text-lg font-black text-white"
+          aria-expanded={isOpen}
+          onClick={() => setMobileExpanded(isOpen ? null : name)}
+        >
+          {label} <ChevronDown className={`size-5 motion-safe:transition-transform ${isOpen ? 'rotate-180 text-primary-light' : ''}`} aria-hidden="true" />
+        </button>
+        {isOpen && (
+          <ul className="grid gap-1 pb-4 sm:grid-cols-2">
+            {links.map(link => (
+              <li key={link.href}>
+                <Link href={link.href} onClick={closeMobile} className="block py-2 text-sm text-white/70 hover:text-primary-light">
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    )
+  }
 
-  const otherServices = useMemo(() => services
-    .filter(s => !featuredServiceSlugs.includes(s.slug))
-    .map(s => ({ name: s.name, href: `/services/${s.slug}` })),
-    [services, featuredServiceSlugs]
-  );
-
-  const navigation = useMemo(() => [
-    {
-      name: 'Services',
-      href: '/services',
-      hasDropdown: true,
-      dropdownType: 'services',
-      dropdownItems: serviceDropdownItems,
-    },
-    { name: 'Fleet', href: '/fleet' },
-    {
-      name: 'Partners',
-      href: '/wedding-partners',
-      hasDropdown: true,
-      dropdownType: 'partners',
-      dropdownItems: [
-        { name: 'Wedding Partners', href: '/wedding-partners' },
-        { name: 'Local Premier Partners', href: '/local-premier-partners' },
-        { name: 'Trusted Referral Partners', href: '/trusted-referral-partners' },
-      ]
-    },
-    {
-      name: 'Shop & Perks',
-      href: '/shop',
-      hasDropdown: true,
-      dropdownType: 'shop',
-      dropdownItems: [
-        { name: 'Merch Store', href: '/shop' },
-        { name: 'Gift Cards', href: '/gift-cards' },
-        { name: 'Insider Membership', href: '/insider-membership-benefits' },
-      ]
-    },
-    {
-      name: 'Events',
-      href: '/events',
-      hasDropdown: true,
-      dropdownType: 'events',
-      dropdownItems: [
-        { name: 'All Events', href: '/events' },
-        { name: 'Concerts', href: '/events?type=concert' },
-        { name: 'Tours', href: '/events?type=tour' },
-        { name: 'Special Events', href: '/events?type=special' },
-      ]
-    },
-    {
-      name: 'Learn More',
-      href: '/about-us',
-      hasDropdown: true,
-      dropdownType: 'about',
-      dropdownItems: [
-        { name: 'Our Team', href: '/our-drivers' },
-        { name: 'Pricing', href: '/pricing' },
-        { name: 'Blog', href: '/blog' },
-        { name: 'Testimonials', href: '/testimonials' },
-      ]
-    },
-    { name: 'Contact', href: '/contact' },
-  ], [serviceDropdownItems]);
+  const serviceLinks = orderedServices.map(service => ({ name: service.name, href: `/services/${service.slug}` }))
 
   return (
-    <header className="bg-white dark:bg-dark-bg-secondary border-b border-neutral-200 dark:border-dark-border sticky top-0 z-50 transition-colors">
+    <header className="sticky top-0 z-50 border-b border-white/20 bg-lrp-black text-white">
       <nav aria-label="Main navigation" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center h-full py-2">
-            <Link href="/" className="flex items-center h-full">
-              <Image
-                src="/Color logo - no background.png"
-                alt="Lake Ride Pros Logo"
-                width={150}
-                height={50}
-                className="w-auto h-full max-w-[128px] sm:max-w-[144px] md:max-w-[160px] object-contain"
-                quality={65}
-                priority
-              />
-            </Link>
-          </div>
+        <div className="flex h-[4.5rem] items-center justify-between gap-6">
+          <Link href="/" aria-label="Lake Ride Pros home" className={`flex h-full shrink-0 items-center py-2 ${focus}`}>
+            <Image
+              src="/Color logo - no background.png"
+              alt=""
+              width={320}
+              height={324}
+              sizes="56px"
+              quality={75}
+              loading="eager"
+              fetchPriority="high"
+              className="h-14 w-auto object-contain"
+            />
+          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex lg:items-center lg:space-x-6">
-            {navigation.map((item) => (
-              item.hasDropdown ? (
-                <div
-                  key={item.name}
-                  className="relative"
-                  role="none"
-                  onMouseEnter={() => openDropdown(item.dropdownType as DropdownType)}
-                  onMouseLeave={() => closeDropdown(item.dropdownType as DropdownType)}
-                  onFocus={() => openDropdown(item.dropdownType as DropdownType)}
-                  onBlur={(e) => {
-                    // Only close if focus moves outside the dropdown container
-                    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                      closeDropdown(item.dropdownType as DropdownType);
-                    }
-                  }}
-                >
-                  <button
-                    className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md px-1 -mx-1"
-                    aria-expanded={dropdowns[item.dropdownType as DropdownType]}
-                    aria-haspopup="true"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        openDropdown(item.dropdownType as DropdownType);
-                      }
-                      if (e.key === 'Escape') {
-                        closeDropdown(item.dropdownType as DropdownType);
-                      }
-                    }}
-                  >
-                    {item.name}
-                    <ChevronDown className="w-4 h-4" aria-hidden="true" />
-                  </button>
-
-                  {item.dropdownType === 'services' && dropdowns.services && (
-                    <div className="absolute top-full left-0 pt-2 z-50">
-                    <div role="menu" aria-label="Services submenu" className="w-[600px] bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border p-6">
-                      <div className="grid grid-cols-2 gap-6">
-                        {/* Featured Services Column */}
-                        <div>
-                          <div className="text-xs font-bold text-primary uppercase mb-3">Most Popular</div>
-                          <div className="space-y-1">
-                            {featuredServices.map((service) => (
-                              <Link
-                                key={service.name}
-                                href={service.href}
-                                role="menuitem"
-                                className="block px-3 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors rounded-md"
-                              >
-                                {service.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Other Services Column - Scrollable */}
-                        <div>
-                          <div className="text-xs font-bold text-neutral-600 dark:text-neutral-400 uppercase mb-3">All Services</div>
-                          <div className="space-y-1 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
-                            <Link
-                              href="/services"
-                              role="menuitem"
-                              className="block px-3 py-2 text-sm font-semibold text-primary hover:bg-lrp-green/10 transition-colors rounded-md"
-                            >
-                              View All Services →
-                            </Link>
-                            {otherServices.map((service) => (
-                              <Link
-                                key={service.name}
-                                href={service.href}
-                                role="menuitem"
-                                className="block px-3 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors rounded-md"
-                              >
-                                {service.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    </div>
-                  )}
-
-                  {item.dropdownType === 'partners' && dropdowns.partners && (
-                    <div className="absolute top-full left-0 pt-2 z-50">
-                    <div role="menu" aria-label="Partners submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50">
-                      {item.dropdownItems?.map((dropdownItem) => (
-                        <Link
-                          key={dropdownItem.name}
-                          href={dropdownItem.href}
-                          role="menuitem"
-                          className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
-                        >
-                          {dropdownItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                    </div>
-                  )}
-
-                  {item.dropdownType === 'shop' && dropdowns.shop && (
-                    <div className="absolute top-full left-0 pt-2 z-50">
-                    <div role="menu" aria-label="Shop & Perks submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
-                      {item.dropdownItems?.map((dropdownItem) => (
-                        <Link
-                          key={dropdownItem.name}
-                          href={dropdownItem.href}
-                          role="menuitem"
-                          className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
-                        >
-                          {dropdownItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                    </div>
-                  )}
-
-                  {item.dropdownType === 'events' && dropdowns.events && (
-                    <div className="absolute top-full left-0 pt-2 z-50">
-                    <div role="menu" aria-label="Events submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
-                      {item.dropdownItems?.map((dropdownItem) => (
-                        <Link
-                          key={dropdownItem.name}
-                          href={dropdownItem.href}
-                          role="menuitem"
-                          className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
-                        >
-                          {dropdownItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                    </div>
-                  )}
-
-                  {item.dropdownType === 'about' && dropdowns.about && (
-                    <div className="absolute top-full left-0 pt-2 z-50">
-                    <div role="menu" aria-label="Learn More submenu" className="w-64 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2">
-                      {item.dropdownItems?.map((dropdownItem) => (
-                        <Link
-                          key={dropdownItem.name}
-                          href={dropdownItem.href}
-                          role="menuitem"
-                          className="block px-4 py-2 text-sm text-neutral-900 dark:text-white hover:bg-lrp-green/10 hover:text-lrp-green transition-colors"
-                        >
-                          {dropdownItem.name}
-                        </Link>
-                      ))}
-                    </div>
-                    </div>
-                  )}
+          <div className="hidden items-center gap-6 lg:flex [&>a]:min-w-11">
+            {desktopMenu('services', 'Services', (
+              <div className="absolute left-0 top-full w-[42rem] border-t-2 border-primary bg-white p-7 text-lrp-black shadow-2xl">
+                <div className="flex items-end justify-between border-b border-black/20 pb-5">
+                  <div>
+                    <p className="text-xs font-bold text-primary-dark">Everyday rides to full weekends</p>
+                    <p className="mt-1 text-2xl font-black">Choose the plan, not the vehicle.</p>
+                  </div>
+                  <Link href="/services" className="text-sm font-bold underline decoration-primary decoration-2 underline-offset-4">All services</Link>
                 </div>
-              ) : (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary transition-colors duration-200 text-sm font-semibold relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 hover:after:scale-x-100 after:transition-transform"
-                >
-                  {item.name}
-                </Link>
-              )
+                <ul className="mt-4 grid max-h-[23rem] grid-cols-2 gap-x-8 overflow-y-auto">
+                  {serviceLinks.map(link => (
+                    <li key={link.href} className="border-b border-black/10">
+                      <Link href={link.href} className="block py-3 text-sm font-bold hover:text-primary-dark">{link.name}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-
-            {/* Quote Now Button */}
-            <MoovsBookingLink location="header"
-              className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-2.5 rounded-lg font-semibold transition-colors hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-            >
-              Quote Now
+            <Link href="/fleet" className={`text-sm font-bold text-white/85 hover:text-primary-light ${focus}`}>Fleet</Link>
+            {desktopMenu('partners', 'Partners', (
+              <div className="absolute left-0 top-full w-72 border-t-2 border-primary bg-white px-6 py-4 text-lrp-black shadow-2xl">
+                <ul>{partners.map(link => <li key={link.href}><Link href={link.href} className="block border-b border-black/10 py-3 text-sm font-bold hover:text-primary-dark">{link.name}</Link></li>)}</ul>
+              </div>
+            ))}
+            <Link href="/events" className={`text-sm font-bold text-white/85 hover:text-primary-light ${focus}`}>Events</Link>
+            {desktopMenu('explore', 'Explore', (
+              <div className="absolute right-0 top-full w-80 border-t-2 border-primary bg-white px-6 py-4 text-lrp-black shadow-2xl">
+                <ul className="grid grid-cols-2 gap-x-5">{explore.map(link => <li key={link.href}><Link href={link.href} className="block border-b border-black/10 py-3 text-sm font-bold hover:text-primary-dark">{link.name}</Link></li>)}</ul>
+              </div>
+            ))}
+            <Link href="/contact" className={`text-sm font-bold text-white/85 hover:text-primary-light ${focus}`}>Contact</Link>
+            <MoovsBookingLink location="header" className="inline-flex min-h-11 items-center justify-center bg-primary px-5 py-3 text-sm font-black text-lrp-black hover:bg-primary-light focus-visible:ring-white focus-visible:ring-offset-lrp-black">
+              Quote or book
             </MoovsBookingLink>
+            <CartIcon />
           </div>
 
-          {/* Right side buttons */}
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            {/* Social Media Dropdown - hidden on mobile */}
-            <div
-              className="hidden md:block relative"
-              role="presentation"
-              onMouseEnter={() => openDropdown('social')}
-              onMouseLeave={() => closeDropdown('social')}
-              onFocus={() => openDropdown('social')}
-              onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                  closeDropdown('social');
-                }
-              }}
-            >
-              <button
-                className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-primary dark:hover:text-primary transition-colors rounded-lg hover:bg-neutral-100 dark:hover:bg-dark-bg-tertiary"
-                aria-expanded={dropdowns.social}
-                aria-haspopup="true"
-                aria-label="Social media links"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openDropdown('social');
-                  }
-                  if (e.key === 'Escape') {
-                    closeDropdown('social');
-                  }
-                }}
-              >
-                <AtSign className="w-4 h-4" />
-              </button>
-
-              {/* Animated Dropdown */}
-              {dropdowns.social && (
-              <div
-                role="menu"
-                aria-label="Social media links"
-                className="absolute top-full right-0 pt-0 bg-white dark:bg-dark-bg-secondary rounded-lg shadow-xl border border-neutral-200 dark:border-dark-border py-2 z-50 min-w-[160px]"
-              >
-                {socialLinks.map((social) => {
-                  const Icon = social.icon;
-                  return (
-                    <a
-                      key={social.name}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      role="menuitem"
-                      className="flex items-center gap-3 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-lrp-green/10 hover:text-primary dark:hover:text-primary transition-colors"
-                      aria-label={`Follow Lake Ride Pros on ${social.name} (opens in new tab)`}
-                    >
-                      <Icon className="w-4 h-4" />
-                      <span>{social.name}</span>
-                    </a>
-                  );
-                })}
-              </div>
-              )}
-            </div>
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
-
-            {/* Cart Icon */}
+          <div className="flex items-center gap-3 lg:hidden [&>a]:min-w-11">
             <CartIcon />
-
-            {/* Mobile menu button */}
             <button
+              ref={mobileMenuButton}
               type="button"
-              className="lg:!hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-primary-dark hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={mobileMenuOpen}
+              className={`inline-flex size-11 items-center justify-center text-primary-light ${focus}`}
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
+              onClick={() => setMobileOpen(value => !value)}
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {mobileMenuOpen ? (
-                  <path d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
+              {mobileOpen ? <X className="size-6" aria-hidden="true" /> : <Menu className="size-6" aria-hidden="true" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div id="mobile-menu" className="lg:hidden max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom, 0px))' }}>
-            <nav aria-label="Mobile navigation" className="flex flex-col space-y-2">
-              {navigation.map((item) => (
-                <div key={item.name}>
-                  {item.hasDropdown ? (
-                    <>
-                      <Link
-                        href={item.href}
-                        className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors duration-200 px-3 py-2 text-base font-semibold rounded-lg block"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                      <div className="pl-4 space-y-1 max-h-[280px] overflow-y-auto pr-2">
-                        {item.dropdownItems?.map((dropdownItem) => (
-                          <Link
-                            key={dropdownItem.name}
-                            href={dropdownItem.href}
-                            className="text-neutral-600 dark:text-neutral-300 hover:text-primary dark:hover:text-primary hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors duration-200 px-3 py-1.5 text-sm rounded-lg block"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            {dropdownItem.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className="text-lrp-black dark:text-white hover:text-primary dark:hover:text-primary hover:bg-green-50 dark:hover:bg-dark-bg-tertiary transition-colors duration-200 px-3 py-2 text-base font-semibold rounded-lg block"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  )}
-                </div>
-              ))}
-
-              {/* Mobile Quote Now Button */}
-              <MoovsBookingLink location="mobile_header"
-                onClick={() => setMobileMenuOpen(false)}
-                className="bg-primary hover:bg-primary-dark text-lrp-black px-6 py-3 rounded-lg font-semibold text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              >
-                Quote Now
+        {mobileOpen && (
+          <div id="mobile-menu" className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-white/20 pb-8 lg:hidden">
+            {mobileGroup('services', 'Services', [{ name: 'All services', href: '/services' }, ...serviceLinks])}
+            <div className="grid grid-cols-2 gap-x-6 border-b border-white/20 py-2">
+              <Link href="/fleet" onClick={closeMobile} className="py-4 text-lg font-black">Fleet</Link>
+              <Link href="/events" onClick={closeMobile} className="py-4 text-lg font-black">Events</Link>
+            </div>
+            {mobileGroup('partners', 'Partners', partners)}
+            {mobileGroup('explore', 'Explore', explore)}
+            <div className="grid gap-3 pt-6 sm:grid-cols-2">
+              <MoovsBookingLink location="mobile_header" onClick={closeMobile} className="inline-flex min-h-14 items-center justify-center bg-primary px-6 py-4 font-black text-lrp-black hover:bg-primary-light focus-visible:ring-white focus-visible:ring-offset-lrp-black">
+                Quote or book
               </MoovsBookingLink>
-            </nav>
+              <Link href="/contact" onClick={closeMobile} className="inline-flex min-h-14 items-center justify-center border border-white/45 px-6 py-4 font-black">Contact us</Link>
+            </div>
           </div>
         )}
       </nav>
-
     </header>
-  );
+  )
 }

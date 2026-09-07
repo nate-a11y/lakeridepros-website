@@ -1,3 +1,5 @@
+import CorePage from '@/components/core-editorial/CorePage'
+import CoreHero from '@/components/core-editorial/CoreHero'
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import SpotifyEmbed from '@/components/SpotifyEmbed';
@@ -69,18 +71,16 @@ const platforms = [
 
 export default function MusicPage() {
   return (
-    <div className="min-h-screen bg-lrp-white dark:bg-dark-bg-primary">
+    <CorePage>
       {/* Hero */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <CoreHero image="music">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Lake Ride Pros Music
           </h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Ride with the vibe. Listen to Lake Ride Pros on all major streaming platforms.
           </p>
-        </div>
-      </section>
+        </CoreHero>
 
       {/* Spotify Embed */}
       <SpotifyEmbed
@@ -90,13 +90,13 @@ export default function MusicPage() {
       />
 
       {/* Streaming Platform Links */}
-      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary">
+      <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+          <div className="text-left mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
               Listen Everywhere
             </h2>
-            <p className="text-lrp-text-secondary dark:text-dark-text-secondary max-w-xl mx-auto">
+            <p className="text-lrp-text-secondary max-w-xl mx-auto">
               Find Lake Ride Pros on your favorite streaming platform
             </p>
           </div>
@@ -108,12 +108,12 @@ export default function MusicPage() {
                 href={platform.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`${platform.color} ${platform.hoverColor} text-white rounded-xl p-6 flex items-center gap-4 transition-all hover:shadow-lg hover:-translate-y-0.5 group`}
+                className={`border-t border-black/25 py-6 flex items-center gap-4 text-black hover:text-[#2f730e] group`}
                 aria-label={`Listen on ${platform.name} (opens in new tab)`}
               >
                 {platform.icon}
                 <div>
-                  <p className="text-sm text-white/80">Listen on</p>
+                  <p className="text-sm text-black/70">Listen on</p>
                   <p className="text-xl font-bold">{platform.name}</p>
                 </div>
                 <svg
@@ -137,13 +137,13 @@ export default function MusicPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-lrp-green hover:text-lrp-green-dark font-medium"
+            className="inline-flex items-center gap-2 text-[#2f730e] hover:text-[#2f730e] font-medium"
           >
             <span>&larr;</span>
             <span>Back to Home</span>
           </Link>
         </div>
       </section>
-    </div>
+    </CorePage>
   );
 }

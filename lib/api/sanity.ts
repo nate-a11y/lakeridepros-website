@@ -96,6 +96,20 @@ export interface Event {
   [key: string]: any
 }
 
+/**
+ * Sanity request errors may contain an authenticated request snapshot. Log only
+ * the message so build/runtime logs can never echo authorization headers.
+ */
+function logSanityError(context: string, error: unknown): void {
+  const message = error instanceof Error ? error.message : 'Unknown Sanity error'
+  console.error(`[Sanity] ${context}: ${message}`)
+}
+
+function logSanityWarning(context: string, error: unknown): void {
+  const message = error instanceof Error ? error.message : 'Unknown Sanity error'
+  console.warn(`[Sanity] ${context}: ${message}`)
+}
+
 interface PaginationParams {
   limit?: number
   page?: number
@@ -191,7 +205,7 @@ export async function getServices(
     const docs = normalizeDocs(raw)
     return paginateSimple(docs, params)
   } catch (error) {
-    console.error('[Sanity] Error fetching services:', error)
+    logSanityError('Error fetching services', error)
     return { docs: [] }
   }
 }
@@ -202,7 +216,7 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
     const raw = await client.fetch(serviceBySlugQuery, { slug }, { next: { revalidate: 60 } })
     return raw ? normalizeDoc<Service>(raw) : null
   } catch (error) {
-    console.error(`[Sanity] Error fetching service ${slug}:`, error)
+    logSanityError(`Error fetching service ${slug}`, error)
     return null
   }
 }
@@ -224,7 +238,7 @@ export async function getVehicles(
     const docs = normalizeDocs(raw)
     return paginateSimple(docs, params)
   } catch (error) {
-    console.error('[Sanity] Error fetching vehicles:', error)
+    logSanityError('Error fetching vehicles', error)
     return { docs: [] }
   }
 }
@@ -239,7 +253,7 @@ export async function getFeaturedVehicles(limit = 6): Promise<Vehicle[]> {
     )
     return normalizeDocs(raw)
   } catch (error) {
-    console.error('[Sanity] Error fetching featured vehicles:', error)
+    logSanityError('Error fetching featured vehicles', error)
     return []
   }
 }
@@ -251,7 +265,7 @@ export async function getRandomVehicles(limit = 3): Promise<Vehicle[]> {
     const vehicles = normalizeDocs(raw)
     return fisherYatesShuffle(vehicles).slice(0, limit)
   } catch (error) {
-    console.error('[Sanity] Error fetching random vehicles:', error)
+    logSanityError('Error fetching random vehicles', error)
     return []
   }
 }
@@ -262,7 +276,7 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
     const raw = await writeClient.fetch(vehicleBySlugQuery, { slug }, { cache: 'no-store' })
     return raw ? normalizeDoc<Vehicle>(raw) : null
   } catch (error) {
-    console.error(`[Sanity] Error fetching vehicle ${slug}:`, error)
+    logSanityError(`Error fetching vehicle ${slug}`, error)
     return null
   }
 }
@@ -283,7 +297,7 @@ export const getVehiclesLocal = async (): Promise<Vehicle[]> => {
     )
     return normalizeDocs(raw)
   } catch (error) {
-    console.error('[Sanity] Error fetching all vehicles:', error)
+    logSanityError('Error fetching all vehicles', error)
     return []
   }
 }
@@ -341,7 +355,7 @@ export async function getBlogPosts(
       totalPages,
     }
   } catch (error) {
-    console.error('[Sanity] Error fetching blog posts:', error)
+    logSanityError('Error fetching blog posts', error)
     return { docs: [], hasNextPage: false, page: 1, totalDocs: 0, totalPages: 0 }
   }
 }
@@ -356,7 +370,7 @@ export async function getLatestBlogPosts(limit = 3): Promise<BlogPost[]> {
     )
     return normalizeDocs(raw)
   } catch (error) {
-    console.error('[Sanity] Error fetching latest blog posts:', error)
+    logSanityError('Error fetching latest blog posts', error)
     return []
   }
 }
@@ -367,7 +381,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
     const raw = await client.fetch(blogPostBySlugQuery, { slug }, { next: { revalidate: 60 } })
     return raw ? normalizeDoc<BlogPost>(raw) : null
   } catch (error) {
-    console.error(`[Sanity] Error fetching blog post ${slug}:`, error)
+    logSanityError(`Error fetching blog post ${slug}`, error)
     return null
   }
 }
@@ -397,7 +411,7 @@ export async function getAdjacentBlogPosts(
       next: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
     }
   } catch (error) {
-    console.error('[Sanity] Error fetching adjacent blog posts:', error)
+    logSanityError('Error fetching adjacent blog posts', error)
     return { previous: null, next: null }
   }
 }
@@ -421,7 +435,7 @@ export async function getProducts(
     const docs = normalizeDocs(raw)
     return paginateSimple(docs, params)
   } catch (error) {
-    console.error('[Sanity] Error fetching products:', error)
+    logSanityError('Error fetching products', error)
     return { docs: [] }
   }
 }
@@ -436,7 +450,7 @@ export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
     )
     return normalizeDocs(raw)
   } catch (error) {
-    console.error('[Sanity] Error fetching featured products:', error)
+    logSanityError('Error fetching featured products', error)
     return []
   }
 }
@@ -447,7 +461,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     const raw = await client.fetch(productBySlugQuery, { slug }, { next: { revalidate: 60 } })
     return raw ? normalizeDoc<Product>(raw) : null
   } catch (error) {
-    console.error(`[Sanity] Error fetching product ${slug}:`, error)
+    logSanityError(`Error fetching product ${slug}`, error)
     return null
   }
 }
@@ -458,7 +472,7 @@ export const getProductsLocal = async (): Promise<unknown[]> => {
     const raw: any[] = await client.fetch(productsQuery, {}, { next: { revalidate: 60 } })
     return normalizeDocs(raw)
   } catch (error) {
-    console.error('[Sanity] Error fetching all products:', error)
+    logSanityError('Error fetching all products', error)
     return []
   }
 }
@@ -496,7 +510,7 @@ export async function getTestimonials(
       return content.length > 0 && !placeholderTexts.includes(content)
     })
   } catch (error) {
-    console.error('[Sanity] Error fetching testimonials:', error)
+    logSanityError('Error fetching testimonials', error)
     return []
   }
 }
@@ -654,7 +668,7 @@ export async function getPartners(
 
     return partners
   } catch (error) {
-    console.warn('[Sanity] Partners collection not found or error, returning empty array:', error)
+    logSanityWarning('Partners collection unavailable; returning an empty list', error)
     return []
   }
 }
@@ -683,7 +697,7 @@ export async function getPartnersByType(
 
     return partners
   } catch (error) {
-    console.warn('[Sanity] Partners collection not found or error, returning empty array:', error)
+    logSanityWarning('Partners collection unavailable; returning an empty list', error)
     return []
   }
 }
@@ -709,7 +723,7 @@ export async function getPartnerBySlugLocal(slug: string): Promise<Partner | nul
     )
     return raw ? normalizeDoc<Partner>(raw) : null
   } catch (error) {
-    console.error(`[Sanity] Error fetching partner ${slug}:`, error)
+    logSanityError(`Error fetching partner ${slug}`, error)
     return null
   }
 }
@@ -728,7 +742,7 @@ export async function getPageBySlug(slug: string): Promise<Record<string, unknow
     const raw = await client.fetch(pageBySlugQuery, { slug }, { next: { revalidate: 60 } })
     return raw ? normalizeDoc(raw) : null
   } catch (error) {
-    console.error(`[Sanity] Error fetching page ${slug}:`, error)
+    logSanityError(`Error fetching page ${slug}`, error)
     return null
   }
 }
@@ -747,7 +761,7 @@ export const getPagesLocal = async (): Promise<unknown[]> => {
     )
     return normalizeDocs(raw)
   } catch (error) {
-    console.error('[Sanity] Error fetching all pages:', error)
+    logSanityError('Error fetching all pages', error)
     return []
   }
 }
@@ -765,7 +779,7 @@ export async function getVenues(
     const docs = normalizeDocs(raw)
     return paginateSimple(docs, params)
   } catch (error) {
-    console.error('[Sanity] Error fetching venues:', error)
+    logSanityError('Error fetching venues', error)
     return { docs: [] }
   }
 }
@@ -776,7 +790,7 @@ export async function getVenueBySlug(slug: string): Promise<Venue | null> {
     const raw = await client.fetch(venueBySlugQuery, { slug }, { next: { revalidate: 60 } })
     return raw ? normalizeDoc<Venue>(raw) : null
   } catch (error) {
-    console.error(`[Sanity] Error fetching venue ${slug}:`, error)
+    logSanityError(`Error fetching venue ${slug}`, error)
     return null
   }
 }
@@ -794,7 +808,7 @@ export async function getEvents(
     const docs = normalizeDocs(raw)
     return paginateSimple(docs, params)
   } catch (error) {
-    console.error('[Sanity] Error fetching events:', error)
+    logSanityError('Error fetching events', error)
     return { docs: [] }
   }
 }
@@ -826,7 +840,7 @@ export async function getUpcomingEvents(): Promise<Event[]> {
     // Already sorted by date from the GROQ query
     return upcoming
   } catch (error) {
-    console.error('[Sanity] Error fetching upcoming events:', error)
+    logSanityError('Error fetching upcoming events', error)
     return []
   }
 }
@@ -841,7 +855,7 @@ export async function getEventsByVenue(venueId: string): Promise<Event[]> {
     )
     return normalizeDocs(raw)
   } catch (error) {
-    console.error(`[Sanity] Error fetching events for venue ${venueId}:`, error)
+    logSanityError(`Error fetching events for venue ${venueId}`, error)
     return []
   }
 }
@@ -867,7 +881,7 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
 
     return event
   } catch (error) {
-    console.error(`[Sanity] Error fetching event ${slug}:`, error)
+    logSanityError(`Error fetching event ${slug}`, error)
     return null
   }
 }
@@ -882,7 +896,7 @@ export async function getDriverProfiles(): Promise<SanityDriverProfile[]> {
     const raw: any[] = await client.fetch(driverProfilesQuery, {}, { next: { revalidate: 60 } })
     return normalizeDocs(raw)
   } catch (error) {
-    console.error('[Sanity] Error fetching driver profiles:', error)
+    logSanityError('Error fetching driver profiles', error)
     return []
   }
 }
@@ -893,7 +907,7 @@ export async function getDriverProfileBySlug(slug: string): Promise<SanityDriver
     const raw = await client.fetch(driverProfileBySlugQuery, { slug }, { next: { revalidate: 60 } })
     return raw ? normalizeDoc<SanityDriverProfile>(raw) : null
   } catch (error) {
-    console.error(`[Sanity] Error fetching driver profile ${slug}:`, error)
+    logSanityError(`Error fetching driver profile ${slug}`, error)
     return null
   }
 }
@@ -958,7 +972,7 @@ export async function getMemberLogos(): Promise<SanityMemberLogo[]> {
     const raw: any[] = await client.fetch(memberLogosQuery, {}, { next: { revalidate: 60 } })
     return normalizeDocs(raw)
   } catch (error) {
-    console.error('[Sanity] Error fetching member logos:', error)
+    logSanityError('Error fetching member logos', error)
     return []
   }
 }

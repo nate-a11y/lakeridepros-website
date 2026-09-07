@@ -4,7 +4,6 @@ import Image from 'next/image';
 import BookingWidget from '@/components/BookingWidget';
 import { getServices, getMediaUrl } from '@/lib/api/sanity';
 import { DynamicIcon } from '@/lib/iconMapper';
-import { ChevronRight } from 'lucide-react';
 import { seoServicePageList } from './_data/seoServicePages';
 
 export const metadata: Metadata = {
@@ -122,139 +121,113 @@ export default async function ServicesPage() {
           />
         </>
       )}
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-boardson text-4xl sm:text-5xl font-bold mb-4">
-            Our Transportation Services
-          </h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            Professional, reliable, and luxurious transportation for every occasion
-          </p>
+      <section aria-labelledby="services-heading" className="bg-lrp-black py-16 text-white sm:py-24">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-12 lg:items-end lg:px-8">
+          <div className="min-w-0 lg:col-span-8">
+            <p className="font-boardson text-3xl text-primary-light">At the Lake. Across Missouri.</p>
+            <h1 id="services-heading" className="mt-5 max-w-4xl text-balance font-celebri text-[clamp(2.6rem,12vw,3rem)] font-black leading-[0.95] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
+              Our Transportation Services
+            </h1>
+          </div>
+          <div className="min-w-0 lg:col-span-4">
+            <p className="max-w-md text-lg leading-relaxed text-white/75">
+              Professional, reliable, and luxurious transportation for every occasion
+            </p>
+            <a href="#all-services" className="mt-5 min-h-11 border-b border-primary pb-1 font-bold text-white hover:text-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-light">
+              Find your service
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="all-services" aria-label="All transportation services" className="scroll-mt-28 bg-white py-16 text-lrp-black sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {services.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-x-12 gap-y-14 md:grid-cols-2">
               {services.map((service) => (
-                <div
-                  key={service._id}
-                  className="group bg-white dark:bg-dark-bg-tertiary rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
-                  style={{ width: '100%' }}
-                >
-                  {/* Image */}
-                  <Link href={`/services/${service.slug}`} className="block" style={{ display: 'block', width: '100%' }}>
-                    <div style={{ display: 'block', position: 'relative', height: '12rem', width: '100%', overflow: 'hidden' }}>
-                      {service.image && typeof service.image === 'object' && (
+                <article key={service._id} className="min-w-0 border-b border-black/25 pb-8">
+                  <Link
+                    href={`/services/${service.slug}`}
+                    prefetch={false}
+                    className="group w-full text-left focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary-dark"
+                    style={{ display: 'block' }}
+                  >
+                    {service.image && typeof service.image === 'object' && (
+                      <div className="relative aspect-[16/10] overflow-hidden bg-lrp-gray">
                         <Image
                           src={getMediaUrl(service.image)}
                           alt={service.image.alt || service.title}
                           fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          sizes="(min-width: 1280px) 584px, (min-width: 768px) 46vw, 100vw"
+                          className="object-cover"
                         />
-                      )}
-                      {/* Icon badge */}
+                      </div>
+                    )}
+                    <div className="mt-6 flex items-start gap-3">
                       {service.icon && (
-                        <div className="absolute top-4 left-4 flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-lrp-black shadow-lg">
-                          <DynamicIcon name={service.icon} size={20} />
-                        </div>
+                        <span aria-hidden="true" className="mt-1 shrink-0 text-primary-dark">
+                          <DynamicIcon name={service.icon} size={24} />
+                        </span>
                       )}
+                      <h2 className="font-celebri text-3xl font-black leading-tight tracking-[-0.025em] group-hover:underline group-hover:decoration-primary-dark group-hover:underline-offset-4">
+                        {service.title}
+                      </h2>
                     </div>
-                  </Link>
-
-                  {/* Content */}
-                  <div className="p-6">
-                    <Link
-                      href={`/services/${service.slug}`}
-                      className="font-bold text-neutral-900 dark:text-white mb-2 hover:text-primary dark:hover:text-primary-light transition-colors text-lg block focus:outline-none focus:underline"
-                    >
-                      {service.title}
-                    </Link>
-                    <p className="text-lrp-text-secondary dark:text-dark-text-secondary line-clamp-2 mb-4 text-sm leading-relaxed">
+                    <p className="mt-3 max-w-xl text-base leading-relaxed text-black/65">
                       {service.shortDescription || service.description}
                     </p>
-                    <div className="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-700">
-                      {service.pricing?.basePrice ? (
-                        <span className="text-primary dark:text-primary-light font-semibold text-sm">
-                          From ${service.pricing.basePrice}
-                        </span>
-                      ) : (
-                        <span className="text-lrp-text-secondary dark:text-dark-text-secondary text-sm">
-                          Custom Pricing
-                        </span>
-                      )}
-                      <Link
-                        href={`/services/${service.slug}`}
-                        className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm hover:gap-2 gap-1 transition-all focus:outline-none focus:underline"
-                        aria-label={`Learn more about ${service.title}`}
-                      >
-                        Learn More
-                        <ChevronRight className="w-4 h-4" />
-                      </Link>
+                    <div className="mt-5 flex flex-wrap items-baseline justify-between gap-4 text-sm">
+                      <span className="text-black/65">
+                        {service.pricing?.basePrice ? `From $${service.pricing.basePrice}` : 'Custom Pricing'}
+                      </span>
+                      <span className="font-bold underline decoration-primary-dark underline-offset-4">
+                        Learn More<span className="sr-only"> about {service.title}</span>
+                      </span>
                     </div>
-                  </div>
-                </div>
+                  </Link>
+                </article>
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                Services information will be available soon.
-              </p>
-            </div>
+            <p className="py-12 text-black/65">Services information will be available soon.</p>
           )}
         </div>
       </section>
 
-      {/* Specialty SEO Landing Pages */}
-      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
+      <section aria-labelledby="specialty-guides-heading" className="bg-lrp-black py-16 text-white sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <header className="grid gap-6 lg:grid-cols-2 lg:items-end">
+            <h2 id="specialty-guides-heading" className="max-w-xl font-celebri text-4xl font-black leading-[0.95] tracking-[-0.035em] sm:text-5xl">
               Specialty Transportation Guides
             </h2>
-            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
+            <p className="max-w-xl leading-relaxed text-white/75">
               Planning a more specific Lake of the Ozarks itinerary? These private transportation pages cover common restaurant, dock, hotel, resort, and vacation rental scenarios.
             </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          </header>
+          <div className="mt-10 grid gap-x-12 md:grid-cols-2">
             {seoServicePageList.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group rounded-2xl bg-white dark:bg-dark-bg-primary p-6 shadow-sm hover:shadow-lg hover:border-primary border-2 border-transparent transition-all duration-300"
+                prefetch={false}
+                className="group border-t border-white/25 py-7 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary-light"
+                style={{ display: 'block' }}
               >
-                <h3 className="text-lg font-bold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors mb-2">
-                  {service.title}
-                </h3>
-                <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mb-4">
-                  {service.metadataDescription}
-                </p>
-                <span className="inline-flex items-center text-primary dark:text-primary-light font-semibold text-sm">
-                  View guide
-                  <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                </span>
+                <h3 className="text-xl font-bold group-hover:text-primary-light">{service.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/75">{service.metadataDescription}</p>
+                <span className="mt-4 inline-block text-sm font-bold underline decoration-primary underline-offset-4">View guide</span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Booking Section */}
-      <section className="py-16 bg-neutral-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-neutral-900 mb-4">
-              Ready to Book?
-            </h2>
-            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">
-              Reserve your luxury transportation today
-            </p>
-          </div>
+      <section aria-labelledby="services-booking-heading" className="bg-white py-16 text-lrp-black sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <header className="mb-10 border-t border-black/25 pt-6">
+            <h2 id="services-booking-heading" className="font-celebri text-4xl font-black tracking-[-0.035em] sm:text-5xl">Ready to Book?</h2>
+            <p className="mt-3 text-lg text-black/65">Reserve your luxury transportation today</p>
+          </header>
           <BookingWidget />
         </div>
       </section>

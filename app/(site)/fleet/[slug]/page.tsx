@@ -2,13 +2,12 @@ import { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 import FleetBookingCTA from '@/components/FleetBookingCTA';
-import TestimonialsSection from '@/components/TestimonialsSection';
+import FleetTestimonials from '@/components/fleet-editorial/FleetTestimonials';
+import styles from '@/components/fleet-editorial/FleetEditorial.module.css';
 import Gallery from '@/components/Gallery';
 import type { GalleryImage } from '@/components/Gallery';
-import { TierBadges } from '@/components/TierBadge';
 import { getVehicleBySlug, getVehicleRelatedTestimonials, getMediaUrl } from '@/lib/api/sanity';
 import { metaDescription, metaTitle } from '@/lib/seo/metadata';
-import { cn } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,6 +105,20 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
     }
   }
 
+  // Lead with cars / full exterior views; retain every featured asset in the gallery.
+  if (['flex', 'elite', 'pink-patrol'].includes(slug) && vehicle.featuredImage && galleryImages.length > 1) {
+    const featured = galleryImages.shift();
+    if (featured) galleryImages.push(featured);
+  }
+
+  // Lead Flex with a current vehicle photo rather than its studio artwork.
+  if (slug === 'flex') {
+    const photographedVehicle = galleryImages.findIndex((image) => image.alt === 'LRP11');
+    if (photographedVehicle > 0) {
+      galleryImages.unshift(...galleryImages.splice(photographedVehicle, 1));
+    }
+  }
+
   // Breadcrumb Schema for SEO
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -133,50 +146,35 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
   };
 
   return (
-    <>
+    <div className={styles.page}>
       {/* Breadcrumb Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {/* Hero Section */}
-      <section
-        className={cn(
-          'text-white py-12',
-          isPinkPatrol
-            ? 'relative overflow-hidden bg-[radial-gradient(circle_at_20%_20%,#ff4fb3_0%,#db2777_26%,#111827_72%)]'
-            : 'bg-gradient-to-r from-primary to-primary-dark',
-        )}
-      >
-        {isPinkPatrol && (
-          <div
-            className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.16)_0%,transparent_28%,rgba(0,0,0,0.28)_72%)] pointer-events-none"
-            aria-hidden="true"
-          />
-        )}
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/fleet"
-            className="inline-flex items-center text-white/90 hover:text-white mb-4 focus:outline-none focus:ring-2 focus:ring-white/80 rounded"
-          >
-            <svg className="h-5 w-5 mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-              <path d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Fleet
-          </Link>
-          <h1 className="text-4xl font-bold">{vehicle.name}</h1>
-          <p className="text-xl text-white/90 mt-2 capitalize">{vehicle.type}</p>
-          {/* Pricing Tier Badges */}
-          <TierBadges tiers={vehicle.pricingTiers} className="mt-3" />
+      <section className="bg-lrp-black py-8 text-white sm:py-12">
+        <div className={styles.wrap}>
+          <Link href="/fleet" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-primary-light focus-visible:!outline-white">Back to Fleet</Link>
+          <div className="mt-6 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            <div className="min-w-0">
+              <h1 className="max-w-4xl text-[clamp(2.75rem,6vw,5rem)] leading-[0.98] tracking-[-0.04em]">{vehicle.name}</h1>
+              <p className="mt-4 text-lg capitalize">{vehicle.type}</p>
+              {vehicle.pricingTiers && vehicle.pricingTiers.length > 0 && <div className="mt-3 flex flex-wrap gap-4 font-semibold text-primary-light">{vehicle.pricingTiers.map((tier) => {
+                const label = { flex: 'Flex', elite: 'Elite', 'lrp-black': 'LRP Black' }[tier];
+                return label ? <span key={tier}>{label}</span> : null;
+              })}</div>}
+            </div>
+            <p className="shrink-0 font-boardson text-3xl text-primary-light">Up to {vehicle.capacity} passengers</p>
+          </div>
         </div>
       </section>
 
       {/* Vehicle Details */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className={styles.specGrid}>
             {/* Images Gallery */}
-            <div>
+            <div className={styles.gallery}>
               <Gallery
                 images={galleryImages}
                 title={vehicle.name}
@@ -187,45 +185,45 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
 
             {/* Details */}
             <div>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-4">
+              <h2 className="text-2xl font-bold text-lrp-black mb-4">
                 Vehicle Details
               </h2>
-              <p className="text-neutral-700 mb-6">{vehicle.description}</p>
+              <p className="text-[#444] mb-6">{vehicle.description}</p>
 
               <div className="space-y-4 mb-6">
-                <div className="flex items-center">
-                  <span className="font-semibold text-neutral-900 w-32">Capacity:</span>
-                  <span className="text-neutral-700">{vehicle.capacity} passengers</span>
+                <div className="flex flex-wrap items-baseline gap-y-1">
+                  <span className="w-32 shrink-0 font-semibold text-lrp-black">Capacity:</span>
+                  <span className="text-[#444]">{vehicle.capacity} passengers</span>
                 </div>
-                <div className="flex items-center">
-                  <span className="font-semibold text-neutral-900 w-32">Type:</span>
-                  <span className="text-neutral-700 capitalize">{vehicle.type}</span>
+                <div className="flex flex-wrap items-baseline gap-y-1">
+                  <span className="w-32 shrink-0 font-semibold text-lrp-black">Type:</span>
+                  <span className="text-[#444] capitalize">{vehicle.type}</span>
                 </div>
                 {vehicle.specifications?.make && (
-                  <div className="flex items-center">
-                    <span className="font-semibold text-neutral-900 w-32">Make/Model:</span>
-                    <span className="text-neutral-700">
+                  <div className="flex flex-wrap items-baseline gap-y-1">
+                    <span className="w-32 shrink-0 font-semibold text-lrp-black">Make/Model:</span>
+                    <span className="text-[#444]">
                       {vehicle.specifications.make} {vehicle.specifications.model}
                     </span>
                   </div>
                 )}
                 {vehicle.specifications?.year && (
-                  <div className="flex items-center">
-                    <span className="font-semibold text-neutral-900 w-32">Year:</span>
-                    <span className="text-neutral-700">{vehicle.specifications.year}</span>
+                  <div className="flex flex-wrap items-baseline gap-y-1">
+                    <span className="w-32 shrink-0 font-semibold text-lrp-black">Year:</span>
+                    <span className="text-[#444]">{vehicle.specifications.year}</span>
                   </div>
                 )}
               </div>
 
               {vehicle.amenities && vehicle.amenities.length > 0 && (
                 <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-neutral-900 mb-3">
+                  <h3 className="text-xl font-semibold text-lrp-black mb-3">
                     Amenities
                   </h3>
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {vehicle.amenities.map((amenityObj, index) => (
-                      <li key={index} className="flex items-center text-neutral-700">
-                        <svg className={cn('h-5 w-5 mr-2', isPinkPatrol ? 'text-[#db2777]' : 'text-secondary')} fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                      <li key={index} className="flex items-start text-[#444]">
+                        <svg className="mr-2 h-5 w-5 shrink-0 text-[#2f730e]" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
                           <path d="M5 13l4 4L19 7" />
                         </svg>
                         {amenityObj.amenity}
@@ -236,8 +234,8 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
               )}
 
               {vehicle.pricing && (
-                <div className="bg-neutral-50 dark:bg-dark-bg-tertiary p-6 rounded-lg">
-                  <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
+                <div className={styles.price}>
+                  <h3 className="text-xl font-semibold text-lrp-black mb-4">
                     Pricing Options
                   </h3>
 
@@ -245,14 +243,14 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                   {vehicle.pricing.pointToPointMinimum && (
                     <div className="mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700">
                       <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                        <span className="text-sm font-medium text-[#444]">
                           Point-to-Point
                         </span>
-                        <span className="text-xs text-neutral-500 dark:text-neutral-500">
+                        <span className="text-xs text-[#444]">
                           (Taxi-style)
                         </span>
                       </div>
-                      <p className={cn('text-2xl font-bold', isPinkPatrol ? 'text-[#db2777] dark:text-pink-300' : 'text-primary dark:text-primary-light')}>
+                      <p className="text-2xl font-bold text-[#2f730e]">
                         Starting at ${vehicle.pricing.pointToPointMinimum}
                       </p>
                     </div>
@@ -262,11 +260,11 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                   {vehicle.pricing.hourlyRate && (
                     <div className={`${vehicle.pricing.dailyRate ? 'mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700' : 'mb-4'}`}>
                       <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                        <span className="text-sm font-medium text-[#444]">
                           Hourly Charter
                         </span>
                       </div>
-                      <p className={cn('text-2xl font-bold', isPinkPatrol ? 'text-[#db2777] dark:text-pink-300' : 'text-primary dark:text-primary-light')}>
+                      <p className="text-2xl font-bold text-[#2f730e]">
                         ${vehicle.pricing.hourlyRate}/hour
                       </p>
                     </div>
@@ -276,11 +274,11 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                   {vehicle.pricing.dailyRate && (
                     <div className="mb-4">
                       <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                        <span className="text-sm font-medium text-[#444]">
                           Full Day Rate
                         </span>
                       </div>
-                      <p className={cn('text-2xl font-bold', isPinkPatrol ? 'text-[#db2777] dark:text-pink-300' : 'text-primary dark:text-primary-light')}>
+                      <p className="text-2xl font-bold text-[#2f730e]">
                         ${vehicle.pricing.dailyRate}
                       </p>
                     </div>
@@ -288,7 +286,7 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
 
                   {/* Pricing Notes */}
                   {vehicle.pricing.notes && (
-                    <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
+                    <p className="text-sm text-[#444] mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
                       {vehicle.pricing.notes}
                     </p>
                   )}
@@ -301,31 +299,29 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
 
       {/* Testimonials Section */}
       {testimonials.length > 0 && (
-        <TestimonialsSection
+        <FleetTestimonials
           testimonials={testimonials}
           title="What Our Clients Say"
           subtitle={`Hear from customers who loved riding in our ${vehicle.name.toLowerCase()}`}
-          showCount={3}
-          includeSchema={false}
         />
       )}
 
       {/* Booking Section */}
-      <section className={cn('py-16', isPinkPatrol ? 'bg-pink-50/40 dark:bg-[#190912]' : 'bg-neutral-50 dark:bg-dark-bg-secondary')}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
+      <section className={`${styles.wrap} py-16`}>
+        <div className={styles.cta}>
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-white mb-4">
               Book This Vehicle
             </h2>
-            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">
+            <p className="text-lg text-white">
               Reserve {vehicle.name} for your next trip
             </p>
           </div>
-          <div className="flex justify-center">
+          <div>
             <FleetBookingCTA vehicleName={vehicle.name} accentVariant={accentVariant} />
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

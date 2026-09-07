@@ -1,5 +1,7 @@
 'use client';
 
+import CoreHero from '@/components/core-editorial/CoreHero'
+import CommercePage from '@/components/commerce-editorial/CommercePage'
 import { useState, FormEvent, useEffect, useRef } from 'react';
 
 export default function BridalShowRegistrationPage() {
@@ -74,19 +76,19 @@ export default function BridalShowRegistrationPage() {
   };
 
   return (
-    <>
+    <CommercePage variant="entry">
       {/* Hero Section */}
-      <header className="bg-gradient-to-r from-primary to-primary-dark text-white py-20" role="banner">
+      <CoreHero image="pinkPatrol">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-boardson text-4xl sm:text-5xl font-bold mb-4">Bridal Show Registration</h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Enter to win a special giveaway from Lake Ride Pros!
           </p>
         </div>
-      </header>
+      </CoreHero>
 
       {/* Registration Content */}
-      <main className="py-16 bg-neutral-50 dark:bg-dark-bg-primary transition-colors" role="main">
+      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-primary transition-colors">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-dark-bg-secondary shadow-lg rounded-lg p-8 border border-neutral-200 dark:border-dark-border transition-colors">
             <div className="text-center mb-8">
@@ -251,7 +253,7 @@ export default function BridalShowRegistrationPage() {
             </form>
           </div>
         </div>
-      </main>
-    </>
+      </section>
+    </CommercePage>
   );
 }

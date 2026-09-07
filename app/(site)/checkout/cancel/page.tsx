@@ -1,9 +1,10 @@
+import CommercePage from '@/components/commerce-editorial/CommercePage'
 import Link from 'next/link'
 import { XCircle, ShoppingCart } from 'lucide-react'
 
 export default function CheckoutCancelPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-bg-primary py-20">
+    <CommercePage variant="receipt" className="min-h-screen bg-white dark:bg-dark-bg-primary py-20">
       <div className="container mx-auto px-4 max-w-2xl text-center">
         {/* Cancel Icon */}
         <div className="w-24 h-24 bg-neutral-200 dark:bg-dark-bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
@@ -47,6 +48,6 @@ export default function CheckoutCancelPage() {
           </Link>
         </div>
       </div>
-    </div>
+    </CommercePage>
   )
 }

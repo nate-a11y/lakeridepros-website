@@ -1,3 +1,4 @@
+import styles from '@/components/support-editorial/SupportEditorial.module.css'
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getPageBySlug, getMediaUrl } from '@/lib/api/sanity';
@@ -44,18 +45,21 @@ export default async function DynamicPage({ params }: PageProps) {
   const featuredImage = typeof page.featuredImage === 'object' ? page.featuredImage as SanityImage : null;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
+    <div className={styles.page}>
       {/* Hero Section */}
       {featuredImage && (
-        <div className="relative h-[400px] w-full">
-          <Image
-            src={getMediaUrl(featuredImage)}
-            alt={featuredImage.alt || page.title}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+        <div className={styles.cmsHero}>
+          <div className={styles.cmsHeroImage}>
+            <Image
+              src={getMediaUrl(featuredImage)}
+              alt={featuredImage.alt || page.title}
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
+              priority
+            />
+          </div>
+          <div className="flex items-center">
             <h1 className="text-5xl font-bold text-white text-center px-4">
               {page.title}
             </h1>
@@ -64,14 +68,14 @@ export default async function DynamicPage({ params }: PageProps) {
       )}
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-16 max-w-4xl">
+      <div className={styles.reading}>
         {!featuredImage && (
-          <h1 className="text-4xl md:text-5xl font-bold text-lrp-black dark:text-white mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-lrp-black mb-8">
             {page.title}
           </h1>
         )}
 
-        <div className="prose prose-lg max-w-none dark:prose-invert text-lrp-text dark:text-dark-text-primary">
+        <div className="prose prose-lg max-w-none text-lrp-text">
           {page.content && <PortableText value={page.content} />}
         </div>
       </div>

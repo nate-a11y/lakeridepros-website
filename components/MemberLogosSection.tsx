@@ -10,12 +10,13 @@ export default async function MemberLogosSection() {
   }
 
   return (
-    <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
+    <section className="bg-lrp-gray py-14 text-black transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-bold text-center text-neutral-900 dark:text-white mb-8">
-          Proud Members Of
-        </h2>
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+        <div className="grid gap-8 border-y border-black/25 py-8 lg:grid-cols-[14rem_1fr] lg:items-center">
+          <h2 className="text-sm font-bold text-black/60">
+            Proud members of
+          </h2>
+          <div className="flex flex-wrap items-center gap-10 lg:justify-end">
           {logos.map((logo) => {
             const imageUrl = getMediaUrl(logo.logo);
             if (!imageUrl) return null;
@@ -23,18 +24,19 @@ export default async function MemberLogosSection() {
             return (
               <div
                 key={logo._id}
-                className="flex items-center justify-center p-6 bg-white dark:bg-dark-bg-primary rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="flex items-center justify-center"
               >
                 <Image
                   src={imageUrl}
                   alt={logo.name}
                   width={240}
                   height={120}
-                  className="h-20 md:h-28 lg:h-32 w-auto object-contain"
+                  className="h-20 w-auto object-contain md:h-24"
                 />
               </div>
             );
           })}
+          </div>
         </div>
       </div>
     </section>

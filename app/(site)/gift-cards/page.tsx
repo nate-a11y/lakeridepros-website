@@ -1,5 +1,7 @@
 'use client';
 
+import CorePage from '@/components/core-editorial/CorePage'
+import CoreHero from '@/components/core-editorial/CoreHero'
 import { useState, useEffect } from 'react';
 import { formatPrice } from '@/lib/utils';
 import { Loader2, Gift, Sparkles } from 'lucide-react';
@@ -147,22 +149,20 @@ export default function GiftCardsPage() {
   };
 
   return (
-    <>
+    <CorePage>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <CoreHero image="pinkPatrol">
           <h1 className="font-boardson text-4xl sm:text-5xl font-bold mb-4">Gift Cards</h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Give the gift of luxury transportation
           </p>
-        </div>
-      </section>
+        </CoreHero>
 
       {/* Promotional Banner - Only shown during promo period */}
       {isPromo && (
-        <section className="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-6">
+        <section className="bg-lrp-black text-white py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+            <div className="flex flex-col sm:flex-row items-center justify-start gap-4 text-left">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-8 h-8" />
                 <span className="text-2xl font-bold">Holiday Bonus Sale!</span>
@@ -172,7 +172,7 @@ export default function GiftCardsPage() {
                 Buy $100, get <span className="font-bold">$125</span> value! Buy $200, get <span className="font-bold">$250</span> value!
               </div>
             </div>
-            <p className="text-center text-white/90 mt-2 text-sm">
+            <p className="text-left text-white/90 mt-2 text-sm">
               25% bonus on all gift cards $100+ (in $100 increments). Limited time only!
             </p>
           </div>
@@ -198,13 +198,14 @@ export default function GiftCardsPage() {
                     <button
                       type="button"
                       onClick={() => setCardType('digital')}
-                      className={`py-4 px-4 rounded-lg border-2 font-semibold transition-colors ${
+                      aria-pressed={cardType === 'digital'}
+                      className={`py-4 px-4  border-2 font-semibold transition-colors ${
                         cardType === 'digital'
                           ? 'border-primary bg-primary text-lrp-black'
                           : 'border-neutral-300 text-neutral-700 hover:border-primary'
                       }`}
                     >
-                      <div className="text-center">
+                      <div className="text-left">
                         <div className="text-lg">📧 Digital</div>
                         <div className="text-xs mt-1 opacity-80">Instant email delivery</div>
                       </div>
@@ -212,13 +213,14 @@ export default function GiftCardsPage() {
                     <button
                       type="button"
                       onClick={() => setCardType('physical')}
-                      className={`py-4 px-4 rounded-lg border-2 font-semibold transition-colors ${
+                      aria-pressed={cardType === 'physical'}
+                      className={`py-4 px-4  border-2 font-semibold transition-colors ${
                         cardType === 'physical'
                           ? 'border-primary bg-primary text-lrp-black'
                           : 'border-neutral-300 text-neutral-700 hover:border-primary'
                       }`}
                     >
-                      <div className="text-center">
+                      <div className="text-left">
                         <div className="text-lg">💳 Physical</div>
                         <div className="text-xs mt-1 opacity-80">Shipped via USPS (+$5)</div>
                       </div>
@@ -231,7 +233,7 @@ export default function GiftCardsPage() {
                   <span className="block text-sm font-semibold text-neutral-900 mb-3">
                     Select Amount
                     {isPromo && (
-                      <span className="text-amber-600 ml-2 text-xs font-normal">
+                      <span className="text-[#2f730e] ml-2 text-xs font-normal">
                         (Bonus on $100+!)
                       </span>
                     )}
@@ -245,7 +247,8 @@ export default function GiftCardsPage() {
                           key={amount.value}
                           type="button"
                           onClick={() => setSelectedAmount(amount.value)}
-                          className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors relative ${
+                      aria-pressed={selectedAmount === amount.value}
+                          className={`py-3 px-4  border-2 font-semibold transition-colors relative ${
                             selectedAmount === amount.value
                               ? 'border-primary bg-primary text-lrp-black'
                               : 'border-neutral-300 text-neutral-700 hover:border-primary'
@@ -284,7 +287,7 @@ export default function GiftCardsPage() {
                         max="1000"
                         step="0.01"
                         required
-                        className="w-full pl-8 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full pl-8 pr-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
                     <p className="text-xs text-neutral-500 mt-1">Min: $10, Max: $1,000</p>
@@ -301,13 +304,14 @@ export default function GiftCardsPage() {
                       <button
                         type="button"
                         onClick={() => setDeliveryMethod('immediate')}
-                        className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors ${
+                      aria-pressed={deliveryMethod === 'immediate'}
+                        className={`py-3 px-4  border-2 font-semibold transition-colors ${
                           deliveryMethod === 'immediate'
                             ? 'border-primary bg-primary text-lrp-black'
                             : 'border-neutral-300 text-neutral-700 hover:border-primary'
                         }`}
                       >
-                        <div className="text-center">
+                        <div className="text-left">
                           <div className="text-sm">⚡ Send Now</div>
                           <div className="text-xs mt-1 opacity-80">Instant delivery</div>
                         </div>
@@ -315,13 +319,14 @@ export default function GiftCardsPage() {
                       <button
                         type="button"
                         onClick={() => setDeliveryMethod('scheduled')}
-                        className={`py-3 px-4 rounded-lg border-2 font-semibold transition-colors ${
+                      aria-pressed={deliveryMethod === 'scheduled'}
+                        className={`py-3 px-4  border-2 font-semibold transition-colors ${
                           deliveryMethod === 'scheduled'
                             ? 'border-primary bg-primary text-lrp-black'
                             : 'border-neutral-300 text-neutral-700 hover:border-primary'
                         }`}
                       >
-                        <div className="text-center">
+                        <div className="text-left">
                           <div className="text-sm">📅 Schedule</div>
                           <div className="text-xs mt-1 opacity-80">Future delivery</div>
                         </div>
@@ -329,7 +334,7 @@ export default function GiftCardsPage() {
                     </div>
 
                     {deliveryMethod === 'scheduled' && (
-                      <div className="space-y-4 bg-neutral-50 p-4 rounded-lg">
+                      <div className="space-y-4 bg-white p-4">
                         <p className="text-sm text-neutral-600">
                           Perfect for birthdays, holidays, or special occasions!
                         </p>
@@ -345,7 +350,7 @@ export default function GiftCardsPage() {
                               onChange={(e) => setScheduledDate(e.target.value)}
                               min={new Date(Date.now() + 86400000).toISOString().split('T')[0]} // Tomorrow
                               required={deliveryMethod === 'scheduled'}
-                              className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                              className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                           </div>
                           <div>
@@ -358,7 +363,7 @@ export default function GiftCardsPage() {
                               value={scheduledTime}
                               onChange={(e) => setScheduledTime(e.target.value)}
                               required={deliveryMethod === 'scheduled'}
-                              className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                              className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                           </div>
                         </div>
@@ -386,7 +391,7 @@ export default function GiftCardsPage() {
                         onChange={(e) => setPurchaserName(e.target.value)}
                         placeholder="Jane Smith"
                         required
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
 
@@ -401,7 +406,7 @@ export default function GiftCardsPage() {
                         onChange={(e) => setPurchaserEmail(e.target.value)}
                         placeholder="jane@example.com"
                         required
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                       <p className="text-xs text-neutral-500 mt-1">Receipt and gift card will be sent here</p>
                     </div>
@@ -428,7 +433,7 @@ export default function GiftCardsPage() {
                         value={recipientName}
                         onChange={(e) => setRecipientName(e.target.value)}
                         placeholder="John Doe"
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
 
@@ -442,7 +447,7 @@ export default function GiftCardsPage() {
                         value={recipientEmail}
                         onChange={(e) => setRecipientEmail(e.target.value)}
                         placeholder="recipient@example.com"
-                        className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -470,7 +475,7 @@ export default function GiftCardsPage() {
                           onChange={(e) => setShippingName(e.target.value)}
                           placeholder="John Doe"
                           required={cardType === 'physical'}
-                          className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                         />
                       </div>
 
@@ -485,7 +490,7 @@ export default function GiftCardsPage() {
                           onChange={(e) => setShippingStreet1(e.target.value)}
                           placeholder="123 Main St"
                           required={cardType === 'physical'}
-                          className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                         />
                       </div>
 
@@ -499,7 +504,7 @@ export default function GiftCardsPage() {
                           value={shippingStreet2}
                           onChange={(e) => setShippingStreet2(e.target.value)}
                           placeholder="Apt 4B"
-                          className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                         />
                       </div>
 
@@ -515,7 +520,7 @@ export default function GiftCardsPage() {
                             onChange={(e) => setShippingCity(e.target.value)}
                             placeholder="Osage Beach"
                             required={cardType === 'physical'}
-                            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                           />
                         </div>
 
@@ -530,7 +535,7 @@ export default function GiftCardsPage() {
                             onChange={(e) => setShippingState(e.target.value)}
                             placeholder="MO"
                             required={cardType === 'physical'}
-                            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                           />
                         </div>
                       </div>
@@ -547,7 +552,7 @@ export default function GiftCardsPage() {
                             onChange={(e) => setShippingZipCode(e.target.value)}
                             placeholder="65065"
                             required={cardType === 'physical'}
-                            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                           />
                         </div>
 
@@ -562,7 +567,7 @@ export default function GiftCardsPage() {
                             onChange={(e) => setShippingCountry(e.target.value)}
                             placeholder="United States"
                             required={cardType === 'physical'}
-                            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                           />
                         </div>
                       </div>
@@ -580,16 +585,16 @@ export default function GiftCardsPage() {
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Add a personal message..."
                     rows={4}
-                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
 
                 {/* Total */}
-                <div className="bg-neutral-50 p-6 rounded-lg">
+                <div className="bg-white py-6">
                   {/* Show bonus info when promotion is active */}
                   {isPromo && bonusAmount > 0 && (
-                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-400 rounded-lg p-4 mb-4">
-                      <div className="flex items-center gap-2 text-amber-700 font-bold mb-2">
+                    <div className="bg-white border-2 border-black/25 p-4 mb-4">
+                      <div className="flex items-center gap-2 text-[#2f730e] font-bold mb-2">
                         <Gift className="w-5 h-5" />
                         <span>Holiday Bonus Applied!</span>
                       </div>
@@ -598,13 +603,13 @@ export default function GiftCardsPage() {
                           <span className="text-neutral-600">You pay:</span>
                           <span className="text-neutral-900">{formatPrice(finalAmount)}</span>
                         </div>
-                        <div className="flex justify-between text-amber-600">
+                        <div className="flex justify-between text-[#2f730e]">
                           <span>Bonus added:</span>
                           <span className="font-semibold">+{formatPrice(bonusAmount)}</span>
                         </div>
-                        <div className="flex justify-between text-lg font-bold border-t border-amber-300 pt-1 mt-1">
+                        <div className="flex justify-between text-lg font-bold border-t border-black/25 pt-1 mt-1">
                           <span className="text-neutral-900">Card value:</span>
-                          <span className="text-primary">{formatPrice(giftCardValue)}</span>
+                          <span className="text-[#2f730e]">{formatPrice(giftCardValue)}</span>
                         </div>
                       </div>
                     </div>
@@ -612,7 +617,7 @@ export default function GiftCardsPage() {
 
                   {/* Prompt for higher amount if close to bonus threshold */}
                   {isPromo && finalAmount >= 75 && finalAmount < 100 && (
-                    <div className="bg-amber-50 border border-amber-300 rounded-lg p-3 mb-4 text-sm text-amber-800">
+                    <div className="bg-white border border-black/25 p-3 mb-4 text-sm text-[#2f730e]">
                       <strong>Tip:</strong> Spend ${100 - finalAmount} more to get a $25 bonus!
                     </div>
                   )}
@@ -634,13 +639,13 @@ export default function GiftCardsPage() {
                     <span className="text-lg font-semibold text-neutral-900">
                       {isPromo && bonusAmount > 0 ? 'You Pay:' : 'Total:'}
                     </span>
-                    <span className="text-2xl font-bold text-primary">
+                    <span className="text-2xl font-bold text-[#2f730e]">
                       {formatPrice(totalPayment)}
                     </span>
                   </div>
 
                   {checkoutError && (
-                    <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 mb-4">
+                    <div role="alert" className="bg-red-50 border-2 border-red-500 p-4 mb-4">
                       <p className="text-red-700 text-sm">
                         {checkoutError}
                       </p>
@@ -650,7 +655,7 @@ export default function GiftCardsPage() {
                   <button
                     type="submit"
                     disabled={checkoutLoading || finalAmount < 10 || finalAmount > 1000}
-                    className="w-full bg-secondary hover:bg-secondary-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-lrp-black font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-secondary hover:bg-secondary-dark disabled:bg-neutral-400 disabled:cursor-not-allowed text-lrp-black font-semibold py-3 px-6 transition-colors flex items-center justify-center gap-2"
                   >
                     {checkoutLoading ? (
                       <>
@@ -662,7 +667,7 @@ export default function GiftCardsPage() {
                     )}
                   </button>
 
-                  <p className="text-sm text-neutral-600 text-center mt-3">
+                  <p className="text-sm text-neutral-600 text-left mt-3">
                     Secure checkout powered by Stripe
                   </p>
                 </div>
@@ -671,7 +676,7 @@ export default function GiftCardsPage() {
 
             {/* Info Section */}
             <div>
-              <div className="bg-gradient-to-br from-primary to-primary-dark text-white p-8 rounded-lg mb-6">
+              <div className="bg-lrp-black text-white p-8 mb-6">
                 <h3 className="text-2xl font-bold mb-4">How It Works</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start">
@@ -707,11 +712,11 @@ export default function GiftCardsPage() {
                 </ul>
               </div>
 
-              <div className="bg-neutral-50 p-6 rounded-lg">
+              <div className="bg-white py-6">
                 <h3 className="text-xl font-bold text-neutral-900 mb-3">
                   Terms & Conditions
                 </h3>
-                <ul className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary space-y-2">
+                <ul className="text-sm text-lrp-text-secondary space-y-2">
                   <li>• Gift cards are valid for 12 months from purchase date</li>
                   <li>• Can be used for any Lake Ride Pros service</li>
                   <li>• Non-refundable and cannot be redeemed for cash</li>
@@ -723,6 +728,6 @@ export default function GiftCardsPage() {
           </div>
         </div>
       </section>
-    </>
+    </CorePage>
   );
 }

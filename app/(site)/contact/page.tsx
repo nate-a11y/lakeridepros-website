@@ -1,5 +1,7 @@
 'use client';
 
+import CorePage from '@/components/core-editorial/CorePage'
+import CoreHero from '@/components/core-editorial/CoreHero'
 import { useState, FormEvent, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { PhoneLink } from '@/components/PhoneLink';
@@ -114,31 +116,29 @@ export default function ContactPage() {
   };
 
   return (
-    <>
+    <CorePage>
       {/* Hero Section */}
-      <header className="bg-gradient-to-r from-primary to-primary-dark text-white py-20" role="banner">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <CoreHero image="suv">
           <h1 className="font-boardson text-4xl sm:text-5xl font-bold mb-4">Contact Us</h1>
           <p className="text-xl text-white/90 max-w-2xl mx-auto">
             Get in touch with our team for general questions, support, or partnership inquiries
           </p>
-        </div>
-      </header>
+        </CoreHero>
 
       {/* Contact Content */}
-      <main className="py-16 bg-neutral-50 dark:bg-dark-bg-primary transition-colors" role="main">
+      <div className="py-16 bg-white transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Contact Info */}
             <aside className="lg:col-span-1 space-y-8" aria-label="Contact information">
               <div>
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
+                <h2 className="text-2xl font-bold text-neutral-900 mb-6">
                   Get In Touch
                 </h2>
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <svg
-                      className="h-6 w-6 text-primary mr-3 flex-shrink-0"
+                      className="h-6 w-6 text-[#2f730e] mr-3 flex-shrink-0"
                       fill="none"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -151,8 +151,8 @@ export default function ContactPage() {
                       <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-neutral-900 dark:text-white">Location</p>
-                      <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
+                      <p className="font-semibold text-neutral-900">Location</p>
+                      <p className="text-lrp-text-secondary">
                         Lake of the Ozarks based but Operate Statewide
                       </p>
                     </div>
@@ -160,7 +160,7 @@ export default function ContactPage() {
 
                   <div className="flex items-start">
                     <svg
-                      className="h-6 w-6 text-primary mr-3 flex-shrink-0"
+                      className="h-6 w-6 text-[#2f730e] mr-3 flex-shrink-0"
                       fill="none"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -172,9 +172,9 @@ export default function ContactPage() {
                       <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-neutral-900 dark:text-white">Phone</p>
+                      <p className="font-semibold text-neutral-900">Phone</p>
                       <PhoneLink
-                        className="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                        className="text-[#2f730e] hover:text-[#2f730e] transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                       >
                         (573) 206-9499
                       </PhoneLink>
@@ -183,7 +183,7 @@ export default function ContactPage() {
 
                   <div className="flex items-start">
                     <svg
-                      className="h-6 w-6 text-primary mr-3 flex-shrink-0"
+                      className="h-6 w-6 text-[#2f730e] mr-3 flex-shrink-0"
                       fill="none"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -195,10 +195,10 @@ export default function ContactPage() {
                       <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-neutral-900 dark:text-white">Email</p>
+                      <p className="font-semibold text-neutral-900">Email</p>
                       <a
                         href="mailto:contactus@lakeridepros.com"
-                        className="text-primary hover:text-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                        className="text-[#2f730e] hover:text-[#2f730e] transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                         aria-label="Email us at contactus@lakeridepros.com"
                       >
                         contactus@lakeridepros.com
@@ -208,7 +208,7 @@ export default function ContactPage() {
 
                   <div className="flex items-start">
                     <svg
-                      className="h-6 w-6 text-primary mr-3 flex-shrink-0"
+                      className="h-6 w-6 text-[#2f730e] mr-3 flex-shrink-0"
                       fill="none"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -220,8 +220,8 @@ export default function ContactPage() {
                       <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div>
-                      <p className="font-semibold text-neutral-900 dark:text-white">Hours</p>
-                      <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
+                      <p className="font-semibold text-neutral-900">Hours</p>
+                      <p className="text-lrp-text-secondary">
                         24/7 Service Available
                         <br />
                         Office: Mon-Fri, 8AM-6PM
@@ -235,32 +235,32 @@ export default function ContactPage() {
             {/* Contact Form */}
             <div className="lg:col-span-2">
               <section
-                className="mb-8 rounded-2xl border border-primary/30 bg-primary/10 p-6 shadow-sm dark:border-primary/40 dark:bg-primary/15"
+                className="mb-8 border-t border-black/25 bg-white py-6"
                 aria-labelledby="booking-guidance-title"
               >
-                <h2 id="booking-guidance-title" className="text-2xl font-bold text-neutral-900 dark:text-white mb-3">
+                <h2 id="booking-guidance-title" className="text-2xl font-bold text-neutral-900 mb-3">
                   Need a quote or ready to book?
                 </h2>
-                <p className="text-neutral-700 dark:text-neutral-300 mb-5">
+                <p className="text-neutral-700 mb-5">
                   For ride pricing, availability, reservations, airport transportation, weddings, or group events,
                   please use our booking flow instead of the contact form. It collects the trip details we need to
                   respond faster.
                 </p>
                 <Link
                   href="/book"
-                  className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 font-semibold text-lrp-black transition-colors hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                  className="inline-flex items-center justify-center bg-primary px-6 py-3 font-semibold text-lrp-black transition-colors hover:bg-primary-light focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                 >
                   Quote Now / Book Now
                 </Link>
               </section>
-              <div className="bg-white dark:bg-dark-bg-secondary shadow-lg rounded-lg p-8 border border-neutral-200 dark:border-dark-border transition-colors">
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">
+              <div className="bg-white border-t border-black/25 pt-8">
+                <h2 className="text-2xl font-bold text-neutral-900 mb-6">
                   Send a General Message
                 </h2>
-                <p className="text-neutral-700 dark:text-neutral-300 mb-6">
+                <p className="text-neutral-700 mb-6">
                   Use this form for non-booking questions, website support, partnerships, media inquiries, or feedback.
                 </p>
-                <p className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-100">
+                <p className="mb-6 border border-black/25 bg-white p-4 text-sm text-[#2f730e]">
                   If your message is about trip details, pricing, availability, or booking a ride, use{' '}
                   <Link href="/book" className="font-semibold underline underline-offset-2 hover:no-underline">
                     Quote Now / Book Now
@@ -272,7 +272,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
+                        className="block text-sm font-semibold text-neutral-900 mb-2"
                       >
                         Name *
                       </label>
@@ -285,13 +285,13 @@ export default function ContactPage() {
                         required
                         aria-required="true"
                         autoComplete="name"
-                        className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
+                        className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 bg-white transition-colors"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
+                        className="block text-sm font-semibold text-neutral-900 mb-2"
                       >
                         Email *
                       </label>
@@ -304,7 +304,7 @@ export default function ContactPage() {
                         required
                         aria-required="true"
                         autoComplete="email"
-                        className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
+                        className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 bg-white transition-colors"
                       />
                     </div>
                   </div>
@@ -313,7 +313,7 @@ export default function ContactPage() {
                     <div>
                       <label
                         htmlFor="phone"
-                        className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
+                        className="block text-sm font-semibold text-neutral-900 mb-2"
                       >
                         Phone
                       </label>
@@ -324,13 +324,13 @@ export default function ContactPage() {
                         value={formData.phone}
                         onChange={handleChange}
                         autoComplete="tel"
-                        className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
+                        className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 bg-white transition-colors"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="subject"
-                        className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
+                        className="block text-sm font-semibold text-neutral-900 mb-2"
                       >
                         Subject
                       </label>
@@ -340,7 +340,7 @@ export default function ContactPage() {
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors"
+                        className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 bg-white transition-colors"
                       />
                     </div>
                   </div>
@@ -348,7 +348,7 @@ export default function ContactPage() {
                   <div>
                     <label
                       htmlFor="message"
-                      className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2"
+                      className="block text-sm font-semibold text-neutral-900 mb-2"
                     >
                       Message *
                     </label>
@@ -360,7 +360,7 @@ export default function ContactPage() {
                       required
                       aria-required="true"
                       rows={6}
-                      className="w-full px-4 py-3 border border-neutral-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 dark:text-white bg-white dark:bg-dark-bg-primary transition-colors resize-vertical"
+                      className="w-full px-4 py-3 border border-neutral-300 focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none text-neutral-900 bg-white transition-colors resize-vertical"
                     />
                   </div>
 
@@ -391,10 +391,10 @@ export default function ContactPage() {
                     <div
                       role="alert"
                       aria-live="polite"
-                      className={`p-4 rounded-lg ${
+                      className={`p-4  ${
                         status === 'success'
-                          ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800'
-                          : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                          ? 'bg-green-50  text-green-800  border border-green-200 '
+                          : 'bg-red-50  text-red-800  border border-red-200 '
                       }`}
                     >
                       {message}
@@ -404,7 +404,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className="w-full bg-primary hover:bg-primary-dark text-lrp-black font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    className="w-full bg-primary hover:bg-primary-light text-lrp-black font-semibold py-3 px-6 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     aria-label={status === 'loading' ? 'Sending message' : 'Send message'}
                   >
                     {status === 'loading' ? (
@@ -441,7 +441,7 @@ export default function ContactPage() {
             </div>
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </CorePage>
   );
 }

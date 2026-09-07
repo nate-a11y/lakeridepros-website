@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import styles from '@/components/drivers-editorial/DriversEditorial.module.css';
 import { getDriverProfiles, getMediaUrl } from '@/lib/api/sanity';
 
 export const metadata: Metadata = {
@@ -73,169 +74,146 @@ export default async function OurDriversPage() {
   const drivers = await getDriverProfiles();
 
   return (
-    <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-boardson text-4xl sm:text-5xl font-bold mb-4">
-            Meet Our Team
-          </h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
-            The professionals behind your premium transportation experience
-          </p>
-        </div>
-      </section>
-
-      {/* Certification Banner */}
-      <section className="bg-white dark:bg-dark-bg-primary border-b border-neutral-200 dark:border-neutral-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+    <div className={styles.page}>
+      <section className={styles.hero}>
+        <div className={`${styles.container} ${styles.heroGrid}`}>
+          <div>
+            <h1>Meet Our Team</h1>
+            <p className={styles.intro}>
+              The professionals behind your premium transportation experience
+            </p>
+          </div>
+          <div className={styles.certification}>
             <Image
               src="https://dhwnlzborisjihhauchp.supabase.co/storage/v1/object/public/media/1769395379565-1000010589.webp"
               alt="First Aid, CPR, AED, and Stop the Bleed Certified"
               width={64}
               height={64}
-              className="object-contain"
             />
-            <div className="text-center sm:text-left">
-              <p className="font-bold text-neutral-900 dark:text-white">
-                All Drivers Certified in First Aid, CPR, AED & Stop the Bleed
+            <div>
+              <p>
+                All Drivers Certified in First Aid, CPR, AED &amp; Stop the
+                Bleed
               </p>
-              <p className="text-sm text-lrp-text-secondary dark:text-dark-text-secondary">
-                Your safety is our training—every driver is emergency response certified.
+              <p className={styles.caption}>
+                Your safety is our training—every driver is emergency response
+                certified.
               </p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Team Grid Section */}
-      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        className={styles.section}
+        aria-label="Lake Ride Pros team profiles"
+      >
+        <div className={styles.container}>
           {drivers.length === 0 ? (
-            <div className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg p-8 text-center">
-              <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
-                Coming Soon
-              </h2>
-              <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
-                We&apos;re working on something great. Check back soon to meet our amazing team!
+            <div className={styles.empty}>
+              <h2>Coming Soon</h2>
+              <p>
+                We&apos;re working on something great. Check back soon to meet
+                our amazing team!
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {drivers.map((driver) => {
+            <div className={styles.grid}>
+              {drivers.map((driver, index) => {
                 const imageUrl = getMediaUrl(driver.image);
                 const roleLabel = getRoleLabel(driver.role);
                 const isOwner = driver.role && driver.role.includes('owner');
-
-                // Format name as "First L."
                 const nameParts = driver.name.trim().split(/\s+/);
                 const displayName = isOwner
                   ? driver.name
                   : nameParts.length > 1
                     ? `${nameParts[0]} ${nameParts[nameParts.length - 1].charAt(0)}.`
                     : nameParts[0];
-
                 const driverSlug = driver.slug;
-
                 return (
-                  <div
-                    key={driver._id}
-                    className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] hover:shadow-xl group"
-                  >
-                    {/* Driver Image - Clickable */}
+                  <article key={driver._id} className={styles.profile}>
                     <Link
                       href={`/our-drivers/${driverSlug}`}
-                      className="block relative w-full aspect-square bg-gradient-to-br from-primary/10 to-primary/5"
+                      className={styles.portrait}
+                      aria-label={`View ${displayName}'s profile`}
                     >
                       {imageUrl ? (
                         <Image
                           src={imageUrl}
                           alt={`${displayName} - ${roleLabel}`}
                           fill
-                          className="object-contain"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                          sizes="(min-width: 1280px) 286px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                          loading={index === 0 ? 'eager' : 'lazy'}
+                          fetchPriority={index === 0 ? 'high' : 'auto'}
                         />
                       ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center">
-                            <span className="text-4xl font-bold text-primary">
-                              {driver.name.charAt(0).toUpperCase()}
-                            </span>
-                          </div>
-                        </div>
+                        <span className={styles.placeholder} aria-hidden="true">
+                          {driver.name.charAt(0).toUpperCase()}
+                        </span>
                       )}
                     </Link>
-
-                    {/* Driver Info */}
-                    <div className="p-6">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Link href={`/our-drivers/${driverSlug}`}>
-                          <h3 className="text-xl font-bold text-neutral-900 dark:text-white group-hover:text-primary dark:group-hover:text-primary-light transition-colors">
+                    <div className={styles.profileInfo}>
+                      <div className={styles.nameRow}>
+                        <h2>
+                          <Link href={`/our-drivers/${driverSlug}`}>
                             {displayName}
-                          </h3>
-                        </Link>
+                          </Link>
+                        </h2>
                         {driver.assignmentNumber && (
-                          <span className="inline-flex items-center px-2 py-0.5 text-xs font-bold bg-[#1f2937] text-white dark:bg-[#f5f5f5] dark:text-[#1f2937] rounded">
+                          <span className={styles.assignment}>
                             {driver.assignmentNumber}
                           </span>
                         )}
                       </div>
-                      <p className="text-sm font-medium text-primary dark:text-primary-light mb-2">
-                        {roleLabel}
-                      </p>
+                      <p className={styles.role}>{roleLabel}</p>
                       {driver.vehicles && driver.vehicles.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-3">
+                        <div className={styles.vehicles}>
                           {driver.vehicles.map((vehicle) => (
-                            <span
-                              key={vehicle}
-                              className="inline-block px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light rounded-full"
-                            >
+                            <span key={vehicle} className={styles.vehicle}>
                               {vehicle
                                 .split('_')
-                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .map(
+                                  (word) =>
+                                    word.charAt(0).toUpperCase() +
+                                    word.slice(1),
+                                )
                                 .join(' ')}
                             </span>
                           ))}
                         </div>
                       )}
                       {driver.bio && (
-                        <p className="text-lrp-text-secondary dark:text-dark-text-secondary text-sm line-clamp-3">
-                          {driver.bio}
-                        </p>
+                        <p className={styles.bioPreview}>{driver.bio}</p>
                       )}
                       <Link
                         href={`/our-drivers/${driverSlug}`}
-                        className="mt-3 text-sm font-medium text-primary dark:text-primary-light opacity-0 group-hover:opacity-100 transition-opacity inline-block"
+                        className={styles.textLink}
+                        aria-label={`View ${displayName}'s profile`}
                       >
-                        View Profile →
+                        View Profile
                       </Link>
                     </div>
-                  </div>
+                  </article>
                 );
               })}
             </div>
           )}
         </div>
       </section>
-
-      {/* Call to Action Section */}
-      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
-            Join Our Team
-          </h2>
-          <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-8">
-            Are you a professional driver looking for a great opportunity? We&apos;re always looking for talented individuals to join our team.
-          </p>
-          <Link
-            href="/careers/driver-application"
-            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-lrp-black bg-primary hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-          >
+      <section className={styles.close}>
+        <div className={`${styles.container} ${styles.closeGrid}`}>
+          <div>
+            <h2>Join Our Team</h2>
+            <p className={styles.intro}>
+              Are you a professional driver looking for a great opportunity?
+              We&apos;re always looking for talented individuals to join our
+              team.
+            </p>
+          </div>
+          <Link href="/careers/driver-application" className={styles.button}>
             View Career Opportunities
           </Link>
         </div>
       </section>
-    </>
+    </div>
   );
 }

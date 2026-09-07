@@ -1,5 +1,6 @@
 'use client'
 
+import styles from '@/components/support-editorial/SupportEditorial.module.css'
 import React, { useState, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -168,19 +169,19 @@ export default function GeneralApplicationPage() {
   // Success state
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary transition-colors py-16 px-4 sm:px-6 lg:px-8">
+      <div className={`${styles.page} ${styles.forms}`}>
         <div className="max-w-2xl mx-auto">
-          <div className="bg-white dark:bg-dark-bg-secondary border border-neutral-200 dark:border-dark-border rounded-lg p-8 sm:p-12 text-center transition-colors">
-            <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400" aria-hidden="true" />
+          <div className="bg-white border border-neutral-200 rounded-lg p-8 sm:p-12 text-center transition-colors">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-12 h-12 text-green-600" aria-hidden="true" />
             </div>
-            <h1 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
+            <h1 className="text-3xl font-bold text-neutral-900 mb-4">
               Application Submitted!
             </h1>
-            <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-2">
+            <p className="text-lg text-lrp-text-secondary mb-2">
               Thank you for your interest in joining the Lake Ride Pros team.
             </p>
-            <p className="text-lrp-text-secondary dark:text-dark-text-secondary">
+            <p className="text-lrp-text-secondary">
               Someone from our team will be in touch within 2-3 business days.
             </p>
           </div>
@@ -192,26 +193,26 @@ export default function GeneralApplicationPage() {
   const inputBaseClass =
     'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:border-primary transition-colors'
   const inputNormalClass =
-    'border-neutral-300 dark:border-dark-border bg-white dark:bg-dark-bg-primary text-neutral-900 dark:text-white'
+    'border-neutral-300  bg-white  text-neutral-900 '
   const inputErrorClass = 'border-red-500'
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary transition-colors py-8 px-4 sm:px-6 lg:px-8">
+    <div className={`${styles.page} ${styles.forms}`}>
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <header className="text-center mb-8" role="banner">
-          <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white mb-4">
+        <header className="text-center mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">
             Sales &amp; Brand Ambassador Application
           </h1>
-          <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary">
+          <p className="text-lg text-lrp-text-secondary">
             Help grow the Lake Ride Pros brand across the Lake of the Ozarks area.
           </p>
         </header>
 
         {/* Form Card */}
-        <main
-          className="bg-white dark:bg-dark-bg-secondary border border-neutral-200 dark:border-dark-border rounded-lg p-6 sm:p-8 transition-colors"
-          role="main"
+        <section
+          className={styles.formPanel}
+
         >
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -221,7 +222,7 @@ export default function GeneralApplicationPage() {
           >
             {/* Position Selection */}
             <fieldset>
-              <legend className="block text-sm font-medium text-neutral-900 dark:text-white mb-2">
+              <legend className="block text-sm font-medium text-neutral-900 mb-2">
                 Position(s) of Interest *
               </legend>
               <div className="flex flex-wrap gap-4">
@@ -234,15 +235,15 @@ export default function GeneralApplicationPage() {
                       type="checkbox"
                       checked={selectedPositions?.includes(position) || false}
                       onChange={() => handlePositionChange(position)}
-                      className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 dark:border-dark-border rounded"
+                      className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 rounded"
                       aria-describedby={errors.positions ? 'positions-error' : undefined}
                     />
-                    <span className="text-sm text-neutral-900 dark:text-white">{position}</span>
+                    <span className="text-sm text-neutral-900">{position}</span>
                   </label>
                 ))}
               </div>
               {errors.positions && (
-                <p id="positions-error" className="text-red-600 dark:text-red-400 text-sm mt-1" role="alert">
+                <p id="positions-error" className="text-red-600 text-sm mt-1" role="alert">
                   {errors.positions.message}
                 </p>
               )}
@@ -250,7 +251,7 @@ export default function GeneralApplicationPage() {
 
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+              <label htmlFor="fullName" className="block text-sm font-medium text-neutral-900 mb-1">
                 Full Name *
               </label>
               <input
@@ -263,7 +264,7 @@ export default function GeneralApplicationPage() {
                 aria-describedby={errors.fullName ? 'fullName-error' : undefined}
               />
               {errors.fullName && (
-                <p id="fullName-error" className="text-red-600 dark:text-red-400 text-sm mt-1" role="alert">
+                <p id="fullName-error" className="text-red-600 text-sm mt-1" role="alert">
                   {errors.fullName.message}
                 </p>
               )}
@@ -271,7 +272,7 @@ export default function GeneralApplicationPage() {
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+              <label htmlFor="email" className="block text-sm font-medium text-neutral-900 mb-1">
                 Email *
               </label>
               <input
@@ -284,7 +285,7 @@ export default function GeneralApplicationPage() {
                 aria-describedby={errors.email ? 'email-error' : undefined}
               />
               {errors.email && (
-                <p id="email-error" className="text-red-600 dark:text-red-400 text-sm mt-1" role="alert">
+                <p id="email-error" className="text-red-600 text-sm mt-1" role="alert">
                   {errors.email.message}
                 </p>
               )}
@@ -292,7 +293,7 @@ export default function GeneralApplicationPage() {
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+              <label htmlFor="phone" className="block text-sm font-medium text-neutral-900 mb-1">
                 Phone *
               </label>
               <input
@@ -306,7 +307,7 @@ export default function GeneralApplicationPage() {
                 aria-describedby={errors.phone ? 'phone-error' : undefined}
               />
               {errors.phone && (
-                <p id="phone-error" className="text-red-600 dark:text-red-400 text-sm mt-1" role="alert">
+                <p id="phone-error" className="text-red-600 text-sm mt-1" role="alert">
                   {errors.phone.message}
                 </p>
               )}
@@ -314,7 +315,7 @@ export default function GeneralApplicationPage() {
 
             {/* City, State */}
             <div>
-              <label htmlFor="cityState" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+              <label htmlFor="cityState" className="block text-sm font-medium text-neutral-900 mb-1">
                 City, State *
               </label>
               <input
@@ -327,7 +328,7 @@ export default function GeneralApplicationPage() {
                 aria-describedby={errors.cityState ? 'cityState-error' : undefined}
               />
               {errors.cityState && (
-                <p id="cityState-error" className="text-red-600 dark:text-red-400 text-sm mt-1" role="alert">
+                <p id="cityState-error" className="text-red-600 text-sm mt-1" role="alert">
                   {errors.cityState.message}
                 </p>
               )}
@@ -335,7 +336,7 @@ export default function GeneralApplicationPage() {
 
             {/* How did you hear about us? */}
             <div>
-              <label htmlFor="howDidYouHear" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+              <label htmlFor="howDidYouHear" className="block text-sm font-medium text-neutral-900 mb-1">
                 How did you hear about us?
               </label>
               <input
@@ -348,12 +349,12 @@ export default function GeneralApplicationPage() {
 
             {/* Social Media Handles */}
             <fieldset>
-              <legend className="block text-sm font-medium text-neutral-900 dark:text-white mb-3">
-                Social Media Handles <span className="text-lrp-text-secondary dark:text-dark-text-secondary font-normal">(optional)</span>
+              <legend className="block text-sm font-medium text-neutral-900 mb-3">
+                Social Media Handles <span className="text-lrp-text-secondary font-normal">(optional)</span>
               </legend>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="socialFacebook" className="block text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-1">
+                  <label htmlFor="socialFacebook" className="block text-xs text-lrp-text-secondary mb-1">
                     Facebook
                   </label>
                   <input
@@ -365,7 +366,7 @@ export default function GeneralApplicationPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="socialInstagram" className="block text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-1">
+                  <label htmlFor="socialInstagram" className="block text-xs text-lrp-text-secondary mb-1">
                     Instagram
                   </label>
                   <input
@@ -377,7 +378,7 @@ export default function GeneralApplicationPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="socialX" className="block text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-1">
+                  <label htmlFor="socialX" className="block text-xs text-lrp-text-secondary mb-1">
                     X (Twitter)
                   </label>
                   <input
@@ -389,7 +390,7 @@ export default function GeneralApplicationPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="socialTikTok" className="block text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-1">
+                  <label htmlFor="socialTikTok" className="block text-xs text-lrp-text-secondary mb-1">
                     TikTok
                   </label>
                   <input
@@ -405,10 +406,10 @@ export default function GeneralApplicationPage() {
 
             {/* Tell us about yourself */}
             <div>
-              <label htmlFor="aboutYourself" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+              <label htmlFor="aboutYourself" className="block text-sm font-medium text-neutral-900 mb-1">
                 Tell us about yourself *
               </label>
-              <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-2">
+              <p className="text-xs text-lrp-text-secondary mb-2">
                 Brief summary of your background, relevant experience, and why you&apos;d be a great fit.
               </p>
               <textarea
@@ -420,7 +421,7 @@ export default function GeneralApplicationPage() {
                 aria-describedby={errors.aboutYourself ? 'aboutYourself-error' : undefined}
               />
               {errors.aboutYourself && (
-                <p id="aboutYourself-error" className="text-red-600 dark:text-red-400 text-sm mt-1" role="alert">
+                <p id="aboutYourself-error" className="text-red-600 text-sm mt-1" role="alert">
                   {errors.aboutYourself.message}
                 </p>
               )}
@@ -428,10 +429,10 @@ export default function GeneralApplicationPage() {
 
             {/* Previous Work Experience */}
             <div>
-              <label htmlFor="workExperience" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
+              <label htmlFor="workExperience" className="block text-sm font-medium text-neutral-900 mb-1">
                 Previous Work Experience *
               </label>
-              <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-2">
+              <p className="text-xs text-lrp-text-secondary mb-2">
                 List your most recent positions (company, role, dates).
               </p>
               <textarea
@@ -443,7 +444,7 @@ export default function GeneralApplicationPage() {
                 aria-describedby={errors.workExperience ? 'workExperience-error' : undefined}
               />
               {errors.workExperience && (
-                <p id="workExperience-error" className="text-red-600 dark:text-red-400 text-sm mt-1" role="alert">
+                <p id="workExperience-error" className="text-red-600 text-sm mt-1" role="alert">
                   {errors.workExperience.message}
                 </p>
               )}
@@ -451,23 +452,23 @@ export default function GeneralApplicationPage() {
 
             {/* Resume Upload */}
             <div>
-              <label htmlFor="resume" className="block text-sm font-medium text-neutral-900 dark:text-white mb-1">
-                Resume Upload <span className="text-lrp-text-secondary dark:text-dark-text-secondary font-normal">(optional)</span>
+              <label htmlFor="resume" className="block text-sm font-medium text-neutral-900 mb-1">
+                Resume Upload <span className="text-lrp-text-secondary font-normal">(optional)</span>
               </label>
-              <p className="text-xs text-lrp-text-secondary dark:text-dark-text-secondary mb-2">
+              <p className="text-xs text-lrp-text-secondary mb-2">
                 Accepted formats: .pdf, .doc, .docx (max 5MB)
               </p>
 
               {resumeFile ? (
-                <div className="flex items-center gap-3 p-3 bg-primary/5 dark:bg-primary/10 border border-primary/20 dark:border-primary/30 rounded-md">
+                <div className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/20 rounded-md">
                   <Upload className="w-5 h-5 text-primary flex-shrink-0" aria-hidden="true" />
-                  <span className="text-sm text-neutral-900 dark:text-white truncate flex-grow">
+                  <span className="text-sm text-neutral-900 truncate flex-grow">
                     {resumeFile.name}
                   </span>
                   <button
                     type="button"
                     onClick={removeFile}
-                    className="text-neutral-500 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+                    className="text-neutral-500 hover:text-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
                     aria-label="Remove uploaded resume"
                   >
                     <X className="w-5 h-5" aria-hidden="true" />
@@ -480,11 +481,11 @@ export default function GeneralApplicationPage() {
                   id="resume"
                   accept=".pdf,.doc,.docx"
                   onChange={handleFileChange}
-                  className="block w-full text-sm text-lrp-text-secondary dark:text-dark-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 file:cursor-pointer file:transition-colors"
+                  className="block w-full text-sm text-lrp-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 file:cursor-pointer file:transition-colors"
                 />
               )}
               {fileError && (
-                <p className="text-red-600 dark:text-red-400 text-sm mt-1" role="alert">
+                <p className="text-red-600 text-sm mt-1" role="alert">
                   {fileError}
                 </p>
               )}
@@ -501,8 +502,8 @@ export default function GeneralApplicationPage() {
 
             {/* Error Message */}
             {submitError && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md" role="alert">
-                <p className="text-sm text-red-700 dark:text-red-400">{submitError}</p>
+              <div className="p-4 bg-red-50 border border-red-200 rounded-md" role="alert">
+                <p className="text-sm text-red-700">{submitError}</p>
               </div>
             )}
 
@@ -513,7 +514,7 @@ export default function GeneralApplicationPage() {
                 disabled={isSubmitting}
                 className={`w-full px-6 py-3 font-semibold rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                   isSubmitting
-                    ? 'bg-neutral-400 dark:bg-neutral-600 cursor-not-allowed text-white'
+                    ? 'bg-neutral-400  cursor-not-allowed text-white'
                     : 'bg-primary text-lrp-black hover:bg-primary-dark'
                 }`}
                 aria-label={isSubmitting ? 'Submitting application' : 'Submit application'}
@@ -549,10 +550,10 @@ export default function GeneralApplicationPage() {
               </button>
             </div>
           </form>
-        </main>
+        </section>
 
         {/* Footer Info */}
-        <footer className="mt-8 text-center text-sm text-lrp-text-secondary dark:text-dark-text-secondary" role="contentinfo">
+        <footer className="mt-8 text-center text-sm text-lrp-text-secondary">
           <p>
             Questions? Contact us at{' '}
             <a

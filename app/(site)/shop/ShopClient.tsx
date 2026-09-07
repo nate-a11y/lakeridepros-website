@@ -171,6 +171,7 @@ export default function ShopClient({ initialProducts, initialCategory }: ShopCli
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400 transition-colors group-focus-within:text-lrp-green z-10" />
               <input
                 type="text"
+                aria-label="Search products"
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => updateSearchQuery(e.target.value)}
@@ -477,7 +478,8 @@ function ProductCard({ product, onQuickView, isWishlisted, onToggleWishlist, ind
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-105 transition-transform duration-500 rounded-xl"
-              priority={false}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">

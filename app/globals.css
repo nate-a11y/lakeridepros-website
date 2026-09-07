@@ -47,7 +47,7 @@
 
   /* Brand color aliases for consistency */
   --lrp-green: #4cbb17;
-  --lrp-green-light: #5cd91f;
+  --lrp-green-light: #60e421;
   --lrp-green-dark: #3a8e11;
   --lrp-green-text: #3a8e11;  /* WCAG AA compliant (4.5:1) for text on white */
   --lrp-black: #060606;
@@ -790,16 +790,18 @@ input[type="checkbox"] {
 /* Visible focus indicators for keyboard navigation */
 /* Uses CSS variable --focus-ring which changes per theme */
 [data-main-app] *:focus-visible {
-  outline: var(--focus-ring-width, 3px) solid var(--focus-ring);
+  outline: 2px solid #ffffff;
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px #060606;
   border-radius: 2px;
 }
 
 /* Enhanced focus for buttons and links */
 [data-main-app] button:focus-visible,
 [data-main-app] a:focus-visible {
-  outline: var(--focus-ring-width, 3px) solid var(--focus-ring);
+  outline: 2px solid #ffffff;
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px #060606;
 }
 
 /* Skip to main content link */
@@ -808,7 +810,7 @@ input[type="checkbox"] {
   top: -100px;
   left: 1rem;
   background: #4cbb17;
-  color: white;
+  color: #060606;
   padding: 0.75rem 1.5rem;
   text-decoration: none;
   font-weight: 600;
@@ -819,8 +821,9 @@ input[type="checkbox"] {
 
 .skip-link:focus {
   top: 1rem;
-  outline: 3px solid white;
+  outline: 2px solid white;
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px #060606;
 }
 
 /* Minimum touch target size for accessibility (44x44px) */
@@ -975,4 +978,27 @@ p, li, td, th {
 
 .dark .custom-scrollbar {
   scrollbar-color: #4b5563 transparent;
+}
+
+/* A single, lightweight signature motion for the homepage route line. */
+@keyframes lrp-route-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.lrp-route-path {
+  animation: lrp-route-draw 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lrp-route-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 }

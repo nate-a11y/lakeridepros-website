@@ -1,3 +1,4 @@
+import CommercePage from '@/components/commerce-editorial/CommercePage'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ShopClient from './ShopClient'
@@ -41,7 +42,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const initialCategory = normalizeShopCategory(categoryParam)
 
   return (
-    <>
+    <CommercePage variant="shop">
       <ShopClient
         initialProducts={products}
         initialCategory={initialCategory}
@@ -60,6 +61,6 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           ))}
         </ul>
       </nav>
-    </>
+    </CommercePage>
   )
 }

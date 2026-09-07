@@ -11,7 +11,7 @@ test.describe('Homepage', () => {
 
     // Check for main navigation elements
     await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible()
-    await expect(page.getByRole('link', { name: /lake ride pros logo/i })).toBeVisible()
+    await expect(page.getByRole('link', { name: /lake ride pros home/i })).toBeVisible()
   })
 
   test('displays footer', async ({ page }) => {
@@ -27,31 +27,20 @@ test.describe('Homepage', () => {
   test('cart icon is visible', async ({ page }) => {
     await page.goto('/')
 
-    const cartIcon = page.getByLabel(/shopping cart/i)
+    // Desktop and mobile controls both stay mounted for responsive navigation;
+    // assert the control exposed at the current breakpoint.
+    const cartIcon = page.locator('a[aria-label^="Shopping cart"]:visible')
     await expect(cartIcon).toBeVisible()
   })
 
-  test('theme toggle works', async ({ page }) => {
+  test('keeps the editorial dark theme locked', async ({ page }) => {
     await page.goto('/')
 
-    // Find theme toggle button
     const themeToggle = page.getByRole('button', { name: /theme/i }).or(
       page.locator('[aria-label*="theme"]')
-    ).or(
-      page.locator('button').filter({ hasText: /dark|light/i })
     )
-
-    if (await themeToggle.count() > 0) {
-      await themeToggle.first().click()
-
-      // Wait for theme change
-      await page.waitForTimeout(500)
-
-      // Check if dark mode class is applied
-      const html = page.locator('html')
-      const htmlClass = await html.getAttribute('class')
-      expect(htmlClass).toBeTruthy()
-    }
+    await expect(themeToggle).toHaveCount(0)
+    await expect(page.locator('html')).toHaveClass(/dark/)
   })
 
   test('hero section is visible', async ({ page }) => {
@@ -74,6 +63,19 @@ test.describe('Homepage', () => {
 
     if (await menuButton.count() > 0) {
       await expect(menuButton.first()).toBeVisible()
+      await menuButton.first().click()
+      await expect(menuButton.first()).toHaveAttribute('aria-expanded', 'true')
+      await page.keyboard.press('Escape')
+      await expect(menuButton.first()).toHaveAttribute('aria-expanded', 'false')
     }
+  })
+
+  test('foregrounds private rides and renders a real vehicle collage', async ({ page }) => {
+    await page.goto('/')
+
+    await expect(page.getByText(/From a private SUV for one airport pickup/i)).toBeVisible()
+    const hero = page.locator('section').first()
+    await expect(hero.getByRole('tab', { name: /Private SUVs/i })).toHaveAttribute('aria-selected', 'true')
+    await expect(hero.locator('[role="tabpanel"]:not([hidden]) img')).toHaveCount(3)
   })
 })

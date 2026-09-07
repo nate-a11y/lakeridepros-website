@@ -1,5 +1,7 @@
 'use client';
 
+import CoreHero from '@/components/core-editorial/CoreHero'
+import CommercePage from '@/components/commerce-editorial/CommercePage'
 import { useState, useEffect, useRef, FormEvent, use } from 'react';
 import Link from 'next/link';
 import { Giveaway } from '@/lib/supabase/giveaways';
@@ -162,17 +164,17 @@ export default function GiveawayEntryPage({
 
   if (loadingGiveaway) {
     return (
-      <main className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary flex items-center justify-center">
+      <CommercePage variant="entry" className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary flex items-center justify-center">
         <div className="text-center text-lrp-text-secondary dark:text-dark-text-secondary">
           Loading giveaway...
         </div>
-      </main>
+      </CommercePage>
     );
   }
 
   if (loadError || !giveaway) {
     return (
-      <main className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary flex items-center justify-center p-4">
+      <CommercePage variant="entry" className="min-h-screen bg-neutral-50 dark:bg-dark-bg-primary flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center bg-white dark:bg-dark-bg-secondary rounded-lg shadow-lg p-8 border border-neutral-200 dark:border-dark-border">
           <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
             Giveaway Not Found
@@ -187,7 +189,7 @@ export default function GiveawayEntryPage({
             Back to Home
           </Link>
         </div>
-      </main>
+      </CommercePage>
     );
   }
 
@@ -203,8 +205,8 @@ export default function GiveawayEntryPage({
   const isOpen = status === 'open';
 
   return (
-    <>
-      <header className="bg-gradient-to-r from-primary to-primary-dark text-white py-16" role="banner">
+    <CommercePage variant="entry">
+      <CoreHero image="suv" compact>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="uppercase tracking-widest text-sm font-semibold text-white/80 mb-2">
             Lake Ride Pros Giveaway
@@ -221,9 +223,9 @@ export default function GiveawayEntryPage({
             {formatDate(giveaway.start_date)} &mdash; {formatDate(giveaway.end_date)}
           </p>
         </div>
-      </header>
+      </CoreHero>
 
-      <main className="py-12 bg-neutral-50 dark:bg-dark-bg-primary transition-colors" role="main">
+      <section className="py-12 bg-neutral-50 dark:bg-dark-bg-primary transition-colors">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           {giveaway.description && (
             <div className="bg-white dark:bg-dark-bg-secondary rounded-lg p-6 mb-6 border border-neutral-200 dark:border-dark-border">
@@ -499,8 +501,8 @@ export default function GiveawayEntryPage({
             </div>
           ) : null}
         </div>
-      </main>
-    </>
+      </section>
+    </CommercePage>
   );
 }
 

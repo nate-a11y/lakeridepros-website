@@ -1,3 +1,5 @@
+import CorePage from '@/components/core-editorial/CorePage'
+import CoreHero from '@/components/core-editorial/CoreHero'
 import type { Metadata } from 'next'
 import { PhoneLink } from '@/components/PhoneLink'
 import BookingWidget from '@/components/BookingWidget'
@@ -27,19 +29,17 @@ export const metadata: Metadata = {
 
 export default function BookPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-bg-primary" data-page="booking">
+    <CorePage data-page="booking">
       {/* Lake Ride Pros Branded Header */}
-      <section className="bg-primary py-16" aria-labelledby="booking-page-title">
-        <div className="container mx-auto px-4">
-          <h1 id="booking-page-title" className="text-4xl md:text-5xl font-bold text-white text-center">
+      <CoreHero image="sprinter" compact labelledBy="booking-page-title">
+          <h1 id="booking-page-title" className="text-4xl md:text-5xl font-bold text-white text-left">
             Book Your Ride
           </h1>
-          <p className="text-white/90 text-center mt-4 text-lg max-w-2xl mx-auto">
+          <p className="text-white/90 text-left mt-4 text-lg max-w-2xl mx-auto">
             Select your vehicle, choose your date and time, and we'll handle the rest.
             Premium transportation at Lake of the Ozarks.
           </p>
-        </div>
-      </section>
+        </CoreHero>
 
       <section className="container mx-auto px-4 py-8" aria-label="Online booking">
         <BookingWidget />
@@ -47,22 +47,22 @@ export default function BookPage() {
 
       {/* Contact Help Section */}
       <aside className="container mx-auto px-4 pb-16" aria-labelledby="booking-help-title">
-        <div className="bg-neutral-50 dark:bg-dark-bg-secondary rounded-lg p-8 text-center">
-          <h2 id="booking-help-title" className="text-2xl font-bold text-lrp-black dark:text-white mb-4">
+        <div className="bg-white py-8 text-left">
+          <h2 id="booking-help-title" className="text-2xl font-bold text-lrp-black mb-4">
             Need Help Booking?
           </h2>
-          <p className="text-neutral-700 dark:text-neutral-300 mb-6">
+          <p className="text-neutral-700 mb-6">
             Our team is available 24/7 to assist with your transportation needs
           </p>
-          <nav aria-label="Contact options" className="flex flex-col sm:flex-row gap-4 justify-center">
+          <nav aria-label="Contact options" className="flex flex-col sm:flex-row gap-4 justify-start">
             <PhoneLink
-              className="bg-primary hover:bg-primary-dark text-lrp-black px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
+              className="bg-primary hover:bg-primary-light text-lrp-black px-8 py-3 font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
             >
               (573) 206-9499
             </PhoneLink>
             <a
               href="mailto:contactus@lakeridepros.com"
-              className="bg-white dark:bg-dark-bg-tertiary border-2 border-primary text-primary hover:bg-primary hover:text-lrp-black px-8 py-3 rounded-lg font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
+              className="bg-white border-2 border-primary text-[#2f730e] hover:bg-primary hover:text-lrp-black px-8 py-3 font-semibold text-lg inline-flex items-center justify-center gap-2 transition-all"
               aria-label="Email Lake Ride Pros at contactus@lakeridepros.com"
             >
               <span aria-hidden="true">✉️</span> Email Us
@@ -70,6 +70,6 @@ export default function BookPage() {
           </nav>
         </div>
       </aside>
-    </div>
+    </CorePage>
   )
 }

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import styles from '@/components/drivers-editorial/DriversEditorial.module.css';
 import { ArrowLeft } from 'lucide-react';
 import { getDriverProfileBySlug, getMediaUrl } from '@/lib/api/sanity';
 import { metaDescription, metaTitle } from '@/lib/seo/metadata';
@@ -106,138 +107,98 @@ export default async function DriverDetailPage({ params }: Props) {
   const displayName = formatDisplayName(driver.name, driver.role);
 
   return (
-    <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary to-primary-dark text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/our-drivers"
-            className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Team</span>
-          </Link>
-          <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="font-boardson text-4xl sm:text-5xl font-bold">
-              {displayName}
-            </h1>
-            {driver.assignmentNumber && (
-              <span className="inline-flex items-center px-3 py-1 text-sm font-bold bg-white/20 text-white rounded-lg border border-white/30">
-                {driver.assignmentNumber}
-              </span>
+    <div className={styles.page}>
+      <section className={styles.hero}>
+        <div className={styles.container}>
+          <div className={styles.back}>
+            <Link href="/our-drivers" className={styles.textLink}>
+              <ArrowLeft size={16} aria-hidden="true" />
+              Back to Team
+            </Link>
+          </div>
+          <h1>{displayName}</h1>
+          <p className={styles.detailRole}>{roleLabel}</p>
+          {driver.assignmentNumber && (
+            <span className={styles.detailAssignment}>
+              {driver.assignmentNumber}
+            </span>
+          )}
+        </div>
+      </section>
+      <section className={styles.section}>
+        <div className={`${styles.container} ${styles.detailGrid}`}>
+          <div className={styles.detailPortrait}>
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt={`${displayName} - ${roleLabel}`}
+                fill
+                sizes="(min-width: 1280px) 550px, (min-width: 768px) 45vw, 100vw"
+                loading="eager"
+                fetchPriority="high"
+              />
+            ) : (
+              <div className={styles.placeholder} aria-hidden="true">
+                {driver.name.charAt(0).toUpperCase()}
+              </div>
             )}
           </div>
-          <p className="text-xl text-white/90 mt-2">{roleLabel}</p>
-        </div>
-      </section>
-
-      {/* Driver Profile Section */}
-      <section className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white dark:bg-dark-bg-primary rounded-2xl shadow-lg overflow-hidden">
-            <div className="grid md:grid-cols-2 gap-0">
-              {/* Image */}
-              <div className="relative aspect-square md:aspect-auto md:min-h-[400px] bg-gradient-to-br from-primary/10 to-primary/5">
-                {imageUrl ? (
-                  <Image
-                    src={imageUrl}
-                    alt={`${displayName} - ${roleLabel}`}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-32 h-32 rounded-full bg-primary/20 flex items-center justify-center">
-                      <span className="text-6xl font-bold text-primary">
-                        {driver.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Info */}
-              <div className="p-8 md:p-10">
-                <div className="flex items-center gap-3 mb-2 flex-wrap">
-                  <h2 className="text-3xl font-bold text-neutral-900 dark:text-white">
-                    {displayName}
-                  </h2>
-                  {driver.assignmentNumber && (
-                    <span className="inline-flex items-center px-2.5 py-1 text-sm font-bold bg-[#1f2937] text-white dark:bg-[#f5f5f5] dark:text-[#1f2937] rounded">
-                      {driver.assignmentNumber}
-                    </span>
-                  )}
-                </div>
-                <p className="text-lg font-medium text-primary dark:text-primary-light mb-4">
-                  {roleLabel}
-                </p>
-
-                {/* Vehicles */}
-                {driver.vehicles && driver.vehicles.length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-2">
-                      Vehicles
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {driver.vehicles.map((vehicle) => (
-                        <span
-                          key={vehicle}
-                          className="inline-block px-3 py-1 text-sm font-medium bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light rounded-full"
-                        >
-                          {vehicle
-                            .split('_')
-                            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                            .join(' ')}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Bio */}
-                {driver.bio && (
-                  <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-2">
-                      About
-                    </h3>
-                    <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed whitespace-pre-line">
-                      {driver.bio}
-                    </p>
-                  </div>
-                )}
-              </div>
+          <div className={styles.facts}>
+            <div className={styles.nameRow}>
+              <h2>{displayName}</h2>
+              {driver.assignmentNumber && (
+                <span className={styles.assignment}>
+                  {driver.assignmentNumber}
+                </span>
+              )}
             </div>
+            <p className={styles.role}>{roleLabel}</p>
+            {driver.vehicles && driver.vehicles.length > 0 && (
+              <div className={styles.factSection}>
+                <h3>Vehicles</h3>
+                <div className={styles.vehicles}>
+                  {driver.vehicles.map((vehicle) => (
+                    <span key={vehicle} className={styles.vehicle}>
+                      {vehicle
+                        .split('_')
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1),
+                        )
+                        .join(' ')}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {driver.bio && (
+              <div className={styles.factSection}>
+                <h3>About</h3>
+                <p className={styles.biography}>{driver.bio}</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-white dark:bg-dark-bg-primary transition-colors">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">
-            Ready to Book Your Ride?
-          </h2>
-          <p className="text-lg text-lrp-text-secondary dark:text-dark-text-secondary mb-8">
-            Our team is ready to provide you with premium transportation services at Lake of the Ozarks.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/book"
-              className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-lrp-black bg-primary hover:bg-primary-dark transition-colors"
-            >
+      <section className={styles.close}>
+        <div className={`${styles.container} ${styles.closeGrid}`}>
+          <div>
+            <h2>Ready to Book Your Ride?</h2>
+            <p className={styles.intro}>
+              Our team is ready to provide you with premium transportation
+              services at Lake of the Ozarks.
+            </p>
+          </div>
+          <div className={styles.actions}>
+            <Link href="/book" className={styles.button}>
               Book Now
             </Link>
-            <Link
-              href="/our-drivers"
-              className="inline-flex items-center justify-center px-8 py-3 text-base font-medium rounded-lg text-primary dark:text-primary-light border-2 border-primary hover:bg-primary hover:text-lrp-black transition-colors"
-            >
+            <Link href="/our-drivers" className={styles.secondaryButton}>
               Meet the Team
             </Link>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

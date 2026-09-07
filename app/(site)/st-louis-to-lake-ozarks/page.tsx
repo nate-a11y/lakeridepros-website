@@ -1,14 +1,18 @@
+import LocationHero from '@/components/location/LocationHero'
+import LocationSection from '@/components/location/LocationSection'
+import LocationEditorialList from '@/components/location/LocationEditorialList'
+import LocationFAQs from '@/components/location/LocationFAQs'
+import LocationCTA from '@/components/location/LocationCTA'
+import RelatedLocationLinks from '@/components/location/RelatedLocationLinks'
+import { locationPhotography } from '@/components/location/locationPhotography'
 import type { Metadata } from 'next'
-import { MapPin, Phone, CheckCircle, ArrowRight, Clock, Users, Shield } from 'lucide-react'
-import Link from 'next/link'
-import RelatedServices from '@/components/RelatedServices'
-import { PhoneLink } from '@/components/PhoneLink'
-import TestimonialsCarousel from '@/components/TestimonialsCarousel'
+import LocationTestimonials from '@/components/location/LocationTestimonials'
 import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/sanity'
 
 export const metadata: Metadata = {
   title: 'St. Louis to Lake Ozarks Shuttle | Lake Ride Pros',
-  description: 'Private shuttle service from St. Louis and STL Airport to Lake of the Ozarks, with professional drivers and door-to-door transportation.',
+  description:
+    'Private shuttle service from St. Louis and STL Airport to Lake of the Ozarks, with professional drivers and door-to-door transportation.',
   keywords: [
     'St Louis to Lake of the Ozarks',
     'STL airport to Lake Ozarks shuttle',
@@ -17,17 +21,20 @@ export const metadata: Metadata = {
     'Lambert Airport to Lake of the Ozarks',
     'St Louis to Camdenton shuttle',
     'private shuttle STL to Lake Ozarks',
-    'group transportation St Louis to Lake'
+    'group transportation St Louis to Lake',
   ],
   alternates: {
     canonical: 'https://www.lakeridepros.com/st-louis-to-lake-ozarks',
   },
   openGraph: {
     title: 'St Louis to Lake of the Ozarks Transportation | Lake Ride Pros',
-    description: 'Professional shuttle service from St. Louis Lambert Airport (STL) to Lake of the Ozarks. Luxury vehicles, experienced drivers, flight tracking.',
+    description:
+      'Professional shuttle service from St. Louis Lambert Airport (STL) to Lake of the Ozarks. Luxury vehicles, experienced drivers, flight tracking.',
     url: 'https://www.lakeridepros.com/st-louis-to-lake-ozarks',
     siteName: 'Lake Ride Pros',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'St Louis to Lake Ozarks Transportation' }],
+    images: [
+      { url: '/og-image.jpg', width: 1200, height: 630, alt: 'St Louis to Lake Ozarks Transportation' },
+    ],
     locale: 'en_US',
     type: 'website',
   },
@@ -52,7 +59,7 @@ const localBusinessSchema = {
     '@type': 'PostalAddress',
     addressLocality: 'Lake of the Ozarks',
     addressRegion: 'MO',
-    addressCountry: 'US'
+    addressCountry: 'US',
   },
   areaServed: [
     {
@@ -60,22 +67,22 @@ const localBusinessSchema = {
       name: 'St. Louis',
       containedInPlace: {
         '@type': 'State',
-        name: 'Missouri'
-      }
+        name: 'Missouri',
+      },
     },
     {
       '@type': 'City',
       name: 'Lake of the Ozarks',
       containedInPlace: {
         '@type': 'State',
-        name: 'Missouri'
-      }
-    }
+        name: 'Missouri',
+      },
+    },
   ],
   geo: {
     '@type': 'GeoCoordinates',
     latitude: 38.7486,
-    longitude: -90.3700
+    longitude: -90.37,
   },
   priceRange: '$$-$$$',
   description: 'Professional luxury shuttle service from St. Louis Lambert Airport to Lake of the Ozarks',
@@ -90,63 +97,63 @@ const faqSchema = {
       name: 'How much does a shuttle from St. Louis to Lake of the Ozarks cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'STL Airport transportation pricing depends on the vehicle, exact pickup and destination, timing, passenger count, luggage, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote.'
-      }
+        text: 'STL Airport transportation pricing depends on the vehicle, exact pickup and destination, timing, passenger count, luggage, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote.',
+      },
     },
     {
       '@type': 'Question',
       name: 'How long is the drive from St. Louis to Lake of the Ozarks?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The drive from St. Louis Lambert Airport (STL) to Lake of the Ozarks is approximately 2.5 to 3 hours depending on your final destination (Osage Beach, Camdenton, or Lake Ozark). Our professional drivers take the most efficient routes and monitor traffic in real-time.'
-      }
+        text: 'The drive from St. Louis Lambert Airport (STL) to Lake of the Ozarks is approximately 2.5 to 3 hours depending on your final destination (Osage Beach, Camdenton, or Lake Ozark). Our professional drivers take the most efficient routes and monitor traffic in real-time.',
+      },
     },
     {
       '@type': 'Question',
       name: 'Do you track flights from STL Airport?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes! We track all incoming flights from St. Louis Lambert Airport in real-time. If your flight is delayed, we automatically adjust your pickup time at no extra charge. We monitor arrivals and will be waiting when you land.'
-      }
+        text: 'Yes! We track all incoming flights from St. Louis Lambert Airport in real-time. If your flight is delayed, we automatically adjust your pickup time at no extra charge. We monitor arrivals and will be waiting when you land.',
+      },
     },
     {
       '@type': 'Question',
       name: 'Can you accommodate large groups from St. Louis?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely! We specialize in group transportation from St. Louis to Lake of the Ozarks. Our current fleet includes a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, and a 37-passenger Executive Shuttle. We can coordinate multiple vehicles for larger groups.'
-      }
+        text: 'Absolutely! We specialize in group transportation from St. Louis to Lake of the Ozarks. Our current fleet includes a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, and a 37-passenger Executive Shuttle. We can coordinate multiple vehicles for larger groups.',
+      },
     },
     {
       '@type': 'Question',
       name: 'Where do you pick up at STL Airport?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We pick up at both Terminal 1 and Terminal 2 at St. Louis Lambert International Airport. Your driver will meet you at baggage claim with a Lake Ride Pros sign. We provide detailed pickup instructions upon booking confirmation.'
-      }
+        text: 'We pick up at both Terminal 1 and Terminal 2 at St. Louis Lambert International Airport. Your driver will meet you at baggage claim with a Lake Ride Pros sign. We provide detailed pickup instructions upon booking confirmation.',
+      },
     },
     {
       '@type': 'Question',
       name: 'Do you provide round-trip service from St. Louis to Lake of the Ozarks?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes! Round-trip shuttle service from STL to Lake of the Ozarks is available at discounted rates compared to booking two one-way trips. Perfect for weekend getaways, weddings, and lake vacations. Book both legs together and save.'
-      }
+        text: 'Yes! Round-trip shuttle service from STL to Lake of the Ozarks is available at discounted rates compared to booking two one-way trips. Perfect for weekend getaways, weddings, and lake vacations. Book both legs together and save.',
+      },
     },
     {
       '@type': 'Question',
       name: 'What vehicles do you use for St. Louis to Lake Ozarks shuttles?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We use luxury Mercedes Sprinter vans, comfortable limo buses, and spacious shuttle buses for STL to Lake of the Ozarks routes. All vehicles feature premium seating, climate control, ample luggage space, and are meticulously maintained for safety and comfort.'
-      }
-    }
-  ]
+        text: 'We use luxury Mercedes Sprinter vans, comfortable limo buses, and spacious shuttle buses for STL to Lake of the Ozarks routes. All vehicles feature premium seating, climate control, ample luggage space, and are meticulously maintained for safety and comfort.',
+      },
+    },
+  ],
 }
 
 export default async function StLouisToLakeOzarksPage() {
   // Fetch random 5-star testimonials
-  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => []);
+  const testimonials = await getRandomTestimonials(3, false, 5).catch(() => [])
 
   return (
     <>
@@ -155,348 +162,319 @@ export default async function StLouisToLakeOzarksPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
-      <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
+      <div className="min-h-screen bg-white text-lrp-black">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-lrp-green to-lrp-green/80 py-20">
-          <div className="container mx-auto px-4 text-center">
-            <MapPin className="w-16 h-16 text-white mx-auto mb-6" />
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              St. Louis to Lake of the Ozarks Transportation
-            </h1>
-            <p className="text-white/90 text-xl md:text-2xl max-w-3xl mx-auto mb-8">
-              Professional shuttle service from STL Airport to Lake of the Ozarks. Flight tracking, luxury vehicles, door-to-door service.
-            </p>
-            <Link
-              href="/book"
-              className="inline-block bg-white text-lrp-green-dark hover:bg-lrp-gray hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
-            >
-              Book Your STL Shuttle
-            </Link>
-          </div>
-        </section>
+        <LocationHero
+          title={'St. Louis to Lake of the Ozarks Transportation'}
+          introduction={
+            <>
+              <p>
+                Professional shuttle service from STL Airport to Lake of the Ozarks. Flight tracking, luxury
+                vehicles, door-to-door service.
+              </p>
+            </>
+          }
+          image={locationPhotography.sprinter}
+          bookingLabel={'Book Your STL Shuttle'}
+          bookingLocation="st-louis-to-lake-ozarks-hero"
+          bookingHref="/book"
+        />
 
         {/* Key Benefits */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-12">
-              Why Choose Our St. Louis to Lake Ozarks Shuttle
-            </h2>
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-lrp-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Clock className="w-8 h-8 text-lrp-green" />
-                </div>
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
-                  Flight Tracking
-                </h3>
-                <p className="text-gray-700 dark:text-lrp-gray">
-                  We monitor your STL flight in real-time and adjust pickup for delays automatically at no extra charge.
-                </p>
-              </div>
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-lrp-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-lrp-green" />
-                </div>
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
-                  Group Friendly
-                </h3>
-                <p className="text-gray-700 dark:text-lrp-gray">
-                  Comfortable vehicles for 2-37 passengers. Perfect for families, wedding parties, and corporate groups.
-                </p>
-              </div>
-              <div className="bg-lrp-gray dark:bg-dark-bg-secondary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-lrp-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-8 h-8 text-lrp-green" />
-                </div>
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
-                  Professional Drivers
-                </h3>
-                <p className="text-gray-700 dark:text-lrp-gray">
-                  Licensed, DOT-compliant drivers who know the STL to Lake Ozarks route like the back of their hand.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <LocationSection
+          id="local-section-1"
+          title={'Why Choose Our St. Louis to Lake Ozarks Shuttle'}
+          tone="white"
+        >
+          <LocationEditorialList
+            items={[
+              {
+                title: 'Flight Tracking',
+                description: (
+                  <>
+                    <p>
+                      We monitor your STL flight in real-time and adjust pickup for delays automatically at no
+                      extra charge.
+                    </p>
+                  </>
+                ),
+              },
+              {
+                title: 'Group Friendly',
+                description: (
+                  <>
+                    <p>
+                      Comfortable vehicles for 2-37 passengers. Perfect for families, wedding parties, and
+                      corporate groups.
+                    </p>
+                  </>
+                ),
+              },
+              {
+                title: 'Professional Drivers',
+                description: (
+                  <>
+                    <p>
+                      Licensed, DOT-compliant drivers who know the STL to Lake Ozarks route like the back of
+                      their hand.
+                    </p>
+                  </>
+                ),
+              },
+            ]}
+          />
+        </LocationSection>
 
         {/* Popular Lake Destinations */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-12">
-              Popular Lake Destinations from St. Louis
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <CheckCircle className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Tan-Tar-A Resort</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
-                  Weddings, conferences, golf getaways from STL
-                </p>
-              </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <CheckCircle className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Margaritaville Lake Resort</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
-                  Direct shuttle from STL Airport to Margaritaville
-                </p>
-              </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <CheckCircle className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Osage Beach</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
-                  Hotels, vacation rentals, Bagnell Dam Strip
-                </p>
-              </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <CheckCircle className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Camdenton</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
-                  Lake homes, vacation properties, event venues
-                </p>
-              </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <CheckCircle className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Lake Ozark</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
-                  Downtown Lake Ozark, waterfront resorts
-                </p>
-              </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-6 rounded-lg">
-                <CheckCircle className="w-8 h-8 text-lrp-green mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black dark:text-white mb-2">Private Lake Homes</h3>
-                <p className="text-gray-700 dark:text-lrp-gray text-sm">
-                  Door-to-door service to any Lake address
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <LocationSection id="local-section-2" title={'Popular Lake Destinations from St. Louis'} tone="gray">
+          <LocationEditorialList
+            items={[
+              {
+                title: 'Tan-Tar-A Resort',
+                description: (
+                  <>
+                    <p>Weddings, conferences, golf getaways from STL</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Margaritaville Lake Resort',
+                description: (
+                  <>
+                    <p>Direct shuttle from STL Airport to Margaritaville</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Osage Beach',
+                description: (
+                  <>
+                    <p>Hotels, vacation rentals, Bagnell Dam Strip</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Camdenton',
+                description: (
+                  <>
+                    <p>Lake homes, vacation properties, event venues</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Lake Ozark',
+                description: (
+                  <>
+                    <p>Downtown Lake Ozark, waterfront resorts</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Private Lake Homes',
+                description: (
+                  <>
+                    <p>Door-to-door service to any Lake address</p>
+                  </>
+                ),
+              },
+            ]}
+          />
+        </LocationSection>
 
         {/* Services Available */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-12">
-              St. Louis to Lake Ozarks Transportation Services
-            </h2>
-            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-              <Link href="/services/airport-transfers" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg mb-2">Airport Shuttle</h3>
-                    <p className="text-sm opacity-80">STL Airport to Lake of the Ozarks direct</p>
-                  </div>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </div>
-              </Link>
-              <Link href="/services/wedding-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg mb-2">Wedding Guest Shuttles</h3>
-                    <p className="text-sm opacity-80">STL Airport for destination weddings at the Lake</p>
-                  </div>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </div>
-              </Link>
-              <Link href="/services/corporate-executive-travel" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg mb-2">Corporate Transportation</h3>
-                    <p className="text-sm opacity-80">Executive shuttles for Lake Ozarks conferences</p>
-                  </div>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </div>
-              </Link>
-              <Link href="/services/group-event-transportation" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg mb-2">Large Group Transport</h3>
-                    <p className="text-sm opacity-80">Multi-vehicle coordination for 50+ passengers</p>
-                  </div>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </div>
-              </Link>
-              <Link href="/services" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg mb-2">Round-Trip Service</h3>
-                    <p className="text-sm opacity-80">Discounted rates for round-trip STL shuttles</p>
-                  </div>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </div>
-              </Link>
-              <Link href="/services/private-aviation-transfers" className="group block bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg hover:bg-lrp-green hover:text-lrp-black transition-all">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-lg mb-2">Private Aviation</h3>
-                    <p className="text-sm opacity-80">FBO pickup at STL, private jet coordination</p>
-                  </div>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </div>
-              </Link>
-            </div>
-          </div>
-        </section>
+        <LocationSection
+          id="local-section-3"
+          title={'St. Louis to Lake Ozarks Transportation Services'}
+          tone="white"
+        >
+          <LocationEditorialList
+            items={[
+              {
+                title: 'Airport Shuttle',
+                href: '/services/airport-transfers',
+                description: (
+                  <>
+                    <p>STL Airport to Lake of the Ozarks direct</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Wedding Guest Shuttles',
+                href: '/services/wedding-transportation',
+                description: (
+                  <>
+                    <p>STL Airport for destination weddings at the Lake</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Corporate Transportation',
+                href: '/services/corporate-executive-travel',
+                description: (
+                  <>
+                    <p>Executive shuttles for Lake Ozarks conferences</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Large Group Transport',
+                href: '/services/group-event-transportation',
+                description: (
+                  <>
+                    <p>Multi-vehicle coordination for 50+ passengers</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Round-Trip Service',
+                href: '/services',
+                description: (
+                  <>
+                    <p>Discounted rates for round-trip STL shuttles</p>
+                  </>
+                ),
+              },
+              {
+                title: 'Private Aviation',
+                href: '/services/private-aviation-transfers',
+                description: (
+                  <>
+                    <p>FBO pickup at STL, private jet coordination</p>
+                  </>
+                ),
+              },
+            ]}
+          />
+        </LocationSection>
 
         {/* Why Choose Lake Ride Pros */}
-        <section className="py-16 bg-lrp-gray dark:bg-dark-bg-secondary">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-12">
-              Why Lake Ride Pros for STL to Lake Ozarks
-            </h2>
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-lrp-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="w-8 h-8 text-lrp-green" />
-                </div>
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
-                  We Know Both Ends
-                </h3>
-                <p className="text-gray-700 dark:text-lrp-gray">
-                  Familiar with STL Airport terminals and every Lake destination. No GPS guessing, just local expertise.
-                </p>
-              </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-lrp-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-8 h-8 text-lrp-green" />
-                </div>
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
-                  We Don't Cancel
-                </h3>
-                <p className="text-gray-700 dark:text-lrp-gray">
-                  Unlike rideshare services, your shuttle is guaranteed. We've never cancelled on a customer - ever.
-                </p>
-              </div>
-              <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-lrp-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Phone className="w-8 h-8 text-lrp-green" />
-                </div>
-                <h3 className="text-xl font-bold text-lrp-black dark:text-white mb-3">
-                  24/7 Availability
-                </h3>
-                <p className="text-gray-700 dark:text-lrp-gray">
-                  Early morning flights, late arrivals - we run shuttles from STL to Lake Ozarks around the clock.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <LocationSection id="local-section-4" title={'Why Lake Ride Pros for STL to Lake Ozarks'} tone="gray">
+          <LocationEditorialList
+            items={[
+              {
+                title: 'We Know Both Ends',
+                description: (
+                  <>
+                    <p>
+                      Familiar with STL Airport terminals and every Lake destination. No GPS guessing, just
+                      local expertise.
+                    </p>
+                  </>
+                ),
+              },
+              {
+                title: "We Don't Cancel",
+                description: (
+                  <>
+                    <p>
+                      Unlike rideshare services, your shuttle is guaranteed. We've never cancelled on a
+                      customer - ever.
+                    </p>
+                  </>
+                ),
+              },
+              {
+                title: '24/7 Availability',
+                description: (
+                  <>
+                    <p>
+                      Early morning flights, late arrivals - we run shuttles from STL to Lake Ozarks around
+                      the clock.
+                    </p>
+                  </>
+                ),
+              },
+            ]}
+          />
+        </LocationSection>
 
         {/* FAQ Section */}
-        <section className="py-16">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-lrp-black dark:text-white text-center mb-12">
-              St. Louis to Lake Ozarks Shuttle FAQs
-            </h2>
-            <div className="space-y-4">
-              <details className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
-                  How much does a shuttle from St. Louis to Lake of the Ozarks cost?
-                </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  STL Airport transportation pricing depends on the vehicle, exact pickup and destination, timing, passenger count, luggage, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote.
-                </p>
-              </details>
-
-              <details className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
-                  How long is the drive from St. Louis to Lake of the Ozarks?
-                </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  The drive from St. Louis Lambert Airport (STL) to Lake of the Ozarks is approximately 2.5 to 3 hours depending on your final destination (Osage Beach, Camdenton, or Lake Ozark). Our professional drivers take the most efficient routes and monitor traffic in real-time.
-                </p>
-              </details>
-
-              <details className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
-                  Do you track flights from STL Airport?
-                </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Yes! We track all incoming flights from St. Louis Lambert Airport in real-time. If your flight is delayed, we automatically adjust your pickup time at no extra charge. We monitor arrivals and will be waiting when you land.
-                </p>
-              </details>
-
-              <details className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
-                  Can you accommodate large groups from St. Louis?
-                </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Absolutely! We specialize in group transportation from St. Louis to Lake of the Ozarks. Our current fleet includes a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, and a 37-passenger Executive Shuttle. We can coordinate multiple vehicles for larger groups.
-                </p>
-              </details>
-
-              <details className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
-                  Where do you pick up at STL Airport?
-                </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  We pick up at both Terminal 1 and Terminal 2 at St. Louis Lambert International Airport. Your driver will meet you at baggage claim with a Lake Ride Pros sign. We provide detailed pickup instructions upon booking confirmation.
-                </p>
-              </details>
-
-              <details className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
-                  Do you provide round-trip service from St. Louis to Lake of the Ozarks?
-                </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  Yes! Round-trip shuttle service from STL to Lake of the Ozarks is available at discounted rates compared to booking two one-way trips. Perfect for weekend getaways, weddings, and lake vacations. Book both legs together and save.
-                </p>
-              </details>
-
-              <details className="bg-lrp-gray dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-lrp-black dark:text-white">
-                  What vehicles do you use for St. Louis to Lake Ozarks shuttles?
-                </summary>
-                <p className="text-gray-700 dark:text-lrp-gray mt-4">
-                  We use luxury Mercedes Sprinter vans, comfortable limo buses, and spacious shuttle buses for STL to Lake of the Ozarks routes. All vehicles feature premium seating, climate control, ample luggage space, and are meticulously maintained for safety and comfort.
-                </p>
-              </details>
-            </div>
-          </div>
-        </section>
+        <LocationFAQs
+          title={'St. Louis to Lake Ozarks Shuttle FAQs'}
+          tone="white"
+          items={[
+            {
+              question: 'How much does a shuttle from St. Louis to Lake of the Ozarks cost?',
+              answer:
+                'STL Airport transportation pricing depends on the vehicle, exact pickup and destination, timing, passenger count, luggage, and whether you need one-way or round-trip service. Check our current pricing page and request a custom quote.',
+            },
+            {
+              question: 'How long is the drive from St. Louis to Lake of the Ozarks?',
+              answer:
+                'The drive from St. Louis Lambert Airport (STL) to Lake of the Ozarks is approximately 2.5 to 3 hours depending on your final destination (Osage Beach, Camdenton, or Lake Ozark). Our professional drivers take the most efficient routes and monitor traffic in real-time.',
+            },
+            {
+              question: 'Do you track flights from STL Airport?',
+              answer:
+                'Yes! We track all incoming flights from St. Louis Lambert Airport in real-time. If your flight is delayed, we automatically adjust your pickup time at no extra charge. We monitor arrivals and will be waiting when you land.',
+            },
+            {
+              question: 'Can you accommodate large groups from St. Louis?',
+              answer:
+                'Absolutely! We specialize in group transportation from St. Louis to Lake of the Ozarks. Our current fleet includes a 13-passenger Executive Sprinter, 14-passenger limo-style vehicles, a 23-passenger Pink Patrol bus, and a 37-passenger Executive Shuttle. We can coordinate multiple vehicles for larger groups.',
+            },
+            {
+              question: 'Where do you pick up at STL Airport?',
+              answer:
+                'We pick up at both Terminal 1 and Terminal 2 at St. Louis Lambert International Airport. Your driver will meet you at baggage claim with a Lake Ride Pros sign. We provide detailed pickup instructions upon booking confirmation.',
+            },
+            {
+              question: 'Do you provide round-trip service from St. Louis to Lake of the Ozarks?',
+              answer:
+                'Yes! Round-trip shuttle service from STL to Lake of the Ozarks is available at discounted rates compared to booking two one-way trips. Perfect for weekend getaways, weddings, and lake vacations. Book both legs together and save.',
+            },
+            {
+              question: 'What vehicles do you use for St. Louis to Lake Ozarks shuttles?',
+              answer:
+                'We use luxury Mercedes Sprinter vans, comfortable limo buses, and spacious shuttle buses for STL to Lake of the Ozarks routes. All vehicles feature premium seating, climate control, ample luggage space, and are meticulously maintained for safety and comfort.',
+            },
+          ]}
+        />
 
         {/* Testimonials */}
-        <TestimonialsCarousel
+        <LocationTestimonials
           testimonials={testimonials}
           title="What Our St. Louis Clients Say"
           subtitle="Real experiences from customers traveling from St. Louis to Lake of the Ozarks"
-          includeSchema={false}
         />
 
         {/* Related Services */}
-        <RelatedServices services={[
-          { title: "Kansas City to Lake Ozarks", href: "/kansas-city-to-lake-ozarks", description: "Professional shuttle from MCI Airport to Lake of the Ozarks" },
-          { title: "Airport Shuttle Service", href: "/services/airport-transfers", description: "All major Missouri airports to Lake destinations" },
-          { title: "Wedding Transportation", href: "/services/wedding-transportation", description: "Guest shuttles for destination weddings at the Lake" }
-        ]} />
+        <RelatedLocationLinks
+          title="You May Also Need"
+          items={[
+            {
+              title: 'Kansas City to Lake Ozarks',
+              href: '/kansas-city-to-lake-ozarks',
+              description: 'Professional shuttle from MCI Airport to Lake of the Ozarks',
+            },
+            {
+              title: 'Airport Shuttle Service',
+              href: '/services/airport-transfers',
+              description: 'All major Missouri airports to Lake destinations',
+            },
+            {
+              title: 'Wedding Transportation',
+              href: '/services/wedding-transportation',
+              description: 'Guest shuttles for destination weddings at the Lake',
+            },
+          ]}
+        />
 
         {/* CTA Section */}
-        <section className="py-16 bg-lrp-green">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Book Your STL to Lake Ozarks Shuttle?
-            </h2>
-            <p className="text-white/90 text-xl mb-8">
-              Professional shuttle service from St. Louis Lambert Airport to Lake of the Ozarks
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/book"
-                className="inline-block bg-white text-lrp-green-dark hover:bg-lrp-gray hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all"
-              >
-                Book Now
-              </Link>
-              <PhoneLink className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-lrp-green px-10 py-4 rounded-lg font-bold text-lg transition-all">
-                <Phone className="w-5 h-5" />
-                (573) 206-9499
-              </PhoneLink>
-            </div>
-          </div>
-        </section>
+        <LocationCTA
+          title={'Ready to Book Your STL to Lake Ozarks Shuttle?'}
+          description={
+            <>
+              <p>Professional shuttle service from St. Louis Lambert Airport to Lake of the Ozarks</p>
+            </>
+          }
+          bookingLabel={'Book Now'}
+          bookingLocation="st-louis-to-lake-ozarks-close"
+          bookingHref="/book"
+          phoneLabel="(573) 206-9499"
+        />
       </div>
     </>
   )

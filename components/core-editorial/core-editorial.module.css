@@ -1,0 +1,65 @@
+.page {
+  --background: #fff;
+  --foreground: var(--lrp-black);
+  --neutral-50: #fafafa;
+  --neutral-100: #f3f3f3;
+  --neutral-200: #dedede;
+  --neutral-300: #b3b3b3;
+  --neutral-400: #777;
+  --neutral-500: #666;
+  --neutral-600: #555;
+  --neutral-700: #333;
+  --neutral-800: #171717;
+  --neutral-900: var(--lrp-black);
+  color: var(--lrp-black);
+  background: #fff;
+  color-scheme: light;
+}
+.page :where(h1, h2, h3, h4) { text-wrap: balance; }
+.page :where(h2) { font-family: 'CelebriSans', sans-serif; letter-spacing: -.035em; line-height: 1.13; }
+.page :where(p) { line-height: 1.7; }
+.page :where(a, button, summary, input, select, textarea):focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 4px;
+}
+.page :where(input, textarea, select) { color: var(--lrp-black); background: #fff; }
+.page :where(input, textarea)::placeholder { color: #666; }
+.page :where(a[href^='mailto:']) { overflow-wrap: anywhere; }
+.page :where(.container) { max-width: 1280px; }
+.page :where(.grid) > * { min-width: 0; }
+.page :where(button) { min-height: 44px; }
+.page :where(details) { border-top: 1px solid #b3b3b3; }
+.page :where(summary) { padding-block: .5rem; }
+.hero { color: #fff; background: var(--lrp-black); }
+.heroLayout {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding: 2.5rem 1rem;
+}
+.heroCopy { min-width: 0; }
+.heroCopy h1 {
+  font-family: 'CelebriSans', sans-serif;
+  font-size: clamp(2.25rem, 4.6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.03;
+  letter-spacing: -.045em;
+  margin: 0;
+  text-align: left;
+  color: #fff;
+}
+.heroCopy > p { margin: 1.5rem 0 0; max-width: 40rem; font-size: 1.125rem; text-align: left; color: #fff; }
+.heroImage { position: relative; min-width: 0; aspect-ratio: 4 / 3; }
+.wide { aspect-ratio: 1800 / 907; }
+.compact .heroImage { max-height: 200px; }
+.album { aspect-ratio: 1; width: min(100%, 420px); justify-self: center; }
+@media (min-width: 640px) {
+  .heroLayout { padding: 3rem 1.5rem; }
+}
+@media (min-width: 1024px) {
+  .heroLayout { grid-template-columns: 1fr 1fr; gap: 3rem; padding: 4rem 2rem; }
+  .compact .heroLayout { padding-block: 2rem; }
+  .compact .heroImage { max-height: 300px; }
+}

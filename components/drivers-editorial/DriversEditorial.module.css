@@ -1,0 +1,326 @@
+.page {
+  color: var(--lrp-black);
+  background: #fff;
+}
+.page :is(a, button):focus-visible {
+  outline: 3px solid var(--lrp-green);
+  outline-offset: 5px;
+}
+.container {
+  width: min(100% - 2rem, 1216px);
+  margin-inline: auto;
+}
+.hero {
+  padding-block: 3rem;
+  background: var(--lrp-black);
+  color: #fff;
+}
+.heroGrid {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+.hero h1 {
+  font-family: var(--font-celebri), sans-serif;
+  font-size: clamp(3.2rem, 6.2vw, 5.5rem);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.intro {
+  margin-top: 1.25rem;
+  max-width: 590px;
+  color: var(--lrp-gray);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+.certification {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border-top: 1px solid var(--lrp-green);
+  padding-top: 1.5rem;
+}
+.certification img {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.certification p {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.65;
+}
+.certification .caption {
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--lrp-gray);
+}
+.section {
+  padding-block: 3rem;
+}
+.grid {
+  display: grid;
+  gap: 2.5rem 1.5rem;
+}
+.profile {
+  min-width: 0;
+}
+.page .portrait {
+  display: block;
+  width: 100%;
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--lrp-gray);
+}
+.portrait img {
+  object-fit: contain;
+}
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-boardson), sans-serif;
+  font-size: 7rem;
+  color: var(--lrp-black);
+}
+.profileInfo {
+  padding-top: 1.2rem;
+}
+.nameRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.7rem;
+}
+.nameRow h2 {
+  font-family: var(--font-celebri), sans-serif;
+  font-size: 1.65rem;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 900;
+}
+.nameRow a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--lrp-green);
+  text-underline-offset: 5px;
+}
+.assignment {
+  display: inline-block;
+  border-bottom: 2px solid var(--lrp-green);
+  padding-bottom: 0.2rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.role {
+  margin-top: 0.65rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  font-weight: 600;
+}
+.vehicles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  margin-top: 0.75rem;
+}
+.vehicle {
+  color: var(--lrp-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+.vehicle:not(:last-child)::after {
+  content: ',';
+}
+.bioPreview {
+  margin-top: 0.85rem;
+  color: var(--lrp-text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.8;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.textLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--lrp-green);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+.textLink:hover {
+  text-decoration-color: currentColor;
+}
+.profileInfo .textLink {
+  margin-top: 0.6rem;
+}
+.close {
+  padding-block: 3.5rem;
+  background: var(--lrp-black);
+  color: #fff;
+}
+.closeGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.close h2,
+.empty h2 {
+  font-family: var(--font-celebri), sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+.button,
+.secondaryButton {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.35rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 1.6;
+}
+.button {
+  color: var(--lrp-black);
+  background: var(--lrp-green);
+}
+.button:hover {
+  background: var(--lrp-green-light);
+}
+.secondaryButton {
+  border: 1px solid currentColor;
+}
+.secondaryButton:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.empty {
+  padding-block: 2rem;
+}
+.empty p {
+  margin-top: 1rem;
+  max-width: 600px;
+  line-height: 1.8;
+  color: var(--lrp-text-secondary);
+}
+.back {
+  margin-bottom: 2rem;
+}
+.detailRole {
+  margin-top: 1.2rem;
+  color: var(--lrp-gray);
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+.detailAssignment {
+  display: block;
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--lrp-green-light);
+  font-weight: 700;
+}
+.detailGrid {
+  display: grid;
+  gap: 2.5rem;
+  align-items: start;
+}
+.detailPortrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--lrp-gray);
+}
+.detailPortrait img {
+  object-fit: contain;
+}
+.facts h2 {
+  font-family: var(--font-celebri), sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+.factSection {
+  border-top: 1px solid var(--lrp-gray);
+  padding-top: 1.5rem;
+  margin-top: 1.75rem;
+}
+.factSection h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.biography {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--lrp-text-secondary);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+@media (min-width: 640px) {
+  .container {
+    width: min(100% - 3rem, 1216px);
+  }
+  .hero {
+    padding-block: 4rem;
+  }
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .detailGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 3rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    width: min(100% - 4rem, 1216px);
+  }
+  .heroGrid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 5rem;
+  }
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .section {
+    padding-block: 4rem;
+  }
+  .certification {
+    border-top: 0;
+    border-left: 2px solid var(--lrp-green);
+    padding-top: 0;
+    padding-left: 1.75rem;
+  }
+}
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

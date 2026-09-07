@@ -1,159 +1,123 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, useReducedMotion } from 'framer-motion'
-import ParticleField from './ui/ParticleField'
+import { ArrowDownRight, ArrowUpRight } from 'lucide-react'
 import { MoovsBookingLink } from '@/components/MoovsBookingLink'
 
-export default function HeroSection() {
-  const shouldReduceMotion = useReducedMotion()
+interface HeroSectionProps {
+  heroImageUrl: string
+  heroImageAlt: string
+  reviewCount: number
+  ratingValue: number
+}
 
+export default function HeroSection({
+  heroImageUrl,
+  heroImageAlt,
+  reviewCount,
+  ratingValue,
+}: HeroSectionProps) {
   return (
-    <>
-      {/* Hero Section */}
-      <section className="relative bg-white dark:bg-dark-bg-primary py-24 lg:py-32 overflow-hidden transition-colors">
-        {/* Particle Field Background */}
-        <ParticleField />
+    <section className="relative isolate min-h-[780px] overflow-hidden bg-black text-white lg:min-h-[calc(100svh-5rem)]">
+      <Image
+        src={heroImageUrl}
+        alt={heroImageAlt}
+        fill
+        preload
+        quality={75}
+        sizes="100vw"
+        className="object-cover object-[58%_center]"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,.94)_0%,rgba(0,0,0,.72)_42%,rgba(0,0,0,.15)_76%,rgba(0,0,0,.38)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/80 to-transparent" />
 
-        {/* Green accent shapes */}
-        <motion.div
-          className="absolute top-0 right-0 w-96 h-96 bg-primary opacity-10 dark:opacity-20 rounded-full blur-3xl"
-          animate={shouldReduceMotion ? undefined : {
-            scale: [1, 1.2, 1],
-            opacity: [0.1, 0.15, 0.1],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      <Link
+        href="/local-premier-partners/legacy-real-estate-group"
+        className="absolute right-3 top-3 z-10 flex items-center gap-2 bg-black/70 px-3 py-1.5 text-white backdrop-blur-sm transition-colors hover:bg-black sm:right-6 sm:top-5 sm:gap-3 sm:px-4 sm:py-2 lg:right-8"
+        aria-label="Powered by Legacy Real Estate Group"
+      >
+        <span className="text-[9px] text-white/65 sm:text-[11px]">Powered by</span>
+        <Image
+          src="https://cdn.sanity.io/images/1hcdphjr/production/20de425c0da23174b563da7bfe1499ae7dbc7923-1024x762.webp"
+          alt="Legacy Real Estate Group"
+          width={80}
+          height={60}
+          loading="eager"
+          sizes="80px"
+          className="brightness-0 invert"
         />
-        <motion.div
-          className="absolute bottom-0 left-0 w-72 h-72 bg-primary-light opacity-10 dark:opacity-20 rounded-full blur-3xl"
-          animate={shouldReduceMotion ? undefined : {
-            scale: [1, 1.15, 1],
-            opacity: [0.1, 0.2, 0.1],
-          }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      </Link>
+
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-24 hidden h-36 w-full opacity-80 lg:block"
+        viewBox="0 0 1440 160"
+        preserveAspectRatio="none"
+      >
+        <path
+          className="lrp-route-path"
+          d="M0 115 C220 145 315 16 520 64 S825 160 1022 78 S1270 26 1440 72"
+          fill="none"
+          pathLength="1"
+          stroke="var(--primary)"
+          strokeLinecap="round"
+          strokeWidth="3"
+          vectorEffect="non-scaling-stroke"
         />
+        <circle cx="1022" cy="78" fill="var(--primary)" r="6" />
+      </svg>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            {/* Animated Heading */}
-            <motion.h1
-              className="font-boardson text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-lrp-black dark:text-white"
-              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-            >
-              Premium <span className="text-primary-dark dark:text-primary-light">Luxury Transportation</span> at Lake of the Ozarks
-            </motion.h1>
+      <div className="relative mx-auto flex min-h-[780px] max-w-7xl flex-col justify-end px-4 pb-10 pt-32 sm:px-6 sm:pb-12 lg:min-h-[calc(100svh-5rem)] lg:px-8 lg:pb-14">
+        <div className="max-w-3xl">
+          <h1 className="text-balance font-celebri text-[clamp(3.35rem,8.4vw,8.25rem)] font-black leading-[0.82] tracking-[-0.065em]">
+            <span className="mb-5 block text-sm font-semibold tracking-[0.08em] text-[#7bea45] sm:text-base">
+              Lake of the Ozarks transportation, re-engineered.
+            </span>
+            Every ride.
+            <span className="block text-primary">One local team.</span>
+          </h1>
+          <p className="mt-7 max-w-2xl text-pretty text-lg leading-relaxed text-white/82 sm:text-xl">
+            Airport pickups before sunrise. Wedding and resort logistics all day. Concerts,
+            dinners, and rides home after dark. From one passenger to thirty-seven.
+          </p>
 
-            {/* Static subtitle prevents cumulative layout shift on mobile. */}
-            <motion.p
-              className="text-center text-xl mt-6 mb-8 text-lrp-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto"
-              initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <MoovsBookingLink
+              location="hero"
+              className="inline-flex min-h-14 items-center justify-center gap-3 bg-primary px-6 py-4 font-bold text-black transition-colors hover:bg-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
             >
-              Missouri&apos;s premier transportation service. Safe rides, good times. Perfect for weddings, wine tours, bachelor parties, and special events.
-            </motion.p>
-
-            {/* Animated CTA Buttons */}
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-              initial={shouldReduceMotion ? undefined : { y: 20 }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.6, delay: 1.2 }}
+              Quote or book a ride <ArrowUpRight className="size-5" aria-hidden="true" />
+            </MoovsBookingLink>
+            <Link
+              href="/services"
+              className="inline-flex min-h-14 items-center justify-center gap-3 border border-white/45 bg-black/25 px-6 py-4 font-bold text-white backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-black"
             >
-              <MoovsBookingLink location="hero"
-                className="bg-[#2f730e] hover:bg-[#24580b] text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg hover:shadow-xl shadow-green-glow"
-              >
-                Book Your Ride
-              </MoovsBookingLink>
-              <motion.div
-                whileHover={shouldReduceMotion ? undefined : { scale: 1.05 }}
-                whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
-              >
-                <Link
-                  href="/fleet"
-                  className="bg-white dark:bg-dark-bg-secondary hover:bg-primary-light dark:hover:bg-primary border-2 border-primary text-[#2f730e] dark:text-[#5cd91f] hover:text-lrp-black font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-md"
-                >
-                  View Our Fleet
-                </Link>
-              </motion.div>
-            </motion.div>
-
-            {/* Trust Indicators */}
-            <motion.div
-              className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-lrp-text-secondary dark:text-dark-text-secondary"
-              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.8 }}
-            >
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Licensed & Insured</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>First Aid & CPR Certified</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>AED & Stop the Bleed Trained</span>
-              </div>
-            </motion.div>
-
-            {/* Powered By */}
-            <motion.div
-              className="mt-12 flex justify-center"
-              initial={shouldReduceMotion ? undefined : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 2.1 }}
-            >
-              <Link
-                href="/local-premier-partners/legacy-real-estate-group"
-                className="group flex flex-col items-center gap-2"
-              >
-                <span className="text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
-                  Powered by
-                </span>
-                <Image
-                  src="https://cdn.sanity.io/images/1hcdphjr/production/20de425c0da23174b563da7bfe1499ae7dbc7923-1024x762.webp"
-                  alt="Legacy Real Estate Group"
-                  width={200}
-                  height={149}
-                  className="h-auto w-40 transition-opacity group-hover:opacity-80"
-                />
-              </Link>
-            </motion.div>
-
-            {/* Scroll Indicator */}
-            <motion.div
-              className="mt-16"
-              initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2.5, duration: 1 }}
-            >
-              <motion.div
-                animate={shouldReduceMotion ? undefined : { y: [0, 10, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="flex flex-col items-center text-neutral-400 dark:text-neutral-500"
-              >
-                <span className="text-xs uppercase tracking-widest mb-2">Scroll to explore</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7" />
-                </svg>
-              </motion.div>
-            </motion.div>
+              Find the right service <ArrowDownRight className="size-5" aria-hidden="true" />
+            </Link>
           </div>
-        </div>
-      </section>
 
-    </>
+        </div>
+
+        <dl className="mt-12 grid grid-cols-2 border-t border-white/30 pt-5 text-white lg:grid-cols-4 lg:gap-8">
+          <div className="border-r border-white/20 pr-4">
+            <dt className="text-xs text-white/60">Local since</dt>
+            <dd className="mt-1 text-xl font-bold sm:text-2xl">2020</dd>
+          </div>
+          <div className="pl-4 lg:border-r lg:border-white/20 lg:pl-0">
+            <dt className="text-xs text-white/60">Rides completed</dt>
+            <dd className="mt-1 text-xl font-bold sm:text-2xl">15,000+</dd>
+          </div>
+          <div className="mt-5 border-r border-white/20 pr-4 lg:mt-0">
+            <dt className="text-xs text-white/60">Google rating</dt>
+            <dd className="mt-1 text-xl font-bold sm:text-2xl">
+              {ratingValue.toFixed(1)} <span className="text-sm font-normal text-white/65">({reviewCount}+)</span>
+            </dd>
+          </div>
+          <div className="mt-5 pl-4 lg:mt-0 lg:pl-0">
+            <dt className="text-xs text-white/60">Passenger options</dt>
+            <dd className="mt-1 text-xl font-bold sm:text-2xl">1–37</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
   )
 }

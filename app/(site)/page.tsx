@@ -1,11 +1,16 @@
 import type { Metadata } from 'next';
-import nextDynamic from 'next/dynamic';
-import HeroSection from '@/components/HeroSection';
-import NewRatesBanner from '@/components/NewRatesBanner';
-import BookingWidget from '@/components/BookingWidget';
+import FleetLensHero from '@/components/home/FleetLensHero';
+import ServicesLens from '@/components/home/ServicesLens';
+import OperationsProof from '@/components/home/OperationsProof';
+import ReviewsEditorial from '@/components/home/ReviewsEditorial';
+import LocalIntelligence from '@/components/home/LocalIntelligence';
+import FinalBookingClose from '@/components/home/FinalBookingClose';
+import PartnersCarousel from '@/components/PartnersCarousel';
+import FAQAccordion from '@/components/FAQAccordion';
+import NewsletterSignup from '@/components/NewsletterSignup';
 import {
   getServices,
-  getRandomVehicles,
+  getVehicles,
   getRandomTestimonials,
   getPartners,
   getMediaUrl,
@@ -13,30 +18,13 @@ import {
 } from '@/lib/api/sanity';
 import { resolveSlug } from '@/types/sanity';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
-import { getPopularServicesLocal } from '@/lib/analytics-server';
 import { client } from '@/sanity/lib/client';
 import { groq } from 'next-sanity';
-
-// Lazy load below-fold components to reduce initial main thread work
-const StatsBar = nextDynamic(() => import('@/components/StatsBar'));
-const SpotifyEmbed = nextDynamic(() => import('@/components/SpotifyEmbed'));
-const ServicesShowcase = nextDynamic(() => import('@/components/ServicesShowcase'));
-const FeaturedVehiclesSection = nextDynamic(() => import('@/components/FeaturedVehiclesSection'));
-const FeaturedBlogSection = nextDynamic(() => import('@/components/FeaturedBlogSection'));
-const TestimonialsCarousel = nextDynamic(() => import('@/components/TestimonialsCarousel'));
-const PartnersCarousel = nextDynamic(() => import('@/components/PartnersCarousel'));
-const PopularServicesRanking = nextDynamic(() => import('@/components/PopularServicesRanking'));
-const HowItWorks = nextDynamic(() => import('@/components/HowItWorks'));
-const WhyChooseUs = nextDynamic(() => import('@/components/WhyChooseUs'));
-const ServiceAreasMap = nextDynamic(() => import('@/components/ServiceAreasMap')); // Keep SSR for local SEO keywords
-const MemberLogosSection = nextDynamic(() => import('@/components/MemberLogosSection'));
-const FAQAccordion = nextDynamic(() => import('@/components/FAQAccordion'));
-const NewsletterSignup = nextDynamic(() => import('@/components/NewsletterSignup'));
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
   title: 'Lake of the Ozarks Transportation | Lake Ride Pros',
-  description: 'Luxury transportation at Lake of the Ozarks for weddings, airport transfers, nightlife and groups. Professional drivers and service available 24/7.',
+  description: 'Lake of the Ozarks transportation and professional rides throughout Missouri for airports, weddings, resorts, events, nightlife, and groups from 1 to 37.',
   keywords: [
     'Lake of the Ozarks transportation',
     'luxury transportation Missouri',
@@ -53,8 +41,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://www.lakeridepros.com',
     siteName: 'Lake Ride Pros',
-    title: 'Lake Ride Pros - Premier Transportation at Lake of the Ozarks',
-    description: 'Luxury limo buses, sprinter vans, and shuttle services for weddings, events, and nights out.',
+    title: 'Lake Ride Pros | Lake of the Ozarks & Missouri Transportation',
+    description: 'Private rides, airport transfers, weddings, resorts, events, and group transportation from 1 to 37 passengers throughout Missouri.',
     images: [
       {
         url: '/og-image.jpg',
@@ -66,8 +54,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Lake Ride Pros - Premium Transportation',
-    description: 'Luxury transportation at Lake of the Ozarks',
+    title: 'Lake Ride Pros | Missouri Transportation',
+    description: 'Private rides, airport transfers, weddings, resorts, events, and groups from Lake of the Ozarks throughout Missouri.',
     images: ['/og-image.jpg'],
   },
   robots: {
@@ -89,16 +77,30 @@ export const metadata: Metadata = {
 // Rebuild the route periodically instead of forcing every request through SSR.
 export const revalidate = 300;
 
+const preferredVehicleGalleryIndices: Record<string, number[]> = {
+  flex: [4, 0, 10],
+  elite: [0, 2, 1],
+  'executive-sprinter-van': [4, 0, 1],
+  'lrp-limo-bus': [0, 3, 4],
+  'rescue-squad-1': [0, 3, 4],
+  'pink-patrol': [0, 1, 3],
+  'executive-shuttle-bus': [2, 4, 3],
+};
+
+function meaningfulAlt(candidate: string | undefined, fallback: string) {
+  const value = candidate?.trim();
+  const internalLabel = /^(?:(?:img|image|dsc|photo)[-_ ]*\d+|lrp(?:\d+|[a-z]{2,}\s*[-–]))/i;
+  if (!value || value.length < 8 || internalLabel.test(value)) return fallback;
+  return value;
+}
+
 export default async function HomePage() {
-  // Fetch data with error handling - use HTTP API calls for consistent media URLs
-  // Optimized: Reduced limits to minimize HTML payload size
-  const [servicesData, vehicles, blogPosts, testimonials, partnersData, popularServicesData, googleReviewSummary] = await Promise.all([
-    getServices({ limit: 30 }).catch(() => ({ docs: [] })), // For services section + popular filtering
-    getRandomVehicles(3).catch(() => []),
-    getLatestBlogPostsLocal(10).catch(() => []),
+  const [servicesData, vehiclesData, blogPosts, testimonials, partnersData, googleReviewSummary] = await Promise.all([
+    getServices({ limit: 30 }).catch(() => ({ docs: [] })),
+    getVehicles({ limit: 30 }).catch(() => ({ docs: [] })),
+    getLatestBlogPostsLocal(6).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),
-    getPopularServicesLocal(5).catch(() => []),
     client.fetch<{reviewCount: number; ratingValue: number | null}>(groq`{
       "reviewCount": count(*[
         _type == "testimonial"
@@ -115,36 +117,77 @@ export default async function HomePage() {
   ]);
 
   const services = servicesData.docs || [];
+  const vehicles = vehiclesData.docs || [];
 
-  // Use analytics-based popular services, fallback to hardcoded list (same as header)
-  const fallbackServiceSlugs = [
+  // Deliberately broad: the homepage should represent how the whole Lake moves,
+  // rather than over-indexing on nightlife or any single trip type.
+  const featuredServiceSlugs = [
+    'airport-transfers',
     'wedding-transportation',
-    'airport-shuttle',
-    'nightlife-transportation',
-    'corporate-transportation',
-    'private-aviation-transportation',
+    'corporate-executive-travel',
+    'group-shuttle-services',
+    'events-festivals',
+    'party-bus-nightlife',
   ];
+  const featuredServices = featuredServiceSlugs
+    .map(slug => services.find(service => resolveSlug(service.slug) === slug))
+    .filter((service): service is (typeof services)[number] => Boolean(service));
 
-  const popularServiceSlugs = popularServicesData.length > 0
-    ? popularServicesData.map(s => s.slug)
-    : fallbackServiceSlugs;
+  // Keep large CMS documents and full galleries on the server. The two client
+  // interactions receive only the strings they render.
+  const fleetLensVehicles = vehicles.flatMap(vehicle => {
+    const slug = resolveSlug(vehicle.slug);
+    const preferredGallery = (preferredVehicleGalleryIndices[slug] || [0, 1, 2])
+      .map(index => vehicle.images?.[index])
+      .filter((image): image is NonNullable<typeof image> => Boolean(image?.image));
+    const candidates = [
+      ...preferredGallery.map(item => ({ image: item.image, alt: item.alt })),
+      ...(vehicle.featuredImage ? [{ image: vehicle.featuredImage, alt: vehicle.featuredImage.alt }] : []),
+    ];
+    const seenUrls = new Set<string>();
+    const images = candidates.flatMap((candidate, index) => {
+      const url = candidate.image ? getMediaUrl(candidate.image) : '';
+      if (!url || seenUrls.has(url)) return [];
+      seenUrls.add(url);
+      return [{
+        url,
+        alt: meaningfulAlt(candidate.alt || candidate.image?.alt, `${vehicle.name}, Lake Ride Pros fleet view ${index + 1}`),
+        objectPosition: candidate.image?.hotspot
+          ? `${candidate.image.hotspot.x * 100}% ${candidate.image.hotspot.y * 100}%`
+          : 'center',
+      }];
+    }).slice(0, 3);
+    if (images.length === 0) return [];
+    return [{
+      _id: vehicle._id,
+      name: vehicle.name,
+      slug,
+      images,
+    }];
+  });
 
-  // Filter and sort services by popularity
-  const popularServices = services
-    .filter(s => popularServiceSlugs.includes(resolveSlug(s.slug)))
-    .sort((a, b) => popularServiceSlugs.indexOf(resolveSlug(a.slug)) - popularServiceSlugs.indexOf(resolveSlug(b.slug)))
-    .slice(0, 4); // Show top 4 on home page
+  const servicePreviews = (featuredServices.length > 0 ? featuredServices : services.slice(0, 6)).map(service => ({
+    slug: resolveSlug(service.slug),
+    title: service.title,
+    imageUrl: service.image ? getMediaUrl(service.image) : '',
+    imageAlt: meaningfulAlt(service.image?.alt, `${service.title} transportation with Lake Ride Pros`),
+    objectPosition: service.image?.hotspot
+      ? `${service.image.hotspot.x * 100}% ${service.image.hotspot.y * 100}%`
+      : 'center',
+  }));
 
-  // Transform partners to minimal data for client component (reduces HTML payload)
-  const partners = partnersData.slice(0, 12).map(p => ({
-    _id: p._id,
-    name: p.name,
-    slug: resolveSlug(p.slug),
-    website: p.website,
-    blurb: p.blurb,
-    logoUrl: getMediaUrl(p.logo),
-    isPremierPartner: p.isPremierPartner,
-    isWeddingPartner: p.isWeddingPartner,
+  const closingVehicle = vehicles.find(vehicle => resolveSlug(vehicle.slug) === 'pink-patrol');
+  const closingImage = closingVehicle?.images?.[0]?.image || closingVehicle?.featuredImage;
+
+  const partners = partnersData.slice(0, 12).map(partner => ({
+    _id: partner._id,
+    name: partner.name,
+    slug: resolveSlug(partner.slug),
+    website: partner.website,
+    blurb: partner.blurb,
+    logoUrl: getMediaUrl(partner.logo),
+    isPremierPartner: partner.isPremierPartner,
+    isWeddingPartner: partner.isWeddingPartner,
   }));
 
   const currentLocalBusinessSchema = {
@@ -172,69 +215,35 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      {/* New Year New Rates Hero Banner */}
-      <NewRatesBanner />
-
-      {/* Hero Section with Booking Modal */}
-      <HeroSection />
-
-      {/* Animated Stats Bar */}
-      <StatsBar />
-
-      {/* Booking Widget Section */}
-      <section id="booking" className="py-16 bg-neutral-50 dark:bg-dark-bg-secondary transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <BookingWidget />
-        </div>
-      </section>
-
-      {/* Spotify Music Section */}
-      <SpotifyEmbed
-        artistId="44y7Dl9jKhtIq1SJ7uKv7v"
-        title="Ride With The Vibe"
-        subtitle="Set the mood for your Lake trip with music from our featured artist"
+      <FleetLensHero
+        vehicles={fleetLensVehicles}
+        ratingValue={googleReviewSummary.ratingValue ?? 5}
+        reviewCount={googleReviewSummary.reviewCount || 322}
       />
 
-      {/* Services Overview Section */}
-      <ServicesShowcase services={services.slice(0, 6)} />
+      <ServicesLens services={servicePreviews} />
 
-      {/* Featured Vehicles Section */}
-      <FeaturedVehiclesSection vehicles={vehicles} />
+      <OperationsProof />
 
-      {/* Latest Blog Posts Section */}
-      <FeaturedBlogSection posts={blogPosts} />
-
-      {/* Testimonials Section with Review Schema */}
-      <TestimonialsCarousel
+      <ReviewsEditorial
         testimonials={testimonials}
-        title="What Our Clients Say"
-        subtitle="Hear from those who have experienced our premium service"
-        includeSchema={true}
+        ratingValue={googleReviewSummary.ratingValue ?? 5}
+        reviewCount={googleReviewSummary.reviewCount || 322}
       />
 
-      {/* Partner Logos Section - Client component handles infinite scroll */}
       {partners.length > 0 && <PartnersCarousel partners={partners} />}
 
-      {/* Most Requested Services Section */}
-      <PopularServicesRanking services={popularServices} />
+      <LocalIntelligence posts={blogPosts} />
 
-      {/* How It Works Section */}
-      <HowItWorks />
-
-      {/* Why Choose Lake Ride Pros Section */}
-      <WhyChooseUs />
-
-      {/* Service Areas Section */}
-      <ServiceAreasMap />
-
-      {/* Proud Members Of Section */}
-      <MemberLogosSection />
+      <NewsletterSignup />
 
       {/* FAQ Section */}
       <FAQAccordion />
 
-      {/* Newsletter Signup */}
-      <NewsletterSignup />
+      <FinalBookingClose
+        imageUrl={closingImage ? getMediaUrl(closingImage) : undefined}
+        imageAlt={meaningfulAlt(closingImage?.alt, closingVehicle ? `${closingVehicle.name}, part of the Lake Ride Pros fleet` : 'Lake Ride Pros fleet vehicle')}
+      />
     </>
   );
 }

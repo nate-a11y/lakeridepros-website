@@ -1,5 +1,6 @@
 'use client'
 
+import CommercePage from '@/components/commerce-editorial/CommercePage'
 import { useState } from 'react'
 import { Trash2, ShoppingCart, ArrowLeft, Loader2 } from 'lucide-react'
 import Image from 'next/image'
@@ -48,7 +49,7 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-white dark:bg-dark-bg-primary py-20">
+      <CommercePage variant="cart" className="min-h-screen bg-white dark:bg-dark-bg-primary py-20">
         <div className="container mx-auto px-4 text-center">
           <ShoppingCart className="w-24 h-24 text-neutral-400 mx-auto mb-6" />
           <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-4">
@@ -65,12 +66,12 @@ export default function CartPage() {
             Continue Shopping
           </Link>
         </div>
-      </div>
+      </CommercePage>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-bg-primary py-12">
+    <CommercePage variant="cart" className="min-h-screen bg-white dark:bg-dark-bg-primary py-12">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
@@ -221,7 +222,7 @@ export default function CartPage() {
               </div>
 
               {checkoutError && (
-                <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-500 rounded-lg p-4 mb-6">
+                <div role="alert" aria-live="polite" className="bg-red-50 dark:bg-red-900/20 border-2 border-red-500 rounded-lg p-4 mb-6">
                   <p className="text-red-700 dark:text-red-400 text-sm">
                     {checkoutError}
                   </p>
@@ -250,6 +251,6 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-    </div>
+    </CommercePage>
   )
 }

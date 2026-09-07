@@ -1,352 +1,176 @@
-import Link from 'next/link';
-import { getServicesLocal } from '@/lib/api/sanity';
-import { getPopularServicesLocal } from '@/lib/analytics-server';
-import { FacebookIcon, InstagramIcon, TikTokIcon, XIcon, YouTubeIcon } from '@/components/SocialIcons';
+import Image from 'next/image'
+import Link from 'next/link'
+import { getServicesLocal } from '@/lib/api/sanity'
+import { getPopularServicesLocal } from '@/lib/analytics-server'
+import { FacebookIcon, InstagramIcon, TikTokIcon, XIcon, YouTubeIcon } from '@/components/SocialIcons'
 
 const socialLinks = [
-  {
-    name: 'Facebook',
-    href: 'https://facebook.com/lakeridepros',
-    icon: FacebookIcon,
-  },
-  {
-    name: 'Instagram',
-    href: 'https://instagram.com/lakeridepros',
-    icon: InstagramIcon,
-  },
-  {
-    name: 'X (Twitter)',
-    href: 'https://x.com/LakeRidePros?s=09',
-    icon: XIcon,
-  },
-  {
-    name: 'YouTube',
-    href: 'https://youtube.com/@lakeridepros?si=oS45binC05S-krrq',
-    icon: YouTubeIcon,
-  },
-  {
-    name: 'TikTok',
-    href: 'https://www.tiktok.com/@lakeridepros?_r=1&_t=ZT-91WVPg1ADlu',
-    icon: TikTokIcon,
-  },
-];
+  { name: 'Facebook', href: 'https://facebook.com/lakeridepros', icon: FacebookIcon },
+  { name: 'Instagram', href: 'https://instagram.com/lakeridepros', icon: InstagramIcon },
+  { name: 'X', href: 'https://x.com/LakeRidePros?s=09', icon: XIcon },
+  { name: 'YouTube', href: 'https://youtube.com/@lakeridepros?si=oS45binC05S-krrq', icon: YouTubeIcon },
+  { name: 'TikTok', href: 'https://www.tiktok.com/@lakeridepros?_r=1&_t=ZT-91WVPg1ADlu', icon: TikTokIcon },
+]
+
+const placeLinks = [
+  { name: 'Osage Beach', href: '/transportation-osage-beach' },
+  { name: 'Camdenton', href: '/transportation-camdenton' },
+  { name: 'Lake Ozark', href: '/transportation-lake-ozark' },
+  { name: 'Sunrise Beach', href: '/transportation-sunrise-beach' },
+  { name: 'Laurie', href: '/transportation-laurie' },
+  { name: 'Bagnell Dam Strip', href: '/bagnell-dam-strip-transportation' },
+  { name: 'Kansas City', href: '/kansas-city-to-lake-ozarks' },
+  { name: 'St. Louis', href: '/st-louis-to-lake-ozarks' },
+  { name: 'Columbia', href: '/columbia-to-lake-ozarks' },
+  { name: 'Jefferson City', href: '/jefferson-city-to-lake-ozarks' },
+  { name: 'Springfield', href: '/springfield-to-lake-ozarks' },
+  { name: 'Airport transportation', href: '/lake-ozarks-airport-transportation' },
+]
+
+const exploreLinks = [
+  { name: 'Manage your profile', href: 'https://customer.moovs.app/lake-ride-pros/user/profile' },
+  { name: 'Fleet', href: '/fleet' },
+  { name: 'Pricing', href: '/pricing' },
+  { name: 'Gift cards', href: '/gift-cards' },
+  { name: 'Check gift card balance', href: '/gift-card-balance' },
+  { name: 'Shop', href: '/shop' },
+  { name: 'Insider membership', href: '/insider-membership-benefits' },
+  { name: 'Events', href: '/events' },
+  { name: 'Music', href: '/music' },
+]
+
+const companyLinks = [
+  { name: 'About us', href: '/about-us' },
+  { name: 'Our drivers', href: '/our-drivers' },
+  { name: 'Testimonials', href: '/testimonials' },
+  { name: 'Lake guides', href: '/blog' },
+  { name: 'Wedding partners', href: '/wedding-partners' },
+  { name: 'Local premier partners', href: '/local-premier-partners' },
+  { name: 'Careers', href: '/careers' },
+  { name: 'Application status', href: '/careers/application-status' },
+  { name: 'Contact', href: '/contact' },
+]
+
+const legalLinks = [
+  { name: 'Privacy', href: '/privacy-policy' },
+  { name: 'Terms', href: '/terms-of-service' },
+  { name: 'Returns', href: '/return-policy' },
+  { name: 'Accessibility', href: '/accessibility' },
+]
+
+const linkClass = 'min-w-11 text-sm leading-relaxed text-white/70 hover:text-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-light'
 
 export default async function Footer() {
-  const currentYear = new Date().getFullYear();
-
-  // Fallback popular services (same as header)
-  const fallbackServiceSlugs = [
+  const fallbackSlugs = [
     'wedding-transportation',
-    'airport-shuttle',
-    'nightlife-transportation',
-    'corporate-transportation',
+    'airport-transfers',
+    'party-bus-nightlife',
+    'corporate-executive-travel',
     'private-aviation-transportation',
     'group-shuttle-services',
-  ];
+  ]
+  let popularSlugs = fallbackSlugs
 
-  // Fetch popular services from analytics (same as header)
-  let popularServiceSlugs: string[] = [];
   try {
-    const popularServices = await getPopularServicesLocal(6);
-    popularServiceSlugs = popularServices.map(s => s.slug);
-  } catch (error) {
-    console.error('Error fetching popular services for footer:', error);
-    // Use fallback if analytics fails
-    popularServiceSlugs = fallbackServiceSlugs;
+    const popular = await getPopularServicesLocal(6)
+    if (popular.length > 0) popularSlugs = popular.map(service => service.slug)
+  } catch {
+    // The stable fallback keeps useful links available during analytics outages.
   }
 
-  // If no popular services from analytics, use fallback
-  if (popularServiceSlugs.length === 0) {
-    popularServiceSlugs = fallbackServiceSlugs;
-  }
-
-  // Fetch services dynamically from CMS (using local Payload - required for build-time static generation)
-  let dynamicServices: Array<{ name: string; href: string }> = [];
+  let serviceLinks: Array<{ name: string; href: string }> = []
   try {
-    const servicesResponse = await getServicesLocal();
-    // Filter to only popular services and maintain order
-    dynamicServices = popularServiceSlugs
-      .map(slug => {
-        const service = servicesResponse.docs.find(s => String(s.slug) === slug);
-        return service ? { name: service.title, href: `/services/${String(service.slug)}` } : null;
-      })
-      .filter((s): s is { name: string; href: string } => s !== null);
-
-    // Add "View All Services" link at the end
-    dynamicServices.push({ name: 'View All Services →', href: '/services' });
-  } catch (error) {
-    console.error('Error fetching services for footer:', error);
-    // Fall back to static list if fetch fails
-    dynamicServices = [
-      { name: 'Wedding Transportation', href: '/services/wedding-transportation' },
-      { name: 'Airport Transfers', href: '/services/airport-shuttle' },
-      { name: 'Nightlife & Party', href: '/services/nightlife-transportation' },
-      { name: 'Corporate Travel', href: '/services/corporate-transportation' },
-      { name: 'View All Services →', href: '/services' },
-    ];
+    const services = await getServicesLocal()
+    serviceLinks = popularSlugs.flatMap(slug => {
+      const service = services.docs.find(item => String(item.slug) === slug)
+      return service ? [{ name: service.title, href: `/services/${String(service.slug)}` }] : []
+    })
+  } catch {
+    serviceLinks = [
+      { name: 'Wedding transportation', href: '/services/wedding-transportation' },
+      { name: 'Airport transportation', href: '/services/airport-transfers' },
+      { name: 'Group shuttles', href: '/services/group-shuttle-services' },
+      { name: 'Nightlife transportation', href: '/services/party-bus-nightlife' },
+    ]
   }
-
-  const footerLinks = {
-    quickLinks: [
-      { name: 'Book a Ride', href: '/book' },
-      { name: 'Services', href: '/services' },
-      { name: 'Fleet', href: '/fleet' },
-      { name: 'Pricing', href: '/pricing' },
-      { name: 'Gift Cards', href: '/gift-cards' },
-      { name: 'Check Gift Card Balance', href: '/gift-card-balance' },
-      { name: 'Shop', href: '/shop' },
-    ],
-    services: dynamicServices,
-    serviceAreas: [
-      { name: 'Osage Beach Transportation', href: '/transportation-osage-beach' },
-      { name: 'Camdenton Transportation', href: '/transportation-camdenton' },
-      { name: 'Lake Ozark Transportation', href: '/transportation-lake-ozark' },
-      { name: 'Sunrise Beach Transportation', href: '/transportation-sunrise-beach' },
-      { name: 'Laurie Transportation', href: '/transportation-laurie' },
-      { name: 'Kansas City to Lake Ozarks', href: '/kansas-city-to-lake-ozarks' },
-      { name: 'St. Louis to Lake Ozarks', href: '/st-louis-to-lake-ozarks' },
-      { name: 'Columbia to Lake Ozarks', href: '/columbia-to-lake-ozarks' },
-      { name: 'Jefferson City to Lake', href: '/jefferson-city-to-lake-ozarks' },
-      { name: 'Springfield to Lake', href: '/springfield-to-lake-ozarks' },
-      { name: 'Bagnell Dam Strip', href: '/bagnell-dam-strip-transportation' },
-      { name: 'Airport Transportation', href: '/lake-ozarks-airport-transportation' },
-    ],
-    partners: [
-      { name: 'Wedding Partners', href: '/wedding-partners' },
-      { name: 'Local Premier Partners', href: '/local-premier-partners' },
-      { name: 'Trusted Referral Partners', href: '/trusted-referral-partners' },
-    ],
-    insiders: [
-      { name: 'Membership Benefits', href: '/insider-membership-benefits' },
-      { name: 'Terms & Conditions', href: '/insider-terms-and-conditions' },
-    ],
-    company: [
-      { name: 'About Us', href: '/about-us' },
-      { name: 'Testimonials', href: '/testimonials' },
-      { name: 'Transportation Insights', href: '/lake-ozarks-transportation-insights' },
-      { name: 'Blog', href: '/blog' },
-      { name: 'Music', href: '/music' },
-      { name: 'Contact', href: '/contact' },
-    ],
-    legal: [
-      { name: 'Privacy Policy', href: '/privacy-policy' },
-      { name: 'Terms of Service', href: '/terms-of-service' },
-      { name: 'Return Policy', href: '/return-policy' },
-      { name: 'Accessibility', href: '/accessibility' },
-    ],
-  };
 
   return (
-    <footer className="bg-primary-dark dark:bg-dark-bg-primary text-lrp-black transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-8 items-start">
-          {/* Column 1 - Quick Links */}
-          <nav aria-label="Quick links">
-            <h3 className="text-white font-bold mb-4 text-lg">Quick Links</h3>
-            <ul className="space-y-2">
-              {footerLinks.quickLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Column 2 - Services */}
-          <nav aria-label="Services">
-            <h3 className="text-white font-bold mb-4 text-lg">Services</h3>
-            <ul className="space-y-2">
-              {footerLinks.services.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Column 3 - Service Areas */}
-          <nav aria-label="Service areas">
-            <h3 className="text-white font-bold mb-4 text-lg">Service Areas</h3>
-            <ul className="space-y-2">
-              {footerLinks.serviceAreas.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Column 4 - Partners */}
+    <footer className="bg-lrp-black text-white">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8">
+        <div className="grid gap-10 border-b border-white/20 pb-12 lg:grid-cols-[1.05fr_1.95fr] lg:gap-20">
           <div>
-            <nav aria-label="Partners">
-              <h3 className="text-white font-bold mb-4 text-lg">Partners</h3>
-              <ul className="space-y-2">
-                {footerLinks.partners.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Insiders */}
-            <nav aria-label="Insiders membership" className="mt-6">
-              <h3 className="text-white font-bold mb-4 text-lg">Insiders</h3>
-              <ul className="space-y-2">
-                {footerLinks.insiders.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-
-          {/* Column 5 - Company */}
-          <div>
-            <nav aria-label="Company">
-              <h3 className="text-white font-bold mb-4 text-lg">Company</h3>
-              <ul className="space-y-2">
-                {footerLinks.company.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Careers */}
-            <nav aria-label="Careers" className="mt-6">
-              <h3 className="text-white font-bold mb-4 text-lg">Careers</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/careers"
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/careers/application-status"
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                  >
-                    Application Status
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-
-          {/* Column 6 - Legal & Contact */}
-          <div>
-            <nav aria-label="Legal">
-              <h3 className="text-white font-bold mb-4 text-lg">Legal</h3>
-              <ul className="space-y-2">
-                {footerLinks.legal.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            {/* Contact */}
-            <div className="mt-6">
-              <h3 className="text-white font-bold mb-4 text-lg">Contact</h3>
-              <ul className="space-y-2">
-                <li>
-                  <a
-                    href="tel:5732069499"
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm"
-                    aria-label="Call Lake Ride Pros"
-                  >
-                    (573) 206-9499
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="mailto:contactus@lakeridepros.com"
-                    className="text-white/90 hover:text-lrp-green-light transition-colors text-sm break-words"
-                    aria-label="Email Lake Ride Pros"
-                  >
-                    contactus@lakeridepros.com
-                  </a>
-                </li>
-                <li>
-                  <span className="text-white/90 text-sm">
-                    Lake of the Ozarks, MO
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        {/* Social Media Links */}
-        <div className="border-t border-white/20 mt-8 pt-8">
-          <div className="flex justify-center items-center gap-6">
-            {socialLinks.map((social) => {
-              const Icon = social.icon;
-              return (
+            <Link href="/" className="inline-flex focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary-light">
+              <Image
+                src="/Color logo - no background.png"
+                alt="Lake Ride Pros"
+                width={320}
+                height={324}
+                sizes="(min-width: 640px) 176px, 144px"
+                className="h-auto w-36 object-contain sm:w-44"
+              />
+            </Link>
+            <p className="mt-6 max-w-sm text-balance text-2xl font-black leading-tight">
+              Based at the Lake. Ready across Missouri.
+            </p>
+            <address className="mt-6 grid justify-items-start gap-2 not-italic">
+              <a href="tel:+15732069499" className="text-xl font-black hover:text-primary-light">(573) 206-9499</a>
+              <a href="mailto:contactus@lakeridepros.com" className="max-w-full break-all text-sm text-white/70 hover:text-primary-light sm:break-normal">contactus@lakeridepros.com</a>
+              <span className="text-sm text-white/55">Lake of the Ozarks, Missouri</span>
+            </address>
+            <div className="mt-7 flex items-center gap-1">
+              {socialLinks.map(({ name, href, icon: Icon }) => (
                 <a
-                  key={social.name}
-                  href={social.href}
+                  key={name}
+                  href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/90 hover:text-lrp-green-light transition-colors"
-                  aria-label={`Follow Lake Ride Pros on ${social.name} (opens in new tab)`}
+                  aria-label={`Follow Lake Ride Pros on ${name} (opens in a new tab)`}
+                  className="inline-flex size-11 items-center justify-center text-white/65 hover:text-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-light"
                 >
-                  <Icon className="w-6 h-6" />
+                  <Icon className="size-5" />
                 </a>
-              );
-            })}
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4">
+            <nav aria-label="Popular services">
+              <h2 className="mb-4 text-sm font-black text-primary-light">Ride</h2>
+              <ul className="space-y-2.5">
+                {serviceLinks.map(link => <li key={link.href}><Link href={link.href} className={linkClass}>{link.name}</Link></li>)}
+                <li><Link href="/services" className="text-sm font-bold text-white hover:text-primary-light">All services</Link></li>
+              </ul>
+            </nav>
+            <nav aria-label="Explore Lake Ride Pros">
+              <h2 className="mb-4 text-sm font-black text-primary-light">Explore</h2>
+              <ul className="space-y-2.5">
+                {exploreLinks.map(link => <li key={link.href}><Link href={link.href} className={linkClass}>{link.name}</Link></li>)}
+              </ul>
+            </nav>
+            <nav aria-label="Service areas">
+              <h2 className="mb-4 text-sm font-black text-primary-light">Where we drive</h2>
+              <ul className="grid gap-x-4 gap-y-2.5 sm:block sm:space-y-2.5">
+                {placeLinks.map(link => <li key={link.href}><Link href={link.href} className={linkClass}>{link.name}</Link></li>)}
+              </ul>
+            </nav>
+            <nav aria-label="Company">
+              <h2 className="mb-4 text-sm font-black text-primary-light">Company</h2>
+              <ul className="space-y-2.5">
+                {companyLinks.map(link => <li key={link.href}><Link href={link.href} className={linkClass}>{link.name}</Link></li>)}
+              </ul>
+            </nav>
           </div>
         </div>
 
-        {/* Copyright */}
-        <div className="border-t border-white/20 mt-8 pt-8 text-center">
-          <p className="text-white/90 text-sm">
-            © {currentYear} Lake Ride Pros LLC. All rights reserved.
-          </p>
+        <div className="flex flex-col gap-5 pt-7 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} Lake Ride Pros LLC. All rights reserved.</p>
+          <nav aria-label="Legal links">
+            <ul className="flex flex-wrap gap-x-5 gap-y-2">
+              {legalLinks.map(link => <li key={link.href}><Link href={link.href} className="min-w-11 hover:text-white">{link.name}</Link></li>)}
+            </ul>
+          </nav>
         </div>
       </div>
     </footer>
-  );
+  )
 }

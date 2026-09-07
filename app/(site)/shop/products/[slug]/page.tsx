@@ -1,3 +1,4 @@
+import CommercePage from '@/components/commerce-editorial/CommercePage'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ProductActions from './ProductActions'
@@ -145,7 +146,7 @@ export default async function ProductPage(props: ProductPageProps) {
   };
 
   return (
-    <>
+    <CommercePage variant="product">
       {/* Structured Data */}
       <script
         type="application/ld+json"
@@ -183,6 +184,6 @@ export default async function ProductPage(props: ProductPageProps) {
           <ProductActions product={product} />
         </div>
       </div>
-    </>
+    </CommercePage>
   )
 }

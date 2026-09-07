@@ -66,6 +66,11 @@ const nextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  // Sanity 6's embedded Studio currently ships a nested @sanity/workbench
+  // entrypoint that resolves to raw TypeScript in Webpack development mode.
+  // Compile the Studio packages explicitly so visiting /studio cannot poison
+  // the dev compiler (and subsequently make every public route return 500).
+  transpilePackages: ['@sanity/workbench'],
   reactCompiler: false,
   serverExternalPackages: ['jspdf', 'jspdf-autotable', 'fflate'],
   experimental: {

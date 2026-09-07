@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import FleetCategoryGallery from '@/components/fleet-editorial/FleetCategoryGallery'
+import styles from '@/components/fleet-editorial/FleetEditorial.module.css'
 
 export const metadata: Metadata = {
   title: 'Luxury SUV Transportation | Lake Ride Pros',
@@ -82,98 +84,82 @@ export default function SuburbansPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
+      <div className={styles.page}>
         {/* Breadcrumbs */}
-        <nav aria-label="Breadcrumb" className="container mx-auto px-4 py-4">
+        <nav aria-label="Breadcrumb" className={`${styles.wrap} ${styles.breadcrumb}`}>
           <ol className="flex gap-2 text-sm">
-            <li><Link href="/" className="text-primary hover:underline">Home</Link></li>
+            <li><Link href="/" className="text-[#2f730e] hover:underline">Home</Link></li>
             <li className="text-lrp-text-secondary">/</li>
-            <li><Link href="/fleet" className="text-primary hover:underline">Fleet</Link></li>
+            <li><Link href="/fleet" className="text-[#2f730e] hover:underline">Fleet</Link></li>
             <li className="text-lrp-text-secondary">/</li>
-            <li className="text-neutral-700 dark:text-neutral-300">Suburbans</li>
+            <li className={styles.text}>Suburbans</li>
           </ol>
         </nav>
 
         {/* Hero */}
-        <section className="bg-primary py-16">
-          <div className="container mx-auto px-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-white text-center">
+        <section className={styles.hero}>
+          <div className={styles.wrap}>
+            <h1 >
               Luxury Suburban SUV Service at Lake of the Ozarks
             </h1>
-            <p className="text-white/90 text-center mt-4 text-lg">
+            <p >
               7-Passenger Executive Transportation with Premium Comfort
             </p>
           </div>
         </section>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 py-12">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Images */}
-            <div>
-              <div className="bg-neutral-200 dark:bg-neutral-700 rounded-lg aspect-video flex items-center justify-center">
-                <p className="text-lrp-text-secondary dark:text-lrp-text-muted">Suburban Main Image</p>
-              </div>
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                <div className="bg-neutral-200 dark:bg-neutral-700 rounded-lg aspect-video flex items-center justify-center">
-                  <p className="text-xs text-lrp-text-secondary dark:text-lrp-text-muted">Interior</p>
-                </div>
-                <div className="bg-neutral-200 dark:bg-neutral-700 rounded-lg aspect-video flex items-center justify-center">
-                  <p className="text-xs text-lrp-text-secondary dark:text-lrp-text-muted">Seating</p>
-                </div>
-                <div className="bg-neutral-200 dark:bg-neutral-700 rounded-lg aspect-video flex items-center justify-center">
-                  <p className="text-xs text-lrp-text-secondary dark:text-lrp-text-muted">Exterior</p>
-                </div>
-              </div>
-            </div>
+        <div className={`${styles.wrap} ${styles.content}`}>
+          <div className={styles.specGrid}>
+            <FleetCategoryGallery category="suburbans" />
 
             {/* Specs & Booking */}
             <div>
-              <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-6">
+              <h2 className="text-3xl font-bold text-lrp-black mb-6">
                 Features & Specifications
               </h2>
 
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary rounded-lg p-6 mb-6">
+              <div className={styles.specs}>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
-                    <span className="text-primary text-xl">✓</span>
-                    <span className="text-neutral-700 dark:text-neutral-300"><strong>Capacity:</strong> Up to 7 passengers</span>
+                    <span className="text-[#2f730e] text-xl">✓</span>
+                    <span className={styles.text}><strong>Capacity:</strong> Up to 7 passengers</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-primary text-xl">✓</span>
-                    <span className="text-neutral-700 dark:text-neutral-300"><strong>Leather Seating:</strong> Premium leather interior throughout</span>
+                    <span className="text-[#2f730e] text-xl">✓</span>
+                    <span className={styles.text}><strong>Leather Seating:</strong> Premium leather interior throughout</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-primary text-xl">✓</span>
-                    <span className="text-neutral-700 dark:text-neutral-300"><strong>Spacious Interior:</strong> Comfortable legroom and headspace</span>
+                    <span className="text-[#2f730e] text-xl">✓</span>
+                    <span className={styles.text}><strong>Spacious Interior:</strong> Comfortable legroom and headspace</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-primary text-xl">✓</span>
-                    <span className="text-neutral-700 dark:text-neutral-300"><strong>Luggage Capacity:</strong> Ample cargo space for bags and equipment</span>
+                    <span className="text-[#2f730e] text-xl">✓</span>
+                    <span className={styles.text}><strong>Luggage Capacity:</strong> Ample cargo space for bags and equipment</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-primary text-xl">✓</span>
-                    <span className="text-neutral-700 dark:text-neutral-300"><strong>Professional Drivers:</strong> Licensed and experienced chauffeurs</span>
+                    <span className="text-[#2f730e] text-xl">✓</span>
+                    <span className={styles.text}><strong>Professional Drivers:</strong> Licensed and experienced chauffeurs</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="text-primary text-xl">✓</span>
-                    <span className="text-neutral-700 dark:text-neutral-300"><strong>Climate Control:</strong> Dual-zone temperature control</span>
+                    <span className="text-[#2f730e] text-xl">✓</span>
+                    <span className={styles.text}><strong>Climate Control:</strong> Dual-zone temperature control</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="bg-primary/10 dark:bg-primary/20 border-2 border-primary rounded-lg p-6 mb-6">
-                <p className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+              <div className={styles.price}>
+                <p className="text-2xl font-bold text-lrp-black mb-2">
                   Starting at $75/hour
                 </p>
-                <p className="text-neutral-700 dark:text-neutral-300 text-sm">
+                <p className={`${styles.text} text-sm`}>
                   Minimum booking may apply. Contact us for exact pricing.
                 </p>
               </div>
 
               <Link
                 href="/book"
-                className="block w-full bg-primary hover:bg-primary-dark text-lrp-black py-4 rounded-lg font-bold text-lg transition-all text-center"
+                className={`${styles.primary} w-full`}
               >
                 Check Availability
               </Link>
@@ -181,31 +167,31 @@ export default function SuburbansPage() {
           </div>
 
           {/* Perfect For Section */}
-          <section className="mt-16">
-            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-8">
+          <section className={styles.section}>
+            <h2 className="text-3xl font-bold text-lrp-black mb-8">
               Perfect for Lake Ozarks Events
             </h2>
 
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <h3 className="text-xl font-bold text-primary mb-3">Airport Transfers</h3>
-                <p className="text-neutral-700 dark:text-neutral-300">
+              <div className={styles.editorialItem}>
+                <h3 className="text-xl font-bold text-[#2f730e] mb-3">Airport Transfers</h3>
+                <p className={styles.text}>
                   Reliable transportation to and from Springfield-Branson Airport or Columbia Regional Airport.
                   Start your Lake Ozarks vacation in comfort and style.
                 </p>
               </div>
 
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <h3 className="text-xl font-bold text-primary mb-3">Small Groups & Daily Transportation</h3>
-                <p className="text-neutral-700 dark:text-neutral-300">
+              <div className={styles.editorialItem}>
+                <h3 className="text-xl font-bold text-[#2f730e] mb-3">Small Groups & Daily Transportation</h3>
+                <p className={styles.text}>
                   Perfect size for families and small groups exploring Lake of the Ozarks. Comfortable daily
                   transportation for restaurant visits, shopping, and sightseeing.
                 </p>
               </div>
 
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <h3 className="text-xl font-bold text-primary mb-3">Executive Travel & Family Trips</h3>
-                <p className="text-neutral-700 dark:text-neutral-300">
+              <div className={styles.editorialItem}>
+                <h3 className="text-xl font-bold text-[#2f730e] mb-3">Executive Travel & Family Trips</h3>
+                <p className={styles.text}>
                   Ideal for business travelers and family getaways. Professional service with the comfort
                   and privacy needed for important meetings or quality family time.
                 </p>
@@ -214,55 +200,55 @@ export default function SuburbansPage() {
           </section>
 
           {/* Why Choose Section */}
-          <section className="mt-16">
-            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-8">
+          <section className={styles.section}>
+            <h2 className="text-3xl font-bold text-lrp-black mb-8">
               Why Choose Our Suburban SUVs?
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black font-bold">
+              <div className={styles.reason}>
+                <div className={styles.reasonNumber}>
                   1
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">Professional Drivers</h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <h3 className="text-xl font-bold text-lrp-black mb-2">Professional Drivers</h3>
+                  <p className={styles.text}>
                     Licensed, insured, and experienced drivers who know Lake of the Ozarks intimately.
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black font-bold">
+              <div className={styles.reason}>
+                <div className={styles.reasonNumber}>
                   2
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">Impeccably Maintained</h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <h3 className="text-xl font-bold text-lrp-black mb-2">Impeccably Maintained</h3>
+                  <p className={styles.text}>
                     Regularly serviced and professionally detailed before every trip.
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black font-bold">
+              <div className={styles.reason}>
+                <div className={styles.reasonNumber}>
                   3
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">Flexible Scheduling</h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <h3 className="text-xl font-bold text-lrp-black mb-2">Flexible Scheduling</h3>
+                  <p className={styles.text}>
                     Available 24/7 with flexible hourly rates and custom packages.
                   </p>
                 </div>
               </div>
 
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black font-bold">
+              <div className={styles.reason}>
+                <div className={styles.reasonNumber}>
                   4
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">Safety First</h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <h3 className="text-xl font-bold text-lrp-black mb-2">Safety First</h3>
+                  <p className={styles.text}>
                     Fully insured with commercial liability coverage. Your safety is our priority.
                   </p>
                 </div>
@@ -271,35 +257,35 @@ export default function SuburbansPage() {
           </section>
 
           {/* FAQ */}
-          <section className="mt-16">
-            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-8">
+          <section className={styles.section}>
+            <h2 className="text-3xl font-bold text-lrp-black mb-8">
               Suburban SUV Rental FAQs
             </h2>
 
             <div className="space-y-4">
-              <details className="bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary transition-colors">
+              <details className={styles.faq}>
+                <summary >
                   What's the minimum rental time for the Suburban?
                 </summary>
-                <p className="text-neutral-700 dark:text-neutral-300 mt-4">
+                <p className={`${styles.text} mt-4`}>
                   Most bookings have a 2-hour minimum, though this can vary based on the date and service type. Airport transfers may have different minimums. Contact us for specific details.
                 </p>
               </details>
 
-              <details className="bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary transition-colors">
+              <details className={styles.faq}>
+                <summary >
                   How much luggage can the Suburban hold?
                 </summary>
-                <p className="text-neutral-700 dark:text-neutral-300 mt-4">
+                <p className={`${styles.text} mt-4`}>
                   Our Suburbans can comfortably accommodate 7 passengers with their luggage. For larger groups, we can coordinate multiple vehicles for your party.
                 </p>
               </details>
 
-              <details className="bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg">
-                <summary className="font-bold text-lg cursor-pointer text-neutral-900 dark:text-white hover:text-primary transition-colors">
+              <details className={styles.faq}>
+                <summary >
                   How far in advance should I book?
                 </summary>
-                <p className="text-neutral-700 dark:text-neutral-300 mt-4">
+                <p className={`${styles.text} mt-4`}>
                   For peak season (May-September) and weekends, book 2-4 weeks in advance. We often accommodate last-minute bookings during off-peak times.
                 </p>
               </details>
@@ -307,31 +293,31 @@ export default function SuburbansPage() {
           </section>
 
           {/* Related Vehicles */}
-          <section className="mt-16">
-            <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-8">
+          <section className={styles.section}>
+            <h2 className="text-3xl font-bold text-lrp-black mb-8">
               Other Transportation Options
             </h2>
 
             <div className="grid md:grid-cols-3 gap-6">
-              <Link href="/fleet/sprinter-van" className="block bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg hover:border-2 hover:border-primary transition-all">
-                <h3 className="text-xl font-bold text-primary mb-2">Luxury Sprinter Van</h3>
-                <p className="text-neutral-700 dark:text-neutral-300">Perfect for groups up to 12 passengers with premium amenities</p>
+              <Link href="/fleet/sprinter-van" className={styles.related}>
+                <h3 className="text-xl font-bold text-[#2f730e] mb-2">Luxury Sprinter Van</h3>
+                <p className={styles.text}>Perfect for groups up to 12 passengers with premium amenities</p>
               </Link>
 
-              <Link href="/fleet/limo-bus" className="block bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg hover:border-2 hover:border-primary transition-all">
-                <h3 className="text-xl font-bold text-primary mb-2">Luxury Limo Bus</h3>
-                <p className="text-neutral-700 dark:text-neutral-300">Perfect for parties and celebrations with premium amenities</p>
+              <Link href="/fleet/limo-bus" className={styles.related}>
+                <h3 className="text-xl font-bold text-[#2f730e] mb-2">Luxury Limo Bus</h3>
+                <p className={styles.text}>Perfect for parties and celebrations with premium amenities</p>
               </Link>
 
-              <Link href="/fleet/shuttle-bus" className="block bg-neutral-100 dark:bg-dark-bg-secondary p-6 rounded-lg hover:border-2 hover:border-primary transition-all">
-                <h3 className="text-xl font-bold text-primary mb-2">Shuttle Bus</h3>
-                <p className="text-neutral-700 dark:text-neutral-300">Up to 37 passengers for large events and weddings</p>
+              <Link href="/fleet/shuttle-bus" className={styles.related}>
+                <h3 className="text-xl font-bold text-[#2f730e] mb-2">Shuttle Bus</h3>
+                <p className={styles.text}>Up to 37 passengers for large events and weddings</p>
               </Link>
             </div>
           </section>
 
           {/* CTA */}
-          <section className="mt-16 bg-primary rounded-lg p-12 text-center">
+          <section className={styles.cta}>
             <h2 className="text-3xl font-bold text-white mb-4">
               Ready to Book Your Luxury Suburban?
             </h2>
@@ -340,7 +326,7 @@ export default function SuburbansPage() {
             </p>
             <Link
               href="/book"
-              className="inline-block bg-white text-primary hover:bg-neutral-100 px-10 py-4 rounded-lg font-bold text-lg transition-all"
+              className={styles.primary}
             >
               Check Availability
             </Link>

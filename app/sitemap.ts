@@ -7,10 +7,11 @@ import {
   getPagesLocal,
   getPartnersLocal,
   getDriverProfiles,
+  getEvents,
 } from '@/lib/api/sanity';
 
-// Regenerate sitemap every hour instead of at build time
-// This significantly reduces build time by deferring these queries
+// Keep metadata-route reads cacheable during prerender and refresh regularly.
+// Individual public CMS fetches may use a shorter revalidation interval.
 export const revalidate = 3600;
 
 // Normalized docs have slug flattened to string by normalizeDoc()
@@ -53,13 +54,14 @@ function encodePathSegment(segment: string): string {
 async function getSanityData() {
   try {
     // Fetch all dynamic content from Sanity
-    const [servicesResponse, blogPostsResponse, vehicles, products, pages, allPartners] = await Promise.all([
+    const [servicesResponse, blogPostsResponse, vehicles, products, pages, allPartners, eventsResponse] = await Promise.all([
       getServicesLocal(),
       getBlogPostsLocal({ limit: 100 }),
       getVehiclesLocal(),
       getProductsLocal(),
       getPagesLocal(),
       getPartnersLocal(), // Fetch all active partners
+      getEvents(), // Cached public data, unlike the live calendar's no-store fetch.
     ]);
 
     return {
@@ -69,10 +71,12 @@ async function getSanityData() {
       products,
       pages,
       allPartners,
+      events: eventsResponse.docs,
     };
   } catch (error) {
-    console.error('Error fetching Sanity data for sitemap:', error);
-    return { services: [], blogPosts: [], vehicles: [], products: [], pages: [], allPartners: [] };
+    const message = error instanceof Error ? error.message : 'Unknown Sanity error';
+    console.error(`[Sitemap] Error fetching Sanity data: ${message}`);
+    return { services: [], blogPosts: [], vehicles: [], products: [], pages: [], allPartners: [], events: [] };
   }
 }
 
@@ -91,9 +95,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/contact', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/blog', priority: 0.8, changeFrequency: 'daily' as const },
     { url: '/gift-cards', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/music', priority: 0.6, changeFrequency: 'monthly' as const },
     { url: '/shop', priority: 0.7, changeFrequency: 'weekly' as const },
     { url: '/testimonials', priority: 0.8, changeFrequency: 'weekly' as const },
     { url: '/lake-ozarks-transportation-insights', priority: 0.8, changeFrequency: 'monthly' as const },
+    { url: '/events', priority: 0.8, changeFrequency: 'daily' as const },
 
     // All service pages are now CMS-driven and included via serviceSitemapEntries below
 
@@ -127,6 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/services/hotel-shuttle-service', priority: 0.8, changeFrequency: 'monthly' as const },
 
     // Career pages
+    { url: '/careers', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/careers/driver-application', priority: 0.7, changeFrequency: 'monthly' as const },
 
     // Team page
@@ -155,7 +162,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getSanityData(),
     getDriverProfiles(),
   ]);
-  const { services, blogPosts, vehicles, products, pages, allPartners } = sanityData;
+  const { services, blogPosts, vehicles, products, pages, allPartners, events } = sanityData;
 
   // Dynamic service pages
   const serviceSitemapEntries = services.map((service: SitemapDoc) => ({
@@ -172,6 +179,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));
+
+  // Only upcoming active events resolve as indexable detail pages; expired
+  // events redirect to the calendar and therefore do not belong in the sitemap.
+  // Match the live calendar's date-only guard so today's midnight events remain
+  // included. Filter after the cached read, not with GROQ's time-sensitive now().
+  const todayStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+  const eventSitemapEntries = events.flatMap((event) => {
+    const slug = getSlugValue(event.slug);
+    const eventDateStr = (event.date || '').split('T')[0];
+    const venueActive = typeof event.venue === 'object' ? event.venue?.active !== false : true;
+    if (!slug || event.active === false || !venueActive || eventDateStr < todayStr) return [];
+    return [{
+      url: `${baseUrl}/events/${encodePathSegment(slug)}`,
+      lastModified: new Date(event.updatedAt || event._updatedAt || currentDate),
+      changeFrequency: 'daily' as const,
+      priority: 0.7,
+    }];
+  });
 
   // Vehicles
   const vehicleSitemapEntries = vehicles.map((vehicle: SitemapDoc) => ({
@@ -263,6 +288,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticSitemapEntries,
     ...serviceSitemapEntries,
     ...blogSitemapEntries,
+    ...eventSitemapEntries,
     ...vehicleSitemapEntries,
     ...productSitemapEntries,
     ...pageSitemapEntries,

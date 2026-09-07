@@ -1,3 +1,5 @@
+import CorePage from '@/components/core-editorial/CorePage'
+import CoreHero from '@/components/core-editorial/CoreHero'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -64,47 +66,45 @@ export default function AboutUsPage() {
   }
 
   return (
-    <>
+    <CorePage>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
 
-      <div className="min-h-screen bg-white dark:bg-dark-bg-primary">
+      <div className="min-h-screen bg-white">
         {/* Hero */}
-        <section className="bg-primary py-20">
-          <div className="container mx-auto px-4">
-            <h1 className="font-boardson text-4xl md:text-6xl font-bold text-white text-center">
+        <CoreHero image="sprinter">
+            <h1 className="font-boardson text-4xl md:text-6xl font-bold text-white text-left">
               About Lake Ride Pros
             </h1>
-            <p className="text-white/90 text-center mt-6 text-xl max-w-3xl mx-auto">
+            <p className="text-white/90 text-left mt-6 text-xl max-w-3xl mx-auto">
               Your Premier Luxury Transportation Provider at Lake of the Ozarks
             </p>
-          </div>
-        </section>
+          </CoreHero>
 
         {/* Company Story */}
         <section className="py-16 container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-8 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-8 text-left">
               Our Story
             </h2>
 
-            <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed mb-6">
+            <div className="prose prose-lg max-w-none">
+              <p className="text-neutral-700 text-lg leading-relaxed mb-6">
                 <strong>Lake Ride Pros</strong> was founded in 2020 by <strong>Jim Brentlinger</strong>,
                 <strong> Nate Bullock</strong>, and <strong>Michael Brandt</strong> with a simple mission:
                 to provide the Lake of the Ozarks community with safe, reliable, and luxurious transportation
                 that puts customer satisfaction first.
               </p>
 
-              <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed mb-6">
+              <p className="text-neutral-700 text-lg leading-relaxed mb-6">
                 Based right here at <strong>Lake of the Ozarks</strong>, we understand the unique transportation
                 needs of our community. From wedding shuttles to wine tours, bachelor parties to corporate events,
                 we've built our reputation on professionalism, safety, and delivering unforgettable experiences.
               </p>
 
-              <p className="text-neutral-700 dark:text-neutral-300 text-lg leading-relaxed">
+              <p className="text-neutral-700 text-lg leading-relaxed">
                 What started with a vision to elevate transportation standards in <strong>Missouri</strong> has
                 grown into the region's premier luxury transportation service. Today, Lake Ride Pros serves the
                 entire state while maintaining our commitment to personalized service and local expertise.
@@ -114,47 +114,47 @@ export default function AboutUsPage() {
         </section>
 
         {/* Mission & Values */}
-        <section className="bg-neutral-100 dark:bg-dark-bg-secondary py-16">
+        <section className="bg-white py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-12 text-left">
               Our Mission & Values
             </h2>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-lrp-black text-3xl font-bold mx-auto mb-6">
+              <div className="border-t border-black/25 py-8 text-left">
+                <div className="text-3xl mb-6">
                   🛡️
                 </div>
-                <h3 className="text-2xl font-bold text-primary mb-4">
+                <h3 className="text-2xl font-bold text-[#2f730e] mb-4">
                   Safety First
                 </h3>
-                <p className="text-neutral-700 dark:text-neutral-300">
+                <p className="text-neutral-700">
                   Every vehicle is regularly inspected and maintained. All drivers are professionally licensed,
                   insured, and trained. Your safety is our top priority, always.
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-lrp-black text-3xl font-bold mx-auto mb-6">
+              <div className="border-t border-black/25 py-8 text-left">
+                <div className="text-3xl mb-6">
                   ⭐
                 </div>
-                <h3 className="text-2xl font-bold text-primary mb-4">
+                <h3 className="text-2xl font-bold text-[#2f730e] mb-4">
                   Exceptional Service
                 </h3>
-                <p className="text-neutral-700 dark:text-neutral-300">
+                <p className="text-neutral-700">
                   We don't just transport you—we create experiences. Professional drivers, luxury vehicles,
                   and personalized attention make every ride memorable.
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg text-center">
-                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-lrp-black text-3xl font-bold mx-auto mb-6">
+              <div className="border-t border-black/25 py-8 text-left">
+                <div className="text-3xl mb-6">
                   🤝
                 </div>
-                <h3 className="text-2xl font-bold text-primary mb-4">
+                <h3 className="text-2xl font-bold text-[#2f730e] mb-4">
                   Community Focused
                 </h3>
-                <p className="text-neutral-700 dark:text-neutral-300">
+                <p className="text-neutral-700">
                   As locals, we're invested in our Lake of the Ozarks community. We partner with local businesses
                   and give back to the area we call home.
                 </p>
@@ -163,7 +163,7 @@ export default function AboutUsPage() {
 
             {/* Driver Certifications */}
             <div className="mt-12 max-w-4xl mx-auto">
-              <div className="bg-white dark:bg-dark-bg-primary p-8 rounded-lg">
+              <div className="bg-white py-8">
                 <div className="flex flex-col md:flex-row items-center gap-6">
                   <div className="flex-shrink-0">
                     <Image
@@ -174,11 +174,11 @@ export default function AboutUsPage() {
                       className="w-32 h-32 object-contain"
                     />
                   </div>
-                  <div className="text-center md:text-left">
-                    <h3 className="text-2xl font-bold text-primary mb-2">
+                  <div className="text-left md:text-left">
+                    <h3 className="text-2xl font-bold text-[#2f730e] mb-2">
                       All Drivers Certified
                     </h3>
-                    <p className="text-neutral-700 dark:text-neutral-300">
+                    <p className="text-neutral-700">
                       Every Lake Ride Pros driver is certified in <strong>First Aid</strong>, <strong>CPR</strong>, <strong>AED</strong>, and <strong>Stop the Bleed</strong>.
                       Your safety isn't just our priority—it's our training.
                     </p>
@@ -191,48 +191,48 @@ export default function AboutUsPage() {
 
         {/* Founders Section */}
         <section className="py-16 container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-12 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-12 text-left">
             Meet Our Founders
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <div className="text-center">
-              <div className="w-48 h-48 bg-neutral-200 dark:bg-dark-bg-secondary rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-6xl text-primary font-bold">JB</span>
+            <div className="text-left">
+              <div className="border-t border-black/25 pt-6 mb-6">
+                <span className="font-boardson text-4xl text-[#2f730e]">JB</span>
               </div>
-              <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+              <h3 className="text-2xl font-bold text-neutral-900 mb-2">
                 Jim Brentlinger
               </h3>
-              <p className="text-primary font-semibold mb-4">Co-Founder</p>
-              <p className="text-neutral-700 dark:text-neutral-300">
+              <p className="text-[#2f730e] font-semibold mb-4">Co-Founder</p>
+              <p className="text-neutral-700">
                 With years of experience in the transportation industry, Jim brings operational excellence
                 and a commitment to customer satisfaction to Lake Ride Pros.
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-48 h-48 bg-neutral-200 dark:bg-dark-bg-secondary rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-6xl text-primary font-bold">NB</span>
+            <div className="text-left">
+              <div className="border-t border-black/25 pt-6 mb-6">
+                <span className="font-boardson text-4xl text-[#2f730e]">NB</span>
               </div>
-              <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+              <h3 className="text-2xl font-bold text-neutral-900 mb-2">
                 Nate Bullock
               </h3>
-              <p className="text-primary font-semibold mb-4">Co-Founder</p>
-              <p className="text-neutral-700 dark:text-neutral-300">
+              <p className="text-[#2f730e] font-semibold mb-4">Co-Founder</p>
+              <p className="text-neutral-700">
                 Nate's entrepreneurial vision and dedication to quality service drive Lake Ride Pros'
                 growth and innovation in luxury transportation.
               </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-48 h-48 bg-neutral-200 dark:bg-dark-bg-secondary rounded-full mx-auto mb-6 flex items-center justify-center">
-                <span className="text-6xl text-primary font-bold">MB</span>
+            <div className="text-left">
+              <div className="border-t border-black/25 pt-6 mb-6">
+                <span className="font-boardson text-4xl text-[#2f730e]">MB</span>
               </div>
-              <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
+              <h3 className="text-2xl font-bold text-neutral-900 mb-2">
                 Michael Brandt
               </h3>
-              <p className="text-primary font-semibold mb-4">Co-Founder</p>
-              <p className="text-neutral-700 dark:text-neutral-300">
+              <p className="text-[#2f730e] font-semibold mb-4">Co-Founder</p>
+              <p className="text-neutral-700">
                 Michael's attention to detail and passion for hospitality ensure every Lake Ride Pros
                 experience exceeds expectations.
               </p>
@@ -241,24 +241,24 @@ export default function AboutUsPage() {
         </section>
 
         {/* Why Choose Us */}
-        <section className="bg-neutral-100 dark:bg-dark-bg-secondary py-16">
+        <section className="bg-white py-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-12 text-left">
               Why Choose Lake Ride Pros?
             </h2>
 
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
+                  <div className="text-[#2f730e] text-xl font-bold">
                     ✓
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">
                     Fully Licensed & Insured
                   </h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <p className="text-neutral-700">
                     Complete commercial liability insurance and all required licenses. We operate legally
                     and professionally—something not all transportation providers can claim.
                   </p>
@@ -267,15 +267,15 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
+                  <div className="text-[#2f730e] text-xl font-bold">
                     ✓
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">
                     Professional Drivers
                   </h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <p className="text-neutral-700">
                     Our drivers undergo thorough background checks, extensive training, and are committed
                     to providing exceptional service and safe transportation.
                   </p>
@@ -284,15 +284,15 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
+                  <div className="text-[#2f730e] text-xl font-bold">
                     ✓
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">
                     Luxury Fleet
                   </h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <p className="text-neutral-700">
                     From 14-passenger limo buses to 37-passenger shuttles, our diverse fleet is
                     impeccably maintained and features premium amenities for your comfort.
                   </p>
@@ -301,15 +301,15 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
+                  <div className="text-[#2f730e] text-xl font-bold">
                     ✓
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">
                     24/7 Availability
                   </h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <p className="text-neutral-700">
                     Whether you need transportation at 6 AM or 2 AM, Lake Ride Pros is available
                     around the clock to serve you.
                   </p>
@@ -318,15 +318,15 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
+                  <div className="text-[#2f730e] text-xl font-bold">
                     ✓
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">
                     Local Expertise
                   </h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <p className="text-neutral-700">
                     We know Lake of the Ozarks inside and out—every venue, winery, and destination.
                     Our local knowledge ensures smooth, efficient transportation.
                   </p>
@@ -335,15 +335,15 @@ export default function AboutUsPage() {
 
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-lrp-black text-xl font-bold">
+                  <div className="text-[#2f730e] text-xl font-bold">
                     ✓
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">
                     Competitive Pricing
                   </h3>
-                  <p className="text-neutral-700 dark:text-neutral-300">
+                  <p className="text-neutral-700">
                     Premium service doesn't have to mean premium prices. We offer competitive rates
                     with transparent pricing and no hidden fees.
                   </p>
@@ -355,12 +355,12 @@ export default function AboutUsPage() {
 
         {/* Service Area */}
         <section className="py-16 container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-6">
+          <div className="max-w-4xl mx-auto text-left">
+            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
               Serving Lake of the Ozarks & All of Missouri
             </h2>
 
-            <p className="text-neutral-700 dark:text-neutral-300 text-lg mb-8">
+            <p className="text-neutral-700 text-lg mb-8">
               While we're proudly based at <strong>Lake of the Ozarks</strong>, Lake Ride Pros provides
               luxury transportation throughout <strong>Missouri</strong>. We specialize in serving
               <strong> Osage Beach</strong>, <strong>Camdenton</strong>, <strong>Lake Ozark</strong>,
@@ -369,37 +369,37 @@ export default function AboutUsPage() {
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-4 rounded-lg">
-                <p className="font-bold text-primary">Osage Beach</p>
+              <div className="bg-white p-4">
+                <p className="font-bold text-[#2f730e]">Osage Beach</p>
               </div>
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-4 rounded-lg">
-                <p className="font-bold text-primary">Camdenton</p>
+              <div className="bg-white p-4">
+                <p className="font-bold text-[#2f730e]">Camdenton</p>
               </div>
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-4 rounded-lg">
-                <p className="font-bold text-primary">Lake Ozark</p>
+              <div className="bg-white p-4">
+                <p className="font-bold text-[#2f730e]">Lake Ozark</p>
               </div>
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-4 rounded-lg">
-                <p className="font-bold text-primary">Eldon</p>
+              <div className="bg-white p-4">
+                <p className="font-bold text-[#2f730e]">Eldon</p>
               </div>
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-4 rounded-lg">
-                <p className="font-bold text-primary">Columbia</p>
+              <div className="bg-white p-4">
+                <p className="font-bold text-[#2f730e]">Columbia</p>
               </div>
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-4 rounded-lg">
-                <p className="font-bold text-primary">Jefferson City</p>
+              <div className="bg-white p-4">
+                <p className="font-bold text-[#2f730e]">Jefferson City</p>
               </div>
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-4 rounded-lg">
-                <p className="font-bold text-primary">Kansas City</p>
+              <div className="bg-white p-4">
+                <p className="font-bold text-[#2f730e]">Kansas City</p>
               </div>
-              <div className="bg-neutral-100 dark:bg-dark-bg-secondary p-4 rounded-lg">
-                <p className="font-bold text-primary">St. Louis</p>
+              <div className="bg-white p-4">
+                <p className="font-bold text-[#2f730e]">St. Louis</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Community Involvement */}
-        <section className="bg-primary py-16">
-          <div className="container mx-auto px-4 text-center">
+        <section className="bg-lrp-black py-16">
+          <div className="container mx-auto px-4 text-left">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
               Committed to Our Community
             </h2>
@@ -412,30 +412,30 @@ export default function AboutUsPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-20 container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white mb-6">
+        <section className="py-20 container mx-auto px-4 text-left">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
             Experience the Lake Ride Pros Difference
           </h2>
-          <p className="text-neutral-700 dark:text-neutral-300 text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-neutral-700 text-lg mb-8 max-w-2xl mx-auto">
             Book your luxury transportation today and discover why Lake Ride Pros is
             Lake of the Ozarks' premier choice for professional, reliable transportation.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-start">
             <Link
               href="/book"
-              className="bg-primary hover:bg-primary-dark text-lrp-black px-10 py-4 rounded-lg font-bold text-lg transition-all"
+              className="bg-primary hover:bg-primary-light text-lrp-black px-10 py-4 font-bold text-lg transition-all"
             >
               Book Your Ride
             </Link>
             <Link
               href="/contact"
-              className="border-2 border-primary text-primary hover:bg-primary hover:text-lrp-black px-10 py-4 rounded-lg font-bold text-lg transition-all"
+              className="border-2 border-primary text-[#2f730e] hover:bg-primary hover:text-lrp-black px-10 py-4 font-bold text-lg transition-all"
             >
               Contact Us
             </Link>
           </div>
         </section>
       </div>
-    </>
+    </CorePage>
   )
 }

@@ -96,7 +96,7 @@ This project enforces WCAG 2.1 AA compliance:
 - `vitest.config.ts` - Test configuration
 - `vercel.json` - Deployment configuration
 
-<!-- crystl-cli:begin v2.202.0 -->
+<!-- crystl-cli:begin v2.202.2 -->
 ## Crystl CLI (agent-callable)
 
 This section is auto-maintained by Crystl — edits between the `crystl-cli` markers are overwritten when it refreshes; the rest of this file belongs to the project. You're running inside Crystl. You can inspect and control sibling gems and shards via the `crystl` CLI. Full command reference (every flag): `crystl docs cli`.
@@ -149,3 +149,13 @@ Tiers: read-only commands and a few others (copy, scrollback clear, screenshots,
 
 Full reference: `crystl docs cli` · https://crystl.dev/docs/cli
 <!-- crystl-cli:end -->
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

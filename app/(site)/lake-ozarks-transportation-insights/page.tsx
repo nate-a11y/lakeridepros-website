@@ -1,3 +1,4 @@
+import styles from '@/components/support-editorial/SupportEditorial.module.css'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { BarChart3, CalendarDays, CarFront, MapPin, Plane, Quote, ShieldCheck, Users } from 'lucide-react'
@@ -220,11 +221,11 @@ export default function LakeOzarksTransportationInsightsPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
-      <main className="min-h-screen bg-white text-neutral-900 dark:bg-dark-bg-primary dark:text-white">
+      <div className={`${styles.page} ${styles.insights}`}>
         <article>
-          <header className="bg-neutral-950 py-16 text-white sm:py-20">
+          <header className={styles.hero}>
             <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold">
+              <div className="mb-5 inline-flex items-center gap-2 text-sm font-semibold">
                 <BarChart3 className="size-4" aria-hidden="true" />
                 Original Lake Ride Pros data
               </div>
@@ -273,19 +274,21 @@ export default function LakeOzarksTransportationInsightsPage() {
             </div>
           </section>
 
-          <section aria-labelledby="booking-window" className="bg-neutral-50 py-14 dark:bg-dark-bg-secondary sm:py-16">
+          <section aria-labelledby="booking-window" className="bg-neutral-50 py-14 sm:py-16">
             <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
               <h2 id="booking-window" className="text-3xl font-bold tracking-tight sm:text-4xl">
                 How far ahead do people actually book?
               </h2>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700 dark:text-neutral-300">
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700">
                 Nightlife transportation is often arranged close to the date. Weddings and destination group
                 trips are planned much earlier. For a peak summer weekend, earlier is safer regardless of trip type.
               </p>
-              <div className="mt-8 overflow-x-auto rounded-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-dark-bg-primary">
+              {/* Scrollable data tables must be keyboard-focusable (WCAG 2.1.1). */}
+              {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+              <div tabIndex={0} role="region" aria-label="Median booking lead time by trip type" className="mt-8 overflow-x-auto rounded-2xl border border-neutral-200 bg-white">
                 <table className="w-full min-w-[620px] text-left">
                   <caption className="sr-only">Median booking lead time by trip type</caption>
-                  <thead className="bg-neutral-100 text-sm uppercase tracking-wide text-neutral-700 dark:bg-dark-bg-tertiary dark:text-neutral-300">
+                  <thead className="bg-neutral-100 text-sm uppercase tracking-wide text-neutral-700">
                     <tr>
                       <th scope="col" className="px-5 py-4">Trip type</th>
                       <th scope="col" className="px-5 py-4">Observed median</th>
@@ -293,7 +296,7 @@ export default function LakeOzarksTransportationInsightsPage() {
                       <th scope="col" className="px-5 py-4">Practical planning target</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                  <tbody className="divide-y divide-neutral-200">
                     {insights.bookingLeadTimes.map((row) => (
                       <tr key={row.tripType}>
                         <th scope="row" className="px-5 py-4 font-bold">{row.tripType}</th>
@@ -305,7 +308,7 @@ export default function LakeOzarksTransportationInsightsPage() {
                   </tbody>
                 </table>
               </div>
-              <p className="mt-4 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+              <p className="mt-4 text-sm leading-6 text-neutral-600">
                 Lead-time analysis uses only completed records with both a usable original booking timestamp and a
                 labeled trip type. The wedding sample is smaller than the other categories, so use it as directional
                 planning evidence rather than a guarantee of availability.
@@ -318,19 +321,19 @@ export default function LakeOzarksTransportationInsightsPage() {
               <h2 id="vehicle-size" className="text-3xl font-bold tracking-tight sm:text-4xl">
                 What vehicle sizes do groups use?
               </h2>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700 dark:text-neutral-300">
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700">
                 Actual party sizes show why passenger capacity alone is not enough. Luggage, coolers, mobility
                 needs, and the experience your group wants can all require a larger vehicle.
               </p>
               <div className="mt-8 grid gap-5 sm:grid-cols-2">
                 {insights.observedGroupSizes.map((row) => (
-                  <div key={row.vehicle} className="rounded-2xl border border-neutral-200 p-6 dark:border-neutral-700">
+                  <div key={row.vehicle} className="rounded-2xl border border-neutral-200 p-6">
                     <h3 className="text-xl font-bold">{row.vehicle}</h3>
-                    <p className="mt-3 text-4xl font-extrabold text-lrp-green-dark dark:text-lrp-green">
+                    <p className="mt-3 text-4xl font-extrabold text-lrp-green-dark">
                       {row.medianPassengers}
                     </p>
                     <p className="mt-1 font-semibold">median recorded party size</p>
-                    <p className="mt-3 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+                    <p className="mt-3 text-sm leading-6 text-neutral-600">
                       75% of recorded groups had {row.seventyFifthPercentile} passengers or fewer ·{' '}
                       {formatInsightNumber(row.records)} completed records
                     </p>
@@ -339,17 +342,17 @@ export default function LakeOzarksTransportationInsightsPage() {
               </div>
               <div className="mt-8 rounded-2xl bg-lrp-green/10 p-6">
                 <p className="font-bold">Capacity is not a packing recommendation.</p>
-                <p className="mt-2 leading-7 text-neutral-700 dark:text-neutral-300">
+                <p className="mt-2 leading-7 text-neutral-700">
                   Tell us your passenger count and luggage before booking. A vehicle&apos;s legal seating capacity may
                   not leave the space your group needs for airport bags, golf clubs, wedding attire, or accessibility
-                  equipment. See the <Link href="/fleet" className="font-bold text-lrp-green-dark underline dark:text-lrp-green">current fleet</Link>{' '}
+                  equipment. See the <Link href="/fleet" className="font-bold text-lrp-green-dark underline">current fleet</Link>{' '}
                   or ask us to size it with you.
                 </p>
               </div>
             </div>
           </section>
 
-          <section aria-labelledby="airport-patterns" className="bg-neutral-50 py-14 dark:bg-dark-bg-secondary sm:py-16">
+          <section aria-labelledby="airport-patterns" className="bg-neutral-50 py-14 sm:py-16">
             <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
               <div className="flex items-start gap-4">
                 <Plane className="mt-1 size-9 shrink-0 text-lrp-green" aria-hidden="true" />
@@ -357,22 +360,24 @@ export default function LakeOzarksTransportationInsightsPage() {
                   <h2 id="airport-patterns" className="text-3xl font-bold tracking-tight sm:text-4xl">
                     Which airports appear in Lake trips?
                   </h2>
-                  <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700 dark:text-neutral-300">
+                  <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700">
                     Springfield-Branson, Lee C. Fine, and Columbia Regional were the most frequently referenced
                     airport endpoints in the completed records we analyzed.
                   </p>
                 </div>
               </div>
-              <div className="mt-8 overflow-x-auto rounded-2xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-dark-bg-primary">
+              {/* Scrollable data tables must be keyboard-focusable (WCAG 2.1.1). */}
+              {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+              <div tabIndex={0} role="region" aria-label="Airport transportation patterns" className="mt-8 overflow-x-auto rounded-2xl border border-neutral-200 bg-white">
                 <table className="w-full min-w-[560px] text-left">
                   <caption className="sr-only">Completed trip legs referencing each airport</caption>
-                  <thead className="bg-neutral-100 text-sm uppercase tracking-wide text-neutral-700 dark:bg-dark-bg-tertiary dark:text-neutral-300">
+                  <thead className="bg-neutral-100 text-sm uppercase tracking-wide text-neutral-700">
                     <tr>
                       <th scope="col" className="px-5 py-4">Airport</th>
                       <th scope="col" className="px-5 py-4">Completed trip legs</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
+                  <tbody className="divide-y divide-neutral-200">
                     {insights.airportTripLegs.map((row) => (
                       <tr key={row.airport}>
                         <th scope="row" className="px-5 py-4 font-bold">{row.airport}</th>
@@ -383,7 +388,7 @@ export default function LakeOzarksTransportationInsightsPage() {
                 </table>
               </div>
               <p className="mt-6">
-                <Link href="/lake-ozarks-airport-transportation" className="font-bold text-lrp-green-dark underline dark:text-lrp-green">
+                <Link href="/lake-ozarks-airport-transportation" className="font-bold text-lrp-green-dark underline">
                   Compare Lake of the Ozarks airport transportation options
                 </Link>
               </p>
@@ -416,12 +421,12 @@ export default function LakeOzarksTransportationInsightsPage() {
             </div>
           </section>
 
-          <section aria-labelledby="local-proof" className="bg-neutral-50 py-14 dark:bg-dark-bg-secondary sm:py-16">
+          <section aria-labelledby="local-proof" className="bg-neutral-50 py-14 sm:py-16">
             <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
               <h2 id="local-proof" className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Local experience behind the numbers
               </h2>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700 dark:text-neutral-300">
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700">
                 Trip data shows the pattern. Reviews from local professionals show what execution looks like on the
                 ground—from amphitheater traffic and office events to repeat transportation around the Lake.
               </p>
@@ -432,7 +437,7 @@ export default function LakeOzarksTransportationInsightsPage() {
                     <blockquote className="mt-4 text-lg leading-8 text-lrp-black">
                       “{review.quote}”
                     </blockquote>
-                    <figcaption className="mt-5 border-t border-neutral-200 pt-4 dark:border-neutral-700">
+                    <figcaption className="mt-5 border-t border-neutral-200 pt-4">
                       <p className="font-bold">{review.name}</p>
                       <p className="text-sm text-lrp-text-secondary">
                         {review.title} · {review.company}
@@ -457,19 +462,19 @@ export default function LakeOzarksTransportationInsightsPage() {
               <h2 id="operational-stories" className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Five real-world planning lessons from customer reviews
               </h2>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700 dark:text-neutral-300">
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-neutral-700">
                 These customer-reported examples show why Lake transportation depends on more than mileage and
                 passenger count. Each one points to a practical question worth answering before dispatch day.
               </p>
               <div className="mt-8 space-y-5">
                 {operationalReviewStories.map((story) => (
-                  <article key={story.title} className="rounded-2xl border border-neutral-200 p-6 dark:border-neutral-700 sm:p-8">
-                    <p className="text-sm font-bold uppercase tracking-wide text-lrp-green-dark dark:text-lrp-green">
+                  <article key={story.title} className="rounded-2xl border border-neutral-200 p-6 sm:p-8">
+                    <p className="text-sm font-bold uppercase tracking-wide text-lrp-green-dark">
                       Customer-reported example · {story.reviewer}
                     </p>
                     <h3 className="mt-2 text-2xl font-bold">{story.title}</h3>
-                    <p className="mt-4 leading-7 text-neutral-700 dark:text-neutral-300">{story.summary}</p>
-                    <p className="mt-4 rounded-xl bg-neutral-100 p-4 font-semibold leading-7 dark:bg-dark-bg-tertiary">
+                    <p className="mt-4 leading-7 text-neutral-700">{story.summary}</p>
+                    <p className="mt-4 rounded-xl bg-neutral-100 p-4 font-semibold leading-7">
                       Planning takeaway: {story.lesson}
                     </p>
                     <div className="mt-5 flex flex-wrap gap-x-5 gap-y-3 text-sm font-bold">
@@ -477,7 +482,7 @@ export default function LakeOzarksTransportationInsightsPage() {
                         href={story.reviewUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-lrp-green-dark underline dark:text-lrp-green"
+                        className="text-lrp-green-dark underline"
                       >
                         Read the Google review<span className="sr-only"> from {story.reviewer} (opens in a new tab)</span>
                       </a>
@@ -486,12 +491,12 @@ export default function LakeOzarksTransportationInsightsPage() {
                           href={story.secondaryReviewUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-lrp-green-dark underline dark:text-lrp-green"
+                          className="text-lrp-green-dark underline"
                         >
                           Read the second Google review<span className="sr-only"> (opens in a new tab)</span>
                         </a>
                       )}
-                      <Link href={story.relatedHref} className="text-lrp-green-dark underline dark:text-lrp-green">
+                      <Link href={story.relatedHref} className="text-lrp-green-dark underline">
                         {story.relatedLabel}
                       </Link>
                     </div>
@@ -552,31 +557,31 @@ export default function LakeOzarksTransportationInsightsPage() {
             </div>
           </section>
         </article>
-      </main>
+      </div>
     </>
   )
 }
 
 function InsightCard({ icon, value, label }: { icon: ReactNode; value: string; label: string }) {
   return (
-    <div className="rounded-2xl border border-neutral-200 p-6 shadow-sm dark:border-neutral-700 dark:bg-dark-bg-secondary">
+    <div className="rounded-2xl border border-neutral-200 p-6 shadow-sm">
       {icon}
       <p className="mt-5 text-3xl font-extrabold">{value}</p>
-      <p className="mt-2 leading-6 text-neutral-600 dark:text-neutral-300">{label}</p>
+      <p className="mt-2 leading-6 text-neutral-600">{label}</p>
     </div>
   )
 }
 
 function Takeaway({ number, title, children }: { number: string; title: string; children: ReactNode }) {
   return (
-    <li className="rounded-2xl border border-neutral-200 p-6 dark:border-neutral-700">
+    <li className="rounded-2xl border border-neutral-200 p-6">
       <div className="flex items-center gap-3">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-lrp-green font-extrabold text-neutral-950" aria-hidden="true">
           {number}
         </span>
         <h3 className="text-xl font-bold">{title}</h3>
       </div>
-      <p className="mt-4 leading-7 text-neutral-700 dark:text-neutral-300">{children}</p>
+      <p className="mt-4 leading-7 text-neutral-700">{children}</p>
     </li>
   )
 }

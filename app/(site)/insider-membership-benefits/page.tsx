@@ -7,6 +7,7 @@ import {
   BadgeDollarSign,
   CalendarClock,
   Check,
+  Gem,
   Gift,
   LockKeyhole,
   ShieldCheck,
@@ -369,12 +370,9 @@ export default async function InsiderMembershipBenefitsPage({
                     </p>
                   </div>
                   {tier.name === 'Diamond' ? (
-                    <Image
-                      src="/insider-rewards/diamond.webp"
-                      alt=""
-                      width={1672}
-                      height={941}
-                      className="h-16 w-24 rounded-lg object-cover"
+                    <Gem
+                      aria-hidden="true"
+                      className="h-9 w-9 shrink-0 text-primary"
                     />
                   ) : null}
                 </div>
@@ -513,7 +511,10 @@ export default async function InsiderMembershipBenefitsPage({
       </section>
 
       <section className="py-20">
-        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+        <div
+          data-centered-cta
+          className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8"
+        >
           <Sparkles
             aria-hidden="true"
             className="mx-auto h-10 w-10 text-primary"

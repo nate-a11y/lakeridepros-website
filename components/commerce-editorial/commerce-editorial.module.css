@@ -82,6 +82,8 @@
 .membership :where(article[class*='border-primary']) { border-top: 3px solid var(--primary); }
 .membership :where(a:global(.bg-primary), button:global(.bg-primary)) { color: var(--lrp-black); }
 .membership :where([class*='text-center']) { text-align: left; margin-left: 0; }
+.membership :where([data-centered-cta]) { margin-inline: auto; text-align: center; }
+.membership :where([data-centered-cta] *) { text-align: center; }
 @media (max-width: 639px) {
   .cart :where([class*='flex gap-6 p-6']) { flex-wrap: wrap; gap: 1rem; padding: 1rem 0; }
   .cart :where([class*='flex gap-6 p-6']) > a { flex-basis: 80px; }

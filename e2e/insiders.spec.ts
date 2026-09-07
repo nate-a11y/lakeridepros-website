@@ -134,6 +134,34 @@ test.describe('Insider Rewards internal release candidate', () => {
     expect(await page.locator('body').innerText()).not.toMatch(
       forbiddenCustomerLanguage,
     )
+
+    const closingCta = page.locator('[data-centered-cta]')
+    await expect(closingCta).toBeVisible()
+    const closingCtaLayout = await closingCta.evaluate((element) => {
+      const box = element.getBoundingClientRect()
+      const heading = element.querySelector('h2')
+      const headingBox = heading?.getBoundingClientRect()
+
+      return {
+        containerCenter: box.left + box.width / 2,
+        headingCenter: headingBox
+          ? headingBox.left + headingBox.width / 2
+          : Number.NaN,
+        viewportCenter: window.innerWidth / 2,
+        headingTextAlign: heading
+          ? window.getComputedStyle(heading).textAlign
+          : '',
+      }
+    })
+    expect(closingCtaLayout.headingTextAlign).toBe('center')
+    expect(
+      Math.abs(
+        closingCtaLayout.containerCenter - closingCtaLayout.viewportCenter,
+      ),
+    ).toBeLessThanOrEqual(1)
+    expect(
+      Math.abs(closingCtaLayout.headingCenter - closingCtaLayout.viewportCenter),
+    ).toBeLessThanOrEqual(1)
     await expectNoDocumentOverflow(page)
   })
 

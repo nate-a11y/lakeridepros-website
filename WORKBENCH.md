@@ -26,7 +26,8 @@
 - [x] Finish homepage SEO, accessibility, performance, and interaction gauntlet ⧗2026-09-06T19:47:03-05:00 #3033c419
   > Homepage and sitewide gauntlet complete: clean production build, 485 unit tests, Chromium accessibility and responsive QA, cached sitemap/fleet prerender fixes, and Webpack Studio regression verification. ⧗2026-09-06T19:47:03-05:00
 - [x] Propagate approved editorial system across public route families ⧗2026-09-06T19:47:03-05:00 #15269b5a
-- [~] Deploy verified feature branch to Vercel Preview and stop before production ⧗2026-09-06T18:16:16-05:00 #340af571
+- [x] Deploy verified feature branch to Vercel Preview and stop before production ⧗2026-09-06T20:03:52-05:00 #340af571
+  > Non-production Vercel Preview dpl_HVQEutNNGVBofsKQzSG2WG3hSEKT is READY. Protected base URL verified; 14-day deployment-scoped shareable link created. Preview route/GTM/mobile/desktop QA passed. No production promotion. ⧗2026-09-06T20:03:52-05:00
 - [x] Mobile-first QA across homepage and representative route families ⧗2026-09-06T19:47:03-05:00 #db9de6ed
   Test 375/390/768 widths, touch navigation, sticky/overlay behavior, tap targets, text wrapping, image crops, no horizontal overflow, accessibility, and Core Web Vitals risk before final Vercel preview.
   > Responsive audits covered 320/375/390/768/1024/1440 route families; final homepage desktop + Mobile Chrome suite passed with no overflow or failed images. ⧗2026-09-06T19:47:03-05:00

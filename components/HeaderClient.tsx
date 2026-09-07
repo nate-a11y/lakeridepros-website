@@ -34,7 +34,6 @@ const explore = [
   { name: 'Testimonials', href: '/testimonials' },
   { name: 'Gift cards', href: '/gift-cards' },
   { name: 'Shop', href: '/shop' },
-  { name: 'Insider membership', href: '/insider-membership-benefits' },
   { name: 'About Lake Ride Pros', href: '/about-us' },
 ]
 
@@ -195,6 +194,7 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
               </div>
             ))}
             <Link href="/events" className={`text-sm font-bold text-white/85 hover:text-primary-light ${focus}`}>Events</Link>
+            <Link href="/insider-membership-benefits" className={`text-sm font-bold text-white/85 hover:text-primary-light ${focus}`}>Insiders</Link>
             {desktopMenu('explore', 'Explore', (
               <div className="absolute right-0 top-full w-80 border-t-2 border-primary bg-white px-6 py-4 text-lrp-black shadow-2xl">
                 <ul className="grid grid-cols-2 gap-x-5">{explore.map(link => <li key={link.href}><Link href={link.href} className="block border-b border-black/10 py-3 text-sm font-bold hover:text-primary-dark">{link.name}</Link></li>)}</ul>
@@ -226,9 +226,10 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
         {mobileOpen && (
           <div id="mobile-menu" className="max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-white/20 pb-8 lg:hidden">
             {mobileGroup('services', 'Services', [{ name: 'All services', href: '/services' }, ...serviceLinks])}
-            <div className="grid grid-cols-2 gap-x-6 border-b border-white/20 py-2">
+            <div className="grid grid-cols-3 gap-x-4 border-b border-white/20 py-2">
               <Link href="/fleet" onClick={closeMobile} className="py-4 text-lg font-black">Fleet</Link>
               <Link href="/events" onClick={closeMobile} className="py-4 text-lg font-black">Events</Link>
+              <Link href="/insider-membership-benefits" onClick={closeMobile} className="py-4 text-lg font-black">Insiders</Link>
             </div>
             {mobileGroup('partners', 'Partners', partners)}
             {mobileGroup('explore', 'Explore', explore)}

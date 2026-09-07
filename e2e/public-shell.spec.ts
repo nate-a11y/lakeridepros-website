@@ -18,6 +18,7 @@ test('desktop profile navigation, keyboard dismissal, and single GTM survive nav
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/cart')
   await expect(page.locator('#google-tag-manager')).toHaveCount(1)
+  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Insiders', exact: true })).toBeVisible()
 
   const explore = page.getByRole('button', { name: 'Explore', exact: true })
   await explore.focus()
@@ -50,6 +51,7 @@ test('mobile navigation opens with fleet and booking in view rather than a long 
   const menu = page.locator('#mobile-menu')
   await expect(menu.getByRole('button', { name: 'Services', exact: true })).toHaveAttribute('aria-expanded', 'false')
   await expect(menu.getByRole('link', { name: 'Fleet', exact: true })).toBeInViewport()
+  await expect(menu.getByRole('link', { name: 'Insiders', exact: true })).toBeInViewport()
   await expect(menu.getByRole('link', { name: 'Quote or book', exact: true })).toBeInViewport()
   await menu.getByRole('button', { name: 'Explore', exact: true }).click()
   await expect(menu.getByRole('link', { name: 'Manage your profile' })).toHaveAttribute('href', profileUrl)

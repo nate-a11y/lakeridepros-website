@@ -2,17 +2,17 @@ import CorePage from '@/components/core-editorial/CorePage'
 import CoreHero from '@/components/core-editorial/CoreHero'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Car, Megaphone, ArrowRight } from 'lucide-react'
+import { Car, BriefcaseBusiness, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Careers | Lake Ride Pros - Join Our Team',
-  description: 'Join the Lake Ride Pros team at Lake of the Ozarks. Apply as a professional driver or sales & brand ambassador. Missouri\'s Best award-winning transportation company.',
+  description: 'Join the Lake Ride Pros team at Lake of the Ozarks. Apply as a professional driver or explore detailing, dispatch, sales, and other team roles. Missouri\'s Best award-winning transportation company.',
   alternates: {
     canonical: 'https://www.lakeridepros.com/careers',
   },
   openGraph: {
     title: 'Careers | Lake Ride Pros - Join Our Team',
-    description: 'Join the Lake Ride Pros team at Lake of the Ozarks. Apply as a professional driver or sales & brand ambassador.',
+    description: 'Join the Lake Ride Pros team at Lake of the Ozarks. Apply as a professional driver or explore detailing, dispatch, sales, and other team roles.',
     url: 'https://www.lakeridepros.com/careers',
     siteName: 'Lake Ride Pros',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Careers' }],
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Careers | Lake Ride Pros - Join Our Team',
-    description: 'Join the Lake Ride Pros team at Lake of the Ozarks. Apply as a professional driver or sales & brand ambassador.',
+    description: 'Join the Lake Ride Pros team at Lake of the Ozarks. Apply as a professional driver or explore detailing, dispatch, sales, and other team roles.',
     images: ['/og-image.jpg'],
   },
 }
@@ -79,16 +79,16 @@ export default function CareersPage() {
               </div>
 
 
-            {/* Card 2 - Sales & Brand Ambassador */}
+            {/* Card 2 - General Application */}
 
               <div className="h-full bg-white border-t border-black/25 py-8 flex flex-col transition-colors">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="flex-shrink-0">
-                    <Megaphone className="w-7 h-7 text-[#2f730e]" aria-hidden="true" />
+                    <BriefcaseBusiness className="w-7 h-7 text-[#2f730e]" aria-hidden="true" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-neutral-900">
-                      Sales &amp; Brand Ambassador
+                      General Application
                     </h2>
                     <span className="inline-block mt-2 py-0.5 text-xs font-semibold bg-white text-[#2f730e]">
                       Quick Application
@@ -97,7 +97,7 @@ export default function CareersPage() {
                 </div>
 
                 <p className="text-lrp-text-secondary mb-8 flex-grow">
-                  Help grow the Lake Ride Pros brand. Build relationships with venues, hotels, and event planners across the Lake area.
+                  Apply for part-time detailing, dispatch, sales, brand ambassador, or other non-driving opportunities with Lake Ride Pros.
                 </p>
 
                 <Link

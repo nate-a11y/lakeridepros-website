@@ -183,3 +183,30 @@ describe("coordinator participant phone", () => {
     expect(screen.queryByRole("link", { name: "+15735550123" })).not.toBeInTheDocument()
   })
 })
+
+describe("synced Moovs route", () => {
+  it("shows each actual Moovs leg separately from the original requested route for riders", async () => {
+    navigation.coordinator = false
+    getRequest.mockResolvedValue({ request: { ...request, trips: [
+      { id: "outbound", pickupAt: "2026-09-02T09:00:00", pickupName: "", pickupAddress: "5 Validated Pickup St", destinationName: "", destinationAddress: "6 Validated Dropoff St", status: "confirmed", cost: 50 },
+      { id: "return", pickupAt: "2026-09-02T12:00:00", pickupName: "", pickupAddress: "6 Validated Dropoff St", destinationName: "", destinationAddress: "5 Validated Pickup St", status: "confirmed", cost: 50 },
+    ] }, messages: [] })
+    render(<RequestDetailView />)
+    await screen.findByText(request.reference)
+    expect(screen.getAllByText("5 Validated Pickup St")).toHaveLength(2)
+    expect(screen.getAllByText("6 Validated Dropoff St")).toHaveLength(2)
+    expect(screen.getByText("1 Main St")).toBeInTheDocument()
+    expect(screen.getByText("2 Main St")).toBeInTheDocument()
+    expect(screen.queryByText(/\$50|\$100/)).not.toBeInTheDocument()
+  })
+
+  it("does not substitute unvalidated request addresses when Moovs addresses are absent", async () => {
+    getRequest.mockResolvedValue({ request: { ...request, trips: [
+      { id: "trip", pickupAt: "", pickupName: "", pickupAddress: "", destinationName: "", destinationAddress: "", status: "pending" },
+    ] }, messages: [] })
+    render(<RequestDetailView />)
+    await screen.findByText(request.reference)
+    expect(screen.getAllByText("Not available from Moovs yet")).toHaveLength(2)
+    expect(screen.getAllByText("1 Main St")).toHaveLength(1)
+  })
+})

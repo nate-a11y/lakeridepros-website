@@ -110,3 +110,14 @@ describe("Camden portal data boundaries", () => {
     })
   })
 })
+
+
+it("maps synced Moovs endpoints independently of the requested endpoints", () => {
+  const result = mapRequest({
+    pickup_address: "Original home", destination_address: "Original clinic",
+    trips: [{ id: "synced", pickup_address: "Validated clinic", dropoff_address: "Validated home" }],
+  })
+  expect(result.pickupAddress).toBe("Original home")
+  expect(result.destinationAddress).toBe("Original clinic")
+  expect(result.trips[0]).toMatchObject({ pickupAddress: "Validated clinic", destinationAddress: "Validated home" })
+})

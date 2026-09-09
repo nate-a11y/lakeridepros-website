@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { generalApplicationSchema } from "@/lib/validation/general-application";
 import { getSupabaseServerClient } from "@/lib/supabase/client";
 
 const CAREERS_FROM_EMAIL =
@@ -9,8 +10,16 @@ const CAREERS_REPLY_TO_EMAIL = "owners@lakeridepros.com";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const parsed = generalApplicationSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || "Please check your application details." },
+        { status: 400 },
+      );
+    }
     const {
       positions,
+      otherPosition,
       fullName,
       email,
       phone,
@@ -22,39 +31,12 @@ export async function POST(request: NextRequest) {
       socialInstagram,
       socialX,
       socialTikTok,
-      turnstileToken,
-      resumeBase64,
-      resumeFileName,
-    } = body;
-
-    // Validate required fields
-    if (
-      !fullName ||
-      !email ||
-      !phone ||
-      !positions?.length ||
-      !cityState ||
-      !aboutYourself ||
-      !workExperience
-    ) {
-      return NextResponse.json(
-        { error: "Please fill out all required fields." },
-        { status: 400 },
-      );
-    }
+    } = parsed.data;
+    const { turnstileToken, resumeBase64, resumeFileName } = body;
 
     if (!turnstileToken) {
       return NextResponse.json(
         { error: "Please complete the security verification." },
-        { status: 400 },
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: "Please enter a valid email address." },
         { status: 400 },
       );
     }
@@ -90,8 +72,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Persist non-driver career applications so they appear in the LRP Driver Portal
-    // Applications review queue. The portal treats non-driver positions (Sales,
-    // Brand Ambassador, etc.) as staff onboarding instead of DOT driver compliance.
+    // Applications review queue. The Staff prefix keeps all these roles on the
+    // portal's existing non-driver onboarding path (including Dispatcher/Other).
     const ip =
       request.headers.get("x-forwarded-for")?.split(",")[0] ||
       request.headers.get("x-real-ip") ||
@@ -104,7 +86,9 @@ export async function POST(request: NextRequest) {
     const cityStateMatch = String(cityState)
       .trim()
       .match(/^(.+?),\s*([A-Za-z]{2})$/);
-    const positionList = (positions as string[]).join(", ");
+    const positionList = positions.join(", ");
+    const otherPositionDetails = positions.includes("Other") ? otherPosition : undefined;
+    const displayPositions = positions.map((position) => position === "Other" && otherPositionDetails ? `Other: ${otherPositionDetails}` : position).join(", ");
     const today = new Date().toISOString().split("T")[0];
     const socialLinks = [
       socialFacebook ? `Facebook: ${socialFacebook}` : null,
@@ -125,7 +109,7 @@ export async function POST(request: NextRequest) {
       .join("\n\n");
 
     const otherQualifications = [
-      `Positions of interest: ${positionList}`,
+      `Positions of interest: ${displayPositions}`,
       `City/State: ${cityState}`,
       "",
       "About themselves:",
@@ -148,7 +132,7 @@ export async function POST(request: NextRequest) {
           phone,
           address_city: cityStateMatch?.[1]?.trim() || null,
           address_state: cityStateMatch?.[2]?.toUpperCase() || null,
-          position_applied: positionList,
+          position_applied: `Staff: ${positionList}`,
           date_of_application: today,
           other_qualifications: otherQualifications,
           employment_history: [
@@ -193,7 +177,7 @@ export async function POST(request: NextRequest) {
 <body style="font-family: 'Montserrat', Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 20px;">
   <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
     <div style="background-color: #4cbb17; padding: 24px; text-align: center;">
-      <h1 style="color: #ffffff; margin: 0; font-size: 24px;">New Application: Sales/Brand Ambassador</h1>
+      <h1 style="color: #ffffff; margin: 0; font-size: 24px;">New General Application</h1>
     </div>
     <div style="padding: 24px;">
       <h2 style="color: #060606; font-size: 20px; margin-top: 0;">Applicant: ${escapeHtml(fullName)}</h2>
@@ -201,7 +185,7 @@ export async function POST(request: NextRequest) {
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
         <tr>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-weight: bold; color: #060606; width: 40%;">Position(s)</td>
-          <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; color: #333333;">${escapeHtml(positionList)}</td>
+          <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; color: #333333;">${escapeHtml(displayPositions)}</td>
         </tr>
         <tr>
           <td style="padding: 8px 12px; border-bottom: 1px solid #e5e5e5; font-weight: bold; color: #060606;">Email</td>
@@ -271,7 +255,7 @@ export async function POST(request: NextRequest) {
       from: CAREERS_FROM_EMAIL,
       replyTo: email,
       to: "owners@lakeridepros.com",
-      subject: `New Application: Sales/Brand Ambassador - ${fullName}`,
+      subject: `New Application: ${positionList} - ${normalizedFullName}`,
       html: applicationHtml,
       ...(attachments.length > 0 ? { attachments } : {}),
     });
@@ -297,7 +281,7 @@ export async function POST(request: NextRequest) {
     <div style="padding: 24px;">
       <p style="color: #060606; font-size: 16px; line-height: 1.6;">Hi ${escapeHtml(fullName)},</p>
       <p style="color: #333333; font-size: 16px; line-height: 1.6;">
-        Thank you for applying to the <strong>${escapeHtml(positionList)}</strong> position${(positions as string[]).length > 1 ? "s" : ""} at Lake Ride Pros!
+        Thank you for applying to the <strong>${escapeHtml(displayPositions)}</strong> position${positions.length > 1 ? "s" : ""} at Lake Ride Pros!
       </p>
       <p style="color: #333333; font-size: 16px; line-height: 1.6;">
         We have received your application and a member of our team will review it shortly. You can expect to hear from us within 2-3 business days.

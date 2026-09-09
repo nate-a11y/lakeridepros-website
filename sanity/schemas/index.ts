@@ -13,8 +13,10 @@ import venue from './venue'
 import serviceAnalytics from './serviceAnalytics'
 import driverProfile from './driverProfile'
 import memberLogo from './memberLogo'
+import siteAnnouncement from './siteAnnouncement'
 
 export const schemaTypes = [
+  siteAnnouncement,
   blogPost,
   service,
   vehicle,

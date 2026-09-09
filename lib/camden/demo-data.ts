@@ -151,7 +151,7 @@ export function createDemoDashboard(role: "rider" | "coordinator" = "rider"): Ca
     context: context(role),
     requests: visibleRequests,
     riders: [{ id: "demo-rider", name: "Jordan Taylor", phone: "+15735550123" }],
-    pickupLocations,
+    pickupLocations: pickupLocations.map((location) => ({ ...location, riderId: "demo-rider" })),
     destinations,
     rideTypes,
     changeReasons,

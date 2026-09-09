@@ -6,6 +6,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import SiteAnnouncement from "@/components/announcements/SiteAnnouncement";
 import { PhoneModal } from "@/components/PhoneModal";
 
 export default function SiteLayout({
@@ -29,6 +30,7 @@ export default function SiteLayout({
           <a href="#main-content" className="skip-link">
             Skip to main content
           </a>
+          <SiteAnnouncement />
           <Header />
           <main id="main-content" className="min-h-screen">
             {children}

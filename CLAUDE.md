@@ -142,6 +142,6 @@ Accessibility is a release blocker in this repo.
 - Keep generated outputs (`.next`, `coverage`, Playwright reports, media exports, `supabase/.temp`) out of commits.
 - Use commit email `nate@lakeridepros.com` for this nate-a11y/lakeridepros-website repo when committing.
 
-<!-- crystl-cli:begin v2.202.2 -->
+<!-- crystl-cli:begin v2.206.0 -->
 @AGENTS.md
 <!-- crystl-cli:end -->

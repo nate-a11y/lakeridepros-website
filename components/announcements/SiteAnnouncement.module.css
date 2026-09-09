@@ -1,0 +1,43 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem max(1rem, calc((100vw - 1440px) / 2));
+  background: var(--primary);
+  color: var(--lrp-black);
+  border-bottom: 1px solid var(--lrp-black);
+  font-size: 0.875rem;
+}
+.viewport { flex: 1; min-width: 0; overflow: hidden; }
+.track { display: flex; width: max-content; min-width: 200%; animation: announcement-scroll 32s linear infinite; }
+.track > span { flex: 1 0 auto; padding-right: 4rem; white-space: nowrap; }
+.banner:hover .track, .banner:focus-within .track { animation-play-state: paused; }
+.banner[data-paused='true'] .track { display: block; animation: none; width: auto; min-width: 0; }
+.banner[data-paused='true'] .track > span { display: block; padding-right: 0; white-space: normal; overflow-wrap: anywhere; }
+.banner[data-paused='true'] .track > span[aria-hidden] { display: none; }
+.thumbnail { flex: 0 0 64px; width: 64px; height: 48px; object-fit: contain; background: #fff; }
+.controls { display: flex; flex: 0 0 auto; }
+.control { display: inline-flex; justify-content: center; align-items: center; min-width: 44px; min-height: 44px; color: inherit; cursor: pointer; background: transparent; border: 0; }
+.control:hover { background: rgb(0 0 0 / 10%); }
+.control:focus-visible, .bannerLink:focus-visible, .popupLink:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+.bannerLink { flex: 0 0 auto; max-width: 12rem; padding: 0.5rem; font-weight: 800; color: var(--lrp-black); text-decoration: underline; overflow-wrap: anywhere; }
+.dialog { position: fixed; inset: 0; margin: auto; padding: 0; width: min(92vw, 600px); max-width: 600px; max-height: 88dvh; overflow-y: auto; overscroll-behavior: contain; background: #fff; color: var(--lrp-black); border: 1px solid var(--lrp-black); box-shadow: 0 24px 80px rgb(0 0 0 / 35%); }
+.dialog::backdrop { background: rgb(0 0 0 / 65%); }
+.popupHeader { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.5rem 0.75rem 0.5rem 1.5rem; background: var(--primary); color: var(--lrp-black); }
+.eyebrow { margin: 0; font-size: 0.6875rem; letter-spacing: 0.1em; font-weight: 800; text-transform: uppercase; }
+.image { width: 100%; height: auto; max-height: 42dvh; object-fit: contain; background: #f5f5f5; }
+.popupBody { padding: clamp(1.25rem, 4vw, 2.25rem); }
+.popupBody h2 { margin: 0; color: var(--lrp-black); font-size: clamp(1.5rem, 4vw, 2.25rem); font-weight: 800; line-height: 1.15; overflow-wrap: anywhere; }
+.message { margin: 1rem 0 0; white-space: pre-wrap; line-height: 1.65; overflow-wrap: anywhere; color: #333; }
+.popupLink { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: var(--primary); color: var(--lrp-black); font-weight: 800; overflow-wrap: anywhere; }
+@keyframes announcement-scroll { to { transform: translateX(-50%); } }
+@media (max-width: 600px) {
+  .banner { flex-wrap: wrap; gap: 0.25rem; padding: 0.5rem 0.75rem; }
+  .bannerLink { order: 4; flex-basis: 100%; max-width: none; text-align: center; }
+  .thumbnail { flex-basis: 48px; width: 48px; height: 40px; margin-right: 0.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .track { display: block; animation: none; width: auto; min-width: 0; }
+  .track > span { display: block; padding-right: 0; white-space: normal; overflow-wrap: anywhere; }
+  .track > span[aria-hidden], .motionControl { display: none; }
+}

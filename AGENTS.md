@@ -96,7 +96,7 @@ This project enforces WCAG 2.1 AA compliance:
 - `vitest.config.ts` - Test configuration
 - `vercel.json` - Deployment configuration
 
-<!-- crystl-cli:begin v2.202.2 -->
+<!-- crystl-cli:begin v2.206.0 -->
 ## Crystl CLI (agent-callable)
 
 This section is auto-maintained by Crystl — edits between the `crystl-cli` markers are overwritten when it refreshes; the rest of this file belongs to the project. You're running inside Crystl. You can inspect and control sibling gems and shards via the `crystl` CLI. Full command reference (every flag): `crystl docs cli`.
@@ -130,6 +130,7 @@ Make the user's life easier — reach for these unprompted:
 - **Waiting on a shard to say something → `crystl watch`, never a `screen` loop.** Re-reading `crystl screen` until the text changes spends a whole turn per look and usually reads the same screen back. `crystl watch` blocks until output matches and returns the moment it does — one turn instead of ten. Same for a worker you dispatched: `crystl wait done|blocked|idle` rather than polling `crystl shards`. Free on every tier.
 - **"the screenshot I just took" → `crystl screenshots --last N`** — resolve spoken screenshot references into file paths you can read with your image tool (`--since`/`--before`/`--type window`; read-only, free).
 - **Before you commit config → `crystl keys scan`** — checks the files git WOULD commit for API keys, reporting a path and a line number and never a value. Read-only and free, and it exits 0 even with findings so it can't break a script (`--fail-on-findings` opts into a gate). No gem open, or crystl not running? `--dir <path>` names the tree — that form checks the patterns only, because the keys saved in crystl are not readable outside the app, and it says so in its own output. Met a key format no public list carries? `crystl keys patterns add "ACME_TOKEN_"` teaches it — a literal prefix, recorded against your shard. You can only ADD: switching a built-in off, or removing a pattern, is done by the user in Settings → key scan. Say so rather than looking for a flag.
+- **Starting in an unfamiliar project → `crystl optimize`** — scores how well THIS project is set up for you (instructions files, docs, build/test commands, conventions) and lists the gaps by severity. Headless and free; `--json` for parsing, `--show` also opens the panel for the user, and it exits 0 even with findings. Fix the high ones before you fix the code, and re-run it after you write a CLAUDE.md.
 
 Fan-out norm: workers pause silently on in-terminal dialogs — quiet is NOT done. `crystl shards` / `crystl status` flag classified prompts as `⏸ awaiting input` and a worker that cannot run at all — out of quota, credentials expired, agent gone — with what is in the way and when it comes back (also pushed via `crystl events`). Read the class before you act: a keypress unblocks `awaiting input`, but a rate-limited worker needs the clock, not a nudge. `crystl wait blocked` after a fan-out catches every worker at once. For dialogs outside the classifier (model-switch menus), arm `crystl watch` for the exact screen wording instead of polling `screen`. Unblock with `crystl send` (on 403, ask the user to click Allow instead).
 

@@ -4,7 +4,8 @@ import styles from '@/components/support-editorial/SupportEditorial.module.css'
 import React, { useState, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import Link from 'next/link'
+import { GENERAL_APPLICATION_POSITIONS, generalApplicationSchema, type GeneralApplicationFormData } from '@/lib/validation/general-application'
 import { CheckCircle, Upload, X } from 'lucide-react'
 import Turnstile from '@/components/Turnstile'
 
@@ -14,23 +15,6 @@ const ACCEPTED_FILE_TYPES = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 ]
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-
-const applicationSchema = z.object({
-  positions: z.array(z.string()).min(1, 'Please select at least one position'),
-  fullName: z.string().min(1, 'Full name is required').max(200),
-  email: z.string().email('Please enter a valid email address'),
-  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
-  cityState: z.string().min(1, 'City, State is required').max(200),
-  howDidYouHear: z.string().max(500).optional(),
-  socialFacebook: z.string().max(200).optional(),
-  socialInstagram: z.string().max(200).optional(),
-  socialX: z.string().max(200).optional(),
-  socialTikTok: z.string().max(200).optional(),
-  aboutYourself: z.string().min(1, 'Please tell us about yourself').max(5000),
-  workExperience: z.string().min(1, 'Please provide your work experience').max(5000),
-})
-
-type ApplicationFormData = z.infer<typeof applicationSchema>
 
 export default function GeneralApplicationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -47,10 +31,11 @@ export default function GeneralApplicationPage() {
     formState: { errors },
     setValue,
     control,
-  } = useForm<ApplicationFormData>({
-    resolver: zodResolver(applicationSchema),
+  } = useForm<GeneralApplicationFormData>({
+    resolver: zodResolver(generalApplicationSchema),
     defaultValues: {
       positions: [],
+      otherPosition: '',
       fullName: '',
       email: '',
       phone: '',
@@ -67,9 +52,10 @@ export default function GeneralApplicationPage() {
 
   const selectedPositions = useWatch({ control, name: 'positions' })
 
-  const handlePositionChange = (position: string) => {
+  const handlePositionChange = (position: GeneralApplicationFormData['positions'][number]) => {
     const current = selectedPositions || []
     if (current.includes(position)) {
+      if (position === 'Other') setValue('otherPosition', '', { shouldValidate: false })
       setValue('positions', current.filter((p) => p !== position), { shouldValidate: true })
     } else {
       setValue('positions', [...current, position], { shouldValidate: true })
@@ -122,7 +108,7 @@ export default function GeneralApplicationPage() {
     })
   }
 
-  const onSubmit = async (data: ApplicationFormData) => {
+  const onSubmit = async (data: GeneralApplicationFormData) => {
     if (!turnstileToken) {
       setSubmitError('Please complete the security verification')
       return
@@ -202,10 +188,14 @@ export default function GeneralApplicationPage() {
         {/* Header */}
         <header className="text-center mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">
-            Sales &amp; Brand Ambassador Application
+            General Application
           </h1>
           <p className="text-lg text-lrp-text-secondary">
-            Help grow the Lake Ride Pros brand across the Lake of the Ozarks area.
+            Join our team in detailing, dispatch, sales, brand ambassador, or another non-driving role.
+          </p>
+          <p className="mt-3 text-sm text-lrp-text-secondary">
+            Interested in driving? Use our{' '}
+            <Link href="/careers/driver-application" className="underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">driver application</Link>.
           </p>
         </header>
 
@@ -218,7 +208,7 @@ export default function GeneralApplicationPage() {
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-6"
             noValidate
-            aria-label="Sales and Brand Ambassador application form"
+            aria-label="General employment application form"
           >
             {/* Position Selection */}
             <fieldset>
@@ -226,7 +216,7 @@ export default function GeneralApplicationPage() {
                 Position(s) of Interest *
               </legend>
               <div className="flex flex-wrap gap-4">
-                {['Sales', 'Brand Ambassador'].map((position) => (
+                {GENERAL_APPLICATION_POSITIONS.map((position) => (
                   <label
                     key={position}
                     className="flex items-center gap-2 cursor-pointer"
@@ -248,6 +238,22 @@ export default function GeneralApplicationPage() {
                 </p>
               )}
             </fieldset>
+
+            {selectedPositions?.includes('Other') && (
+              <div>
+                <label htmlFor="otherPosition" className="block text-sm font-medium text-neutral-900 mb-1">Other position of interest *</label>
+                <input
+                  {...register('otherPosition')}
+                  id="otherPosition"
+                  type="text"
+                  maxLength={200}
+                  className={`${inputBaseClass} ${errors.otherPosition ? inputErrorClass : inputNormalClass}`}
+                  aria-invalid={errors.otherPosition ? 'true' : 'false'}
+                  aria-describedby={errors.otherPosition ? 'otherPosition-error' : undefined}
+                />
+                {errors.otherPosition && <p id="otherPosition-error" className="text-red-600 text-sm mt-1" role="alert">{errors.otherPosition.message}</p>}
+              </div>
+            )}
 
             {/* Full Name */}
             <div>

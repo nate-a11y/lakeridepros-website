@@ -1,0 +1,83 @@
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import SiteAnnouncement from '../SiteAnnouncement'
+const navigation = vi.hoisted(() => ({ path: '/' }))
+vi.mock('next/navigation', () => ({ usePathname: () => navigation.path }))
+const fetchMock = vi.fn()
+const announcement = { _id: 'siteAnnouncement', _rev: 'r1', enabled: true, mode: 'popup', title: 'Weekend rides', message: 'Reserve your ride early.', expiresAt: '2099-01-01T00:00:00Z', image: { url: 'https://cdn.sanity.io/images/test/production/photo.jpg', alt: 'A Lake Ride Pros shuttle', width: 1200, height: 800 } }
+beforeEach(() => {
+  navigation.path = '/'
+  localStorage.clear()
+  fetchMock.mockReset().mockResolvedValue(new Response(JSON.stringify({ announcement })))
+  vi.stubGlobal('fetch', fetchMock)
+})
+afterEach(() => vi.useRealTimers())
+it('shows one popup image, dismisses with Escape, and remembers dismissal across remounts', async () => {
+  const { unmount } = render(<SiteAnnouncement />)
+  const dialog = await screen.findByRole('dialog', { name: 'Weekend rides' })
+  expect(screen.getAllByRole('img')).toHaveLength(1)
+  expect(screen.getByRole('img')).toHaveAttribute('alt', 'A Lake Ride Pros shuttle')
+  fireEvent(dialog, new Event('cancel', { bubbles: false, cancelable: true }))
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  unmount()
+  fetchMock.mockResolvedValue(new Response(JSON.stringify({ announcement })))
+  render(<SiteAnnouncement />)
+  await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+})
+it('supports a pausable, dismissible scrolling banner with one compact image', async () => {
+  fetchMock.mockResolvedValue(new Response(JSON.stringify({ announcement: { ...announcement, mode: 'banner' } })))
+  const user = userEvent.setup()
+  render(<SiteAnnouncement />)
+  const banner = await screen.findByRole('region', { name: 'Site announcement' })
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  expect(screen.getAllByRole('img')).toHaveLength(1)
+  await user.click(screen.getByRole('button', { name: 'Pause announcement scrolling' }))
+  expect(banner).toHaveAttribute('data-paused', 'true')
+  await user.click(screen.getByRole('button', { name: 'Dismiss announcement' }))
+  expect(screen.queryByRole('region', { name: 'Site announcement' })).not.toBeInTheDocument()
+})
+it('does not display or fetch announcements on application and private routes', () => {
+  navigation.path = '/careers/driver-application'
+  render(<SiteAnnouncement />)
+  expect(fetchMock).not.toHaveBeenCalled()
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+})
+it('removes an announcement at its expiration without a reload', async () => {
+  vi.useFakeTimers()
+  vi.setSystemTime(new Date('2026-09-09T12:00:00Z'))
+  fetchMock.mockResolvedValue(new Response(JSON.stringify({ announcement: { ...announcement, expiresAt: '2026-09-09T12:00:02Z' } })))
+  render(<SiteAnnouncement />)
+  await act(async () => { await vi.advanceTimersByTimeAsync(1) })
+  expect(screen.getByRole('dialog')).toBeInTheDocument()
+  await act(async () => { await vi.advanceTimersByTimeAsync(2000) })
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+})
+it('shows a newly published revision after a previous announcement was dismissed', async () => {
+  const user = userEvent.setup()
+  const { unmount } = render(<SiteAnnouncement />)
+  await user.click(await screen.findByRole('button', { name: 'Dismiss announcement' }))
+  unmount()
+  fetchMock.mockResolvedValue(new Response(JSON.stringify({ announcement: { ...announcement, _rev: 'r2', title: 'New notice' } })))
+  render(<SiteAnnouncement />)
+  expect(await screen.findByRole('dialog', { name: 'New notice' })).toBeInTheDocument()
+})
+it('hides an announcement disabled in Studio on the next refresh', async () => {
+  vi.useFakeTimers()
+  fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ announcement })))
+    .mockResolvedValue(new Response(JSON.stringify({ announcement: null })))
+  render(<SiteAnnouncement />)
+  await act(async () => { await vi.advanceTimersByTimeAsync(1) })
+  expect(screen.getByRole('dialog')).toBeInTheDocument()
+  await act(async () => { await vi.advanceTimersByTimeAsync(60_000) })
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+})
+it('still dismisses when browser storage is blocked', async () => {
+  const storage = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Storage blocked') })
+  const user = userEvent.setup()
+  render(<SiteAnnouncement />)
+  await user.click(await screen.findByRole('button', { name: 'Dismiss announcement' }))
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  storage.mockRestore()
+})

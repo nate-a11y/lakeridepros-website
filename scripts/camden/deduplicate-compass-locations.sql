@@ -1,5 +1,6 @@
 \set ON_ERROR_STOP on
--- Scoped operational cleanup approved by Nate; hold for the combined website release.
+-- Scoped operational cleanup approved by Nate; applied 2026-09-08 America/Chicago.
+-- Retained as an audit/runbook artifact; guards intentionally reject reapplication.
 -- Defaults to a rollback rehearsal. At release, after rechecking current usage,
 -- run with psql -v apply_changes=true to commit. Guards fail closed on data drift.
 \if :{?apply_changes}

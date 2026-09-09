@@ -28,7 +28,7 @@ There is one announcement slot, not a list of concurrent announcements. The Stud
 - UI: `components/announcements/SiteAnnouncement.tsx` and scoped CSS, mounted in the public site layout only.
 - 42 announcement regressions; full website suite: **548 tests passed**. Full ESLint and production build (including TypeScript) passed.
 - Local HTTP smoke checks: homepage, announcement API, and Studio returned 200; unpublished/absent content returned `announcement: null`.
-- Browser visual QA is still pending: no connected browser was available. No production deployment performed for this item; included in the combined feature-branch push.
+- Browser visual QA is still pending: no connected browser was available. Combined feature-branch preview deployed successfully at commit `1632159`; production website not promoted.
 
 ## References
 - [Sanity singleton configuration](https://www.sanity.io/guides/singleton-document)

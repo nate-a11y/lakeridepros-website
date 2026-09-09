@@ -7,7 +7,7 @@
 - Request detail labels the original **Requested route** separately from each linked trip's **Moovs pickup / Moovs drop-off**. Missing synced addresses are explicitly unavailable, never filled from the request. Costs remain hidden from riders.
 
 ## Database change
-`supabase/migrations/20260909003646_camden_bidirectional_locations.sql`:
+`supabase/migrations/20260909012351_camden_bidirectional_locations.sql`:
 - Backfills a private endpoint-ID registry from the two existing location tables. Source rows, IDs, approvals, and existing request rows are preserved.
 - Replaces directional request foreign keys with registry foreign keys; source references and deletion protection remain enforced. Insert triggers register future approved/pending locations without publishing them.
 - Validates approval, active status, and rider ownership for either endpoint in submit/edit RPCs and a defensive table trigger. Historical routes remain readable when a location is retired.
@@ -15,7 +15,7 @@
 - Registry/view/helpers have no API-role access. The private view is security-invoker.
 
 ## Rollout / rollback
-- **Status: prepared and tested locally; not applied to production and not deployed.**
+- **Status: migration and duplicate cleanup applied to production on 2026-09-08 (America/Chicago); website deployed to the feature-branch preview, not production.**
 - Apply the database migration **before** deploying the form. Old clients continue to submit their original home-to-facility routes.
 - Do not restore the old directional foreign keys after reverse-direction requests exist. Prefer a forward fix or roll back the new form while keeping bidirectional database readers and constraints.
 - Schema belongs to the shared website / LRP Bolt Supabase project. Existing Camden foundation migrations live in `~/Projects/lrpbolt/supabase/migrations`; newer website migrations must also be present in the isolated test database.
@@ -33,8 +33,14 @@
 - No source records were deleted, merged, or deactivated. Only the confirmed Linn Creek street suffix was corrected after the initial read-only diagnosis.
 
 ## Combined release
-- Nate authorized committing and pushing the combined website batch on 2026-09-08. Production database rollout remains a separate step; apply the migration before promoting the updated form.
+- Nate authorized the combined branch push, then explicitly authorized the production migration and deduplication on 2026-09-08. Both database steps are complete. Website production promotion remains separate.
 - Approved consolidation: keep the three TREATMENT Compass Health entries as canonical (the participant editor requires that category); retire the identical APPOINTMENTS entries. Locations stay available independently of ride type.
-- Production rollback rehearsal passed: three redundant choices retired, one request's destination reference repointed to its identical canonical facility with a version increment and internal audit event, zero participant assignment changes. Every other request/location field was verified unchanged. **Rolled back; not applied.**
+- Production rollback rehearsal passed: three redundant choices retired, one request's destination reference repointed to its identical canonical facility with a version increment and internal audit event, zero participant assignment changes. Every other request/location field was verified unchanged. **Rehearsal rolled back, then committed after fresh guards passed at release.**
 - Release script: `scripts/camden/deduplicate-compass-locations.sql`. Defaults to rollback; `apply_changes=true` explicitly commits. Recheck usage at release; guards intentionally stop if reference counts/addresses/assignments changed.
-- The earlier user-confirmed Linn Creek `Rd` → `Dr` correction is already live. The duplicate cleanup and bidirectional production migration remain pending. Website changes are included in the combined branch push.
+- The earlier user-confirmed Linn Creek `Rd` → `Dr` correction is already live. The duplicate cleanup and bidirectional production migration are now live. Website changes are included in commit `1632159` on `feat/sitewide-lrp-redesign`.
+
+## Production verification — 2026-09-08
+- Supabase recorded migration version `20260909012351`; local filename matches remote history. Registry includes all 71 source locations, both endpoint FKs validated, and all six submit/edit/read functions reference the bidirectional view.
+- Three duplicate facilities inactive; three approved active Compass Health facilities; zero requests reference the retired IDs. Four existing requests remain. Cleanup transaction checked unrelated request/location fields and preserved all participant assignments; only one canonical destination reference, version/timestamp, and internal audit event changed.
+- API roles cannot access the private registry/view or validation trigger. Security advisor reports expected deny-all RLS/no-policy information for the private registry. Unrelated shared-project security findings remain outside this release scope.
+- Preview deployment `dpl_F3sxg8kDwYsaHS2NP3vCvcR5kcGH` reached READY for `1632159`. Production website/main not changed.

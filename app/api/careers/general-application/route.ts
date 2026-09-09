@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import { generalApplicationSchema } from "@/lib/validation/general-application";
+import { generalApplicationDetails, generalApplicationSchema } from "@/lib/validation/general-application";
 import { getSupabaseServerClient } from "@/lib/supabase/client";
 
 const CAREERS_FROM_EMAIL =
@@ -108,9 +108,11 @@ export async function POST(request: NextRequest) {
       .filter(Boolean)
       .join("\n\n");
 
+    const roleDetails = generalApplicationDetails(parsed.data);
     const otherQualifications = [
       `Positions of interest: ${displayPositions}`,
       `City/State: ${cityState}`,
+      roleDetails,
       "",
       "About themselves:",
       aboutYourself,
@@ -226,6 +228,9 @@ export async function POST(request: NextRequest) {
         }
       </table>
 
+      <h3 style="color: #060606; font-size: 16px; margin-top: 24px;">Availability &amp; Role Details</h3>
+      <p style="color: #333333; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(roleDetails)}</p>
+
       <h3 style="color: #060606; font-size: 16px; margin-top: 24px;">About Themselves</h3>
       <p style="color: #333333; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(aboutYourself)}</p>
 
@@ -290,6 +295,8 @@ export async function POST(request: NextRequest) {
         If you have any questions in the meantime, feel free to reach out to us at
         <a href="mailto:owners@lakeridepros.com" style="color: #3a8e11;">owners@lakeridepros.com</a>.
       </p>
+      <h3 style="color: #060606; font-size: 16px;">Your Availability &amp; Role Details</h3>
+      <p style="color: #333333; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(roleDetails)}</p>
       <p style="color: #333333; font-size: 16px; line-height: 1.6; margin-top: 24px;">
         Best regards,<br />
         The Lake Ride Pros Team

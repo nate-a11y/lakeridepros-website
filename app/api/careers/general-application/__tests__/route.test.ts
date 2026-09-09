@@ -8,6 +8,9 @@ vi.mock('resend', () => ({ Resend: class { emails = { send } } }))
 
 const input = {
   fullName: 'Test Applicant', email: 'applicant@example.com', phone: '5735550101', cityState: 'Camdenton, MO',
+  availability: 'Weekends & evenings, 20 hours weekly.', earliestStartDate: '2026-10-01',
+  detailingExperience: 'Interior cleaning <training>', detailingApproach: 'Use a checklist and report damage.',
+  dispatchExperience: 'Phone support <training>', dispatchScenario: 'Confirm timing and update both customers.',
   aboutYourself: 'Reliable team member.', workExperience: 'Customer service.', turnstileToken: 'test-token',
 }
 function request(patch: Record<string, unknown>) {
@@ -48,4 +51,37 @@ it.each([
   expect(response.status).toBe(400)
   expect(insert).not.toHaveBeenCalled()
   expect(send).not.toHaveBeenCalled()
+})
+
+it('persists and emails availability and both selected role answers with safe HTML', async () => {
+  const response = await POST(request({ positions: ['Part-Time Detailer', 'Dispatcher'] }))
+  expect(response.status).toBe(200)
+  const saved = insert.mock.calls[0][0][0]
+  for (const value of [input.availability, input.earliestStartDate, input.detailingExperience, input.detailingApproach, input.dispatchExperience, input.dispatchScenario]) {
+    expect(saved.other_qualifications).toContain(value)
+  }
+  for (const [message] of send.mock.calls) {
+    expect(message.html).toContain('Weekends &amp; evenings')
+    expect(message.html).toContain('2026-10-01')
+    expect(message.html).toContain('Interior cleaning &lt;training&gt;')
+    expect(message.html).toContain('Phone support &lt;training&gt;')
+    expect(message.html).not.toContain('<training>')
+  }
+})
+it('does not persist or email stale answers for unselected roles', async () => {
+  expect((await POST(request({ positions: ['Sales'] }))).status).toBe(200)
+  expect(insert.mock.calls[0][0][0].other_qualifications).not.toContain('Interior cleaning')
+  expect(insert.mock.calls[0][0][0].other_qualifications).not.toContain('Phone support')
+  for (const [message] of send.mock.calls) expect(message.html).not.toContain('&lt;training&gt;')
+})
+it.each([
+  { availability: '' }, { earliestStartDate: '2026-02-30' },
+  { positions: ['Part-Time Detailer'], detailingExperience: '' },
+  { positions: ['Part-Time Detailer'], detailingApproach: '' },
+  { dispatchExperience: '' }, { dispatchScenario: '' },
+])('rejects missing/invalid screening answers before saving or emailing: %j', async patch => {
+  expect((await POST(request({ positions: ['Dispatcher'], ...patch }))).status).toBe(400)
+  expect(insert).not.toHaveBeenCalled()
+  expect(send).not.toHaveBeenCalled()
+  expect(fetch).not.toHaveBeenCalled()
 })

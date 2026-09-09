@@ -5,9 +5,10 @@ import React, { useState, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import { GENERAL_APPLICATION_POSITIONS, generalApplicationSchema, type GeneralApplicationFormData } from '@/lib/validation/general-application'
+import { GENERAL_APPLICATION_POSITIONS, ROLE_QUESTIONS, generalApplicationSchema, type GeneralApplicationFormData } from '@/lib/validation/general-application'
 import { CheckCircle, Upload, X } from 'lucide-react'
 import Turnstile from '@/components/Turnstile'
+import GeneralApplicationDetails from '@/components/careers/GeneralApplicationDetails'
 
 const ACCEPTED_FILE_TYPES = [
   'application/pdf',
@@ -35,6 +36,12 @@ export default function GeneralApplicationPage() {
     resolver: zodResolver(generalApplicationSchema),
     defaultValues: {
       positions: [],
+      availability: '',
+      earliestStartDate: '',
+      detailingExperience: '',
+      detailingApproach: '',
+      dispatchExperience: '',
+      dispatchScenario: '',
       otherPosition: '',
       fullName: '',
       email: '',
@@ -55,6 +62,9 @@ export default function GeneralApplicationPage() {
   const handlePositionChange = (position: GeneralApplicationFormData['positions'][number]) => {
     const current = selectedPositions || []
     if (current.includes(position)) {
+      for (const question of ROLE_QUESTIONS.filter(question => question.role === position)) {
+        setValue(question.name, '', { shouldValidate: false })
+      }
       if (position === 'Other') setValue('otherPosition', '', { shouldValidate: false })
       setValue('positions', current.filter((p) => p !== position), { shouldValidate: true })
     } else {
@@ -409,6 +419,8 @@ export default function GeneralApplicationPage() {
                 </div>
               </div>
             </fieldset>
+
+            <GeneralApplicationDetails register={register} errors={errors} positions={selectedPositions || []} />
 
             {/* Tell us about yourself */}
             <div>

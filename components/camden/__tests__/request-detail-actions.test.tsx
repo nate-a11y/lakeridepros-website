@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { CamdenDashboardData, CamdenRequest, CamdenRequestDetail, CamdenUserContext } from "@/lib/camden/types"
@@ -6,6 +6,7 @@ import { RequestDetailView } from "../request-detail"
 
 const navigation = vi.hoisted(() => ({ coordinator: true }))
 const transitionFollowup = vi.hoisted(() => vi.fn().mockResolvedValue({ id: "request-1", message: "Saved" }))
+const createChangeProposal = vi.hoisted(() => vi.fn().mockResolvedValue({ id: "request-1", message: "Saved" }))
 
 vi.mock("next/navigation", () => ({
   useParams: () => ({ id: "request-1" }),
@@ -90,6 +91,7 @@ vi.mock("@/lib/camden/service", () => ({
     addMessage: vi.fn(),
     updatePendingRequest: vi.fn(),
     createFollowup: vi.fn(),
+    createChangeProposal,
     transitionRequest: vi.fn(),
   }),
 }))
@@ -99,9 +101,49 @@ beforeEach(() => {
   getDashboard.mockImplementation((persona: "rider" | "coordinator") => Promise.resolve(dashboard(persona)))
   getRequest.mockResolvedValue({ request, messages: [] } satisfies CamdenRequestDetail)
   transitionFollowup.mockClear()
+  createChangeProposal.mockClear()
 })
 
 describe("same-record ride actions", () => {
+  it("submits selected addresses and timing as a pending proposal without changing the current ride", async () => {
+    navigation.coordinator = false
+    getRequest.mockResolvedValue({ request: { ...request, status: "confirmed", action: null }, messages: [] })
+    getDashboard.mockResolvedValue({
+      ...dashboard("rider"),
+      pickupLocations: [{ id: "pickup-1", riderId: "rider-1", name: "Home", address: "1 Main St" }],
+      destinations: [
+        { id: "destination-1", name: "Compass Health", address: "2 Main St" },
+        { id: "destination-2", name: "Treatment Court", address: "3 Court St" },
+      ],
+      changeReasons: [{ id: "reason-1", kind: "change", label: "Pickup or destination changed", requiresExplanation: false }],
+    } satisfies CamdenDashboardData)
+    const user = userEvent.setup()
+    render(<RequestDetailView />)
+    await user.click(await screen.findByRole("button", { name: "Request a change" }))
+    const dialog = screen.getByRole("dialog", { name: "Request a change" })
+    await user.selectOptions(within(dialog).getByLabelText(/Reason/), "reason-1")
+    await user.selectOptions(within(dialog).getByLabelText("Drop-off address"), "destination-2")
+    fireEvent.change(within(dialog).getByLabelText("Requested pickup time"), { target: { value: "08:45" } })
+    await user.click(within(dialog).getByRole("button", { name: "Submit request" }))
+
+    await waitFor(() => expect(createChangeProposal).toHaveBeenCalledWith("request-1", 4, "reason-1", "", expect.objectContaining({
+      requestedPickupTime: "08:45", pickupLocationId: "pickup-1", destinationLocationId: "destination-2",
+    })))
+    expect(request.pickupAddress).toBe("1 Main St")
+  })
+
+  it("shows the proposed addresses separately from the unchanged current route", async () => {
+    navigation.coordinator = false
+    getRequest.mockResolvedValue({ request: { ...request, action: { ...request.action!, proposedChanges: {
+      rideDate: "2026-09-03", requestedPickupTime: "08:45", appointmentTime: "09:30", direction: "one_way",
+      pickupLocationId: "pickup-1", destinationLocationId: "destination-2", notes: "", companionCount: 0, companionDetails: "",
+    } } }, messages: [] })
+    getDashboard.mockResolvedValue({ ...dashboard("rider"), pickupLocations: [{ id: "pickup-1", riderId: "rider-1", name: "Home", address: "1 Main St" }], destinations: [{ id: "destination-2", name: "Treatment Court", address: "3 Court St" }] } satisfies CamdenDashboardData)
+    render(<RequestDetailView />)
+    expect(await screen.findByText("Pending proposed change")).toBeInTheDocument()
+    expect(screen.getByText("Treatment Court — 3 Court St")).toBeInTheDocument()
+    expect(screen.getByText("2 Main St")).toBeInTheDocument()
+  })
   it("distinguishes a pending portal request from its linked trip status", async () => {
     const pendingRequest: CamdenRequest = {
       ...request,

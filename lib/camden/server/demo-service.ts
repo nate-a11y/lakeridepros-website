@@ -15,6 +15,7 @@ export class ServerDemoCamdenService {
   duplicateRequest() { return this.done("Request duplicated") }
   addMessage() { return this.done("Message sent") }
   createFollowup(_id: string, _version: number, kind: "change" | "cancellation") { return this.done(`${kind === "change" ? "Change" : "Cancellation"} requested`) }
+  createChangeProposal() { return this.done("Change proposal requested") }
   transitionFollowup(_id: string, _version: number, status: Exclude<CamdenFollowupStatus, "requested">) { return this.done(`Follow-up ${status}`) }
   transitionRequest(_id: string, status: CamdenRequestStatus) { return this.done(`Request moved to ${status.replaceAll("_", " ")}`) }
   requestLocation() { return this.done("Location submitted for approval") }

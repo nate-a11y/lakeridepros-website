@@ -36,12 +36,31 @@ const requestDraft = z.object({
   duplicateConfirmed: z.boolean().optional(),
 }).strict()
 
+const changeProposal = z.object({
+  rideDate: date,
+  requestedPickupTime: time,
+  appointmentTime: time,
+  direction: z.enum(["one_way", "round_trip"]),
+  returnKind: z.enum(["scheduled", "will_call"]).optional(),
+  returnTime: optionalTime,
+  pickupLocationId: uuid,
+  destinationLocationId: uuid,
+  notes: z.string().trim().max(2_000),
+  companionCount: z.number().int().min(0).max(20),
+  companionDetails: z.string().trim().max(500),
+}).strict().superRefine((value, context) => {
+  if (value.direction === "round_trip" && !value.returnKind) context.addIssue({ code: "custom", message: "Choose a return plan." })
+  if (value.returnKind === "scheduled" && !value.returnTime) context.addIssue({ code: "custom", message: "Choose a return time." })
+  if (value.direction === "one_way" && (value.returnKind || value.returnTime)) context.addIssue({ code: "custom", message: "One-way trips cannot include a return." })
+})
+
 export const CamdenDataSchemas = {
   "submit-request": z.object({ input: requestDraft }).strict(),
   "update-pending-request": z.object({ id: uuid, version: z.number().int().positive(), patch: requestDraft.partial() }).strict(),
   "duplicate-request": z.object({ id: uuid, patch: requestDraft.partial() }).strict(),
   "add-message": z.object({ id: uuid, body: z.string().trim().min(1).max(2_000) }).strict(),
   "create-followup": z.object({ id: uuid, version: z.number().int().positive(), kind: z.enum(["change", "cancellation"]), reasonId: uuid, explanation: z.string().trim().max(2_000).optional() }).strict(),
+  "create-change-proposal": z.object({ id: uuid, version: z.number().int().positive(), reasonId: uuid, explanation: z.string().trim().max(2_000), proposal: changeProposal }).strict(),
   "transition-followup": z.object({ id: uuid, version: z.number().int().positive(), status: z.enum(["acknowledged", "declined", "completed"]), publicExplanation: z.string().trim().max(2_000).optional() }).strict(),
   "transition-request": z.object({ id: uuid, status: z.enum(["acknowledged", "needs_information", "declined"]), version: z.number().int().positive(), publicExplanation: z.string().trim().max(2_000).optional() }).strict(),
   "request-location": z.object({ name: z.string().trim().min(2).max(150), address: z.object({ address_line1: z.string().trim().min(2).max(200), address_line2: z.string().trim().max(200).optional(), city: z.string().trim().min(2).max(100), state: z.string().trim().length(2), postal_code: z.string().trim().regex(/^\d{5}(?:-\d{4})?$/) }).strict(), notes: z.string().trim().max(1_000).optional() }).strict(),

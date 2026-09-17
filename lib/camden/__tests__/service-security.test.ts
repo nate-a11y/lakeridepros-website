@@ -90,6 +90,17 @@ describe("Camden same-record action client contract", () => {
     }))
   })
 
+  it("sends structured changes through the dedicated proposal endpoint", async () => {
+    vi.stubEnv("NODE_ENV", "production")
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({ id: "request-1", message: "Saved" }), { status: 200 }))
+    const proposal = { rideDate: "2026-09-03", requestedPickupTime: "08:45", appointmentTime: "09:30", direction: "one_way" as const, pickupLocationId: "home-1", destinationLocationId: "court-1", notes: "", companionCount: 0, companionDetails: "" }
+    await createCamdenPortalService("rider").createChangeProposal("request-1", 7, "reason-1", "", proposal)
+    expect(fetchMock).toHaveBeenCalledWith("/api/camden/data/create-change-proposal", expect.objectContaining({
+      method: "POST",
+      body: JSON.stringify({ id: "request-1", version: 7, reasonId: "reason-1", explanation: "", proposal }),
+    }))
+  })
+
   it("uses the dedicated coordinator resolution endpoint", async () => {
     vi.stubEnv("NODE_ENV", "production")
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({ id: "request-1", message: "Saved" }), { status: 200 }))

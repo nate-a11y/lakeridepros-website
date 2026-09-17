@@ -76,6 +76,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ op
     const messages: Record<CamdenMutationName, string> = {
       "submit-request": "Request submitted", "update-pending-request": "Request updated", "duplicate-request": "Request duplicated",
       "add-message": "Message sent", "create-followup": "Follow-up requested", "transition-request": "Request status updated",
+      "create-change-proposal": "Change proposal requested",
       "transition-followup": "Follow-up updated", "request-location": "Location submitted for approval", "accept-policy": "Policy accepted", "update-profile": "Profile updated",
     }
     // Exercise the same server-only fixture adapter without exposing fixture records to browser bundles.
@@ -97,6 +98,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ op
       case "duplicate-request": return noStoreJson(await service.duplicateRequest(input.id as string, input.patch as Parameters<typeof service.duplicateRequest>[1]))
       case "add-message": return noStoreJson(await service.addMessage(input.id as string, input.body as string))
       case "create-followup": return noStoreJson(await service.createFollowup(input.id as string, input.version as number, input.kind as "change" | "cancellation", input.reasonId as string, input.explanation as string | undefined))
+      case "create-change-proposal": return noStoreJson(await service.createChangeProposal(input.id as string, input.version as number, input.reasonId as string, input.explanation as string, input.proposal as Parameters<typeof service.createChangeProposal>[4]))
       case "transition-followup": return noStoreJson(await service.transitionFollowup(input.id as string, input.version as number, input.status as Exclude<CamdenFollowupStatus, "requested">, input.publicExplanation as string | undefined))
       case "transition-request": return noStoreJson(await service.transitionRequest(input.id as string, input.status as CamdenRequestStatus, input.version as number, input.publicExplanation as string | undefined))
       case "request-location": return noStoreJson(await service.requestLocation(input.name as string, input.address as Parameters<typeof service.requestLocation>[1], input.notes as string | undefined))

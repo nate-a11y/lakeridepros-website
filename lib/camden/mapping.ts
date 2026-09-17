@@ -1,5 +1,6 @@
 import type {
   CamdenChangeReason,
+  CamdenChangeProposal,
   CamdenDashboardData,
   CamdenFollowupAction,
   CamdenLocation,
@@ -30,7 +31,10 @@ export function numberValue(value: unknown, fallback = 0): number {
 
 export function addressValue(row: UnknownRecord): string {
   if (typeof row.address === "string") return row.address
-  return [row.address_line1, row.address_line2, row.city, row.state, row.postal_code]
+  const statePostal = [row.state, row.postal_code]
+    .filter((part): part is string => typeof part === "string" && part.length > 0)
+    .join(" ")
+  return [row.address_line1, row.address_line2, row.city, statePostal]
     .filter((part): part is string => typeof part === "string" && part.length > 0)
     .join(", ")
 }
@@ -66,6 +70,20 @@ export function hideRiderCosts(request: CamdenRequest): CamdenRequest {
 
 export function mapRequest(value: unknown): CamdenRequest {
   const row = record(value)
+  const proposed = record(row.action_proposed_changes)
+  const proposedChanges: CamdenChangeProposal | undefined = row.action_proposed_changes && Object.keys(proposed).length ? {
+    rideDate: stringValue(proposed.service_date),
+    requestedPickupTime: stringValue(proposed.requested_pickup_time),
+    appointmentTime: stringValue(proposed.appointment_time),
+    direction: stringValue(proposed.direction, "one_way") as CamdenChangeProposal["direction"],
+    returnKind: stringValue(proposed.return_type) === "specific_time" ? "scheduled" : stringValue(proposed.return_type) === "call_when_ready" ? "will_call" : undefined,
+    returnTime: stringValue(proposed.requested_return_time) || undefined,
+    pickupLocationId: stringValue(proposed.pickup_location_id),
+    destinationLocationId: stringValue(proposed.destination_location_id),
+    notes: stringValue(proposed.rider_notes),
+    companionCount: numberValue(proposed.companion_count),
+    companionDetails: stringValue(proposed.companion_details),
+  } : undefined
   const actionKind = stringValue(row.action_kind)
   const actionStatus = stringValue(row.action_status)
   const action: CamdenFollowupAction | null = ["change", "cancellation"].includes(actionKind) && ["requested", "acknowledged", "declined", "completed"].includes(actionStatus) ? {
@@ -85,6 +103,7 @@ export function mapRequest(value: unknown): CamdenRequest {
     resolvedAt: stringValue(row.action_resolved_at) || undefined,
     resolutionExplanation: stringValue(row.action_resolution_explanation) || undefined,
     lateUrgent: Boolean(row.action_late_urgent),
+    proposedChanges: actionKind === "change" ? proposedChanges : undefined,
   } : null
   const trips = Array.isArray(row.trips) ? row.trips.map((tripValue) => {
     const trip = record(tripValue)

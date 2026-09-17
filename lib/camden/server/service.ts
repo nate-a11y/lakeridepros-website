@@ -15,6 +15,7 @@ import {
   isFollowupActive,
   type CamdenActionResult,
   type CamdenCoordinatorData,
+  type CamdenChangeProposal,
   type CamdenFollowupKind,
   type CamdenFollowupStatus,
   type CamdenParticipantSnapshots,
@@ -156,6 +157,16 @@ export class ServerCamdenPortalService {
       expected_version: version,
       reason_id: reasonId,
       explanation: explanation ?? null,
+    })
+  }
+
+  createChangeProposal(id: string, version: number, reasonId: string, explanation: string, proposal: CamdenChangeProposal) {
+    return this.action("request_change_proposal", {
+      request_id: id,
+      expected_version: version,
+      reason_id: reasonId,
+      explanation,
+      proposal: serializeCamdenRequestDraft(proposal),
     })
   }
 

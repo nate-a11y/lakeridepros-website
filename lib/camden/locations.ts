@@ -2,7 +2,7 @@ import type { CamdenDashboardData, CamdenLocation } from "./types"
 
 /** Keep private homes rider-scoped; identical catalog entries need only one option. */
 export function approvedRequestLocations(
-  data: CamdenDashboardData,
+  data: Pick<CamdenDashboardData, "pickupLocations" | "destinations">,
   riderId: string | null | undefined,
   selectedId: string,
 ): CamdenLocation[] {

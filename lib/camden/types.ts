@@ -18,6 +18,20 @@ export type CamdenReturnKind = "scheduled" | "will_call"
 export type CamdenFollowupKind = "change" | "cancellation"
 export type CamdenFollowupStatus = "requested" | "acknowledged" | "declined" | "completed"
 
+export interface CamdenChangeProposal {
+  rideDate: string
+  requestedPickupTime: string
+  appointmentTime: string
+  direction: CamdenTripDirection
+  returnKind?: CamdenReturnKind
+  returnTime?: string
+  pickupLocationId: string
+  destinationLocationId: string
+  notes: string
+  companionCount: number
+  companionDetails: string
+}
+
 export interface CamdenFollowupAction {
   cycleId: string
   sequence: number
@@ -35,6 +49,7 @@ export interface CamdenFollowupAction {
   resolvedAt?: string
   resolutionExplanation?: string
   lateUrgent: boolean
+  proposedChanges?: CamdenChangeProposal
 }
 
 export function isFollowupActive(action: CamdenFollowupAction | null): boolean {
@@ -312,6 +327,7 @@ export interface CamdenPortalService {
   updatePendingRequest(id: string, version: number, patch: Partial<CamdenRequestDraft>): Promise<CamdenActionResult>
   duplicateRequest(id: string, patch: Partial<CamdenRequestDraft>): Promise<CamdenActionResult>
   addMessage(id: string, body: string): Promise<CamdenActionResult>
+  createChangeProposal(id: string, version: number, reasonId: string, explanation: string, proposal: CamdenChangeProposal): Promise<CamdenActionResult>
   createFollowup(id: string, version: number, kind: CamdenFollowupKind, reasonId: string, explanation?: string): Promise<CamdenActionResult>
   transitionFollowup(id: string, version: number, status: Exclude<CamdenFollowupStatus, "requested">, publicExplanation?: string): Promise<CamdenActionResult>
   transitionRequest(id: string, status: CamdenRequestStatus, version: number, publicExplanation?: string): Promise<CamdenActionResult>

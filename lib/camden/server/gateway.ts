@@ -12,6 +12,7 @@ export const CAMDEN_GATEWAY_OPERATIONS = [
   "duplicate_request",
   "add_message",
   "request_change",
+  "request_change_proposal",
   "request_cancel",
   "transition_followup",
   "create_location_request",
@@ -52,6 +53,11 @@ export async function callCamdenGateway(
       || lower.includes("changes and cancellations require")
       || lower.includes("active reason")
       || lower.includes("explanation is required")
+      || lower.includes("change proposal")
+      || lower.includes("proposed location")
+      || lower.includes("approved locations")
+      || lower.includes("actual ride change")
+      || lower.includes("invalid ride details")
     ) {
       throw new CamdenServiceError(error.message, "validation")
     }

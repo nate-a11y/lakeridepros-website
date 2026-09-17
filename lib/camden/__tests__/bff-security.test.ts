@@ -61,7 +61,7 @@ describe("Camden BFF allowlists", () => {
   it("exposes only named read and mutation endpoints", () => {
     expect(CAMDEN_READ_OPERATIONS).toEqual(["context", "dashboard", "coordinator-dashboard", "participant-snapshots", "request"])
     expect(CAMDEN_MUTATION_OPERATIONS).toEqual([
-      "submit-request", "update-pending-request", "duplicate-request", "add-message", "create-followup",
+      "submit-request", "update-pending-request", "duplicate-request", "add-message", "create-followup", "create-change-proposal",
       "transition-followup", "transition-request", "request-location", "accept-policy", "update-profile",
     ])
   })
@@ -74,6 +74,17 @@ describe("Camden BFF allowlists", () => {
     }
     expect(CamdenDataSchemas["create-followup"].safeParse(input).success).toBe(false)
     expect(CamdenDataSchemas["create-followup"].safeParse({ ...input, version: 2 }).success).toBe(true)
+  })
+
+  it("requires a complete structured change proposal", () => {
+    const baseline = { id: "00000000-0000-4000-8000-000000000001", version: 2, reasonId: "00000000-0000-4000-8000-000000000002", explanation: "", proposal: {
+      rideDate: "2026-10-01", requestedPickupTime: "09:00", appointmentTime: "10:00", direction: "one_way",
+      pickupLocationId: "00000000-0000-4000-8000-000000000003", destinationLocationId: "00000000-0000-4000-8000-000000000004",
+      notes: "", companionCount: 0, companionDetails: "",
+    } }
+    expect(CamdenDataSchemas["create-change-proposal"].safeParse(baseline).success).toBe(true)
+    expect(CamdenDataSchemas["create-change-proposal"].safeParse({ ...baseline, proposal: { ...baseline.proposal, destinationLocationId: "" } }).success).toBe(false)
+    expect(CamdenDataSchemas["create-change-proposal"].safeParse({ ...baseline, version: undefined }).success).toBe(false)
   })
 
   it("allows only coordinator follow-up transitions supported by the gateway", () => {

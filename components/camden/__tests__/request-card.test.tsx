@@ -19,6 +19,8 @@ describe("RequestCard", () => {
     render(<RequestCard request={request} />)
     expect(screen.queryByText("$64.50")).not.toBeInTheDocument()
     expect(screen.getByRole("link", { name: /view details/i })).toHaveAttribute("href", "/camden-county/requests/request-1")
+    expect(screen.getByText((_, element) => element?.tagName === "SPAN" && element.textContent === "Home — 1 Main St")).toBeInTheDocument()
+    expect(screen.getByText((_, element) => element?.tagName === "SPAN" && element.textContent === "Compass Health — 2 Main St")).toBeInTheDocument()
   })
 
   it("renders costs and a coordinator detail link only when explicitly requested", () => {

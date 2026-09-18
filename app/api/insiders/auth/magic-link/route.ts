@@ -7,6 +7,7 @@ import { getClientIp, rateLimit } from '@/lib/rate-limit'
 
 const requestSchema = z.object({
   email: z.string().trim().email().max(254).transform((value) => value.toLowerCase()),
+  captchaToken: z.string().trim().min(1).max(4096).optional(),
 })
 
 const GENERIC_MESSAGE =
@@ -76,6 +77,13 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  if (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !parsed.data.captchaToken) {
+    return NextResponse.json(
+      { error: 'Complete the security check before requesting a sign-in link.' },
+      { status: 400 },
+    )
+  }
+
   const emailHash = createHash('sha256').update(parsed.data.email).digest('hex')
   const ip = getClientIp(request)
   const limiter = rateLimit(`insider-magic-link:${ip}:${emailHash}`, {
@@ -102,6 +110,7 @@ export async function POST(request: NextRequest) {
         options: {
           emailRedirectTo: redirectTo.toString(),
           shouldCreateUser: true,
+          captchaToken: parsed.data.captchaToken,
           data: {
             account_type: 'insider',
           },

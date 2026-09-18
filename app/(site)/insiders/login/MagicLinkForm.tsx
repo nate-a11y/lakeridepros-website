@@ -2,24 +2,38 @@
 
 import { FormEvent, useState } from 'react'
 import { ArrowRight, CheckCircle2, Loader2, Mail } from 'lucide-react'
+import Turnstile from '@/components/Turnstile'
+
+const captchaRequired = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
 
 export function MagicLinkForm() {
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState('')
+  const [captchaKey, setCaptchaKey] = useState(0)
+
+  function resetCaptcha() {
+    setCaptchaToken('')
+    setCaptchaKey((current) => current + 1)
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setMessage('')
     setError('')
+    if (captchaRequired && !captchaToken) {
+      setError('Complete the security check before requesting a sign-in link.')
+      return
+    }
     setSubmitting(true)
 
     try {
       const response = await fetch('/api/insiders/auth/magic-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, captchaToken: captchaToken || undefined }),
       })
       const payload = (await response.json()) as {
         message?: string
@@ -41,6 +55,7 @@ export function MagicLinkForm() {
       )
     } finally {
       setSubmitting(false)
+      if (captchaRequired) resetCaptcha()
     }
   }
 
@@ -73,9 +88,21 @@ export function MagicLinkForm() {
         </div>
       </div>
 
+      {captchaRequired ? (
+        <Turnstile
+          key={captchaKey}
+          onSuccess={setCaptchaToken}
+          onExpire={() => setCaptchaToken('')}
+          onError={() => {
+            setCaptchaToken('')
+            setError('The security check could not load. Please try again.')
+          }}
+        />
+      ) : null}
+
       <button
         type="submit"
-        disabled={submitting}
+        disabled={submitting || (captchaRequired && !captchaToken)}
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3.5 font-bold text-black transition hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-60"
       >
         {submitting ? (

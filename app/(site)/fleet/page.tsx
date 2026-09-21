@@ -95,9 +95,12 @@ export default async function FleetPage() {
               <div>
                 {group.vehicles.map((vehicle) => {
                   const vehicleSlug = resolveSlug(vehicle.slug);
-                  const preferredPhoto = vehicleSlug === 'flex' ? vehicle.images?.find((photo) => photo.alt === 'LRP11')
-                    : vehicleSlug === 'elite' ? vehicle.images?.[0]
-                    : vehicleSlug === 'pink-patrol' ? vehicle.images?.find((photo) => getMediaUrl(photo.image) !== getMediaUrl(vehicle.featuredImage)) : undefined;
+                  // Flex and Elite are service categories, so their featured
+                  // artwork is the correct identity here. Keep photo overrides
+                  // limited to the fleet listing cases that explicitly need one.
+                  const preferredPhoto = vehicleSlug === 'pink-patrol'
+                    ? vehicle.images?.find((photo) => getMediaUrl(photo.image) !== getMediaUrl(vehicle.featuredImage))
+                    : undefined;
                   const photo = preferredPhoto?.image || vehicle.featuredImage || vehicle.images?.[0]?.image;
                   const imageUrl = photo ? getMediaUrl(photo) : null;
                   const imageAlt = preferredPhoto?.alt || vehicle.featuredImage?.alt || `${vehicle.name} - Luxury transportation`;

@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import { ChevronDown, Menu, ShoppingBag, X } from 'lucide-react'
 import { MoovsBookingLink } from '@/components/MoovsBookingLink'
+import { useCart } from '@/lib/store/cart'
 
 interface Service {
   name: string
@@ -43,6 +44,18 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileExpanded, setMobileExpanded] = useState<MenuName | null>(null)
   const mobileMenuButton = useRef<HTMLButtonElement>(null)
+  const cartItemCount = useCart(state => state.getItemCount())
+  const [cartHydrated, setCartHydrated] = useState(false)
+
+  useEffect(() => {
+    const rehydrate = useCart.persist?.rehydrate
+    if (!rehydrate) {
+      setCartHydrated(true)
+      return
+    }
+
+    void Promise.resolve(rehydrate()).finally(() => setCartHydrated(true))
+  }, [])
 
   useEffect(() => {
     if (!mobileOpen) return
@@ -149,6 +162,28 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
 
   const serviceLinks = orderedServices.map(service => ({ name: service.name, href: `/services/${service.slug}` }))
 
+  function cartLink() {
+    if (!cartHydrated || cartItemCount === 0) return null
+
+    const itemLabel = cartItemCount === 1 ? 'item' : 'items'
+
+    return (
+      <Link
+        href="/cart"
+        aria-label={`Shopping cart, ${cartItemCount} ${itemLabel}`}
+        className={`relative inline-flex size-11 shrink-0 items-center justify-center text-primary-light hover:text-white ${focus}`}
+      >
+        <ShoppingBag className="size-6" aria-hidden="true" />
+        <span
+          aria-hidden="true"
+          className="absolute right-0 top-0 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[0.65rem] font-black leading-none text-lrp-black"
+        >
+          {cartItemCount > 99 ? '99+' : cartItemCount}
+        </span>
+      </Link>
+    )
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/20 bg-lrp-black text-white">
       <nav aria-label="Main navigation" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -200,12 +235,14 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
               </div>
             ))}
             <Link href="/contact" className={`text-sm font-bold text-white/85 hover:text-primary-light ${focus}`}>Contact</Link>
+            {cartLink()}
             <MoovsBookingLink location="header" className="inline-flex min-h-11 items-center justify-center bg-primary px-5 py-3 text-sm font-black text-lrp-black hover:bg-primary-light focus-visible:ring-white focus-visible:ring-offset-lrp-black">
               Quote or book
             </MoovsBookingLink>
           </div>
 
           <div className="flex items-center gap-3 lg:hidden [&>a]:min-w-11">
+            {cartLink()}
             <button
               ref={mobileMenuButton}
               type="button"

@@ -93,6 +93,8 @@ const nextConfig = {
       { protocol: 'https', hostname: 'lakeridepros.com' },
       { protocol: 'https', hostname: 'lakeridepros-website.vercel.app' },
       { protocol: 'https', hostname: '*.vercel.app' },
+      { protocol: 'https', hostname: 'cdn.fourthwall.com' },
+      { protocol: 'https', hostname: 'imgproxy.fourthwall.dev' },
       { protocol: 'http', hostname: 'localhost', port: '3001' },
       { protocol: 'http', hostname: 'localhost', port: '3000' },
     ],

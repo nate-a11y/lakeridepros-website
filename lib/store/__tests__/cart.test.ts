@@ -59,6 +59,17 @@ describe('Cart Store', () => {
       expect(items[0].quantity).toBe(3) // 1 + 2
     })
 
+    it('caps repeated additions at the checkout quantity limit', () => {
+      const { addItem } = getCartState()
+
+      addItem({ ...mockItem, quantity: 20 })
+      addItem({ ...mockItem, quantity: 20 })
+
+      const { items } = getCartState()
+      expect(items).toHaveLength(1)
+      expect(items[0].quantity).toBe(20)
+    })
+
     it('adds multiple different items', () => {
       const { addItem } = getCartState()
 
@@ -163,6 +174,15 @@ describe('Cart Store', () => {
       const { items } = getCartState()
       expect(items[0].quantity).toBe(10)
       expect(items[1].quantity).toBe(2) // unchanged
+    })
+
+    it('caps quantity updates at the checkout limit', () => {
+      const { addItem, updateQuantity } = getCartState()
+
+      addItem(mockItem)
+      updateQuantity(mockItem.variantId, 1000)
+
+      expect(getCartState().items[0].quantity).toBe(20)
     })
   })
 
@@ -283,13 +303,13 @@ describe('Cart Store', () => {
   })
 
   describe('Edge Cases', () => {
-    it('handles very large quantities', () => {
+    it('caps very large initial quantities at the checkout limit', () => {
       const { addItem, getItemCount, getSubtotal } = getCartState()
 
       addItem({ ...mockItem, price: 10, quantity: 1000 })
 
-      expect(getItemCount()).toBe(1000)
-      expect(getSubtotal()).toBe(10000)
+      expect(getItemCount()).toBe(20)
+      expect(getSubtotal()).toBe(200)
     })
 
     it('handles very small prices', () => {

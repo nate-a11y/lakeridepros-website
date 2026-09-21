@@ -16,6 +16,13 @@ export interface CartItem {
   personalization?: string
 }
 
+const MAX_ITEM_QUANTITY = 20
+
+function clampItemQuantity(quantity: number) {
+  if (!Number.isFinite(quantity)) return 1
+  return Math.min(MAX_ITEM_QUANTITY, Math.max(1, Math.trunc(quantity)))
+}
+
 const memoryStorage = (() => {
   const store = new Map<string, string>()
 
@@ -59,6 +66,7 @@ export const useCart = create<CartState>()(
 
       addItem: (newItem) => {
         set((state) => {
+          const quantity = clampItemQuantity(newItem.quantity)
           // Check if item already exists in cart
           const existingItemIndex = state.items.findIndex(
             (item) => item.variantId === newItem.variantId
@@ -67,11 +75,14 @@ export const useCart = create<CartState>()(
           if (existingItemIndex > -1) {
             // Item exists, update quantity
             const updatedItems = [...state.items]
-            updatedItems[existingItemIndex].quantity += newItem.quantity
+            updatedItems[existingItemIndex].quantity = Math.min(
+              20,
+              updatedItems[existingItemIndex].quantity + quantity
+            )
             return { items: updatedItems }
           } else {
             // New item, add to cart
-            return { items: [...state.items, newItem] }
+            return { items: [...state.items, { ...newItem, quantity }] }
           }
         })
       },
@@ -91,7 +102,7 @@ export const useCart = create<CartState>()(
         set((state) => ({
           items: state.items.map((item) =>
             item.variantId === variantId
-              ? { ...item, quantity }
+              ? { ...item, quantity: clampItemQuantity(quantity) }
               : item
           ),
         }))
@@ -113,7 +124,9 @@ export const useCart = create<CartState>()(
       },
     }),
     {
-      name: 'lrp-cart-storage', // localStorage key
+      // Keep the Fourthwall cart isolated from the retired Printify cart. Old
+      // variant IDs are not valid in Fourthwall and must never reach checkout.
+      name: 'lrp-fourthwall-cart-v1',
       storage: createJSONStorage(getCartStorage),
       skipHydration: true, // Prevent automatic hydration on SSR
     }

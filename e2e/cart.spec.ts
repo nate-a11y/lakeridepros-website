@@ -1,64 +1,119 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
-test.describe('Shopping Cart', () => {
-  test('cart page loads', async ({ page }) => {
-    await page.goto('/cart')
-    await expect(page).toHaveURL(/\/cart/)
-  })
+const CART_STORAGE_KEY = 'lrp-fourthwall-cart-v1'
+function seededCart(quantity = 2) {
+  return {
+    state: {
+      items: [
+        {
+          productId: '11111111-1111-4111-8111-111111111111',
+          productName: 'QA Lake Tee',
+          productSlug: 'qa-lake-tee',
+          variantId: '22222222-2222-4222-8222-222222222222',
+          variantName: 'Medium / Green',
+          price: 24,
+          quantity,
+          image: '/og-image.jpg',
+          imageAlt: 'QA Lake Tee',
+        },
+      ],
+    },
+    version: 0,
+  }
+}
 
-  test('displays empty cart message when cart is empty', async ({ page }) => {
-    // Clear any existing cart data
-    await page.goto('/cart')
+async function seedCart(page: Page, quantity = 2) {
+  await page.addInitScript(
+    ({ key, value }) => window.localStorage.setItem(key, value),
+    { key: CART_STORAGE_KEY, value: JSON.stringify(seededCart(quantity)) },
+  )
+}
 
-    // Look for empty cart indicators
-    const emptyMessage = page.getByText(/empty/i).or(
-      page.getByText(/no items/i)
-    )
-
-    // Empty cart should show some message or be visibly empty
-    const hasEmptyMessage = await emptyMessage.count() > 0
-    if (hasEmptyMessage) {
-      await expect(emptyMessage.first()).toBeVisible()
-    }
-  })
-
-  test('shows cart icon with no badge when empty', async ({ page }) => {
-    await page.goto('/')
-
-    const cartBadge = page.locator('[class*="badge"]').filter({ hasText: /\d+/ })
-    const badgeCount = await cartBadge.count()
-
-    // If badge exists and cart is empty, it shouldn't be visible
-    if (badgeCount === 0) {
-      expect(true).toBe(true) // Pass - no badge shown
-    }
-  })
-
-  test('cart icon is clickable and navigates to cart page', async ({ page }) => {
-    await page.goto('/')
-
-    const cartIcon = page.getByLabel(/shopping cart/i).or(
-      page.getByRole('link', { name: /cart/i })
-    )
-
-    await cartIcon.first().click()
-    await page.waitForURL(/\/cart/)
-
-    expect(page.url()).toContain('/cart')
-  })
-
-  test('cart page has checkout button (when items exist)', async ({ page }) => {
+test.describe('Fourthwall shopping cart', () => {
+  test('shows a deterministic empty-cart state and keeps the header cart hidden', async ({ page }) => {
     await page.goto('/cart')
 
-    // Just verify the page structure exists
-    expect(page.url()).toContain('/cart')
+    await expect(page).toHaveURL(/\/cart$/)
+    await expect(page.getByRole('heading', { name: 'Your cart is empty.' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Browse the shop' })).toHaveAttribute('href', '/shop')
+    await expect(page.getByRole('link', { name: /Shopping cart/i })).toHaveCount(0)
   })
 
-  test('responsive - cart page works on mobile', async ({ page }) => {
+  test('hydrates a seeded multi-item cart and updates its quantity', async ({ page }) => {
+    await seedCart(page)
+    await page.goto('/cart')
+
+    await expect(page.getByRole('heading', { name: 'Your cart' })).toBeVisible()
+    await expect(page.getByText('QA Lake Tee')).toBeVisible()
+    await expect(page.getByLabel('Order summary').getByText('$48.00')).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Shopping cart, 2 items' })).toBeVisible()
+
+    await page.getByLabel('Quantity').selectOption('3')
+    await expect(page.getByLabel('Order summary').getByText('$72.00')).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Shopping cart, 3 items' })).toBeVisible()
+  })
+
+  test('posts only variant IDs and quantities and preserves the cart on checkout failure', async ({ page }) => {
+    await seedCart(page)
+    let checkoutBody: unknown
+    await page.route('**/api/fourthwall/checkout', async route => {
+      checkoutBody = route.request().postDataJSON()
+      await route.fulfill({
+        status: 502,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'Mock Fourthwall checkout unavailable' }),
+      })
+    })
+    await page.goto('/cart')
+
+    await page.getByRole('button', { name: 'Checkout with Fourthwall' }).click()
+
+    await expect(page.getByText('Mock Fourthwall checkout unavailable', { exact: true })).toBeVisible()
+    expect(checkoutBody).toEqual({
+      items: [{ variantId: '22222222-2222-4222-8222-222222222222', quantity: 2 }],
+    })
+    await expect(page.getByText('QA Lake Tee')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Checkout with Fourthwall' })).toBeEnabled()
+  })
+
+  test('fails closed while checkout is disabled and preserves a valid 20-item cart', async ({ page }) => {
+    await seedCart(page, 20)
+    let checkoutBody: unknown
+    await page.route('**/api/fourthwall/checkout', async route => {
+      checkoutBody = route.request().postDataJSON()
+      await route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'Fourthwall checkout is not currently available' }),
+      })
+    })
+    await page.goto('/cart')
+
+    await expect(page.getByRole('link', { name: 'Shopping cart, 20 items' })).toBeVisible()
+    await expect(page.getByLabel('Quantity')).toHaveValue('20')
+    await page.getByRole('button', { name: 'Checkout with Fourthwall' }).click()
+
+    await expect(page.getByText('Fourthwall checkout is not currently available', { exact: true })).toBeVisible()
+    expect(checkoutBody).toEqual({
+      items: [{ variantId: '22222222-2222-4222-8222-222222222222', quantity: 20 }],
+    })
+    await expect(page.getByLabel('Quantity')).toHaveValue('20')
+    await expect(page.getByRole('link', { name: 'Shopping cart, 20 items' })).toBeVisible()
+    const persistedQuantity = await page.evaluate((key) => {
+      const stored = window.localStorage.getItem(key)
+      if (!stored) return null
+      return JSON.parse(stored).state.items[0]?.quantity
+    }, CART_STORAGE_KEY)
+    expect(persistedQuantity).toBe(20)
+  })
+
+  test('keeps the seeded cart usable at a mobile viewport', async ({ page }) => {
+    await seedCart(page)
     await page.setViewportSize({ width: 375, height: 667 })
     await page.goto('/cart')
 
-    // Verify page loads on mobile
-    await expect(page).toHaveURL(/\/cart/)
+    await expect(page.getByRole('heading', { name: 'Your cart' })).toBeVisible()
+    await expect(page.getByText('QA Lake Tee')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Checkout with Fourthwall' })).toBeVisible()
   })
 })

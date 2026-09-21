@@ -6,10 +6,17 @@ import CartPage from '@/app/(site)/cart/page'
 import BridalShowRegistrationPage from '@/app/(site)/bridal-show-registration/page'
 
 const cart = vi.hoisted(() => ({
-  items: [{ productId: 'qa', variantId: 'qa-size', productSlug: 'qa', productName: 'QA merchandise', variantName: 'Medium', image: '/og-image.jpg', imageAlt: 'QA merchandise', price: 20, quantity: 2 }],
+  items: [{ productId: 'qa', variantId: 'qa-size', productSlug: 'qa', productName: 'QA merchandise', variantName: 'Medium', image: '', imageAlt: 'QA merchandise', price: 20, quantity: 2 }],
   removeItem: vi.fn(), updateQuantity: vi.fn(), clearCart: vi.fn(), getSubtotal: () => 40,
 }))
-vi.mock('@/lib/store/cart', () => ({ useCart: () => cart }))
+vi.mock('@/lib/store/cart', () => {
+  const useCart = Object.assign(
+    (selector: (state: typeof cart) => unknown) => selector(cart),
+    { persist: { rehydrate: vi.fn().mockResolvedValue(undefined) } },
+  )
+
+  return { useCart }
+})
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals() })
 
 describe('Public commerce editorial presentation', () => {
@@ -21,22 +28,25 @@ describe('Public commerce editorial presentation', () => {
     expect(screen.getByRole('link', { name: 'Shirts' })).toHaveAttribute('href', '/shop?category=shirts')
   })
 
-  it('retains cart totals, keyboard quantity controls, removal and mocked checkout failure', async () => {
+  it('retains cart totals, quantity controls, removal and mocked Fourthwall checkout failure', async () => {
     const user = userEvent.setup()
     const fetchMock = vi.fn().mockResolvedValue({ ok: false, json: async () => ({ error: 'Mock checkout unavailable' }) })
     vi.stubGlobal('fetch', fetchMock)
     vi.spyOn(console, 'error').mockImplementation(() => {})
     render(<CartPage />)
-    expect(screen.getByText('$49.39')).toBeInTheDocument()
-    screen.getByRole('button', { name: 'Increase quantity' }).focus()
-    await user.keyboard('{Enter}')
+
+    await waitFor(() => expect(screen.getAllByText('$40.00')).toHaveLength(2))
+    await user.selectOptions(screen.getByLabelText('Quantity'), '3')
     expect(cart.updateQuantity).toHaveBeenCalledWith('qa-size', 3)
-    await user.click(screen.getByRole('button', { name: 'Remove item from cart' }))
+    await user.click(screen.getByRole('button', { name: 'Remove QA merchandise from cart' }))
     expect(cart.removeItem).toHaveBeenCalledWith('qa-size')
-    await user.click(screen.getByRole('button', { name: 'Proceed to Checkout' }))
+    await user.click(screen.getByRole('button', { name: 'Checkout with Fourthwall' }))
     expect(await screen.findByText('Mock checkout unavailable')).toBeInTheDocument()
-    expect(fetchMock).toHaveBeenCalledWith('/api/stripe/create-checkout', expect.objectContaining({ method: 'POST', body: JSON.stringify({ items: cart.items }) }))
-    expect(screen.getByRole('button', { name: 'Proceed to Checkout' })).toBeEnabled()
+    expect(fetchMock).toHaveBeenCalledWith('/api/fourthwall/checkout', expect.objectContaining({
+      method: 'POST',
+      body: JSON.stringify({ items: [{ variantId: 'qa-size', quantity: 2 }] }),
+    }))
+    expect(screen.getByRole('button', { name: 'Checkout with Fourthwall' })).toBeEnabled()
   })
 
   it('preserves registration fields, honeypot and successful submission against a mock only', async () => {

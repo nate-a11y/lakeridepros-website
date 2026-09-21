@@ -37,6 +37,7 @@ describe('Fourthwall Storefront API client', () => {
   })
 
   it('returns validated products from the configured collection', async () => {
+    vi.setSystemTime(new Date('2026-09-21T06:30:00Z'))
     vi.stubEnv('FOURTHWALL_STOREFRONT_TOKEN', 'storefront-token')
     vi.stubEnv('FOURTHWALL_COLLECTION_SLUG', 'featured')
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
@@ -49,6 +50,24 @@ describe('Fourthwall Storefront API client', () => {
     expect(url.pathname).toBe('/v1/collections/featured/products')
     expect(url.searchParams.get('storefront_token')).toBe('storefront-token')
     expect(url.searchParams.get('currency')).toBe('USD')
+    expect(url.searchParams.get('_lrp_catalog_epoch')).toBe(
+      String(Math.floor(Date.now() / 60_000)),
+    )
+    expect(fetchMock.mock.calls[0][1]).toMatchObject({ next: { revalidate: 60 } })
+  })
+
+  it('bypasses both application and upstream collection caches during checkout validation', async () => {
+    vi.setSystemTime(new Date('2026-09-21T06:31:23.456Z'))
+    vi.stubEnv('FOURTHWALL_STOREFRONT_TOKEN', 'storefront-token')
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ results: [PRODUCT] }), { status: 200 }),
+    )
+
+    await expect(getFourthwallProducts({ throwOnError: true })).resolves.toEqual([PRODUCT])
+
+    const url = new URL(String(fetchMock.mock.calls[0][0]))
+    expect(url.searchParams.get('_lrp_catalog_epoch')).toBe(String(Date.now()))
+    expect(fetchMock.mock.calls[0][1]).toMatchObject({ cache: 'no-store' })
   })
 
   it('drops malformed upstream products instead of crashing the shop', async () => {

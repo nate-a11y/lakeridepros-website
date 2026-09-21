@@ -1,5 +1,6 @@
 const STOREFRONT_API_URL = 'https://storefront-api.fourthwall.com/v1'
 const STOREFRONT_TIMEOUT_MS = 10_000
+const STOREFRONT_CACHE_SECONDS = 60
 
 export interface FourthwallImage {
   id: string
@@ -151,12 +152,20 @@ async function storefrontRequest<T>(path: string, throwOnError = false): Promise
   const url = new URL(`${STOREFRONT_API_URL}${path}`)
   url.searchParams.set('storefront_token', token)
 
+  // Fourthwall can briefly serve a cached collection immediately after a product
+  // webhook fires. A bounded epoch prevents that stale upstream response from being
+  // retained by Next for five minutes while still avoiding a request on every view.
+  url.searchParams.set(
+    '_lrp_catalog_epoch',
+    String(throwOnError ? Date.now() : Math.floor(Date.now() / (STOREFRONT_CACHE_SECONDS * 1_000))),
+  )
+
   try {
     const response = await fetch(url, {
       headers: { Accept: 'application/json' },
       ...(throwOnError
         ? { cache: 'no-store' as const }
-        : { next: { revalidate: 300 } }),
+        : { next: { revalidate: STOREFRONT_CACHE_SECONDS } }),
       signal: AbortSignal.timeout(STOREFRONT_TIMEOUT_MS),
     })
 

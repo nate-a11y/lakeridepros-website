@@ -25,9 +25,15 @@ function getStripe() {
 }
 
 export async function POST(request: NextRequest) {
-  const stripe = getStripe()
+  if (process.env.MERCH_CHECKOUT_ENABLED !== 'true') {
+    return NextResponse.json(
+      { error: 'The Lake Ride Pros merch shop is temporarily unavailable while we launch our new collection.' },
+      { status: 503 }
+    )
+  }
 
   try {
+    const stripe = getStripe()
     const ip = getClientIp(request)
     const { success } = rateLimit(`stripe-checkout:${ip}`, { limit: 10, windowMs: 60000 })
     if (!success) {

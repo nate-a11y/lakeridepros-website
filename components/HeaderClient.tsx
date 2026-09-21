@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { MoovsBookingLink } from '@/components/MoovsBookingLink'
-import CartIcon from '@/components/cart/CartIcon'
 
 interface Service {
   name: string
@@ -204,11 +203,9 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
             <MoovsBookingLink location="header" className="inline-flex min-h-11 items-center justify-center bg-primary px-5 py-3 text-sm font-black text-lrp-black hover:bg-primary-light focus-visible:ring-white focus-visible:ring-offset-lrp-black">
               Quote or book
             </MoovsBookingLink>
-            <CartIcon />
           </div>
 
           <div className="flex items-center gap-3 lg:hidden [&>a]:min-w-11">
-            <CartIcon />
             <button
               ref={mobileMenuButton}
               type="button"

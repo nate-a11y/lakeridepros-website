@@ -1,7 +1,5 @@
 import { serve } from "inngest/next";
 import { inngest } from "@/lib/inngest/client";
-import { syncPrintifyProducts } from "@/lib/inngest/functions/sync-printify";
-import { syncPrintifyPublishedProduct } from "@/lib/inngest/functions/sync-published-printify";
 import {
   postBlogToSocial,
   sharePostNow,
@@ -16,8 +14,6 @@ import { generateInsiderMonthlyRecaps } from "@/lib/inngest/functions/generate-i
 export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [
-    syncPrintifyProducts,
-    syncPrintifyPublishedProduct,
     postBlogToSocial,
     sharePostNow,
     generateWinnerVideo,

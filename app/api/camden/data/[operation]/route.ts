@@ -12,7 +12,7 @@ const STATUSES = new Set<CamdenRequestStatus>(["pending", "acknowledged", "needs
 
 function errorResponse(error: unknown) {
   if (error instanceof CamdenServiceError) {
-    const status = error.code === "unauthorized" ? 401 : error.code === "forbidden" ? 403 : error.code === "conflict" ? 409 : error.code === "validation" ? 400 : 503
+    const status = error.code === "unauthorized" ? 401 : error.code === "forbidden" ? 403 : error.code === "conflict" || error.code === "duplicate_confirmation_required" ? 409 : error.code === "validation" ? 400 : 503
     return noStoreJson({ error: error.message, code: error.code }, { status })
   }
   return noStoreJson({ error: "The Treatment Court portal is temporarily unavailable.", code: "unavailable" }, { status: 503 })

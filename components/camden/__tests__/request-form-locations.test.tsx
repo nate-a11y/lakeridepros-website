@@ -73,6 +73,36 @@ describe("approved request endpoints", () => {
     expect(JSON.parse(submitted![1].body).input).toMatchObject({ pickupLocationId: pickupId, destinationLocationId: destinationId })
   })
 
+  it("lets the rider confirm a database-detected nearby ride without reporting an outage", async () => {
+    const originalFetch = fetchMock.getMockImplementation()!
+    fetchMock.mockImplementation(async (url, options) => {
+      if (options?.method === "POST") {
+        const input = JSON.parse(options.body).input
+        if (!input.duplicateConfirmed) {
+          return new Response(JSON.stringify({ code: "duplicate_confirmation_required", error: "A ride near this time already exists. Confirm that this is a separate ride to continue." }), { status: 409 })
+        }
+      }
+      return originalFetch(url, options)
+    })
+    const user = userEvent.setup()
+    render(<NewRequestForm />)
+    await screen.findByRole("combobox", { name: /^Pickup/ })
+    await user.selectOptions(screen.getByRole("combobox", { name: /^Ride type/ }), "type-treatment")
+    fireEvent.change(screen.getByLabelText(/^Ride date/), { target: { value: "2099-10-01" } })
+    fireEvent.change(screen.getByLabelText(/^Requested pickup time/), { target: { value: "09:00" } })
+    fireEvent.change(screen.getByLabelText(/^Appointment/), { target: { value: "10:00" } })
+    await user.selectOptions(screen.getByRole("combobox", { name: /^Pickup/ }), "home-1")
+    await user.selectOptions(screen.getByRole("combobox", { name: /^Destination/ }), "clinic-a")
+    await user.click(screen.getByRole("button", { name: "Submit request" }))
+    expect(await screen.findByText(/A ride near this time already exists/)).toBeInTheDocument()
+    expect(screen.queryByText("The Treatment Court portal is temporarily unavailable.")).not.toBeInTheDocument()
+    await user.click(screen.getByRole("button", { name: "Submit separate ride" }))
+    expect(await screen.findByRole("heading", { name: "Request submitted" })).toBeInTheDocument()
+    const submissions = fetchMock.mock.calls.filter(([url]) => url.endsWith("/submit-request"))
+    expect(submissions).toHaveLength(2)
+    expect(JSON.parse(submissions[1][1].body).input.duplicateConfirmed).toBe(true)
+  })
+
   it("requires a coordinator to select a rider and clears both endpoints when that rider changes", async () => {
     state.coordinator = true
     const user = userEvent.setup()

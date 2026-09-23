@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react"
 import { createCamdenPortalService } from "@/lib/camden/service"
 import { approvedRequestLocations } from "@/lib/camden/locations"
-import type { CamdenRequestDraft } from "@/lib/camden/types"
+import { CamdenServiceError, type CamdenRequestDraft } from "@/lib/camden/types"
 import { CamdenModal } from "./modal"
 import { PortalShell } from "./portal-shell"
 import { ErrorState, fieldClass, LoadingState, Notice, primaryButtonClass, secondaryButtonClass } from "./ui"
@@ -19,7 +19,7 @@ const emptyDraft: CamdenRequestDraft = {
 
 function similarTime(left: string, right: string) {
   const minutes = (value: string) => { const [hour = "0", minute = "0"] = value.split(":"); return Number(hour) * 60 + Number(minute) }
-  return Math.abs(minutes(left) - minutes(right)) <= 90
+  return Math.abs(minutes(left) - minutes(right)) <= 120
 }
 
 export function NewRequestForm() {
@@ -31,7 +31,6 @@ export function NewRequestForm() {
   const { data, error, loading, reload } = useCamdenData(loader)
   const isCoordinator = data?.context.role === "coordinator"
   const [draft, setDraft] = useState<CamdenRequestDraft>(emptyDraft)
-  const [duplicateAcknowledged, setDuplicateAcknowledged] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -61,10 +60,18 @@ export function NewRequestForm() {
     })
   }, [data, duplicateId, isCoordinator])
 
-  const possibleDuplicate = useMemo(() => data?.requests.find((request) => request.rideDate === draft.rideDate && request.requestedPickupTime && draft.requestedPickupTime && similarTime(request.requestedPickupTime, draft.requestedPickupTime)), [data, draft.rideDate, draft.requestedPickupTime])
+  const selectedRiderId = isCoordinator ? draft.riderId : data?.context.riderId
+  const possibleDuplicate = useMemo(() => data?.requests.find((request) =>
+    request.riderId === selectedRiderId
+    && request.rideDate === draft.rideDate
+    && request.status !== "declined"
+    && request.status !== "cancelled"
+    && (request.requestKind === undefined || request.requestKind === "ride")
+    && ((request.requestedPickupTime && draft.requestedPickupTime && similarTime(request.requestedPickupTime, draft.requestedPickupTime))
+      || (request.appointmentTime && draft.appointmentTime && similarTime(request.appointmentTime, draft.appointmentTime))),
+  ), [data, draft.appointmentTime, draft.rideDate, draft.requestedPickupTime, selectedRiderId])
   const selectedRideType = data?.rideTypes.find((type) => type.id === draft.rideTypeId)
   const riders = data?.riders ?? []
-  const selectedRiderId = isCoordinator ? draft.riderId : data?.context.riderId
   const availablePickups = data ? approvedRequestLocations(data, selectedRiderId, draft.pickupLocationId) : []
   const availableDestinations = data ? approvedRequestLocations(data, selectedRiderId, draft.destinationLocationId) : []
 
@@ -81,11 +88,11 @@ export function NewRequestForm() {
       );
       return;
     }
-    if (possibleDuplicate && !duplicateAcknowledged) {
+    if (possibleDuplicate) {
       setShowDuplicateWarning(true);
       return;
     }
-    await saveRequest(duplicateAcknowledged);
+    await saveRequest(false);
   }
 
   async function saveRequest(duplicateConfirmed: boolean) {
@@ -110,6 +117,10 @@ export function NewRequestForm() {
       );
       return true;
     } catch (caught) {
+      if (caught instanceof CamdenServiceError && caught.code === "duplicate_confirmation_required" && !duplicateConfirmed) {
+        setShowDuplicateWarning(true);
+        return false;
+      }
       setFormError(
         caught instanceof Error
           ? caught.message
@@ -122,7 +133,6 @@ export function NewRequestForm() {
   }
 
   async function confirmDuplicate() {
-    setDuplicateAcknowledged(true);
     if (await saveRequest(true)) setShowDuplicateWarning(false);
   }
 
@@ -155,8 +165,8 @@ export function NewRequestForm() {
           {isCoordinator && <fieldset><legend className="text-lg font-extrabold">Rider</legend><div className="mt-3"><label htmlFor="rider" className="mb-1 block text-sm font-bold">Approved rider <span aria-hidden="true">*</span></label><select id="rider" className={fieldClass} value={draft.riderId ?? ""} onChange={(event) => { setDraft((current) => ({ ...current, riderId: event.target.value, pickupLocationId: "", destinationLocationId: "" })) }} required><option value="">Select a rider</option>{riders.map((rider) => <option key={rider.id} value={rider.id}>{rider.name}</option>)}</select></div></fieldset>}
           <fieldset><legend className="text-lg font-extrabold">Ride details</legend><div className="mt-3 grid gap-5 sm:grid-cols-2">
             <div className="sm:col-span-2"><label htmlFor="ride-type" className="mb-1 block text-sm font-bold">Ride type <span aria-hidden="true">*</span></label><select id="ride-type" className={fieldClass} value={draft.rideTypeId} onChange={(event) => update("rideTypeId", event.target.value)} required><option value="">Select a ride type</option>{data.rideTypes.map((type) => <option key={type.id} value={type.id}>{type.name}</option>)}</select>{selectedRideType && <p className="mt-2 flex text-sm text-neutral-600"><Info className="mr-2 mt-0.5 size-4 shrink-0" aria-hidden="true" />{selectedRideType.noticeSummary}</p>}</div>
-            <div><label htmlFor="ride-date" className="mb-1 block text-sm font-bold">Ride date <span aria-hidden="true">*</span></label><input id="ride-date" type="date" className={fieldClass} value={draft.rideDate} min={new Date().toISOString().slice(0, 10)} onChange={(event) => { update("rideDate", event.target.value); setDuplicateAcknowledged(false) }} required /></div>
-            <div><label htmlFor="pickup-time" className="mb-1 block text-sm font-bold">Requested pickup time <span aria-hidden="true">*</span></label><input id="pickup-time" type="time" className={fieldClass} value={draft.requestedPickupTime} onChange={(event) => { update("requestedPickupTime", event.target.value); setDuplicateAcknowledged(false) }} required /></div>
+            <div><label htmlFor="ride-date" className="mb-1 block text-sm font-bold">Ride date <span aria-hidden="true">*</span></label><input id="ride-date" type="date" className={fieldClass} value={draft.rideDate} min={new Date().toISOString().slice(0, 10)} onChange={(event) => update("rideDate", event.target.value)} required /></div>
+            <div><label htmlFor="pickup-time" className="mb-1 block text-sm font-bold">Requested pickup time <span aria-hidden="true">*</span></label><input id="pickup-time" type="time" className={fieldClass} value={draft.requestedPickupTime} onChange={(event) => update("requestedPickupTime", event.target.value)} required /></div>
             <div><label htmlFor="appointment-time" className="mb-1 block text-sm font-bold">Appointment / required arrival <span aria-hidden="true">*</span></label><input id="appointment-time" type="time" className={fieldClass} value={draft.appointmentTime} onChange={(event) => update("appointmentTime", event.target.value)} required /></div>
             <fieldset><legend className="mb-1 text-sm font-bold">Trip direction <span aria-hidden="true">*</span></legend><div className="flex min-h-12 items-center gap-4 rounded-xl border border-neutral-300 px-3"><label className="flex min-h-11 items-center gap-2"><input type="radio" name="direction" value="one_way" checked={draft.direction === "one_way"} onChange={() => setDraft((current) => ({ ...current, direction: "one_way", returnKind: undefined, returnTime: undefined }))} /> One way</label><label className="flex min-h-11 items-center gap-2"><input type="radio" name="direction" value="round_trip" checked={draft.direction === "round_trip"} onChange={() => update("direction", "round_trip")} /> Round trip</label></div></fieldset>
           </div></fieldset>
@@ -351,7 +361,7 @@ export function NewRequestForm() {
         <CamdenModal
           open={showDuplicateWarning}
           onClose={() => setShowDuplicateWarning(false)}
-          title="Possible duplicate request"
+          title="Another ride near this time"
           description="Please confirm before creating another ride near the same time."
           busy={submitting}
           size="sm"
@@ -370,9 +380,8 @@ export function NewRequestForm() {
               aria-hidden="true"
             />
             <p className="text-sm">
-              You already have <strong>{possibleDuplicate?.reference}</strong>{" "}
-              near this time. Multiple rides are allowed, but only continue if
-              this separate ride is intentional.
+              {possibleDuplicate?.reference ? <>You already have <strong>{possibleDuplicate.reference}</strong> near this time. </> : "A ride near this time already exists. "}
+              Multiple rides are allowed, but only continue if this separate ride is intentional.
             </p>
           </div>
           <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">

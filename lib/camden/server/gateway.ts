@@ -36,6 +36,9 @@ export async function callCamdenGateway(
   })
   if (error) {
     const lower = error.message.toLowerCase()
+    if (operation === "create_request" && error.code === "P0001" && error.message === "POTENTIAL_DUPLICATE_CONFIRMATION_REQUIRED") {
+      throw new CamdenServiceError("A ride near this time already exists. Confirm that this is a separate ride to continue.", "duplicate_confirmation_required")
+    }
     if (lower.includes("session") || lower.includes("access required") || lower.includes("expired")) {
       throw new CamdenServiceError("Your session has expired. Please sign in again.", "unauthorized")
     }

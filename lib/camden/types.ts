@@ -339,7 +339,7 @@ export interface CamdenPortalService {
 export class CamdenServiceError extends Error {
   constructor(
     message: string,
-    public readonly code: "unauthorized" | "forbidden" | "conflict" | "validation" | "unavailable" | "unknown" = "unknown",
+    public readonly code: "unauthorized" | "forbidden" | "conflict" | "duplicate_confirmation_required" | "validation" | "unavailable" | "unknown" = "unknown",
   ) {
     super(message)
     this.name = "CamdenServiceError"

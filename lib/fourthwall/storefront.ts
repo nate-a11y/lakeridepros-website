@@ -244,6 +244,24 @@ export function getFourthwallProductImage(product: FourthwallProduct) {
   return image?.transformedUrl || image?.url || ''
 }
 
+/** Keep every view available, with the selected option's mockups first. */
+export function getFourthwallProductImages(product: FourthwallProduct, variantId?: string) {
+  const selectedVariant = product.variants.find(variant => variant.id === variantId)
+  const candidates = [
+    ...(selectedVariant?.images || []),
+    ...product.images,
+    ...product.variants.flatMap(variant => variant.images),
+  ]
+  const seen = new Set<string>()
+
+  return candidates.filter(image => {
+    const urls = [image.url, image.transformedUrl].filter((url): url is string => !!url)
+    if (urls.length === 0 || urls.some(url => seen.has(url))) return false
+    urls.forEach(url => seen.add(url))
+    return true
+  })
+}
+
 export function getFourthwallStartingPrice(product: FourthwallProduct) {
   const prices = product.variants
     .filter(isFourthwallVariantAvailable)

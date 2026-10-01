@@ -140,8 +140,8 @@ export default async function ShopPage() {
                     <article key={product.id} className="mx-auto max-w-6xl border border-black/15 bg-[#f5f5f1]">
                       <Link
                         href={`/shop/products/${product.slug}`}
+                        data-fourthwall-card="featured"
                         className="group grid min-h-[32rem] w-full lg:grid-cols-[minmax(0,1.18fr)_minmax(20rem,0.82fr)] focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary"
-                        style={{ display: 'grid' }}
                       >
                         <FourthwallProductArtwork
                           src={imageUrl}
@@ -179,6 +179,7 @@ export default async function ShopPage() {
                       <article key={product.id} className="border border-black/15 bg-white">
                         <Link
                           href={`/shop/products/${product.slug}`}
+                          data-fourthwall-card="catalog"
                           className="group block h-full focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary"
                         >
                           <div className="aspect-[4/5]">

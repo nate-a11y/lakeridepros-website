@@ -48,6 +48,10 @@
 .shop :where(a[class*='text-[#2f730e]']) { color: #2f730e !important; }
 .shop :where(a[class*='bg-[#2f730e]']) { color: #fff !important; }
 .shop :where(a:global(.group)) { display: block; }
+/* Outrank the global touch-target inline-flex rule without changing other links. */
+.page.shop a[data-fourthwall-card] { width: 100%; padding: 0; }
+.page.shop a[data-fourthwall-card='catalog'] { display: block; }
+.page.shop a[data-fourthwall-card='featured'] { display: grid; }
 .product :where(nav ol) { flex-wrap: wrap; }
 .product :where(h1) { font-size: clamp(2.1rem, 3.5vw, 3.75rem); }
 .cart > :global(.container) > div:first-child { border-bottom: 1px solid #b3b3b3; padding-bottom: 2rem; }

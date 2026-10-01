@@ -8,8 +8,7 @@ import {
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import FourthwallProductArtwork from '../../FourthwallProductArtwork'
-import FourthwallProductActions from './FourthwallProductActions'
+import FourthwallProductDetails from './FourthwallProductDetails'
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>
@@ -49,7 +48,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // return shoppers to the live holding page rather than exposing a dead end.
   if (!product) redirect('/shop')
 
-  const image = getFourthwallProductImage(product)
   const description = plainFourthwallDescription(product.description)
   const startingPrice = getFourthwallStartingPrice(product)
 
@@ -64,39 +62,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
             Back to shop
           </Link>
 
-          <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:gap-14">
-            <div className="relative aspect-square overflow-hidden border border-black/10 bg-white dark:border-white/15 dark:bg-dark-bg-secondary">
-              <FourthwallProductArtwork
-                src={image}
-                alt={product.name}
-                featured
-                priority
-              />
-            </div>
-
-            <div className="self-center">
-              <p className="text-sm font-black uppercase tracking-[0.18em] text-primary-dark dark:text-primary-light">
-                Lake Ride Pros Merch
+          <FourthwallProductDetails key={product.id} product={product}>
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-primary-dark dark:text-primary-light">
+              Lake Ride Pros Merch
+            </p>
+            <h1 className="mt-3 text-balance font-boardson text-5xl font-bold text-lrp-black dark:text-white sm:text-6xl">
+              {product.name}
+            </h1>
+            <p className="mt-5 text-2xl font-black text-primary-dark dark:text-primary-light">
+              {startingPrice === null ? 'Currently unavailable' : `From $${startingPrice.toFixed(2)}`}
+            </p>
+            {description && (
+              <p className="mt-6 text-pretty text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
+                {description}
               </p>
-              <h1 className="mt-3 text-balance font-boardson text-5xl font-bold text-lrp-black dark:text-white sm:text-6xl">
-                {product.name}
-              </h1>
-              <p className="mt-5 text-2xl font-black text-primary-dark dark:text-primary-light">
-                {startingPrice === null ? 'Currently unavailable' : `From $${startingPrice.toFixed(2)}`}
-              </p>
-              {description && (
-                <p className="mt-6 text-pretty text-lg leading-relaxed text-neutral-700 dark:text-neutral-300">
-                  {description}
-                </p>
-              )}
-              <div className="mt-8">
-                <FourthwallProductActions product={product} />
-              </div>
-              <p className="mt-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-                Secure checkout, shipping, taxes, and order support are handled by Fourthwall.
-              </p>
-            </div>
-          </div>
+            )}
+          </FourthwallProductDetails>
         </div>
       </article>
     </CommercePage>

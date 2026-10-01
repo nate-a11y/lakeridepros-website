@@ -18,6 +18,8 @@ vi.mock('../FourthwallProductActions', () => ({
 vi.mock('@/lib/fourthwall/storefront', () => ({
   getFourthwallProduct: vi.fn(),
   getFourthwallProductImage: vi.fn(),
+  getFourthwallProductImages: vi.fn(() => []),
+  isFourthwallVariantAvailable: vi.fn(() => true),
   getFourthwallStartingPrice: vi.fn(),
   plainFourthwallDescription: vi.fn(),
 }))

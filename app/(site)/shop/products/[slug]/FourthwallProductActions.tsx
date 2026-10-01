@@ -12,14 +12,15 @@ import {
 
 interface FourthwallProductActionsProps {
   product: FourthwallProduct
+  selectedVariantId: string
+  onVariantChange: (variantId: string) => void
 }
 
-export default function FourthwallProductActions({ product }: FourthwallProductActionsProps) {
+export default function FourthwallProductActions({ product, selectedVariantId, onVariantChange }: FourthwallProductActionsProps) {
   const variants = useMemo(
     () => product.variants.filter(isFourthwallVariantAvailable),
     [product.variants]
   )
-  const [selectedVariantId, setSelectedVariantId] = useState(variants[0]?.id || '')
   const [quantity, setQuantity] = useState(1)
   const [added, setAdded] = useState(false)
   const addItem = useCart(state => state.addItem)
@@ -67,7 +68,10 @@ export default function FourthwallProductActions({ product }: FourthwallProductA
         <select
           id="fourthwall-variant"
           value={selectedVariantId}
-          onChange={event => setSelectedVariantId(event.target.value)}
+          onChange={event => {
+            onVariantChange(event.target.value)
+            setAdded(false)
+          }}
           className="min-h-12 w-full border-2 border-neutral-300 bg-white px-4 py-3 text-lrp-black focus-visible:border-primary focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary dark:border-white/25 dark:bg-lrp-black dark:text-white"
         >
           {variants.map(variant => (

@@ -1,6 +1,6 @@
 # Camden coordinator invoices — website/backend contract
 
-Local implementation only. No deployment, production writes, customer messages, shared migrations, PDF generation, or staff workflow changes are authorized here. Backend implementation belongs to lrpbolt Opal.
+Production website release authorized and deployed on 2026-10-02. Nate explicitly approved both ends with sending enabled; the earlier local-only scope below is historical. Shared backend and staff releases remain owned by lrpbolt Opal. Deployment authorization does not authorize an actual invoice email or customer publication as a test.
 
 ## Existing authorization boundary
 
@@ -76,3 +76,12 @@ Supersedes the remaining mapping finding above: the existing gateway now maps SQ
 - Backend cap remains50,000; disposable SQL regressions now explicitly test10050/50000 success and50050 rejection, plus composed SQL/PDF/mock-email/website-schema integration and concurrent-send gates.
 - Both known contract differences are now resolved locally. Remaining acceptance still requires real cookie/hash/idle/revocation + Supabase RPC HTTP/Edge JWT/private Storage with synthetic data and sending disabled. Local OrbStack Docker socket was absent at readiness check; the full Supabase HTTP/Storage stack was not started. No live-stack acceptance claimed.
 - No commit, push, deployment, production writes, cron activation or real emails.
+
+## Production website release — 2026-10-02
+
+- Website implementation commit `c503a01662346baf4813cdf0231d5761921aad21` pushed to `main`. Only the22 Camden invoice files were included; unrelated instruction/Crystl changes remain untouched.
+- Isolated production candidate `dpl_9uNcmrCUHjonVs31FaJXyc88LCLZ` built successfully and was promoted after backend readiness. Matching Git deployment `dpl_FQzgjGW8G9nQcaLhvX17gRUL9oHp` is READY. Live coordinator path: `https://www.lakeridepros.com/camden-county/invoices`.
+- Independently verified shared migration `20261002054902_camden_invoice_workflow`, both invoice Edge functions ACTIVE version2 with JWT checks, private `camden-invoices` bucket, and active15-minute `camden-invoice-sync` job17. Backend owner confirms sending and sync enabled; canonical sync returnedHTTP200 with one invoice and zero issues. Staff UI release evidence is tracked in the owning lrpbolt runbook/readiness receipt.
+- Website release gates:686 tests passed on pinned Node24.16.0, scoped lint/TypeScript/color/copy/spec audits pass, cloud production build passes. Full ESLint remains blocked by the pre-existing global jsx-a11y plugin configuration; no unrelated configuration change included.
+- Live website smoke: list, inline PDF, and attachment PDF each return private/no-store/noindex401 for both anonymous and correctly shaped invalid opaque sessions. Invoice page redirects to login without invoice controls; public shop returns200.
+- No actual invoice email, PDF generation, validation, or publication was triggered as a website deployment test. Authenticated published-PDF production download remains an operational verification on the first legitimately sent/published version; local fixture-level exact-byte/hash integration already passed. No public Storage links or external Supabase Auth bypass added.

@@ -19,6 +19,8 @@ export const CAMDEN_GATEWAY_OPERATIONS = [
   "update_profile",
   "coordinator_dashboard",
   "participant_snapshots",
+  "coordinator_invoices",
+  "coordinator_invoice_document",
   "transition_request",
 ] as const
 
@@ -36,6 +38,11 @@ export async function callCamdenGateway(
   })
   if (error) {
     const lower = error.message.toLowerCase()
+    // An authenticated but suspended/wrong-role identity is forbidden, not an expired session or outage.
+    if (error.code === "42501" && (lower.includes("access suspended") || lower === "coordinator access required")) {
+      throw new CamdenServiceError("You do not have access to that information.", "forbidden")
+    }
+    if (operation === "coordinator_invoice_document" && (error.code === "P0002" || lower.includes("not found"))) throw new CamdenServiceError("Statement not found.", "not_found")
     if (operation === "create_request" && error.code === "P0001" && error.message === "POTENTIAL_DUPLICATE_CONFIRMATION_REQUIRED") {
       throw new CamdenServiceError("A ride near this time already exists. Confirm that this is a separate ride to continue.", "duplicate_confirmation_required")
     }

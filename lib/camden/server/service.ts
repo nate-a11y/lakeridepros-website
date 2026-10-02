@@ -48,17 +48,8 @@ export class ServerCamdenPortalService {
   async getCoordinatorDashboard(): Promise<CamdenCoordinatorData> {
     const raw = record(await this.gateway("coordinator_dashboard"))
     const dashboard = mapDashboard(raw)
-    const invoices = (Array.isArray(raw.invoices) ? raw.invoices : []).map((value) => {
-      const row = record(value)
-      return {
-        id: stringValue(row.id),
-        periodStart: stringValue(row.period_start),
-        periodEnd: stringValue(row.period_end),
-        status: stringValue(row.status, "draft") as "draft" | "issued" | "paid" | "past_due",
-        invoiceNumber: stringValue(row.invoice_number) || undefined,
-        documentUrl: stringValue(row.invoice_url) || undefined,
-      }
-    })
+    // Legacy register contains drafts/arbitrary document URLs. Published statements use the dedicated invoice read contract.
+    const invoices: CamdenCoordinatorData["invoices"] = []
     const monthPrefix = new Date().toISOString().slice(0, 7)
     const requestSpend = (request: CamdenRequest) => request.trips.reduce((total, trip) => total + (trip.cost ?? 0), 0)
     return {

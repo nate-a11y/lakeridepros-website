@@ -4,8 +4,8 @@ import { ServerCamdenPortalService } from "./server/service"
 import { readCamdenSessionToken } from "./server/session"
 import type { CamdenRole } from "./types"
 
-export async function requireCamdenSession(allowedRoles?: CamdenRole[]) {
-  if (process.env.NODE_ENV === "development" && process.env.NEXT_PUBLIC_CAMDEN_DEMO_MODE !== "false") return null
+export async function requireCamdenSession(allowedRoles?: CamdenRole[], options: { allowDevelopmentDemo?: boolean } = {}) {
+  if (options.allowDevelopmentDemo !== false && process.env.NODE_ENV === "development" && process.env.NEXT_PUBLIC_CAMDEN_DEMO_MODE !== "false") return null
   const token = await readCamdenSessionToken()
   if (!token) redirect("/camden-county/login")
   try {

@@ -178,7 +178,7 @@ describe('/pricing discount and fee disclosures', () => {
     expect(within(exactQuote).getByRole('link', { name: 'Book Now' })).toHaveAttribute('href', '/book')
     expect(container.textContent).not.toMatch(/Call for exact quotes|Call\/Text for Quote|Call us at.*online booking form|Call \(573\) 206-9499 for (instant|custom) quote/)
     expect(JSON.stringify(questions)).not.toContain('Call us at')
-    screen.getAllByRole('link', { name: 'Book Now', exact: true }).forEach(link => {
+    screen.getAllByRole('link', { name: 'Book Now' }).forEach(link => {
       expect(link).toHaveAttribute('href', '/book')
     })
   })

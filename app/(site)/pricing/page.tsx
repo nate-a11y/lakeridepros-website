@@ -38,6 +38,15 @@ export const metadata: Metadata = {
   },
 }
 
+const transportationCostAnswer = 'Point-to-point sedan/SUV pricing starts with a flat package covering the first 5 miles: Flex $15, Elite $20, and LRP Black $25. The next 45 miles cost $2.25/$2.50/$2.90 per mile respectively; miles beyond 50 cost $1.85/$2.15/$2.60 per mile. No booking fee applies to Flex, Elite, or Black. Larger-vehicle base minimums are $80 for Limo Bus or Rescue Squad, $175 for Luxury Sprinter, $250 for Pink Patrol, and $400 for Luxury Shuttle, plus the applicable booking fee. These are minimum transportation charges, not flat fares for every route. Hourly rates are Flex $80/hr, Elite $100/hr, and Black $140/hr (1-hour minimum); Limo Bus and Rescue Squad start at $130/hr, Sprinter at $175/hr, Pink Patrol at $225/hr weekdays or $250/hr weekends, and Shuttle at $275/hr. See the hourly cards for larger-vehicle tiers and minimums. Vehicle positioning, extra stops, and other applicable charges are included in your final quote. Click Book Now on the Lake Ride Pros website to get an exact quote.'
+const exactQuoteAnswer = 'Click Book Now on the Lake Ride Pros website to get a quote. Enter your pickup and dropoff locations, date, time, passenger count, and service type. You can review your quote with no obligation to book.'
+const bookingFeeAnswer = 'Flex, Elite, and LRP Black have no booking fee. Limo Bus, Rescue Squad, and Luxury Sprinter have a $10 booking fee; Pink Patrol and Luxury Shuttle have a $20 booking fee. These fees are separate from the listed transportation rates and base minimums, and are included in your quote before you book.'
+const transferPricingAnswer = 'For Flex, Elite, and Black, the first 5 miles are a flat package charge, not an extra fee on top of mileage. Only the miles after the first 5 are charged at the next tier, through total mile 50; the lower per-mile rate applies only to miles beyond 50. For example, a 10-mile Elite transfer has a $32.50 transportation charge: $20 for the first 5 miles plus 5 miles at $2.50. Larger-vehicle base minimums are a floor for the transportation charge, not a surcharge added to every mile. Vehicle positioning (travel to and from your trip), additional stops, and other applicable charges may increase the final quote.'
+const fuelSurchargeAnswer = 'A fuel surcharge applies to all reservations. It is currently 5% and may change based on current fuel prices. The applicable surcharge is disclosed in your quote before you book.'
+const pricingFeesAnswer = 'No hidden fees at Lake Ride Pros. Your quote includes transportation, a professional driver, insurance, estimated tolls (if applicable), and any applicable booking fee. A fuel surcharge applies to all reservations; it is currently 5% and may change with fuel prices. Credit card payments incur a 3% processing fee. Gratuity is not included in the listed rates, and extra wait time or requested add-ons may cost more. All applicable fees are disclosed before you book.'
+const insiderSavingsAnswer = 'Join the Lake Ride Pros Insiders Program for member discounts on eligible rides and exclusive rewards. Savings depend on your membership tier and program terms.'
+const creditCardFeeAnswer = 'Yes. Credit card payments incur a 3% processing fee, disclosed before you book. The listed transportation rates do not include this fee.'
+
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -47,15 +56,46 @@ const faqSchema = {
       name: 'How much does Lake of the Ozarks transportation cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban) at $2.90/mile, and Pink Patrol transfer service starts at a $250 minimum plus mileage. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr (tiered), Luxury Sprinter $175/hr (tiered), Pink Patrol $225/hr weekdays and $250/hr weekends (tiered), Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers. Contact us at (573) 206-9499 for exact quote.'
+        text: transportationCostAnswer
       }
+    },
+    {
+      '@type': 'Question',
+      name: 'How is point-to-point pricing calculated?',
+      acceptedAnswer: { '@type': 'Answer', text: transferPricingAnswer }
+    },
+    {
+      '@type': 'Question',
+      name: 'Which vehicles have a booking fee?',
+      acceptedAnswer: { '@type': 'Answer', text: bookingFeeAnswer }
     },
     {
       '@type': 'Question',
       name: 'Are there any hidden fees?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, estimated tolls (if applicable), insurance, and professional driver. The only additional charges may be gratuity (optional) or wait time beyond the agreed window. All potential costs are disclosed upfront.'
+        text: pricingFeesAnswer
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a fuel surcharge?',
+      acceptedAnswer: { '@type': 'Answer', text: fuelSurchargeAnswer }
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a credit card processing fee?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: creditCardFeeAnswer
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How can I get discounted rates?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: insiderSavingsAnswer
       }
     },
     {
@@ -71,7 +111,7 @@ const faqSchema = {
       name: 'What is included in your pricing?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'All Lake Ride Pros pricing includes: professional licensed driver, fuel, commercial insurance, vehicle maintenance, tolls on major routes, flight tracking (for airport service), and 24/7 dispatch support. Optional add-ons include decorations, special requests, and extended wait times.'
+        text: 'All Lake Ride Pros pricing includes: professional licensed driver, commercial insurance, vehicle maintenance, flight tracking (for airport service), and 24/7 dispatch support. A fuel surcharge applies to all reservations (currently 5%, variable with fuel prices); applicable tolls and booking fees are disclosed in your quote. Optional add-ons include decorations, special requests, and extended wait times.'
       }
     },
     {
@@ -79,7 +119,7 @@ const faqSchema = {
       name: 'How do I get an exact quote?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Call us at (573) 206-9499 or use our online booking form. Provide your pickup/dropoff locations, date, time, passenger count, and service type. We\'ll provide an instant quote with no obligation to book.'
+        text: exactQuoteAnswer
       }
     },
     {
@@ -125,7 +165,7 @@ export default function PricingPage() {
                 <div>
                   <CheckCircle className="w-6 h-6 text-[#2f730e] mb-2" />
                   <p className="font-semibold text-lrp-black">No Hidden Fees</p>
-                  <p className="text-sm text-gray-600">What we quote is what you pay</p>
+                  <p className="text-sm text-gray-600">All charges disclosed before you book</p>
                 </div>
                 <div>
                   <CheckCircle className="w-6 h-6 text-[#2f730e] mb-2" />
@@ -225,11 +265,11 @@ export default function PricingPage() {
               Point to Point Rates
             </h2>
             <p className="text-left text-gray-600 mb-12 max-w-2xl mx-auto">
-              Per-mile pricing for sedans and SUVs. Flat rates for larger vehicles.
+              First-five-mile packages, then per-mile pricing for sedans and SUVs. Point-to-point minimums for larger vehicles.
             </p>
 
             {/* Per-Mile Tiers */}
-            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Sedans & SUVs (Per Mile)</h3>
+            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Sedans & SUVs (First 5 Miles + Mileage)</h3>
             <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
               {/* Flex */}
               <div className="bg-white py-6 border-t border-black/25">
@@ -241,7 +281,11 @@ export default function PricingPage() {
                 <p className="text-sm text-gray-600 mb-4">1-4 passengers</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">First 50 miles</span>
+                    <span className="text-sm text-gray-600">First 5 miles</span>
+                    <span className="font-bold text-[#2f730e]">$15 flat</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Miles 6–50</span>
                     <span className="font-bold text-[#2f730e]">$2.25/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -250,42 +294,11 @@ export default function PricingPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Booking fee</span>
-                    <span className="font-bold text-[#2f730e]">$5</span>
+                    <span className="font-bold text-[#2f730e]">None</span>
                   </div>
                 </div>
                 <div className="pt-4 border-t border-gray-200">
                   <div className="text-xl font-bold text-[#2f730e]">$15 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                </div>
-              </div>
-
-              {/* Flex Reserve */}
-              <div className="bg-white py-6 border-t border-black/25 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-lrp-black text-white text-xs font-bold px-3 py-1 whitespace-nowrap">
-                  SAVE 10%
-                </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-6 h-6 text-[#2f730e]" />
-                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">RESERVE</span>
-                </div>
-                <h4 className="font-bold text-lg text-lrp-black mb-1">Flex Reserve</h4>
-                <p className="text-sm text-gray-600 mb-4">1-4 passengers</p>
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">First 50 miles</span>
-                    <span className="font-bold text-[#2f730e]">$2.03/mi</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">After 50 miles</span>
-                    <span className="font-bold text-[#2f730e]">$1.67/mi</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Booking fee</span>
-                    <span className="font-bold text-[#2f730e]">$5</span>
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="text-xl font-bold text-[#2f730e]">$15 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                  <p className="text-xs text-[#2f730e] mt-2 font-medium">Book 24+ hrs ahead</p>
                 </div>
               </div>
 
@@ -299,7 +312,11 @@ export default function PricingPage() {
                 <p className="text-sm text-gray-600 mb-4">1-7 passengers</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">First 50 miles</span>
+                    <span className="text-sm text-gray-600">First 5 miles</span>
+                    <span className="font-bold text-[#2f730e]">$20 flat</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Miles 6–50</span>
                     <span className="font-bold text-[#2f730e]">$2.50/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -308,42 +325,11 @@ export default function PricingPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-600">Booking fee</span>
-                    <span className="font-bold text-[#2f730e]">$5</span>
+                    <span className="font-bold text-[#2f730e]">None</span>
                   </div>
                 </div>
                 <div className="pt-4 border-t border-gray-200">
-                  <div className="text-xl font-bold text-[#2f730e]">$15 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                </div>
-              </div>
-
-              {/* Elite Reserve */}
-              <div className="bg-white py-6 border-t border-black/25 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-lrp-black text-white text-xs font-bold px-3 py-1 whitespace-nowrap">
-                  SAVE 10%
-                </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-6 h-6 text-[#2f730e]" />
-                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">RESERVE</span>
-                </div>
-                <h4 className="font-bold text-lg text-lrp-black mb-1">Elite Reserve</h4>
-                <p className="text-sm text-gray-600 mb-4">1-7 passengers</p>
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">First 50 miles</span>
-                    <span className="font-bold text-[#2f730e]">$2.25/mi</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">After 50 miles</span>
-                    <span className="font-bold text-[#2f730e]">$1.94/mi</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Booking fee</span>
-                    <span className="font-bold text-[#2f730e]">$5</span>
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="text-xl font-bold text-[#2f730e]">$15 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                  <p className="text-xs text-[#2f730e] mt-2 font-medium">Book 24+ hrs ahead</p>
+                  <div className="text-xl font-bold text-[#2f730e]">$20 <span className="text-sm font-normal text-gray-600">minimum</span></div>
                 </div>
               </div>
 
@@ -357,7 +343,11 @@ export default function PricingPage() {
                 <p className="text-sm text-white/70 mb-4">1-6 passengers (Suburban)</p>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-white/70">First 50 miles</span>
+                    <span className="text-sm text-white/70">First 5 miles</span>
+                    <span className="font-bold text-primary-light">$25 flat</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-white/70">Miles 6–50</span>
                     <span className="font-bold text-primary-light">$2.90/mi</span>
                   </div>
                   <div className="flex justify-between items-center">
@@ -366,7 +356,7 @@ export default function PricingPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-white/70">Booking fee</span>
-                    <span className="font-bold text-primary-light">$10</span>
+                    <span className="font-bold text-primary-light">None</span>
                   </div>
                 </div>
                 <div className="pt-4 border-t border-white/20">
@@ -376,38 +366,30 @@ export default function PricingPage() {
               </div>
             </div>
 
-            {/* Reserve Benefits Callout */}
+            {/* Insider Savings Callout */}
             <div className="max-w-4xl mx-auto mb-12 p-6 bg-lrp-black text-white">
-              <h3 className="text-xl font-bold mb-4 text-left">Why Book Reserve?</h3>
-              <div className="grid md:grid-cols-3 gap-4 text-left">
-                <div>
-                  <CheckCircle className="w-8 h-8 mb-2" />
-                  <p className="font-semibold">10% Discount</p>
-                  <p className="text-sm text-white/80">Book 24+ hours ahead</p>
-                </div>
-                <div>
-                  <CheckCircle className="w-8 h-8 mb-2" />
-                  <p className="font-semibold">No Surge Pricing</p>
-                  <p className="text-sm text-white/80">Same rate, every time</p>
-                </div>
-                <div>
-                  <CheckCircle className="w-8 h-8 mb-2" />
-                  <p className="font-semibold">All Year Round</p>
-                  <p className="text-sm text-white/80">Peak season included</p>
-                </div>
-              </div>
+              <h3 className="text-xl font-bold mb-4 text-left">Looking for Discounted Rates?</h3>
+              <p className="text-white/90 mb-4">
+                Join the Lake Ride Pros Insiders Program for member discounts on eligible rides and exclusive rewards. Savings depend on your membership tier and program terms.
+              </p>
+              <Link
+                href="/insider-membership-benefits"
+                className="inline-flex items-center justify-center bg-white px-6 py-3 font-semibold text-lrp-black hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              >
+                Sign Up for the Insiders Program
+              </Link>
             </div>
 
-            {/* Flat Rate Vehicles */}
-            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Larger Vehicles (Flat Rate)</h3>
+            {/* Larger Vehicle Point-to-Point Minimums */}
+            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Larger Vehicles (Point-to-Point Minimums)</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
               {/* Limo Bus */}
               <div className="bg-white py-6 border-t border-lrp-green">
                 <Users className="w-8 h-8 text-[#2f730e] mb-3" />
                 <h4 className="font-bold text-lg text-lrp-black mb-1">Limo Bus</h4>
                 <p className="text-sm text-gray-600 mb-3">1-14 passengers</p>
-                <div className="text-2xl font-bold text-[#2f730e] mb-1">$90 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                <p className="text-xs text-gray-600">$80 base + $10 booking fee</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$80 <span className="text-sm font-normal text-gray-600">base minimum</span></div>
+                <p className="text-xs text-gray-600">$10 booking fee · from $90 before other charges</p>
               </div>
 
               {/* Rescue Squad */}
@@ -415,8 +397,8 @@ export default function PricingPage() {
                 <Users className="w-8 h-8 text-[#2f730e] mb-3" />
                 <h4 className="font-bold text-lg text-lrp-black mb-1">Rescue Squad</h4>
                 <p className="text-sm text-gray-600 mb-3">1-14 passengers</p>
-                <div className="text-2xl font-bold text-[#2f730e] mb-1">$90 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                <p className="text-xs text-gray-600">$80 base + $10 booking fee</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$80 <span className="text-sm font-normal text-gray-600">base minimum</span></div>
+                <p className="text-xs text-gray-600">$10 booking fee · from $90 before other charges</p>
               </div>
 
               {/* Luxury Sprinter */}
@@ -424,17 +406,8 @@ export default function PricingPage() {
                 <Users className="w-8 h-8 text-[#2f730e] mb-3" />
                 <h4 className="font-bold text-lg text-lrp-black mb-1">Luxury Sprinter</h4>
                 <p className="text-sm text-gray-600 mb-3">1-13 passengers</p>
-                <div className="text-2xl font-bold text-[#2f730e] mb-1">$175 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                <p className="text-xs text-gray-600">$175 base + $10 booking fee</p>
-              </div>
-
-              {/* Luxury Shuttle */}
-              <div className="bg-white py-6 border-t border-lrp-green">
-                <Users className="w-8 h-8 text-[#2f730e] mb-3" />
-                <h4 className="font-bold text-lg text-lrp-black mb-1">Luxury Shuttle</h4>
-                <p className="text-sm text-gray-600 mb-3">1-37 passengers</p>
-                <div className="text-2xl font-bold text-[#2f730e] mb-1">$275 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                <p className="text-xs text-gray-600">$400 base + $20 booking fee</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$175 <span className="text-sm font-normal text-gray-600">base minimum</span></div>
+                <p className="text-xs text-gray-600">$10 booking fee · from $185 before other charges</p>
               </div>
 
               {/* Pink Patrol */}
@@ -442,13 +415,22 @@ export default function PricingPage() {
                 <Users className="w-8 h-8 text-[#2f730e] mb-3" />
                 <h4 className="font-bold text-lg text-lrp-black mb-1">Pink Patrol</h4>
                 <p className="text-sm text-gray-600 mb-3">1-23 passengers</p>
-                <div className="text-2xl font-bold text-[#2f730e] mb-1">$250 <span className="text-sm font-normal text-gray-600">minimum</span></div>
-                <p className="text-xs text-gray-600">Transfer service plus mileage</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$250 <span className="text-sm font-normal text-gray-600">base minimum</span></div>
+                <p className="text-xs text-gray-600">$20 booking fee · from $270 before other charges</p>
+              </div>
+
+              {/* Luxury Shuttle */}
+              <div className="bg-white py-6 border-t border-lrp-green">
+                <Users className="w-8 h-8 text-[#2f730e] mb-3" />
+                <h4 className="font-bold text-lg text-lrp-black mb-1">Luxury Shuttle</h4>
+                <p className="text-sm text-gray-600 mb-3">1-37 passengers</p>
+                <div className="text-2xl font-bold text-[#2f730e] mb-1">$400 <span className="text-sm font-normal text-gray-600">base minimum</span></div>
+                <p className="text-xs text-gray-600">$20 booking fee · from $420 before other charges</p>
               </div>
             </div>
 
             <p className="text-left text-sm text-gray-600 mt-8">
-              All prices include professional driver, fuel, and insurance. <Link href="/book" className="text-[#2f730e] hover:underline">Get a quote</Link> for exact pricing.
+              Base minimums are not flat trip fares. Distance, vehicle positioning, and other applicable charges may increase your quote. Transportation includes a professional driver and insurance. All reservations have a fuel surcharge, currently 5%, which may change with fuel prices. <Link href="/book" className="text-[#2f730e] hover:underline">Book Now</Link> for exact pricing.
             </p>
           </div>
         </section>
@@ -467,7 +449,7 @@ export default function PricingPage() {
             </p>
 
             {/* Sedans & SUVs - Flat Hourly */}
-            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Sedans & SUVs (Flat Rate)</h3>
+            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Sedans & SUVs (Hourly Rates)</h3>
             <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
               {/* Flex */}
               <div className="bg-white py-6 border-t border-black/25">
@@ -482,36 +464,11 @@ export default function PricingPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Flat rate all hours</span>
+                    <span className="text-gray-700">Same hourly rate for every hour</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">Sedans & small SUVs</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Flex Reserve */}
-              <div className="bg-white py-6 border-t border-black/25 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-lrp-black text-white text-xs font-bold px-3 py-1 whitespace-nowrap">
-                  SAVE 10%
-                </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-6 h-6 text-[#2f730e]" />
-                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">RESERVE</span>
-                </div>
-                <h4 className="text-xl font-bold text-lrp-black mb-2">Flex Reserve</h4>
-                <p className="text-gray-600 text-sm mb-4">1-4 passengers</p>
-                <div className="text-3xl font-bold text-[#2f730e] mb-2">$72<span className="text-lg text-gray-600">/hour</span></div>
-                <p className="text-sm text-[#2f730e] mb-4 font-medium">Book 48+ hrs ahead</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">No surge pricing ever</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Same rate year-round</span>
                   </li>
                 </ul>
               </div>
@@ -529,36 +486,11 @@ export default function PricingPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Flat rate all hours</span>
+                    <span className="text-gray-700">Same hourly rate for every hour</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">Larger SUVs</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Elite Reserve */}
-              <div className="bg-white py-6 border-t border-black/25 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-lrp-black text-white text-xs font-bold px-3 py-1 whitespace-nowrap">
-                  SAVE 10%
-                </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-6 h-6 text-[#2f730e]" />
-                  <span className="bg-lrp-black text-white text-xs font-bold px-2 py-0.5">RESERVE</span>
-                </div>
-                <h4 className="text-xl font-bold text-lrp-black mb-2">Elite Reserve</h4>
-                <p className="text-gray-600 text-sm mb-4">1-7 passengers</p>
-                <div className="text-3xl font-bold text-[#2f730e] mb-2">$90<span className="text-lg text-gray-600">/hour</span></div>
-                <p className="text-sm text-[#2f730e] mb-4 font-medium">Book 48+ hrs ahead</p>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">No surge pricing ever</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Same rate year-round</span>
                   </li>
                 </ul>
               </div>
@@ -571,7 +503,7 @@ export default function PricingPage() {
                 </div>
                 <h4 className="text-xl font-bold mb-2">LRP Black</h4>
                 <p className="text-white/70 text-sm mb-4">1-6 passengers (Suburban)</p>
-                <div className="text-3xl font-bold text-primary-light mb-2">$120<span className="text-lg text-white/70">/hour</span></div>
+                <div className="text-3xl font-bold text-primary-light mb-2">$140<span className="text-lg text-white/70">/hour</span></div>
                 <p className="text-sm text-white/70 mb-4">1-hour minimum</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
@@ -587,7 +519,7 @@ export default function PricingPage() {
             </div>
 
             {/* Larger Vehicles - Tiered Hourly */}
-            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Larger Vehicles (Tiered Rates)</h3>
+            <h3 className="text-xl font-bold text-lrp-black text-left mb-6">Larger Vehicles (Hourly Rates & Minimums)</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
               {/* Limo Bus */}
               <div className="bg-lrp-black p-8 text-white relative">
@@ -602,11 +534,11 @@ export default function PricingPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white">First 3-4 hrs: $130/hr</span>
+                    <span className="text-white">First 3 hrs: $130/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white">After: $110/hr</span>
+                    <span className="text-white">After 3 hrs: $110/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
@@ -625,11 +557,11 @@ export default function PricingPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">First 3-4 hrs: $130/hr</span>
+                    <span className="text-gray-700">First 3 hrs: $130/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">After: $110/hr</span>
+                    <span className="text-gray-700">After 3 hrs: $110/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
@@ -648,11 +580,11 @@ export default function PricingPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">First 3-4 hrs: $175/hr</span>
+                    <span className="text-gray-700">First 3 hrs: $175/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">After: $155/hr</span>
+                    <span className="text-gray-700">After 3 hrs: $155/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
@@ -674,11 +606,11 @@ export default function PricingPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">Weekdays: first 3 hrs $225/hr</span>
+                    <span className="text-white/90">Weekdays: first 3 hrs $225/hr; then $200/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
-                    <span className="text-white/90">Weekends: first 4 hrs $250/hr</span>
+                    <span className="text-white/90">Weekends: first 4 hrs $250/hr; then $225/hr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
@@ -697,7 +629,7 @@ export default function PricingPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Flat rate all hours</span>
+                    <span className="text-gray-700">Same hourly rate for every hour</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-[#2f730e] mt-0.5 flex-shrink-0" />
@@ -711,7 +643,7 @@ export default function PricingPage() {
               </div>
             </div>
             <p className="text-left text-sm text-gray-600 mt-8">
-              <strong>Note:</strong> Weekend rates (Fri-Sun) have 4-hour minimums for Limo Bus, Rescue Squad, Sprinter, and Pink Patrol. Weekday minimums are 3 hours. All prices subject to 3% credit card processing fee.
+              <strong>Note:</strong> Weekend rates (Fri-Sun) have 4-hour minimums for Limo Bus, Rescue Squad, Sprinter, and Pink Patrol. Weekday minimums are 3 hours. The tier changes after 3 hours for Limo Bus, Rescue Squad, and Sprinter even when the weekend minimum is 4 hours. Shuttle has a 2-hour minimum every day. Booking fees: $10 for Bus, Rescue, and Sprinter; $20 for Pink Patrol and Shuttle. Flex, Elite, and Black have no booking fee. All reservations have a fuel surcharge, currently 5%, which may change with fuel prices. Credit card payments incur a 3% processing fee, disclosed before you book.
             </p>
           </div>
         </section>
@@ -723,13 +655,13 @@ export default function PricingPage() {
               Airport Shuttle Pricing
             </h2>
             <p className="text-left text-gray-600 mb-12 max-w-2xl mx-auto">
-              Call for exact quotes — pricing varies by vehicle type, distance, and final destination
+              Click Book Now to get a quote online — pricing varies by vehicle type, distance, and final destination
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               <div className="bg-white py-6 border-t border-lrp-green">
                 <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black mb-2">Lee C Fine (AIZ)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Get Quote</Link>
+                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
                 <p className="text-sm text-gray-600 mb-3">At Lake of the Ozarks</p>
                 <p className="text-xs text-gray-600">Private aviation & FBO service</p>
               </div>
@@ -737,7 +669,7 @@ export default function PricingPage() {
               <div className="bg-white py-6 border-t border-lrp-green">
                 <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black mb-2">Kansas City (MCI)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Get Quote</Link>
+                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
                 <p className="text-sm text-gray-600 mb-3">2.5-3 hours</p>
                 <p className="text-xs text-gray-600">Flight tracking included</p>
               </div>
@@ -745,7 +677,7 @@ export default function PricingPage() {
               <div className="bg-white py-6 border-t border-lrp-green">
                 <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black mb-2">St. Louis (STL)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Get Quote</Link>
+                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
                 <p className="text-sm text-gray-600 mb-3">2-2.5 hours</p>
                 <p className="text-xs text-gray-600">Delay adjustment included</p>
               </div>
@@ -753,13 +685,13 @@ export default function PricingPage() {
               <div className="bg-white py-6 border-t border-lrp-green">
                 <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
                 <h3 className="font-bold text-lg text-lrp-black mb-2">Springfield (SGF)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Get Quote</Link>
+                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
                 <p className="text-sm text-gray-600 mb-3">1.5-2 hours</p>
                 <p className="text-xs text-gray-600">Round-trip discounts available</p>
               </div>
             </div>
             <p className="text-left text-sm text-gray-600 mt-8">
-              Airport shuttle pricing based on distance, vehicle type, and passenger count. Rates vary by destination address. Call (573) 206-9499 for instant quote.
+              Airport shuttle pricing based on distance, vehicle type, and passenger count. Rates vary by destination address. Click Book Now to get a quote through the Lake Ride Pros website.
             </p>
           </div>
         </section>
@@ -796,7 +728,7 @@ export default function PricingPage() {
                   </li>
                 </ul>
                 <Link href="/book" className="block w-full text-left bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 font-semibold transition-all">
-                  Get Quote
+                  Book Now
                 </Link>
               </div>
 
@@ -829,7 +761,7 @@ export default function PricingPage() {
                   </li>
                 </ul>
                 <Link href="/book" className="block w-full text-left bg-white text-[#2f730e] hover:bg-white px-6 py-3 font-semibold transition-all">
-                  Get Quote
+                  Book Now
                 </Link>
               </div>
 
@@ -858,13 +790,13 @@ export default function PricingPage() {
                     <span className="text-gray-700 text-sm">Full weekend packages</span>
                   </li>
                 </ul>
-                <PhoneLink className="block w-full text-left bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 font-semibold transition-all">
-                  Call/Text for Quote
-                </PhoneLink>
+                <Link href="/book" className="block w-full text-left bg-[#2f730e] hover:bg-[#24580b] text-white px-6 py-3 font-semibold transition-all focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lrp-green">
+                  Book Now
+                </Link>
               </div>
             </div>
             <p className="text-left text-sm text-gray-600 mt-8">
-              Wedding pricing based on hourly rates, vehicle type, guest count, and timeline. All packages include professional driver, fuel, insurance, and coordination. Additional discounted services available through our trusted referral partners. Call (573) 206-9499 for custom quote.
+              Wedding pricing based on hourly rates, vehicle type, guest count, and timeline. All packages include a professional driver, insurance, and coordination. A fuel surcharge applies to all reservations (currently 5%, subject to fuel prices). Additional discounted services available through our trusted referral partners. Click Book Now to request your custom quote through the Lake Ride Pros website.
             </p>
           </div>
         </section>
@@ -929,7 +861,7 @@ export default function PricingPage() {
                 <CheckCircle className="w-5 h-5 text-[#2f730e] mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-semibold text-lrp-black">Fuel & Tolls</p>
-                  <p className="text-sm text-gray-600">All fuel costs and major route tolls included</p>
+                  <p className="text-sm text-gray-600">Fuel surcharge currently 5% (variable); applicable tolls disclosed in your quote</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-white">
@@ -976,8 +908,22 @@ export default function PricingPage() {
                   How much does Lake of the Ozarks transportation cost?
                 </summary>
                 <p className="text-gray-700 mt-4">
-                  Transportation rates at Lake of the Ozarks vary by service tier. Point-to-point: Flex (1-4 passengers) starts at $2.25/mile with a $15 minimum, Elite (1-7 passengers) at $2.50/mile, LRP Black (Suburban with beverages) at $2.90/mile, and Pink Patrol transfer service starts at a $250 minimum plus mileage. Hourly rentals: Flex $80/hr, Elite $100/hr, LRP Black $120/hr, Limo Bus $130/hr, Luxury Sprinter $175/hr, Pink Patrol $225/hr weekdays and $250/hr weekends, Luxury Shuttle $275/hr. Book 24+ hours in advance for 10% off Flex and Elite tiers! Contact us at (573) 206-9499 for a custom quote.
+                  {transportationCostAnswer}
                 </p>
+              </details>
+
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
+                  How is point-to-point pricing calculated?
+                </summary>
+                <p className="text-gray-700 mt-4">{transferPricingAnswer}</p>
+              </details>
+
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
+                  Which vehicles have a booking fee?
+                </summary>
+                <p className="text-gray-700 mt-4">{bookingFeeAnswer}</p>
               </details>
 
               <details className="bg-white py-6">
@@ -985,7 +931,33 @@ export default function PricingPage() {
                   Are there any hidden fees?
                 </summary>
                 <p className="text-gray-700 mt-4">
-                  No hidden fees at Lake Ride Pros. Our quotes include base transportation, fuel, estimated tolls (if applicable), insurance, and professional driver. The only additional charges may be gratuity (optional) or wait time beyond the agreed window. All potential costs are disclosed upfront.
+                  {pricingFeesAnswer}
+                </p>
+              </details>
+
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
+                  Is there a fuel surcharge?
+                </summary>
+                <p className="text-gray-700 mt-4">{fuelSurchargeAnswer}</p>
+              </details>
+
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
+                  Is there a credit card processing fee?
+                </summary>
+                <p className="text-gray-700 mt-4">
+                  {creditCardFeeAnswer}
+                </p>
+              </details>
+
+              <details className="bg-white py-6">
+                <summary className="font-bold text-lg cursor-pointer text-lrp-black">
+                  How can I get discounted rates?
+                </summary>
+                <p className="text-gray-700 mt-4">
+                  {insiderSavingsAnswer}
+                  {' '}<Link href="/insider-membership-benefits" className="text-[#2f730e] underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lrp-green">Sign up for the Insiders Program</Link>.
                 </p>
               </details>
 
@@ -1003,7 +975,7 @@ export default function PricingPage() {
                   What is included in your pricing?
                 </summary>
                 <p className="text-gray-700 mt-4">
-                  All Lake Ride Pros pricing includes: professional licensed driver, fuel, commercial insurance, vehicle maintenance, tolls on major routes, flight tracking (for airport service), and 24/7 dispatch support. Optional add-ons include decorations, special requests, and extended wait times.
+                  All Lake Ride Pros pricing includes: professional licensed driver, commercial insurance, vehicle maintenance, flight tracking (for airport service), and 24/7 dispatch support. A fuel surcharge applies to all reservations (currently 5%, variable with fuel prices); applicable tolls and booking fees are disclosed in your quote. Optional add-ons include decorations, special requests, and extended wait times.
                 </p>
               </details>
 
@@ -1012,8 +984,11 @@ export default function PricingPage() {
                   How do I get an exact quote?
                 </summary>
                 <p className="text-gray-700 mt-4">
-                  Call us at (573) 206-9499 or use our online booking form. Provide your pickup/dropoff locations, date, time, passenger count, and service type. We'll provide an instant quote with no obligation to book.
+                  {exactQuoteAnswer}
                 </p>
+                <Link href="/book" className="mt-4 inline-flex bg-[#2f730e] px-6 py-3 font-semibold text-white hover:bg-[#24580b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lrp-green">
+                  Book Now
+                </Link>
               </details>
 
               <details className="bg-white py-6 border-t border-lrp-green">
@@ -1049,7 +1024,7 @@ export default function PricingPage() {
                   What forms of payment do you accept?
                 </summary>
                 <p className="text-gray-700 mt-4">
-                  We accept all major credit cards (Visa, MasterCard, Amex, Discover), debit cards, Venmo, Zelle, and cash. Payment can be made when booking online or by calling (573) 206-9499. Corporate accounts and invoicing available for business clients.
+                  We accept all major credit cards (Visa, MasterCard, Amex, Discover), debit cards, Venmo, Zelle, and cash. Payment can be made when booking online or by calling (573) 206-9499. Credit card payments incur a 3% processing fee. Corporate accounts and invoicing available for business clients.
                 </p>
               </details>
             </div>
@@ -1058,19 +1033,19 @@ export default function PricingPage() {
 
         {/* CTA Section */}
         <section className="py-16 bg-lrp-black">
-          <div className="container mx-auto px-4 text-left">
+          <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Get Your Free Quote?
             </h2>
             <p className="text-white text-xl mb-8 max-w-2xl mx-auto">
-              No obligation. Instant pricing. Book online or call us directly for a custom quote.
+              Click Book Now to get a quote through the Lake Ride Pros website. Review your pricing with no obligation to book.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/book"
                 className="inline-block bg-white text-[#2f730e] hover:bg-white px-10 py-4 font-bold text-lg transition-all"
               >
-                Get Instant Quote
+                Book Now
               </Link>
               <PhoneLink
                 className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary-light px-10 py-4 font-bold text-lg transition-all"

@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
   })
 })
 
-test('desktop profile navigation, keyboard dismissal, and single GTM survive navigation', async ({ page }) => {
+test('desktop profile navigation, keyboard dismissal, and single GTM survive navigation', async ({ page, browserName }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await page.goto('/cart')
   await expect(page.locator('#google-tag-manager')).toHaveCount(1)
@@ -23,8 +23,12 @@ test('desktop profile navigation, keyboard dismissal, and single GTM survive nav
   const explore = page.getByRole('button', { name: 'Explore', exact: true })
   await explore.focus()
   await page.keyboard.press('Enter')
-  await expect(page.locator('header').getByRole('link', { name: 'Manage your profile' })).toHaveAttribute('href', profileUrl)
-  await page.keyboard.press('Tab')
+  const profile = page.locator('header').getByRole('link', { name: 'Manage your profile' })
+  await expect(profile).toHaveAttribute('href', profileUrl)
+  // macOS WebKit skips links on plain Tab unless full keyboard access is enabled.
+  // Option-Tab includes links without changing the user's system preferences.
+  await page.keyboard.press(browserName === 'webkit' && process.platform === 'darwin' ? 'Alt+Tab' : 'Tab')
+  await expect(profile).toBeFocused()
   await page.keyboard.press('Escape')
   await expect(explore).toBeFocused()
   await expect(explore).toHaveAttribute('aria-expanded', 'false')

@@ -103,7 +103,10 @@ export default function HeaderClient({ services, popularServiceSlugs = [] }: Hea
         onMouseEnter={() => setOpenMenu(name)}
         onMouseLeave={() => setOpenMenu(null)}
         onBlur={event => {
-          if (!event.currentTarget.contains(event.relatedTarget as Node)) setOpenMenu(null)
+          // WebKit can blur with a null target during pointer activation. Closing
+          // here unmounts the link before its click/navigation can run; the link's
+          // click handler and mouse-leave already close this menu.
+          if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget as Node)) setOpenMenu(null)
         }}
         onClick={event => {
           if ((event.target as Element).closest('a')) setOpenMenu(null)

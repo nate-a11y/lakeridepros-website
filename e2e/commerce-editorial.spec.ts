@@ -16,12 +16,20 @@ for (const width of [375, 390, 768, 1440]) {
     await page.route('**/api/giveaways/editorial-qa', (route) => route.fulfill({ json: {
       status: 'open', giveaway: { title: 'Lake Ride Pros Giveaway', description: 'QA fixture', start_date: '2026-09-01T12:00:00Z', end_date: '2026-10-01T12:00:00Z' },
     } }))
-    await page.goto('/shop', { waitUntil: 'networkidle' })
-    const product = await page.locator('a[href^="/shop/products/"]').first().getAttribute('href')
-    expect(product).toBeTruthy()
-    for (const route of ['/shop', product!, '/cart', '/checkout/cancel', '/checkout/success', '/gift-cards/success', '/insider-membership-benefits', '/giveaways/editorial-qa', '/bridal-show-registration']) {
+    await page.goto('/shop', { waitUntil: 'domcontentloaded' })
+    await expect(page.locator('main h1')).toBeVisible()
+    const products = page.locator('a[href^="/shop/products/"]')
+    let product: string | null = null
+    if (await products.count() > 0) {
+      product = await products.first().getAttribute('href')
+      expect(product).toBeTruthy()
+    } else {
+      await expect(page.getByRole('heading', { name: 'The collection is in the works.' })).toBeVisible()
+      testInfo.annotations.push({ type: 'coverage', description: 'Empty catalogue verified; product-detail QA requires a populated Fourthwall catalogue.' })
+    }
+    for (const route of ['/shop', ...(product ? [product] : []), '/cart', '/checkout/cancel', '/checkout/success', '/gift-cards/success', '/insider-membership-benefits', '/giveaways/editorial-qa', '/bridal-show-registration']) {
       if (new URL(page.url()).pathname !== route) {
-        await page.goto(route, { waitUntil: 'networkidle' })
+        await page.goto(route, { waitUntil: 'domcontentloaded' })
       }
       await expect(page.locator('main')).toHaveCount(1)
       await expect(page.locator('main h1')).toBeVisible()

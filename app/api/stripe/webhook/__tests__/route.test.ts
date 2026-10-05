@@ -146,7 +146,7 @@ describe('Stripe Webhook Handler', () => {
   })
 
   describe('Checkout Session Completed - Regular Order', () => {
-    it('processes regular product order successfully', async () => {
+    it.each(['endive', 'legacy'])('processes regular product orders with %s shipping details', async shape => {
       const mockSession = {
         id: 'cs_test_123',
         object: 'checkout.session',
@@ -219,7 +219,11 @@ describe('Stripe Webhook Handler', () => {
         },
       }
 
-      mockRetrieve.mockResolvedValue(fullSession)
+      mockRetrieve.mockResolvedValue(shape === 'endive' ? {
+        ...fullSession,
+        shipping_details: undefined,
+        collected_information: { shipping_details: fullSession.shipping_details },
+      } : fullSession)
 
       const mockEvent = {
         id: 'evt_test',
@@ -242,7 +246,7 @@ describe('Stripe Webhook Handler', () => {
       expect(mockRetrieve).toHaveBeenCalledWith(
         'cs_test_123',
         expect.objectContaining({
-          expand: expect.arrayContaining(['line_items', 'customer_details', 'shipping_details']),
+          expand: ['line_items', 'line_items.data.price.product'],
         })
       )
       expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({

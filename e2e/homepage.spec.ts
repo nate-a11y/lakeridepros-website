@@ -24,13 +24,11 @@ test.describe('Homepage', () => {
     await expect(page.locator('footer')).toBeVisible()
   })
 
-  test('cart icon is visible', async ({ page }) => {
+  test('keeps the cart icon hidden when the cart is empty', async ({ page }) => {
     await page.goto('/')
 
-    // Desktop and mobile controls both stay mounted for responsive navigation;
-    // assert the control exposed at the current breakpoint.
-    const cartIcon = page.locator('a[aria-label^="Shopping cart"]:visible')
-    await expect(cartIcon).toBeVisible()
+    // Populated-cart visibility and quantity changes are covered in cart.spec.ts.
+    await expect(page.getByRole('link', { name: /Shopping cart/i })).toHaveCount(0)
   })
 
   test('keeps the editorial dark theme locked', async ({ page }) => {

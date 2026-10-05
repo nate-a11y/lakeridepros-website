@@ -11,7 +11,7 @@ function getStripe() {
     throw new Error('STRIPE_SECRET_KEY is not set')
   }
   return new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2026-08-26.dahlia',
+    apiVersion: '2026-09-30.endive',
   })
 }
 
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
 
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      allowed_payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
       success_url: `${siteUrl}/gift-cards/success?session_id={CHECKOUT_SESSION_ID}`,

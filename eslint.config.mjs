@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     "test-resend.js",
   ]),
   {
+    // Custom accessibility rules also cover config/scripts outside Next's JSX glob.
+    plugins: Object.assign({}, ...nextVitals.map(config => config.plugins), ...nextTs.map(config => config.plugins)),
     rules: {
       // WCAG 2.1 AA Accessibility Rules - Critical (errors)
       "jsx-a11y/alt-text": "error",

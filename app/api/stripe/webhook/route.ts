@@ -9,7 +9,7 @@ function getStripe() {
     throw new Error('STRIPE_SECRET_KEY is not set')
   }
   return new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2026-08-26.dahlia',
+    apiVersion: '2026-09-30.endive',
   })
 }
 
@@ -75,14 +75,16 @@ async function handleCheckoutSessionCompleted(stripe: Stripe, session: Stripe.Ch
     // Otherwise handle regular product order
     // Retrieve full session with line items
     const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
-      expand: ['line_items', 'line_items.data.price.product', 'customer_details', 'shipping_details'],
+      expand: ['line_items', 'line_items.data.price.product'],
     })
 
     const lineItems = fullSession.line_items?.data || []
     const customerEmail = fullSession.customer_details?.email
     const customerName = fullSession.customer_details?.name
     const customerPhone = fullSession.customer_details?.phone
-    const shippingDetails = (fullSession as unknown as { shipping_details?: { address?: Stripe.Address } }).shipping_details
+    // Endive returns shipping under collected_information; retain legacy webhook/session support.
+    const shippingDetails = fullSession.collected_information?.shipping_details
+      ?? (fullSession as unknown as { shipping_details?: { address?: Stripe.Address } }).shipping_details
     const shippingAddress = shippingDetails?.address
 
     if (!customerEmail || !customerName || !shippingAddress) {

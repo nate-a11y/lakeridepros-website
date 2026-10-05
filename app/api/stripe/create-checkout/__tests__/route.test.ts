@@ -2,12 +2,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { NextRequest } from 'next/server'
 import { POST } from '../route'
 
-const { mockCreateSession } = vi.hoisted(() => ({
+const { mockCreateSession, mockStripeOptions } = vi.hoisted(() => ({
   mockCreateSession: vi.fn(),
+  mockStripeOptions: vi.fn(),
 }))
 
 vi.mock('stripe', () => ({
   default: class MockStripe {
+    constructor(_key: string, options: unknown) { mockStripeOptions(options) }
     checkout = {
       sessions: {
         create: mockCreateSession,
@@ -68,7 +70,10 @@ describe('Stripe merch checkout', () => {
     })
 
     const response = await POST(request)
+    expect(mockStripeOptions).toHaveBeenCalledWith({ apiVersion: '2026-09-30.endive' })
     const checkoutInput = mockCreateSession.mock.calls[0][0]
+    expect(checkoutInput.allowed_payment_method_types).toEqual(['card'])
+    expect(checkoutInput).not.toHaveProperty('payment_method_types')
 
     expect(response.status).toBe(200)
     expect(checkoutInput.metadata).toEqual({ type: 'merch' })

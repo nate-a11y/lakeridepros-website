@@ -48,6 +48,7 @@
 ## Compatibility fixes
 
 - Register the existing Next ESLint plugin instances for globally configured rules. Fixes the missing accessibility-plugin error for config/script files without redefining Next's wrapped plugins or relaxing rules. Regression tests verify TSX/MJS/CJS config loading and rejection of an image without alt text.
+- Post-release checkout verification also found pre-existing `.vercel/output` bundles being linted (ESLint does not inherit Git ignores). Explicitly ignore only generated Vercel build output, with regression checks for both static/function artifacts and continued source linting. Accessibility rules remain unchanged.
 - Vitest 5: use jest-dom's Vitest entrypoint and augment `@vitest/expect`'s generic assertion interface for matcher types. Existing test isolation/coverage thresholds remain unchanged.
 - Stripe 23: pin request API version `2026-09-30.endive`; card-only Checkout now uses `allowed_payment_method_types`. Retrieve only expandable line-item fields; read Endive `collected_information.shipping_details` with legacy `shipping_details` fallback. Mocked tests cover digital gift-card amounts, merch card restrictions, and both shipping response shapes.
 - The local API-version change does not update the Stripe account or webhook endpoint configuration. Real sandbox checkout/fulfillment and webhook replay remain separate release validation, not proved by mocked tests.
@@ -63,7 +64,7 @@
 ## Verification
 
 - Clean `npm ci` and `npm ls --depth=0` passed; no invalid direct dependency tree. npm reports no unreviewed install scripts.
-- All unit tests passed: 726 across 99 files (including new regression coverage).
+- All unit tests passed: 727 across 99 files (including new regression coverage).
 - TypeScript check, all repository lint/copy/color audits, and strict accessibility lint passed.
 - Production build passed locally using public CMS reads, internal demo flags, and a loopback synthetic Supabase auth configuration. No production credentials were used; this is not production-auth proof.
 - Coverage run passed the tests but failed the unchanged 80% thresholds: statements 71.47%, branches 65.26%, functions 69.96%, lines 73.76%. Historical coverage debt remains; thresholds were not lowered.

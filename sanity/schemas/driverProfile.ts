@@ -94,10 +94,17 @@ export default defineType({
           type: 'string',
           options: {
             list: [
+              // Match Driver Portal Directory values exactly; sync preserves casing.
+              {title: 'Flex', value: 'Flex'},
+              {title: 'Elite', value: 'Elite'},
+              {title: 'LRP Black', value: 'LRP Black'},
               {title: 'Limo Bus', value: 'limo_bus'},
               {title: 'Rescue Squad', value: 'rescue_squad'},
               {title: 'Sprinter', value: 'sprinter'},
               {title: 'Suburban', value: 'suburban'},
+              {title: 'Shuttle', value: 'shuttle'},
+              {title: 'Pink Patrol', value: 'pink_patrol'},
+              // Retain the existing choice so older profiles remain valid.
               {title: 'Shuttle Bus', value: 'shuttle_bus'},
             ],
           },

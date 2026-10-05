@@ -72,9 +72,16 @@ describe('/pricing discount and fee disclosures', () => {
     expect(faq('What forms of payment do you accept?')).toHaveTextContent('3% processing fee')
   })
 
+  it('publishes the updated Black rate in the FAQ and structured data', () => {
+    const { container, questions } = renderPricing()
+    expect(faq('How much does Lake of the Ozarks transportation cost?')).toHaveTextContent('Black $120/hr (1-hour minimum)')
+    expect(questions.find(entry => entry.name === 'How much does Lake of the Ozarks transportation cost?')!.acceptedAnswer.text).toContain('Black $120/hr (1-hour minimum)')
+    expect(container.textContent).not.toContain('$140')
+  })
+
   it('uses validated hourly rates and preserves the Black advance-booking requirement', () => {
     renderPricing()
-    for (const [name, rate] of [['Flex', '$80'], ['Elite', '$100'], ['LRP Black', '$140']] as const) {
+    for (const [name, rate] of [['Flex', '$80'], ['Elite', '$100'], ['LRP Black', '$120']] as const) {
       const cards = screen.getAllByRole('heading', { name })
       const hourlyCard = cards[1].parentElement!
       expect(within(hourlyCard).getByText(rate, { exact: false })).toHaveTextContent(`${rate}/hour`)

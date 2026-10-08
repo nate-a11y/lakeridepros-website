@@ -26,18 +26,20 @@ it('submits multiple staff roles and the specified Other interest', async () => 
   await user.click(screen.getByRole('checkbox', { name: 'Dispatcher' }))
   await user.click(screen.getByRole('checkbox', { name: 'Other' }))
   for (const [label, value] of [
+    [/ID number/, 'TEST-ID-01'], [/Issuing state/, 'MO'], [/ID expiration date/, '2020-01-01'],
     [/other position/i, 'Fleet support'], [/Full Name/, 'Test Applicant'], [/^Email/, 'applicant@example.com'],
     [/^Phone/, '5735550101'], [/^City, State/, 'Camdenton, MO'], [/Tell us about yourself/, 'I enjoy helping customers.'],
     [/Previous Work Experience/, 'Customer service experience.'],
     [/^Availability \*/, 'Weekends, 20 hours weekly'], [/Earliest start date/, '2026-10-01'],
     [/Dispatch and customer service experience/, 'Phone scheduling'], [/Handling a delayed pickup/, 'Contact the driver and update the customer'],
   ] as const) fireEvent.change(screen.getByLabelText(label), { target: { value } })
+  for (const side of ['front', 'back']) await user.upload(screen.getByLabelText(`ID ${side} photo *`), new File(['photo'], 'id.jpg', { type: 'image/jpeg' }))
   await user.click(screen.getByRole('button', { name: 'Verify test applicant' }))
   await user.click(screen.getByRole('button', { name: 'Submit application' }))
   expect(await screen.findByRole('heading', { name: 'Application Submitted!' })).toBeInTheDocument()
   const [url, options] = fetchMock.mock.calls[0]
   expect(url).toBe('/api/careers/general-application')
-  expect(JSON.parse(options.body)).toMatchObject({ positions: ['Dispatcher', 'Other'], otherPosition: 'Fleet support', availability: 'Weekends, 20 hours weekly', earliestStartDate: '2026-10-01', dispatchExperience: 'Phone scheduling' })
+  expect(JSON.parse(options.body.get('application'))).toMatchObject({ positions: ['Dispatcher', 'Other'], otherPosition: 'Fleet support', availability: 'Weekends, 20 hours weekly', earliestStartDate: '2026-10-01', dispatchExperience: 'Phone scheduling' })
 })
 
 it('requires an Other description and clears it when Other is deselected', async () => {
@@ -80,4 +82,14 @@ it('shows screening validation errors without submitting', async () => {
   expect(screen.getByText('Please enter a valid earliest start date')).toBeInTheDocument()
   expect(screen.getByLabelText(/Vehicle detailing experience/)).toHaveAttribute('aria-invalid', 'true')
   expect(fetchMock).not.toHaveBeenCalled()
+})
+
+it('uses identity-only fields and private photo inputs, not driving authorization or license class', () => {
+  render(<GeneralApplicationPage />)
+  expect(screen.getByText(/This is not a driving-eligibility check/)).toBeVisible()
+  expect(screen.getByLabelText('ID number *')).toHaveAttribute('autoComplete', 'off')
+  expect(screen.getByLabelText('ID expiration date *')).not.toHaveAttribute('min')
+  for (const side of ['front', 'back']) expect(screen.getByLabelText(`ID ${side} photo *`)).toHaveAttribute('accept', 'image/jpeg,image/png')
+  expect(screen.queryByLabelText(/license class/i)).not.toBeInTheDocument()
+  expect(screen.queryByRole('checkbox', { name: /driving record/i })).not.toBeInTheDocument()
 })

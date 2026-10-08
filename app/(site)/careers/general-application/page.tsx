@@ -8,6 +8,8 @@ import Link from 'next/link'
 import { GENERAL_APPLICATION_POSITIONS, ROLE_QUESTIONS, generalApplicationSchema, type GeneralApplicationFormData } from '@/lib/validation/general-application'
 import { CheckCircle, Upload, X } from 'lucide-react'
 import Turnstile from '@/components/Turnstile'
+import GeneralApplicationIdentity from '@/components/careers/GeneralApplicationIdentity'
+import { identityDocumentError } from '@/lib/validation/identity-document'
 import GeneralApplicationDetails from '@/components/careers/GeneralApplicationDetails'
 
 const ACCEPTED_FILE_TYPES = [
@@ -22,6 +24,8 @@ export default function GeneralApplicationPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [identityFiles, setIdentityFiles] = useState<{ front: File | null; back: File | null }>({ front: null, back: null })
+  const [identityErrors, setIdentityErrors] = useState<{ front: string | null; back: string | null }>({ front: null, back: null })
   const [resumeFile, setResumeFile] = useState<File | null>(null)
   const [fileError, setFileError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -46,6 +50,9 @@ export default function GeneralApplicationPage() {
       fullName: '',
       email: '',
       phone: '',
+      current_license_state: '',
+      current_license_number: '',
+      current_license_expiration: '',
       cityState: '',
       howDidYouHear: '',
       socialFacebook: '',
@@ -124,6 +131,13 @@ export default function GeneralApplicationPage() {
       return
     }
 
+    const photoErrors = { front: identityDocumentError(identityFiles.front), back: identityDocumentError(identityFiles.back) }
+    setIdentityErrors(photoErrors)
+    if (photoErrors.front || photoErrors.back) {
+      setSubmitError('Please provide both ID photos for identity review.')
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitError(null)
 
@@ -136,15 +150,13 @@ export default function GeneralApplicationPage() {
         resumeFileName = resumeFile.name
       }
 
+      const formData = new FormData()
+      formData.set('application', JSON.stringify({ ...data, turnstileToken, resumeBase64, resumeFileName }))
+      formData.set('licenseFront', identityFiles.front!)
+      formData.set('licenseBack', identityFiles.back!)
       const response = await fetch('/api/careers/general-application', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...data,
-          turnstileToken,
-          resumeBase64,
-          resumeFileName,
-        }),
+        body: formData,
       })
 
       if (!response.ok) {
@@ -285,6 +297,18 @@ export default function GeneralApplicationPage() {
                 </p>
               )}
             </div>
+
+            <GeneralApplicationIdentity
+              register={register}
+              errors={errors}
+              files={identityFiles}
+              fileErrors={identityErrors}
+              disabled={isSubmitting}
+              onFileChange={(side, file) => {
+                setIdentityFiles(previous => ({ ...previous, [side]: file }))
+                setIdentityErrors(previous => ({ ...previous, [side]: file ? identityDocumentError(file) : null }))
+              }}
+            />
 
             {/* Email */}
             <div>

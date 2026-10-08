@@ -2,6 +2,7 @@ import { expect, it } from 'vitest'
 import { generalApplicationSchema } from '../general-application'
 
 const base = {
+  current_license_number: 'TEST-ID-01', current_license_state: 'MO', current_license_expiration: '2020-01-01',
   positions: ['Sales'], fullName: 'Test Applicant', email: 'applicant@example.com', phone: '5735550101',
   cityState: 'Camdenton, MO', aboutYourself: 'Ready to learn.', workExperience: 'Customer service.',
   availability: 'Mon–Fri after 4 pm, weekends flexible; 15–20 hours weekly.', earliestStartDate: '2026-10-01',
@@ -28,4 +29,16 @@ it('requires both sets of answers when both roles are selected', () => {
 it('limits free-text answers', () => {
   expect(generalApplicationSchema.safeParse({ ...base, availability: 'a'.repeat(2001) }).success).toBe(false)
   expect(generalApplicationSchema.safeParse({ ...base, positions: ['Dispatcher'], dispatchExperience: 'a'.repeat(3001), dispatchScenario: 'Call the driver' }).success).toBe(false)
+})
+
+it('requires identity details but accepts an expired ID without driving eligibility or MVR consent', () => {
+  const parsed = generalApplicationSchema.safeParse({ ...base, current_license_expiration: '2000-01-01' })
+  expect(parsed.success).toBe(true)
+  for (const patch of [{ current_license_number: ' ' }, { current_license_state: 'XX' }, { current_license_expiration: '2026-02-30' }]) {
+    expect(generalApplicationSchema.safeParse({ ...base, ...patch }).success).toBe(false)
+  }
+  if (parsed.success) {
+    expect(parsed.data).not.toHaveProperty('current_license_class')
+    expect(parsed.data).not.toHaveProperty('authorize_license_record_check')
+  }
 })

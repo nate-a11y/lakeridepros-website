@@ -2,19 +2,25 @@ import { NextRequest } from 'next/server'
 import { beforeEach, expect, it, vi } from 'vitest'
 import { POST } from '../route'
 
-const { insert, send } = vi.hoisted(() => ({ insert: vi.fn(), send: vi.fn() }))
-vi.mock('@/lib/supabase/client', () => ({ getSupabaseServerClient: () => ({ from: () => ({ insert }) }) }))
+const { insert, send, upload, remove } = vi.hoisted(() => ({ insert: vi.fn(), send: vi.fn(), upload: vi.fn(), remove: vi.fn() }))
+vi.mock('@/lib/supabase/client', () => ({ getSupabaseServerClient: () => ({ from: () => ({ insert }), storage: { from: () => ({ upload, remove }) } }) }))
 vi.mock('resend', () => ({ Resend: class { emails = { send } } }))
 
 const input = {
+  current_license_number: 'TEST-ID-01', current_license_state: 'MO', current_license_expiration: '2020-01-01',
   fullName: 'Test Applicant', email: 'applicant@example.com', phone: '5735550101', cityState: 'Camdenton, MO',
   availability: 'Weekends & evenings, 20 hours weekly.', earliestStartDate: '2026-10-01',
   detailingExperience: 'Interior cleaning <training>', detailingApproach: 'Use a checklist and report damage.',
   dispatchExperience: 'Phone support <training>', dispatchScenario: 'Confirm timing and update both customers.',
   aboutYourself: 'Reliable team member.', workExperience: 'Customer service.', turnstileToken: 'test-token',
 }
-function request(patch: Record<string, unknown>) {
-  return new NextRequest('http://localhost/api/careers/general-application', { method: 'POST', body: JSON.stringify({ ...input, ...patch }) })
+const image = () => new File([new Uint8Array([0xff, 0xd8, 0xff, 0xe0])], 'id.jpg', { type: 'image/jpeg' })
+function request(patch: Record<string, unknown>, front: File | null = image(), back: File | null = image()) {
+  const form = new FormData()
+  form.set('application', JSON.stringify({ ...input, ...patch }))
+  if (front) form.set('licenseFront', front)
+  if (back) form.set('licenseBack', back)
+  return new NextRequest('http://localhost/api/careers/general-application', { method: 'POST', body: form })
 }
 beforeEach(() => {
   vi.clearAllMocks()
@@ -22,6 +28,8 @@ beforeEach(() => {
   vi.stubEnv('RESEND_API_KEY', 'test-resend')
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ success: true }))))
   insert.mockReturnValue({ select: () => ({ single: async () => ({ data: { id: 'test-application' }, error: null }) }) })
+  upload.mockResolvedValue({ data: { path: 'test-path' }, error: null })
+  remove.mockResolvedValue({ error: null })
   send.mockResolvedValue({ data: { id: 'test-email' }, error: null })
 })
 
@@ -84,4 +92,53 @@ it.each([
   expect(insert).not.toHaveBeenCalled()
   expect(send).not.toHaveBeenCalled()
   expect(fetch).not.toHaveBeenCalled()
+})
+
+it('stores private identity paths but never attaches/photos/emails ID values', async () => {
+  expect((await POST(request({ positions: ['Sales'], applicationId: '../victim' }))).status).toBe(200)
+  const saved = insert.mock.calls[0][0][0]
+  expect(saved).toMatchObject({ current_license_number: 'TEST-ID-01', current_license_state: 'MO', current_license_expiration: '2020-01-01' })
+  expect(saved.id).toMatch(/^[a-f0-9-]{36}$/)
+  expect(saved.license_front_url).toMatch(new RegExp(`^${saved.id}/identity_front_[a-f0-9-]+\\.jpg$`))
+  expect(saved.license_back_url).toMatch(new RegExp(`^${saved.id}/identity_back_[a-f0-9-]+\\.jpg$`))
+  expect(upload).toHaveBeenCalledTimes(2)
+  for (const [message] of send.mock.calls) {
+    expect(message).not.toHaveProperty('attachments')
+    expect(message.html).not.toContain('TEST-ID-01')
+    expect(message.html).not.toContain('identity_front')
+  }
+  expect(saved).not.toHaveProperty('authorize_license_record_check')
+  expect(remove).not.toHaveBeenCalled()
+})
+it('rejects missing photos and spoofed image data before saving or emailing', async () => {
+  expect((await POST(request({ positions: ['Sales'] }, null))).status).toBe(400)
+  expect((await POST(request({ positions: ['Sales'] }, new File(['not an image'], 'fake.jpg', { type: 'image/jpeg' })))).status).toBe(400)
+  expect(insert).not.toHaveBeenCalled()
+  expect(upload).not.toHaveBeenCalled()
+  expect(send).not.toHaveBeenCalled()
+})
+it('does not upload identity photos when Turnstile fails', async () => {
+  vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({ success: false })))
+  expect((await POST(request({ positions: ['Sales'] }))).status).toBe(400)
+  expect(upload).not.toHaveBeenCalled()
+  expect(insert).not.toHaveBeenCalled()
+})
+it('cleans up only newly uploaded photos if the second upload fails', async () => {
+  upload.mockResolvedValueOnce({ error: null }).mockResolvedValueOnce({ error: { message: 'failure' } })
+  expect((await POST(request({ positions: ['Sales'] }))).status).toBe(500)
+  expect(remove).toHaveBeenCalledWith([upload.mock.calls[0][0]])
+  expect(insert).not.toHaveBeenCalled()
+  expect(send).not.toHaveBeenCalled()
+})
+it('cleans up new photos if application persistence fails', async () => {
+  insert.mockReturnValue({ select: () => ({ single: async () => ({ error: { message: 'failure' } }) }) })
+  expect((await POST(request({ positions: ['Sales'] }))).status).toBe(500)
+  expect(remove).toHaveBeenCalledWith(upload.mock.calls.map(call => call[0]))
+  expect(send).not.toHaveBeenCalled()
+})
+it('retains saved identity documents if email delivery fails', async () => {
+  send.mockResolvedValueOnce({ error: { message: 'failure' } })
+  expect((await POST(request({ positions: ['Sales'] }))).status).toBe(500)
+  expect(insert).toHaveBeenCalledOnce()
+  expect(remove).not.toHaveBeenCalled()
 })

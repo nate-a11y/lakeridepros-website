@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "node:crypto";
+import { identityDocumentError, identityDocumentMatchesType } from "@/lib/validation/identity-document";
 import { Resend } from "resend";
 import { generalApplicationDetails, generalApplicationSchema } from "@/lib/validation/general-application";
 import { getSupabaseServerClient } from "@/lib/supabase/client";
@@ -8,8 +10,28 @@ const CAREERS_FROM_EMAIL =
 const CAREERS_REPLY_TO_EMAIL = "owners@lakeridepros.com";
 
 export async function POST(request: NextRequest) {
+  const uploadedPaths: string[] = [];
+  let applicationSaved = false;
+  const cleanupUploads = async () => {
+    if (!applicationSaved && uploadedPaths.length) {
+      try {
+        const { error } = await getSupabaseServerClient().storage.from("driver-applications").remove(uploadedPaths);
+        if (error) console.error("Failed to clean up unsubmitted identity photos");
+      } catch {
+        console.error("Failed to clean up unsubmitted identity photos");
+      }
+    }
+  };
   try {
-    const body = await request.json();
+    const multipart = request.headers.get("content-type")?.includes("multipart/form-data");
+    const form = multipart ? await request.formData() : null;
+    const body = form ? JSON.parse(String(form.get("application") || "{}")) : await request.json();
+    const front = form?.get("licenseFront");
+    const back = form?.get("licenseBack");
+    const photos = [
+      { side: "front", file: front && typeof front !== "string" ? front : null },
+      { side: "back", file: back && typeof back !== "string" ? back : null },
+    ];
     const parsed = generalApplicationSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
@@ -33,6 +55,11 @@ export async function POST(request: NextRequest) {
       socialTikTok,
     } = parsed.data;
     const { turnstileToken, resumeBase64, resumeFileName } = body;
+    for (const { side, file } of photos) {
+      const error = identityDocumentError(file);
+      if (error) return NextResponse.json({ error: `ID ${side}: ${error}` }, { status: 400 });
+    }
+
 
     if (!turnstileToken) {
       return NextResponse.json(
@@ -71,6 +98,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Do not persist an application or photos with an unconfigured mail service.
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json({ error: "Email service is not configured." }, { status: 500 });
+    }
+    const photoBuffers = await Promise.all(photos.map(async ({ side, file }) => {
+      const bytes = new Uint8Array(await file!.arrayBuffer());
+      return { side, file: file!, bytes };
+    }));
+    if (photoBuffers.some(({ file, bytes }) => !identityDocumentMatchesType(bytes, file.type))) {
+      return NextResponse.json({ error: "ID photos must contain valid JPG or PNG image data." }, { status: 400 });
+    }
+
     // Persist non-driver career applications so they appear in the LRP Driver Portal
     // Applications review queue. The Staff prefix keeps all these roles on the
     // portal's existing non-driver onboarding path (including Dispatcher/Other).
@@ -99,6 +138,7 @@ export async function POST(request: NextRequest) {
 
     const applicationNotes = [
       "General non-driver application submitted from /careers/general-application.",
+      "Photo ID supplied for manual identity review only; no driving eligibility or driving-record authorization collected.",
       howDidYouHear ? `How they heard about us: ${howDidYouHear}` : null,
       socialLinks.length ? `Social media:\n${socialLinks.join("\n")}` : null,
       resumeFileName
@@ -122,11 +162,34 @@ export async function POST(request: NextRequest) {
     ].join("\n");
 
     const supabase = getSupabaseServerClient();
+    // Server-assigned application prefix prevents caller-selected storage paths.
+    // Persist paths only; authorized portal reviewers obtain short-lived URLs.
+    const applicationId = randomUUID();
+    const identityPaths: Record<string, string> = {};
+    for (const { side, file, bytes } of photoBuffers) {
+      const extension = file.type === "image/png" ? "png" : "jpg";
+      const path = `${applicationId}/identity_${side}_${randomUUID()}.${extension}`;
+      const { error } = await supabase.storage.from("driver-applications").upload(path, bytes, {
+        contentType: file.type, upsert: false, cacheControl: "0",
+      });
+      if (error) {
+        await cleanupUploads();
+        return NextResponse.json({ error: "Unable to save ID photos. Please try again." }, { status: 500 });
+      }
+      uploadedPaths.push(path);
+      identityPaths[side] = path;
+    }
     const { error: applicationError } = (await supabase
       .from("driver_applications")
       // @ts-ignore - general/non-driver applications reuse the existing portal review table
       .insert([
         {
+          id: applicationId,
+          current_license_number: parsed.data.current_license_number,
+          current_license_state: parsed.data.current_license_state,
+          current_license_expiration: parsed.data.current_license_expiration,
+          license_front_url: identityPaths.front,
+          license_back_url: identityPaths.back,
           status: "submitted",
           first_name: firstName,
           last_name: lastName,
@@ -153,22 +216,17 @@ export async function POST(request: NextRequest) {
       .single()) as { error: any };
 
     if (applicationError) {
-      console.error("Error saving general application:", applicationError);
+      console.error("Error saving general application");
+      await cleanupUploads();
       return NextResponse.json(
         { error: "Failed to submit application. Please try again." },
         { status: 500 },
       );
     }
 
-    // Set up Resend
-    if (!process.env.RESEND_API_KEY) {
-      console.error("RESEND_API_KEY is not configured");
-      return NextResponse.json(
-        { error: "Email service is not configured." },
-        { status: 500 },
-      );
-    }
+    applicationSaved = true;
 
+    // Set up Resend
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Build email HTML
@@ -330,7 +388,9 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error("General application submission error:", error);
+    await cleanupUploads();
+    if (error instanceof SyntaxError) return NextResponse.json({ error: "Invalid application data." }, { status: 400 });
+    console.error("General application submission error", error instanceof Error ? error.name : "UnknownError");
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },
       { status: 500 },

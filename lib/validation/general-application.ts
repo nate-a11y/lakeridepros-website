@@ -1,5 +1,9 @@
 import { z } from 'zod'
 
+export const IDENTITY_STATES = [
+  'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC',
+] as const
+
 export const GENERAL_APPLICATION_POSITIONS = [
   'Sales', 'Brand Ambassador', 'Part-Time Detailer', 'Dispatcher', 'Other',
 ] as const
@@ -17,6 +21,10 @@ export const generalApplicationSchema = z.object({
   fullName: z.string().trim().min(1, 'Full name is required').max(200),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+  current_license_number: z.string().trim().min(1, 'ID number is required').max(100),
+  current_license_state: z.string().refine(state => IDENTITY_STATES.includes(state as typeof IDENTITY_STATES[number]), 'Please select the issuing state'),
+  // Record the date for identity review; do not apply driver expiry/class/MVR rules.
+  current_license_expiration: z.iso.date('Please enter a valid ID expiration date'),
   cityState: z.string().trim().min(1, 'City, State is required').max(200),
   availability: z.string().trim().min(1, 'Please describe your availability').max(2000),
   earliestStartDate: z.iso.date('Please enter a valid earliest start date'),

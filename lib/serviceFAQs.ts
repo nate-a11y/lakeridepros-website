@@ -1,3 +1,4 @@
+import { servedAirportsAnswer } from '@/lib/airport-copy'
 import { cancellationPolicyAnswer } from '@/lib/homeFaqs';
 import { pricingFeesAnswer, transportationCostAnswer } from '@/lib/pricing-copy';
 
@@ -24,7 +25,7 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'Which airports do you service from Lake of the Ozarks?',
-      answer: 'We provide transportation to/from Kansas City International Airport (MCI), St. Louis Lambert International Airport (STL), Springfield-Branson Airport (SGF), and Columbia Regional Airport (COU). Our professional drivers ensure safe, comfortable rides to all major regional airports.',
+      answer: servedAirportsAnswer,
     },
     {
       question: 'Do you track flight delays and arrivals?',

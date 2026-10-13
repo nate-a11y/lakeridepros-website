@@ -1,3 +1,4 @@
+import { commercialAirports, commercialAirportOrderAnswer, nearestAirportAnswer, servedAirportsAnswer } from '@/lib/airport-copy'
 import LocationHero from '@/components/location/LocationHero'
 import LocationSection from '@/components/location/LocationSection'
 import LocationEditorialList from '@/components/location/LocationEditorialList'
@@ -12,11 +13,11 @@ import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/s
 export const metadata: Metadata = {
   title: 'Lake of the Ozarks Airport Shuttle | Lake Ride Pros',
   description:
-    'Professional airport shuttle service to/from Lake of the Ozarks. Grand Glaize Airport (KOZS), MCI, STL, SGF. Private aviation, commercial flights. Book now!',
+    'Professional airport shuttle service to/from Lake of the Ozarks. COU, SGF, STL, MCI, and local private aviation airports. Private aviation, commercial flights. Book now!',
   keywords: [
     'Lake of the Ozarks airport transportation',
     'Grand Glaize Airport shuttle',
-    'KOZS airport transportation',
+    'K15 airport transportation',
     'Lake Ozarks airport transfer',
     'MCI to Lake of the Ozarks',
     'STL to Lake Ozarks shuttle',
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Lake of the Ozarks Airport Transportation | Lake Ride Pros',
     description:
-      'Professional airport shuttle and private aviation transportation at Lake of the Ozarks. Grand Glaize Airport (KOZS), MCI, STL, SGF.',
+      'Professional airport shuttle and private aviation transportation at Lake of the Ozarks. COU, SGF, STL, MCI, and local private aviation airports.',
     url: 'https://www.lakeridepros.com/lake-ozarks-airport-transportation',
     siteName: 'Lake Ride Pros',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ozarks Airport Transportation' }],
@@ -86,15 +87,15 @@ const faqSchema = {
       name: 'What is the closest airport to Lake of the Ozarks?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Lee C. Fine Memorial Airport (KOZS), also known as Grand Glaize Airport, is located right at Lake of the Ozarks in Osage Beach. It serves private aircraft and charter flights. For commercial flights, Kansas City International (MCI) is 2-2.5 hours away, and St. Louis Lambert (STL) is 2.5-3 hours away.',
+        text: nearestAirportAnswer,
       },
     },
     {
       '@type': 'Question',
-      name: 'Do you provide transportation from Grand Glaize Airport (KOZS)?',
+      name: 'Do you provide transportation from Grand Glaize Airport (K15)?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes! We provide prompt pickup service from Grand Glaize Airport (Lee C. Fine Memorial Airport - KOZS) in Osage Beach. Perfect for private aircraft arrivals. We can meet you planeside or at the FBO and transport you anywhere around Lake of the Ozarks.',
+        text: 'Yes! We provide prompt pickup service from Grand Glaize Airport (K15) in Osage Beach. Perfect for private aircraft arrivals. We can meet you planeside or at the FBO and transport you anywhere around Lake of the Ozarks.',
       },
     },
     {
@@ -110,7 +111,7 @@ const faqSchema = {
       name: 'Can you accommodate private aviation and charter flights?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Absolutely! We specialize in private aviation transportation at Lake of the Ozarks. We coordinate with FBOs at Grand Glaize Airport (KOZS) and monitor flight arrival times. Our luxury vehicles are perfect for executive and VIP clients arriving by private jet.',
+        text: 'Absolutely! We specialize in private aviation transportation at Lake of the Ozarks. We coordinate with FBOs at Grand Glaize Airport (K15) and monitor flight arrival times. Our luxury vehicles are perfect for executive and VIP clients arriving by private jet.',
       },
     },
     {
@@ -126,7 +127,7 @@ const faqSchema = {
       name: 'What airports do you service for Lake of the Ozarks transportation?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We provide transportation to/from Grand Glaize Airport (KOZS) at Lake of the Ozarks, Kansas City International (MCI), St. Louis Lambert (STL), Springfield-Branson (SGF), and Columbia Regional (COU). We service both private aviation and commercial flights at all locations.',
+        text: servedAirportsAnswer,
       },
     },
     {
@@ -160,8 +161,8 @@ export default async function LakeOzarksAirportTransportationPage() {
           introduction={
             <>
               <p>
-                Professional shuttle service from Grand Glaize Airport (KOZS), MCI, STL, and all major
-                airports to Lake destinations. Private aviation specialists.
+                Professional shuttle service from Columbia (COU), Springfield (SGF), St. Louis (STL), Kansas City (MCI), and local
+                private aviation airports to Lake destinations. Private aviation specialists.
               </p>
             </>
           }
@@ -172,44 +173,20 @@ export default async function LakeOzarksAirportTransportationPage() {
         />
 
         {/* Airport Coverage */}
-        <LocationSection id="local-section-1" title={'Airports We Service'} tone="white">
+        <LocationSection id="local-section-1" title={'Airports We Service'} introduction={<p>{commercialAirportOrderAnswer}</p>} tone="white">
           <LocationEditorialList
             items={[
+              ...commercialAirports.map(airport => ({
+                title: `${airport.city} (${airport.code})`,
+                description: <p>{airport.name}</p>,
+              })),
               {
-                title: 'Grand Glaize (KOZS)',
-                description: (
-                  <>
-                    <p>Lee C. Fine Memorial Airport</p>
-                    <p>At Lake of the Ozarks</p>
-                  </>
-                ),
+                title: 'Lee C. Fine Memorial (AIZ)',
+                description: <p>Local private aviation airport at Lake of the Ozarks</p>,
               },
               {
-                title: 'Kansas City (MCI)',
-                description: (
-                  <>
-                    <p>Kansas City International</p>
-                    <p>2-2.5 hours</p>
-                  </>
-                ),
-              },
-              {
-                title: 'St. Louis (STL)',
-                description: (
-                  <>
-                    <p>Lambert International</p>
-                    <p>2.5-3 hours</p>
-                  </>
-                ),
-              },
-              {
-                title: 'Springfield (SGF)',
-                description: (
-                  <>
-                    <p>Springfield-Branson Airport</p>
-                    <p>1.5-2 hours</p>
-                  </>
-                ),
+                title: 'Grand Glaize (K15)',
+                description: <p>Separate local airport in Osage Beach for private aviation</p>,
               },
             ]}
           />
@@ -260,41 +237,15 @@ export default async function LakeOzarksAirportTransportationPage() {
         <LocationSection id="local-section-3" title={'Popular Airport Routes'} tone="white">
           <LocationEditorialList
             items={[
+              ...commercialAirports.map(airport => ({
+                title: `${airport.code} to Lake of the Ozarks`,
+                href: airport.href,
+                description: <p>{airport.name} to Lake destinations</p>,
+              })),
               {
-                title: 'MCI to Lake of the Ozarks',
-                href: '/kansas-city-to-lake-ozarks',
-                description: (
-                  <>
-                    <p>Kansas City International to Lake destinations</p>
-                  </>
-                ),
-              },
-              {
-                title: 'STL to Lake of the Ozarks',
-                href: '/st-louis-to-lake-ozarks',
-                description: (
-                  <>
-                    <p>St. Louis Lambert to Lake destinations</p>
-                  </>
-                ),
-              },
-              {
-                title: 'SGF to Lake of the Ozarks',
-                href: '/services/airport-transfers',
-                description: (
-                  <>
-                    <p>Springfield-Branson to Lake destinations</p>
-                  </>
-                ),
-              },
-              {
-                title: 'Grand Glaize Airport (KOZS)',
-                href: '/services/airport-transfers',
-                description: (
-                  <>
-                    <p>Private aviation transfers at the Lake</p>
-                  </>
-                ),
+                title: 'Local private aviation transfers',
+                href: '/services/private-aviation-transfers',
+                description: <p>Lee C. Fine Memorial, Grand Glaize, and Camdenton airport pickups</p>,
               },
             ]}
           />
@@ -426,12 +377,12 @@ export default async function LakeOzarksAirportTransportationPage() {
             {
               question: 'What is the closest airport to Lake of the Ozarks?',
               answer:
-                'Lee C. Fine Memorial Airport (KOZS), also known as Grand Glaize Airport, is located right at Lake of the Ozarks in Osage Beach. It serves private aircraft and charter flights. For commercial flights, Kansas City International (MCI) is 2-2.5 hours away, and St. Louis Lambert (STL) is 2.5-3 hours away.',
+                nearestAirportAnswer,
             },
             {
-              question: 'Do you provide transportation from Grand Glaize Airport (KOZS)?',
+              question: 'Do you provide transportation from Grand Glaize Airport (K15)?',
               answer:
-                'Yes! We provide prompt pickup service from Grand Glaize Airport (Lee C. Fine Memorial Airport - KOZS) in Osage Beach. Perfect for private aircraft arrivals. We can meet you planeside or at the FBO and transport you anywhere around Lake of the Ozarks.',
+                'Yes! We provide prompt pickup service from Grand Glaize Airport (K15) in Osage Beach. Perfect for private aircraft arrivals. We can meet you planeside or at the FBO and transport you anywhere around Lake of the Ozarks.',
             },
             {
               question: 'How much does airport transportation cost at Lake of the Ozarks?',
@@ -441,7 +392,7 @@ export default async function LakeOzarksAirportTransportationPage() {
             {
               question: 'Can you accommodate private aviation and charter flights?',
               answer:
-                'Absolutely! We specialize in private aviation transportation at Lake of the Ozarks. We coordinate with FBOs at Grand Glaize Airport (KOZS) and monitor flight arrival times. Our luxury vehicles are perfect for executive and VIP clients arriving by private jet.',
+                'Absolutely! We specialize in private aviation transportation at Lake of the Ozarks. We coordinate with FBOs at Grand Glaize Airport (K15) and monitor flight arrival times. Our luxury vehicles are perfect for executive and VIP clients arriving by private jet.',
             },
             {
               question: 'Do you track commercial flights from MCI and STL?',
@@ -451,7 +402,7 @@ export default async function LakeOzarksAirportTransportationPage() {
             {
               question: 'What airports do you service for Lake of the Ozarks transportation?',
               answer:
-                'We provide transportation to/from Grand Glaize Airport (KOZS) at Lake of the Ozarks, Kansas City International (MCI), St. Louis Lambert (STL), Springfield-Branson (SGF), and Columbia Regional (COU). We service both private aviation and commercial flights at all locations.',
+                servedAirportsAnswer,
             },
             {
               question: 'How far in advance should I book airport transportation?',

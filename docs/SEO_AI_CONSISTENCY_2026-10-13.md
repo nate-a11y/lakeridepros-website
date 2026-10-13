@@ -34,3 +34,12 @@
 - Existing dependency install reported 16 advisories (1 moderate, 15 high); no unrelated dependency changes are included.
 - Remaining CMS fetch helpers retain their existing empty-data fallback on outages. The storefront checks do not guarantee every upstream system is healthy; monitor sitemap/feeds after release.
 - Crawling and truthful content improve readiness, not guaranteed rankings or AI citations. `llms.txt` is an optional directory, not a ranking feature.
+
+## Airport geography correction
+
+- Nate flagged the Kansas City route's incorrect closest-airport claim. Commercial airport order for typical Osage Beach/Lake Ozark trips is **COU, SGF, STL, MCI**, with distances/timing dependent on the final Lake address, route, and traffic. Removed claims that MCI is closest/shortest and its unsupported fixed 2–2.5-hour estimate.
+- Airport hub and pricing coverage use one ordered airport list; COU is now included in both. Homepage/service coverage and visible/schema airport answers share source copy. Local private airports are explicitly separate from scheduled commercial options.
+- Corrected the hub's conflation of Lee C. Fine Memorial (AIZ) with Grand Glaize (K15). These are separate airports, not aliases; removed KOZS from Grand Glaize metadata/copy.
+- Regression tests exercise actual rendered pages, ordering, local identities, and visible/schema equality. Sources: [Margaritaville airport location guide](https://www.margaritavilleresortlakeoftheozarks.com/location), [resort airport FAQ](https://www.margaritavilleresortlakeoftheozarks.com/faqs), [City of Osage Beach airport authority](https://www.osagebeach-mo.gov/86/Airports).
+- No CMS/production content writes. Destination-specific routing must still be checked when quoting a trip; the ordering is not guaranteed for every address around the Lake.
+- Follow-up gates: **107 test files / 790 tests**, lint, typecheck, build, and whitespace checks pass. Pricing, airport hub, and MCI route each pass axe WCAG A/AA at 375 and 1440 px, with no document overflow. Full multi-browser E2E remains unrun.

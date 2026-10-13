@@ -1,3 +1,4 @@
+import { commercialAirportOrderAnswer } from '@/lib/airport-copy'
 import LocationHero from '@/components/location/LocationHero'
 import LocationSection from '@/components/location/LocationSection'
 import LocationEditorialList from '@/components/location/LocationEditorialList'
@@ -106,7 +107,7 @@ const faqSchema = {
       name: 'How long is the drive from Kansas City to Lake of the Ozarks?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'The drive from Kansas City International Airport (MCI) to Lake of the Ozarks is approximately 2 to 2.5 hours depending on your final destination (Osage Beach, Camdenton, or Lake Ozark). Our professional drivers take the most efficient routes and monitor traffic in real-time.',
+        text: 'Kansas City International Airport (MCI) is a longer transfer than Columbia (COU) or Springfield (SGF) for typical Osage Beach and Lake Ozark trips. Your exact driving time depends on the pickup address, Lake destination, route, and traffic. Confirm your itinerary and allow time for airport check-in before booking.',
       },
     },
     {
@@ -146,7 +147,7 @@ const faqSchema = {
       name: 'Is Kansas City or St. Louis closer to Lake of the Ozarks?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Kansas City (MCI Airport) is slightly closer to Lake of the Ozarks at approximately 2-2.5 hours, compared to 2.5-3 hours from St. Louis (STL Airport). Both airports offer convenient access to the Lake, and we provide professional shuttle service from both locations.',
+        text: commercialAirportOrderAnswer,
       },
     },
   ],
@@ -192,12 +193,12 @@ export default async function KansasCityToLakeOzarksPage() {
           <LocationEditorialList
             items={[
               {
-                title: 'Shortest Route',
+                title: 'Door-to-Door Airport Transfer',
                 description: (
                   <>
                     <p>
-                      MCI is the closest major airport to Lake of the Ozarks. Only 2-2.5 hours to your
-                      lakefront destination.
+                      Private transportation from Kansas City International Airport directly to your Lake
+                      destination. Columbia and Springfield are typically closer airport options.
                     </p>
                   </>
                 ),
@@ -408,7 +409,7 @@ export default async function KansasCityToLakeOzarksPage() {
             {
               question: 'How long is the drive from Kansas City to Lake of the Ozarks?',
               answer:
-                'The drive from Kansas City International Airport (MCI) to Lake of the Ozarks is approximately 2 to 2.5 hours depending on your final destination (Osage Beach, Camdenton, or Lake Ozark). Our professional drivers take the most efficient routes and monitor traffic in real-time.',
+                'Kansas City International Airport (MCI) is a longer transfer than Columbia (COU) or Springfield (SGF) for typical Osage Beach and Lake Ozark trips. Your exact driving time depends on the pickup address, Lake destination, route, and traffic. Confirm your itinerary and allow time for airport check-in before booking.',
             },
             {
               question: 'Do you track flights from MCI Airport?',
@@ -433,7 +434,7 @@ export default async function KansasCityToLakeOzarksPage() {
             {
               question: 'Is Kansas City or St. Louis closer to Lake of the Ozarks?',
               answer:
-                'Kansas City (MCI Airport) is slightly closer to Lake of the Ozarks at approximately 2-2.5 hours, compared to 2.5-3 hours from St. Louis (STL Airport). Both airports offer convenient access to the Lake, and we provide professional shuttle service from both locations.',
+                commercialAirportOrderAnswer,
             },
           ]}
         />

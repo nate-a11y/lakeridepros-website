@@ -1,3 +1,4 @@
+import { commercialAirports, commercialAirportOrderAnswer } from '@/lib/airport-copy'
 import { transportationCostAnswer, exactQuoteAnswer, bookingFeeAnswer, transferPricingAnswer, fuelSurchargeAnswer, pricingFeesAnswer, insiderSavingsAnswer, creditCardFeeAnswer } from '@/lib/pricing-copy'
 import CorePage from '@/components/core-editorial/CorePage'
 import CoreHero from '@/components/core-editorial/CoreHero'
@@ -659,32 +660,18 @@ export default function PricingPage() {
                 <p className="text-xs text-gray-600">Private aviation & FBO service</p>
               </div>
 
-              <div className="bg-white py-6 border-t border-lrp-green">
-                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black mb-2">Kansas City (MCI)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
-                <p className="text-sm text-gray-600 mb-3">2.5-3 hours</p>
-                <p className="text-xs text-gray-600">Flight tracking included</p>
-              </div>
-
-              <div className="bg-white py-6 border-t border-lrp-green">
-                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black mb-2">St. Louis (STL)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
-                <p className="text-sm text-gray-600 mb-3">2-2.5 hours</p>
-                <p className="text-xs text-gray-600">Delay adjustment included</p>
-              </div>
-
-              <div className="bg-white py-6 border-t border-lrp-green">
-                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black mb-2">Springfield (SGF)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
-                <p className="text-sm text-gray-600 mb-3">1.5-2 hours</p>
-                <p className="text-xs text-gray-600">Round-trip discounts available</p>
-              </div>
+              {commercialAirports.map(airport => (
+                <div key={airport.code} className="bg-white py-6 border-t border-lrp-green">
+                  <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
+                  <h3 className="font-bold text-lg text-lrp-black mb-2">{airport.city} ({airport.code})</h3>
+                  <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
+                  <p className="text-sm text-gray-600 mb-3">{airport.name}</p>
+                  <p className="text-xs text-gray-600">Travel time depends on your Lake destination</p>
+                </div>
+              ))}
             </div>
             <p className="text-left text-sm text-gray-600 mt-8">
-              Airport shuttle pricing based on distance, vehicle type, and passenger count. Rates vary by destination address. Click Book Now to get a quote through the Lake Ride Pros website.
+              {commercialAirportOrderAnswer} Airport shuttle pricing based on distance, vehicle type, and passenger count. Rates vary by destination address. Click Book Now to get a quote through the Lake Ride Pros website.
             </p>
           </div>
         </section>

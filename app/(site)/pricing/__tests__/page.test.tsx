@@ -69,6 +69,23 @@ describe('/pricing discount and fee disclosures', () => {
     }
   })
 
+  it('keeps both mileage tiers and the worked transfer example aligned with the cards', () => {
+    const { questions } = renderPricing()
+    const answer = questions.find(entry => entry.name === 'How much does Lake of the Ozarks transportation cost?')!.acceptedAnswer.text
+    const rates = ['Flex', 'Elite', 'LRP Black'].map(name => {
+      const card = screen.getAllByRole('heading', { name })[0].parentElement!
+      const tiers = [...card.textContent!.matchAll(/(\$\d+\.\d+)\/mi/g)].map(match => match[1])
+      expect(tiers, `${name} mileage tiers`).toHaveLength(2)
+      return tiers
+    })
+    expect(answer).toContain(rates.map(tiers => tiers[0]).join('/'))
+    expect(answer).toContain(rates.map(tiers => tiers[1]).join('/'))
+    const elite = screen.getAllByRole('heading', { name: 'Elite' })[0].parentElement!
+    const packageCharge = Number(elite.textContent!.match(/First 5 miles\s*\$(\d+)/)![1])
+    const exampleCharge = (packageCharge + 5 * Number(rates[1][0].slice(1))).toFixed(2)
+    expect(faq('How is point-to-point pricing calculated?')).toHaveTextContent(`$${exampleCharge}`)
+  })
+
   it('labels larger-vehicle transfers as point-to-point minimums rather than flat rates', () => {
     renderPricing()
     expect(screen.getByRole('heading', { name: 'Larger Vehicles (Point-to-Point Minimums)' })).toBeInTheDocument()

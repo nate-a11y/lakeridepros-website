@@ -19,16 +19,17 @@
 
 ## Verification
 
-- Node 24.21.0: `lint:all`, 106 unit-test files / **785 tests**, TypeScript `--noEmit`, Next production build, and `git diff --check` pass.
+- Node 24.21.0: `lint:all`, 106 unit-test files / **786 tests**, TypeScript `--noEmit`, Next production build, and `git diff --check` pass.
 - Local sitemap: **254 unique URLs**, current tee included, retired Sanity merch and expired Clint Black event excluded. Every entry crawled: no HTTP/canonical/JSON-LD syntax issues.
 - Representative desktop/mobile axe scans pass. Responsive checks at 375/390/768/1024/1440 px show no document overflow in the sampled changed route families.
 - Actual remote widget script tested locally with a browser-only localhost allowlist fixture: launcher text is black and axe reports no violations. The real widget origin allowlist remains unchanged.
+- Pushed application commit `fb9d9cd`; its automatic Vercel Preview `dpl_9znCbkcTrvuoU2HHW8SZFu8ybeva` is READY. Authenticated GET readback confirms Black $120/hr, 5% fuel surcharge, and 3% card processing disclosures. Preview sitemap has 253 URLs, no expired Clint entry, and no products because Preview storefront configuration is inactive/missing. Local real-catalog sitemap has 254 URLs, including the current tee. Production remains on `4fa1cee`.
 - Browser submissions blocked. No checkout, payment, booking, chat submission, or database acceptance testing.
 - Crystl pattern secret scan passed; stored Crystl-key coverage was unavailable.
 
 ## Follow-up / limits
 
-- Verify Preview configuration before shop acceptance: a Preview with storefront disabled or no token cannot validate product inclusion. Do not copy secrets into this document or Git.
+- Preview shop acceptance remains gated on storefront configuration. Do not copy secrets into this document or Git; no cloud environment or production configuration changes were made.
 - Full multi-browser E2E/accessibility suite, real-device/screen-reader QA, Google-selected canonicals/indexing, authenticated GSC/GA4/GBP, and field Core Web Vitals were not verified. Public PageSpeed was quota-limited; Ahrefs probes lacked plan access.
 - Existing dependency install reported 16 advisories (1 moderate, 15 high); no unrelated dependency changes are included.
 - Remaining CMS fetch helpers retain their existing empty-data fallback on outages. The storefront checks do not guarantee every upstream system is healthy; monitor sitemap/feeds after release.

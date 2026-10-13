@@ -1,5 +1,5 @@
+import ContactCenterWidget from '@/components/ContactCenterWidget';
 import { WebsiteAnalytics } from "@/components/WebsiteAnalytics";
-import Script from "next/script";
 import { Suspense } from "react";
 import { BookingAttributionCapture } from "@/components/BookingAttributionCapture";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
@@ -18,11 +18,7 @@ export default function SiteLayout({
   return (
     <div data-main-app>
       <WebsiteAnalytics />
-      <Script
-        src="https://contact-center.moovs.app/moovs-contact-center-widget.js"
-        data-config-url="https://aakyuztlpgx4ll6nghevco6q7u0vxiop.lambda-url.us-east-1.on.aws/public/website-widget/b47bc1b5-99f1-4ca9-b13f-4e3b82257af8/config"
-        strategy="afterInteractive"
-      />
+      <ContactCenterWidget />
       <Suspense fallback={null}><BookingAttributionCapture /></Suspense>
       <ThemeProvider
         attribute="class"

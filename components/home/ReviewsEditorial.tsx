@@ -18,6 +18,7 @@ export default function ReviewsEditorial({
   const reviewSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': 'https://www.lakeridepros.com/#organization',
     name: 'Lake Ride Pros',
     review: testimonials
       .slice(0, 3)
@@ -55,8 +56,10 @@ export default function ReviewsEditorial({
               </h2>
             </div>
             <div className="lg:col-span-4">
+              {reviewCount > 0 ? <>
               <p className="text-5xl font-black tracking-[-0.04em]">{ratingValue.toFixed(1)} / 5</p>
-              <p className="mt-2 text-sm text-black/65">Based on {reviewCount}+ Google reviews</p>
+              <p className="mt-2 text-sm text-black/65">Based on {reviewCount} Google reviews</p>
+              </> : <Link href="/testimonials" className="underline">Read customer reviews</Link>}
             </div>
           </div>
 

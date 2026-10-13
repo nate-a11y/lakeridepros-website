@@ -1,3 +1,5 @@
+import { externalWebsiteUrl } from '@/lib/seo/external-website-url'
+import { metaTitle, metaDescription } from '@/lib/seo/metadata'
 import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
@@ -31,19 +33,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!event) {
     return {
       title: 'Event Not Found | Lake Ride Pros',
+      robots: { index: false, follow: true },
     }
   }
 
   const venue = typeof event.venue === 'object' ? event.venue : null
   const venueName = venue?.name || 'Missouri'
 
+  const title = metaTitle(`${event.name} — Ride Availability`)
+  const description = metaDescription(`Transportation to ${event.name} at ${venueName}, Missouri. Check vehicle availability and reserve your ride with Lake Ride Pros.`, '')
+
   return {
-    title: `${event.name} at ${venueName} — Ride Availability | Lake Ride Pros`,
-    description: event.description || `Book your ride to ${event.name} at ${venueName}, Missouri. Check availability and reserve your transportation with Lake Ride Pros.`,
+    title,
+    description,
     alternates: { canonical: `https://www.lakeridepros.com/events/${event.slug}` },
     openGraph: {
-      title: `${event.name} at ${venueName} | Lake Ride Pros`,
-      description: event.description || `Book your ride to ${event.name} at ${venueName}, Missouri.`,
+      title,
+      description,
       url: `https://www.lakeridepros.com/events/${event.slug}`,
       siteName: 'Lake Ride Pros',
       images: event.image && typeof event.image === 'object'
@@ -77,6 +83,7 @@ export default async function EventDetailPage({ params }: Props) {
   }
 
   const venue = typeof event.venue === 'object' ? event.venue : null
+  const venueWebsite = externalWebsiteUrl(venue?.website)
   // Extract YYYY-MM-DD from the ISO string to avoid any timezone shifting.
   // This is safe regardless of whether the stored date is midnight UTC, noon UTC, etc.
   const [year, month, day] = event.date.split('T')[0].split('-').map(Number)
@@ -170,9 +177,9 @@ export default async function EventDetailPage({ params }: Props) {
               {venue.address && <p>{venue.address}</p>}
             </div>
             <div className={styles.actions}>
-              {venue.website && (
+              {venueWebsite && (
                 <a
-                  href={venue.website}
+                  href={venueWebsite}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.textLink}

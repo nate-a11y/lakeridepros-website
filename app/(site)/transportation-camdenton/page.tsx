@@ -46,10 +46,10 @@ export const metadata: Metadata = {
 const localBusinessSchema = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  name: 'Lake Ride Pros - Camdenton Transportation',
+  name: 'Lake Ride Pros',
   image: 'https://www.lakeridepros.com/og-image.jpg',
-  '@id': 'https://www.lakeridepros.com/transportation-camdenton',
-  url: 'https://www.lakeridepros.com/transportation-camdenton',
+  '@id': 'https://www.lakeridepros.com/#organization',
+  url: 'https://www.lakeridepros.com',
   telephone: '+1-573-206-9499',
   email: 'contactus@lakeridepros.com',
   address: {

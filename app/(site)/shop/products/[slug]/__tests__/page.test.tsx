@@ -17,6 +17,7 @@ vi.mock('../FourthwallProductActions', () => ({
 }))
 vi.mock('@/lib/fourthwall/storefront', () => ({
   getFourthwallProduct: vi.fn(),
+  getFourthwallProductSchema: vi.fn(() => ({ '@type': 'Product' })),
   getFourthwallProductImage: vi.fn(),
   getFourthwallProductImages: vi.fn(() => []),
   isFourthwallVariantAvailable: vi.fn(() => true),

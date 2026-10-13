@@ -45,7 +45,7 @@ function PartnerEntry({ partner, kind }: { partner: Partner; kind: DirectoryKind
   const logo = partner.logo && typeof partner.logo === 'object' ? partner.logo : null
 
   return (
-    <article className="grid min-w-0 content-start gap-5 border-t border-lrp-gray py-8 sm:grid-cols-[144px_minmax(0,1fr)] sm:gap-7 lg:grid-cols-[160px_minmax(0,1fr)]">
+    <article style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 400px' }} className="grid min-w-0 content-start gap-5 border-t border-lrp-gray py-8 sm:grid-cols-[144px_minmax(0,1fr)] sm:gap-7 lg:grid-cols-[160px_minmax(0,1fr)]">
       {logo && (
         <div className="flex h-36 w-full items-center justify-start bg-white sm:h-40 sm:justify-center">
           <Image

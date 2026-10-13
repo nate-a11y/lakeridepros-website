@@ -213,14 +213,23 @@ export async function getFourthwallProducts(options: { throwOnError?: boolean } 
   }
 
   const collection = process.env.FOURTHWALL_COLLECTION_SLUG?.trim() || 'all'
-  const page = await storefrontRequest<FourthwallPage<unknown>>(
-    `/collections/${encodeURIComponent(collection)}/products?page=0&size=100&currency=USD`,
-    options.throwOnError,
-  )
+  const products: FourthwallProduct[] = []
+  // Bound malformed upstream pagination instead of issuing an unlimited number of requests.
+  for (let pageNumber = 0; pageNumber < 100; pageNumber++) {
+    const page = await storefrontRequest<FourthwallPage<unknown>>(
+      `/collections/${encodeURIComponent(collection)}/products?page=${pageNumber}&size=100&currency=USD`,
+      options.throwOnError,
+    )
+    if (!Array.isArray(page?.results)) {
+      if (options.throwOnError) throw new FourthwallStorefrontError('Invalid catalog response', 'upstream')
+      return []
+    }
+    products.push(...page.results.filter(isFourthwallProduct).filter(isPublicPurchasableProduct))
+    if (!page.paging?.hasNextPage) return products
+  }
+  if (options.throwOnError) throw new FourthwallStorefrontError('Catalog pagination limit exceeded', 'upstream')
+  return []
 
-  return Array.isArray(page?.results)
-    ? page.results.filter(isFourthwallProduct).filter(isPublicPurchasableProduct)
-    : []
 }
 
 export async function getFourthwallProduct(slug: string): Promise<FourthwallProduct | null> {
@@ -271,5 +280,31 @@ export function getFourthwallStartingPrice(product: FourthwallProduct) {
 }
 
 export function plainFourthwallDescription(description: string) {
-  return description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  return description.replace(/<[^>]*>/g, ' ').replace(/This first production-ready item is available for checkout and fulfillment testing\.?/gi, '').replace(/\s+/g, ' ').trim()
+}
+
+export function getFourthwallProductSchema(product: FourthwallProduct) {
+  const variants = product.variants.filter(isFourthwallVariantAvailable)
+  const image = getFourthwallProductImage(product)
+  const prices = variants.map(variant => variant.unitPrice.value)
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: plainFourthwallDescription(product.description),
+    ...(image ? { image } : {}),
+    productID: product.id,
+    brand: { '@type': 'Brand', name: 'Lake Ride Pros' },
+    ...(prices.length > 0 ? {
+      offers: {
+        '@type': 'AggregateOffer',
+        lowPrice: Math.min(...prices),
+        highPrice: Math.max(...prices),
+        offerCount: variants.length,
+        priceCurrency: variants[0].unitPrice.currency,
+        availability: 'https://schema.org/InStock',
+        url: `https://www.lakeridepros.com/shop/products/${encodeURIComponent(product.slug)}`,
+      },
+    } : {}),
+  }
 }

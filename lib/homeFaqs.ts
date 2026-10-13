@@ -1,3 +1,5 @@
+export const cancellationPolicyAnswer = 'Cancellations made at least 48 hours before service receive a full refund minus the processing fee. Cancellations made 24 to 48 hours before service receive a 50% refund. Cancellations less than 24 hours before service are non-refundable. Weather exceptions apply; review the Terms of Service for complete details.'
+
 export interface HomeFaq {
   question: string
   answer: string
@@ -39,7 +41,7 @@ export const homeFaqs: HomeFaq[] = [
   },
   {
     question: 'What is your cancellation policy?',
-    answer: 'Cancellations made at least 48 hours before service receive a full refund minus the processing fee. Cancellations made 24 to 48 hours before service receive a 50% refund. Cancellations less than 24 hours before service are non-refundable. Weather exceptions apply; review the Terms of Service for complete details.',
+    answer: cancellationPolicyAnswer,
     link: { href: '/terms-of-service', label: 'Read the Terms of Service' },
   },
   {

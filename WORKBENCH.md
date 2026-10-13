@@ -5,6 +5,7 @@
   Focus on SEO, content structure, deployment commands, and accessibility checks.
 - [~] Audit local SEO and conversion basics
   Check page titles, descriptions, structured data, service areas, CTAs, and trust signals.
+  > 2026-10-13: SEO consistency fixes locally verified in isolated feature branch: 785 unit tests, lint, typecheck, build; 254 sitemap URLs crawled. Pricing/service/schema regression protection and live shop sitemap added. See docs/SEO_AI_CONSISTENCY_2026-10-13.md. Preview review and production approval remain.
 - [x] Add a launch QA checklist ⧗2026-09-06T18:46:23-05:00
   Include mobile, accessibility, contact/booking links, analytics, and performance basics.
   > Added docs/LRP_WEBSITE_RELEASE_CHECKLIST.md covering brand/content, SEO/GEO/AEO, mobile/accessibility, GTM/analytics, performance, testing, preview-only deployment, and explicit stop-before-production. ⧗2026-09-06T18:46:24-05:00

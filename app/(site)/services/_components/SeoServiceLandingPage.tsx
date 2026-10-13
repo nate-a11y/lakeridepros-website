@@ -175,6 +175,7 @@ export default function SeoServiceLandingPage({ page }: SeoServiceLandingPagePro
               <h2 id="service-intro-heading" className={sectionHeading}>{page.introHeading}</h2>
               <div className="mt-7 max-w-prose space-y-5 text-lg leading-relaxed text-black/70">
                 {page.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                <p>See our <Link href="/lake-ozarks-transportation-insights" className={`underline ${focusRing}`}>original transportation data</Link> for booking lead times and group-sizing guidance, and our <Link href="/pricing" className={`underline ${focusRing}`}>current pricing and fees</Link>.</p>
               </div>
             </div>
             <aside className="border-t-2 border-lrp-black pt-6 lg:col-span-5">

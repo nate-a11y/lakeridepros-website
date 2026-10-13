@@ -3,16 +3,16 @@ import {
   getServicesLocal,
   getBlogPostsLocal,
   getVehiclesLocal,
-  getProductsLocal,
   getPagesLocal,
   getPartnersLocal,
   getDriverProfiles,
-  getEvents,
+  getUpcomingEvents,
+  getVenues,
 } from '@/lib/api/sanity';
+import { FourthwallStorefrontError, getFourthwallProducts } from '@/lib/fourthwall/storefront';
 
-// Keep metadata-route reads cacheable during prerender and refresh regularly.
-// Individual public CMS fetches may use a shorter revalidation interval.
-export const revalidate = 3600;
+// Resolve the same current catalog/calendar as the public routes, not a build-time snapshot.
+export const dynamic = 'force-dynamic';
 
 // Normalized docs have slug flattened to string by normalizeDoc()
 interface SitemapDoc {
@@ -51,32 +51,39 @@ function encodePathSegment(segment: string): string {
   return encodeURIComponent(segment);
 }
 
+function lastModified(doc: { updatedAt?: string; _updatedAt?: string; publishedDate?: string }): Date | undefined {
+  const value = doc.updatedAt || doc._updatedAt || doc.publishedDate;
+  if (!value) return undefined;
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) ? date : undefined;
+}
+
 async function getSanityData() {
   try {
     // Fetch all dynamic content from Sanity
-    const [servicesResponse, blogPostsResponse, vehicles, products, pages, allPartners, eventsResponse] = await Promise.all([
+    const [servicesResponse, blogPostsResponse, vehicles, pages, allPartners, events, venuesResponse] = await Promise.all([
       getServicesLocal(),
       getBlogPostsLocal({ limit: 100 }),
       getVehiclesLocal(),
-      getProductsLocal(),
       getPagesLocal(),
       getPartnersLocal(), // Fetch all active partners
-      getEvents(), // Cached public data, unlike the live calendar's no-store fetch.
+      getUpcomingEvents(),
+      getVenues(),
     ]);
 
     return {
       services: servicesResponse.docs,
       blogPosts: blogPostsResponse.docs,
       vehicles,
-      products,
       pages,
       allPartners,
-      events: eventsResponse.docs,
+      events,
+      venues: venuesResponse.docs,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown Sanity error';
     console.error(`[Sitemap] Error fetching Sanity data: ${message}`);
-    return { services: [], blogPosts: [], vehicles: [], products: [], pages: [], allPartners: [], events: [] };
+    return { services: [], blogPosts: [], vehicles: [], pages: [], allPartners: [], events: [], venues: [] };
   }
 }
 
@@ -152,22 +159,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticSitemapEntries = staticRoutes.map((route) => ({
     url: `${baseUrl}${route.url}`,
-    lastModified: currentDate,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
 
-  // Fetch dynamic content from Sanity and Supabase
-  const [sanityData, drivers] = await Promise.all([
+  // Fetch public CMS content and the same live catalog as the shop.
+  const [sanityData, drivers, products] = await Promise.all([
     getSanityData(),
     getDriverProfiles(),
+    getFourthwallProducts({ throwOnError: true }).catch((error: unknown) => {
+      if (error instanceof FourthwallStorefrontError && error.reason === 'configuration') return [];
+      throw error; // An outage must not publish a partial catalog as a successful sitemap.
+    }),
   ]);
-  const { services, blogPosts, vehicles, products, pages, allPartners, events } = sanityData;
+  const { services, blogPosts, vehicles, pages, allPartners, events, venues } = sanityData;
 
   // Dynamic service pages
   const serviceSitemapEntries = services.map((service: SitemapDoc) => ({
     url: `${baseUrl}/services/${service.slug}`,
-    lastModified: new Date(service.updatedAt || currentDate),
+    lastModified: lastModified(service),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }));
@@ -175,7 +185,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Blog posts
   const blogSitemapEntries = blogPosts.map((post: SitemapDoc) => ({
     url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.updatedAt || post.publishedDate || currentDate),
+    lastModified: lastModified(post),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));
@@ -192,7 +202,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!slug || event.active === false || !venueActive || eventDateStr < todayStr) return [];
     return [{
       url: `${baseUrl}/events/${encodePathSegment(slug)}`,
-      lastModified: new Date(event.updatedAt || event._updatedAt || currentDate),
+      lastModified: lastModified(event),
       changeFrequency: 'daily' as const,
       priority: 0.7,
     }];
@@ -201,23 +211,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Vehicles
   const vehicleSitemapEntries = vehicles.map((vehicle: SitemapDoc) => ({
     url: `${baseUrl}/fleet/${vehicle.slug}`,
-    lastModified: new Date(vehicle.updatedAt || currentDate),
+    lastModified: lastModified(vehicle),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }));
 
-  // Products
-  const productSitemapEntries = (products as SitemapDoc[]).flatMap((product: SitemapDoc) => {
+  // Products share the storefront's public/available/stock filtering.
+  const productSitemapEntries = products.flatMap((product) => {
     const slug = getSlugValue(product.slug);
 
-    // A sitemap should contain only canonical, indexable URLs. Sanity now blocks
-    // unsafe slugs, but this guard prevents legacy or imported records from
-    // publishing broken product URLs.
+    // Invalid imported slugs must not publish broken product URLs.
     if (!slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return [];
 
     return [{
       url: `${baseUrl}/shop/products/${encodePathSegment(slug)}`,
-      lastModified: new Date(product.updatedAt || currentDate),
+      lastModified: lastModified(product),
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     }];
@@ -226,7 +234,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Custom pages
   const pageSitemapEntries = (pages as SitemapDoc[]).map((page: SitemapDoc) => ({
     url: `${baseUrl}/${page.slug}`,
-    lastModified: new Date(page.updatedAt || currentDate),
+    lastModified: lastModified(page),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }));
@@ -262,7 +270,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     partnerSitemapEntries.push({
       url: `${baseUrl}${urlPath}`,
-      lastModified: new Date(partner.updatedAt || currentDate),
+      lastModified: lastModified(partner),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     });
@@ -278,21 +286,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     driverSitemapEntries.push({
       url: `${baseUrl}/our-drivers/${encodePathSegment(slug)}`,
-      lastModified: new Date(driver.updatedAt || driver._updatedAt || currentDate),
+      lastModified: lastModified(driver),
       changeFrequency: 'weekly' as const,
       priority: 0.5,
     });
   });
 
-  return [
+  const entries = [
     ...staticSitemapEntries,
     ...serviceSitemapEntries,
     ...blogSitemapEntries,
     ...eventSitemapEntries,
+    ...venues.map((venue) => ({
+      url: `${baseUrl}/events/venues/${encodePathSegment(venue.slug)}`,
+      lastModified: lastModified(venue),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    })),
     ...vehicleSitemapEntries,
     ...productSitemapEntries,
     ...pageSitemapEntries,
     ...partnerSitemapEntries,
     ...driverSitemapEntries,
   ];
+  return [...new Map(entries.map((entry) => [entry.url, entry])).values()];
 }

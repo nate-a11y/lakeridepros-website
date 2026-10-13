@@ -15,11 +15,10 @@ import {
   getPartners,
   getMediaUrl,
   getLatestBlogPostsLocal,
+  getGoogleReviewSummary,
 } from '@/lib/api/sanity';
 import { resolveSlug } from '@/types/sanity';
 import { localBusinessSchema, organizationSchema, faqSchema } from '@/lib/schemas';
-import { client } from '@/sanity/lib/client';
-import { groq } from 'next-sanity';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.lakeridepros.com'),
@@ -101,19 +100,7 @@ export default async function HomePage() {
     getLatestBlogPostsLocal(6).catch(() => []),
     getRandomTestimonials(3, false, 5).catch(() => []), // Random 5-star testimonials
     getPartners(undefined, true).catch(() => []),
-    client.fetch<{reviewCount: number; ratingValue: number | null}>(groq`{
-      "reviewCount": count(*[
-        _type == "testimonial"
-        && source == "google"
-        && googleReviewStatus != "not_found"
-      ]),
-      "ratingValue": math::avg(*[
-        _type == "testimonial"
-        && source == "google"
-        && googleReviewStatus != "not_found"
-        && defined(rating)
-      ].rating)
-    }`).catch(() => ({reviewCount: 322, ratingValue: 5})),
+    getGoogleReviewSummary(),
   ]);
 
   const services = servicesData.docs || [];
@@ -190,21 +177,13 @@ export default async function HomePage() {
     isWeddingPartner: partner.isWeddingPartner,
   }));
 
-  const currentLocalBusinessSchema = {
-    ...localBusinessSchema,
-    aggregateRating: {
-      ...localBusinessSchema.aggregateRating,
-      ratingValue: (googleReviewSummary.ratingValue ?? 5).toFixed(1),
-      reviewCount: String(googleReviewSummary.reviewCount || 322),
-    },
-  };
 
   return (
     <>
       {/* SEO Structured Data (JSON-LD) */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(currentLocalBusinessSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
       <script
         type="application/ld+json"
@@ -217,8 +196,8 @@ export default async function HomePage() {
 
       <FleetLensHero
         vehicles={fleetLensVehicles}
-        ratingValue={googleReviewSummary.ratingValue ?? 5}
-        reviewCount={googleReviewSummary.reviewCount || 322}
+        ratingValue={googleReviewSummary.ratingValue ?? 0}
+        reviewCount={googleReviewSummary.reviewCount}
       />
 
       <ServicesLens services={servicePreviews} />
@@ -227,8 +206,8 @@ export default async function HomePage() {
 
       <ReviewsEditorial
         testimonials={testimonials}
-        ratingValue={googleReviewSummary.ratingValue ?? 5}
-        reviewCount={googleReviewSummary.reviewCount || 322}
+        ratingValue={googleReviewSummary.ratingValue ?? 0}
+        reviewCount={googleReviewSummary.reviewCount}
       />
 
       {partners.length > 0 && <PartnersCarousel partners={partners} />}

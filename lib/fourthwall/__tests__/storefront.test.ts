@@ -2,6 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   getFourthwallProduct,
   getFourthwallProducts,
+  getFourthwallProductSchema,
+  plainFourthwallDescription,
 } from '@/lib/fourthwall/storefront'
 
 const PRODUCT = {
@@ -68,6 +70,33 @@ describe('Fourthwall Storefront API client', () => {
     const url = new URL(String(fetchMock.mock.calls[0][0]))
     expect(url.searchParams.get('_lrp_catalog_epoch')).toBe(String(Date.now()))
     expect(fetchMock.mock.calls[0][1]).toMatchObject({ cache: 'no-store' })
+  })
+
+
+  it('reads every catalog page, including products after the first 100', async () => {
+    vi.stubEnv('FOURTHWALL_STOREFRONT_TOKEN', 'storefront-token')
+    const second = { ...PRODUCT, id: 'second-product', slug: 'second-product' }
+    const fetchMock = vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify({ results: [PRODUCT], paging: { hasNextPage: true, pageNumber: 0, totalPages: 2 } })))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ results: [second], paging: { hasNextPage: false, pageNumber: 1, totalPages: 2 } })))
+    await expect(getFourthwallProducts()).resolves.toEqual([PRODUCT, second])
+    expect(new URL(String(fetchMock.mock.calls[1][0])).searchParams.get('page')).toBe('1')
+  })
+
+  it('does not return a partial catalog if a later page fails', async () => {
+    vi.stubEnv('FOURTHWALL_STOREFRONT_TOKEN', 'storefront-token')
+    vi.spyOn(globalThis, 'fetch')
+      .mockResolvedValueOnce(new Response(JSON.stringify({ results: [PRODUCT], paging: { hasNextPage: true } })))
+      .mockResolvedValueOnce(new Response('{}', { status: 503 }))
+    await expect(getFourthwallProducts({ throwOnError: true })).rejects.toMatchObject({ reason: 'upstream' })
+  })
+
+  it('builds product offers only from the currently purchasable variants', () => {
+    const product = { ...PRODUCT, variants: [...PRODUCT.variants, { ...PRODUCT.variants[0], id: 'sold-out', unitPrice: { value: 1, currency: 'USD' }, stock: { type: 'LIMITED', inStock: 0 } }] }
+    expect(getFourthwallProductSchema(product as import('@/lib/fourthwall/storefront').FourthwallProduct)).toMatchObject({
+      '@type': 'Product', offers: { lowPrice: 25, highPrice: 25, offerCount: 1, priceCurrency: 'USD' },
+    })
+    expect(plainFourthwallDescription('A heavyweight tee. This first production-ready item is available for checkout and fulfillment testing.')).toBe('A heavyweight tee.')
   })
 
   it('drops malformed upstream products instead of crashing the shop', async () => {

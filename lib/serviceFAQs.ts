@@ -1,3 +1,6 @@
+import { cancellationPolicyAnswer } from '@/lib/homeFaqs';
+import { pricingFeesAnswer, transportationCostAnswer } from '@/lib/pricing-copy';
+
 /**
  * Service-specific FAQs for enhanced SEO with FAQ Schema
  * Each service should have 8-10 common questions
@@ -25,11 +28,11 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'Do you track flight delays and arrivals?',
-      answer: 'Yes! We monitor all flight statuses in real-time. If your flight is delayed or arrives early, we automatically adjust your pickup time at no extra charge. Your driver will be there when you land.',
+      answer: 'We monitor flight arrivals and coordinate pickup timing when flights change. Additional waiting or changes to your reserved service may affect the final quote.',
     },
     {
       question: 'How much does airport shuttle service cost?',
-      answer: 'Pricing varies based on distance, vehicle type, and number of passengers. Contact us for an exact quote. We offer competitive flat rates with no hidden fees, and group discounts are available for larger parties.',
+      answer: transportationCostAnswer,
     },
     {
       question: 'Can you accommodate large groups or luggage?',
@@ -45,15 +48,15 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'Do you provide car seats for children?',
-      answer: 'Yes, we can provide car seats and booster seats upon request at no additional charge. Please specify the age and weight of children when booking so we can ensure proper safety equipment.',
+      answer: 'Tell us if you need child seats or booster seats when requesting a quote. We will confirm suitable equipment, availability, and any applicable charges before you book.',
     },
     {
       question: 'Are your airport shuttles private or shared?',
-      answer: 'We offer both private and shared shuttle options. Private shuttles provide direct, non-stop service for you and your party. Shared shuttles may make multiple stops and offer a more economical option.',
+      answer: 'Airport transfers are prearranged for your reservation. Share your passenger count, luggage, pickup address, and destination when requesting a quote so we can confirm the right vehicle and service.',
     },
     {
       question: 'What is your cancellation policy for airport transfers?',
-      answer: 'We offer free cancellations up to 24 hours before your scheduled pickup. Cancellations within 24 hours may incur a fee. Weather-related cancellations are handled on a case-by-case basis with full refunds typically provided.',
+      answer: cancellationPolicyAnswer,
     },
   ],
 
@@ -97,7 +100,7 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'What is your cancellation policy for weddings?',
-      answer: 'Wedding bookings require a deposit. Cancellations made 30+ days before the event receive a full refund minus a processing fee. Cancellations within 30 days may forfeit the deposit. We recommend wedding insurance for added protection.',
+      answer: cancellationPolicyAnswer,
     },
   ],
 
@@ -149,7 +152,7 @@ export const serviceFAQs: ServiceFAQs = {
   'party-bus': [
     {
       question: 'What is the minimum rental time for a party bus?',
-      answer: 'Our minimum rental time is typically 3-4 hours depending on the vehicle and date. This ensures you have enough time to enjoy your celebration without feeling rushed. Longer rentals receive better hourly rates.',
+      answer: 'Minimum rental times and hourly tiers depend on the vehicle and day of the week. See the current pricing guide for each vehicle’s minimums, rates, booking fees, and surcharges; your final quote confirms the charges for your itinerary.',
     },
     {
       question: 'How many people can fit in your party buses?',
@@ -169,15 +172,15 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'Can we make multiple stops during our rental?',
-      answer: 'Yes! Multiple stops are included in your rental. Popular itineraries include bar hopping, restaurant stops, lake attractions, and entertainment venues. Your driver will coordinate timing to maximize your rental period.',
+      answer: 'Multiple stops can be planned in an hourly reservation. Share your full itinerary at booking; timing, vehicle positioning, and requested changes can affect the final quote.',
     },
     {
       question: 'Is there a deposit required to book a party bus?',
-      answer: 'Yes, we require a deposit to secure your reservation. The deposit amount varies based on vehicle and rental duration. Final payment is typically due 24-48 hours before your event. We accept all major payment methods.',
+      answer: 'Payment is required at booking under our published terms. Your quote and booking confirmation explain the payment requirements for your reservation. Credit card payments incur a 3% processing fee.',
     },
     {
       question: 'What is your party bus cancellation policy?',
-      answer: 'Cancellations made 14+ days before your event receive a full refund minus processing fees. Cancellations within 14 days may forfeit the deposit. Weather-related cancellations are evaluated case-by-case. We recommend event insurance.',
+      answer: cancellationPolicyAnswer,
     },
     {
       question: 'Can we decorate the party bus?',
@@ -205,7 +208,7 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'Are wine tastings included in the price?',
-      answer: 'No, our transportation price covers the vehicle and driver only. Wine tastings, food, and purchases at wineries are separate and paid directly to each winery. Most tasting fees range from $10-15 per person per winery.',
+      answer: 'Wine tastings, meals, and purchases are separate from transportation and paid to the wineries. Confirm each winery’s current fees and reservation requirements directly. Transportation fees and surcharges are disclosed in your quote.',
     },
     {
       question: 'Can we bring our own food and drinks?',
@@ -261,7 +264,7 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'What is included in special event transportation pricing?',
-      answer: 'Pricing includes the vehicle, professional driver, fuel, insurance, and standard amenities. Additional services like decorations, special routes, extended wait times, or champagne service may incur extra charges.',
+      answer: pricingFeesAnswer,
     },
     {
       question: 'Can you provide transportation for surprise parties?',
@@ -285,11 +288,11 @@ export const serviceFAQs: ServiceFAQs = {
     },
     {
       question: 'What is included in the service price?',
-      answer: 'Our pricing includes the vehicle, professional driver, fuel, insurance, and standard amenities. Additional services or special requests may incur extra charges. We provide transparent pricing with no hidden fees.',
+      answer: pricingFeesAnswer,
     },
     {
       question: 'What is your cancellation policy?',
-      answer: 'Cancellation policies vary by service type. Generally, cancellations 24-48 hours in advance receive full refunds. Last-minute cancellations may incur fees. Contact us for specific cancellation terms for your booking.',
+      answer: cancellationPolicyAnswer,
     },
     {
       question: 'Are your drivers licensed and insured?',
@@ -327,7 +330,15 @@ export const serviceFAQs: ServiceFAQs = {
  * Returns service-specific FAQs or default FAQs if service not found
  */
 export function getFAQsForService(serviceSlug: string): FAQ[] {
-  return serviceFAQs[serviceSlug] || serviceFAQs['default'];
+  const aliases: Record<string, string> = {
+    'airport-transfers': 'airport-shuttle',
+    'private-aviation-transfers': 'airport-shuttle',
+    'party-bus-nightlife': 'party-bus',
+    'corporate-executive-travel': 'corporate-transportation',
+    'wine-tour-shuttle': 'wine-tour',
+    'special-events-transportation': 'special-events',
+  };
+  return serviceFAQs[aliases[serviceSlug] || serviceSlug] || serviceFAQs['default'];
 }
 
 /**

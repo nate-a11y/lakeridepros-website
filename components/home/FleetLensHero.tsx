@@ -270,7 +270,7 @@ export default function FleetLensHero({ vehicles, ratingValue, reviewCount }: Fl
           </div>
           <div className="mt-5 border-r border-white/20 pr-4 sm:mt-0 sm:px-4">
             <dt className="text-xs text-white/55">Google rating</dt>
-            <dd className="mt-1 text-lg font-black">{ratingValue.toFixed(1)} · {reviewCount}+</dd>
+            <dd className="mt-1 text-lg font-black">{reviewCount > 0 ? `${ratingValue.toFixed(1)} · ${reviewCount}` : 'Read our reviews'}</dd>
           </div>
           <div className="mt-5 pl-4 sm:mt-0">
             <dt className="text-xs text-white/55">Recognition</dt>

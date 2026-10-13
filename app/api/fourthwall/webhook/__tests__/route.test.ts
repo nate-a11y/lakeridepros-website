@@ -52,6 +52,7 @@ describe('Fourthwall webhook', () => {
 
     expect(response.status).toBe(200)
     expect(mockRevalidatePath).toHaveBeenCalledWith('/shop', 'layout')
+    expect(mockRevalidatePath).toHaveBeenCalledWith('/sitemap.xml')
   })
 
   it('rejects an invalid signature', async () => {
@@ -70,6 +71,7 @@ describe('Fourthwall webhook', () => {
 
     expect(response.status).toBe(200)
     expect(mockRevalidatePath).toHaveBeenCalledWith('/shop', 'layout')
+    expect(mockRevalidatePath).toHaveBeenCalledWith('/sitemap.xml')
   })
 
   it('rejects signed payloads that are not valid webhook events', async () => {
@@ -91,7 +93,7 @@ describe('Fourthwall webhook', () => {
       received: true,
       duplicate: true,
     })
-    expect(mockRevalidatePath).toHaveBeenCalledTimes(1)
+    expect(mockRevalidatePath).toHaveBeenCalledTimes(2)
   })
 
   it('does not mark an event processed when its side effect fails', async () => {
@@ -104,7 +106,7 @@ describe('Fourthwall webhook', () => {
 
     const retryResponse = await POST(webhookRequest(payload))
     expect(retryResponse.status).toBe(200)
-    expect(mockRevalidatePath).toHaveBeenCalledTimes(2)
+    expect(mockRevalidatePath).toHaveBeenCalledTimes(3)
   })
 
   it('rejects events from a different configured webhook', async () => {

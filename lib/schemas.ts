@@ -5,8 +5,8 @@ export const localBusinessSchema = {
   "@type": "LocalBusiness",
   "name": "Lake Ride Pros",
   "image": "https://www.lakeridepros.com/og-image.jpg",
-  "logo": "https://www.lakeridepros.com/logo.png",
-  "@id": "https://www.lakeridepros.com",
+  "logo": "https://www.lakeridepros.com/Color%20logo%20-%20no%20background.png",
+  "@id": "https://www.lakeridepros.com/#organization",
   "url": "https://www.lakeridepros.com",
   "telephone": "+1-573-206-9499",
   "email": "contactus@lakeridepros.com",
@@ -48,13 +48,6 @@ export const localBusinessSchema = {
   ],
   "paymentAccepted": ["Cash", "Credit Card", "Debit Card", "Venmo"],
   "currenciesAccepted": "USD",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "5.0",
-    "reviewCount": "322",
-    "bestRating": "5",
-    "worstRating": "1"
-  },
   "potentialAction": {
     "@type": "ReserveAction",
     "target": {
@@ -75,9 +68,10 @@ export const localBusinessSchema = {
 export const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://www.lakeridepros.com/#organization",
   "name": "Lake Ride Pros",
   "url": "https://www.lakeridepros.com",
-  "logo": "https://www.lakeridepros.com/logo.png",
+  "logo": "https://www.lakeridepros.com/Color%20logo%20-%20no%20background.png",
   "description": "Professional transportation based at Lake of the Ozarks and serving private and group trips throughout Missouri",
   "foundingDate": "2020",
   "founder": [

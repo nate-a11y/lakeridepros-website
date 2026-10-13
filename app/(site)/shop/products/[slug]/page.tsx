@@ -1,6 +1,7 @@
 import CommercePage from '@/components/commerce-editorial/CommercePage'
 import {
   getFourthwallProduct,
+  getFourthwallProductSchema,
   getFourthwallProductImage,
   getFourthwallStartingPrice,
   plainFourthwallDescription,
@@ -53,23 +54,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <CommercePage variant="shop">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(getFourthwallProductSchema(product)).replace(/</g, '\\u003c') }} />
       <article className="min-h-[70vh] bg-neutral-50 px-4 py-12 dark:bg-lrp-black sm:px-6 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <Link
             href="/shop"
-            className="inline-flex min-h-11 items-center font-bold text-primary-dark underline decoration-2 underline-offset-4 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-primary dark:text-primary-light"
+            className="inline-flex min-h-11 items-center font-bold text-primary-dark underline decoration-2 underline-offset-4 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-current dark:text-white"
           >
             Back to shop
           </Link>
 
           <FourthwallProductDetails key={product.id} product={product}>
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-primary-dark dark:text-primary-light">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-lrp-black dark:text-white">
               Lake Ride Pros Merch
             </p>
             <h1 className="mt-3 text-balance font-boardson text-5xl font-bold text-lrp-black dark:text-white sm:text-6xl">
               {product.name}
             </h1>
-            <p className="mt-5 text-2xl font-black text-primary-dark dark:text-primary-light">
+            <p className="mt-5 text-2xl font-black text-lrp-black dark:text-white">
               {startingPrice === null ? 'Currently unavailable' : `From $${startingPrice.toFixed(2)}`}
             </p>
             {description && (

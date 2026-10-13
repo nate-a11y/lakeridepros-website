@@ -1,3 +1,4 @@
+import { externalWebsiteUrl } from '@/lib/seo/external-website-url'
 import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import Link from 'next/link'
@@ -116,7 +117,7 @@ export default async function VenueDetailPage({ params }: Props) {
             <div className={styles.actions}>
               {venue.website && (
                 <a
-                  href={venue.website}
+                  href={externalWebsiteUrl(venue.website)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.textLink}

@@ -34,7 +34,7 @@ export default function AboutUsPage() {
     "@type": "Organization",
     "name": "Lake Ride Pros",
     "url": "https://www.lakeridepros.com",
-    "logo": "https://www.lakeridepros.com/logo.png",
+    "logo": "https://www.lakeridepros.com/Color%20logo%20-%20no%20background.png",
     "description": "Premier luxury transportation service at Lake of the Ozarks, Missouri. Specializing in limo buses, sprinter vans, and shuttle services.",
     "foundingDate": "2020",
     "founder": [

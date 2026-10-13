@@ -1,3 +1,5 @@
+import { commercialAirports, commercialAirportOrderAnswer } from '@/lib/airport-copy'
+import { transportationCostAnswer, exactQuoteAnswer, bookingFeeAnswer, transferPricingAnswer, fuelSurchargeAnswer, pricingFeesAnswer, insiderSavingsAnswer, creditCardFeeAnswer } from '@/lib/pricing-copy'
 import CorePage from '@/components/core-editorial/CorePage'
 import CoreHero from '@/components/core-editorial/CoreHero'
 import type { Metadata } from 'next'
@@ -38,14 +40,6 @@ export const metadata: Metadata = {
   },
 }
 
-const transportationCostAnswer = 'Point-to-point sedan/SUV pricing starts with a flat package covering the first 5 miles: Flex $15, Elite $20, and LRP Black $25. The next 45 miles cost $2.25/$2.50/$2.90 per mile respectively; miles beyond 50 cost $1.85/$2.15/$2.60 per mile. No booking fee applies to Flex, Elite, or Black. Larger-vehicle base minimums are $80 for Limo Bus or Rescue Squad, $175 for Luxury Sprinter, $250 for Pink Patrol, and $400 for Luxury Shuttle, plus the applicable booking fee. These are minimum transportation charges, not flat fares for every route. Hourly rates are Flex $80/hr, Elite $100/hr, and Black $120/hr (1-hour minimum); Limo Bus and Rescue Squad start at $130/hr, Sprinter at $175/hr, Pink Patrol at $225/hr weekdays or $250/hr weekends, and Shuttle at $275/hr. See the hourly cards for larger-vehicle tiers and minimums. Vehicle positioning, extra stops, and other applicable charges are included in your final quote. Click Book Now on the Lake Ride Pros website to get an exact quote.'
-const exactQuoteAnswer = 'Click Book Now on the Lake Ride Pros website to get a quote. Enter your pickup and dropoff locations, date, time, passenger count, and service type. You can review your quote with no obligation to book.'
-const bookingFeeAnswer = 'Flex, Elite, and LRP Black have no booking fee. Limo Bus, Rescue Squad, and Luxury Sprinter have a $10 booking fee; Pink Patrol and Luxury Shuttle have a $20 booking fee. These fees are separate from the listed transportation rates and base minimums, and are included in your quote before you book.'
-const transferPricingAnswer = 'For Flex, Elite, and Black, the first 5 miles are a flat package charge, not an extra fee on top of mileage. Only the miles after the first 5 are charged at the next tier, through total mile 50; the lower per-mile rate applies only to miles beyond 50. For example, a 10-mile Elite transfer has a $32.50 transportation charge: $20 for the first 5 miles plus 5 miles at $2.50. Larger-vehicle base minimums are a floor for the transportation charge, not a surcharge added to every mile. Vehicle positioning (travel to and from your trip), additional stops, and other applicable charges may increase the final quote.'
-const fuelSurchargeAnswer = 'A fuel surcharge applies to all reservations. It is currently 5% and may change based on current fuel prices. The applicable surcharge is disclosed in your quote before you book.'
-const pricingFeesAnswer = 'No hidden fees at Lake Ride Pros. Your quote includes transportation, a professional driver, insurance, estimated tolls (if applicable), and any applicable booking fee. A fuel surcharge applies to all reservations; it is currently 5% and may change with fuel prices. Credit card payments incur a 3% processing fee. Gratuity is not included in the listed rates, and extra wait time or requested add-ons may cost more. All applicable fees are disclosed before you book.'
-const insiderSavingsAnswer = 'Join the Lake Ride Pros Insiders Program for member discounts on eligible rides and exclusive rewards. Savings depend on your membership tier and program terms.'
-const creditCardFeeAnswer = 'Yes. Credit card payments incur a 3% processing fee, disclosed before you book. The listed transportation rates do not include this fee.'
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -666,32 +660,18 @@ export default function PricingPage() {
                 <p className="text-xs text-gray-600">Private aviation & FBO service</p>
               </div>
 
-              <div className="bg-white py-6 border-t border-lrp-green">
-                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black mb-2">Kansas City (MCI)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
-                <p className="text-sm text-gray-600 mb-3">2.5-3 hours</p>
-                <p className="text-xs text-gray-600">Flight tracking included</p>
-              </div>
-
-              <div className="bg-white py-6 border-t border-lrp-green">
-                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black mb-2">St. Louis (STL)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
-                <p className="text-sm text-gray-600 mb-3">2-2.5 hours</p>
-                <p className="text-xs text-gray-600">Delay adjustment included</p>
-              </div>
-
-              <div className="bg-white py-6 border-t border-lrp-green">
-                <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
-                <h3 className="font-bold text-lg text-lrp-black mb-2">Springfield (SGF)</h3>
-                <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
-                <p className="text-sm text-gray-600 mb-3">1.5-2 hours</p>
-                <p className="text-xs text-gray-600">Round-trip discounts available</p>
-              </div>
+              {commercialAirports.map(airport => (
+                <div key={airport.code} className="bg-white py-6 border-t border-lrp-green">
+                  <MapPin className="w-8 h-8 text-[#2f730e] mb-3" />
+                  <h3 className="font-bold text-lg text-lrp-black mb-2">{airport.city} ({airport.code})</h3>
+                  <Link href="/book" className="text-2xl font-bold text-[#2f730e] mb-1 hover:underline block">Book Now</Link>
+                  <p className="text-sm text-gray-600 mb-3">{airport.name}</p>
+                  <p className="text-xs text-gray-600">Travel time depends on your Lake destination</p>
+                </div>
+              ))}
             </div>
             <p className="text-left text-sm text-gray-600 mt-8">
-              Airport shuttle pricing based on distance, vehicle type, and passenger count. Rates vary by destination address. Click Book Now to get a quote through the Lake Ride Pros website.
+              {commercialAirportOrderAnswer} Airport shuttle pricing based on distance, vehicle type, and passenger count. Rates vary by destination address. Click Book Now to get a quote through the Lake Ride Pros website.
             </p>
           </div>
         </section>

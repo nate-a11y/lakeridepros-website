@@ -113,6 +113,7 @@ export default async function ServiceDetailPage({ params }: Props) {
     description: service.description,
     provider: {
       '@type': 'LocalBusiness',
+      '@id': 'https://www.lakeridepros.com/#organization',
       name: 'Lake Ride Pros',
       url: 'https://www.lakeridepros.com',
       logo: 'https://www.lakeridepros.com/Color%20logo%20-%20no%20background.png',
@@ -280,6 +281,8 @@ export default async function ServiceDetailPage({ params }: Props) {
         <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:gap-16 lg:px-8">
           <header className="lg:col-span-4">
             <h2 id="service-faq-heading" className="font-celebri text-4xl font-black leading-[0.95] tracking-[-0.035em] sm:text-5xl">Frequently Asked Questions</h2>
+            <p className="mt-4 text-white/75">See our <Link href="/pricing" className="underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">current rates and fees</Link> and <Link href="/terms-of-service" className="underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">booking terms</Link>.</p>
+            <p className="mt-4 text-white/75">Plan your pickup with our <Link href="/lake-ozarks-transportation-insights" className="underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">original Lake transportation data and planning insights</Link>.</p>
             <p className="mt-5 leading-relaxed text-white/75">Common questions about {service.title.toLowerCase()}</p>
           </header>
           <div className="min-w-0 border-t border-white/25 lg:col-span-8">

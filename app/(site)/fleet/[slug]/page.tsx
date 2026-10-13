@@ -233,65 +233,12 @@ export default async function VehiclePage({ params }: VehiclePageProps) {
                 </div>
               )}
 
-              {vehicle.pricing && (
-                <div className={styles.price}>
-                  <h3 className="text-xl font-semibold text-lrp-black mb-4">
-                    Pricing Options
-                  </h3>
-
-                  {/* Point-to-Point Pricing */}
-                  {vehicle.pricing.pointToPointMinimum && (
-                    <div className="mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700">
-                      <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-sm font-medium text-[#444]">
-                          Point-to-Point
-                        </span>
-                        <span className="text-xs text-[#444]">
-                          (Taxi-style)
-                        </span>
-                      </div>
-                      <p className="text-2xl font-bold text-[#2f730e]">
-                        Starting at ${vehicle.pricing.pointToPointMinimum}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Hourly Rate Pricing */}
-                  {vehicle.pricing.hourlyRate && (
-                    <div className={`${vehicle.pricing.dailyRate ? 'mb-4 pb-4 border-b border-neutral-200 dark:border-neutral-700' : 'mb-4'}`}>
-                      <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-sm font-medium text-[#444]">
-                          Hourly Charter
-                        </span>
-                      </div>
-                      <p className="text-2xl font-bold text-[#2f730e]">
-                        ${vehicle.pricing.hourlyRate}/hour
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Daily Rate Pricing */}
-                  {vehicle.pricing.dailyRate && (
-                    <div className="mb-4">
-                      <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-sm font-medium text-[#444]">
-                          Full Day Rate
-                        </span>
-                      </div>
-                      <p className="text-2xl font-bold text-[#2f730e]">
-                        ${vehicle.pricing.dailyRate}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Pricing Notes */}
-                  {vehicle.pricing.notes && (
-                    <p className="text-sm text-[#444] mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
-                      {vehicle.pricing.notes}
-                    </p>
-                  )}
-                </div>
-              )}
+              <div className={styles.price}>
+                <h3 className="text-xl font-semibold text-lrp-black mb-4">Current Rates &amp; Minimums</h3>
+                <p className="text-lrp-black">Pricing depends on your service tier, route, date, and rental duration. The pricing guide lists current transportation rates, booking fees, fuel surcharge, and card processing fees.</p>
+                <Link href="/pricing" className="mt-4 inline-flex min-h-11 items-center font-bold text-lrp-black underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current">View current pricing and minimums</Link>
+                <p className="mt-3 text-sm text-lrp-black">Get an exact quote before booking; base minimums are not all-in trip fares.</p>
+              </div>
             </div>
           </div>
         </div>

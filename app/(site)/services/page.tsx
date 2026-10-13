@@ -85,7 +85,7 @@ export default async function ServicesPage() {
     name: 'Lake Ride Pros',
     image: 'https://www.lakeridepros.com/og-image.jpg',
     url: 'https://www.lakeridepros.com',
-    logo: 'https://www.lakeridepros.com/logo.png',
+    logo: 'https://www.lakeridepros.com/Color%20logo%20-%20no%20background.png',
     description: 'Premium transportation services at Lake of the Ozarks',
     telephone: '+1-573-206-9499',
     address: {

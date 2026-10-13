@@ -8,6 +8,7 @@ import { groq } from 'next-sanity'
 export const servicesQuery = groq`
   *[_type == "service" && active == true] | order(order asc) {
     _id,
+    _updatedAt,
     _type,
     title,
     slug,
@@ -33,6 +34,7 @@ export const servicesQuery = groq`
 export const serviceBySlugQuery = groq`
   *[_type == "service" && slug.current == $slug && active == true][0] {
     _id,
+    _updatedAt,
     _type,
     title,
     slug,
@@ -62,6 +64,7 @@ export const serviceBySlugQuery = groq`
 export const vehiclesQuery = groq`
   *[_type == "vehicle" && available == true] | order(order asc) {
     _id,
+    _updatedAt,
     _type,
     name,
     slug,
@@ -102,6 +105,7 @@ export const vehiclesQuery = groq`
 export const featuredVehiclesQuery = groq`
   *[_type == "vehicle" && featured == true && available == true] | order(order asc) [0...$limit] {
     _id,
+    _updatedAt,
     _type,
     name,
     slug,
@@ -130,6 +134,7 @@ export const featuredVehiclesQuery = groq`
 export const vehicleBySlugQuery = groq`
   *[_type == "vehicle" && slug.current == $slug][0] {
     _id,
+    _updatedAt,
     _type,
     name,
     slug,
@@ -174,6 +179,7 @@ export const vehicleBySlugQuery = groq`
 export const blogPostsQuery = groq`
   *[_type == "blogPost" && published == true && publishedDate <= now()] | order(publishedDate desc) {
     _id,
+    _updatedAt,
     _type,
     title,
     slug,
@@ -202,6 +208,7 @@ export const blogPostsQuery = groq`
 export const latestBlogPostsQuery = groq`
   *[_type == "blogPost" && published == true && publishedDate <= now()] | order(publishedDate desc) [0...$limit] {
     _id,
+    _updatedAt,
     _type,
     title,
     slug,
@@ -229,6 +236,7 @@ export const latestBlogPostsQuery = groq`
 export const blogPostBySlugQuery = groq`
   *[_type == "blogPost" && slug.current == $slug && published == true][0] {
     _id,
+    _updatedAt,
     _type,
     title,
     slug,
@@ -282,6 +290,7 @@ export const adjacentBlogPostsQuery = groq`
 export const productsQuery = groq`
   *[_type == "product" && status == "active"] | order(order asc) {
     _id,
+    _updatedAt,
     _type,
     _createdAt,
     _updatedAt,
@@ -315,6 +324,7 @@ export const productsQuery = groq`
 export const featuredProductsQuery = groq`
   *[_type == "product" && featured == true && status == "active"] | order(order asc) [0...$limit] {
     _id,
+    _updatedAt,
     _type,
     name,
     slug,
@@ -341,6 +351,7 @@ export const featuredProductsQuery = groq`
 export const productBySlugQuery = groq`
   *[_type == "product" && slug.current == $slug && status == "active"][0] {
     _id,
+    _updatedAt,
     _type,
     name,
     slug,
@@ -397,6 +408,7 @@ export const testimonialsQuery = groq`
     && ($minRating == 0 || rating >= $minRating)
   ] | order(order asc) {
     _id,
+    _updatedAt,
     _type,
     name,
     title,
@@ -433,6 +445,7 @@ export const testimonialsQuery = groq`
 export const partnersQuery = groq`
   *[_type == "partner" && active == true] | order(order asc) {
     _id,
+    _updatedAt,
     _type,
     name,
     slug,
@@ -487,6 +500,7 @@ export const partnersQuery = groq`
 export const pageBySlugQuery = groq`
   *[_type == "page" && slug.current == $slug && published == true][0] {
     _id,
+    _updatedAt,
     _type,
     title,
     slug,
@@ -511,6 +525,7 @@ export const pageBySlugQuery = groq`
 export const venuesQuery = groq`
   *[_type == "venue" && active == true] | order(order asc) {
     _id,
+    _updatedAt,
     _type,
     name,
     shortName,
@@ -549,6 +564,7 @@ export const venuesQuery = groq`
 export const venueBySlugQuery = groq`
   *[_type == "venue" && slug.current == $slug && active == true][0] {
     _id,
+    _updatedAt,
     _type,
     name,
     shortName,
@@ -665,6 +681,7 @@ export const eventBySlugQuery = groq`
 export const driverProfilesQuery = groq`
   *[_type == "driverProfile" && displayOnWebsite == true && active == true] | order(order asc) {
     _id,
+    _updatedAt,
     _type,
     name,
     slug,
@@ -690,6 +707,7 @@ export const driverProfilesQuery = groq`
 export const driverProfileBySlugQuery = groq`
   *[_type == "driverProfile" && slug.current == $slug && displayOnWebsite == true && active == true][0] {
     _id,
+    _updatedAt,
     _type,
     name,
     slug,
@@ -719,6 +737,7 @@ export const driverProfileBySlugQuery = groq`
 export const serviceAnalyticsQuery = groq`
   *[_type == "serviceAnalytics" && service._ref == $serviceId][0] {
     _id,
+    _updatedAt,
     _type,
     service-> {
       _id,
@@ -744,6 +763,7 @@ export const serviceAnalyticsQuery = groq`
 export const giftCardByCodeQuery = groq`
   *[_type == "giftCard" && code == $code][0] {
     _id,
+    _updatedAt,
     _type,
     type,
     code,
@@ -776,6 +796,7 @@ export const scheduledGiftCardsQuery = groq`
     && scheduledDeliveryDate <= now()
   ] {
     _id,
+    _updatedAt,
     _type,
     type,
     code,
@@ -805,6 +826,7 @@ export const scheduledGiftCardsQuery = groq`
 export const memberLogosQuery = groq`
   *[_type == "memberLogo" && active == true] | order(order asc) {
     _id,
+    _updatedAt,
     _type,
     name,
     logo {
@@ -828,6 +850,7 @@ export const memberLogosQuery = groq`
 export const orderByNumberQuery = groq`
   *[_type == "order" && orderNumber == $orderNumber][0] {
     _id,
+    _updatedAt,
     _type,
     orderNumber,
     customerName,

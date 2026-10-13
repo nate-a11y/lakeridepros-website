@@ -29,6 +29,63 @@ describe('/pricing discount and fee disclosures', () => {
     expect(screen.getAllByRole('heading', { name: 'Elite' })).toHaveLength(2)
   })
 
+
+  it('prevents hourly cards drifting from the transportation-cost FAQ/schema', () => {
+    const { questions } = renderPricing()
+    const answer = questions.find(entry => entry.name === 'How much does Lake of the Ozarks transportation cost?')!.acceptedAnswer.text
+    const cases = [
+      ['Flex', 'Flex '], ['Elite', 'Elite '], ['LRP Black', 'Black '],
+      ['Limo Bus', 'Limo Bus and Rescue Squad start at '],
+      ['Rescue Squad', 'Limo Bus and Rescue Squad start at '],
+      ['Luxury Sprinter', 'Sprinter at '], ['Pink Patrol', 'Pink Patrol at '],
+      ['Luxury Shuttle', 'Shuttle at '],
+    ]
+    for (const [vehicle, prefix] of cases) {
+      const card = screen.getAllByRole('heading', { name: vehicle })[1].parentElement!
+      const rate = card.textContent!.match(/(\$\d+)\/hour/)?.[1]
+      expect(rate, `${vehicle} hourly card`).toBeDefined()
+      expect(answer, `${vehicle} cost answer`).toContain(`${prefix}${rate}/hr`)
+    }
+  })
+
+
+  it('prevents transfer cards drifting from the transportation-cost FAQ/schema', () => {
+    const { questions } = renderPricing()
+    const answer = questions.find(entry => entry.name === 'How much does Lake of the Ozarks transportation cost?')!.acceptedAnswer.text
+    for (const name of ['Flex', 'Elite', 'LRP Black']) {
+      const card = screen.getAllByRole('heading', { name })[0].parentElement!
+      const amount = card.textContent!.match(/First 5 miles\s*(\$\d+)\s*flat/)?.[1]
+      expect(amount).toBeDefined()
+      expect(answer).toContain(`${name} ${amount}`)
+    }
+    for (const [name, suffix] of [
+      ['Limo Bus', 'Limo Bus or Rescue Squad'], ['Rescue Squad', 'Limo Bus or Rescue Squad'],
+      ['Luxury Sprinter', 'Luxury Sprinter'], ['Pink Patrol', 'Pink Patrol'], ['Luxury Shuttle', 'Luxury Shuttle'],
+    ]) {
+      const card = screen.getAllByRole('heading', { name })[0].parentElement!
+      const amount = card.textContent!.match(/(\$\d+) base minimum/)?.[1]
+      expect(amount).toBeDefined()
+      expect(answer).toContain(`${amount} for ${suffix}`)
+    }
+  })
+
+  it('keeps both mileage tiers and the worked transfer example aligned with the cards', () => {
+    const { questions } = renderPricing()
+    const answer = questions.find(entry => entry.name === 'How much does Lake of the Ozarks transportation cost?')!.acceptedAnswer.text
+    const rates = ['Flex', 'Elite', 'LRP Black'].map(name => {
+      const card = screen.getAllByRole('heading', { name })[0].parentElement!
+      const tiers = [...card.textContent!.matchAll(/(\$\d+\.\d+)\/mi/g)].map(match => match[1])
+      expect(tiers, `${name} mileage tiers`).toHaveLength(2)
+      return tiers
+    })
+    expect(answer).toContain(rates.map(tiers => tiers[0]).join('/'))
+    expect(answer).toContain(rates.map(tiers => tiers[1]).join('/'))
+    const elite = screen.getAllByRole('heading', { name: 'Elite' })[0].parentElement!
+    const packageCharge = Number(elite.textContent!.match(/First 5 miles\s*\$(\d+)/)![1])
+    const exampleCharge = (packageCharge + 5 * Number(rates[1][0].slice(1))).toFixed(2)
+    expect(faq('How is point-to-point pricing calculated?')).toHaveTextContent(`$${exampleCharge}`)
+  })
+
   it('labels larger-vehicle transfers as point-to-point minimums rather than flat rates', () => {
     renderPricing()
     expect(screen.getByRole('heading', { name: 'Larger Vehicles (Point-to-Point Minimums)' })).toBeInTheDocument()

@@ -62,18 +62,7 @@ export default function TestimonialsCarousel({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Lake Ride Pros',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: (
-        testimonials
-          .filter(t => t.rating)
-          .reduce((sum, t) => sum + (t.rating || 0), 0) /
-        testimonials.filter(t => t.rating).length
-      ).toFixed(1),
-      reviewCount: testimonials.filter(t => t.rating).length,
-      bestRating: 5,
-      worstRating: 1,
-    },
+    '@id': 'https://www.lakeridepros.com/#organization',
     review: testimonials
       .filter(t => t.rating && t.createdAt)
       .map(testimonial => ({

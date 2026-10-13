@@ -1,3 +1,6 @@
+import { servedAirportsAnswer } from '@/lib/airport-copy'
+export const cancellationPolicyAnswer = 'Cancellations made at least 48 hours before service receive a full refund minus the processing fee. Cancellations made 24 to 48 hours before service receive a 50% refund. Cancellations less than 24 hours before service are non-refundable. Weather exceptions apply; review the Terms of Service for complete details.'
+
 export interface HomeFaq {
   question: string
   answer: string
@@ -35,11 +38,11 @@ export const homeFaqs: HomeFaq[] = [
   },
   {
     question: 'Which airports do you serve?',
-    answer: 'We provide airport transportation to and from Kansas City International Airport (MCI), St. Louis Lambert International Airport (STL), Springfield-Branson National Airport (SGF), Columbia Regional Airport (COU), and private aviation terminals. Flight-aware coordination helps us adjust pickup timing when schedules change.',
+    answer: servedAirportsAnswer,
   },
   {
     question: 'What is your cancellation policy?',
-    answer: 'Cancellations made at least 48 hours before service receive a full refund minus the processing fee. Cancellations made 24 to 48 hours before service receive a 50% refund. Cancellations less than 24 hours before service are non-refundable. Weather exceptions apply; review the Terms of Service for complete details.',
+    answer: cancellationPolicyAnswer,
     link: { href: '/terms-of-service', label: 'Read the Terms of Service' },
   },
   {

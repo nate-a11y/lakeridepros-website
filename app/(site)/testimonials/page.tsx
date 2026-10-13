@@ -1,13 +1,17 @@
+import { notFound } from 'next/navigation'
+import DirectoryPagination from '@/components/DirectoryPagination'
+import { DIRECTORY_PAGE_SIZE, getPageNumber } from '@/lib/seo/pagination'
+import { localBusinessSchema } from '@/lib/schemas'
 import CorePage from '@/components/core-editorial/CorePage'
 import CoreHero from '@/components/core-editorial/CoreHero'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, Quote } from 'lucide-react'
-import { getTestimonialsLocal, getMediaUrl } from '@/lib/api/sanity'
+import { getTestimonialsLocal, getMediaUrl, getGoogleReviewSummary } from '@/lib/api/sanity'
 import type { Testimonial } from '@/types/sanity'
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: 'Customer Reviews & Testimonials | Lake Ride Pros',
   description: 'Read real Lake Ride Pros customer reviews for weddings, airport transfers, bachelor parties, corporate events and transportation at Lake of the Ozarks.',
   keywords: [
@@ -105,68 +109,35 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   )
 }
 
-export default async function TestimonialsPage() {
-  // Fetch all testimonials with 4+ star ratings
-  const testimonials = await getTestimonialsLocal(false, 4)
+type PageProps = { searchParams: Promise<{ page?: string }> }
 
-  // Calculate aggregate rating
-  const ratedTestimonials = testimonials.filter(t => t.rating)
-  const averageRating = ratedTestimonials.length > 0
-    ? (ratedTestimonials.reduce((sum, t) => sum + (t.rating || 0), 0) / ratedTestimonials.length).toFixed(1)
-    : '5.0'
-  const reviewCount = ratedTestimonials.length
-
-  // Aggregate Rating Schema for rich snippets
-  const aggregateRatingSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: 'Lake Ride Pros',
-    image: 'https://www.lakeridepros.com/logo.png',
-    url: 'https://www.lakeridepros.com',
-    telephone: '+1-573-206-9499',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Lake of the Ozarks',
-      addressRegion: 'MO',
-      addressCountry: 'US'
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: averageRating,
-      reviewCount: reviewCount,
-      bestRating: 5,
-      worstRating: 1,
-    },
-    review: ratedTestimonials.slice(0, 10).map(testimonial => ({
-      '@type': 'Review',
-      author: {
-        '@type': 'Person',
-        name: testimonial.name,
-        ...(testimonial.title && { jobTitle: testimonial.title }),
-        ...(testimonial.company && {
-          worksFor: {
-            '@type': 'Organization',
-            name: testimonial.company,
-          },
-        }),
-      },
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: testimonial.rating,
-        bestRating: 5,
-        worstRating: 1,
-      },
-      reviewBody: testimonial.content,
-      datePublished: testimonial.createdAt,
-    })),
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  const page = getPageNumber((await searchParams).page)
+  if (page === null) return { ...baseMetadata, robots: { index: false } }
+  return {
+    ...baseMetadata,
+    title: page === 1 ? baseMetadata.title : `Customer Reviews - Page ${page} | Lake Ride Pros`,
+    description: page === 1 ? baseMetadata.description : `More real Lake Ride Pros customer reviews. Page ${page} of our curated transportation testimonials.`,
+    alternates: { canonical: `https://www.lakeridepros.com/testimonials${page === 1 ? '' : `?page=${page}`}` },
   }
+}
+
+export default async function TestimonialsPage({ searchParams }: PageProps) {
+  const page = getPageNumber((await searchParams).page)
+  if (page === null) notFound()
+  const [testimonials, summary] = await Promise.all([getTestimonialsLocal(false, 4), getGoogleReviewSummary()])
+  const totalPages = Math.max(1, Math.ceil(testimonials.length / DIRECTORY_PAGE_SIZE))
+  if (page > totalPages) notFound()
+  const visibleTestimonials = testimonials.slice((page - 1) * DIRECTORY_PAGE_SIZE, page * DIRECTORY_PAGE_SIZE)
+  const averageRating = (summary.ratingValue ?? 0).toFixed(1)
+  const reviewCount = summary.reviewCount
 
   return (
     <CorePage>
-      {/* Aggregate Rating Schema */}
+      {/* Shared business identity; testimonials are not a full-corpus rating. */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aggregateRatingSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
       />
 
       <div className="min-h-screen bg-white">
@@ -197,7 +168,7 @@ export default async function TestimonialsPage() {
                   ))}
                 </div>
                 <span className="text-white font-bold text-lg">{averageRating}</span>
-                <span className="text-white/80">from {reviewCount} reviews</span>
+                <span className="text-white/80">from {reviewCount} Google reviews</span>
               </div>
             )}
           </CoreHero>
@@ -205,9 +176,10 @@ export default async function TestimonialsPage() {
         {/* Testimonials Grid */}
         <section className="py-16">
           <div className="container mx-auto px-4">
+            <p className="mb-8 text-neutral-700">A curated selection of customer stories. The Google rating above includes all synced Google reviews, not just the testimonials shown here.</p>
             {testimonials.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-6 max-w-7xl mx-auto">
-                {testimonials.map((testimonial) => (
+                {visibleTestimonials.map((testimonial) => (
                   <TestimonialCard key={testimonial._id} testimonial={testimonial} />
                 ))}
               </div>
@@ -218,6 +190,7 @@ export default async function TestimonialsPage() {
                 </p>
               </div>
             )}
+            <DirectoryPagination page={page} totalPages={totalPages} path="/testimonials" />
           </div>
         </section>
 

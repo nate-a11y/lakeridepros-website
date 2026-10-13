@@ -122,6 +122,7 @@ export async function POST(request: NextRequest) {
   // catalog events remain safe even across instances where the local dedupe cache differs.
   if (SHOP_REVALIDATION_EVENTS.has(event.type)) {
     revalidatePath('/shop', 'layout')
+    revalidatePath('/sitemap.xml')
   }
 
   console.info('[Fourthwall webhook]', {

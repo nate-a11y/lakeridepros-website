@@ -49,6 +49,8 @@ import type {
 } from '@/types/sanity'
 
 export interface Venue {
+  _updatedAt?: string
+  updatedAt?: string
   _id: string
   name: string
   shortName?: string
@@ -68,6 +70,8 @@ export interface Venue {
 export type EventType = 'concert' | 'tour' | 'special'
 
 export interface Event {
+  _updatedAt?: string
+  updatedAt?: string
   _id: string
   name: string
   slug: string
@@ -130,6 +134,7 @@ function normalizeDoc<T = any>(doc: T): T {
   if (!doc || typeof doc !== 'object') return doc
 
   const normalized: any = { ...(doc as any) }
+  normalized.updatedAt = normalized.updatedAt || normalized._updatedAt
 
   // Map _id -> id
   if (normalized._id) {
@@ -332,7 +337,7 @@ export async function getBlogPosts(
       groq`{
         "docs": *[_type == "blogPost" && published == true && publishedDate <= now()]
           | order(publishedDate desc) [$start...$end] {
-            _id, _type, title, slug, excerpt, content,
+            _id, _type, _updatedAt, title, slug, excerpt, content,
             featuredImage { ..., asset-> { _id, url, metadata } },
             author-> { _id, name, email },
             publishedDate, categories, published
@@ -480,6 +485,19 @@ export const getProductsLocal = async (): Promise<unknown[]> => {
 // ============================================================================
 // TESTIMONIALS
 // ============================================================================
+
+/** Full synced Google corpus, including textless and low-rated reviews. */
+export async function getGoogleReviewSummary(): Promise<{ reviewCount: number; ratingValue: number | null }> {
+  try {
+    return await client.fetch(groq`{
+      "reviewCount": count(*[_type == "testimonial" && source == "google" && googleReviewStatus != "not_found"]),
+      "ratingValue": math::avg(*[_type == "testimonial" && source == "google" && googleReviewStatus != "not_found" && defined(rating)].rating)
+    }`, {}, { next: { revalidate: 60 } })
+  } catch {
+    console.error('[Google reviews] Summary unavailable')
+    return { reviewCount: 0, ratingValue: null }
+  }
+}
 
 /** Placeholder strings to filter out empty / stub testimonials. */
 const placeholderTexts = ['No comment provided', 'No content provided', '']

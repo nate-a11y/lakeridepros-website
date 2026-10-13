@@ -32,7 +32,7 @@ const getAuthorName = (author: { name?: string } | string | number | null | unde
     return 'Lake Ride Pros';
   }
   // If it's a User object (Sanity reference), return the name or fallback
-  return author.name || 'Lake Ride Pros';
+  return author.name === 'Nate' ? 'Nate Bullock' : author.name || 'Lake Ride Pros';
 };
 
 interface BlogPostPageProps {
@@ -125,6 +125,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     author: {
       '@type': typeof post.author === 'string' || !post.author ? 'Organization' : 'Person',
       name: getAuthorName(post.author),
+      url: 'https://www.lakeridepros.com/about-us',
     },
     publisher: {
       '@type': 'Organization',
@@ -182,11 +183,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       <header className={styles.postHeader}>
         <div className={styles.wrap}>
+          {['labor-day-2026-transportation-planning', 'bikefest-2026-advance-planning-transportation', 'shootout-2026-advance-planning-transportation'].includes(slug) && new Date() >= new Date('2026-10-01T00:00:00Z') && (
+            <aside aria-label="Historical event planning guide" className="mb-8 border border-primary-dark bg-white p-5 text-lrp-black">
+              <p className="font-bold">Archived 2026 event planning guide</p>
+              <p className="mt-2">This article was published before the 2026 event. Its countdowns and availability references are historical, not current offers. For a future trip, check <Link href="/events" className="underline">upcoming events</Link>, <Link href="/pricing" className="underline">current pricing</Link>, or <Link href="/book" className="underline">request an exact quote</Link>.</p>
+            </aside>
+          )}
           <Link href="/blog" className="mb-6 inline-flex min-h-11 items-center font-semibold text-[#2f730e] underline underline-offset-4 hover:text-lrp-black">Back to Blog</Link>
           <div className={`${styles.meta} mb-6`}>
             {post.publishedDate && <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>}
             {post.categories?.[0] && <span className={styles.category}>{getCategoryLabel(post.categories[0])}</span>}
-            <span>By {getAuthorName(post.author)}</span>
+            <span>By <Link href="/about-us" className="underline underline-offset-4">{getAuthorName(post.author)}</Link></span>
           </div>
           <h1 className={styles.postTitle}>{post.title}</h1>
           {post.excerpt && <p className={styles.postExcerpt}>{post.excerpt}</p>}

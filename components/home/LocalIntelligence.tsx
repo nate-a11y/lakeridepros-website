@@ -82,7 +82,7 @@ export default function LocalIntelligence({ posts }: LocalIntelligenceProps) {
                         fill
                         quality={65}
                         sizes="(min-width: 1280px) 700px, (min-width: 1024px) 58vw, (min-width: 640px) calc(100vw - 48px), calc(100vw - 32px)"
-                        className="object-cover"
+                        className="object-contain"
                       />
                     </div>
                   )}

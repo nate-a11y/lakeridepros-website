@@ -232,9 +232,9 @@ export const latestBlogPostsQuery = groq`
   }
 `
 
-/** Single published blog post by slug. */
+/** Single blog post that has reached its publication date. */
 export const blogPostBySlugQuery = groq`
-  *[_type == "blogPost" && slug.current == $slug && published == true][0] {
+  *[_type == "blogPost" && slug.current == $slug && published == true && publishedDate <= now()][0] {
     _id,
     _updatedAt,
     _type,

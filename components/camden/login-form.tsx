@@ -1,6 +1,7 @@
 "use client"
 
 import { ArrowRight, KeyRound, MessageSquareText, ShieldCheck } from "lucide-react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { FormEvent, useEffect, useState } from "react"
 import Turnstile from "@/components/Turnstile"
@@ -144,9 +145,20 @@ export function CamdenLoginForm() {
           {error && <div role="alert" className="mt-5 rounded-xl border border-red-300 bg-red-50 p-4 text-sm font-semibold text-red-900">{error}</div>}
           {step === "phone" ? (
             <form onSubmit={requestCode} className="mt-6 space-y-5">
-              <div><label htmlFor="portal-phone" className="mb-2 block text-sm font-bold">Mobile phone number</label><input id="portal-phone" type="tel" inputMode="tel" autoComplete="tel" className={fieldClass} value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="(555) 555-1234" required aria-describedby="phone-help" /><p id="phone-help" className="mt-2 text-xs text-neutral-600">Standard message and data rates may apply.</p></div>
+              <div><label htmlFor="portal-phone" className="mb-2 block text-sm font-bold">Mobile phone number</label><input id="portal-phone" type="tel" inputMode="tel" autoComplete="tel" className={fieldClass} value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="(555) 555-1234" required aria-describedby="phone-help" /></div>
               {!demoMode && <Turnstile key={captchaKey} onSuccess={setCaptchaToken} onExpire={() => setCaptchaToken("")} onError={() => setError("The security check could not load. Please try again.")} />}
-              <button type="submit" disabled={busy || !captchaToken} className={`${primaryButtonClass} w-full`}>{busy ? "Sending code…" : "Text me a code"}<ArrowRight className="ml-2 size-4" aria-hidden="true" /></button>
+              <button type="submit" disabled={busy || !captchaToken} aria-describedby="phone-help" className={`${primaryButtonClass} w-full`}>{busy ? "Sending code…" : "Text me a code"}<ArrowRight className="ml-2 size-4" aria-hidden="true" /></button>
+              <p id="phone-help" className="text-sm leading-relaxed text-neutral-600">
+                By selecting “Text me a code,” you agree to receive the sign-in code you requested by SMS from Lake Ride Pros.
+                Message frequency varies with your requests. Message and data rates may apply.
+                Reply STOP to opt out or HELP for help. You can also call{" "}
+                <a href="tel:+15732069499" className="font-semibold text-[#245f0b] underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">(573) 206-9499</a>.
+                This action does not subscribe you to ride updates or marketing messages.
+                See our{" "}
+                <Link href="/privacy-policy" className="font-semibold text-[#245f0b] underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Privacy Policy</Link>{" "}
+                and{" "}
+                <Link href="/terms-of-service" className="font-semibold text-[#245f0b] underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Terms of Service</Link>.
+              </p>
             </form>
           ) : (
             <form onSubmit={verifyCode} className="mt-6 space-y-5">

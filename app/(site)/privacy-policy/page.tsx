@@ -42,7 +42,7 @@ export default function PrivacyPolicyPage() {
             Privacy Policy
           </h1>
           <p className="text-white/90 text-center mt-4">
-            Last Updated: July 29, 2026
+            Last Updated: October 22, 2026
           </p>
         </div>
       </div>
@@ -177,6 +177,10 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-2xl font-bold text-lrp-green-dark mb-4">
               3. How We Share Your Information
             </h2>
+            <p className="text-lrp-black mb-4">
+              No mobile information will be sold or shared with third parties
+              for promotional or marketing purposes.
+            </p>
             <p className="text-lrp-black mb-4">
               We may share your information with:
             </p>

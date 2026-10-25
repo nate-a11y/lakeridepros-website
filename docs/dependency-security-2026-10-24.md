@@ -3,7 +3,7 @@
 ## Scope
 
 - Based on current main `ee4d65e789fc9e82766c6db348b8fc13b119f83a`, isolated in `fix/dependency-security-20261024`.
-- Dependency manifest/lock updates only; no application behavior, auth schema, service/provider settings, CMS content or production data changes. No publication/deployment authorized or performed for this patch.
+- Dependency manifest/lock updates only; no application behavior, auth schema, service/provider settings, CMS content or production data changes. Initially prepared for local review only; Nate separately authorized publication with “ship it” on 2026-10-25. Final deployment evidence is recorded in Nate OS.
 - Preserve the dirty primary checkout. No `npm audit fix --force`, forced major downgrade, broad latest-version sweep, new direct dependency, or install-script policy relaxation.
 
 ## Changes

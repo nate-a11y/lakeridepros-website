@@ -35,3 +35,10 @@
 - [x] Verify GTM coverage across every rendered page ⧗2026-09-06T19:47:03-05:00 #8f396b33
   Keep one GTM container in the root layout; test representative marketing, commerce, events, location, partner, portal, and non-site routes in local production and Vercel preview without duplicate container loads.
   > Local production audit passed on 320/320 rendered routes with one root GTM component; hydrated representative-route checks passed without duplicates. ⧗2026-09-06T19:47:04-05:00
+
+- [ ] Dependency refresh: maintained Zod mitigation and toolchain holds #31024ba9
+  Nate approved reconciliation and production shipping on 2026-11-09. Isolated release starts at SEO main 1f2abb3; old shared dirty checkout untouched.
+  - Refreshed direct dependencies, preserved production security override floors and Stripe Endive/card-only/Fourthwall/invoice behavior; Inngest private Zod patch is hash/version guarded.
+  - Reconciled suite: 1,191 tests; coverage 86.36% statements / 80.11% branches / 84.08% functions / 88.82% lines. Original 80% gates and exclusions unchanged.
+  - Raw npm audit remains two high entries for one locally mitigated upstream Zod issue. Review/remove patch after a supported upstream fix; ESLint 10 and TypeScript 7 await compatible peer tooling.
+  - Real provider/payment/background-job and physical-device acceptance remain separate. See docs/dependency-security-2026-11-09.md for scoped verification and release status.

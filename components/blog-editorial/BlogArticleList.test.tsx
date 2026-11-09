@@ -12,7 +12,9 @@ const post = {
 describe('editorial blog archive', () => {
   it('preserves full article text and crawlable normalized slug links', () => {
     render(<BlogArticleList posts={[post]} currentPage={1} totalPages={1} />)
-    expect(screen.getByRole('link', { name: `Read article: ${post.title}` })).toHaveAttribute('href', '/blog/airport-guide')
+    const link = screen.getByRole('link', { name: new RegExp(post.title) })
+    expect(link).toHaveAttribute('href', '/blog/airport-guide')
+    expect(link).toHaveAccessibleName(/The full CMS excerpt stays readable/)
     expect(screen.getByText(post.excerpt)).toBeVisible()
     expect(screen.getByText('Tips & Guides')).toBeVisible()
     expect(screen.queryByRole('navigation')).not.toBeInTheDocument()

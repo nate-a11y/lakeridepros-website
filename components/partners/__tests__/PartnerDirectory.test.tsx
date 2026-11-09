@@ -22,7 +22,7 @@ function partner(overrides: Partial<Partner> = {}): Partner {
 
 describe('PartnerDirectory', () => {
   it('preserves discoverable partner, website and phone links', () => {
-    render(<PartnerDirectory kind="premier" partners={[partner()]} />)
+    render(<PartnerDirectory kind="premier" partners={[partner({ isPremierPartner: true })]} />)
     expect(screen.getByRole('link', { name: 'Learn More About Lake Venue' })).toHaveAttribute('href', '/local-premier-partners/lake-venue')
     expect(screen.getByRole('link', { name: /Visit Lake Venue website/ })).toHaveAttribute('href', 'https://example.com')
     expect(screen.getByRole('link', { name: '573-555-0123' })).toHaveAttribute('href', 'tel:573-555-0123')
@@ -34,7 +34,7 @@ describe('PartnerDirectory', () => {
   })
 
   it('uses dedicated wedding URLs and wedding copy', () => {
-    render(<PartnerDirectory kind="wedding" partners={[partner({ weddingBlurb: 'Wedding-specific introduction.', weddingDescription: 'Wedding-only description.', weddingCategory: 'venues-destinations' })]} />)
+    render(<PartnerDirectory kind="wedding" partners={[partner({ isWeddingPartner: true, weddingBlurb: 'Wedding-specific introduction.', weddingDescription: 'Wedding-only description.', weddingCategory: 'venues-destinations' })]} />)
     expect(screen.getByText('Wedding-specific introduction.')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Learn More About Lake Venue' })).toHaveAttribute('href', '/wedding-partners/lake-venue')
     expect(screen.getByRole('heading', { name: 'Venues & Destinations' })).toBeInTheDocument()
@@ -43,7 +43,7 @@ describe('PartnerDirectory', () => {
   })
 
   it('searches descriptions and restores the directory after clearing', () => {
-    render(<PartnerDirectory kind="premier" partners={[partner()]} />)
+    render(<PartnerDirectory kind="premier" partners={[partner({ isPremierPartner: true })]} />)
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'not a partner' } })
     expect(screen.queryByRole('article')).not.toBeInTheDocument()
     expect(screen.getByText('No premier partners found matching your search.')).toBeInTheDocument()

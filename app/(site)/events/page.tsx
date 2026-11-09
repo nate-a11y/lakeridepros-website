@@ -1,3 +1,4 @@
+import { metaDescription } from '@/lib/seo/metadata'
 import { getUpcomingEvents, getVenues, type Event, type EventType } from '@/lib/api/sanity'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -54,6 +55,7 @@ export async function generateMetadata({
   const params = await searchParams
   const type = normalizeType(params?.type)
   const copy = EVENT_TYPE_COPY[type]
+  const description = metaDescription(copy.metaDescription, 'Plan your pickup, compare upcoming events, and request a ride quote from Lake Ride Pros.')
   const url =
     type === 'all'
       ? 'https://www.lakeridepros.com/events'
@@ -61,11 +63,11 @@ export async function generateMetadata({
 
   return {
     title: copy.metaTitle,
-    description: copy.metaDescription,
+    description,
     alternates: { canonical: url },
     openGraph: {
       title: copy.metaTitle,
-      description: copy.metaDescription,
+      description,
       url,
       siteName: 'Lake Ride Pros',
       images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Event Ride Availability' }],
@@ -75,7 +77,7 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: copy.metaTitle,
-      description: copy.metaDescription,
+      description,
       images: ['/og-image.jpg'],
     },
   }
@@ -189,6 +191,21 @@ export default async function EventsPage({
         venues={venues}
         waitlistCounts={waitlistCounts}
       />
+      {venues.length > 0 && (
+        <section className={`${styles.container} ${styles.section}`} aria-labelledby="venue-directory-heading">
+          <h2 id="venue-directory-heading">Plan a ride by venue</h2>
+          <p className={styles.intro}>Find venue information and upcoming events, even while the next show is being scheduled.</p>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {venues.filter(venue => venue.slug).map(venue => (
+              <li key={venue._id}>
+                <Link href={`/events/venues/${encodeURIComponent(venue.slug)}`} className={`${styles.textLink} min-h-11 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4`}>
+                  {venue.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <section className={styles.close}>
         <div className={`${styles.container} ${styles.closeGrid}`}>
           <div>

@@ -9,22 +9,22 @@ const CASE_SENSITIVE_LEGACY_REDIRECTS: Readonly<Record<string, string>> = {
   '/our-drivers/LRP7': '/our-drivers/lrp7',
   '/our-drivers/LRP9': '/our-drivers/lrp9',
   '/events/Avenged-Sevenfold-and-Good-Charlotte':
-    '/events/avenged-sevenfold-and-good-charlotte',
+    '/events',
   '/events/Brandon-Lake-with-Franni-Cash-and-Pat-Barrett':
-    '/events/brandon-lake-with-franni-cash-and-pat-barrett',
+    '/events',
   '/events/Eric-Church-with-special-guest-49-winchester':
-    '/events/eric-church-with-special-guest-49-winchester',
+    '/events',
   '/events/Guns-and-Roses-World-Tour-2026':
-    '/events/guns-and-roses-world-tour-2026',
-  '/events/Kolby-copper': '/events/kolby-copper',
-  '/events/MC4D': '/events/mc4d',
+    '/events',
+  '/events/Kolby-copper': '/events',
+  '/events/MC4D': '/events',
   '/events/Monster-Energy-SMX-World-Championship-Final':
-    '/events/monster-energy-smx-world-championship-final',
+    '/events',
   '/events/New-Edition-Way-Tour-Featuring-New-Edition-Boyz-II-Men-and-Toni-Braxton':
-    '/events/new-edition-way-tour-featuring-new-edition-boyz-ii-men-and-toni-braxton',
-  '/events/Nine-Inch-Nails': '/events/nine-inch-nails',
+    '/events',
+  '/events/Nine-Inch-Nails': '/events',
   '/events/The-Queens-4-Legends-1-Stage':
-    '/events/the-queens-4-legends-1-stage',
+    '/events',
   '/local-premier-partners/AED-EMPIRE':
     '/local-premier-partners/aed-empire',
   '/partners/Citywide-home-mortgage':

@@ -1,3 +1,4 @@
+import { metaDescription } from '@/lib/seo/metadata'
 import { notFound } from 'next/navigation'
 import DirectoryPagination from '@/components/DirectoryPagination'
 import { DIRECTORY_PAGE_SIZE, getPageNumber } from '@/lib/seo/pagination'
@@ -11,7 +12,7 @@ import { Star, Quote } from 'lucide-react'
 import { getTestimonialsLocal, getMediaUrl, getGoogleReviewSummary } from '@/lib/api/sanity'
 import type { Testimonial } from '@/types/sanity'
 
-const baseMetadata: Metadata = {
+const baseMetadata = {
   title: 'Customer Reviews & Testimonials | Lake Ride Pros',
   description: 'Read real Lake Ride Pros customer reviews for weddings, airport transfers, bachelor parties, corporate events and transportation at Lake of the Ozarks.',
   keywords: [
@@ -40,7 +41,7 @@ const baseMetadata: Metadata = {
     description: 'Read what our customers say about Lake Ride Pros at Lake of the Ozarks.',
     images: ['/og-image.jpg'],
   },
-}
+} satisfies Metadata
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -114,11 +115,19 @@ type PageProps = { searchParams: Promise<{ page?: string }> }
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
   const page = getPageNumber((await searchParams).page)
   if (page === null) return { ...baseMetadata, robots: { index: false } }
+  const title = page === 1 ? baseMetadata.title : `Customer Reviews - Page ${page} | Lake Ride Pros`
+  const description = page === 1 ? baseMetadata.description : metaDescription(
+    `Read Lake Ride Pros customer reviews, page ${page}.`,
+    'Explore transportation feedback from Lake of the Ozarks customers and find out what to expect when planning your next ride.',
+  )
+  const url = `https://www.lakeridepros.com/testimonials${page === 1 ? '' : `?page=${page}`}`
   return {
     ...baseMetadata,
-    title: page === 1 ? baseMetadata.title : `Customer Reviews - Page ${page} | Lake Ride Pros`,
-    description: page === 1 ? baseMetadata.description : `More real Lake Ride Pros customer reviews. Page ${page} of our curated transportation testimonials.`,
-    alternates: { canonical: `https://www.lakeridepros.com/testimonials${page === 1 ? '' : `?page=${page}`}` },
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { ...baseMetadata.openGraph, title, description, url },
+    twitter: { ...baseMetadata.twitter, title, description },
   }
 }
 

@@ -3,6 +3,13 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
+  openGraph: {
+    title: 'Return Policy | Lake Ride Pros',
+    description: 'Review return, refund, exchange, and eligibility policies for Lake Ride Pros merchandise, including damaged items and order-support instructions.',
+    url: 'https://www.lakeridepros.com/return-policy',
+    type: 'website', siteName: 'Lake Ride Pros', locale: 'en_US',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Return Policy' }],
+  },
   title: 'Return Policy | Lake Ride Pros',
   description: 'Review return, refund, exchange, and eligibility policies for Lake Ride Pros merchandise, including damaged items and order-support instructions.',
   alternates: {

@@ -2,27 +2,27 @@
 const legacySlugRedirects = [
   {
     "source": "/events/Bring-Me-The-Horizon",
-    "destination": "/events/bring-me-the-horizon-enterprise-center-2026-05-11",
+    "destination": "/events",
     "permanent": true
   },
   {
     "source": "/events/Megan-Moroney",
-    "destination": "/events/megan-moroney-enterprise-center-2026-06-13",
+    "destination": "/events",
     "permanent": true
   },
   {
     "source": "/events/forrest-frank%20-%20Copy",
-    "destination": "/events/forrest-frank-copy",
+    "destination": "/events",
     "permanent": true
   },
   {
     "source": "/events/three-days-grace%20-%20Copy",
-    "destination": "/events/three-days-grace-copy",
+    "destination": "/events",
     "permanent": true
   },
   {
     "source": "/events/zac-brown-band%20-%20Copy",
-    "destination": "/events/zac-brown-band-copy",
+    "destination": "/events",
     "permanent": true
   },
   {
@@ -37,17 +37,17 @@ const legacySlugRedirects = [
   },
   {
     "source": "/shop/products/-lrp-white-tough-phone-cases",
-    "destination": "/shop/products/lrp-white-tough-phone-cases",
+    "destination": "/shop",
     "permanent": true
   },
   {
     "source": "/events/bring-me-the-horizon",
-    "destination": "/events/bring-me-the-horizon-t-mobile-center-2026-05-12",
+    "destination": "/events",
     "permanent": true
   },
   {
     "source": "/events/megan-moroney",
-    "destination": "/events/megan-moroney-t-mobile-center-2026-08-16",
+    "destination": "/events",
     "permanent": true
   },
   {
@@ -124,6 +124,7 @@ const nextConfig = {
       { source: '/fleet/lrp20-nick', destination: '/fleet', permanent: true },
       { source: '/events-1', destination: '/services/group-event-transportation', permanent: true },
       { source: '/25484956-256c-4ca3-bcb1-05c6bb284472', destination: '/our-drivers', permanent: true },
+      { source: '/partners', destination: '/trusted-referral-partners', permanent: true },
       { source: '/referral-partners', destination: '/trusted-referral-partners', permanent: true },
       { source: '/partners/lrp-promotions', destination: '/trusted-referral-partners', permanent: true },
       { source: '/airport-transportation-solutions', destination: '/services', permanent: true },

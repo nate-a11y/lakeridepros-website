@@ -13,7 +13,7 @@ import { getRandomTestimonialsLocal as getRandomTestimonials } from '@/lib/api/s
 export const metadata: Metadata = {
   title: 'Lake of the Ozarks Airport Shuttle | Lake Ride Pros',
   description:
-    'Professional airport shuttle service to/from Lake of the Ozarks. COU, SGF, STL, MCI, and local private aviation airports. Private aviation, commercial flights. Book now!',
+    'Plan airport transportation to or from Lake of the Ozarks. We serve COU, SGF, STL, MCI, and local private aviation airports. Request your ride quote.',
   keywords: [
     'Lake of the Ozarks airport transportation',
     'Grand Glaize Airport shuttle',

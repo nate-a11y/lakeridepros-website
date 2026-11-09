@@ -1,5 +1,7 @@
 'use client'
 
+import { getPartnerPath } from '@/lib/seo/partner-path'
+
 import { useState, useMemo, memo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -71,7 +73,7 @@ const PartnerCard = memo(function PartnerCard({ partner }: { partner: Partner })
         {/* Learn More Button */}
         {partner.slug && (
           <Link
-            href={`/wedding-partners/${partner.slug}`}
+            href={getPartnerPath(partner, partner.slug)}
             className="inline-flex items-center gap-2 px-4 py-2 bg-lrp-green hover:bg-lrp-green-dark text-lrp-black rounded-md font-medium transition-colors text-sm"
           >
             <span>Learn More About {partner.name}</span>

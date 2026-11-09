@@ -11,19 +11,23 @@ import FourthwallProductArtwork from './FourthwallProductArtwork'
 export async function generateMetadata(): Promise<Metadata> {
   const products = await getFourthwallProducts()
 
-  if (products.length === 0) {
-    return {
-      title: 'Lake Ride Pros Shop — New Merch Coming Soon',
-      description: 'The Lake Ride Pros merch shop is being upgraded with better gear and a better shopping experience.',
-      alternates: { canonical: 'https://www.lakeridepros.com/shop' },
-      robots: { index: false, follow: true },
-    }
-  }
-
+  const title = products.length === 0
+    ? 'Lake Ride Pros Shop | New Merch Coming Soon'
+    : 'Lake Ride Pros Shop | Premium Merch and Gear'
+  const description = products.length === 0
+    ? 'The Lake Ride Pros merch collection is being updated. Check back for new gear, or contact our team with questions about the shop.'
+    : 'Shop Lake Ride Pros merchandise. Browse the current collection, compare available styles and sizes, and choose your gear for your next lake day.'
+  const url = 'https://www.lakeridepros.com/shop'
   return {
-    title: 'Lake Ride Pros Shop | Premium Merch and Gear',
-    description: 'Shop the latest Lake Ride Pros apparel, hats, drinkware, and gear.',
-    alternates: { canonical: 'https://www.lakeridepros.com/shop' },
+    title,
+    description,
+    alternates: { canonical: url },
+    ...(products.length === 0 && { robots: { index: false, follow: true } }),
+    openGraph: {
+      title, description, url,
+      type: 'website', siteName: 'Lake Ride Pros', locale: 'en_US',
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Lake Ride Pros Shop' }],
+    },
   }
 }
 

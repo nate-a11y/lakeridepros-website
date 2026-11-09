@@ -10,6 +10,7 @@ vi.mock('@/lib/api/sanity', () => ({
   getDriverProfiles: vi.fn().mockResolvedValue([]),
   getUpcomingEvents: vi.fn().mockResolvedValue([]),
   getVenues: vi.fn().mockResolvedValue({ docs: [] }),
+  getTestimonialsLocal: vi.fn().mockResolvedValue([]),
 }))
 vi.mock('@/lib/fourthwall/storefront', async (importOriginal) => ({
   ...await importOriginal<typeof import('@/lib/fourthwall/storefront')>(),
@@ -18,7 +19,8 @@ vi.mock('@/lib/fourthwall/storefront', async (importOriginal) => ({
 
 import sitemap, { dynamic } from '@/app/sitemap'
 import { getFourthwallProducts, FourthwallStorefrontError, type FourthwallProduct } from '@/lib/fourthwall/storefront'
-import { getProductsLocal, getServicesLocal } from '@/lib/api/sanity'
+import { getPartnersLocal, getProductsLocal, getServicesLocal, getTestimonialsLocal } from '@/lib/api/sanity'
+import type { Partner, Testimonial } from '@/types/sanity'
 
 const product = (slug: string): FourthwallProduct => ({
   type: 'PRODUCT', id: slug, slug, name: slug, description: '',
@@ -31,6 +33,8 @@ describe('sitemap stays aligned with the live shop', () => {
     vi.clearAllMocks()
     vi.mocked(getFourthwallProducts).mockResolvedValue([])
     vi.mocked(getServicesLocal).mockResolvedValue({ docs: [] })
+    vi.mocked(getPartnersLocal).mockResolvedValue([])
+    vi.mocked(getTestimonialsLocal).mockResolvedValue([])
   })
 
   it('is generated at request time and never uses the retired Sanity catalog', async () => {
@@ -48,6 +52,26 @@ describe('sitemap stays aligned with the live shop', () => {
     const next = await sitemap()
     expect(next.some(entry => entry.url.endsWith('/first-tee'))).toBe(false)
     expect(next.some(entry => entry.url.endsWith('/next-hat'))).toBe(true)
+  })
+
+  it('lists canonical partner routes and all existing indexable review pages', async () => {
+    vi.mocked(getPartnersLocal).mockResolvedValue([
+      { slug: 'dual-partner', category: 'local-premier', isWeddingPartner: true },
+      { slug: 'referral-partner' },
+    ] as Partner[])
+    vi.mocked(getTestimonialsLocal).mockResolvedValue(Array.from({ length: 49 }, () => ({} as Testimonial)))
+    const urls = (await sitemap()).map(entry => entry.url)
+    expect(urls).toEqual(expect.arrayContaining([
+      'https://www.lakeridepros.com/local-premier-partners/dual-partner',
+      'https://www.lakeridepros.com/partners/referral-partner',
+      'https://www.lakeridepros.com/testimonials?page=2',
+      'https://www.lakeridepros.com/testimonials?page=3',
+      'https://www.lakeridepros.com/events?type=concert',
+      'https://www.lakeridepros.com/events/waitlist',
+      'https://www.lakeridepros.com/careers/general-application',
+    ]))
+    expect(urls).not.toContain('https://www.lakeridepros.com/wedding-partners/dual-partner')
+    expect(urls).not.toContain('https://www.lakeridepros.com/testimonials?page=4')
   })
 
   it('omits products when the shop is disabled but propagates outages instead of publishing a partial catalog', async () => {

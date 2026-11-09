@@ -1,3 +1,4 @@
+import { metaDescription, metaTitle } from '@/lib/seo/metadata'
 import { externalWebsiteUrl } from '@/lib/seo/external-website-url'
 import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
@@ -33,13 +34,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Venue Not Found | Lake Ride Pros' }
   }
 
+  const title = metaTitle(`${venue.name} Events & Rides`)
+  const description = metaDescription(venue.description || '', `See upcoming events at ${venue.name} and plan transportation with Lake Ride Pros. Check ride availability and request a quote for your group.`)
+
   return {
-    title: `${venue.name} — Upcoming Events & Ride Availability | Lake Ride Pros`,
-    description: venue.description || `Check upcoming events and book your ride to ${venue.name} in Missouri. See ride availability and reserve transportation with Lake Ride Pros.`,
+    title,
+    description,
     alternates: { canonical: `https://www.lakeridepros.com/events/venues/${venue.slug}` },
     openGraph: {
-      title: `${venue.name} Events | Lake Ride Pros`,
-      description: venue.description || `Upcoming events and ride availability at ${venue.name}.`,
+      title,
+      description,
       url: `https://www.lakeridepros.com/events/venues/${venue.slug}`,
       siteName: 'Lake Ride Pros',
       images: venue.image && typeof venue.image === 'object'

@@ -25,7 +25,7 @@ describe('Location editorial content', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Camdenton, Missouri')
     expect(screen.getByRole('link', { name: 'Book Your Camdenton Ride' })).toHaveAttribute('href', '/book')
     expect(
-      screen.getByRole('button', { name: 'Call Lake Ride Pros - Opens phone options' }),
+      screen.getByRole('button', { name: /573.*206.*9499/ }),
     ).toBeInTheDocument()
     expect(screen.getByRole('img', { name: 'Lake Ride Pros shuttle' })).toHaveClass('object-contain')
   })

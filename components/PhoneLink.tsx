@@ -16,7 +16,7 @@ export const PhoneLink = memo(function PhoneLink({ children, className }: PhoneL
       onClick={openModal}
       className={className}
       type="button"
-      aria-label="Call Lake Ride Pros - Opens phone options"
+      aria-haspopup="dialog"
     >
       {children}
     </button>

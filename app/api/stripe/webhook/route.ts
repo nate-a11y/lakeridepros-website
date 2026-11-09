@@ -9,6 +9,7 @@ function getStripe() {
     throw new Error('STRIPE_SECRET_KEY is not set')
   }
   return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    // @ts-expect-error Keep the deployed Endive contract; SDK types only its latest API date.
     apiVersion: '2026-09-30.endive',
   })
 }

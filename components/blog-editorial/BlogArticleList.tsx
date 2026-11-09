@@ -17,7 +17,7 @@ export default function BlogArticleList({ posts, currentPage, totalPages }: {
       <div className={styles.articleList}>
         {posts.map((post) => (
           <article key={post._id} className={styles.articleRow}>
-            <Link href={`/blog/${resolveSlug(post.slug)}`} className={styles.articleLink} aria-label={`Read article: ${post.title}`}>
+            <Link href={`/blog/${resolveSlug(post.slug)}`} className={styles.articleLink}>
               <div className={styles.meta}>
                 {post.publishedDate && <time dateTime={post.publishedDate}>{formatDate(post.publishedDate)}</time>}
                 {post.categories?.[0] && <span className={styles.category}>{getCategoryLabel(post.categories[0])}</span>}

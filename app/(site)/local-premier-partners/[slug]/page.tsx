@@ -1,3 +1,4 @@
+import { getPartnerPath } from '@/lib/seo/partner-path'
 import PartnerDetail from '@/components/partners/PartnerDetail';
 import { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';
@@ -11,13 +12,8 @@ type Props = {
 // Force dynamic rendering to avoid build-time database queries
 export const dynamic = 'force-dynamic';
 
-function canonicalPartnerPath(slug: string): string {
-  return `/local-premier-partners/${encodeURIComponent(slug)}`;
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const canonicalPath = canonicalPartnerPath(slug);
   const partner = await getPartnerBySlugLocal(slug);
 
   if (!partner) {
@@ -25,6 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: 'Premier Partner Not Found | Lake Ride Pros',
     };
   }
+
+  const canonicalPath = getPartnerPath(partner, slug);
 
   const description = partner.blurb || partner.description || '';
   const partnerLogo = typeof partner.logo === 'object' ? partner.logo : null;
@@ -76,6 +74,11 @@ export default async function PremierPartnerDetailPage({ params }: Props) {
 
   if (!partner) {
     permanentRedirect('/local-premier-partners');
+  }
+
+  const canonicalPath = getPartnerPath(partner, slug);
+  if (canonicalPath !== `/local-premier-partners/${encodeURIComponent(slug)}`) {
+    permanentRedirect(canonicalPath);
   }
 
   return <PartnerDetail partner={partner} backLink="/local-premier-partners" categoryLabel="Local Premier Partners" displayCategory="Local Premier Partner" blurb={partner.blurb} description={partner.description} />;

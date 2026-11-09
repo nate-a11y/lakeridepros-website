@@ -1,3 +1,5 @@
+import { DIRECTORY_PAGE_SIZE } from '@/lib/seo/pagination'
+import { getPartnerPath } from '@/lib/seo/partner-path'
 import { MetadataRoute } from 'next';
 import {
   getServicesLocal,
@@ -8,6 +10,7 @@ import {
   getDriverProfiles,
   getUpcomingEvents,
   getVenues,
+  getTestimonialsLocal,
 } from '@/lib/api/sanity';
 import { FourthwallStorefrontError, getFourthwallProducts } from '@/lib/fourthwall/storefront';
 
@@ -89,6 +92,8 @@ async function getSanityData() {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.lakeridepros.com';
+  const testimonials = await getTestimonialsLocal(false, 4);
+  const testimonialPages = Math.ceil(testimonials.length / DIRECTORY_PAGE_SIZE);
   const currentDate = new Date();
 
   // Static pages with priority and change frequency
@@ -107,6 +112,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: '/testimonials', priority: 0.8, changeFrequency: 'weekly' as const },
     { url: '/lake-ozarks-transportation-insights', priority: 0.8, changeFrequency: 'monthly' as const },
     { url: '/events', priority: 0.8, changeFrequency: 'daily' as const },
+    ...['concert', 'tour', 'special'].map(type => ({ url: `/events?type=${type}`, priority: 0.7, changeFrequency: 'daily' as const })),
+    { url: '/events/waitlist', priority: 0.4, changeFrequency: 'monthly' as const },
+    ...Array.from({ length: Math.max(0, testimonialPages - 1) }, (_, index) => ({ url: `/testimonials?page=${index + 2}`, priority: 0.5, changeFrequency: 'weekly' as const })),
 
     // All service pages are now CMS-driven and included via serviceSitemapEntries below
 
@@ -142,6 +150,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Career pages
     { url: '/careers', priority: 0.7, changeFrequency: 'monthly' as const },
     { url: '/careers/driver-application', priority: 0.7, changeFrequency: 'monthly' as const },
+    { url: '/careers/general-application', priority: 0.6, changeFrequency: 'monthly' as const },
 
     // Team page
     { url: '/our-drivers', priority: 0.7, changeFrequency: 'weekly' as const },
@@ -246,27 +255,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Skip partners without a slug
     if (!partner.slug) return;
 
-    let urlPath: string;
     const partnerSlug = getSlugValue(partner.slug);
-    if (!partnerSlug) return;
-    if (partnerSlug === 'lrp-promotions') return;
-    const encodedSlug = encodePathSegment(partnerSlug);
-    const isPremierPartner =
-      partner.isPremierPartner === true || partner.category === 'local-premier';
-    const isWeddingPartner =
-      partner.isWeddingPartner === true || partner.category === 'wedding';
-
-    // Determine the correct URL path based on partner type
-    // Priority: premier > wedding > referral. Legacy category remains authoritative
-    // when a migrated partner also has referral/promotion checkboxes set.
-    if (isPremierPartner) {
-      urlPath = `/local-premier-partners/${encodedSlug}`;
-    } else if (isWeddingPartner) {
-      urlPath = `/wedding-partners/${encodedSlug}`;
-    } else {
-      // Referral partners and promotions go to /partners/
-      urlPath = `/partners/${encodedSlug}`;
-    }
+    if (!partnerSlug || partnerSlug === 'lrp-promotions') return;
+    const urlPath = getPartnerPath(partner, partnerSlug);
 
     partnerSitemapEntries.push({
       url: `${baseUrl}${urlPath}`,

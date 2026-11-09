@@ -1,5 +1,7 @@
 'use client'
 
+import { getPartnerPath } from '@/lib/seo/partner-path'
+
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -106,7 +108,7 @@ export default function LocalPremierPartnersClient({ partners }: LocalPremierPar
                     {/* Learn More Button */}
                     {partner.slug && (
                       <Link
-                        href={`/local-premier-partners/${partner.slug}`}
+                        href={getPartnerPath(partner, partner.slug)}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-lrp-green hover:bg-lrp-green-dark text-lrp-black rounded-md font-medium transition-colors text-sm"
                       >
                         <span>Learn More About {partner.name}</span>

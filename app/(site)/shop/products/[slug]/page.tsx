@@ -1,3 +1,4 @@
+import { metaDescription, metaTitle } from '@/lib/seo/metadata'
 import CommercePage from '@/components/commerce-editorial/CommercePage'
 import {
   getFourthwallProduct,
@@ -27,16 +28,19 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     }
   }
 
-  const description = plainFourthwallDescription(product.description)
-  const image = getFourthwallProductImage(product)
+  const title = metaTitle(product.name, 'Lake Ride Pros Shop')
+  const description = metaDescription(plainFourthwallDescription(product.description), `Browse ${product.name} from the Lake Ride Pros shop. Check available options and sizes before placing your order online.`)
+  const image = getFourthwallProductImage(product) || '/og-image.jpg'
+  const url = `https://www.lakeridepros.com/shop/products/${product.slug}`
 
   return {
-    title: `${product.name} | Lake Ride Pros Shop`,
-    description: description || `Shop ${product.name} from Lake Ride Pros.`,
-    alternates: {
-      canonical: `https://www.lakeridepros.com/shop/products/${product.slug}`,
+    title, description,
+    alternates: { canonical: url },
+    openGraph: {
+      title, description, url,
+      type: 'website', siteName: 'Lake Ride Pros', locale: 'en_US',
+      images: [{ url: image, alt: product.name }],
     },
-    openGraph: image ? { images: [{ url: image, alt: product.name }] } : undefined,
   }
 }
 

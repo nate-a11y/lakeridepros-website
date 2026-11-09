@@ -1,5 +1,7 @@
 'use client'
 
+import { getPartnerPath } from '@/lib/seo/partner-path'
+
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -66,17 +68,6 @@ export default function TrustedReferralPartnersClient({
   }, [filteredTrustedPartners])
 
   const PartnerCard = ({ partner }: { partner: Partner }) => {
-    // Determine the correct URL path based on partner type
-    const getPartnerUrl = (p: Partner): string => {
-      if (p.isPremierPartner || p.category === 'local-premier') {
-        return `/local-premier-partners/${p.slug}`;
-      }
-      if (p.isWeddingPartner || p.category === 'wedding') {
-        return `/wedding-partners/${p.slug}`;
-      }
-      return `/partners/${p.slug}`;
-    };
-
     return (
       <div className="bg-white dark:bg-dark-bg-secondary rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden border border-gray-200 dark:border-gray-700">
         {/* Logo */}
@@ -134,7 +125,7 @@ export default function TrustedReferralPartnersClient({
           {/* Learn More Button */}
           {partner.slug && (
             <Link
-              href={getPartnerUrl(partner)}
+              href={getPartnerPath(partner, partner.slug)}
               className="inline-flex items-center gap-2 px-4 py-2 bg-lrp-green hover:bg-lrp-green-dark text-lrp-black rounded-md font-medium transition-colors text-sm"
             >
               <span>Learn More About {partner.name}</span>

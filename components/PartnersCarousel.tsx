@@ -1,3 +1,4 @@
+import { getPartnerPath } from '@/lib/seo/partner-path'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getMemberLogos, getMediaUrl } from '@/lib/api/sanity'
@@ -10,6 +11,7 @@ interface PartnerData {
   logoUrl: string
   isPremierPartner?: boolean | null
   isWeddingPartner?: boolean | null
+  category?: string | null
 }
 
 interface PartnersCarouselProps {
@@ -18,9 +20,7 @@ interface PartnersCarouselProps {
 
 function partnerHref(partner: PartnerData): string | undefined {
   if (!partner.slug) return partner.website
-  if (partner.isPremierPartner) return `/local-premier-partners/${partner.slug}`
-  if (partner.isWeddingPartner) return `/wedding-partners/${partner.slug}`
-  return `/partners/${partner.slug}`
+  return getPartnerPath(partner, partner.slug)
 }
 
 const knownMemberLogos: Record<string, string> = {

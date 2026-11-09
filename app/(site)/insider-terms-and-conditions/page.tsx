@@ -2,6 +2,13 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
+  openGraph: {
+    title: 'Insider Rewards Terms and Conditions | Lake Ride Pros',
+    description: 'Terms and conditions for Lake Ride Pros Insider Rewards, including membership plans, points, reward levels, and member benefits.',
+    url: 'https://www.lakeridepros.com/insider-terms-and-conditions',
+    type: 'website', siteName: 'Lake Ride Pros', locale: 'en_US',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Insider Rewards Terms and Conditions' }],
+  },
   title: 'Insider Rewards Terms and Conditions | Lake Ride Pros',
   description:
     'Terms and conditions for Lake Ride Pros Insider Rewards, including membership plans, points, reward levels, and member benefits.',

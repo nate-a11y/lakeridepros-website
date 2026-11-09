@@ -173,6 +173,7 @@ export default async function HomePage() {
     website: partner.website,
     blurb: partner.blurb,
     logoUrl: getMediaUrl(partner.logo),
+    category: partner.category,
     isPremierPartner: partner.isPremierPartner,
     isWeddingPartner: partner.isWeddingPartner,
   }));

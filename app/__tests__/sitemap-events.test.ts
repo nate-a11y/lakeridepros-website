@@ -11,6 +11,7 @@ vi.mock('@/lib/api/sanity', () => ({
   getDriverProfiles: vi.fn().mockResolvedValue([]),
   getEvents: vi.fn(),
   getVenues: vi.fn().mockResolvedValue({ docs: [] }),
+  getTestimonialsLocal: vi.fn().mockResolvedValue([]),
   getUpcomingEvents: vi.fn(),
 }))
 
@@ -46,7 +47,7 @@ describe('sitemap live event filtering', () => {
     ])
 
     const entries = await sitemap()
-    const eventUrls = entries.map(entry => entry.url).filter(url => url.includes('/events/'))
+    const eventUrls = entries.map(entry => entry.url).filter(url => url.includes('/events/') && !url.endsWith('/waitlist'))
     expect(eventUrls).toEqual([
       'https://www.lakeridepros.com/events/today',
       'https://www.lakeridepros.com/events/future%20event',

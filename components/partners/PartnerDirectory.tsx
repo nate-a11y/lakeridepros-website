@@ -1,5 +1,7 @@
 'use client'
 
+import { getPartnerPath } from '@/lib/seo/partner-path'
+
 import { useId, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -27,16 +29,6 @@ interface PartnerDirectoryProps {
   partners: Partner[]
   kind: DirectoryKind
   subcategoryLabels?: Record<string, string>
-}
-
-function partnerPath(partner: Partner, kind: DirectoryKind) {
-  if (kind === 'premier' || (kind === 'referral' && (partner.isPremierPartner || partner.category === 'local-premier'))) {
-    return `/local-premier-partners/${partner.slug}`
-  }
-  if (kind === 'wedding' || partner.isWeddingPartner || partner.category === 'wedding') {
-    return `/wedding-partners/${partner.slug}`
-  }
-  return `/partners/${partner.slug}`
 }
 
 function PartnerEntry({ partner, kind }: { partner: Partner; kind: DirectoryKind }) {
@@ -81,7 +73,7 @@ function PartnerEntry({ partner, kind }: { partner: Partner; kind: DirectoryKind
         </div>
         {partner.slug && (
           <Link
-            href={partnerPath(partner, kind)}
+            href={getPartnerPath(partner, partner.slug)}
             className="mt-2 min-h-11 max-w-full !justify-start text-sm font-bold text-lrp-black underline decoration-lrp-green decoration-2 underline-offset-4 hover:decoration-lrp-black"
           >
             Learn More About {partner.name}

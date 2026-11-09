@@ -3,6 +3,13 @@ import Link from 'next/link'
 import EventWaitlistStatusLookup from '@/components/EventWaitlistStatusLookup'
 
 export const metadata: Metadata = {
+  openGraph: {
+    title: 'Check Event Waitlist Status | Lake Ride Pros',
+    description: 'Verify your email or phone number to check active Lake Ride Pros event transportation waitlist entries.',
+    url: 'https://www.lakeridepros.com/events/waitlist',
+    type: 'website', siteName: 'Lake Ride Pros', locale: 'en_US',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Check Event Waitlist Status' }],
+  },
   title: 'Check Event Waitlist Status | Lake Ride Pros',
   description: 'Verify your email or phone number to check active Lake Ride Pros event transportation waitlist entries.',
   alternates: { canonical: 'https://www.lakeridepros.com/events/waitlist' },

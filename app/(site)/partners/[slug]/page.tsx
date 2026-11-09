@@ -1,6 +1,7 @@
+import { getPartnerPath } from '@/lib/seo/partner-path'
 import PartnerDetail from '@/components/partners/PartnerDetail';
 import { Metadata } from 'next';
-import { redirect, permanentRedirect } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 import { getPartnerBySlugLocal, getMediaUrl } from '@/lib/api/sanity';
 import { metaDescription as buildMetaDescription, metaTitle } from '@/lib/seo/metadata';
 
@@ -10,28 +11,6 @@ type Props = {
 
 // Force dynamic rendering to avoid build-time database queries
 export const dynamic = 'force-dynamic';
-
-// Helper to determine redirect URL based on partner type
-function getRedirectUrl(partner: { isWeddingPartner?: boolean | null; isPremierPartner?: boolean | null; category?: string | null }, slug: string): string | null {
-  const encodedSlug = encodeURIComponent(slug);
-  // Redirect wedding partners to dedicated page
-  if (partner.isWeddingPartner) {
-    return `/wedding-partners/${encodedSlug}`;
-  }
-  // Redirect premier partners to dedicated page
-  if (partner.isPremierPartner) {
-    return `/local-premier-partners/${encodedSlug}`;
-  }
-  // Check legacy category field
-  if (partner.category === 'wedding') {
-    return `/wedding-partners/${encodedSlug}`;
-  }
-  if (partner.category === 'local-premier') {
-    return `/local-premier-partners/${encodedSlug}`;
-  }
-  // No redirect needed for referral partners - they stay on /partners/[slug]
-  return null;
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -44,8 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   // Determine canonical URL based on partner type
-  const redirectUrl = getRedirectUrl(partner, slug);
-  const canonicalPath = redirectUrl || `/partners/${encodeURIComponent(slug)}`;
+  const canonicalPath = getPartnerPath(partner, slug);
 
   const description = partner.blurb || partner.description || '';
   const partnerLogo = typeof partner.logo === 'object' ? partner.logo : null;
@@ -103,13 +81,13 @@ export default async function PartnerDetailPage({ params }: Props) {
   const partner = await getPartnerBySlugLocal(slug);
 
   if (!partner) {
-    permanentRedirect('/partners');
+    permanentRedirect('/trusted-referral-partners');
   }
 
   // Redirect to dedicated pages for wedding and premier partners
-  const redirectUrl = getRedirectUrl(partner, slug);
-  if (redirectUrl) {
-    redirect(redirectUrl);
+  const canonicalPath = getPartnerPath(partner, slug);
+  if (canonicalPath !== `/partners/${encodeURIComponent(slug)}`) {
+    permanentRedirect(canonicalPath);
   }
 
   // After redirects, this page only serves referral partners and promotions

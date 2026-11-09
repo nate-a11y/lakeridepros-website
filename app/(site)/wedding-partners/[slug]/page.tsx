@@ -1,3 +1,4 @@
+import { getPartnerPath } from '@/lib/seo/partner-path'
 import PartnerDetail from '@/components/partners/PartnerDetail';
 import { Metadata } from 'next';
 import { permanentRedirect } from 'next/navigation';
@@ -27,13 +28,8 @@ type Props = {
 // Force dynamic rendering to avoid build-time database queries
 export const dynamic = 'force-dynamic';
 
-function canonicalPartnerPath(slug: string): string {
-  return `/wedding-partners/${encodeURIComponent(slug)}`;
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const canonicalPath = canonicalPartnerPath(slug);
   const partner = await getPartnerBySlugLocal(slug);
 
   if (!partner) {
@@ -41,6 +37,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: 'Wedding Partner Not Found | Lake Ride Pros',
     };
   }
+
+  const canonicalPath = getPartnerPath(partner, slug);
 
   // Use wedding-specific content if available
   const weddingBlurb = partner.weddingBlurb || partner.blurb;
@@ -96,6 +94,11 @@ export default async function WeddingPartnerDetailPage({ params }: Props) {
 
   if (!partner) {
     permanentRedirect('/wedding-partners');
+  }
+
+  const canonicalPath = getPartnerPath(partner, slug);
+  if (canonicalPath !== `/wedding-partners/${encodeURIComponent(slug)}`) {
+    permanentRedirect(canonicalPath);
   }
 
   // Use wedding-specific content if available

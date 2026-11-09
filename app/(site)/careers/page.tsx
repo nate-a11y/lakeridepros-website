@@ -6,7 +6,7 @@ import { Car, BriefcaseBusiness, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Careers | Lake Ride Pros - Join Our Team',
-  description: 'Join the Lake Ride Pros team at Lake of the Ozarks. Apply as a professional driver or explore detailing, dispatch, sales, and other team roles. Missouri\'s Best award-winning transportation company.',
+  description: 'Join Lake Ride Pros at Lake of the Ozarks. Explore professional driver, detailing, dispatch, sales, and other roles, and submit your application online.',
   alternates: {
     canonical: 'https://www.lakeridepros.com/careers',
   },
